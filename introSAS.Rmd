@@ -16,9 +16,12 @@ Après avoir créé un compte utilisateur, suivez ces étapes:
 
 Si vous accédez à **SAS** onDemand, vous pouvez créer la bibliothèque contenant toutes les données utilisées en classe en mode lecture seule automatiquement en ajoutant la ligne suivante au fichier `autoexec`: `LIBNAME modstat "~/my_shared_file_links/u41148888/modstat" access=readonly;`
 
-
-![Localisation du fichier `autoexec`](../images/SASonDemand_autoexec.png)
-![Modifications du fichier `autoexec`](../images/SASonDemand_autoexec_2.png)
+```{r localisationautoexec, out.width = '80%' , fig.alt = "Localisation du fichier `autoexec`", echo = FALSE, eval = TRUE, fig.align = "center"}
+knitr::include_graphics("images/SASonDemand_autoexec.png")
+```
+```{r modificationautoexec, out.width = '80%' , fig.alt = "Modification du fichier `autoexec`", echo = FALSE, eval = TRUE, fig.align = "center"}
+knitr::include_graphics("images/SASonDemand_autoexec_2.png")
+```
 
 
 ## Introduction à **SAS**

@@ -2121,7 +2121,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
      All rows must end with a semi-colon.                      */
   @import url('https://fonts.googleapis.com/css2?family=Lato');
   @import url('https://fonts.googleapis.com/css2?family=Fira+Mono');
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat');
 
 
   html {
@@ -2138,7 +2137,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     --heading-font:    'Lato', sans-serif;         /* edited */
     --mono-font:       'Fira Mono', monospace;     /* edited */
     --body-font:       'Lato', sans-serif;         /* edited */
-    --navbar-font:     'Montserrat', sans-serif;   /* edited */
+    --navbar-font:     'Lato', sans-serif;   /* edited */
   }
 
   /*-- ARTICLE METADATA --*/
@@ -2185,7 +2184,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   .distill-site-header { 
-    font-weight: 100;
+    font-weight: bolder;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -2460,7 +2459,12 @@ Ressources
 <li>Confirmez le choix du cours et terminez l’inscription pour Studio</li>
 </ul>
 <p>Si vous accédez à <strong>SAS</strong> onDemand, vous pouvez créer la bibliothèque contenant toutes les données utilisées en classe en mode lecture seule automatiquement en ajoutant la ligne suivante au fichier <code>autoexec</code>: <code>LIBNAME modstat "~/my_shared_file_links/u41148888/modstat" access=readonly;</code></p>
-<p><img src="../images/SASonDemand_autoexec.png" alt="Localisation du fichier autoexec" /> <img src="../images/SASonDemand_autoexec_2.png" alt="Modifications du fichier autoexec" /></p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="images/SASonDemand_autoexec.png" title="Localisation du fichier `autoexec`" alt="Localisation du fichier `autoexec`" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="images/SASonDemand_autoexec_2.png" title="Modification du fichier `autoexec`" alt="Modification du fichier `autoexec`" width="80%" style="display: block; margin: auto;" /></p>
+</div>
 <h2 id="introduction-à-sas">Introduction à <strong>SAS</strong></h2>
 <p>Répétez les instructions précédentes, cette fois en ajoutant la bibliothèque suivante:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2500,7 +2504,7 @@ Ressources
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
 <div class="distill-site-nav distill-site-footer">
-<p>© Copyright 2021 Léo Belzile, Denis Larocque</p>
+<p>© Copyright 2021 Denis Larocque, Léo Belzile. Touts droits réservés.</p>
 </div>
 <!--/radix_placeholder_navigation_after_body-->
 

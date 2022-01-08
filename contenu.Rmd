@@ -55,7 +55,7 @@ remotes::install_github("lbelzile/hecmulti")
 
 ```{r, echo=FALSE, eval=TRUE, message=FALSE}
 source("Rcode/get_Rcode.R")
-knitr::kable(Rcode, align = "ll")
+knitr::kable(Rcode, align = "cl")
 ```
 
 ## Codes **SAS**
@@ -63,7 +63,7 @@ knitr::kable(Rcode, align = "ll")
 
 ```{r, echo=FALSE, eval=TRUE, message=FALSE}
 source("Rcode/get_SAScode.R")
-knitr::kable(SAScode, align = "lll")
+knitr::kable(SAScode, align = "cl")
 ```
 
 
