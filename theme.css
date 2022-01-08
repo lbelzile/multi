@@ -1,0 +1,117 @@
+/* base variables */
+
+/* Edit the CSS properties in this file to create a custom
+   Distill theme. Only edit values in the right column
+   for each row; values shown are the CSS defaults.
+   To return any property to the default,
+   you may set its value to: unset
+   All rows must end with a semi-colon.                      */
+@import url('https://fonts.googleapis.com/css2?family=Lato');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat');
+
+
+html {
+  /*-- Main font sizes --*/
+  --title-size:      40px;
+  --body-size:       1.08rem;
+  --code-size:       15px;
+  --aside-size:      13px;
+  --fig-cap-size:    13px;
+  /*-- Main font colors --*/
+  --title-color:     #003C71;
+  --header-color:    #003C71;                    /* edited */
+  --body-color:      #404040;                    /* edited */
+  --heading-font:    'Lato', sans-serif;         /* edited */
+  --mono-font:       'Fira Mono', monospace;     /* edited */
+  --body-font:       'Lato', sans-serif;         /* edited */
+  --navbar-font:     'Montserrat', sans-serif;   /* edited */
+}
+
+/*-- ARTICLE METADATA --*/
+d-byline {
+  --heading-size:    0.9rem;                      /* edited */
+  --heading-color:   rgba(0, 0, 0, 0.5);
+  --body-size:       0.95rem;                     /* edited */
+  --body-color:      rgba(0, 0, 0, 0.8);
+}
+
+/*-- ARTICLE TABLE OF CONTENTS --*/
+.d-contents {
+  --heading-size:    0px;
+  --contents-size:   13px;
+}
+
+/*-- ARTICLE APPENDIX --*/
+d-appendix {
+  --heading-size:    15px;
+  --heading-color:   rgba(0, 0, 0, 0.65);      
+  --text-size:       0.9rem;                    /* edited */
+  --text-color:      #1a162d;                   /* edited */
+}
+
+/*-- WEBSITE HEADER + FOOTER --*/
+/* These properties only apply to Distill sites and blogs  */
+
+.distill-site-header {
+  --title-size:       18px;
+  --text-color:       #ffffff;                   /* edited */
+  --text-size:        17px;
+  --hover-color:      #fff;                   /* edited */
+  --bkgd-color:       #003C71;                   /* edited */
+}
+
+.distill-site-footer {
+  --bkgd-color:       #003C71;  
+  --text-color:       white;                   /* edited */
+  --text-size:        15px;
+  --hover-color:      white;
+}
+
+/*-- Additional custom styles --*/
+
+
+.distill-site-header { 
+  font-weight: 100;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+
+.distill-site-header {
+  padding-top: 1rem;
+  font-weight: 600;
+}
+
+d-title h1,
+d-article h2,
+.posts-list .description h2,
+.posts-list > h1 {
+    font-weight: 300;
+}
+
+.distill-site-nav a:hover{
+  font-weight: 400;
+}
+
+d-article a, d-article a:link, d-article a:visited, d-article a:hover, d-article a:active{
+   text-decoration: none;
+   border-bottom: 0px;
+}
+
+d-article a:hover{
+   color: #97999B;
+   text-decoration: none;
+   border-bottom: 0px;
+}
+
+d-article ul, d-article ol{
+  line-height: 110%;
+}
+
+/* Scroll horizontally when code is too wide (e.g URLs) */
+
+d-article div.sourceCode pre {
+  overflow-x: auto !important;
+}

@@ -1,0 +1,28 @@
+---
+title: "Analyse multidimensionnelle appliquée"
+site: distill::distill_website
+---
+
+## Description du cours
+
+Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques.
+
+L'emploi de concepts mathématiques sera réduit à son minimum et ces derniers ne serviront qu'à faciliter la compréhension des méthodes étudiées. Le logiciel SAS sera utilisé mais aucune connaissance préalable de celui-ci n'est requise. Par contre, une connaissance des concepts et méthodes statistiques de base est requise. 
+
+## Contenu
+
+1. Logiciel SAS
+2. Analyse exploratoire
+3. Analyse factorielle exploratoire
+4. Analyse de regroupements
+5. Sélection de variables
+6. Régression logistique
+7. Analyse de survie
+8. Données manquantes
+
+## Public cible
+
+Le cours « Analyse multidimensionnelle appliquée » est un cours obligatoire dans le programme de M.Sc. en intelligence d'affaires. Notez que ce cours n’est pas crédité dans la spécialisation en sciences des données et analytique d’affaires: le cours est incompatible avec MATH60603(A).
+
+
+

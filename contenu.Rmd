@@ -1,0 +1,69 @@
+---
+title: "Matériel pédagogique"
+---
+
+
+Le contenu du cours est divisé en chapitres: des notes de cours, du code et des exercices sont disponibles pour chaque sujet.
+
+- [Analyse exploratoire](https://lbelzile.github.io/math60602/index.html#analyse-exploratoire)
+- [Analyse factorielle exploratoire](https://lbelzile.github.io/math60602/analyse-factorielle.html)
+- [Analyse de regroupements](https://lbelzile.github.io/math60602/analyse-regroupements.html)
+- [Sélection de variables](https://lbelzile.github.io/math60602/selection-modele.html)
+- [Régression logistique](https://lbelzile.github.io/math60602/regression-logistique.html)
+- [Analyse de survie](https://lbelzile.github.io/math60602/analyse-survie.html)
+- [Données manquantes](https://lbelzile.github.io/math60602/donnees-manquantes.html)
+
+
+## Devoirs
+
+
+- [Devoir 1](https://lbelzile.github.io/math60602/documents/raw/master/documents/devoirs/MATH60602-A21-Devoir1.pdf)
+- [Devoir 2](https://lbelzile.github.io/math60602/documents/raw/master/documents/devoirs/MATH60602-A21-Devoir2.pdf)
+- [Devoir 3](https://lbelzile.github.io/math60602/documents/raw/master/documents/devoirs/MATH60602-A21-Devoir3.pdf)
+- [Devoir 4](https://lbelzile.github.io/math60602/documents/raw/master/documents/devoirs/MATH60602-A21-Devoir4.pdf)
+- [Devoir 5](https://lbelzile.github.io/math60602/documents/raw/master/documents/devoirs/MATH60602-A21-Devoir5.pdf)
+- [Devoir 6](https://lbelzile.github.io/math60602/documents/raw/master/documents/devoirs/MATH60602-A21-Devoir6.pdf)
+
+
+## Exercices
+
+```{r, echo=FALSE, eval=TRUE, message=FALSE}
+source("Rcode/get_exercise_data.R")
+knitr::kable(exdat, row.names = TRUE, align = "lcccc")
+```
+
+## Données
+
+Si vous accédez à **SAS** onDemand, vous pouvez accéder aux données à l'aide des instructions suivantes: 
+
+```{sas loadintro, eval = FALSE}
+OPTIONS LOCALE=fr_CA DFLANG=LOCALE;
+LIBNAME modstat "~/my_shared_file_links/u41148888/multi" access=readonly;
+```
+
+Les jeux de données (en format `.sas7bdat`) sont disponibles pour [téléchargement en cliquant sur ce lien](https://raw.githubusercontent.com/lbelzile/math60602/master/data/data.zip).
+
+Vous pouvez également accéder aux bases de données dans **R** en installant le paquetage **R** `hecmulti`. Pour ce faire, roulez les commandes suivantes dans **R** (décommentez la première ligne pour installer le paquetage `remotes` si nécessaire):
+
+```{r, eval = FALSE}
+#install.packages("remotes")
+remotes::install_github("lbelzile/hecmulti")
+```
+
+
+## Codes **R**
+
+```{r, echo=FALSE, eval=TRUE, message=FALSE}
+source("Rcode/get_Rcode.R")
+knitr::kable(Rcode, align = "ll")
+```
+
+## Codes **SAS**
+
+
+```{r, echo=FALSE, eval=TRUE, message=FALSE}
+source("Rcode/get_SAScode.R")
+knitr::kable(SAScode, align = "lll")
+```
+
+

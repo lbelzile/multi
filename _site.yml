@@ -1,0 +1,34 @@
+name: "multi"
+title: "MATH 60602"
+description: |
+  Matériel pour le cours de maîtrise MATH 60602 (Analyse multidimensionnelle appliquée) à HEC Montréal.
+output_dir: "_site"
+exclude: ["Rcode/","*.R"]
+template:
+  params:
+    bootswatch: flatly
+theme: theme.css
+navbar:
+  left:
+  - text: "Matériel pédagogique"
+    href: contenu.html
+  - text: "Plan des séances"
+    href: plandetailleseance.html
+  - text: "Notes de cours"
+    href: https://lbelzile.github.io/math60602
+  - text: "Paquetage R"
+    href: https://lbelzile.github.io/hecmulti
+  - text: Ressources
+    menu:
+     - text: "Plan de cours"
+       href: https://github.com/lbelzile/math60602/raw/master/documents/MATH60602-A21-Syllabus.pdf
+     - text: "Introduction à SAS"
+       href: introSAS.html
+  right:
+  - icon: "fab fa-github"
+    href: https://github.com/lbelzile/multi
+
+authors:
+  Léo Belzile (HEC Montréal):
+    href: https://lbelzile.bitbucket.io
+output: distill::distill_article

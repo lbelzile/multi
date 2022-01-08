@@ -1,0 +1,167 @@
+---
+title: "Plan détaillé des séances"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 1
+    toc_float: true
+---
+
+# Séance 1
+
+1. Présentation du plan de cours et des mesures sanitaires
+2. Survol de la matière couverte dans le cours
+3. Discussion de l'article du NYT sur les pratiques du département d'analytique chez Target
+4. Analyse exploratoire: principes directeurs et application aux [billets de trains de la Renfe](https://lbelzile.github.io/math60602/index.html#analyse-exploratoire)
+
+### À compléter avant le cours.
+
+1. Créez un compte sur Piazza 
+2. Créez un compte sur [**SASonDemand**](https://welcome.oda.sas.com/login) ou installez **SAS** sur votre ordinateur personnel en prévision de la deuxième séance de cours.
+
+### Ressources
+- Recueil, [chapitre 1](https://lbelzile.github.io/math60602/)
+- [Exercice 1](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice1.pdf)
+
+# Séance 2
+
+Rendez-vous au laboratoire informatique Lachute pour une séance d'introduction à **SAS**. Les étudiant(e)s qui ont déjà des connaissances de base ou qui ont suivi un cours (par ex., 
+[Logiciels statistiques pour l'analyse de données](https://www.hec.ca/cours/detail/?cours=MATH60613)) ne sont pas tenus de se présenter.
+
+### À compléter avant le cours.
+
+Inscrivez-vous sur **SAS OnDemand for Academics** et créez un compte sur https://odamid.oda.sas.com en sélectionnant l'option _Register for an account_.
+
+Après avoir créé un compte utilisateur, suivez ces étapes:
+
+- Inscrivez vous sur le centre de contrôle (_Control Center_) à [https://odamid.oda.sas.com](https://odamid.oda.sas.com).
+ - Choisir l'option _Enroll in a course_ dans la section _Enrollments_ en bas de la page: cliquez sur le lien. 
+- Inscrivez le code du cours: `ac944d26-9638-4a91-af5f-c1845d61af5d`. 
+- Soumettez le formulaire. 
+- Confirmez le choix du cours et terminez l'inscription pour Studio
+
+Vous pouvez ensuite téléverser les fichiers du cours et créer une librairie. Autrement, pour accéder aux données du cours, ajoutez l'énoncé suivant au début de chacun de vos scripts ou dans les instructions exécutées lors de l'ouverture de **SAS Studio**.
+
+`LIBNAME multi "~/my_shared_file_links/u41148888/multi" access=readonly;`
+
+Une capsule vidéo qui survole le tutoriel est disponible sur ZoneCours, à visionner en mode asynchrone.
+
+Si vous êtes déjà familier avec l'interface SAS classique, je vous invite à visionner [cette vidéo Youtube qui fait un survol des principales différences](https://youtu.be/lJvStXyU_uo)
+
+
+# Séance 3
+
+Présentation de l'analyse factorielle. Cette méthode multidimensionnelle exploratoire sert à réduire un ensemble de données sur une échelle commune (typiquement des résultats de formulaires) en une poignée de dimensions latentes plus facilement résumables.
+
+### Ressources
+
+- Recueil, [chapitre 2](https://lbelzile.github.io/math60602/analyse-factorielle.html)
+- [Scripts **SAS** d'analyse factorielle exploratoire](https://github.com/lbelzile/math60602/raw/master/documents/codeSAS/factor.sas)
+- [Script **R** d'analyse factorielle exploratoire (optionnel)](https://github.com/lbelzile/math60602/raw/master/documents/codeR/MATH60602-02-analyse_factorielle.R)
+- [Script **Python** d'analyse factorielle exploratoire (optionnel)](https://github.com/lbelzile/math60602/raw/master/documents/codePython/MATH60602-02-analyse_factorielle.py)
+- [Exercice 2](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice2.pdf), [données `sondage_entreprise`](https://github.com/lbelzile/math60602/raw/master/data/sondage_entreprise.sas7bdat), [données `aerien_facto`](https://github.com/lbelzile/math60602/raw/master/data/aerien_facto.sas7bdat) et [solutions](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice2.sas)
+
+[Lien vers les bases de données du cours](https://github.com/lbelzile/math60602/tree/master/data)
+
+# Séance 4
+
+Présentation de l'analyse de regroupements, une forme d'apprentissage non supervisée. Méthodes hiérarchiques et visualisation. 
+
+### Ressources
+- Recueil, [chapitre 3](https://lbelzile.github.io/math60602/analyse-regroupements.html)
+- [Scripts **SAS** d'analyse de regroupements](https://github.com/lbelzile/math60602/raw/master/documents/codeSAS/cluster.sas)
+- [Scripts **R** d'analyse de regroupements](https://github.com/lbelzile/math60602/raw/master/documents/codeR/MATH60602-03-analyse_regroupements.R) 
+- [Exercice 3](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice3.pdf), [données `biere`](https://github.com/lbelzile/math60602/blob/master/data/biere.sas7bdat) et [solutions](https://github.com/lbelzile/math60602/blob/master/documents/exercices/MATH60602_Exercice3.sas)
+
+# Séance 5
+
+Apprentissage non supervisé avec une méthode non-hiérarchique (algorithme des $K$-moyennes). Rappel sur la régression linéaire et début du chapitre 4.
+
+### Ressources
+- Recueil, [chapitre 3, section 8](https://lbelzile.github.io/math60602/analyse-regroupements.html#m%C3%A9thodes-non-hi%C3%A9rarchiques) et [chapitre 4](https://lbelzile.github.io/math60602/selection-modele.html)
+- [Code **SAS** de rappel sur la régression linéaire](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/reglin_revision.sas)
+- [Diapositives](https://zonecours2.hec.ca/access/content/group/MATH60602.A2021/Mat%C3%A9riel%20P%C3%A9dagogique/MATH60602_cours6-regroupements.pdf)
+- [Scripts **SAS** d'analyse de regroupements](https://github.com/lbelzile/math60602/raw/master/documents/codeSAS/cluster.sas)
+- [Exercice 3](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice3.pdf), [données `biere`](https://github.com/lbelzile/math60602/blob/master/data/biere.sas7bdat) et [solutions](https://github.com/lbelzile/math60602/blob/master/documents/exercices/MATH60602_Exercice3.sas)
+
+# Séance 6
+
+Notion de séparation d'échantillon. Validation croisée, critères d'information
+
+### Ressources
+- Recueil, [chapitre 4 (sections 4.1 à 4.9)](https://lbelzile.github.io/math60602/selection-modele.html)
+- [Script `selection1_intro.sas`](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/selection1_intro.sas)
+
+# Séance 7
+
+Sélection de variables: algorithmes gloutons de recherche séquentielle, moyenne de modèles et pénalité $L_1$ (LASSO).
+
+- Recueil, [chapitre 4 (sections 4.9 à 4.14)](https://lbelzile.github.io/math60602/selection-modele.html)
+- [Script `selection2_methodes.sas`](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/selection2_methodes.sas)
+- [Exercice 4](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice4.pdf) et [solutions](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice4-sol.sas)
+
+
+# Séance 8
+
+Régression logistique: cote, interprétation des coefficients, tests du rapport de vraisemblance, multicolinéarité.
+
+### Ressources
+- Recueil, [chapitre 5 (sections 5.1 à 5.4)](https://lbelzile.github.io/math60602/regression-logistique.html)
+- Scripts [d'introduction à la procédure logistique](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit1_intro.sas)
+- Diapositives: [PowerPoint](https://github.com/lbelzile/math60602/raw/master/documents/diapos/MATH60602-cours14-H21.pptx), [PDF](https://github.com/lbelzile/math60602/raw/master/documents/diapos/MATH60602-Cours14-H21.pdf)
+- [Données  `colinearite`](https://github.com/lbelzile/math60602/raw/master/data/colinearite.sas7bdat)
+- [Exercice 5](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice5.pdf)
+
+
+# Séance 9
+
+Régression logistique (continuation). Sélection de variables, matrice de confusion et mesures de performance. Courbe lift et courbe d'efficacité du récepteur (ROC). 
+
+### Ressources
+
+- Recueil, [chapitre 5 (sections 5.5 à 5.7)](https://lbelzile.github.io/math60602/regression-logistique.html)
+- [Exercice 5](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice5.pdf), [données `logistclient`](https://raw.githubusercontent.com/lbelzile/math60602/master/data/logistclient.sas7bdat) et [solutions](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice5-sol.sas).
+- Scripts pour la [quasi-séparation de variables](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit9_quasiseparation.sas), la [classification](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit2_classification_base.sas), la [macro pour créer la courbe *lift*](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit3_lift_chart.sas), la [macro gain avec classe](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit4_macro_gain_avec_class.sas), la [sélection de variables](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit5_selection_variables.sas) et la [macro pour obtenir les critères d'information avec la procédure `logistic`](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit6_macro_all_subset.sas)
+
+# Séance 10
+
+Régression logistique (continuation): classification et mesures d'ajustement. Modèles pour données multinomiales, incluant modèle à cote proportionnelles.
+
+### Ressources
+- Recueil, [chapitre 5 (sections 5.7-5.9)](https://lbelzile.github.io/math60602/regression-logistique.html)
+- Scripts pour la [sélection de variables](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit5_selection_variables.sas), macro pour la [recherche séquentielle avec critères AIC/BIC et la procédure `logistic`](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit6_macro_all_subset.sas), [régression multinomiale](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit7_extensions.sas), macro pour [le calcul de gain avec des prédictions](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/logit10_macro_gainpred.sas)
+- [Exercice 5.3](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice5.pdf) sur la régression multinomiale et [solutions](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice5_sol.pdf) avec [code](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice5-sol.sas)
+
+# Séance 11
+
+Analyse de survie: concepts de base et estimation non-paramétrique en présence de censure non-informative à droite (estimateur de Kaplan-Meier). Modèle à risques proportionnels (tests d'hypothèse, interprétation).
+
+### Ressources
+- [Notes de cours (section 6.1-6.5)](https://lbelzile.github.io/math60602/analyse-survie.html)
+- [Exercice 6 (partiel)](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice6.pdf) avec données [chaussures](https://raw.githubusercontent.com/lbelzile/math60602/master/data/chaussures.sas7bdat)
+- Scripts pour l'[estimateur de Kaplan-Meier](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/survie1_fonction_survie.sas) et le [modèle à risques proportionnels](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/survie2_cox.sas)
+
+
+# Séance 12
+
+Analyse de survie (continuation): modèle à risques proportionnels avec variables explicatives qui changent dans le temps, risques non proportionnels et risques compétitifs.
+
+Introduction aux données manquantes.
+
+### Ressources
+- Analyse de survie: [notes de cours (sections 6.6 et 6.7)](https://lbelzile.github.io/math60602/analyse-survie.html#extensions-du-mod%C3%A8le-de-cox)
+- [Exercice 6 (suite et fin)](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice6.pdf) avec données [chaussures](https://raw.githubusercontent.com/lbelzile/math60602/master/data/chaussures.sas7bdat),  [solutionnaire (pdf)](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice6_sol.pdf) et [code](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/exercices/MATH60602_Exercice6.sas)
+- Données manquantes: [notes de cours (sections 6.6 et 6.7)](https://lbelzile.github.io/math60602/donnees-manquantes.html)
+- Scripts pour les modèles à risque proportionnels avec [variables explicatives dont la valeur change dans le temps](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/survie3_varie_temps.sas), [modèles à risques compétitifs](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/survie4_risques_competitifs.sas), [risque non proportionnels](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/survie5_non_proportionnel.sas)
+- Script pour l'[imputation multiple](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/manquantes1.sas)
+
+# Séance 13
+
+Données manquantes dans un contexte de prévision. Récapitulatif du cours et examen de pratique.
+
+### Ressources
+- [Notes de cours (section 7.4): données manquantes dans un contexte de prédiction](https://lbelzile.github.io/math60602/donn%C3%A9es-manquantes-1.html#valeurs-manquantes-dans-un-contexte-de-pr%C3%A9diction)
+- [Exercice 7](https://github.com/lbelzile/math60602/raw/master/documents/exercices/MATH60602_Exercice7.sas), [données `survey_sans_missing`](https://raw.githubusercontent.com/lbelzile/math60602/master/data/survey_sans_missing.sas7bdat), [données `survey_avec_missing`](https://raw.githubusercontent.com/lbelzile/math60602/master/data/survey_avec_missing.sas7bdat)
+- Script pour les [données manquantes dans un contexte de prédiction](https://raw.githubusercontent.com/lbelzile/math60602/master/documents/codeSAS/manquantes2_prevision.sas)
+- [Examen final de pratique](https://lbelzile.bitbucket.io/MATH60602/MATH60602-examen_final_pratique.pdf) et [solutions](https://lbelzile.bitbucket.io/MATH60602/MATH60602-examen_final_pratique_solutions.pdf)
+
