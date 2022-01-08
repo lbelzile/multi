@@ -2,7 +2,7 @@ name: "multi"
 title: "MATH 60602"
 description: |
   Matériel pour le cours de maîtrise MATH 60602 (Analyse multidimensionnelle appliquée) à HEC Montréal.
-output_dir: "_site"
+output_dir: "docs"
 exclude: ["Rcode/","*.R"]
 template:
   params:
