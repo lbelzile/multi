@@ -23,8 +23,10 @@ website:
     pinned: true
     background: "#003C71"
     right:
-      - syllabus.qmd
-      - horaire.qmd
+      - text: "Syllabus"
+        file: syllabus.qmd
+      - text: "Horaire"
+        file: horaire.qmd
       - text: "Contenu"
         file: contenu/index.qmd
       - text: "Évaluations"
@@ -33,7 +35,7 @@ website:
         file: exercices/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/math60602"
-      - icon: cloud-fill
+      - icon: wechat
         href: "https://piazza.com/hec.ca/fall2022/math60602/home"
         aria-label: Piazza
       - icon: inbox-fill
