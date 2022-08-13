@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+/.quarto/
+/slides/
+/_freeze/
+/_site/
+
+projects/*.zip
+
+# knitr and caching stuff
+**/*_files/*
+**/*_cache/*

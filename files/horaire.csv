@@ -1,0 +1,21 @@
+group,subgroup,date,date_end,title,deadline,content,exercice,evaluations
+Contenu,Session 1,2022-08-29,2022-09-01,Introduction et analyse exploratoire,,contenu/01-contenu,,
+Contenu,Session 2,2022-09-08,2022-09-12,Programmation,,contenu/02-contenu,,
+Contenu,Session 3,2022-09-15,2022-09-19,Réduction de la dimension,,contenu/03-contenu,,
+Contenu,Session 3,2022-09-21,,Devoir 1,23:55,,,evaluations/01-devoir
+Contenu,Session 4,2022-09-22,2022-09-26,Analyse de regroupements,,contenu/04-contenu,,
+Contenu,Session 5,2022-09-29,2022-10-05,Analyse de regroupements,,contenu/05-contenu,,
+Contenu,Session 5,2022-10-05,,Devoir 2,23:55,,,evaluations/02-devoir
+Contenu,Session 6,2022-10-06,2022-10-11,Sélection de variables,,contenu/06-contenu,,
+Contenu,Session 7,2022-10-13,2022-10-17,Sélection de variables,,contenu/07-contenu,,
+Contenu,Session 7,2022-10-19,,Devoir 3,23:55,,,evaluations/03-devoir
+Contenu,Relâche,2022-10-20,2022-10-26,Relâche,,,,
+Contenu,Session 8,2022-10-27,2022-10-31,Régression logistique : bases,,contenu/08-contenu,,
+Contenu,Session 9,2022-11-03,2022-11-07,Régression logistique : prédiction,,contenu/09-contenu,,
+Contenu,Session 9,2022-11-09,,Devoir 4,23:55,,,evaluations/04-devoir
+Contenu,Session 10,2022-11-10,2022-11-14,Régression logistique: données multinomiales,,contenu/10-contenu,,
+Contenu,Session 11,2022-11-17,2022-11-21,Analyse de survie,,contenu/11-contenu,,
+Contenu,Session 11,2022-11-23,,Devoir 5,23:55,,,evaluations/05-devoir
+Contenu,Session 12,2022-11-24,2022-11-28,Analyse de survie,,contenu/12-contenu,,
+Contenu,Session 13,2022-12-01,2022-12-05,Données manquantes et révision,,contenu/13-contenu,,
+Contenu,Session 13,2022-12-07,,Devoir 6,23:55,,,evaluations/06-devoir

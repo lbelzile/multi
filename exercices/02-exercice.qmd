@@ -1,0 +1,30 @@
+---
+title: "Analyse factorielle"
+---
+
+## Exercice 2.1
+
+Les données `sondage_entreprise` contiennent les résultats d'un sondage effectué par une compagnie auprès de ses employés. 
+
+- Produisez des statistiques descriptives pour les variables `q8` à `q17`
+    - Combien y a-t-il de répondants?
+    \item Pour quels éléments y a-t-il le plus de consensus entre les répondants?
+- Utilisez  la méthode d'estimation par composantes principales et le critère de Kaiser. Combien de facteurs serait-il raisonnable de retenir?
+- Répétez l'exercice, cette fois avec la méthode du maximum de vraisemblance et le critère d'information d'Akaike pour $k=1, \ldots, 4$ facteurs. Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?
+- Estimez le modèle et interprétez les facteurs résultants (avec rotation varimax).
+  - Si vous ajoutez des facteurs, est-ce que votre interprétation change?
+  - Créez des échelles et vérifiez leur cohérence interne. 
+
+ 
+## Exercice 2.2
+ 
+Effectuez une analyse factorielle exploratoire des données `aerien_facto`: cette base de données contient  toutes les questions en lien avec la satisfaction de la base de données `aerien`. Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).
+
+- Ajustez un modèle avec la méthode des composantes principales et une rotation varimax. 
+    - Combien de facteurs le critère des valeurs propres suggère-t-il?
+    - Combien de facteurs le diagramme d'éboulis suggère-t-il?
+    - Interprétez les chargements obtenus suite à la rotation. Commentez sur l'interprétabilité de ces derniers.
+    - En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.
+-  Répétez l'exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle. 
+    - Qu'arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.
+

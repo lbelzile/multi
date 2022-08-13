@@ -1,0 +1,30 @@
+---
+title: "Ressources **R**"
+---
+
+Il existe plusieurs ressources en ligne pour apprendre **R** et le `tidyverse`, notamment
+
+- [Les ressources didactiques listées sur le CRAN](https://cran.r-project.org/other-docs.html)
+- [Introduction to **R** and RStudio](http://openintrostat.github.io/oilabs-tidy/01_intro_to_r/intro_to_r.html) par Open Intro Stat
+- [Teacups, giraffes & statistics](https://tinystats.github.io/teacups-giraffes-and-statistics/index.html): révise les concepts statistiques et les bases de la programmation
+- le livret [**RYouWithMe** de R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/)
+- le livre [**R** for Data Science](https://r4ds.had.co.nz/index.html), qui adhère aux principes du `tidyverse`.
+- le paquet **R** [DoSStoolkit](https://dosstoolkit.com/), développé à l'université de Toronto
+- la documentation d'[`introverse`](https://spielmanlab.github.io/introverse/articles/introverse_online.html)
+- les feuilles d'aide mémoire de [RStudio](https://www.rstudio.com/resources/cheatsheets/), aussi disponibles depuis le menu Aide dans RStudio
+
+Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés dans les notes de cours,à l'aide des commandes suivantes: 
+
+```{r, eval=FALSE, echo=TRUE}
+lib <- c("remotes", "psych", "glmnet", "caret", "leaps", 
+         "car", "MASS", "glmbb","tidyverse", 
+         "nnet","sampleSelection", "survminer", 
+         "coin","survival", "mice", "patchwork")
+for(pack in lib){
+  if(!require(pack, quietly = TRUE)){
+    install.packages(pack)
+  }
+}
+
+remotes::install_github("lbelzile/hecmulti")
+```

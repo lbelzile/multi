@@ -1,0 +1,9 @@
+date-heading:
+  content: "Contenu pour"
+  class: "bg-content"
+date-format: "full"
+
+format:
+  html:
+    template-partials:
+      - ../html/title-block.html

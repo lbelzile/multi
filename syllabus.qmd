@@ -1,0 +1,194 @@
+---
+title: Plan de cours
+---
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(tibble)
+library(pander)
+```
+
+::: {.grid .course-details .course-details-smaller}
+
+::: {.g-col-6}
+### Enseignant
+
+- {{< fa user >}} &nbsp; [{{< var instructor.name >}}]({{< var instructor.url >}})
+- {{< fa university >}} &nbsp; {{< var instructor.office >}}
+- {{< fa envelope >}} &nbsp; <a href="mailto:{{< var instructor.email >}}">{{< var instructor.email >}}</a>
+
+:::
+
+::: {.g-col-6}
+### Détails du cours
+
+- {{< fa calendar-alt >}} &nbsp; {{< var course.semester >}}
+- {{< fa calendar >}} &nbsp; {{< var course.days >}}
+- {{< fa clock >}} &nbsp; {{< var course.time >}}
+- {{< fa location-dot >}} &nbsp; {{< var course.location >}}
+
+:::
+
+:::
+
+### Horaire des cours
+
+- Section J01: les jeudi du 1 septembre au 1 décembre (relâche le 20 octobre)
+- Section S01: les lundi 29 août, 12, 19 et 26 septembre, le mercredi 5 octobre, le mardi 11 octobre, ainsi que les lundi du 31 octobre au 5 décembre
+
+La séance 2 se déroulera au laboratoire LACED. Les autres séances sont dans la salle Victoriaville au troisième étage de l'édifice Decelles.
+
+Selon le règlement de l'École, la présence de l'étudiant aux activités du cours est présumée. Ainsi, l'enseignant n'est pas tenu de fournir de l'aide ou d'adapter le cours ou son évaluation en raison d'une absence.
+
+### 
+     
+# Description
+
+Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l'aide de logiciels appropriés.
+
+Sujets couverts: l'analyse factorielle exploratoire, l'analyse de regroupements, les méthodes de sélection de variables en régression, la régression logistique (incluant modèles pour données multinomiales), l'analyse de survie et le traitement de données manquantes.
+
+L'emploi de concepts mathématiques sera réduit à son minimum et ces derniers ne serviront qu'à faciliter la compréhension des méthodes étudiées. Une connaissance des concepts et méthodes statistiques de base est requise.
+
+## Thèmes couverts
+
+- Analyse exploratoire
+- Analyse factorielle exploratoire (analyse en composantes principales)
+- Analyse de regroupements
+- Sélection de variables pour les modèles de régression
+- Sélection logistique (incluant les données multinomiales, modèle à cotes proportionnelles)
+- Analyse de survie
+- Données manquantes
+
+
+## Clientèle cible
+Cours obligatoire de spécialisation dans le programme de M.Sc. (spécialisation intelligence d'affaires) et dans le microprogramme en exploitation de données en intelligence d'affaires.
+
+## Cours incompatible
+Vous ne pouvez pas vous inscrire à ce cours si vous avez postulé ou réussi le cours MATH 60603(A), ou si MATH 60603(A) fait partie de votre structure.
+
+# Matériel de cours
+
+## Logiciels et programmation
+
+Nous utiliserons le langage de programmation [**R**](https://cran.r-project.org/). Les notes de cours et les [exercices](/exercices) contiennent des scripts pour vous aider. La courbe d'apprentissage est abrupte, mais nous consacrerons la deuxième séances de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des [instructions pour installer, **R**, Rstudio et d'autres utilitaires ici.](/contenu/installation/)
+
+Chercher sur un moteur de recherche des sujets liés à **R** est parfois fastidieux; essayez `rstats` comme mot-clé si `r` ne retourne rien. Le forum de question [StackOverflow](https://stackoverflow.com/), un site de questions et réponses pour la programmation, ainsi que la [communauté RStudio](https://community.rstudio.com/), un forum dédié à RStudio et au tidyverse, sont d'autres ressrouces utiles.
+
+## Manuel
+
+Les notes de cours [en ligne](https://lbelzile.github.io/math60602) font office d'ouvrage de référence.
+
+
+
+# Évaluations
+
+Votre note finale sera basée sur les évaluations suivantes
+
+- Examen final (50%): le jeudi 15 décembre de 18h30 à 21h30
+- Devoirs (50%): il y a six devoirs, qui sont équipondérés (10%). Votre note sera basée sur les cinq meilleures notes. Il y aura trois devoirs individuels et trois devoirs à réaliser en équipe d'au plus quatre personnes. Vous aurez environ un devoir à compléter par chapitre de cours. 
+
+Selon l'avancement du cours, les dates de remise pourraient être décalées. Vous aurez en moyenne deux semaines pour réaliser chaque devoir.
+
+**Dates de remise:**
+
+- Devoir 1 (individuel), date limite le mercredi 21 septembre
+- Devoir 2 (individuel), date limite le mercredi 5 octobre
+- Devoir 3 (équipe), date limite le mercredi 19 octobre
+- Devoir 4 (équipe), date limite le mercredi 9 novembre
+- Devoir 5 (équipe), date limite le mercredi 23 novembre
+- Devoir 6 (individuel), date limite le mercredi 7 décembre
+
+
+
+Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:
+
+- 110%: Devoir 100% complété. Travail de qualité exceptionnelle démontrant un engagement soutenu avec le cours et une réflexion poussée. L'écriture du document soumis est claire, concise et le français est excellent. Je n'assignerai pas ces notes régulièrement.
+- 100%: Devoir 100% complété avec erreurs mineures.
+- 75%: Devoir majoritairement complété (plus de 70%), la plupart des réponses sont correctes.
+- 50%: Devoir complété à moins de 70% et/ou pour lequel la plupart des réponses sont incorrectes. Témoigne d'un besoin d'amélioration; j'espère ne pas assigner cette note fréquemment.
+- 0%: Devoir non remis, ou visiblement bâclé.
+
+
+Tout travail remis hors délai sera pénalisé de 5% par jour de retard.
+
+En vertu de la politique de l'école, la note obtenue lors des travaux d’équipe contribue à la note globale seulement si la note combinée des évaluations individuelles est supérieure à 50%. Autrement, la note finale de l'étudiant(e) est calculée au pro rata des évaluations individuelles.
+
+ 
+
+
+
+Vous pouvez trouver une description des évaluations sur la page [évaluations](/evaluations/).
+
+
+```{r assignments-grades, include=FALSE}
+assignments <- tibble::tribble(
+  ~Note,  ~Evaluation,
+  50 , "Devoirs (5 × 10 pt)",
+  50     , "Examen final (50 pt)",
+)
+
+grading <- tibble::tribble(
+  ~Grade, ~Range,  ~Grade1, ~Range1,
+  "A+",  "90-100%", "B",  "70-75%",
+  "A", "85–90%",  "B-", "65-70%",
+  "A-", "80–85%",  "C+", "60-65%",
+  "B+",  "75-80%",  "F",  "<60%"
+)
+```
+
+<div class="centered-table">
+
+```{r show-assignments-table, echo=FALSE, results="asis"}
+assignments_total <- tibble(Evaluation = "Total",
+                            Note = sum(assignments$Note))
+
+bind_rows(assignments, assignments_total) %>% 
+  select(Evaluation, Note) %>% 
+  pandoc.table(justify = "lc", missing = "—")
+```
+</div>
+
+<div class="centered-table">
+
+```{r show-grades-table, echo=FALSE, results="asis"}
+grading %>%
+  pandoc.table(justify = "lclc", 
+               col.names = c("Note", "Plage", "Note", "Plage"))
+```
+
+<div>
+
+
+# Ressources étudiantes
+
+Les [services aux étudiant(e)s (SAE)](https://www.hec.ca/etudiants/soutien-ressources/soutien-psychologique/) offrent du soutien aux études, du soutien psychologique et de l'aide pour les personnes en situation de handicap. Consultez leur site web pour la liste des services offerts.
+
+### Intégrité intellectuelle
+Le [Règlement sur l’intégrité intellectuelle des étudiants](https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/REG_integrite-intellectuelle-etudiants.pdf) dicte les comportements proscrits par l'école, notamment la triche, le plagiat et la falsification de résultat. Tout comportement répréhensible sera rapporté aux instances concernées.
+
+### Violences à caractère sexuel
+Le [Bureau d'intervention en matière de harcèlement (BIMH)](https://harcelement.hec.ca/) est le guichet unique au service de tous les membres de la communauté de l’École affectés par le harcèlement ou la violence à caractère sexuel. Vous pouvez les rejoindre au 514 343-7020 ou à l'[adresse courriel `harcelement@hec.ca`](mailto:harcelement@hec.ca) du lundi au vendredi entre 8h30 et 16h30.
+
+Si vous êtes en situation d'urgence ou craignez pour votre sécurité, pour votre intégrité physique ou pour votre vie:
+
+- Appelez immédiatement les services d'urgence au 911
+- Appelez ensuite la Sécurité de HEC Montréal au 514 340-6611
+
+## Consignes pandémiques
+
+[Consultez le site web](https://www.hec.ca/COVID-19/information-generale/) de l'école pour les dernières mesures sanitaires en vigueur.
+
+À compter du trimestre d’automne 2022, la COVID-19 (test positif ou symptômes s’y apparentant) sera considérée en vertu du règlement pédagogique comme toute autre maladie, à l’exception qu’elle sera jugée d’office comme un motif valable sans billet médical requis. Pour tous les autres motifs d’absence, la procédure en vigueur avant la pandémie (article 3.3.1) se poursuit.
+
+Si un membre de la communauté étudiante doit s’absenter pour un motif lié à la COVID-19, voici la procédure à suivre :
+
+ - En cas d’absence pour une ou plusieurs séances de cours : l’étudiant(e) continue de remplir le formulaire d’avis d’absence générant un courriel automatique à votre attention, précisant sa date de retour sur le campus.  Il reviendra à chaque étudiant(e) de faire les démarches pour rattraper le contenu manqué (article 2.1 du règlement pédagogique).
+- En cas d’absence à l'examen final : la procédure demeure la même qu’aux trimestres précédents. L’étudiant(e) doit remplir le formulaire avis d’absence au plus tard cinq jours ouvrables suivant la date de l’examen. Le Registrariat recevra et traitera ce formulaire selon le processus habituel. Si le motif de l’absence est jugé valable, l’examen sera différé au prochain trimestre où le cours est offert.
+
+Le masque de procédure n’est plus obligatoire sur le campus. Cependant, afin de limiter la propagation de la COVID-19, certaines mesures sanitaires demeurent **recommandées** notamment la distanciation physique, les barrières physiques et le port du masque de procédure. Ces consignes relèvent désormais d’un choix personnel. L’École continue de fournir gratuitement pour celles et ceux qui le désirent:
+
+- Masques de procédure;
+- Gel hydroalcoolique;
+- Boîtes de tests rapides, disponibles à la Boutique COOP de l’édifice Côte-Sainte-Catherine ainsi qu’à la ZoneInfo à l’édifice Decelles.
+

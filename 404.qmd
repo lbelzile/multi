@@ -1,0 +1,5 @@
+---
+title: Page introuvable
+---
+
+La page que vous avez tenté de joindre n'est pas disponible. Essayez d'utiliser la barre de recherche ou naviguez via le menu.

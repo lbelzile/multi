@@ -1,0 +1,19 @@
+---
+title: "Devoir 1"
+---
+
+La base de données `visaprem` du paquet `hecmulti` contiennent les profils de 1294 clients d'une institution bancaire française avant la zone euro. Les données ont été collectées lors d'une enquête mensuelle.
+
+- Transformez la variable catégorielle `sexe` en variable binaire entière avec `homme`=`0`, `femme`=`1`, et `NA` pour les valeurs manquantes. 
+- Fusionnez les situations familiales (`famiq`) selon que la personne est seule (`seu`) ou en couple (`cou`), et `NA` pour les valeurs manquantes. 
+- Éliminez les observations correspondant aux observations pour lesquelles la variable `age` est manquante.
+- Calculez le nombre total de jours à débit des trois derniers mois au sein de la variable `nbjd` et éliminez les variables utilisées lors de la création.
+- Considérez le nombre total de cartes `ntcas`. Y a-t-il des incohérences en lien avec les autres variables?
+- Que représentent les variables manquantes résiduelles de `zocnb`? *Indice: voir la question précédente.*
+   - Expliquez pourquoi il serait logique de remplacer ces valeurs manquantes par des valeurs numériques (laquelle).
+   - Effectuez la modification.*
+- Produisez un histogramme de la variable ancienneté du compte (`relat`) avec `ggplot`. Que remarquez-vous? 
+- Produisez un nuage de point de `relat` et `age` et commentez (quel est le lien entre `relat` et `age`)?
+
+
+Vous devez remettre avec votre rapport et votre code **R** la base de données créée à la suite des manipulations. Nommez cette dernière selon la convention `d1_matricule.csv` et assurez-vous que les champs de cette dernière est séparée par des virgules et que vous n'avez pas supprimé la variable `matric`.

@@ -1,0 +1,7 @@
+---
+title: "Contenu"
+---
+
+Cliquez sur les onglets de droite pour naviguer vers le contenu et le matériel pédagogique de chaque séance de cours. 
+
+Un guide d'installation pour **R** et RStudio et des ressources sont également mises à disposition.

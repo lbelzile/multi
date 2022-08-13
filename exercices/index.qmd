@@ -1,0 +1,5 @@
+---
+title: "Exercices"
+---
+
+Cette section contient des exercices de pratique avec les solutions.
