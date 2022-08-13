@@ -18,7 +18,35 @@ tar_option_set(
 # https://github.com/r-lib/here/issues/36#issuecomment-530894167)
 here_rel <- function(...) {fs::path_rel(here::here(...))}
 
+# Load functions for the pipeline
+source("R/tar_slides.R")
+
  list(
+ ## Xaringan slides
+ 
+  ### Knit xaringan slides ----
+  #
+  # Use dynamic branching to get a list of all .Rmd files in slides/ and knit them
+  #
+  # The main index.qmd page loads xaringan_slides as a target to link it as a dependency
+  ### Convert xaringan HTML slides to PDF ----
+  #
+  # Use dynamic branching to get a list of all knitted slide .html files and
+  # convert them to PDF with pagedown
+  #
+  # The main index.qmd page loads xaringan_pdfs as a target to link it as a dependency
+  tar_files(xaringan_html_files, {
+    xaringan_slides
+    list.files(here_rel("diapos"),
+               pattern = "\\.html",
+               full.names = TRUE)
+  }),
+  tar_target(xaringan_pdfs,
+             xaringan_to_pdf(xaringan_html_files),
+             pattern = map(xaringan_html_files),
+             format = "file"),
+
+ 
   ## Class schedule file ----
   tar_target(schedule_file, here_rel("files", "horaire.csv"), format = "file"),
 

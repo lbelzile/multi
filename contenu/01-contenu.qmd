@@ -1,7 +1,5 @@
 ---
 title: "Introduction"
-start-date: "2022-08-29"
-end-date: "2022-09-01"
 ---
 
 ## Contenu
@@ -11,13 +9,9 @@ end-date: "2022-09-01"
 - Considérations éthiques: discussion de l'article [*How Companies Learn Your Secrets*](https://www.nytimes.com/2012/02/19/magazine/shopping-habits.html), via [ZoneCours](https://zonecours2.hec.ca/access/content/group/MATH60602.A2022/NYT_How_companies_learn_your_secrets.pdf)
 - Analyse exploratoire des données
 
-## Objectifs d'apprentissage
-
-- Réaliser une analyse exploratoire et formuler des questions en lien avec une base de données.
-
 ## Avant le cours
 
-- Se familiariser avec le [plan de cours](/syllabus), le [contenu des séances](/content/), le [forum en ligne](https://piazza.com/hec.ca/fall2022/math60602/home), les [exercices](/exercices) et les [devoirs](/evaluations/).
+- Se familiariser avec le [plan de cours](/syllabus), le [contenu des séances](/contenu/), le [forum en ligne](https://piazza.com/hec.ca/fall2022/math60602/home), les [exercices](/exercices) et les [devoirs](/evaluations/).
 
 
 
@@ -30,4 +24,10 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 - {{< fa book >}} [Chapitre 2 (Analyse exploratoire des données)](https://lbelzile.github.io/math60602/01-analyseexploratoire.html)
 
 ## Diapositives 
+
+
+
+## Objectifs d'apprentissage
+
+- Réaliser une analyse exploratoire et formuler des questions en lien avec une base de données.
 

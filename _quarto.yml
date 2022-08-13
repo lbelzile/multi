@@ -2,8 +2,15 @@ project:
   type: website
   render:
     - "*.qmd"
+    - "!slides/"
   resources:
     - "files/"
+    - "diapos/*.html"
+    - "diapos/*.pdf"
+    - "diapos/img/"
+    - "diapos/libs/"
+    - "diapos/css/"
+    - "diapos/*_files/"
 
 
 # See https://quarto.org/docs/projects/code-execution.html#freeze

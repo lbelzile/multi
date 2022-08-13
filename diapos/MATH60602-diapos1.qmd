@@ -1,0 +1,90 @@
+---
+title: "Analyse exploratoire"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: xelatex
+cache: true
+mainfont: "D-DIN"
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+---
+
+# Notions de base
+
+- Variable
+- Observation
+
+**Bonnes pratiques pour l'organisation de données:**
+
+
+> Karl W. Broman & Kara H. Woo (2018) Data Organization in Spreadsheets, The American Statistician, 72:1, 2-10, DOI: 10.1080/00031305.2017.1375989
+
+
+
+# Types de variables numériques
+
+```{r, out.width='80%', fig.cap="Allison Horst (CC BY 4.0)"}
+knitr::include_graphics("figures/continuous_discrete.png")
+```
+
+# Types de variables catégorielles
+
+```{r, out.width='80%', fig.cap="IAllison Horst (CC BY 4.0)"}
+knitr::include_graphics("figures/nominal_ordinal_binary.png")
+```
+
+
+
+# Données en format "tidy"
+
+- variables en colonnes
+- observations en lignes
+- une seule mesure par cellule
+
+```{r, out.width='70%', fig.cap="Allison Horst (CC BY 4.0)"}
+knitr::include_graphics("figures/tidydata_1.jpg")
+```
+
+
+# Validation des données
+
+Vérifier la présence de
+
+- valeurs manquantes (`NA`), $-999$, etc.
+- relations logiques (total, moyenne, etc.) entre variables
+- variables catégorielles non déclarées
+   - valeur entière
+   - chaînes de caractère
+
+# Analyse exploratoire
+
+1. Formuler des questions
+2. Chercher des réponses à ces questions
+    - statistiques descriptives
+    - tableaux de contingence
+    - graphiques
+3. Raffiner les questions
+
+# Représentation graphique de base
+
+Passer en revue les types de graphiques selon les types de variable
+
+# Éléments graphiques clés
+
+- Titre et annotation
+- Libellés et unités sur les axes
+- Libellé de l'axe des $y$ en sous-titre
+- Rotation si étiquettes trop longue (variable discrète)
+- Palette de couleur pour daltoniens
+- Taille de police suffisante pour lisibilité!

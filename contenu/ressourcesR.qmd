@@ -16,10 +16,14 @@ Il existe plusieurs ressources en ligne pour apprendre **R** et le `tidyverse`, 
 Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés dans les notes de cours,à l'aide des commandes suivantes: 
 
 ```{r, eval=FALSE, echo=TRUE}
-lib <- c("remotes", "psych", "glmnet", "caret", "leaps", 
-         "car", "MASS", "glmbb","tidyverse", 
-         "nnet","sampleSelection", "survminer", 
-         "coin","survival", "mice", "patchwork")
+lib <- c("remotes", "psych", "glmnet", "caret", 
+         "leaps", "car", "MASS", "glmbb", "AER",
+         "tidyverse", "nnet", "mice", "survminer", 
+         "coin","survival", "patchwork", "sampleSelection",
+         "Hmisc", "aod", "cluster", "NbClust",
+         "emmeans", "ROCR", "factoextra", "muhaz",
+         "summarytools", "flexclust", "dummies", "gridExtra"
+         )
 for(pack in lib){
   if(!require(pack, quietly = TRUE)){
     install.packages(pack)

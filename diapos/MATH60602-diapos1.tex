@@ -1,0 +1,325 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{D-DIN}
+\fi
+\usecolortheme{Flip}
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+\useinnertheme{Flip}
+\useoutertheme{Flip}
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{tabu}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table des matières}
+\else
+  \newcommand\contentsname{Table des matières}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{Liste des figures}
+\else
+  \newcommand\listfigurename{Liste des figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{Liste des tableaux}
+\else
+  \newcommand\listtablename{Liste des tableaux}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Tableau}
+\else
+  \newcommand\tablename{Tableau}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Énumération}
+\newcommand*\listoflistings{\listof{codelisting}{Liste des énumérations}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Analyse exploratoire},
+  pdfauthor={Léo Belzile},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Analyse exploratoire}
+\subtitle{Analyse multidimensionnelle appliquée}
+\author{Léo Belzile}
+\date{automne 2022}
+\institute{HEC Montréal}
+
+\begin{document}
+\frame{\titlepage}
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, borderline west={3pt}{0pt}{shadecolor}, sharp corners, enhanced, breakable, boxrule=0pt]}{\end{tcolorbox}}\fi
+
+\begin{frame}{Notions de base}
+\protect\hypertarget{notions-de-base}{}
+\begin{itemize}
+\tightlist
+\item
+  Variable
+\item
+  Observation
+\end{itemize}
+
+\textbf{Bonnes pratiques pour l'organisation de données:}
+
+\begin{quote}
+Karl W. Broman \& Kara H. Woo (2018) Data Organization in Spreadsheets,
+The American Statistician, 72:1, 2-10, DOI:
+10.1080/00031305.2017.1375989
+\end{quote}
+\end{frame}
+
+\begin{frame}{Types de variables numériques}
+\protect\hypertarget{types-de-variables-numuxe9riques}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/continuous_discrete.png}
+
+}
+
+\caption{Allison Horst (CC BY 4.0)}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Types de variables catégorielles}
+\protect\hypertarget{types-de-variables-catuxe9gorielles}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/nominal_ordinal_binary.png}
+
+}
+
+\caption{IAllison Horst (CC BY 4.0)}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Données en format ``tidy''}
+\protect\hypertarget{donnuxe9es-en-format-tidy}{}
+\begin{itemize}
+\tightlist
+\item
+  variables en colonnes
+\item
+  observations en lignes
+\item
+  une seule mesure par cellule
+\end{itemize}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/tidydata_1.jpg}
+
+}
+
+\caption{Allison Horst (CC BY 4.0)}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Validation des données}
+\protect\hypertarget{validation-des-donnuxe9es}{}
+Vérifier la présence de
+
+\begin{itemize}
+\tightlist
+\item
+  valeurs manquantes (\texttt{NA}), \(-999\), etc.
+\item
+  relations logiques (total, moyenne, etc.) entre variables
+\item
+  variables catégorielles non déclarées
+
+  \begin{itemize}
+  \tightlist
+  \item
+    valeur entière
+  \item
+    chaînes de caractère
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Analyse exploratoire}
+\protect\hypertarget{analyse-exploratoire}{}
+\begin{enumerate}
+\tightlist
+\item
+  Formuler des questions
+\item
+  Chercher des réponses à ces questions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    statistiques descriptives
+  \item
+    tableaux de contingence
+  \item
+    graphiques
+  \end{itemize}
+\item
+  Raffiner les questions
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Représentation graphique de base}
+\protect\hypertarget{repruxe9sentation-graphique-de-base}{}
+Passer en revue les types de graphiques selon les types de variable
+\end{frame}
+
+\begin{frame}{Éléments graphiques clés}
+\protect\hypertarget{uxe9luxe9ments-graphiques-cluxe9s}{}
+\begin{itemize}
+\tightlist
+\item
+  Titre et annotation
+\item
+  Libellés et unités sur les axes
+\item
+  Libellé de l'axe des \(y\) en sous-titre
+\item
+  Rotation si étiquettes trop longue (variable discrète)
+\item
+  Palette de couleur pour daltoniens
+\item
+  Taille de police suffisante pour lisibilité!
+\end{itemize}
+\end{frame}
+
+
+
+\end{document}

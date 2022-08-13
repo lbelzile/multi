@@ -1,0 +1,29 @@
+---
+title: "Réduction de la dimension"
+---
+
+## Contenu
+
+- Analyse en composantes principales
+- Analyse factorielle exploratoire
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 3 (Réduction de la dimension)](https://lbelzile.github.io/math60602/02-analysefactorielle.html)
+
+
+## Diapositives 
+
+<iframe src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" style="width:718px; height:700px;" frameborder="0"></iframe>
+
+## Exercices
+
+- {{< fa file >}} [Exercices 2](exercices/02-exercice.html)
+
+## Objectifs d'apprentissage
+
+- Reconnaître les situations où la réduction de la dimension est utile
+- Pouvoir déterminer le nombre adéquats de composantes principales ou de facteurs
+- Pouvoir lister les avantages et inconvénients des méthodes d'estimation pour l'analyse factorielle
+- Pouvoir calculer des échelles et vérifier leur cohérence interne.

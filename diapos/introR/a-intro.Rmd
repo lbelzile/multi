@@ -1,0 +1,81 @@
+---
+title: "Démarrer avec R et RStudio"
+output: html_document
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+data(mpg)
+```
+
+## R Markdown
+
+Vous avez entre les mains un fichier [R Markdown](http://rmarkdown.rstudio.com) (extension .Rmd). Quand vous exécutez le code dans le fichier, le résultat apparaît en dessous du bloc code. 
+
+Le code R doit être placé dans des **blocs de code**, séparés par trois accents graves. Essayez d'exécuter ce bloc en cliquant sur le triangle vert Démarrer (*Run*) button (a small green triangle) ou en appuyant sur *Ctrl+Shift+Enter* (ou *Cmd+Shift+Enter* sur Mac). 
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = cty, 
+                           y = hwy), 
+             alpha = 0.2)
+```
+
+## Ajouter un nouveau bloc de code
+
+Ajouter un nouveau bloc de code en cliquant sur le bouton *Insert Chunk* dans la barre d'outils ou avec le raccourci *Cmd/Ctrl+Option+I*. 
+
+Ajoutez 2 + 2 dans votre bloc de code et compilez-le.
+
+INSÉRER LE BLOC CODE ICI
+
+
+## Tricoter un fichier R Markdown
+
+On utilise les fichiers R Markdown comme carnets de note pour écrire un texte, ajouter notre code et conserver les sorties.
+
+Les fichiers R Markdown peuvent également servir à des publicaitons. Utilisez le bouton Tricoter ("Knit") dans la barre d'outils. Tout le code R sera compilé de haut en bas et le fichier résultant inclura les blocs codes et la sortie dans un fichier HTML ---vous pouvez voir le résultat dans `01-getting-started.html` dans l'onglet Fichier (ou Viewer). C'est une bonne façon d'enregistrer vos manipulations et de partager votre travail (vous pouvez aussi produire des documents PDF ou Word).
+
+## Assignation de variables
+
+Quelle est la différence entre le code de ce bloc:
+
+```{r}
+filter(mtcars, cyl == 4)
+```
+
+Et celui là?
+
+```{r}
+four_cyls <- filter(mtcars, cyl == 4)
+```
+
+## Fonctions
+
+ `seq`
+
+Ajouter un bloc qui utilise `seq()` pour créer un<br>vecteur de nombres de 5 à 30, espacés par sauts de 5<br>.small[(5, 10, 15, 20,
+
+CHUNK HERE
+
+
+## Syntaxe fautive
+
+Compilez chaque bloc code, lisez le message d'erreur et essayez de corriger le code.
+
+```{r}
+#| error: true
+sd(pull(.data = starwars, var = mass)
+```
+
+```{r}
+#| error: true
+mon_nom <- "Leo'
+```
+
+```{r}
+#| error: true
+pull(.data = "starwars", var = height)
+```
