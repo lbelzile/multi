@@ -15,7 +15,7 @@ title: "Programmation en **R**"
 
 ## Diapositives 
 
-Chaque heure de la séance sera consacré à une des sujets suivants. Vous pouvez [télécharger l'archive](/diapos/introR.zip) contenant les documents et les données pour les exercices réalisés en classe.
+Chaque heure de la séance sera consacré à un sujet différent. Vous pouvez [télécharger l'archive](/diapos/introR.zip) contenant les documents et les données pour les exercices réalisés en classe.
 
 :::{.callout-tip}
 Si vous tapez<kbd>?</kbd> (ou <kbd>shift</kbd> + <kbd>/</kbd>) en naviguant à travers la série de diapositives, vous obtiendrez une liste d'options.
@@ -43,6 +43,10 @@ xaringanExtra::embed_xaringan(
   ratio = "16:9"
 ) 
 ```
+
+## Exercices
+
+- {{< fa file >}} [Exercices 1](/exercices/01-exercice.html)
 
 ## Objectifs d'apprentissage
 

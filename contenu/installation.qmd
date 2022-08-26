@@ -36,6 +36,16 @@ include_graphics("../files/img/install/install-r-windows.png", error = FALSE)
 
 4. Si vous utilisez macOS, [téléchargez et installez XQuartz](https://www.xquartz.org/). Cette étape n'est pas nécessaire sur Windows.
 
+<-- 
+Certains paquets **R** nécessitent XCode. Pour installer une version minimale sur Unix, tapez
+
+```{r xcode, eval=FALSE, echo=TRUE}
+rstudioapi::terminalExecute(
+  command = "xcode-select --install"
+ )
+```
+
+-->
 
 ### Installer RStudio
 
