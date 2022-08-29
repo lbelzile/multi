@@ -19,7 +19,7 @@ tar_option_set(
 here_rel <- function(...) {fs::path_rel(here::here(...))}
 
 # Load functions for the pipeline
-source("R/tar_slides.R")
+# source("R/tar_slides.R")
 
  list(
  ## Xaringan slides
@@ -35,16 +35,16 @@ source("R/tar_slides.R")
   # convert them to PDF with pagedown
   #
   # The main index.qmd page loads xaringan_pdfs as a target to link it as a dependency
-  tar_files(xaringan_html_files, {
-    xaringan_slides
-    list.files(here_rel("diapos"),
-               pattern = "\\.html",
-               full.names = TRUE)
-  }),
-  tar_target(xaringan_pdfs,
-             xaringan_to_pdf(xaringan_html_files),
-             pattern = map(xaringan_html_files),
-             format = "file"),
+  #tar_files(xaringan_html_files, {
+  #  xaringan_slides
+  #  list.files(here_rel("diapos"),
+  #             pattern = "\\.html",
+  #             full.names = TRUE)
+  #}),
+  #tar_target(xaringan_pdfs,
+  #           xaringan_to_pdf(xaringan_html_files),
+  #           pattern = map(xaringan_html_files),
+  #           format = "file"),
 
  
   ## Class schedule file ----

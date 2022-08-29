@@ -114,19 +114,19 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
-  \renewcommand*\contentsname{Table des matières}
+  \renewcommand*\contentsname{Table of contents}
 \else
-  \newcommand\contentsname{Table des matières}
+  \newcommand\contentsname{Table of contents}
 \fi
 \ifdefined\listfigurename
-  \renewcommand*\listfigurename{Liste des figures}
+  \renewcommand*\listfigurename{List of Figures}
 \else
-  \newcommand\listfigurename{Liste des figures}
+  \newcommand\listfigurename{List of Figures}
 \fi
 \ifdefined\listtablename
-  \renewcommand*\listtablename{Liste des tableaux}
+  \renewcommand*\listtablename{List of Tables}
 \else
-  \newcommand\listtablename{Liste des tableaux}
+  \newcommand\listtablename{List of Tables}
 \fi
 \ifdefined\figurename
   \renewcommand*\figurename{Figure}
@@ -134,16 +134,16 @@
   \newcommand\figurename{Figure}
 \fi
 \ifdefined\tablename
-  \renewcommand*\tablename{Tableau}
+  \renewcommand*\tablename{Table}
 \else
-  \newcommand\tablename{Tableau}
+  \newcommand\tablename{Table}
 \fi
 }
 \@ifpackageloaded{float}{}{\usepackage{float}}
 \floatstyle{ruled}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
-\floatname{codelisting}{Énumération}
-\newcommand*\listoflistings{\listof{codelisting}{Liste des énumérations}}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -156,9 +156,6 @@
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
 \makeatother
 \makeatletter
-\makeatother
-\makeatletter
-\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -180,25 +177,69 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, breakable, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
-\begin{frame}{Notions de base}
-\protect\hypertarget{notions-de-base}{}
-\begin{itemize}
-\tightlist
-\item
-  Variable
-\item
-  Observation
-\end{itemize}
+\begin{frame}{Analyse de données}
+\protect\hypertarget{analyse-de-donnuxe9es}{}
+\begin{figure}
 
-\textbf{Bonnes pratiques pour l'organisation de données:}
+{\centering \includegraphics[width=1\textwidth,height=\textheight]{figures/tidydata_5.jpg}
+
+}
+
+\caption{Allison Horst (CC BY 4.0)}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Organisation du travail}
+\protect\hypertarget{organisation-du-travail}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/r4ds_data-science_fr.png}
+
+}
+
+\caption{Adapté de \emph{R for Data Science}, H. Wickham et G.
+Grolemund}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Organisation des données}
+\protect\hypertarget{organisation-des-donnuxe9es}{}
+\textbf{Quelques bonnes pratiques}
+
+\includegraphics{figures/DataOrganizationinSpreadsheets.png}
 
 \begin{quote}
 Karl W. Broman \& Kara H. Woo (2018) Data Organization in Spreadsheets,
 The American Statistician, 72:1, 2-10, DOI:
 10.1080/00031305.2017.1375989
 \end{quote}
+\end{frame}
+
+\begin{frame}{Données en format ``tidy''}
+\protect\hypertarget{donnuxe9es-en-format-tidy}{}
+\begin{itemize}
+\tightlist
+\item
+  variables en colonnes
+\item
+  observations en lignes
+\item
+  une seule mesure par cellule
+\end{itemize}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/tidydata_1.jpg}
+
+}
+
+\caption{Allison Horst (CC BY 4.0)}
+
+\end{figure}
 \end{frame}
 
 \begin{frame}{Types de variables numériques}
@@ -219,29 +260,6 @@ The American Statistician, 72:1, 2-10, DOI:
 \begin{figure}
 
 {\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/nominal_ordinal_binary.png}
-
-}
-
-\caption{IAllison Horst (CC BY 4.0)}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Données en format ``tidy''}
-\protect\hypertarget{donnuxe9es-en-format-tidy}{}
-\begin{itemize}
-\tightlist
-\item
-  variables en colonnes
-\item
-  observations en lignes
-\item
-  une seule mesure par cellule
-\end{itemize}
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/tidydata_1.jpg}
 
 }
 
@@ -273,32 +291,179 @@ Vérifier la présence de
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Analyse exploratoire}
-\protect\hypertarget{analyse-exploratoire}{}
-\begin{enumerate}
+\begin{frame}{Visualisation}
+\protect\hypertarget{visualisation}{}
+\begin{quote}
+\emph{Un simple graphique transmet plus d'information à l'analyste que
+n'importe quel autre option}
+\end{quote}
+
+\begin{columns}[T]
+\begin{column}{0.8\textwidth}
+\end{column}
+
+\begin{column}{0.2\textwidth}
+John Tukey
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Qu'est ce qu'un bon graphique?}
+\protect\hypertarget{quest-ce-quun-bon-graphique}{}
+\begin{quote}
+\emph{communique des idées complexes avec clarté, précision et
+efficacité \ldots{} le graphique qui offre au lecteur le plus grand
+nombre d'idées le plus rapidement possible avec le moins d'encre et le
+plus petit espace possible}
+\end{quote}
+
+\begin{columns}[T]
+\begin{column}{0.7\textwidth}
+\end{column}
+
+\begin{column}{0.3\textwidth}
+Edward Tufte, 1983
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Grammaire des graphiques}
+\protect\hypertarget{grammaire-des-graphiques}{}
+\begin{columns}[T]
+\begin{column}{0.4\textwidth}
+\includegraphics[width=0.8\textwidth,height=\textheight]{img/03/gg-book.jpg}
+\end{column}
+
+\begin{column}{0.6\textwidth}
+\begin{itemize}
 \tightlist
 \item
-  Formuler des questions
-\item
-  Chercher des réponses à ces questions
+  Éléments (couches):
 
   \begin{itemize}
   \tightlist
   \item
-    statistiques descriptives
+    données
   \item
-    tableaux de contingence
+    application (variable \(\to\) esthétique)
   \item
-    graphiques
+    objets géométriques
+  \item
+    transformations
+  \item
+    positionnement
   \end{itemize}
 \item
-  Raffiner les questions
+  Échelle / guide
+\item
+  Coordonnées (facettes, système de coordonnés)
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Règles d'or}
+\protect\hypertarget{ruxe8gles-dor}{}
+Pour une visualisation effective:
+
+\begin{enumerate}
+\tightlist
+\item
+  le choix du graphique dépend du type de variable
+\item
+  soignez les apparences
+\item
+  portez une attention particulière à la perception visuelle humaine
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{Représentation graphique de base}
-\protect\hypertarget{repruxe9sentation-graphique-de-base}{}
-Passer en revue les types de graphiques selon les types de variable
+\begin{frame}{Règle 1: choix de graphiques avec une seule variable}
+\protect\hypertarget{ruxe8gle-1-choix-de-graphiques-avec-une-seule-variable}{}
+\begin{itemize}
+\tightlist
+\item
+  continue: histogramme, densité
+\item
+  discrète: diagramme en bâton
+\item
+  catégorielle: diagramme en bâton (fréquence ou pourcentage)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+
+{\centering \includegraphics{MATH60602-diapos1_files/figure-beamer/figure-renfe_barplot-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+
+{\centering \includegraphics{MATH60602-diapos1_files/figure-beamer/renfe_hist-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Règle 1: choix de graphiques avec deux variables}
+\protect\hypertarget{ruxe8gle-1-choix-de-graphiques-avec-deux-variables}{}
+\begin{itemize}
+\tightlist
+\item
+  continues: nuage de points
+\item
+  catégorielles: diagramme à bande (avec couleurs), carte thermique
+\item
+  continue \(\times\) catégorielle: boîte à moustache, graphique violon
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/renfe_boxplot-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/renfe_nuagepts_code-1.pdf}
+
+}
+
+\end{figure}
+
+\begin{itemize}
+\tightlist
+\item
+  Qu'est-ce qui cloche dans la représentation graphique précédente?
+\item
+  Comment pourrait-on remédier aux problèmes soulevés?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Règle 2: soignez les apparences}
+\protect\hypertarget{ruxe8gle-2-soignez-les-apparences}{}
+Certaines visualisations sont plus effectives/adéquates que d'autres
+
+\begin{itemize}
+\tightlist
+\item
+  votre graphique doit être interprétable uniquement avec la légende.
+\item
+  inclure les noms de variables \textbf{et} les unités
+\item
+  ajouter une description dans le texte et faire une référence croisée
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Éléments graphiques clés}
@@ -312,11 +477,123 @@ Passer en revue les types de graphiques selon les types de variable
 \item
   Libellé de l'axe des \(y\) en sous-titre
 \item
-  Rotation si étiquettes trop longue (variable discrète)
+  Inverser les axes si les étiquettes trop longue (variable
+  catégorielles)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Règle 3: perception visuelle humaine}
+\protect\hypertarget{ruxe8gle-3-perception-visuelle-humaine}{}
+\begin{itemize}
+\tightlist
 \item
-  Palette de couleur pour daltoniens
+  ratio longueur/largeur
 \item
-  Taille de police suffisante pour lisibilité!
+  taille de police suffisante pour lisibilité
+\item
+  espace entre bandes
+\item
+  étendu des axes (incluant ou pas zéro)
+\item
+  choix de couleurs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    noir/blanc avec contraste
+  \item
+    palettes pour daltoniens
+  \end{itemize}
+\item
+  comparaison d'aires/superficies (difficile)
+\item
+  graphiques 3D / avec rotation superflue à éviter
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problèmes de perceptions}
+\protect\hypertarget{probluxe8mes-de-perceptions}{}
+\includegraphics{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-9-1.pdf}
+\end{frame}
+
+\begin{frame}{Mauvaise palette de couleur}
+\protect\hypertarget{mauvaise-palette-de-couleur}{}
+\begin{itemize}
+\item
+  Gauche: Carte originale de la NOAA en niveaux de gris: on voit
+  clairement le problème de saturation
+\item
+  Droite: solution potentielle avec palette de couleurs différente.
+\end{itemize}
+
+\includegraphics{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-10-1.pdf}
+
+(Source \href{https://www.zeileis.org/news/dorian_rainbow/}{Achim
+Zeileis})
+\end{frame}
+
+\begin{frame}{Pourquoi créer des graphiques?}
+\protect\hypertarget{pourquoi-cruxe9er-des-graphiques}{}
+\begin{quote}
+\emph{Les résumés numériques focalisent l'attention sur les valeurs
+attendues, les résumés graphiques sur les valeurs inattendues.}
+\end{quote}
+
+\begin{columns}[T]
+\begin{column}{0.8\textwidth}
+\end{column}
+
+\begin{column}{0.2\textwidth}
+John Tukey
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Étapes de l'analyse exploratoire}
+\protect\hypertarget{uxe9tapes-de-lanalyse-exploratoire}{}
+\begin{enumerate}
+\tightlist
+\item
+  Formuler des questions
+\item
+  Chercher des réponses à ces questions à l'aide de
+
+  \begin{itemize}
+  \tightlist
+  \item
+    statistiques descriptives
+  \item
+    tableaux de contingence
+  \item
+    graphiques
+  \end{itemize}
+\item
+  Infirmer ou confirmer nos intuitions
+\item
+  Raffiner les questions suite aux observations
+\item
+  Répéter le processus
+\end{enumerate}
+
+Écrire un résumé des trouvailles et des aspects \textbf{importants}
+uniquement.
+\end{frame}
+
+\begin{frame}{Références complémentaires}
+\protect\hypertarget{ruxe9fuxe9rences-compluxe9mentaires}{}
+Pour aller plus loin:
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://socviz.co/lookatdata.html\#lookatdata}{Chapitre 1 de
+  \emph{Data Visualization: A practical introduction} par Kieran Healy}
+\item
+  \href{https://serialmentor.com/dataviz/}{\emph{Fundamentals of Data
+  Visualization} par Claus O. Wilke}
+\item
+  \href{https://r4ds.had.co.nz/}{Chapitre 3 de \emph{\textbf{R} for Data
+  Science} par Garrett Grolemund et Hadley Wickham}
 \end{itemize}
 \end{frame}
 

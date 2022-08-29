@@ -20,29 +20,27 @@ include-in-header:
         \usepackage{tabu}
 ---
 
-# Notions de base
+# Analyse de données
 
-- Variable
-- Observation
 
-**Bonnes pratiques pour l'organisation de données:**
+```{r, out.width='100%', fig.cap="Allison Horst (CC BY 4.0)"}
+knitr::include_graphics("figures/tidydata_5.jpg")
+```
+
+# Organisation du travail
+
+```{r echo=FALSE, eval = TRUE, fig.cap="Adapté de *R for Data Science*, H. Wickham et G. Grolemund", out.width='90%'}
+knitr::include_graphics("figures/r4ds_data-science_fr.png")
+```
+
+# Organisation des données
+
+**Quelques bonnes pratiques**
+
+![](figures/DataOrganizationinSpreadsheets.png)
 
 
 > Karl W. Broman & Kara H. Woo (2018) Data Organization in Spreadsheets, The American Statistician, 72:1, 2-10, DOI: 10.1080/00031305.2017.1375989
-
-
-
-# Types de variables numériques
-
-```{r, out.width='80%', fig.cap="Allison Horst (CC BY 4.0)"}
-knitr::include_graphics("figures/continuous_discrete.png")
-```
-
-# Types de variables catégorielles
-
-```{r, out.width='80%', fig.cap="IAllison Horst (CC BY 4.0)"}
-knitr::include_graphics("figures/nominal_ordinal_binary.png")
-```
 
 
 
@@ -56,6 +54,20 @@ knitr::include_graphics("figures/nominal_ordinal_binary.png")
 knitr::include_graphics("figures/tidydata_1.jpg")
 ```
 
+# Types de variables numériques
+
+```{r, out.width='80%', fig.cap="Allison Horst (CC BY 4.0)"}
+knitr::include_graphics("figures/continuous_discrete.png")
+```
+
+# Types de variables catégorielles
+
+```{r, out.width='80%', fig.cap="Allison Horst (CC BY 4.0)"}
+knitr::include_graphics("figures/nominal_ordinal_binary.png")
+```
+
+
+
 
 # Validation des données
 
@@ -67,24 +79,275 @@ Vérifier la présence de
    - valeur entière
    - chaînes de caractère
 
-# Analyse exploratoire
+# Visualisation
 
-1. Formuler des questions
-2. Chercher des réponses à ces questions
-    - statistiques descriptives
-    - tableaux de contingence
-    - graphiques
-3. Raffiner les questions
 
-# Représentation graphique de base
+> *Un simple graphique transmet plus d'information à l'analyste que n'importe quel autre option* 
 
-Passer en revue les types de graphiques selon les types de variable
+:::: {.columns}
+
+::: {.column width="80%"}
+
+:::
+
+::: {.column width="20%"}
+ John Tukey
+:::
+
+::::
+
+
+# Qu'est ce qu'un bon graphique?
+
+> *communique des idées complexes avec clarté, précision et efficacité ... le graphique qui offre au lecteur le plus grand nombre d'idées le plus rapidement possible avec le moins d'encre et le plus petit espace possible*  
+
+:::: {.columns}
+
+::: {.column width="70%"}
+
+:::
+
+::: {.column width="30%"}
+Edward Tufte, 1983
+:::
+
+::::
+
+
+
+---
+
+# Grammaire des graphiques
+
+
+:::: {.columns}
+
+::: {.column width="40%"}
+```{r, out.width='80%'}
+knitr::include_graphics("img/03/gg-book.jpg")
+```
+:::
+
+::: {.column width="60%"}
+
+- Éléments (couches):
+    - données
+    - application (variable $\to$ esthétique)
+    - objets géométriques
+    - transformations
+    - positionnement
+- Échelle / guide
+- Coordonnées (facettes, système de coordonnés)
+
+:::
+
+::::
+
+
+
+# Règles d'or 
+
+Pour une visualisation effective:
+
+1. le choix du graphique dépend du type de variable
+2. soignez les apparences
+3. portez une attention particulière à la perception visuelle humaine
+
+# Règle 1: choix de graphiques avec une seule variable 
+
+- continue: histogramme, densité
+- discrète: diagramme en bâton
+- catégorielle: diagramme en bâton (fréquence ou pourcentage)
+
+---
+
+```{r}
+#| label: figure-renfe_barplot
+#| fig-width: 6
+#| fig-height: 4
+#| fig.align: center
+data(renfe, package = "hecmulti")
+library(ggplot2)
+ggplot(data = renfe, 
+       aes(y = forcats::fct_rev(forcats::fct_infreq(classe)))) + 
+  geom_bar(aes(x = ..count.. / sum(..count..)), 
+           alpha = 0.5) +
+  labs(subtitle = "Répartitions des billets selon la classe", 
+       x = "", y = "")  +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1L)) + 
+  theme_minimal() + 
+  theme(panel.grid.major.y = element_blank())
+   
+```
+
+---
+
+```{r renfe_hist}
+#| fig.width: 6
+#| fig.height: 4
+#| fig.align: 'center'
+renfe |> subset(tarif == "Promo") |>
+  ggplot(aes(x = prix)) + 
+    geom_histogram(aes(y = (..count..)/sum(..count..)), bins = 30) +
+    geom_rug(sides = "b") + 
+    labs(x = "prix (en euros)", 
+         y = "",
+         title = "Répartition du prix des billets de train (%)",
+         subtitle = "Billets au tarif Promo entre Barcelone et Madrid.") +
+   theme_minimal()
+```
+
+
+# Règle 1: choix de graphiques avec deux variables
+
+- continues: nuage de points
+- catégorielles: diagramme à bande (avec couleurs), carte thermique
+- continue $\times$ catégorielle: boîte à moustache, graphique violon
+
+---
+
+
+```{r}
+#| label: renfe_boxplot
+#| cache: true
+#| echo: false
+#| fig.width: 6
+#| fig.height: 4
+#| fig.align: 'center'
+#| out.width: '90%'
+renfe |> subset(tarif == "Promo") |>
+    ggplot(aes(y = prix, x = classe, col = type)) + 
+    geom_boxplot() + 
+    labs(y = "",
+         x = "classe des billets",
+         col = "type de train",
+         subtitle = "Prix (en euros) de billets au tarif Promo") + 
+   scale_colour_viridis_d(option = "D") + 
+   scale_y_continuous(labels = scales::label_dollar(prefix = "", suffix = "€")) + 
+   theme_minimal() + 
+   theme(legend.position = "bottom")
+```
+
+---
+
+```{r renfe_nuagepts_code}
+#| fig.width: 6
+#| fig.height: 4
+#| fig.align: 'center'
+#| out.width: '70%'
+renfe |> subset(type != "REXPRESS") |>
+    ggplot(aes(x = duree, y = prix, col = type)) + 
+    geom_point() + 
+    labs(y = "", 
+         x = "durée de trajet (en minutes)",
+         col = "type de train",
+         subtitle = "Prix de billets de train en fonction de la durée de trajet") + 
+   scale_colour_viridis_d() +
+      scale_y_continuous(labels = scales::label_dollar(prefix = "", suffix = "€")) + 
+   theme_minimal() +
+   theme(legend.position = "bottom")
+```
+
+- Qu'est-ce qui cloche dans la représentation graphique précédente?
+- Comment pourrait-on remédier aux problèmes soulevés?
+
+
+
+# Règle 2: soignez les apparences
+
+Certaines visualisations sont plus effectives/adéquates que d'autres
+
+
+- votre graphique doit être interprétable uniquement avec la légende.
+- inclure les noms de variables **et** les unités
+- ajouter une description dans le texte et faire une référence croisée
 
 # Éléments graphiques clés
 
 - Titre et annotation
 - Libellés et unités sur les axes
 - Libellé de l'axe des $y$ en sous-titre
-- Rotation si étiquettes trop longue (variable discrète)
-- Palette de couleur pour daltoniens
-- Taille de police suffisante pour lisibilité!
+- Inverser les axes si les étiquettes trop longue (variable catégorielles)
+
+
+# Règle 3: perception visuelle humaine
+
++ ratio longueur/largeur
++ taille de police suffisante pour lisibilité
++ espace entre bandes
++ étendu des axes (incluant ou pas zéro)
++ choix de couleurs 
+   - noir/blanc avec contraste
+   - palettes pour daltoniens
++ comparaison d'aires/superficies (difficile)
++ graphiques 3D / avec rotation superflue à éviter
+
+# Problèmes de perceptions
+
+
+```{r}
+cowplot::ggdraw() + 
+  cowplot::draw_image("figures/Trump-tweet-62917931.png", width = 0.5) + 
+  cowplot::draw_image("figures/NOAA_tempete_a.jpg", width = 0.5, x = 0.5)
+```
+
+
+# Mauvaise palette de couleur
+
+- Gauche: Carte originale de la NOAA en niveaux de gris: on voit clairement le problème de saturation
+
+- Droite: solution potentielle avec palette de couleurs différente. 
+
+```{r}
+cowplot::ggdraw() + 
+  cowplot::draw_image("figures/NOAA_tempete_c.png", width = 0.5) + 
+  cowplot::draw_image("figures/NOAA_tempete_b.png", width = 0.5, x = 0.5)
+```
+
+(Source [Achim Zeileis](https://www.zeileis.org/news/dorian_rainbow/))
+
+# Pourquoi créer des graphiques?
+
+> *Les résumés numériques focalisent l'attention sur les valeurs attendues, les résumés graphiques sur les valeurs inattendues.* 
+
+:::: {.columns}
+
+::: {.column width="80%"}
+
+:::
+  
+::: {.column width="20%"}
+John Tukey
+:::
+
+::::
+
+
+
+
+# Étapes de l'analyse exploratoire
+
+1. Formuler des questions
+2. Chercher des réponses à ces questions à l'aide de
+    - statistiques descriptives
+    - tableaux de contingence
+    - graphiques
+3. Infirmer ou confirmer nos intuitions
+4. Raffiner les questions suite aux observations
+5. Répéter le processus
+
+Écrire un résumé des trouvailles et des aspects **importants** uniquement.
+
+
+
+
+
+# Références complémentaires
+
+Pour aller plus loin: 
+
+- [Chapitre 1 de *Data Visualization: A practical introduction* par Kieran Healy](https://socviz.co/lookatdata.html#lookatdata)
+- [*Fundamentals of Data Visualization* par Claus O. Wilke](https://serialmentor.com/dataviz/)
+- [Chapitre 3 de _**R** for Data Science_ par Garrett Grolemund et Hadley Wickham](https://r4ds.had.co.nz/)
+
+

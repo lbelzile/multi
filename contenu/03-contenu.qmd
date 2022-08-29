@@ -14,7 +14,12 @@ title: "Réduction de la dimension"
 
 
 ## Diapositives 
+
+- {{< fa file >}} [Réduction de la dimension](/diapos/MATH60602-diapos3.pdf)
+
+<!--
 <iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
+-->
 
 ## Exercices
 

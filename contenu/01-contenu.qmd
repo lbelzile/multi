@@ -12,7 +12,7 @@ title: "Introduction"
 ## Avant le cours
 
 - Se familiariser avec le [plan de cours](/syllabus), le [contenu des séances](/contenu/), le [forum en ligne](https://piazza.com/hec.ca/fall2022/math60602/home), les [exercices](/exercices) et les [devoirs](/evaluations/).
-
+- S'inscrire sur Piazza.
 
 
 ## Lectures
@@ -26,8 +26,30 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 ## Diapositives 
 
 
+- {{< fa file >}} [Survol des sujets](/diapos/MATH60602-diapos0.pdf)
+
+- {{< fa file >}} [Graphiques et analyse exploratoire](/diapos/MATH60602-diapos1.pdf)
+
+
+## Activités
+
+**[Atelier de visualisation](/files/graphiques.zip)**: vous devrez identifier en binômes
+
+- les variables et composantes esthétiques
+- la dimension à laquelle elles sont affectées (axes des abscisse, axe des ordonnées, couleur, forme, taille, etc.)
+- le type de représentation (diagramme en bâton, nuage de point, en violon, etc.)
+- les forces et faiblesses des représentations graphiques (absence de légende, problème de lisibilité, etc.)
+
+
 
 ## Objectifs d'apprentissage
 
 - Réaliser une analyse exploratoire et formuler des questions en lien avec une base de données.
+- Décomposer un graphique en éléments et déterminer la représentation adéquate pour une question donnée.
+
+## Ressources complémentaires
+
+- [Chapitre 7 de **R for Data Science** par Garrett Grolemund et Hadley Wickham](https://r4ds.had.co.nz/exploratory-data-analysis.html)
+- [Chapitre 1 de *Data Visualization: A practical introduction* par Kieran Healy](https://socviz.co/lookatdata.html#lookatdata)
+- [Feuille aide-mémoire de DataViz](https://policyviz.com/2018/08/07/dataviz-cheatsheet/)
 

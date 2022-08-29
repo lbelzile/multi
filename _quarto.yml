@@ -2,12 +2,13 @@ project:
   type: website
   render:
     - "*.qmd"
-    - "!slides/"
+    - "!diapos/"
   resources:
     - "files/"
     - "diapos/*.html"
     - "diapos/*.pdf"
     - "diapos/img/"
+    - "diapos/figures/"
     - "diapos/libs/"
     - "diapos/css/"
     - "diapos/*_files/"
@@ -24,7 +25,7 @@ toc-title: "Table des matières"
 website:
   title: "Analyse multidimensionnelle appliquée"
   site-url: "https://lbelzile.github.io/math60602"
-  description-meta: "Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l'aide de logiciels appropriés."
+  description: "Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l'aide de logiciels appropriés."
 
   navbar:
     pinned: true
@@ -48,8 +49,7 @@ website:
       - icon: inbox-fill
         href: "https://lbelzile.github.io/hecmulti"
         aria-label: Données
-      	 
- 
+
   sidebar:
     - title: "Contenu"
       style: "docked"
@@ -72,7 +72,7 @@ website:
               file: contenu/02-contenu.qmd
             - text: "3: Réduction de la dimension"
               file: contenu/03-contenu.qmd
- 
+
 
     - title: "Devoirs"
       style: "docked"
