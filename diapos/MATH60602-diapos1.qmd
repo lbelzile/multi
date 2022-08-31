@@ -25,6 +25,15 @@ include-in-header:
 
 ```{r, out.width='100%', fig.cap="Allison Horst (CC BY 4.0)"}
 knitr::include_graphics("figures/tidydata_5.jpg")
+knitr::opts_chunk$set(
+                      fig.width = 6,  # generated images
+                      fig.pos = "t", 
+                      fig.retina = 2,
+                      fig.align = "center",
+                      out.width = "100%",
+                      dev = "png",
+                      dpi = 300,
+                      dev.args = list(png = list(type = "cairo-png")))
 ```
 
 # Organisation du travail
@@ -42,6 +51,26 @@ knitr::include_graphics("figures/r4ds_data-science_fr.png")
 
 > Karl W. Broman & Kara H. Woo (2018) Data Organization in Spreadsheets, The American Statistician, 72:1, 2-10, DOI: 10.1080/00031305.2017.1375989
 
+# Nettoyage des données
+
+- Toujours garder une copie des données brutes
+- Automatiser le nettoyage
+
+
+```{r}
+cowplot::ggdraw() + 
+  cowplot::draw_image("figures/excel-kenya-census-rohan.png", width = 0.5) + 
+  cowplot::draw_image("figures/reproducibility.png", width = 0.5, x = 0.5)
+```
+
+Ne jamais ouvrir et modifier/sauvegarder les données dans Excel!
+
+# Histoires d'horreur
+
+
+```{r echo=FALSE, eval = TRUE, fig.cap="Capture d'écran d'un article du quotidien *The Guardian*", out.width='90%'}
+knitr::include_graphics("figures/guardian-covid-excel.png")
+```
 
 
 # Données en format "tidy"
@@ -53,6 +82,15 @@ knitr::include_graphics("figures/r4ds_data-science_fr.png")
 ```{r, out.width='70%', fig.cap="Allison Horst (CC BY 4.0)"}
 knitr::include_graphics("figures/tidydata_1.jpg")
 ```
+
+# Exemple
+
+Est-ce que ces données de la Régie de l'Énergie sont en format 'tidy'?
+
+```{r, out.width='100%'}
+knitr::include_graphics("figures/regie-energie.png")
+```
+
 
 # Types de variables numériques
 
@@ -73,10 +111,10 @@ knitr::include_graphics("figures/nominal_ordinal_binary.png")
 
 Vérifier la présence de
 
-- valeurs manquantes (`NA`), $-999$, etc.
+- valeurs manquantes (`NA`, points, cellules vides, 999, -1, etc.)
 - relations logiques (total, moyenne, etc.) entre variables
 - variables catégorielles non déclarées
-   - valeur entière
+   - valeur entière (par ex., jours de la semaine)
    - chaînes de caractère
 
 # Visualisation
@@ -176,24 +214,27 @@ ggplot(data = renfe,
        x = "", y = "")  +
   scale_x_continuous(labels = scales::percent_format(accuracy = 1L)) + 
   theme_minimal() + 
-  theme(panel.grid.major.y = element_blank())
+  theme(panel.grid.major.y = element_blank(),
+        plot.subtitle = element_text(hjust = 0.2))
    
 ```
 
 ---
 
 ```{r renfe_hist}
-#| fig.width: 6
-#| fig.height: 4
-#| fig.align: 'center'
+#| fig-width: 6
+#| fig-height: 3.5
+#| fig-align: 'center'
 renfe |> subset(tarif == "Promo") |>
   ggplot(aes(x = prix)) + 
     geom_histogram(aes(y = (..count..)/sum(..count..)), bins = 30) +
     geom_rug(sides = "b") + 
     labs(x = "prix (en euros)", 
          y = "",
-         title = "Répartition du prix des billets de train (%)",
-         subtitle = "Billets au tarif Promo entre Barcelone et Madrid.") +
+         title = "Répartition du prix des billets de train",
+         subtitle = "billets au tarif Promo entre Barcelone et Madrid.") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) + 
+   scale_x_continuous(labels = scales::label_dollar(prefix = "", suffix = "€")) + 
    theme_minimal()
 ```
 
@@ -204,7 +245,17 @@ renfe |> subset(tarif == "Promo") |>
 - catégorielles: diagramme à bande (avec couleurs), carte thermique
 - continue $\times$ catégorielle: boîte à moustache, graphique violon
 
+# Boîte à moustaches
+
+
+```{r, out.width='100%'}
+knitr::include_graphics("figures/01-intro-boiteamoustache.png")
+```
+
+
 ---
+
+
 
 
 ```{r}
@@ -214,7 +265,7 @@ renfe |> subset(tarif == "Promo") |>
 #| fig.width: 6
 #| fig.height: 4
 #| fig.align: 'center'
-#| out.width: '90%'
+#| out.width: '100%'
 renfe |> subset(tarif == "Promo") |>
     ggplot(aes(y = prix, x = classe, col = type)) + 
     geom_boxplot() + 
@@ -223,7 +274,9 @@ renfe |> subset(tarif == "Promo") |>
          col = "type de train",
          subtitle = "Prix (en euros) de billets au tarif Promo") + 
    scale_colour_viridis_d(option = "D") + 
-   scale_y_continuous(labels = scales::label_dollar(prefix = "", suffix = "€")) + 
+   scale_y_continuous(
+     labels = scales::label_dollar(prefix = "", 
+                                   suffix = "€")) + 
    theme_minimal() + 
    theme(legend.position = "bottom")
 ```
