@@ -71,9 +71,9 @@ Vous ne pouvez pas vous inscrire à ce cours si vous avez postulé ou réussi le
 
 ## Logiciels et programmation
 
-Nous utiliserons le langage de programmation [**R**](https://cran.r-project.org/). Les notes de cours et les [exercices](/exercices) contiennent des scripts pour vous aider. La courbe d'apprentissage est abrupte, mais nous consacrerons la deuxième séances de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des [instructions pour installer, **R**, Rstudio et d'autres utilitaires ici.](/contenu/installation/)
+Nous utiliserons le langage de programmation [**R**](https://cran.r-project.org/). Les notes de cours et les [exercices](/exercices) contiennent des scripts pour vous aider. La courbe d'apprentissage est abrupte, mais nous consacrerons la deuxième séances de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des [instructions pour installer, **R**, Rstudio et d'autres utilitaires ici.](/contenu/installation)
 
-Chercher sur un moteur de recherche des sujets liés à **R** est parfois fastidieux; essayez `rstats` comme mot-clé si `r` ne retourne rien. Le forum de question [StackOverflow](https://stackoverflow.com/), un site de questions et réponses pour la programmation, ainsi que la [communauté RStudio](https://community.rstudio.com/), un forum dédié à RStudio et au tidyverse, sont d'autres ressrouces utiles.
+Chercher sur un moteur de recherche des sujets liés à **R** est parfois fastidieux; essayez `rstats` comme mot-clé si `r` ne retourne rien. Le forum de question [StackOverflow](https://stackoverflow.com/), un site de questions et réponses pour la programmation, ainsi que la [communauté RStudio](https://community.rstudio.com/), un forum dédié à RStudio et au tidyverse, sont d'autres ressources utiles.
 
 ## Manuel
 

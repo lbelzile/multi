@@ -177,7 +177,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, interior hidden, boxrule=0pt, breakable, sharp corners, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, sharp corners, borderline west={3pt}{0pt}{shadecolor}, breakable, interior hidden, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de données}
 \protect\hypertarget{analyse-de-donnuxe9es}{}
@@ -194,7 +194,7 @@
 
 \begin{frame}{Organisation du travail}
 \protect\hypertarget{organisation-du-travail}{}
-\begin{figure}[t]
+\begin{figure}
 
 {\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/r4ds_data-science_fr.png}
 
@@ -229,20 +229,14 @@ The American Statistician, 72:1, 2-10, DOI:
   Automatiser le nettoyage
 \end{itemize}
 
-\begin{figure}[t]
-
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-3-1.png}
-
-}
-
-\end{figure}
+\includegraphics{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-3-1.pdf}
 
 Ne jamais ouvrir et modifier/sauvegarder les données dans Excel!
 \end{frame}
 
 \begin{frame}{Histoires d'horreur}
 \protect\hypertarget{histoires-dhorreur}{}
-\begin{figure}[t]
+\begin{figure}
 
 {\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/guardian-covid-excel.png}
 
@@ -265,7 +259,7 @@ Ne jamais ouvrir et modifier/sauvegarder les données dans Excel!
   une seule mesure par cellule
 \end{itemize}
 
-\begin{figure}[t]
+\begin{figure}
 
 {\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/tidydata_1.jpg}
 
@@ -280,18 +274,12 @@ Ne jamais ouvrir et modifier/sauvegarder les données dans Excel!
 \protect\hypertarget{exemple}{}
 Est-ce que ces données de la Régie de l'Énergie sont en format `tidy'?
 
-\begin{figure}[t]
-
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{figures/regie-energie.png}
-
-}
-
-\end{figure}
+\includegraphics[width=1\textwidth,height=\textheight]{figures/regie-energie.png}
 \end{frame}
 
 \begin{frame}{Types de variables numériques}
 \protect\hypertarget{types-de-variables-numuxe9riques}{}
-\begin{figure}[t]
+\begin{figure}
 
 {\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/continuous_discrete.png}
 
@@ -304,7 +292,7 @@ Est-ce que ces données de la Régie de l'Énergie sont en format `tidy'?
 
 \begin{frame}{Types de variables catégorielles}
 \protect\hypertarget{types-de-variables-catuxe9gorielles}{}
-\begin{figure}[t]
+\begin{figure}
 
 {\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/nominal_ordinal_binary.png}
 
@@ -379,13 +367,7 @@ Edward Tufte, 1983
 \protect\hypertarget{grammaire-des-graphiques}{}
 \begin{columns}[T]
 \begin{column}{0.4\textwidth}
-\begin{figure}[t]
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{img/03/gg-book.jpg}
-
-}
-
-\end{figure}
+\includegraphics[width=0.8\textwidth,height=\textheight]{img/03/gg-book.jpg}
 \end{column}
 
 \begin{column}{0.6\textwidth}
@@ -445,9 +427,9 @@ Pour une visualisation effective:
 \end{frame}
 
 \begin{frame}
-\begin{figure}[t]
+\begin{figure}
 
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/figure-renfe_barplot-1.png}
+{\centering \includegraphics{MATH60602-diapos1_files/figure-beamer/figure-renfe_barplot-1.pdf}
 
 }
 
@@ -455,9 +437,9 @@ Pour une visualisation effective:
 \end{frame}
 
 \begin{frame}
-\begin{figure}[t]
+\begin{figure}
 
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/renfe_hist-1.png}
+{\centering \includegraphics{MATH60602-diapos1_files/figure-beamer/renfe_hist-1.png}
 
 }
 
@@ -479,17 +461,11 @@ Pour une visualisation effective:
 
 \begin{frame}{Boîte à moustaches}
 \protect\hypertarget{bouxeete-uxe0-moustaches}{}
-\begin{figure}[t]
-
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{figures/01-intro-boiteamoustache.png}
-
-}
-
-\end{figure}
+\includegraphics[width=1\textwidth,height=\textheight]{figures/01-intro-boiteamoustache.png}
 \end{frame}
 
 \begin{frame}
-\begin{figure}[t]
+\begin{figure}
 
 {\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/renfe_boxplot-1.png}
 
@@ -499,7 +475,7 @@ Pour une visualisation effective:
 \end{frame}
 
 \begin{frame}
-\begin{figure}[t]
+\begin{figure}
 
 {\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/renfe_nuagepts_code-1.png}
 
@@ -578,13 +554,7 @@ Certaines visualisations sont plus effectives/adéquates que d'autres
 
 \begin{frame}{Problèmes de perceptions}
 \protect\hypertarget{probluxe8mes-de-perceptions}{}
-\begin{figure}[t]
-
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-13-1.png}
-
-}
-
-\end{figure}
+\includegraphics{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-13-1.pdf}
 \end{frame}
 
 \begin{frame}{Mauvaise palette de couleur}
@@ -597,13 +567,7 @@ Certaines visualisations sont plus effectives/adéquates que d'autres
   Droite: solution potentielle avec palette de couleurs différente.
 \end{itemize}
 
-\begin{figure}[t]
-
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-14-1.png}
-
-}
-
-\end{figure}
+\includegraphics{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-14-1.pdf}
 
 (Source \href{https://www.zeileis.org/news/dorian_rainbow/}{Achim
 Zeileis})

@@ -32,8 +32,7 @@ knitr::opts_chunk$set(
                       fig.align = "center",
                       out.width = "100%",
                       dev = "png",
-                      dpi = 300,
-                      dev.args = list(png = list(type = "cairo-png")))
+                      dpi = 200)
 ```
 
 # Organisation du travail
@@ -212,10 +211,11 @@ ggplot(data = renfe,
            alpha = 0.5) +
   labs(subtitle = "Répartitions des billets selon la classe", 
        x = "", y = "")  +
-  scale_x_continuous(labels = scales::percent_format(accuracy = 1L)) + 
+  scale_x_continuous(expand = c(0,0), 
+                     labels = scales::percent_format(accuracy = 1L)) + 
   theme_minimal() + 
   theme(panel.grid.major.y = element_blank(),
-        plot.subtitle = element_text(hjust = 0.2))
+        plot.subtitle = element_text(hjust = 0))
    
 ```
 
@@ -225,7 +225,10 @@ ggplot(data = renfe,
 #| fig-width: 6
 #| fig-height: 3.5
 #| fig-align: 'center'
-renfe |> subset(tarif == "Promo") |>
+#| dev: png
+#| dpi: 200
+renfe |> 
+  subset(tarif == "Promo") |>
   ggplot(aes(x = prix)) + 
     geom_histogram(aes(y = (..count..)/sum(..count..)), bins = 30) +
     geom_rug(sides = "b") + 
@@ -266,6 +269,8 @@ knitr::include_graphics("figures/01-intro-boiteamoustache.png")
 #| fig.height: 4
 #| fig.align: 'center'
 #| out.width: '100%'
+#| dev: png
+#| dpi: 200
 renfe |> subset(tarif == "Promo") |>
     ggplot(aes(y = prix, x = classe, col = type)) + 
     geom_boxplot() + 
@@ -288,6 +293,8 @@ renfe |> subset(tarif == "Promo") |>
 #| fig.height: 4
 #| fig.align: 'center'
 #| out.width: '70%'
+#| dev: png
+#| dpi: 200
 renfe |> subset(type != "REXPRESS") |>
     ggplot(aes(x = duree, y = prix, col = type)) + 
     geom_point() + 

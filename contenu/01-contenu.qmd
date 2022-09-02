@@ -33,9 +33,9 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 
 ## Activités
 
-**[Atelier de visualisation](/files/graphiques.zip)**: vous devrez identifier en binômes
+**[Atelier de visualisation](/files/graphiques.zip)**: vous devrez analyser des graphiques en équipes et donner une appréciation d'ensemble de l'efficacité du graphique pour transmettre une histoire en plus d'identifier les informations suivantes:
 
-- les variables et composantes esthétiques
+- les variables
 - la dimension à laquelle elles sont affectées (axes des abscisse, axe des ordonnées, couleur, forme, taille, etc.)
 - le type de représentation (diagramme en bâton, nuage de point, en violon, etc.)
 - les forces et faiblesses des représentations graphiques (absence de légende, problème de lisibilité, etc.)
