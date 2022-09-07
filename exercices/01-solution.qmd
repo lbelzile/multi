@@ -1,0 +1,45 @@
+---
+title: "Analyse exploratoire"
+---
+
+## Solution 1.1
+
+On commence par charger la base de données
+
+```{r}
+# remotes::install_github("lbelzile/hecmulti")
+data(aerien, package = "hecmulti")
+# Consulter la fiche descriptive
+# ? hecmulti::aerien
+```
+
+- **Formulez des questions en lien avec la description de la base de données préliminaires à l'analyse exploratoire.**
+
+Pour démarrer notre analyse exploratoire, on formule quelques questions. Par exemple:
+
+- Quel est le profil socio-démographique des clients (âge, sexe, clientèle affaires)
+- Est-ce que certaines personnes ont répondu plusieurs fois au questionnaire?
+- Quelle proportion de réponses au sondage sont manquantes et quel est le lien avec le type de vol (via `distance_vol`)? On peut penser que l'offre alimentaire dépend de la durée.
+- Dans quelle mesure le délai à l'arrivée impacte la satisfaction globale?
+- Quel est le lien entre les réponses et le profil socio-démographique?
+- Est-ce que les personnes qui voyagent en classe supérieure (ou pour des motifs d'affaires) sont plus ou moins critiques?
+- Est-ce que les délais au départ ou à l'arrivée peuvent être négatifs (vol en avance)?
+
+
+- **Examinez la base de données; identifiez le type de variable et leur nature.**
+
+```{r}
+dplyr::glimpse(aerien)
+```
+La plupart des variables sont des variables entières (`int`) formées d'échelles de Likert plus valeurs manquantes encodées 0. L'identifiant, le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l'indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (`dbl`). Les délais sont encodées avec des valeurs entières (valeur arrondie).
+
+- **- Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?**
+
+Oui, notamment selon la description toutes les valeurs 0 dans les questionnaires qui peut encoder deux situations: non-réponse ou non-applicable. Les imputer par la moyenne serait donc illogique, puisque certains services (divertissement, nourriture) ne sont pas offerts dans les vols. On pourrait segmenter manuellement la base de données pour séparer selon le type de vol.
+
+Il serait possible en revanche d'imputer l'information pour les valeurs de délai (`r sum(is.na(aerien$delai_arrivee_min))` valeurs manquantes).
+
+
+- **Calculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?**
+
+Pour ce faire, il serait préférable de transformer les scores des items du questionnaire en variables catégorielles, ou de transformer les zéros en valeurs manquantes pour éviter de fausser les résultats.
