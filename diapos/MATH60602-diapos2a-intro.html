@@ -38,6 +38,8 @@ class: center middle main-title section-title-1
 &lt;/figure&gt;
 ]
 
+
+
 ---
 
 class: middle
@@ -121,6 +123,8 @@ class: title title-1 section-title-inv-1
 
 .box-1[On va plutôt enregistrer le code dans un document **R**]
 
+.box-1[On peut aussi assigner le résultat à une variable&lt;br&gt; pour l'utiliser subséquemment]
+
 ---
 
 class: title title-1
@@ -150,7 +154,7 @@ class: title title-1 section-title-inv-1
 ]
 
 .pull-right-narrow[
-.box-1[Trouvez `01_demarrer.Rmd`]
+.box-1[Trouvez `a-intro.Rmd`]
 
 .box-1[Cliquez sur le nom pour ouvrir le fichier]
 ]
@@ -169,211 +173,6 @@ class: title title-1
 
 .pull-right-narrow[
 .box-inv-1[Les documents&lt;br&gt;s'ouvrent ici]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left.center[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd.png" alt="RStudio R Markdown document" title="RStudio R Markdown document" width="100%"&gt;
-&lt;/figure&gt;
-]
-
-.pull-right[
-.box-inv-1[Format de document&lt;br&gt;qui combine texte et code]
-
-.box-inv-1[Un livret&lt;br&gt;pour votre analyse]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-text.png" alt="RStudio R Markdown text" title="RStudio R Markdown text" width="100%"&gt;
-&lt;/figure&gt;
-]
-
-.pull-right[
-.box-inv-1.medium[Texte]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%"&gt;
-&lt;/figure&gt;
-]
-
-.pull-right[
-.box-inv-1.medium[Texte]
-
-.box-inv-1.medium[Code]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-output.png" alt="RStudio R Markdown output" title="RStudio R Markdown output" width="100%"&gt;
-&lt;/figure&gt;
-]
-
-.pull-right[
-.box-inv-1.medium[Texte]
-
-.box-inv-1.medium[Code]
-
-.box-inv-1.medium[Sortie]
-]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.pull-left[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%"&gt;
-&lt;/figure&gt;
-]
-
-.pull-right[
-.box-1[Lisez les instructions]
-
-.box-1[Compilez le bloc de code&lt;br&gt;avec le bouton `démarrer`]
-]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.box-1[Ajoutez un nouveau bloc]
-
-.box-1[Inscrivez `2 + 2` et compilez]
-
----
-
-class: title title-1
-
-# Tricoter
-
-.box-inv-1["Knit" un document R Markdown en un fichier portable]
-
-.center[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-knit.png" alt="RStudio knit button" title="RStudio knit button" width="70%"&gt;
-&lt;/figure&gt;
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.box-inv-1.sp-after[Combiner **R** et histoire]
-
-.box-1[Nous l'utiliserons en classe:]
-
-.box-1[Je fournis un script]
-
-.box-1[Vous complétez les sections « À votre tour »]
-
-.box-1[À la fin, vous aurez une copie annotée]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.box-1[Quelle est la différence entre:]
-
-
-```r
-filter(mtcars, cyl == 4)
-```
-
-
-```r
-four_cyls &lt;- filter(mtcars, cyl == 4)
-```
-
-.box-1[Trouvez ces instructions dans votre carnet et compilez.&lt;br&gt;Quelle est la différence en sortie?]
-
----
-
-class: title title-1
-
-# Assignation
-
-.box-inv-1[`&lt;-` assigne la sortie à droite à la variable de gauche]
-
-
-```r
-four_cyls &lt;- filter(mtcars, cyl == 4)
-```
-
----
-
-class: title title-1
-
-# Panneau environnement
-
-.pull-left[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-environment.png" alt="RStudio environment pane" title="RStudio environment pane" width="100%"&gt;
-&lt;/figure&gt;
-]
-
-.pull-right[
-.box-1[Liste de toutes les&lt;br&gt;variables existantes]
-]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.box-1[Trouvez `four_cyls` dans le panneau environnement.&lt;br&gt;Cliquez sur le nom `four_cyls`]
-
-.box-1[Qu'est-ce qui arrive?]
-
----
-
-class: title title-1
-
-# Visualisation
-
-.pull-left[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-data-viewer.png" alt="RStudio viewer" title="RStudio viewer" width="100%"&gt;
-&lt;/figure&gt;
-]
-
-.pull-right[
-.box-1[Cliquer sur un objet dans le panneau environnement l'ouvre dans un onglet de visualisation interactive.]
 ]
 
 
@@ -419,7 +218,7 @@ install.packages("nom")
 .pull-right[
 
 ```r
-library("nom")
+library(nom)
 ```
 
 .box-inv-1[Charge le paquet]
@@ -443,7 +242,7 @@ class: title title-1 section-title-inv-1
 remotes::install_github("lbelzile/hecmulti")
 ```
 
-<div class="countdown" id="timer_62dd8bd8" style="right:0;bottom:0;font-size:1.5em;" data-audio="true" data-warnwhen="0">
+<div class="countdown" id="timer_631aaa0a" style="right:0;bottom:0;font-size:1.5em;" data-audio="true" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 ---
@@ -619,7 +418,7 @@ class: title title-1 section-title-inv-1
 
 .box-1[Chargez les données `renfe` du paquet `hecmulti`]
 
-<div class="countdown" id="timer_62dd8b19" style="right:0;bottom:0;font-size:1.5em;" data-audio="true" data-warnwhen="0">
+<div class="countdown" id="timer_631aaac1" style="right:0;bottom:0;font-size:1.5em;" data-audio="true" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -633,6 +432,212 @@ renfe
 
 ---
 
+
+class: title title-1
+
+# R Markdown
+
+.pull-left.center[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-rmd.png" alt="RStudio R Markdown document" title="RStudio R Markdown document" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1[Format de document&lt;br&gt;qui combine texte et code]
+
+.box-inv-1[Un livret&lt;br&gt;pour votre analyse]
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-rmd-text.png" alt="RStudio R Markdown text" title="RStudio R Markdown text" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+
+.box-inv-1.medium[Code]
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-rmd-output.png" alt="RStudio R Markdown output" title="RStudio R Markdown output" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+
+.box-inv-1.medium[Code]
+
+.box-inv-1.medium[Sortie]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-1[Lisez les instructions]
+
+.box-1[Compilez le bloc de code&lt;br&gt;avec le bouton `démarrer`]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Ajoutez un nouveau bloc]
+
+.box-1[Inscrivez `2 + 2` et compilez]
+
+---
+
+class: title title-1
+
+# Tricoter
+
+.box-inv-1["Knit" un document R Markdown en un fichier portable]
+
+.center[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-knit.png" alt="RStudio knit button" title="RStudio knit button" width="70%"&gt;
+&lt;/figure&gt;
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.box-inv-1.sp-after[Combiner code **R** et texte]
+
+.box-1[Nous l'utiliserons en classe:]
+
+.box-1[Je fournis un script]
+
+.box-1[Vous complétez les sections « À votre tour »]
+
+.box-1[À la fin, vous aurez une copie annotée]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Quelle est la différence entre:]
+
+
+```r
+filter(mtcars, cyl == 4)
+```
+
+
+```r
+four_cyls &lt;- filter(mtcars, cyl == 4)
+```
+
+.box-1[Trouvez ces instructions dans votre carnet et compilez.&lt;br&gt;Quelle est la différence en sortie?]
+
+---
+
+class: title title-1
+
+# Assignation
+
+.box-inv-1[`&lt;-` assigne la sortie à droite à la variable de gauche]
+
+
+```r
+four_cyls &lt;- filter(mtcars, cyl == 4)
+```
+
+---
+
+class: title title-1
+
+# Panneau environnement
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-environment.png" alt="RStudio environment pane" title="RStudio environment pane" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-1[Liste de toutes les&lt;br&gt;variables existantes]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Trouvez `four_cyls` dans le panneau environnement.&lt;br&gt;Cliquez sur le nom `four_cyls`]
+
+.box-1[Qu'est-ce qui arrive?]
+
+---
+
+class: title title-1
+
+# Visualisation
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-data-viewer.png" alt="RStudio viewer" title="RStudio viewer" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-1[Cliquer sur un objet dans le panneau environnement l'ouvre dans un onglet de visualisation interactive.]
+]
+
+
+---
 
 class: middle section-title-inv-1
 
@@ -759,7 +764,7 @@ class: title title-1 section-title-inv-1
 
 .box-1[Ajouter un bloc qui utilise `seq()` pour créer un&lt;br&gt;vecteur de nombres de 5 à 30, espacés par sauts de 5&lt;br&gt;.small[(5, 10, 15, 20, …)]]
 
-<div class="countdown" id="timer_62dd899c" style="right:0;bottom:0;font-size:1.5em;" data-audio="true" data-warnwhen="0">
+<div class="countdown" id="timer_631aacb5" style="right:0;bottom:0;font-size:1.5em;" data-audio="true" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -807,8 +812,8 @@ mean("mtcars")
 ```
 
 ```
-## Warning in mean.default("mtcars"): l'argument n'est ni numérique, ni logique :
-## renvoi de NA
+## Warning in mean.default("mtcars"): l'argument n'est ni
+## numérique, ni logique : renvoi de NA
 ```
 
 ```

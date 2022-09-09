@@ -2,6 +2,13 @@
 title: "Programmation en **R**"
 ---
 
+```{r}
+#| label: slides-videos
+#| echo: false
+#| include: false
+source(here::here("R", "fonctions_diapos.R"))
+```
+
 ## Contenu
 
 - Bases de la programmation **R**
@@ -22,6 +29,10 @@ Si vous tapez<kbd>?</kbd> (ou <kbd>shift</kbd> + <kbd>/</kbd>) en naviguant à t
 :::
 
 
+```{r show-slide-tabs-1, echo=FALSE, results="asis"}
+slide_buttons("/diapos/MATH60602-diapos2a-intro")
+```
+
 ```{r, show-slide-tabs1, echo=FALSE, eval=TRUE}
 xaringanExtra::embed_xaringan(
   url = "/diapos/MATH60602-diapos2a-intro.html",
@@ -30,6 +41,10 @@ xaringanExtra::embed_xaringan(
 ```
 
 
+```{r show-slide-tabs-2, echo=FALSE, results="asis"}
+slide_buttons("/diapos/MATH60602-diapos2b-visualisation")
+```
+
 ```{r, show-slide-tabs2, echo=FALSE, eval=TRUE}
 xaringanExtra::embed_xaringan(
   url = "/diapos/MATH60602-diapos2b-visualisation.html",
@@ -37,6 +52,9 @@ xaringanExtra::embed_xaringan(
 )
 ```
 
+```{r show-slide-tabs-3, echo=FALSE, results="asis"}
+slide_buttons("/diapos/MATH60602-diapos2c-manipulations")
+```
 ```{r show-slide-tabs3, echo=FALSE}
 xaringanExtra::embed_xaringan(
   url = "/diapos/MATH60602-diapos2c-manipulations.html",

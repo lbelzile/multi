@@ -37,6 +37,7 @@ library(kableExtra)
 
 ```{r xaringanExtra, echo=FALSE}
 xaringanExtra::use_xaringan_extra(c("tile_view"))
+xaringanExtra::use_share_again()
 ```
 
 class: center middle main-title section-title-1
@@ -48,6 +49,7 @@ class: center middle main-title section-title-1
   <img src="img/04/dplyr.png" alt="dplyr" title="dplyr" width="15%">
 </figure>
 ]
+
 
 ---
 
@@ -273,7 +275,7 @@ class: title title-1 section-title-inv-1
 3. Lignes pour l'espérance de vie supérieur à 82 ans
 
 ```{r echo=FALSE}
-countdown(minutes = 4)
+countdown(minutes = 3)
 ```
 
 ---
@@ -712,11 +714,9 @@ ifelse(TEST,
 ```{r echo=FALSE, tidy=FALSE}
 decorate('
 mutate(gapminder, 
-       after_1960 = ifelse(year > 1960, TRUE, FALSE))
+       after_1960 = year > 1960)
 ', eval = FALSE) |> 
-  flair("year > 1960", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
-  flair("TRUE", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
-  flair("FALSE", background = "#CBB5FF", before = "<b>", after = "</b>") |>
+  flair("year > 1960", background = "#FFC0DC", before = "<b>", after = "</b>") |>
   flair::knit_print.with_flair()
 ```
 
@@ -742,7 +742,7 @@ class: title title-1 section-title-inv-1
 .box-1[Utilisez `mutate()` pour ajouter les colonnes…]
 
 1. `africa`, qui est vrai (`TRUE`) si le pays est situé sur le continent africain
-2. `logPIBcap` pour le log PIB par capita (indice: utiliser `log()`)
+2. `log_gdpPercap` pour le log PIB par capita (indice: utiliser `log()`)
 3. `africa_asia` avec comme valeur `"Afrique ou Asie"` si le pays est dans un des deux continents, sinon `"Autre continent"`
 
 ```{r echo=FALSE}

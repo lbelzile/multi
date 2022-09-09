@@ -52,6 +52,8 @@ class: center middle main-title section-title-1
 </figure>
 ]
 
+
+
 ---
 
 class: middle
@@ -130,6 +132,8 @@ class: title title-1 section-title-inv-1
 
 .box-1[On va plutôt enregistrer le code dans un document **R**]
 
+.box-1[On peut aussi assigner le résultat à une variable<br> pour l'utiliser subséquemment]
+
 ---
 
 class: title title-1
@@ -159,7 +163,7 @@ class: title title-1 section-title-inv-1
 ]
 
 .pull-right-narrow[
-.box-1[Trouvez `01_demarrer.Rmd`]
+.box-1[Trouvez `a-intro.Rmd`]
 
 .box-1[Cliquez sur le nom pour ouvrir le fichier]
 ]
@@ -178,208 +182,6 @@ class: title title-1
 
 .pull-right-narrow[
 .box-inv-1[Les documents<br>s'ouvrent ici]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left.center[
-<figure>
-  <img src="img/01/rstudio-rmd.png" alt="RStudio R Markdown document" title="RStudio R Markdown document" width="100%">
-</figure>
-]
-
-.pull-right[
-.box-inv-1[Format de document<br>qui combine texte et code]
-
-.box-inv-1[Un livret<br>pour votre analyse]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left[
-<figure>
-  <img src="img/01/rstudio-rmd-text.png" alt="RStudio R Markdown text" title="RStudio R Markdown text" width="100%">
-</figure>
-]
-
-.pull-right[
-.box-inv-1.medium[Texte]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left[
-<figure>
-  <img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%">
-</figure>
-]
-
-.pull-right[
-.box-inv-1.medium[Texte]
-
-.box-inv-1.medium[Code]
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.pull-left[
-<figure>
-  <img src="img/01/rstudio-rmd-output.png" alt="RStudio R Markdown output" title="RStudio R Markdown output" width="100%">
-</figure>
-]
-
-.pull-right[
-.box-inv-1.medium[Texte]
-
-.box-inv-1.medium[Code]
-
-.box-inv-1.medium[Sortie]
-]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.pull-left[
-<figure>
-  <img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%">
-</figure>
-]
-
-.pull-right[
-.box-1[Lisez les instructions]
-
-.box-1[Compilez le bloc de code<br>avec le bouton `démarrer`]
-]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.box-1[Ajoutez un nouveau bloc]
-
-.box-1[Inscrivez `2 + 2` et compilez]
-
----
-
-class: title title-1
-
-# Tricoter
-
-.box-inv-1["Knit" un document R Markdown en un fichier portable]
-
-.center[
-<figure>
-  <img src="img/01/rstudio-knit.png" alt="RStudio knit button" title="RStudio knit button" width="70%">
-</figure>
-]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.box-inv-1.sp-after[Combiner **R** et histoire]
-
-.box-1[Nous l'utiliserons en classe:]
-
-.box-1[Je fournis un script]
-
-.box-1[Vous complétez les sections « À votre tour »]
-
-.box-1[À la fin, vous aurez une copie annotée]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.box-1[Quelle est la différence entre:]
-
-```{r eval=FALSE}
-filter(mtcars, cyl == 4)
-```
-
-```{r eval=FALSE}
-four_cyls <- filter(mtcars, cyl == 4)
-```
-
-.box-1[Trouvez ces instructions dans votre carnet et compilez.<br>Quelle est la différence en sortie?]
-
----
-
-class: title title-1
-
-# Assignation
-
-.box-inv-1[`<-` assigne la sortie à droite à la variable de gauche]
-
-```{r eval=FALSE}
-four_cyls <- filter(mtcars, cyl == 4)
-```
-
----
-
-class: title title-1
-
-# Panneau environnement
-
-.pull-left[
-<figure>
-  <img src="img/01/rstudio-environment.png" alt="RStudio environment pane" title="RStudio environment pane" width="100%">
-</figure>
-]
-
-.pull-right[
-.box-1[Liste de toutes les<br>variables existantes]
-]
-
----
-
-class: title title-1 section-title-inv-1
-
-# À votre tour
-
-.box-1[Trouvez `four_cyls` dans le panneau environnement.<br>Cliquez sur le nom `four_cyls`]
-
-.box-1[Qu'est-ce qui arrive?]
-
----
-
-class: title title-1
-
-# Visualisation
-
-.pull-left[
-<figure>
-  <img src="img/01/rstudio-data-viewer.png" alt="RStudio viewer" title="RStudio viewer" width="100%">
-</figure>
-]
-
-.pull-right[
-.box-1[Cliquer sur un objet dans le panneau environnement l'ouvre dans un onglet de visualisation interactive.]
 ]
 
 
@@ -423,7 +225,7 @@ install.packages("nom")
 
 .pull-right[
 ```{r eval=FALSE}
-library("nom")
+library(nom)
 ```
 
 .box-inv-1[Charge le paquet]
@@ -628,6 +430,209 @@ renfe
 
 ---
 
+
+class: title title-1
+
+# R Markdown
+
+.pull-left.center[
+<figure>
+  <img src="img/01/rstudio-rmd.png" alt="RStudio R Markdown document" title="RStudio R Markdown document" width="100%">
+</figure>
+]
+
+.pull-right[
+.box-inv-1[Format de document<br>qui combine texte et code]
+
+.box-inv-1[Un livret<br>pour votre analyse]
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.pull-left[
+<figure>
+  <img src="img/01/rstudio-rmd-text.png" alt="RStudio R Markdown text" title="RStudio R Markdown text" width="100%">
+</figure>
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.pull-left[
+<figure>
+  <img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%">
+</figure>
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+
+.box-inv-1.medium[Code]
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.pull-left[
+<figure>
+  <img src="img/01/rstudio-rmd-output.png" alt="RStudio R Markdown output" title="RStudio R Markdown output" width="100%">
+</figure>
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+
+.box-inv-1.medium[Code]
+
+.box-inv-1.medium[Sortie]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.pull-left[
+<figure>
+  <img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%">
+</figure>
+]
+
+.pull-right[
+.box-1[Lisez les instructions]
+
+.box-1[Compilez le bloc de code<br>avec le bouton `démarrer`]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Ajoutez un nouveau bloc]
+
+.box-1[Inscrivez `2 + 2` et compilez]
+
+---
+
+class: title title-1
+
+# Tricoter
+
+.box-inv-1["Knit" un document R Markdown en un fichier portable]
+
+.center[
+<figure>
+  <img src="img/01/rstudio-knit.png" alt="RStudio knit button" title="RStudio knit button" width="70%">
+</figure>
+]
+
+---
+
+class: title title-1
+
+# R Markdown
+
+.box-inv-1.sp-after[Combiner code **R** et texte]
+
+.box-1[Nous l'utiliserons en classe:]
+
+.box-1[Je fournis un script]
+
+.box-1[Vous complétez les sections « À votre tour »]
+
+.box-1[À la fin, vous aurez une copie annotée]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Quelle est la différence entre:]
+
+```{r eval=FALSE}
+filter(mtcars, cyl == 4)
+```
+
+```{r eval=FALSE}
+four_cyls <- filter(mtcars, cyl == 4)
+```
+
+.box-1[Trouvez ces instructions dans votre carnet et compilez.<br>Quelle est la différence en sortie?]
+
+---
+
+class: title title-1
+
+# Assignation
+
+.box-inv-1[`<-` assigne la sortie à droite à la variable de gauche]
+
+```{r eval=FALSE}
+four_cyls <- filter(mtcars, cyl == 4)
+```
+
+---
+
+class: title title-1
+
+# Panneau environnement
+
+.pull-left[
+<figure>
+  <img src="img/01/rstudio-environment.png" alt="RStudio environment pane" title="RStudio environment pane" width="100%">
+</figure>
+]
+
+.pull-right[
+.box-1[Liste de toutes les<br>variables existantes]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Trouvez `four_cyls` dans le panneau environnement.<br>Cliquez sur le nom `four_cyls`]
+
+.box-1[Qu'est-ce qui arrive?]
+
+---
+
+class: title title-1
+
+# Visualisation
+
+.pull-left[
+<figure>
+  <img src="img/01/rstudio-data-viewer.png" alt="RStudio viewer" title="RStudio viewer" width="100%">
+</figure>
+]
+
+.pull-right[
+.box-1[Cliquer sur un objet dans le panneau environnement l'ouvre dans un onglet de visualisation interactive.]
+]
+
+
+---
 
 class: middle section-title-inv-1
 

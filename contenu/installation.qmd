@@ -34,8 +34,9 @@ include_graphics("../files/img/install/install-r-windows.png", error = FALSE)
 
 3. Double cliquez sur le fichier de téléchargement. Approuvez toutes les requêtes, comme pour n'importe quel autre programme.
 
-4. Si vous utilisez macOS, [téléchargez et installez XQuartz](https://www.xquartz.org/). Cette étape n'est pas nécessaire sur Windows.
+4a. Si vous utilisez macOS, [téléchargez et installez XQuartz](https://www.xquartz.org/). 
 
+4b. Si vous utilisez Windows, téléchargez et installez [*Rtools*](https://cran.r-project.org/bin/windows/Rtools/)
 
 ### Installer RStudio
 
