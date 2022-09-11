@@ -78,9 +78,10 @@ class: middle
 
 class: middle section-title-inv-1
 
-.box-1.large[Un panorama de RStudio]
+.box-inv-1.large[Un panorama de RStudio]
 
 ---
+
 
 <figure>
   <img src="img/01/rstudio-normal.png" alt="RStudio" title="RStudio" width="100%">
@@ -88,8 +89,8 @@ class: middle section-title-inv-1
 
 ---
 
-class: title title-1
 
+class: title title-1
 # Console 
 
 .pull-left-wide[
@@ -105,6 +106,7 @@ class: title title-1
 ]
 
 ---
+
 
 class: title title-1 section-title-inv-1
 
@@ -124,6 +126,7 @@ class: title title-1 section-title-inv-1
 
 ---
 
+
 ```{r}
 2 + 2
 ```
@@ -135,6 +138,31 @@ class: title title-1 section-title-inv-1
 .box-1[On peut aussi assigner le résultat à une variable<br> pour l'utiliser subséquemment]
 
 ---
+class: title title-1
+
+# Arborescence et fichiers
+
+.box-inv-1.medium.sp-after[**R** pointe vers un répertoire local]
+
+.box-inv-1.medium.sp-after[
+Utiliser `getwd()` pour trouver l'emplacement
+]
+
+.box-inv-1.medium[Travailler avec chemin relatif]
+
+---
+
+
+class: title title-1
+# Projets dans RStudio
+
+```{r, out.width = '60%',echo=FALSE}
+knitr::include_graphics("img/01/rstudio-new-project.png")
+```
+
+
+---
+
 
 class: title title-1
 
@@ -151,7 +179,6 @@ class: title title-1
 ]
 
 ---
-
 class: title title-1 section-title-inv-1
 
 # À votre tour
@@ -170,8 +197,9 @@ class: title title-1 section-title-inv-1
 
 ---
 
-class: title title-1
 
+
+class: title title-1
 # Panneau source
 
 .pull-left-wide.center[
@@ -189,7 +217,7 @@ class: title title-1
 
 class: middle section-title-inv-1
 
-.box-1.large[Paquets]
+.box-inv-1.large[Paquets]
 
 ---
 
@@ -205,8 +233,9 @@ class: middle section-title-inv-1
 
 ---
 
-class: title title-1
 
+
+class: title title-1
 # Utiliser des paquets
 
 .pull-left[
@@ -234,8 +263,7 @@ library(nom)
 ]
 ---
 
-
-class: title title-1 section-title-inv-1
+class: title title-1  section-title-inv-1
 
 # À votre tour
 
@@ -251,7 +279,10 @@ remotes::install_github("lbelzile/hecmulti")
 ```{r echo=FALSE}
 countdown(minutes = 2, play_sound = TRUE, font_size = "1.5em")
 ```
+
 ---
+
+
 
 class: title title-1
 
@@ -284,76 +315,10 @@ From "Master the Tidyverse" by RStudio
 
 ---
 
-class: title title-1
 
-# Paquet `tidyverse`
-
-.center[
-```{r eval=FALSE}
-library(tidyverse)
-```
-]
-
-.box-inv-1[Le paquet `tidyverse` est un raccourci<br>pour installer et charger les paquets clés du *tidyverse*]
-
----
-
-.pull-left[
-```{r eval=FALSE}
-install.packages("tidyverse")
-```
-
-.tiny[
-```{r eval=FALSE}
-install.packages("ggplot2")
-install.packages("dplyr")
-install.packages("tidyr")
-install.packages("readr")
-install.packages("purrr")
-install.packages("tibble")
-install.packages("stringr")
-install.packages("forcats")
-install.packages("lubridate")
-install.packages("hms")
-install.packages("DBI")
-install.packages("haven")
-install.packages("httr")
-install.packages("jsonlite")
-install.packages("readxl")
-install.packages("rvest")
-install.packages("xml2")
-install.packages("modelr")
-install.packages("broom")
-```
-]
-]
-
---
-
-.pull-right[
-```{r eval=FALSE}
-library("tidyverse")
-```
-
-.tiny[
-```{r eval=FALSE}
-library("ggplot2")
-library("dplyr")
-library("tidyr")
-library("readr")
-library("purrr")
-library("tibble")
-library("stringr")
-library("forcats")
-```
-]
-]
-
----
 
 
 class: title title-1
-
 # Aides-mémoires
 
 .box-inv-1[Allez à Help > Cheatsheets pour<br>trouver des guides de référence sur certains différents paquets]
@@ -430,7 +395,6 @@ renfe
 
 ---
 
-
 class: title title-1
 
 # R Markdown
@@ -465,8 +429,8 @@ class: title title-1
 
 ---
 
-class: title title-1
 
+class: title title-1
 # R Markdown
 
 .pull-left[
@@ -483,8 +447,8 @@ class: title title-1
 
 ---
 
-class: title title-1
 
+class: title title-1
 # R Markdown
 
 .pull-left[
@@ -531,8 +495,8 @@ class: title title-1 section-title-inv-1
 
 ---
 
-class: title title-1
 
+class: title title-1
 # Tricoter
 
 .box-inv-1["Knit" un document R Markdown en un fichier portable]
@@ -542,22 +506,6 @@ class: title title-1
   <img src="img/01/rstudio-knit.png" alt="RStudio knit button" title="RStudio knit button" width="70%">
 </figure>
 ]
-
----
-
-class: title title-1
-
-# R Markdown
-
-.box-inv-1.sp-after[Combiner code **R** et texte]
-
-.box-1[Nous l'utiliserons en classe:]
-
-.box-1[Je fournis un script]
-
-.box-1[Vous complétez les sections « À votre tour »]
-
-.box-1[À la fin, vous aurez une copie annotée]
 
 ---
 
@@ -579,8 +527,8 @@ four_cyls <- filter(mtcars, cyl == 4)
 
 ---
 
-class: title title-1
 
+class: title title-1
 # Assignation
 
 .box-inv-1[`<-` assigne la sortie à droite à la variable de gauche]
@@ -590,7 +538,6 @@ four_cyls <- filter(mtcars, cyl == 4)
 ```
 
 ---
-
 class: title title-1
 
 # Panneau environnement
@@ -636,12 +583,12 @@ class: title title-1
 
 class: middle section-title-inv-1
 
-.box-1.large[Objets, classes et types]
+.box-inv-1.large[Objets, classes et types]
 
 ---
 
-class: title title-1
 
+class: title title-1
 # Vecteurs
 
 .box-inv-1[Objet de base dans **R**]
@@ -657,7 +604,53 @@ c(1, 4, 2, 5, 7)
 ---
 
 class: title title-1
+# Listes
 
+.box-inv-1[Une liste est une collection d'objets]
+
+```{r}
+maliste <- list(elementun = 2:4, FALSE)
+maliste
+```
+
+.box-inv-1[Format de sortie fréquent pour les fonctions!]
+
+---
+class: title title-1
+
+# Éléments d'une liste
+
+.pull-left[
+.box-inv-1[Accéder à un élément<br>par nom avec `$`]
+```{r eval=FALSE}
+maliste$elementun
+```
+]
+
+.pull-right[
+.box-inv-1[Accéder à un élément<br>par position avec `[[ ]]`]
+```{r eval=FALSE}
+maliste[[1]]
+```
+]
+
+---
+class: title title-1
+# Base de données (`data.frame`)
+
+.box-inv-1.sp-after[Une liste avec dimensions]
+
+.box-inv-1.sp-after[Chaque colonne est un vecteur]
+
+.box-inv-1.sp-after[Variables de types potentiellement différents]
+
+
+.box-inv-1.sp-after[Mais de même longueur]
+
+.box-1[tibble (`tbl`): version `tidyverse`, plus sophistiquée]
+
+---
+class: title title-1
 # Types de données de base
 
 <table>
@@ -681,14 +674,43 @@ class: title title-1
     <td>Vrai ou faux</td>
     <td><code class="remark-inline-code">c(TRUE, FALSE, TRUE, FALSE)</code></td>
   </tr>
-  <tr>
-    <td><b>Facteur (<i>factor</i>)</b></td>
-    <td>Catégorielle</td>
-    <td><code class="remark-inline-code">c("En désaccord", "D'accord", "Neutre")</code></td>
-  </tr>
+ 
 </table>
 
-.box-inv-1[Utiliser la fonction `typeof()`<br> pour déterminer le type d'un vecteur.]
+.box-inv-1.sp-after-half[Utiliser la fonction `typeof()`<br> pour déterminer le type d'un vecteur.]
+
+---
+class: title title-1
+# Facteurs (`factor`, `<fct>`)
+
+.box-inv-1.sp-after-half[Vecteurs de variables catégorielles]
+.box-inv-1.sp-after-half[
+Encodées comme entiers avec étiquettes<br> (étiquettes visible via `levels`)
+]
+.box-inv-1.sp-after-half[Traitement spécial dans les modèles]
+
+```{r, echo = TRUE, eval = TRUE}
+facteur <- factor(x = c(1,2,1,3),
+                  labels = c("petit", "moyen", "grand"))
+facteur #méthode print
+levels(facteur)
+```
+
+---
+class: title title-1
+
+# Valeurs manquantes
+
+.box-inv-1.sp-after-half[
+`NA`, `NaN`, `NA_integer_`, etc.
+]
+.box-inv-1.sp-after-half[`is.na()` pour détecter]
+.box-inv-1.sp-after-half[`summary()` sur `data.frame`<br> pour décompte par variable]
+???
+
+Par exemple, la fonction `summary` retourne le décompte des modalités du facteur plutôt que des statistiques descriptives.
+
+Encodée comme un entier, mais avec `labels`
 ---
 
 
@@ -718,8 +740,8 @@ four_cyls <- filter(mtcars, cyl == 4)
 
 ---
 
-class: title title-1
 
+class: title title-1
 # Aide
 
 .box-inv-1[Pour voir la page d'aide sur une fonction **R**,<br>tapez dans la console:]
@@ -754,7 +776,7 @@ class: title title-1
 
 ---
 
-class: title title-1 section-title-inv-1
+class: title title-1  section-title-inv-1
 
 # À votre tour
 
@@ -803,6 +825,18 @@ mean("mtcars")
 
 ---
 
+class: title title-1
+
+# Problèmes fréquents de syntaxe #3
+
+.box-inv-1[Mauvais nom de fonction (**R** est sensible à la casse)]
+
+```{r error=TRUE, warning=TRUE, message=TRUE}
+MEAN(mtcars)
+```
+
+---
+
 class: title title-1 section-title-inv-1
 
 # À votre tour
@@ -813,46 +847,6 @@ class: title title-1 section-title-inv-1
 
 ---
 
-
-
-
-
-class: title title-1
-
-# Listes
-
-.box-inv-1[Une liste est une collection d'objets]
-
-```{r}
-maliste <- list(elementun = 2:4, FALSE)
-maliste
-```
-
-.box-inv-1[Format de sortie fréquent pour les fonctions!]
-
----
-
-
-
-class: title title-1
-
-# Éléments d'une liste
-
-.pull-left[
-.box-inv-1[Accéder à un élément<br>par nom avec `$`]
-```{r eval=FALSE}
-maliste$elementun
-```
-]
-
-.pull-right[
-.box-inv-1[Accéder à un élément<br>par position avec `[[ ]]`]
-```{r eval=FALSE}
-maliste[[1]]
-```
-]
-
----
 
 class: title title-1
 
@@ -878,33 +872,12 @@ methods(class = "lm")
 .box-inv-1[graphique<br>(`plot`)]
 ]
 
----
-
-class: middle section-title-inv-1
-
-.box-1.large[Données rectangulaires]
-
----
-
-class: title title-1
-
-# Bases de données et tableaux
-
-.box-inv-1.medium[Les bases de données `data.frame` sont utilisées pour stocker les données (comme un chiffrier)]
-
---
-
-.box-1[`data.frame`: une liste de variables de type potentiellement différents]
-
---
-
-.box-1[tibble (`tbl`): version `tidyverse`, plus sophistiquée]
 
 ---
 
 class: middle section-title-inv-1
 
-.box-1.large[Importer des données]
+.box-inv-1.large[Importer des données]
 
 ---
 
