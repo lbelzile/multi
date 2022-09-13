@@ -272,7 +272,7 @@ class: title title-1 section-title-inv-1
 
 1. Les données du Canada
 2. Toutes les données de pays situés en Océanie (Oceania)
-3. Lignes pour l'espérance de vie supérieur à 82 ans
+3. Lignes où l'espérance de vie est supérieure à 82 ans
 
 ```{r echo=FALSE}
 countdown(minutes = 3)
@@ -753,8 +753,7 @@ countdown(minutes = 5)
 
 ```{r eval=FALSE}
 mutate(gapminder, 
-       africa = ifelse(continent == "Africa", 
-                                  TRUE, FALSE))
+       africa = continent == "Africa")
 ```
 
 --
@@ -832,7 +831,7 @@ class: title title-1
 
 .box-inv-1[Solution 3: tuyaux!]
 
-.box-inv-1[L'opérateur tuyau, `|>` prend un objet à gauche<br>et l'assigne au premier argument de la fonction de droite]
+.box-inv-1[L'opérateur tuyau, `|>`, prend un objet à gauche<br>et l'assigne au premier argument de la fonction de droite]
 
 ```{r echo=FALSE, tidy=FALSE}
 decorate('

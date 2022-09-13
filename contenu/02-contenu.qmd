@@ -40,26 +40,26 @@ xaringanExtra::embed_xaringan(
 )
 ```
 
+```{r show-slide-tabs-3, echo=FALSE, results="asis"}
+slide_buttons("/diapos/MATH60602-diapos2b-manipulations")
+```
+```{r show-slide-tabs3, echo=FALSE}
+xaringanExtra::embed_xaringan(
+  url = "/diapos/MATH60602-diapos2b-manipulations.html",
+  ratio = "16:9"
+) 
+```
+
 
 ```{r show-slide-tabs-2, echo=FALSE, results="asis"}
-slide_buttons("/diapos/MATH60602-diapos2b-visualisation")
+slide_buttons("/diapos/MATH60602-diapos2c-visualisation")
 ```
 
 ```{r, show-slide-tabs2, echo=FALSE, eval=TRUE}
 xaringanExtra::embed_xaringan(
-  url = "/diapos/MATH60602-diapos2b-visualisation.html",
+  url = "/diapos/MATH60602-diapos2c-visualisation.html",
   ratio = "16:9"
 )
-```
-
-```{r show-slide-tabs-3, echo=FALSE, results="asis"}
-slide_buttons("/diapos/MATH60602-diapos2c-manipulations")
-```
-```{r show-slide-tabs3, echo=FALSE}
-xaringanExtra::embed_xaringan(
-  url = "/diapos/MATH60602-diapos2c-manipulations.html",
-  ratio = "16:9"
-) 
 ```
 
 ## Exercices

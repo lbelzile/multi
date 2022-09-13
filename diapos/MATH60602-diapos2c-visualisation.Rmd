@@ -274,7 +274,8 @@ ggplot(data = mpg) +
 .left-code[
 ```{r color-aes-example, tidy=FALSE, message=FALSE, fig.show="hide", fig.dim=c(4.8, 3.75), out.width="100%"}
 ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy, 
+  geom_point(aes(x = displ, 
+                 y = hwy, 
                  color = class))
 ```
 ]
@@ -288,7 +289,8 @@ ggplot(mpg) +
 .left-code[
 ```{r color-set-example, tidy=FALSE, message=FALSE, fig.show="hide", fig.dim=c(4.8, 3.75), out.width="100%"}
 ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy), 
+  geom_point(aes(x = displ, 
+                 y = hwy), 
              color = "blue")
 ```
 ]
@@ -303,7 +305,8 @@ ggplot(mpg) +
 .small[
 ```{r tidy=FALSE, message=FALSE, fig.dim=c(4.8, 3.75), out.width="100%"}
 ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy, 
+  geom_point(aes(x = displ, 
+                 y = hwy, 
                  color = "blue"))
 ```
 ]
@@ -313,7 +316,8 @@ ggplot(mpg) +
 .small[
 ```{r tidy=FALSE, message=FALSE, fig.dim=c(4.8, 3.75), out.width="100%"}
 ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy), 
+  geom_point(aes(x = displ, 
+                 y = hwy), 
              color = "blue")
 ```
 ]
@@ -349,7 +353,7 @@ ggplot(mpg) +
 ```{r show-ggplot-template1, echo=FALSE, tidy=FALSE}
 decorate('
 ggplot(data = DONNÉES) +
-  FONCTION_GEOM(mapping = aes(APPLICATION ESTHÉTIQUE))
+  FONCTION_GEOM(mapping = aes(APPLICATION: VARIABLES > COMPOSANTESESTHÉTIQUE ))
 ', eval = FALSE) %>% 
   flair("DONNÉES", background = "#CBB5FF", before = "<b>", after = "</b>") %>% 
   flair("FONCTION_GEOM", background = "#FFDFD1", before = "<b>", after = "</b>") %>% 
@@ -369,7 +373,7 @@ ggplot(data = DONNÉES) +
   </tr>
   <tr>
     <td class="cell-left"><img src="img/03/geom_bar.png"></td>
-    <td class="cell-left"><code class="remark-inline-code">geom_col()</code></td>
+    <td class="cell-left"><code class="remark-inline-code">geom_bar()</code></td>
     <td class="cell-left">Diagramme à bande</td>
   </tr>
   <tr>
@@ -423,7 +427,7 @@ ggplot(mpg) +
 ]
 
 ```{r echo=FALSE}
-countdown(minutes = 3)
+countdown(minutes = 1.5)
 ```
 
 ---
