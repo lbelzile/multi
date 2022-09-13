@@ -1,0 +1,30 @@
+---
+title: "Devoir 2"
+---
+
+Les observations de la base de données [`bjffacto`](https://lbelzile.github.io/hecmulti/reference/bjffacto.html) sont tirées de l'article @Bastian:2014 et sont rattachées à une expérience en psychologie visant à corroborer l'hypothèse qu'il y a une coopération accrue entre individus sujets à une expérience traumatisante. La moitié des participant(e)s a dû plonger sa main dans un bain d'eau glacé, tandis que l'autre moitié a dû faire la même chose dans un bain d'eau tiède; les deux groupes devaient ensuite faire un jeu visant à identifier leur niveau de coopération.
+
+La variable `condition` indique le groupe expérimental (zéro pour groupe contrôle, un pour douleur).
+
+1. Pourquoi n'est-il pas nécessaire de standardiser les variables avant de procéder à l'analyse exploratoire? Justifiez votre réponse
+2. Effectuez une analyse factorielle exploratoire à l'aide de la méthode des composantes principales
+    a. En utilisant le critère de Kaiser (valeurs propres) ou le diagramme d'éboulis, déterminez un nombre adéquat de facteurs à employer.
+    b. Produisez un diagramme d'éboulis et rapportez ce dernier.
+    c. Quel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?
+3. Répétez la procédure, cette fois avec la méthode d'estimation par maximum de vraisemblance. 
+    a. Rapportez les valeurs des critères d'information (AIC et BIC) pour $m=2, \ldots, 6$ facteurs dans un tableau. 
+    b. Quel nombre optimal de facteurs ces différents critères retournent-ils? 
+    c. Y a-t-il un problème avec la solution de l'un d'entre eux?
+4. Comparez les regroupements obtenus avec les deux méthodes: est-ce que les regroupements sont semblables (c'est-à-dire, est-ce que les variables retournées dans les regroupements sont associées aux mêmes facteurs)?
+5.  Étiquetez les facteurs obtenus avec la méthode des composantes principales et $m=5$ facteurs. Expliquez brièvement leur signification. Utilisez le seuil de coupure $r=0.5$ pour les chargements avec rotation varimax pour déterminer si une variable fait partie d'un facteur.
+6. Créez des échelles à partir des facteurs et calculez leur cohérence interne: rapportez le $\alpha$ de Cronbach pour chacun des facteurs.
+7. Retournez un tableau de statistiques descriptives (moyenne et écart-type uniquement) pour chaque échelle, par condition expérimental (`condition`). Arrondissez à deux chiffres après la virgule et commentez sur les différences entre groupes, le cas échéant.
+
+Vous devez remettre 
+
+- un rapport au format PDF et 
+- votre code au format texte (`.txt`). 
+
+Nommez ces derniers selon la convention `d2_matricule.pdf` et `d2_matricule.txt`
+
+**Avertissement**: le module sur ZoneCours vous empêchera de soumettre un fichier avec l'extension `.R` ou `.Rmd`.
