@@ -20,9 +20,11 @@ La plupart des manipulations sont à effectuer directement; votre code et la bas
 Vous devez remettre trois fichiers sur ZoneCours, 
 
 - un rapport au format PDF
-- votre code **R**
-- la base de données créée à la suite des manipulations, au format CSV (valeurs séparées par des virgules), à l'aide de la commande `write.csv(db, file = "d1_matricule.csv")` où db est le nom de votre base de données suites aux modifications.
+- votre code **R** ou un fichier Rmarkdown
+- la base de données créée à la suite des manipulations, au format CSV (valeurs séparées par des virgules), à l'aide de la commande `write.csv(db, file = "d1_matricule.csv")` où `db` est le nom de votre base de données suites aux modifications.
 
-Tous vos fichiers seront nommés selon la convention `d1_matricule.extension` en remplaçant `matricule` par votre numéro d'étudiant(e) et `.extension` par `.pdf`, `.R` et `.csv`.
+Tous vos fichiers seront nommés selon la convention `d1_matricule.extension` en remplaçant `matricule` par votre numéro d'étudiant(e) et `.extension` par `.pdf`, `.R`, `.Rmd` et `.csv`, selon le type du fichier.
 
 Assurez-vous que vous n'avez pas supprimé la variable `matric`.
+
+**Astuces**: vous pouvez utiliser la fonction `knitr::purl()` pour extraire le code **R** d'un fichier Rmarkdown (extension `.Rmd`).

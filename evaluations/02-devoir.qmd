@@ -23,8 +23,6 @@ La variable `condition` indique le groupe expérimental (zéro pour groupe contr
 Vous devez remettre 
 
 - un rapport au format PDF et 
-- votre code au format texte (`.txt`). 
+- votre code **R** ou un fichier Rmarkdown (extensions `.R` ou `.Rmd`)
 
-Nommez ces derniers selon la convention `d2_matricule.pdf` et `d2_matricule.txt`
-
-**Avertissement**: le module sur ZoneCours vous empêchera de soumettre un fichier avec l'extension `.R` ou `.Rmd`.
+Nommez ces derniers selon la convention `d2_matricule.pdf`, `d2_matricule.R`, etc.
