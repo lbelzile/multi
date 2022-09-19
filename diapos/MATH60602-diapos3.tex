@@ -217,7 +217,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, breakable, boxrule=0pt, frame hidden, interior hidden, enhanced, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, interior hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Réduction de la dimension}
 \protect\hypertarget{ruxe9duction-de-la-dimension}{}
@@ -403,7 +403,7 @@ C_j &= \underset{\text{somme de poids fois variables explicatives}}{w_{j1} X_1 +
 
 \hypertarget{tbl-eigenvalues}{}
 \begin{table}
-\caption{\label{tbl-eigenvalues}Variance des composantes principales }\tabularnewline
+\caption{\label{tbl-eigenvalues}Variance des premières composantes principales }\tabularnewline
 
 \centering
 \begin{tabular}[t]{cccccccc}
@@ -508,7 +508,7 @@ premières composantes principales)}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{eboulis}\NormalTok{(}\FunctionTok{eigen}\NormalTok{(}\FunctionTok{cor}\NormalTok{(factor)))}
+\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{eboulis}\NormalTok{(acp)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
@@ -525,6 +525,27 @@ premières composantes principales)}
 cumulative (droite).}
 
 \end{figure}
+\end{frame}
+
+\begin{frame}{Avantages et inconvénients}
+\protect\hypertarget{avantages-et-inconvuxe9nients}{}
+\begin{itemize}
+\tightlist
+\item
+  la standardisation (covariance ou corrélation) impacte le résultat
+\item
+  nécessite toutes les variables pour créer des composantes principales,
+  incluant pour de nouvelles observations
+\item
+  le critère d'optimisation ne prend pas en compte une potentielle
+  variable réponse comme pour l'analyse canonique et les moindres carrés
+  partiels.
+\item
+  les composantes principales ne sont pas facilement identifiables
+\item
+  le modèle sert typiquement à des fins d'analyse exploratoire
+  (visualisation) ou pour créer une variable réponse
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Analyse factorielle exploratoire}
@@ -609,6 +630,22 @@ Il faut un échantillon de taille conséquente.
 Essentiellement des règles du pouce.
 \end{frame}
 
+\begin{frame}{Invariance aux rotations orthogonales}
+\protect\hypertarget{invariance-aux-rotations-orthogonales}{}
+On transforme la solution pour garantir une solution
+\textbf{interprétable} puisque cette dernière n'est pas unique.
+
+\begin{itemize}
+\tightlist
+\item
+  La rotation \emph{varimax} maximise la variance de la somme des carrés
+  des chargements pour les facteurs.
+\item
+  Donne des chargements dispersés (valeurs élevées positives ou
+  négatives, d'autres presque nuls).
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Estimation}
 \protect\hypertarget{estimation}{}
 Plusieurs méthodes disponibles, dont
@@ -638,22 +675,6 @@ Plusieurs méthodes disponibles, dont
     problèmes de convergence fréquents (variances estimées négatives!)
     appelés cas de \textbf{(quasi)-Heywood}.
   \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Invariance aux rotations orthogonales}
-\protect\hypertarget{invariance-aux-rotations-orthogonales}{}
-On transforme la solution pour garantir une solution
-\textbf{interprétable} puisque cette dernière n'est pas unique.
-
-\begin{itemize}
-\tightlist
-\item
-  La rotation \emph{varimax} maximise la variance de la somme des carrés
-  des chargements pour les facteurs.
-\item
-  Donne des chargements dispersés (valeurs élevées positives ou
-  négatives, d'autres presque nuls).
 \end{itemize}
 \end{frame}
 
@@ -836,17 +857,8 @@ Le facteur 4 représenterait le prix. On pourrait directement inclure
 \protect\hypertarget{ajustement-avec-composantes-principales}{}
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Décomposition valeurs propres/vecteurs propres}
-\NormalTok{decompo }\OtherTok{\textless{}{-}} \FunctionTok{eigen}\NormalTok{(}\FunctionTok{cor}\NormalTok{(factor))}
-\CommentTok{\# Extraire les valeurs propres}
-\NormalTok{valpropres }\OtherTok{\textless{}{-}}\NormalTok{ decompo}\SpecialCharTok{$}\NormalTok{values}
-\CommentTok{\# Critère de Kaiser}
-\NormalTok{ckaiser }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(valpropres }\SpecialCharTok{\textgreater{}} \DecValTok{1}\NormalTok{)}
-\CommentTok{\# Extraire les premiers vecteurs propres}
-\NormalTok{Gamma\_est }\OtherTok{\textless{}{-}}\NormalTok{ decompo}\SpecialCharTok{$}\NormalTok{vectors[,}\FunctionTok{seq\_len}\NormalTok{(ckaiser)] }\SpecialCharTok{\%*\%}
-  \FunctionTok{diag}\NormalTok{(}\FunctionTok{sqrt}\NormalTok{(valpropres[}\FunctionTok{seq\_len}\NormalTok{(ckaiser)]))}
-\CommentTok{\# Solution (chargements) avec rotation varimax}
-\NormalTok{facto\_cp }\OtherTok{\textless{}{-}} \FunctionTok{varimax}\NormalTok{(Gamma\_est)}
+\NormalTok{facto\_cp }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{factocp}\NormalTok{(}\AttributeTok{x =}\NormalTok{ factor, }
+                  \AttributeTok{nfact =} \StringTok{"kaiser"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}

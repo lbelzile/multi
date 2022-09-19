@@ -21,7 +21,7 @@ Vous devez remettre trois fichiers sur ZoneCours,
 
 - un rapport au format PDF
 - votre code **R** ou un fichier Rmarkdown
-- la base de données créée à la suite des manipulations, au format CSV (valeurs séparées par des virgules), à l'aide de la commande `write.csv(db, file = "d1_matricule.csv")` où `db` est le nom de votre base de données suites aux modifications.
+- la base de données créée à la suite des manipulations, au format CSV (valeurs séparées par des virgules), à l'aide de la commande `write.csv(db, file = "d1_matricule.csv")` où `db` est le nom de votre base de données.
 
 Tous vos fichiers seront nommés selon la convention `d1_matricule.extension` en remplaçant `matricule` par votre numéro d'étudiant(e) et `.extension` par `.pdf`, `.R`, `.Rmd` et `.csv`, selon le type du fichier.
 

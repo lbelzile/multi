@@ -8,7 +8,7 @@ Les données `sondage_entreprise` contiennent les résultats d'un sondage effect
 
 - Produisez des statistiques descriptives pour les variables `q8` à `q17`
     - Combien y a-t-il de répondants?
-    \item Pour quels éléments y a-t-il le plus de consensus entre les répondants?
+    - Pour quels éléments y a-t-il le plus de consensus entre les répondants?
 - Utilisez  la méthode d'estimation par composantes principales et le critère de Kaiser. Combien de facteurs serait-il raisonnable de retenir?
 - Répétez l'exercice, cette fois avec la méthode du maximum de vraisemblance et le critère d'information d'Akaike pour $k=1, \ldots, 4$ facteurs. Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?
 - Estimez le modèle et interprétez les facteurs résultants (avec rotation varimax).

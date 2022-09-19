@@ -139,9 +139,10 @@ et $\mathsf{Cor}(C_i, C_j)=0$ pour $i \neq j$.
 #| label: tbl-eigenvalues
 #| echo: false
 #| tbl-align: 'center'
-#| tbl-cap: "Variance des composantes principales"
+#| tbl-cap: "Variance des premières composantes principales"
 data(factor, package = "hecmulti")
 acp <- princomp(factor, cor = TRUE)
+# aussi 'prcomp'
 
 acp_var <- t(formatC(round(acp$sdev^2,3), digits = 2,
                           format = "f")
@@ -154,6 +155,7 @@ kableExtra::kbl(t(acp_var[,1:8]),
                 booktabs = TRUE,
                 caption = NULL) #|>
  # kableExtra::kable_styling(full_width = TRUE)
+
 ```
 
 
@@ -268,7 +270,7 @@ biplot(acp,
 #| label: eboulis-syntaxe
 #| eval: false
 #| echo: true
-hecmulti::eboulis(eigen(cor(factor)))
+hecmulti::eboulis(acp)
 ```
 
 
@@ -280,8 +282,17 @@ hecmulti::eboulis(eigen(cor(factor)))
 #| echo: false
 #| out-width: '70%'
 #| fig-cap: "Diagramme d'éboulis (gauche) et variance cumulative (droite)."
-hecmulti::eboulis(eigen(cor(factor)))
+hecmulti::eboulis(acp)
 ```
+
+# Avantages et inconvénients
+
+- la standardisation (covariance ou corrélation) impacte le résultat
+- nécessite toutes les variables pour créer des composantes principales, incluant pour de nouvelles observations
+- le critère d'optimisation ne prend pas en compte une potentielle variable réponse comme pour l'analyse canonique et les moindres carrés partiels.
+- les composantes principales ne sont pas facilement identifiables
+- le modèle sert typiquement à des fins d'analyse exploratoire (visualisation) ou pour créer une variable réponse
+
 
 
 # Analyse factorielle exploratoire
@@ -347,6 +358,13 @@ Il faut un échantillon de taille conséquente.
 Essentiellement des règles du pouce.
 
 
+# Invariance aux rotations orthogonales
+ 
+On transforme la solution pour garantir une solution **interprétable** puisque cette dernière n'est pas unique.
+
+- La rotation *varimax* maximise la variance de la somme des carrés des chargements pour les facteurs.
+- Donne des chargements dispersés (valeurs élevées positives ou négatives, d’autres presque nuls).
+
 # Estimation
 
 Plusieurs méthodes disponibles, dont
@@ -358,13 +376,6 @@ Plusieurs méthodes disponibles, dont
    - critères d'information.
    - problèmes de convergence fréquents (variances estimées négatives!) appelés cas de **(quasi)-Heywood**.
 
-
-# Invariance aux rotations orthogonales
- 
-On transforme la solution pour garantir une solution **interprétable** puisque cette dernière n'est pas unique.
-
-- La rotation *varimax* maximise la variance de la somme des carrés des chargements pour les facteurs.
-- Donne des chargements dispersés (valeurs élevées positives ou négatives, d’autres presque nuls).
 
 # Choix du nombre de facteurs 
 
@@ -499,19 +510,10 @@ Le facteur 4 représenterait le prix. On pourrait directement inclure $X_1$.
 
 ```{r}
 #| label: facto-cpkaiser
-#| eval: true
+#| eval: false
 #| echo: true
-# Décomposition valeurs propres/vecteurs propres
-decompo <- eigen(cor(factor))
-# Extraire les valeurs propres
-valpropres <- decompo$values
-# Critère de Kaiser
-ckaiser <- sum(valpropres > 1)
-# Extraire les premiers vecteurs propres
-Gamma_est <- decompo$vectors[,seq_len(ckaiser)] %*%
-  diag(sqrt(valpropres[seq_len(ckaiser)]))
-# Solution (chargements) avec rotation varimax
-facto_cp <- varimax(Gamma_est)
+facto_cp <- hecmulti::factocp(x = factor, 
+                  nfact = "kaiser")
 ```
 
 # Solution avec composantes principales

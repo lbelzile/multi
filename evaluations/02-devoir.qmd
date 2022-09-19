@@ -6,8 +6,10 @@ Les observations de la base de données [`bjffacto`](https://lbelzile.github.io/
 
 La variable `condition` indique le groupe expérimental (zéro pour groupe contrôle, un pour douleur).
 
+**Indication**: utilisez la matrice de covariance pour vos analyses factorielles
+
 1. Pourquoi n'est-il pas nécessaire de standardiser les variables avant de procéder à l'analyse exploratoire? Justifiez votre réponse
-2. Effectuez une analyse factorielle exploratoire à l'aide de la méthode des composantes principales
+2. Effectuez une analyse factorielle exploratoire à l'aide de la méthode des composantes principales. 
     a. En utilisant le critère de Kaiser (valeurs propres) ou le diagramme d'éboulis, déterminez un nombre adéquat de facteurs à employer.
     b. Produisez un diagramme d'éboulis et rapportez ce dernier.
     c. Quel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?

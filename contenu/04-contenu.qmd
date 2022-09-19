@@ -1,0 +1,36 @@
+---
+title: "Sélection de variables"
+---
+
+## Contenu
+
+- Rappels sur la régression
+- Surajustement
+- Méthodes d'estimation de l'erreur: 
+    - pénalisation, 
+    - validation croisée et 
+    - validation externe
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 4 (Sélection de variables et de modèles)](https://lbelzile.github.io/math60602/04-selectionmodeles.html), Sections 4.1-4.4
+
+
+## Diapositives 
+
+- {{< fa file >}} [Sélection de variables](/diapos/MATH60602-diapos4.pdf)
+
+<!--
+<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
+-->
+
+## Exercices
+
+- {{< fa file >}} [Exercices 3](/exercices/03-exercice.html)
+
+## Objectifs d'apprentissage
+
+- Être capable d'interpréter les coefficients d'un modèle de régression linéaire
+- Être en mesure de décrire le suroptimisme et son impact sur l'évaluation de modèles
+- Pouvoir expliquer les avantages et inconvénients des méthodes d'estimation de l'erreur

@@ -84,3 +84,4 @@ walk(seq(1, nrow(schedule_nested)), ~show_table(.x))
 ```
 
 :::
+
