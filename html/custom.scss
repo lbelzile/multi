@@ -31,7 +31,7 @@ $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
 $light:         $gray-100 !default;
-$dark:          $gray-800 !default;
+$dark:          $gray-200 !default;
 
 $font-family-sans-serif:      Fira Sans Condensed, sans-serif !default;
 $font-family-serif:           Barlow, serif !default;  /* Not actually a serif font but whatever */
@@ -222,18 +222,18 @@ pre.text, pre.sourceCode, .cell-output pre {
 // Remove margin on pre in output
 .cell-output pre {
   margin-bottom: 0;
-  color: #ffffff;
+  color: $gray-900;
 }
 
 // Format output and plain text blocks like code
 .cell-output, pre.text {
   border: none;
   padding: .4em;
-  background-color: $monokai-bg;
-  border: 1px solid $monokai-bg;
+  background-color: $gray-100;
+  border: 1px solid $gray-200;
   border-radius: .25rem;
 }
 
 pre.text {
-  color: #ffffff;
+  color: #000;
 }

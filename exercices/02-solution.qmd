@@ -1,0 +1,185 @@
+---
+title: "Analyse factorielle"
+execute:
+  echo: true
+  eval: true
+  message: false
+  warning: false
+  error: false
+---
+
+## Exercice 2.1
+
+Les données `sondage_entreprise` contiennent les résultats d'un sondage effectué par une compagnie auprès de ses employés. 
+
+**1. Produisez des statistiques descriptives pour les variables `q8` à `q17`.**
+
+```{r}
+data(sondage_entreprise, package = "hecmulti")
+str(sondage_entreprise) #aperçu de la base de données
+```
+
+On peut utiliser `summary` pour obtenir les statistiques descriptives, mais les échelles de Likert sont toutes de 1 à 5.
+
+```{r}
+#| label: tbl-statdescriptfactor
+#| echo: false
+#| cache: true
+#| eval: true
+#| tbl-cap: "Statistiques descriptives des questions du sondage en entreprise."
+ tibble::tibble(moyenne = apply(sondage_entreprise, 2, mean),
+              "écart-type" = apply(sondage_entreprise, 2, sd),
+                 histogramme = apply(sondage_entreprise, 2, function(x){skimr::inline_hist(x = x, n_bins = 5)})) |>
+  knitr::kable(digits = 2,
+               booktabs = TRUE) |>
+  kableExtra::kable_styling(full_width = TRUE)
+```
+
+On peut voir sur le corrélogramme que toutes les variables sont très corrélées entre elles.
+
+```{r, eval = TRUE}
+corrplot::corrplot(corr = cor(sondage_entreprise),
+                   type = "upper", 
+                   diag = FALSE)
+```
+
+**2. Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.**
+
+```{r, eval = FALSE}
+nrow(sondage_entreprise)
+```
+
+Il y a `r nrow(sondage_entreprise)` observations et `r ncol(sondage_entreprise)` variables. C'est suffisant pour une analyse factorielle, mais le nombre de facteurs ne sera probablement pas très élevé. 
+
+**3. Utilisez la méthode d'estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d'analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?**
+
+```{r}
+library(hecmulti)
+# Composantes principales, critère de Kaiser
+afk <- factocp(sondage_entreprise, 
+               cor = TRUE)
+spectral <- eigen(cor(sondage_entreprise))
+hecmulti::eboulis(spectral)
+print(afk, cutoff = 0.5)
+```
+
+Le critère de Kaiser (valeurs propres supérieures à 1) avec la matrice de corrélation suggère deux facteurs. Le diagramme d'éboulis donne deux facteurs également avec la matrice de corrélation. 
+
+On peut constater en étudiant les chargements que le premier facteur est très corrélé avec plusieurs variables. En augmentant le point de coupure, on obtient un regroupement avec grosso-modo pour le facteur 1 (Q8-Q9 et Q14-Q17) les questions qui se réfèrent à la réputation sociale de l'entreprise et la balance pour le facteur 2 (Q10-Q13) pour la réputation sur le plan de la gestion. Seule la question Q15 semble un peu à part
+
+
+**4. Répétez l'exercice, cette fois avec la méthode du maximum de vraisemblance**
+    - **Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?**
+    - **Combien de facteurs les critères d'information recommendent-ils?**
+    - **Si vous ajoutez des facteurs, est-ce que votre interprétation change?**
+    
+```{r}
+res_tableau <- ajustement_factanal(
+  factors = 1:4, 
+  covmat = cor(sondage_entreprise),
+  n.obs = nrow(sondage_entreprise))
+knitr::kable(res_tableau)
+```
+
+On voit que le modèle AIC suggère un modèle à quatre facteurs (un cas de quasi-Heywood), tandis que le BIC suggère plutôt trois facteurs. Le test du rapport de vraisemblance comparant la corrélation empirique au modèle d'analyse factorielle indique que le modèle est raisonnable à partir de quatre. Le problème de convergence nous amène à interpréter les résultats pour le modèle à quatre facteurs avec un grin de sel.
+
+Puisque la corrélation est très élevée, il est difficile ici d'interpréter les facteurs résultants parce que plusieurs variables sont corrélées avec de multiples facteurs. On peut augmenter le point de coupure à 0.5 pour déterminer les amalgames suivants:
+
+- Le facteur 1 incluant Q8, Q9, Q16 et Q17 font référence à la réputation sociale et éthique de l'entreprise
+- le facteur 2 comprenant Q10-Q13 correspond à la perception financière (innovation, gestion, finances)
+- le facteur 3 regroupe Q9, Q11 et Q14 (éthique, confiance et innovation)
+ 
+L'interprétation change puisque ce qui était dans le premier facteur se retrouve dans le troisième, avec Q9 qui est présente dans les deux. En pratique, on pourrait décider de l'associer à l'une ou l'autre des échelles, selon la cohérence interne, et la logique.
+ 
+**5. Créez des échelles et vérifiez leur cohérence interne. **
+
+```{r}
+e1 <- sondage_entreprise |> 
+  dplyr::select(c(q8:q9, q14:q17))
+alphaC(e1)
+echelle1 <- rowMeans(e1)
+
+e2 <- sondage_entreprise |> 
+  dplyr::select(c(q10:q13))
+alphaC(e2)
+echelle2 <- rowMeans(e1)
+```
+
+On voit que les deux échelles créées ont un $\alpha$ de Cronbach de plus de 0.8, donc les échelles sont cohérentes. C'est en grande partie dû à la forte corrélation observée entre tous les items
+
+## Exercice 2.2
+ 
+Effectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données `aerien`.  Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).
+
+**1. Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.** 
+
+- **Combien de facteurs le critère des valeurs propres suggère-t-il?**
+- **Combien de facteurs le diagramme d'éboulis suggère-t-il?**
+- **Interprétez les chargements obtenus suite à la rotation. Commentez sur l'interprétabilité de ces derniers.**
+- **En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.**
+   
+La base de données est la même que celle de l'Exercice 1.1, mais on ne sélectionne que les colonnes 7 à 20 qui correspondent aux réponses du questionnaire.
+
+Il faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir `?cor`); j'utilise ici `use = pairwise.complete.obs` qui utilise toutes les paires.^[Le défaut de cette option, qui extrait le maximum d'information à l'aide de toutes les paires complètes, est que l'on a pas de garantie que la matrice de covariance résultante est positive définie.]
+    
+```{r}
+library(hecmulti)
+library(dplyr)
+data(aerien, package = "hecmulti")
+bd <- aerien |> 
+  mutate_at(7:20,
+            ~na_if(., 0)) |>
+  select(7:20)
+corbd <- cor(bd, 
+             use = "pairwise.complete.obs")
+afk <- factocp(covmat = corbd)
+eboulis(eigen(corbd))
+# Copier noms de variables
+rownames(afk$loadings) <- colnames(bd)
+print(afk, 
+      cutoff = 0.4)
+```
+    
+Le diagramme d'éboulis suggère quatre facteurs, idem pour le critère de Kaiser.
+
+Si on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une corrélation suffisante pour être considérés lors de la création d'échelles, on obtient la division suivante:
+
+- Le facteur 1 inclut les items 5, 7, 8 et 14 (nourriture, confort du siège et divertissement en vol, proprete) qui sont tous en lien avec l'offre de service en vol
+- Le facteur 2 inclut items 1-4 (service internet en vol, temps d'arrivée et de départ convenable, facilité de réservation en ligne et localisation de la porte). Difficilement interprétable à cause d'internet, sinon rattachés à l'expérience client avant le vol.
+- Le facteur 3 inclut les items 9, 11, 13 (embarquement, gestion des bagages et service en vol). Les questions sont en lien avec les contacts avec le personnel de bord et la rapidité du service.
+- Le facteur 4 inclut l'item 6, peut-être 12, les deux en lien avec l'enregistrement
+
+Augmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.
+
+```{r}
+print(
+  c(F1 = alphaC(bd |> select(c(5,7,8)), 
+       na.rm = TRUE),
+  F2 = alphaC(bd |> select(1:4),
+       na.rm = TRUE),
+  F3 = alphaC(bd |> select(c(9,11,13)),
+       na.rm = TRUE),
+  F4 = alphaC(bd |> select(c(6,12)),
+       na.rm = TRUE)), 
+  digits = 2)
+```
+
+Si les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n'ont pas un $\alpha$ de Cronbach supérieur à 0.6.
+
+**2. Répétez l'exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.**
+
+- **Qu'arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.**
+
+```{r}
+hecmulti::ajustement_factanal(covmat = corbd,
+                              n.obs = nrow(na.omit(bd)), 
+                              factors = 1:7) |>
+  knitr::kable(digits = 2)
+```
+
+En raison du nombre excessivement élevé d'observations, l'ajustement du modèle est médiocre et les critères d'information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n'est pas adéquate et on rejette à coup sûr le test d'hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l'analyse factorielle parce que notre puissance est élevée vu qu'on a `r  nrow(na.omit(bd))` réponses complètes. 
+
+
+À partir de 7 facteurs, l'optimisation ne converge pas et retourne un cas de Heywood.
+
+Ainsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu'une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible.

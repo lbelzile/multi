@@ -1,0 +1,26 @@
+---
+title: "Sélection de variables"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: xelatex
+cache: true
+mainfont: "D-DIN"
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+---
+
+# Rappel sur la régression linéaire
+
+Bâtir un modèle pour une variable réponse $Y$ en fonction de variables explicatives $X_1, \ldots, X_p$
+

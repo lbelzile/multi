@@ -1,0 +1,18 @@
+---
+title: "Sélection de variables"
+---
+
+## Exercice 3.1
+
+
+Le but de l'exercice est de bâtir un modèle prédictif pour le nombre annuel de demandes d'admission à partir de la base de données `college`.
+
+1. Faites une analyse exploratoire des variables explicatives: 
+   - Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse
+   - Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l'ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?
+   - Vérifiez s'il y a des variables catégorielles encodées comme des variables numériques.
+2. Scindez la base de données en échantillon avec données d'entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire `60602` via `set.seed(60602)`. 
+   - Sélectionnez un modèle à l'aide d'une des méthodes couvertes, mais en basant votre choix sur l'erreur moyenne quadratique évaluée sur l'échantillon de validation.
+3. Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.
+4. Créez un tableau avec le nombre de coefficients de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée. 
+5. Commentez sur le meilleur modèle parmi les combinaisons.

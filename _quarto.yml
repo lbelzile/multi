@@ -72,6 +72,8 @@ website:
               file: contenu/02-contenu.qmd
             - text: "3: Réduction de la dimension"
               file: contenu/03-contenu.qmd
+            - text: "4: Sélection de variables"
+              file: contenu/04-contenu.qmd
 
 
     - title: "Devoirs"
@@ -96,11 +98,22 @@ website:
       contents:
         - text: "Exercices"
           file: exercices/index.qmd
-        - text: "Analyse exploratoire"
-          file: exercices/01-exercice.qmd
-        - text: "Analyse factorielle"
-          file: exercices/02-exercice.qmd
-
+        - section: "Analyse exploratoire"
+          contents: 
+           - text: "Exercice 1"
+             file: exercices/01-exercice.qmd
+           - text: "Solution 1"
+             file: exercices/01-solution.qmd
+        - section: "Analyse factorielle"
+          contents:
+           - text: "Exercice 2"
+             file: exercices/02-exercice.qmd
+           - text: "Solutions 2"
+             file: exercices/02-solution.qmd
+        - section: "Sélection de variables"
+          contents:
+           - text: "Exercice 3"
+             file: exercices/03-exercice.qmd
 
   page-footer:
     left: |
@@ -118,4 +131,4 @@ format:
       - litera
       - html/custom.scss
     toc: true
-    highlight-style: github
+    highlight-style: github-light

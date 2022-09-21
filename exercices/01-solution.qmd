@@ -1,0 +1,185 @@
+---
+title: "Analyse exploratoire"
+execute:
+  echo: true
+  eval: true
+  message: false
+  warning: false
+  error: false
+---
+
+## Solution 1.1
+
+On commence par charger la base de données
+
+```{r}
+# remotes::install_github("lbelzile/hecmulti")
+data(aerien, package = "hecmulti")
+# Consulter la fiche descriptive
+# ? hecmulti::aerien
+```
+
+**1. Formulez des questions en lien avec la description de la base de données préliminaires à l'analyse exploratoire.**
+
+Pour démarrer notre analyse exploratoire, on formule quelques questions. Par exemple:
+
+- Quel est le profil socio-démographique des clients (âge, sexe, clientèle affaires)
+- Quelle proportion de réponses au sondage sont manquantes et quel est le lien avec le type de vol (via `distance_vol`)? On peut penser que l'offre alimentaire dépend de la durée.
+- Dans quelle mesure le délai à l'arrivée impacte la satisfaction globale?
+- Quel est le lien entre les réponses et le profil socio-démographique?
+- Est-ce que les personnes qui voyagent en classe supérieure (ou pour des motifs d'affaires) sont plus ou moins critiques?
+- Est-ce que les délais au départ ou à l'arrivée peuvent être négatifs (vol en avance)?
+
+
+**2. Examinez la base de données; identifiez le type de variable et leur nature.**
+
+```{r}
+dplyr::glimpse(aerien)
+```
+La plupart des variables sont des variables entières (`int`) formées d'échelles de Likert plus valeurs manquantes encodées 0. L'identifiant, le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l'indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (`dbl`). Les délais sont encodées avec des valeurs entières (valeur arrondie). Les colonnes 7 à 20 encodent les réponses au questionnaire.
+
+**3. Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?**
+
+Oui, il y a des valeurs manquantes. Selon la description, toutes les valeurs 0 dans les questionnaires qui peut encoder deux situations: non-réponse ou non-applicable. Les imputer par la moyenne serait donc illogique, puisque certains services (divertissement, nourriture) ne sont pas offerts dans les vols. On pourrait segmenter manuellement la base de données pour séparer selon le type de vol.
+
+Il serait possible en revanche d'imputer l'information pour les valeurs de délai (`r sum(is.na(aerien$delai_arrivee_min))` valeurs manquantes).
+
+
+**4. Calculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?**
+
+A minima, il faut transformer les zéros en valeurs manquantes pour éviter de fausser les résultats. Il serait aussi préférable de transformer les scores des items du questionnaire en variables catégorielles. 
+
+```{r}
+library(dplyr)
+# Remplacer valeurs manquantes (0 en NA)
+aerien <- aerien |> 
+  mutate_at(7:20, ~na_if(., 0))
+  # Statistiques descriptives
+summary(aerien)
+  
+# Voir décompte pour éléments du questionnaire
+aerien |> 
+  mutate_at(7:20, ~factor(., ordered = TRUE)) |>
+  # Statistiques descriptives
+  summary()
+
+# Moyenne et écart-type par variable
+# selon niveau de satisfaction
+aerien |>
+  group_by(satisfaction) |>
+  summarize(across(where(is.numeric), 
+            ~ mean(.x, na.rm = TRUE),
+            .names = "moy_{.col}")) |> 
+  # Pivoter tableau
+  tidyr::pivot_longer(cols = -1,
+                      names_to = "variable",
+                      names_prefix = "moy_",
+                      values_to = "moyenne") |>
+  arrange(variable) |> # trier
+  knitr::kable(digits = 2)
+```
+
+
+On note que `r round(100*as.numeric(table(aerien$loyaute_consommateur)[2]/nrow(aerien)), 0)` pourcent des résultats sont pour des clients. L'âge médian est de `r median(aerien$age)` ans, et la majorité des déplacements sont pour affaires, soit environ  `r round(100*as.numeric(table(aerien$type_deplacement)[1]/nrow(aerien)), 0)` pourcent. Il y a presque autant d'hommes que de femmes. Les personnes qui disposent d'une carte fidélité voyagent davantage en classe affaire (presque la moitié des vols).
+
+```{r}
+aerien |> 
+  group_by(loyaute_consommateur, 
+           classe) |> 
+  summarise(cnt = n()) |>
+  mutate(freq = formattable::percent(cnt / sum(cnt))) |>
+  knitr::kable()
+```
+
+Il y a une forte corrélation entre certains items du questionnaire, ce qui est logique parce que ces questions capturent souvent des concepts communs (services, enregistrement, confort).
+
+```{r}
+corrplot::corrplot(
+  corr = cor(aerien[,7:20], 
+             use = "pairwise.complete.obs"), 
+  diag = FALSE,
+  type = "upper", 
+  tl.pos = "n") # pas de nom
+```
+
+**5. Représentez graphiquement la distribution de quelques variables de la base de données selon les différents niveaux de `satisfaction`.**
+
+```{r}
+library(ggplot2)
+theme_set(theme_classic())
+g1 <- ggplot(data = aerien, 
+       aes(x = loyaute_consommateur,
+           fill = satisfaction)) +
+  geom_bar(position = "fill") +
+  labs(y = "", 
+       x = "loyauté du consommateur")
+
+g2 <- aerien |>
+  count(service_internet_en_vol, 
+        satisfaction) |>
+  group_by(satisfaction) |>
+  mutate(pct = n / sum(n)) |>
+  ggplot(aes(x = service_internet_en_vol,
+             y = pct,
+           fill = satisfaction)) +
+  geom_bar(stat = "identity",
+           position = "dodge2") +
+  labs(y = "", 
+       subtitle = "Pourcentage des réponses",
+       x = "service internet en vol")
+
+g3 <- aerien |>
+  count(preenregistrement_en_ligne, 
+        satisfaction) |>
+  group_by(satisfaction) |>
+  mutate(pct = n / sum(n)) |>
+  ggplot(aes(x = preenregistrement_en_ligne,
+             y = pct,
+           fill = satisfaction)) +
+  geom_bar(stat = "identity",
+           position = "dodge2") +
+  labs(y = "", 
+       subtitle = "Pourcentage des réponses",
+       x = "préenregistrement en ligne")
+
+g4 <- ggplot(data = aerien, 
+       aes(x = delai_arrivee_min,
+           fill = satisfaction)) +
+  geom_histogram(boundary = 0,
+                 binwidth = 2,
+                 position = "dodge2") +
+  coord_trans(x = 'log1p',
+              y = 'log1p') +
+  labs(y = "", 
+       x = "délai à l'arrivée (en minutes)")
+
+g5 <- ggplot(data = aerien,
+             aes(x = delai_depart_min,
+                 y = delai_arrivee_min),
+             alpha = 0.5) +
+  geom_point() +
+  labs(x = "délais au départ (en minutes)",
+       y = "délais à l'arrivée (en minutes)") +
+  coord_trans(x = "log1p",
+              y = "log1p")
+
+library(patchwork)
+# Imprimer plusieurs graphiques
+(g1 + g2) / (g3 + g4) +
+  plot_layout(guides = "collect") & theme(legend.position = "bottom")
+
+g5
+```
+
+On voit clairement qu'il y a de grandes disparités pour la satisfaction. Il est peu surprenant de constater que les personnes qui ne sont pas globalement satisfaites accordent des notes plus faibles aux différents items du questionnaire. Certains items (accès internet en vol, facilité du préenregistrement) semblent avec un impact important sur la satisfaction globale.
+
+À mesure que les délais au départ augmentent, la relation avec le délai à l'arrivée se renforce, mais la corrélation linéaire est plus faible pour les petits retards. On voit que seuls sont enregistrés les retards (un vol qui arrive à l'avance est comptabilisé comme étant à l'heure avec une valeur de zéro).
+
+
+**6. Résumez les faits saillants de votre analyse exploratoire en cinq à 10 points.**
+
+- Sans surprise, les personnes qui ne sont globalement pas satisfaites accordent des notes plus faibles dans le questionnaire. Leurs vols sont en moyenne sur de plus courtes distances et ont de plus long délais à l'arrivée.
+- Le nombre de vols en classe affaire est surreprésenté dans la base de données.
+- La clientèle affaire détient davantage de compte de fidélité; ce segment est moins critique des vols, mais pourrait ne pas bénéficier des même services.
+- Les délais au départ et à l'arrivée ne sont comptabilisés que s'ils sont positifs. 
+- Les délais de retard importants à l'arrivée et au départ sont davantage corrélés à mesure que le retard augmente.

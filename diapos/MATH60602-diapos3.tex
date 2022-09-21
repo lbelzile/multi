@@ -217,7 +217,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, interior hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, breakable, boxrule=0pt, enhanced, frame hidden, borderline west={3pt}{0pt}{shadecolor}, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Réduction de la dimension}
 \protect\hypertarget{ruxe9duction-de-la-dimension}{}
@@ -273,7 +273,7 @@ Utilisé principalement pour les questionnaires
 
 }
 
-\caption{Datasaurus (12 jeux de données avec la même corrélation
+\caption{Datasaurus (13 jeux de données avec la même corrélation
 linéaire)}
 
 \end{figure}
@@ -339,30 +339,54 @@ Pour vous, à quel point est-ce important
 }
 \end{frame}
 
-\begin{frame}{Motivation}
-\protect\hypertarget{motivation}{}
+\begin{frame}{Objectif des composantes principales}
+\protect\hypertarget{objectif-des-composantes-principales}{}
+Typiquement utilisé à des fins
+
 \begin{itemize}
 \tightlist
 \item
-  Y a-t-il des groupements de variables?
+  d'analyse exploratoire (visualisation) ou
 \item
-  Est-ce que les variables faisant partie d'un groupement semblent
-  mesurer certains aspects d'un facteur commun (non observé)?
+  pour créer une variable réponse (par ex., le QI)
 \end{itemize}
 
-De tels groupements peuvent être détectés (automatiquement) si plusieurs
-variables sont très corrélées entre elles.
+Réduire la dimension en préservant le plus de variabilité possible.
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Comment manger le plus de krill?}
+\protect\hypertarget{comment-manger-le-plus-de-krill}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-correlogram-1.pdf}
+\begin{minipage}[t]{0.50\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{"figures/whaleshark.png"}
 
 }
 
-\caption{\label{fig-correlogram}Corrélogramme des items du
-questionnaire}
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{"figures/krill.png"}
+
+}
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-krill}Illustrations d'Allison Horst (CC BY 4.0)}
 
 \end{figure}
 \end{frame}
@@ -416,43 +440,6 @@ C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8\\
 \end{table}
 \end{frame}
 
-\begin{frame}{Comment manger le plus de krill?}
-\protect\hypertarget{comment-manger-le-plus-de-krill}{}
-\begin{figure}
-
-\begin{minipage}[t]{0.50\linewidth}
-
-{\centering 
-
-\raisebox{-\height}{
-
-\includegraphics{"figures/whaleshark.png"}
-
-}
-
-}
-
-\end{minipage}%
-%
-\begin{minipage}[t]{0.50\linewidth}
-
-{\centering 
-
-\raisebox{-\height}{
-
-\includegraphics{"figures/krill.png"}
-
-}
-
-}
-
-\end{minipage}%
-
-\caption{\label{fig-krill}Illustrations d'Allison Horst (CC BY 4.0)}
-
-\end{figure}
-\end{frame}
-
 \begin{frame}{Rotation et système de coordonnées}
 \protect\hypertarget{rotation-et-systuxe8me-de-coordonnuxe9es}{}
 \begin{figure}
@@ -499,8 +486,8 @@ premières composantes principales)}
 \begin{itemize}
 \tightlist
 \item
-  \textbf{critère des valeurs propres de Kaiser}: valeurs propres
-  supérieures à 1.
+  \textbf{critère des valeurs propres de Kaiser}: variances des
+  composantes principales (valeurs propres) supérieures à 1.
 \item
   \textbf{critère du coude de Cattell}: diagramme d'éboulis
   (\texttt{screeplot})
@@ -527,25 +514,77 @@ cumulative (droite).}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Avantages et inconvénients}
-\protect\hypertarget{avantages-et-inconvuxe9nients}{}
+\begin{frame}{Pourcentage de variance exprimée}
+\protect\hypertarget{pourcentage-de-variance-exprimuxe9e}{}
+La variance totale des composantes principales est identique à celle des
+variables originales:
+\[ \mathsf{Va}(C_1) + \cdots + \mathsf{Va}(C_p) = \mathsf{Va}(X_1) + \cdots + \mathsf{Va}(X_p)\]
+
 \begin{itemize}
 \tightlist
 \item
-  la standardisation (covariance ou corrélation) impacte le résultat
-\item
-  nécessite toutes les variables pour créer des composantes principales,
-  incluant pour de nouvelles observations
-\item
-  le critère d'optimisation ne prend pas en compte une potentielle
-  variable réponse comme pour l'analyse canonique et les moindres carrés
-  partiels.
-\item
-  les composantes principales ne sont pas facilement identifiables
-\item
-  le modèle sert typiquement à des fins d'analyse exploratoire
-  (visualisation) ou pour créer une variable réponse
+  Si on travaille avec la matrice de corrélation (variance unitaire),
+  alors la variance totale est \(p\).
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Covariance ou corrélation?}
+\protect\hypertarget{covariance-ou-corruxe9lation}{}
+La matrice de corrélation est la matrice de covariance des données
+\textbf{standardisées} (variance unitaire)
+
+\begin{itemize}
+\tightlist
+\item
+  la covariance accorde plus d'importante aux variables qui ont une
+  variance élevée
+\item
+  si les variables sont sur la même échelle, covariance et corrélation
+  sont utilisables
+\item
+  sinon, utiliser la matrice de corrélation \emph{par défaut}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Inconvénients des composantes principales}
+\protect\hypertarget{inconvuxe9nients-des-composantes-principales}{}
+\begin{itemize}
+\tightlist
+\item
+  Toutes les variables sont nécessaires pour créer des composantes
+  principales avec de nouvelles observations
+\item
+  Le critère d'optimisation ne prend pas en compte une potentielle
+  variable réponse (voir analyse canonique et moindres carrés partiels).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Motivation pour l'analyse factorielle}
+\protect\hypertarget{motivation-pour-lanalyse-factorielle}{}
+\begin{itemize}
+\tightlist
+\item
+  Y a-t-il des groupements de variables?
+\item
+  Est-ce que les variables faisant partie d'un groupement semblent
+  mesurer certains aspects d'un facteur commun (non observé)?
+\end{itemize}
+
+De tels groupements peuvent être détectés (automatiquement) si plusieurs
+variables sont très corrélées entre elles.
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-correlogram-1.pdf}
+
+}
+
+\caption{\label{fig-correlogram}Corrélogramme des items du
+questionnaire}
+
+\end{figure}
 \end{frame}
 
 \begin{frame}{Analyse factorielle exploratoire}
@@ -607,6 +646,38 @@ La proportion de la variance de \(X_i\) expliquée par les facteurs est
 \(\gamma_{i1}^2 + \cdots + \gamma_{im}^2\).
 \end{frame}
 
+\begin{frame}{Exemple d'estimation des chargements}
+\protect\hypertarget{exemple-destimation-des-chargements}{}
+\hypertarget{tbl-factocp}{}
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{\label{tbl-factocp}Estimés des chargements
+(pourcentage).}\tabularnewline
+\toprule()
+& F1 & F2 & F3 & F4 \\
+\midrule()
+\endfirsthead
+\toprule()
+& F1 & F2 & F3 & F4 \\
+\midrule()
+\endhead
+x1 & & & & 81 \\
+x2 & & & -79 & \\
+x3 & & 79 & & \\
+x4 & 82 & & & \\
+x5 & & & & 83 \\
+x6 & & 66 & & \\
+x7 & & & -83 & \\
+x8 & 85 & & & \\
+x9 & & 75 & & \\
+x10 & & & -79 & \\
+x11 & 82 & & & \\
+x12 & & 73 & & \\
+\bottomrule()
+\end{longtable}
+
+:::
+\end{frame}
+
 \begin{frame}{Analyse factorielle en pratique}
 \protect\hypertarget{analyse-factorielle-en-pratique}{}
 La corrélation entre les variables explicatives découlera de celle avec
@@ -646,34 +717,59 @@ On transforme la solution pour garantir une solution
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Estimation}
-\protect\hypertarget{estimation}{}
-Plusieurs méthodes disponibles, dont
+\begin{frame}[fragile]{Estimation avec composantes principales}
+\protect\hypertarget{estimation-avec-composantes-principales}{}
+Garder \(m\) vecteurs propres et valeurs propres, puis effectuer une
+rotation (varimax)
 
 \begin{itemize}
 \tightlist
 \item
-  composantes principales (garder \(m\) vecteurs propres et valeurs
-  propres)
+  estimation toujours valide et rapide.
+\item
+  sélection moins objective que maximum de vraisemblance (critère du
+  coude ou de Kaiser)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(hecmulti)}
+\NormalTok{facto\_cp }\OtherTok{\textless{}{-}} \FunctionTok{factocp}\NormalTok{(factor, }
+                    \AttributeTok{nfact =} \StringTok{"kaiser"}\NormalTok{, }
+                    \AttributeTok{cor =} \ConstantTok{TRUE}\NormalTok{)}
+\CommentTok{\# nfact: nombre de facteurs ("kaiser" par défaut)}
+\CommentTok{\# cor: matrice de corrélation? par défaut vrai}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Estimation par maximum de vraisemblance}
+\protect\hypertarget{estimation-par-maximum-de-vraisemblance}{}
+\begin{itemize}
+\tightlist
+\item
+  Postulat de normalité des aléas et des facteurs.
+\item
+  Nécessite une optimisation numérique délicate:
 
   \begin{itemize}
   \tightlist
   \item
-    estimation toujours valide et rapide.
+    les problèmes de convergence sont fréquents
   \item
-    sélection moins objective.
+    variances estimées parfois négatives!
+  \item
+    appelés cas de \textbf{(quasi)-Heywood}.
   \end{itemize}
 \item
-  \textbf{maximum de vraisemblance}: postulat de normalité, nécessite
-  une optimisation numérique délicate pour chaque \(m\)
+  Méthodes de sélection plus informatives
 
   \begin{itemize}
   \tightlist
   \item
-    critères d'information.
+    critères d'information
   \item
-    problèmes de convergence fréquents (variances estimées négatives!)
-    appelés cas de \textbf{(quasi)-Heywood}.
+    tests d'hypothèse d'adéquation
   \end{itemize}
 \end{itemize}
 \end{frame}
@@ -712,7 +808,7 @@ vraisemblance}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(hecmulti)}
 \FunctionTok{ajustement\_factanal}\NormalTok{(}
-    \AttributeTok{covmat =} \FunctionTok{corr}\NormalTok{(factor), }\CommentTok{\# matrice de corrélation}
+    \AttributeTok{covmat =} \FunctionTok{cor}\NormalTok{(factor), }\CommentTok{\# matrice de corrélation}
     \AttributeTok{factors =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\CommentTok{\# candidats pour nb de facteurs}
     \AttributeTok{n.obs =} \FunctionTok{nrow}\NormalTok{(factor)) }\CommentTok{\# nombre d\textquotesingle{}observations}
 \end{Highlighting}
@@ -851,46 +947,6 @@ Cas de Heywood (trop de facteurs.)
 
 Le facteur 4 représenterait le prix. On pourrait directement inclure
 \(X_1\).
-\end{frame}
-
-\begin{frame}[fragile]{Ajustement avec composantes principales}
-\protect\hypertarget{ajustement-avec-composantes-principales}{}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{facto\_cp }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{factocp}\NormalTok{(}\AttributeTok{x =}\NormalTok{ factor, }
-                  \AttributeTok{nfact =} \StringTok{"kaiser"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Solution avec composantes principales}
-\protect\hypertarget{solution-avec-composantes-principales}{}
-\hypertarget{tbl-factocp}{}
-\begin{table}
-\caption{\label{tbl-factocp}Estimés des chargements (pourcentage). }\tabularnewline
-
-\centering
-\begin{tabular}{lrrrr}
-\toprule
-  & F1 & F2 & F3 & F4\\
-\midrule
-x1 &  &  &  & 81\\
-x2 &  &  &  & \\
-x3 &  & 79 &  & \\
-x4 & 82 &  &  & \\
-x5 &  &  &  & 83\\
-\addlinespace
-x6 &  & 66 &  & \\
-x7 &  &  &  & \\
-x8 & 85 &  &  & \\
-x9 &  & 75 &  & \\
-x10 &  &  &  & \\
-\addlinespace
-x11 & 82 &  &  & \\
-x12 &  & 73 &  & \\
-\bottomrule
-\end{tabular}
-\end{table}
 \end{frame}
 
 \begin{frame}[fragile]{Échelles}

@@ -54,7 +54,7 @@ Utilisé principalement pour les questionnaires
 
 # Datasaurus
 
-![Datasaurus (12 jeux de données avec la même corrélation linéaire)](figures/DataSaurusDozen.pdf)
+![Datasaurus (13 jeux de données avec la même corrélation linéaire)](figures/DataSaurusDozen.pdf)
 
 # Exemple
 
@@ -92,27 +92,28 @@ Pour vous, à quel point est-ce important
 }
 ```
 
-# Motivation
+# Objectif des composantes principales
 
--   Y a-t-il des groupements de variables?
--   Est-ce que les variables faisant partie d'un groupement semblent mesurer certains aspects d'un facteur commun (non observé)?
+Typiquement utilisé à des fins
 
-De tels groupements peuvent être détectés (automatiquement) si plusieurs variables sont très corrélées entre elles.
+- d'analyse exploratoire (visualisation) ou 
+- pour créer une variable réponse (par ex., le QI)
 
----
+Réduire la dimension en préservant le plus de variabilité possible.
 
-```{r}
-#| label: fig-correlogram
-#| echo: false
-#| out-width: '80%'
-#| fig-align: 'center'
-#| fig-cap: "Corrélogramme des items du questionnaire"
-data(factor, package = "hecmulti")
-corrplot::corrplot(cor(factor), 
-                   type = "upper", 
-                   diag = FALSE,
-                   tl.col = "black")
-```
+# Comment manger le plus de krill?
+
+::: {#fig-krill layout-ncol=2}
+
+![]("figures/whaleshark.png")
+
+![]("figures/krill.png")
+
+Illustrations d'Allison Horst (CC BY 4.0)
+
+:::
+
+
 
 # Composantes principales:
 
@@ -142,7 +143,7 @@ et $\mathsf{Cor}(C_i, C_j)=0$ pour $i \neq j$.
 #| tbl-cap: "Variance des premières composantes principales"
 data(factor, package = "hecmulti")
 acp <- princomp(factor, cor = TRUE)
-# aussi 'prcomp'
+# aussi fonction 'prcomp'
 
 acp_var <- t(formatC(round(acp$sdev^2,3), digits = 2,
                           format = "f")
@@ -157,19 +158,6 @@ kableExtra::kbl(t(acp_var[,1:8]),
  # kableExtra::kable_styling(full_width = TRUE)
 
 ```
-
-
-# Comment manger le plus de krill?
-
-::: {#fig-krill layout-ncol=2}
-
-![]("figures/whaleshark.png")
-
-![]("figures/krill.png")
-
-Illustrations d'Allison Horst (CC BY 4.0)
-
-:::
 
 
 # Rotation et système de coordonnées
@@ -263,7 +251,7 @@ biplot(acp,
 
 # Choix du nombre de composantes
 
-- **critère des valeurs propres de Kaiser**: valeurs propres supérieures à 1. 
+- **critère des valeurs propres de Kaiser**: variances des composantes principales (valeurs propres) supérieures à 1. 
 - **critère du coude de Cattell**:  diagramme d'éboulis  (`screeplot`)
 
 ```{r}
@@ -285,15 +273,50 @@ hecmulti::eboulis(acp)
 hecmulti::eboulis(acp)
 ```
 
-# Avantages et inconvénients
+# Pourcentage de variance exprimée
 
-- la standardisation (covariance ou corrélation) impacte le résultat
-- nécessite toutes les variables pour créer des composantes principales, incluant pour de nouvelles observations
-- le critère d'optimisation ne prend pas en compte une potentielle variable réponse comme pour l'analyse canonique et les moindres carrés partiels.
-- les composantes principales ne sont pas facilement identifiables
-- le modèle sert typiquement à des fins d'analyse exploratoire (visualisation) ou pour créer une variable réponse
+La variance totale  des composantes principales est identique à celle des variables originales:
+$$ \mathsf{Va}(C_1) + \cdots + \mathsf{Va}(C_p) = \mathsf{Va}(X_1) + \cdots + \mathsf{Va}(X_p)$$
+
+- Si on travaille avec la matrice de corrélation (variance unitaire), alors la variance totale est $p$.
+
+# Covariance ou corrélation?
+
+La matrice de corrélation est la matrice de covariance des données **standardisées** (variance unitaire)
+
+- la covariance accorde plus d'importante aux variables qui ont une variance élevée
+- si les variables sont sur la même échelle, covariance et corrélation sont utilisables
+- sinon, utiliser la matrice de corrélation *par défaut*.
+
+# Inconvénients des composantes principales
+
+- Toutes les variables sont nécessaires pour créer des composantes principales avec de nouvelles observations
+- Le critère d'optimisation ne prend pas en compte une potentielle variable réponse (voir analyse canonique et moindres carrés partiels).
 
 
+
+
+# Motivation pour l'analyse factorielle
+
+-   Y a-t-il des groupements de variables?
+-   Est-ce que les variables faisant partie d'un groupement semblent mesurer certains aspects d'un facteur commun (non observé)?
+
+De tels groupements peuvent être détectés (automatiquement) si plusieurs variables sont très corrélées entre elles.
+
+---
+
+```{r}
+#| label: fig-correlogram
+#| echo: false
+#| out-width: '80%'
+#| fig-align: 'center'
+#| fig-cap: "Corrélogramme des items du questionnaire"
+data(factor, package = "hecmulti")
+corrplot::corrplot(cor(factor), 
+                   type = "upper", 
+                   diag = FALSE,
+                   tl.col = "black")
+```
 
 # Analyse factorielle exploratoire
 
@@ -341,6 +364,29 @@ Le chargement $\gamma_{ij}$ mesure la corrélation entre $X_i$ et $F_j$,
 
 La proportion de la variance de $X_i$ expliquée par les facteurs est $\gamma_{i1}^2 + \cdots + \gamma_{im}^2$.
 
+---
+# Exemple d'estimation des chargements
+
+```{r}
+#| label: tbl-factocp
+#| echo: false
+#| eval: true
+#| tbl-cap: "Estimés des chargements (pourcentage)."
+data(factor, package = "hecmulti")
+facto_cp <- hecmulti::factocp(factor)
+chargements <- facto_cp$loadings
+class(chargements) <- "matrix"
+chargements[abs(chargements) < 0.3] <- NA
+colnames(chargements) <- paste0("F", 1:4)
+rownames(chargements) <- paste0("x",1:12)
+options(knitr.kable.NA = '')
+knitr::kable(100*chargements, 
+                digits = 0,
+                booktabs = TRUE,
+                row.names = TRUE)
+```
+
+:::
 
 # Analyse factorielle en pratique
 
@@ -357,7 +403,6 @@ Il faut un échantillon de taille conséquente.
 
 Essentiellement des règles du pouce.
 
-
 # Invariance aux rotations orthogonales
  
 On transforme la solution pour garantir une solution **interprétable** puisque cette dernière n'est pas unique.
@@ -365,19 +410,40 @@ On transforme la solution pour garantir une solution **interprétable** puisque 
 - La rotation *varimax* maximise la variance de la somme des carrés des chargements pour les facteurs.
 - Donne des chargements dispersés (valeurs élevées positives ou négatives, d’autres presque nuls).
 
-# Estimation
+# Estimation avec composantes principales
 
-Plusieurs méthodes disponibles, dont
-
-- composantes principales (garder $m$ vecteurs propres et valeurs propres)
-   - estimation toujours valide et rapide.
-   - sélection moins objective.
-- **maximum de vraisemblance**: postulat de normalité, nécessite une optimisation numérique délicate pour chaque $m$
-   - critères d'information.
-   - problèmes de convergence fréquents (variances estimées négatives!) appelés cas de **(quasi)-Heywood**.
+Garder $m$ vecteurs propres et valeurs propres, puis effectuer une rotation (varimax)
 
 
-# Choix du nombre de facteurs 
+- estimation toujours valide et rapide.
+- sélection moins objective que maximum de vraisemblance (critère du coude ou de Kaiser)
+
+
+```{r}
+#| label: facto-cpkaiser
+#| eval: false
+#| echo: true
+library(hecmulti)
+facto_cp <- factocp(factor, 
+                    nfact = "kaiser", 
+                    cor = TRUE)
+# nfact: nombre de facteurs ("kaiser" par défaut)
+# cor: matrice de corrélation? par défaut vrai
+```
+
+
+# Estimation par maximum de vraisemblance
+
+- Postulat de normalité des aléas et des facteurs.
+- Nécessite une optimisation numérique délicate: 
+    - les problèmes de convergence sont fréquents
+    - variances estimées parfois négatives!
+    - appelés cas de **(quasi)-Heywood**.
+- Méthodes de sélection plus informatives
+    - critères d'information
+    - tests d'hypothèse d'adéquation
+
+# Choix du nombre de facteurs
 
 Plus le nombre de facteurs $m$ est grand, plus la corrélation modélisée se rapproche de la corrélation empirique.
 
@@ -403,7 +469,7 @@ Valable uniquement pour les modèles ajustés par **maximum de vraisemblance**
 #| echo: true
 library(hecmulti)
 ajustement_factanal(
-    covmat = corr(factor), # matrice de corrélation
+    covmat = cor(factor), # matrice de corrélation
     factors = 1:5, # candidats pour nb de facteurs
     n.obs = nrow(factor)) # nombre d'observations
 ```
@@ -505,35 +571,6 @@ Cas de Heywood (trop de facteurs.)
 
 Le facteur 4 représenterait le prix. On pourrait directement inclure $X_1$.
 
----
-# Ajustement avec composantes principales
-
-```{r}
-#| label: facto-cpkaiser
-#| eval: false
-#| echo: true
-facto_cp <- hecmulti::factocp(x = factor, 
-                  nfact = "kaiser")
-```
-
-# Solution avec composantes principales
-
-```{r}
-#| label: tbl-factocp
-#| echo: false
-#| eval: true
-#| tbl-cap: "Estimés des chargements (pourcentage)."
-chargements <- facto_cp$loadings
-class(chargements) <- "matrix"
-chargements[chargements < 0.3] <- NA
-colnames(chargements) <- paste0("F", 1:4)
-rownames(chargements) <- paste0("x",1:12)
-options(knitr.kable.NA = '')
-knitr::kable(100*chargements, 
-                digits = 0,
-                booktabs = TRUE,
-                row.names = TRUE)
-```
 
 # Échelles
 

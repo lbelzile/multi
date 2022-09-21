@@ -9,9 +9,9 @@ La base de données `aerien` du paquet `hecmulti` contient les résultats de son
 Effectuez une analyse exploratoire des données `aerien`:
 
 
-- Formulez des questions en lien avec la description de la base de données préliminaires à l'analyse exploratoire.
-- Examinez la base de données; identifiez le type de variable et leur nature.
-- Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?
-- Calculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?
-- Représentez graphiquement la distribution des variables de la base de données, globalement et selon les différents niveaux de `satisfaction`.
-- Résumez les faits saillants de votre analyse exploratoire en cinq à 10 points.
+1. Formulez des questions en lien avec la description de la base de données préliminaires à l'analyse exploratoire.
+2. Examinez la base de données; identifiez le type de variable et leur nature.
+3.  Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?
+4. Calculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?
+5. Représentez graphiquement la distribution de quelques variables de la base de données selon les différents niveaux de `satisfaction`.
+6. Résumez les faits saillants de votre analyse exploratoire en cinq à 10 points.
