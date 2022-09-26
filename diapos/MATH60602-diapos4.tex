@@ -1,0 +1,582 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{D-DIN}
+\fi
+\usecolortheme{Flip}
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+\useinnertheme{Flip}
+\useoutertheme{Flip}
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{tabu}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Sélection de variables},
+  pdfauthor={Léo Belzile},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Sélection de variables}
+\subtitle{Analyse multidimensionnelle appliquée}
+\author{Léo Belzile}
+\date{automne 2022}
+\institute{HEC Montréal}
+
+\begin{document}
+\frame{\titlepage}
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
+
+\begin{frame}{Modèles prédictifs}
+\protect\hypertarget{moduxe8les-pruxe9dictifs}{}
+\textbf{Objectif}: bâtir un modèle pour une variable réponse \(Y\) en
+fonction de variables explicatives
+\(\mathrm{X}_1, \ldots, \mathrm{X}_p\).
+
+On s'intéresse à
+\[\underset{\text{vraie moyenne inconnue}}{f(\mathrm{X}_1, \ldots, \mathrm{X}_p)}.\]
+
+L'analyste détermine
+\[\underset{\text{approximation}}{\widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)},\]
+une fonction des variables explicatives.
+\end{frame}
+
+\begin{frame}{Rappels sur la régression linéaire}
+\protect\hypertarget{rappels-sur-la-ruxe9gression-linuxe9aire}{}
+On spécifie que la \textbf{moyenne} de la variable réponse \(Y\) est une
+fonction linéaire des variables explicatives
+\(\mathrm{X}_1, \ldots, \mathrm{X}_p\), soit
+
+\[\underset{\text{moyenne théorique}}{\mathsf{E}(Y \mid \mathbf{X})} = \underset{\text{
+somme pondérée des variables explicatives}}{\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}}.\]
+
+en supposant que l'écart entre les observations et cette moyenne est
+constant, \[\mathsf{Va}(Y \mid \mathbf{X}) = \sigma^2.\]
+\end{frame}
+
+\begin{frame}{Représentation alternative}
+\protect\hypertarget{repruxe9sentation-alternative}{}
+Pour la \(i\)e observation,
+
+\[\underset{\text{réponse}}{Y_i} = \underset{\text{prédicteur linéaire}}{\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}} + \underset{\text{aléa}}{\varepsilon_i}.\]
+
+\begin{itemize}
+\tightlist
+\item
+  L'aléa \(\varepsilon_i\) représente la distance \textbf{verticale}
+  entre la vraie pente et l'observation
+\item
+  Autant d'aléas que d'observations (\(n\)), variable aléatoire
+  inconnue\ldots{}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Postulats}
+\protect\hypertarget{postulats}{}
+\begin{itemize}
+\tightlist
+\item
+  L'aléa \(\varepsilon_i\) représente l'erreur, soit la différence entre
+  la valeur observée et la moyenne de la population pour les même
+  valeurs des variables explicatives.
+\item
+  On suppose que le modèle pour la moyenne est correctement spécifié:
+  l'aléa a une moyenne théorique nulle, \(\mathsf{E}(\varepsilon_i)=0\).
+\item
+  On suppose que les observations sont indépendantes les unes des
+  autres.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Régression linéaire en deux dimensions}
+\protect\hypertarget{ruxe9gression-linuxe9aire-en-deux-dimensions}{}
+Si \(\mathsf{E}(Y)=\beta_0 + \beta_1 \mathrm{X}\), alors
+
+\begin{itemize}
+\tightlist
+\item
+  \(\beta_0\) représente l'ordonnée à l'origine (valeur quand
+  \(\mathrm{X}=0\).)
+\item
+  \(\beta_1\) est la pente
+\end{itemize}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-1-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Résidus ordinaires}
+\protect\hypertarget{ruxe9sidus-ordinaires}{}
+L'estimation des paramètres
+\(\widehat{\beta}_0, \cdots, \widehat{\beta}_p\) nous donne
+\[\underset{\text{prédiction}}{\widehat{Y}_i} = \widehat{\beta}_0 + \widehat{\beta}_1\mathrm{X}_{i1} \cdots + \widehat{\beta}_p\mathrm{X}_{ip}.\]
+
+On peut approximer l'aléa à l'aide du \textbf{résidu ordinaires}, soit
+\[\underset{\text{résidu ordinaire}}{e_i} = \underset{\text{observation}}{Y_i} - \underset{\text{prédiction}}{\widehat{Y}_i}.\]
+
+\begin{itemize}
+\tightlist
+\item
+  par construction, la moyenne des \(e_i\) est zéro.
+\item
+  le résidu ordinaire est la distance verticale entre l'observation et
+  la ``droite'' \textbf{ajustée}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Illustration des résidus ordinaires}
+\protect\hypertarget{illustration-des-ruxe9sidus-ordinaires}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/distancevert-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erreur quadratique moyenne}
+\protect\hypertarget{erreur-quadratique-moyenne}{}
+L'erreur quadratique moyenne théorique est
+
+\[\mathsf{E} \left[\left\{ (Y - \widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)\right\}^2\right],\]
+la moyenne de la différence au carré entre la vraie valeur de \(Y\) et
+la valeur prédite par le modèle.
+
+En pratique, on remplace la moyenne théorique par une moyenne empirique
+obtenue à partir d'un échantillon aléatoire.
+\end{frame}
+
+\begin{frame}{Estimation des paramètres}
+\protect\hypertarget{estimation-des-paramuxe8tres}{}
+Comment estimer les paramètres \(\beta_0, \ldots, \beta_p\)?
+
+\textbf{Optimisation}: trouver les valeurs qui minimisent l'erreur
+quadratique moyenne \textbf{empirique} avec l'échantillon des \(n\)
+observations, soit
+
+\[\frac{e_1^2 + \cdots + e_n^2}{n}\] Solution explicite
+\(\widehat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{Y}\)!
+\end{frame}
+
+\begin{frame}[fragile]{Estimation dans \textbf{R}}
+\protect\hypertarget{estimation-dans-r}{}
+La fonction \texttt{lm} calcule l'ajustement du modèle linéaire.
+
+Arguments:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{formula}: formule de type
+  \texttt{reponse\ \textasciitilde{}\ \ variables\ explicatives}, où les
+  variables explicatives sont séparées par un signe \texttt{+}
+\item
+  \texttt{data}: base de données
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{modlin }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ hp }\SpecialCharTok{+}\NormalTok{ wt, }
+             \AttributeTok{data =}\NormalTok{ mtcars)}
+\FunctionTok{summary}\NormalTok{(modlin)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Sortie de \texttt{summary}}
+\protect\hypertarget{sortie-de-summary}{}
+\footnotesize
+
+\begin{verbatim}
+
+Call:
+lm(formula = mpg ~ hp + wt, data = mtcars)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-3.941 -1.600 -0.182  1.050  5.854 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 37.22727    1.59879  23.285  < 2e-16 ***
+hp          -0.03177    0.00903  -3.519  0.00145 ** 
+wt          -3.87783    0.63273  -6.129 1.12e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.593 on 29 degrees of freedom
+Multiple R-squared:  0.8268,    Adjusted R-squared:  0.8148 
+F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Tableau de sortie}
+\protect\hypertarget{tableau-de-sortie}{}
+\begin{itemize}
+\tightlist
+\item
+  Formule de l'appel
+\item
+  Statistiques descriptives des résidus ordinaires \(e_1, \ldots, e_n\).
+\item
+  Tableau des estimations
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Coefficients \(\widehat{\beta}_j\)
+  \item
+    Erreurs-types, \(\mathsf{se}(\widehat{\beta}_j)\)
+  \item
+    Statistique du test-\emph{t} pour \(\mathscr{H}_0: \beta_j=0\), soit
+    \(t=\widehat{\beta}_j/\mathsf{se}(\widehat{\beta}_j)\)
+  \item
+    Valeur-\emph{p} selon loi nulle \(\mathsf{St}(n-p-1)\)
+  \end{itemize}
+\item
+  Estimation de l'écart-type \(\widehat{\sigma}\) et degrés de liberté
+  \(n-p-1\)
+\item
+  Estimations du coefficient de détermination, \(R^2\) et \(R^2\) ajusté
+\item
+  Statistique \(F\) d'ajustement global et valeur-\(p\) de
+  \(\mathsf{F}(p, n - p - 1)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mathscr{H}_a\): modèle linéaire
+  \item
+    \(\mathscr{H}_0\): modèle avec uniquement ordonnée à l'origine
+    (chaque observation prédite par la moyenne des réponses,
+    \(\overline{Y}\))
+  \end{itemize}
+\end{itemize}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Quelques méthodes pour \texttt{lm}}
+\protect\hypertarget{quelques-muxe9thodes-pour-lm}{}
+\begin{itemize}
+\tightlist
+\item
+  \texttt{resid} pour les résidus ordinaires \(e_i\)
+\item
+  \texttt{fitted} pour les valeurs ajustées \(\widehat{Y}_i\)
+\item
+  \texttt{coef} pour les estimations des paramètres
+  \(\widehat{\beta}_0, \ldots, \widehat{\beta}_p\)
+\item
+  \texttt{plot} pour des diagnostics graphiques d'ajustement
+\item
+  \texttt{anova} pour la comparaison de modèles emboîtés
+\item
+  \texttt{predict} pour les prédictions (avec nouvelles données)
+\item
+  \texttt{confint} pour intervalles de confiance pour les paramètres.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Variables catégorielles}
+\protect\hypertarget{variables-catuxe9gorielles}{}
+\begin{itemize}
+\tightlist
+\item
+  Les facteurs (\texttt{\textless{}factor\textgreater{}}) sont traités
+  adéquatement par \textbf{R}.
+\item
+  Si la variable a \(K\) valeurs possibles (niveaux), le modèle inclut
+  \(K-1\) indicatrices 0/1.
+\item
+  Par défaut dans \textbf{\$}, la catégorie de référence est la plus
+  petite en ordre alphanumérique.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Encodage des variables catégorielles}
+\protect\hypertarget{encodage-des-variables-catuxe9gorielles}{}
+Considérons une variable catégorielle \texttt{cat} avec niveaux
+\texttt{1}, \texttt{2}, et \texttt{3}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\toprule()
+\texttt{cat} & \texttt{cat2} & \texttt{cat3} \\
+\midrule()
+\endhead
+1 & 0 & 0 \\
+2 & 1 & 0 \\
+3 & 0 & 1 \\
+\bottomrule()
+\end{longtable}
+
+La catégorie de référence est associée à l'ordonnée à l'origine (quand
+\texttt{cat2=0} et \texttt{cat3=0}).
+\end{frame}
+
+\begin{frame}{Prédiction vs inférence}
+\protect\hypertarget{pruxe9diction-vs-infuxe9rence}{}
+\end{frame}
+
+\begin{frame}[fragile]{Sélection de variables}
+\protect\hypertarget{suxe9lection-de-variables}{}
+\begin{itemize}
+\tightlist
+\item
+  Comment choisir quelles variables inclure?
+\item
+  Quel est la spécification adéquate pour
+  \(f(\mathrm{X}_1, \ldots, \mathrm{X}_p)\)?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    régression, réseaux de neurone, forêts aléatoires, etc.
+  \item
+    transformations de variables, \texttt{age}\({}^2\),
+    \(\ln(\)\texttt{age}\()\), etc.
+  \end{itemize}
+\end{itemize}
+
+Notre but sera de sélectionner un \textbf{bon} modèle, selon les
+objectifs de l'étude
+\end{frame}
+
+\begin{frame}{}
+\protect\hypertarget{section}{}
+\end{frame}
+
+\begin{frame}{Illustration du surajustement}
+\protect\hypertarget{illustration-du-surajustement}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/overfitting-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Séparation des données}
+\protect\hypertarget{suxe9paration-des-donnuxe9es}{}
+Ne pas utiliser les données employés pour ajuster un modèle pour
+\textbf{prédire la performance}
+
+\begin{itemize}
+\tightlist
+\item
+  échantillons d'apprentissage/validation/test (fixes)
+\item
+  validation croisée (avec \(K=5, 10\) groupes), mais \emph{résultat
+  aléatoire}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\end{frame}
+
+
+
+\end{document}
