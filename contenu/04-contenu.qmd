@@ -19,6 +19,8 @@ title: "Sélection de variables"
 
 ## Diapositives 
 
+- {{< fa file >}} [Sélection de variables](/diapos/MATH60602-diapos4.pdf)
+
 <!--
 <iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
 -->
@@ -29,6 +31,6 @@ title: "Sélection de variables"
 
 ## Objectifs d'apprentissage
 
-- Être capable d'interpréter les coefficients d'un modèle de régression linéaire
+- Être capable d'ajuster un modèle linéaire avec **R**
 - Être en mesure de décrire le suroptimisme et son impact sur l'évaluation de modèles
 - Pouvoir expliquer les avantages et inconvénients des méthodes d'estimation de l'erreur

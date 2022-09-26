@@ -1,0 +1,82 @@
+---
+title: "Sélection de variables"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: lualatex
+cache: true
+code-line-numbers: true
+fig-align: 'center'
+mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+        \usepackage{mathtools}
+---
+
+# Présentation des données
+
+# Analyse exploratoire
+
+# Séparation de l'échantillon
+
+- On conserve 100 000 observations test pour vérifier la performance (oracle!)
+- Le point de vue à adopter, c'est que ces données ne seraient d'ordinaire pas disponibles.
+
+# Modèle avec variables de base
+
+# Algorithme par séparation et évaluation
+
+# Recherche exhaustive
+
+# Fléau de la dimensionalité
+
+# Méthodes de sélection séquentielles
+
+# Sélection ascendante
+
+# Sélection descendante
+
+# Sélection séquentielle
+
+# Performance en fonction de la complexité 
+TODO: Ajouter Figure 4.7
+
+# Méthodes de régularisation
+
+Objectif: prévenir le surajustement
+
+Standardiser variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ et variable réponse $\boldsymbol{y}$ (moyenne zéro, écart-type unitaire).
+
+# Pénalité de crête (_ridge_)
+
+# LASSO
+
+# Illustration: allocation budgétaire et moindres carrés
+
+# Trajectoire LASSO
+
+# Moyenne de modèles
+
+# Code
+
+# Évaluation de la performance
+
+Pénaliser coefficients de régression $\beta_1, \ldots, \beta_p$
+LASSO et ridge
+Dans les approches subs/quentes, on utilise la pénalisation pour la sélection d'un modèle (plutôt que la validation croisée ou externe).
+
+
+
+# Meilleurs sous-ensembles
