@@ -1,0 +1,635 @@
+---
+title: "Sélection de variables"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: xelatex
+cache: true
+code-line-numbers: true
+fig-align: 'center'
+mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+        \usepackage{mathtools}
+---
+
+# Présentation des données
+
+
+Exemple de base de données marketing (par ex., organisme de charité). Cibler les clients pour l’envoi d’un catalogue.
+
+But: maximiser les levées de fonds
+
+1. Envoyer un échantillon de produits au coût de 10$ à un groupe échantillon.
+2. Construire un modèle de prédiction pour déterminer à qui envoyer le produit parmi tous les clients.
+
+
+
+# Population cible
+
+
+Clients qui ont 
+
+- plus de 18 ans
+- au moins un an d'historique avec l'entreprise et 
+- qui ont effectué au moins un achat au cours de la dernière année.
+
+Regroupements:
+
+- 1K personnes dans l'échantillon d'apprentissage
+- 100K personnes pour l'ensemble des autres clients
+
+# Liste des variables
+
+
+\footnotesize 
+
+
+- `yachat`, une variable binaire qui indique si le client a acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon.
+- `ymontant`, le montant de l'achat si le client a acheté quelque chose.
+- `x1`: sexe de l'individu, soit homme (0) ou femme (1);
+- `x2`: l'âge (en année);
+- `x3`: variable catégorielle indiquant le revenu, soit moins de 35 000\$ (1), entre 35 000\$ et 75 000\$ (2) ou plus de 75 000$ (3);
+- `x4`: variable catégorielle indiquant la région où habite le client (de 1 à 5);
+- `x5`: couple : la personne est elle en couple (0=non, 1=oui);
+- `x6`: nombre d'année depuis que le client est avec la compagnie;
+- `x7`: nombre de semaines depuis le dernier achat;
+- `x8`: montant (en dollars) du dernier achat;
+- `x9`: montant total (en dollars) dépensé depuis un an;
+- `x10`: nombre d'achats différents depuis un an.
+
+
+\normalsize 
+
+#  Aperçu des données
+
+\footnotesize 
+```{r}
+#| label: loaddbm
+#| eval: true
+#| echo: true
+data(dbm, package = "hecmulti")
+str(dbm)
+```
+\normalsize 
+
+---
+
+```{r}
+#| label: contingence-dbm-tbl
+#| eval: true
+#| echo: false
+#| warning: false
+dbm_sub <- dbm |>
+  dplyr::filter(test == 0) |>
+  dplyr::select(!test)
+knitr::kables(list(
+knitr::kable(table(dbm_sub$x1), 
+             booktabs = TRUE, 
+             col.names = c("sexe", "décompte")),
+knitr::kable(table(dbm_sub$x5), booktabs = TRUE, 
+             col.names = c("couple", "décompte"))
+))
+
+
+knitr::kables(list(
+knitr::kable(table(dbm_sub$x3), booktabs = TRUE, 
+             col.names = c("revenu", "décompte")),
+knitr::kable(table(dbm_sub$x4), booktabs = TRUE, 
+             col.names = c("région", "décompte"))))
+
+```
+
+---
+
+```{r}
+#| label: histogrammes-eda-dbm-fig
+#| echo: false
+#| eval: true
+#| warning: false
+#| out-width: '100%'
+library(ggplot2)
+library(patchwork)
+g1 <- ggplot(data = dbm_sub,
+             aes(x = x2)) +
+      geom_histogram(alpha = 0.5, 
+                     aes(y = ..density..),
+                     bins = 30) + 
+  labs(#fill = "achat",
+       y = "densité",
+       x = "âge")
+g2 <- ggplot(data = dbm_sub,
+             aes(#fill = factor(yachat),
+                 x = x8 
+                 )) +
+      geom_histogram(alpha = 0.5, 
+                     aes(y = ..density..),
+                     bins = 30) + 
+  labs(#fill = "achat",
+       y = "densité",
+       x = "montant du dernier achat (en dollar)")
+g3 <- ggplot(data = dbm_sub,
+             aes(#fill = factor(yachat),
+                 x = x9)) +
+      geom_histogram(alpha = 0.5, 
+                     aes(y = ..density..),
+                     bins = 30) + 
+  labs(#fill = "achat",
+       y = "densité",
+       x = "montant total dépensé depuis un an (en dollars)")
+g4 <- ggplot(data = dbm_sub,
+             aes(#fill = factor(yachat),
+                 x = x7 )) +
+      geom_histogram(alpha = 0.5, 
+                     aes(y = ..density..),
+                     bins = 30) + 
+  labs(#fill = "achat",
+       y = "densité",
+       x = "nombre de semaines depuis le dernier achat")
+g5 <- ggplot(data = dbm_sub,
+             aes(#fill = factor(yachat),
+                 x = x6)) +
+      geom_histogram(alpha = 0.5, 
+                     aes(y = ..density..),
+                     bins = 30) + 
+  labs(#fill = "achat",
+       y = "densité",
+       x = "ancienneté comme client")  
+g6 <- ggplot(data = dbm_sub,
+             aes(#fill = factor(yachat),
+                 x = x10 
+                 )) +
+      geom_histogram(alpha = 0.5, 
+                     aes(y = ..density..),
+                     bins = 30) + 
+  labs(#fill = "achat",
+       y = "densité",
+       x = "nombre d'achats différents depuis un an")  
+library(patchwork)
+(g1 + g2)/(g3 + g4) / (g5 + g6) +
+  patchwork::plot_layout(guides = 'collect') & theme_classic() & theme(legend.position = "bottom")
+
+```             
+
+---
+
+
+\footnotesize
+```{r}
+#| label: statdescript-dbm-tbl
+#| echo: false
+#| eval: true
+#| warning: false
+dbm_sub_c <- dbm_sub |>
+    dplyr::select(x2, x6, x7, x8, x9, x10)
+tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
+                               moyenne = apply(dbm_sub_c, 2, mean),
+               "écart-type" = apply(dbm_sub_c, 2, sd),
+               min = apply(dbm_sub_c, 2, min),
+               max = apply(dbm_sub_c, 2, max)) |>
+  knitr::kable(digits = 2, booktabs = TRUE, linesep = "") |>
+  kableExtra::kable_styling(full_width = TRUE)
+
+tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
+               description = c("âge", "nombre d’année comme client","nombre de semaines depuis le dernier achat","montant du dernier achat","montant total dépensé sur un an","nombre d'achats différents sur un an")) |>
+  knitr::kable(booktabs = TRUE, linesep = "") |>
+  kableExtra::kable_styling(full_width = TRUE)
+
+```
+
+# Prédire le montant `ymontant`
+
+Le montant moyen dépensé s'écrit
+
+\begin{align*}
+\mathsf{E}(\texttt{ymontant}) &= \mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1) \Pr(\texttt{yachat}=1).
+\end{align*}
+
+On bâtit un modèle de régression linéaire pour le montant moyen dépensé, $\mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1)$.
+
+Le modèle utilise les données des 210 personnes de l'échantillon d'apprentissage qui ont acheté suite à l'envoi du catalogue.
+
+
+# Séparation de l'échantillon
+
+On conserve 100 000 observations test pour vérifier la performance
+    - (oracle) réponses inconnues à toutes fins pratiques
+
+
+Trop peu de données (210) pour la validation externe.
+
+
+\footnotesize
+
+```{r}
+#| echo: true
+#| eval: true
+#| cache: true
+data(dbm, package = "hecmulti")
+dbm_a <- dbm |>
+  dplyr::filter(test == 0, #données d'entraînement
+                !is.na(ymontant)) 
+# personnes qui ont acheté
+```
+
+\normalsize
+
+# Recherche exhaustive
+
+Idée initiale: 
+
+- essayer tous les modèles possibles .
+- estimer la performance (erreur quadratique moyenne) avec validation croisée ou critères d'information.
+- déterminer le meilleur modèle.
+
+# Fléau de la dimensionalité
+
+Combien de modèles incluant les combinaisons de $p$ variables?
+
+Dans l'exemple, $p=14$ variables de base en incluant les indicatrices pour les variables catégorielles multiniveaux (revenu `x3` et région `x4`)
+
+
+Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles.
+
+```{r}
+#| label: tbl-02-table3
+#| echo: false
+#| eval: true
+#| tbl-cap: "Nombres de modèles en fonction du nombre de paramètres."
+#| warning: false
+p <- c(5,10,15,20,25,30)
+npar <- 2^p
+options(scipen=100)
+knitr::kable(x = data.frame(p = p, npar = npar),
+             digits = 0,
+             col.names = c("$p$",
+                          "nombre de paramètres"),
+            escape = FALSE,
+             booktabs = TRUE)
+```
+
+# Algorithme par séparation et évaluation
+
+Il est possible de déterminer certains modèles sous-optimaux.
+
+L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats.
+
+
+\footnotesize
+
+```{r}
+#| echo: true
+#| eval: true
+#| cache: true
+rec_ex <- leaps::regsubsets(
+  x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10, 
+  nvmax = 13L,
+  method = "exhaustive",
+  data = dbm_a)
+resume_rec_ex <- summary(rec_ex,
+                         matrix.logical = TRUE)
+# Trouver le modèle avec le plus petit BIC
+min_BIC <- which.min(resume_rec_ex$bic)
+# Nom des variables dans le modèle retenu
+rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
+```
+
+
+\normalsize
+
+# Approximation
+
+Soit $\mathsf{E}(Y \mid \mathbf{X}) = f(\mathrm{X}_1, \ldots, \mathrm{X}_p)$ pour $f$ une fonction inconnue supposée lisse.
+
+On peut approximer la fonction en faisant une expansion (série de Taylor) de degré 2 (tous les termes quadratiques, et les interactions d'ordre 2):
+
+- on n'inclut pas le carré de variables indicatrices binaires (car $0^2=0, 1^2=1$).
+- idem pour les interactions entre indicateurs qui représentent des niveaux d'une même variable catégorielle.
+
+# Modèle complet et syntaxe **R**
+
+
+```{r}
+#| label: modele-complet
+#| eval: true
+#| echo: true
+#| cache: true
+# (...)^2 crée toutes les interactions d'ordre deux
+# I(x^2) permet de créer les termes quadratiques
+formule <- 
+  formula(ymontant ~ 
+          (x1 + x2 + x3 + x4 + x5 + 
+             x6 + x7 + x8 + x9 + x10)^2 + 
+            I(x2^2) + I(x6^2) + I(x7^2) +
+            I(x8^2) + I(x9^2) + I(x10^2))
+mod_complet <- lm(formule, data = dbm_a)
+```
+
+Le modèle est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` variables.
+
+# Mot d'ordre
+
+Quelques mantras pour la suite:
+
+- préférer la flexibilité (réduire biais potentiel)
+- être conscient de notre budget (surajustement)
+- porter une attention particulière aux interactions entre variables catégorielles
+    - estimations correspondent à des `moyennes de groupe'
+    - impact élevé potentiel des valeurs aberrantes et des extrêmes
+
+# Méthodes de sélection séquentielles
+
+Recherche exhaustive typiquement trop coûteuse.
+
+On peut plutôt opter pour un algorithme glouton: 
+
+- à chaque étape, on maximise l'utilité (horizon d'optimisation limité) en retirant ou en ajoutant une seule variable.
+- au début, $p$ variables à regarder, puis il y a $p-1$ choix l'étape suivante, etc.
+- moins de modèles explorés, mais utile pour faire une recherche rapide.
+
+
+
+# Digression
+
+Le modèle à $K$ variables qui a la plus petite erreur moyenne quadratique a aussi
+
+- est aussi le meilleur (pour $K$ variables) selon les critères d'information
+- et selon le coefficient de régression $R^2$
+
+Si on enlève ou on ajoute séquentiellement des variables, on peut traquer l'un ou l'autre avant de comparer avec le modèle précédent.
+
+# Sélections ascendante et descendante
+
+**Sélection ascendante**: à partir du modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle précédent la variable qui améliore le plus l’ajustement.
+
+
+**Sélection descendante**: éliminer du modèle complet la variable qui contribue le moins à l’ajustement.
+
+Dans les deux cas, la procédure se termine quand on ne peut satisfaire le critère d'arrêt (par exemple, critère d'information)
+
+# Sélection séquentielle
+
+À partir du modèle de base (d'ordinaire), 
+
+- alterner sélection séquentielle ascendante et descendante.
+- on continue ainsi tant que le modèle retourné par l’algorithme n’est pas identique à celui de l’étape précédente.
+- une variable peut entrer dans le modèle et sortir plus tard dans le processus.
+   - préférable aux procédures ascendantes et descendantes (car plus de modèles).
+   - lui préférer la recherche exhaustive quand c'est possible
+
+
+# Code **R** avec `leaps`
+
+
+```{r}
+#| label: modele-sequentiel1
+#| eval: false
+#| echo: true
+# Cette procédure séquentielle retourne
+# la liste de modèles de 1 variables à
+# nvmax variables.
+rec_seq <- 
+  leaps::regsubsets(
+    x = formule, 
+    data = dbm_a,
+    method = "seqrep", 
+    nvmax = length(coef(mod_complet)))
+which.min(summary(rec_seq)$bic)
+```
+
+# Sélection séquentielle avec critères d'informations en **R** 
+\footnotesize
+
+La procédure est plus longue à rouler(car les modèles linéaires sont ajustés)
+
+On ajoute ou retire la variable qui améliore le plus le critère de sélection  à chaque étape (différent de **SAS**).
+
+```{r}
+#| label: modele-sequentiel2
+#| eval: false
+#| echo: true
+#| cache: true
+seq_AIC <- MASS::stepAIC(
+  lm(ymontant ~ 1, data = dbm_a), 
+  # modèle initial sans variables explicative
+    scope = formule, # modèle maximal possible
+    direction = "both", #séquentielle
+    trace = FALSE, # ne pas imprimer le suivi
+    keep = function(mod, AIC, ...){ 
+      # autres sorties des modèles à conserver
+      list(bic = BIC(mod), 
+           coef = coef(mod))},
+    k = 2) #
+# Remplacer k=2 par k = log(nrow(dbm_a)) pour BIC
+```
+
+L'historique des étapes est disponible via `seq_AIC$anova`
+
+\normalsize 
+
+# Performance en fonction de la complexité 
+
+```{r, out.width = '80%', fig.align='center'}
+knitr::include_graphics("figures/fig-perfo-sequentiel.pdf")
+```
+
+
+\footnotesize 
+40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. Oracle: 100K données de validation (libellé externe)
+
+\normalsize
+
+# Méthodes de régularisation
+
+Objectif: prévenir le surajustement.
+
+L'erreur moyenne quadratique se décompose comme 
+
+$$ \text{biais carré} + \text{variabilité}$$
+
+Les méthodes de régularisation introduisent du biais dans l'estimation des coefficients en pénalisant leur norme.
+
+# Préalable à la régression avec régularisation
+
+Pénalisation la norme de $\beta_1, \ldots, \beta_p$
+
+- Modèles avec pénalités pas les mêmes selon l'échelle des données         
+    - pas invariant aux transformations affines (par ex., conversion de Celcius en Farenheit)
+
+**Solution**: standardiser variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ **et** variable réponse $\boldsymbol{y}$ (moyenne zéro, écart-type unitaire).
+   - vérifier selon le logiciel, cette étape peut-être effectuée implicitement
+
+
+# LASSO
+
+Pénalité avec norme $l_1$ pour la valeur absolue des coefficients,
+$$ \min_{\boldsymbol{\beta}} \left\{ n\mathsf{EQM}(\boldsymbol{\beta}) + \lambda(|\beta_1| + \cdots + |\beta_p|)\right\}.$$
+Hyperparamètre $\lambda>0$ qui détermine la force de la pénalisation.
+
+Rétrécissement de certains coefficients **exactement** à zéro: sélection implicite de variable.
+
+
+
+# Contrainte budgétaire et moindres carrés
+
+```{r, out.width = '80%', fig.align='center'}
+knitr::include_graphics("figures/fig-lassopenalty.pdf")
+```
+
+# Code **R** pour le LASSO
+
+Paramètre de pénalité déterminé par validation croisée à partir d'un vecteur
+de valeurs candidates.
+
+```{r}
+#| eval: false
+#| echo: true
+library(glmnet)
+lambda_seq <- seq(from = 0.1, to = 2, by = 0.01)
+cv_output <- 
+  glmnet::cv.glmnet(x = as.matrix(dbm_a[,1:10]), 
+            y = dbm_a$ymontant, 
+            alpha = 1, 
+            lambda = lambda_seq)
+plot(cv.output)
+```
+
+
+# Trajectoire LASSO
+
+On choisit typiquement $\lambda$ par validation croisée en appliquant la règle du un écart-type (le première modèle à un erreur-type de la valeur minimale).
+
+```{r, out.width = '80%', fig.align='center'}
+knitr::include_graphics("figures/fig-lassopath.pdf")
+```
+
+# Évaluation et prédiction
+
+Une fois la valeur de $\lambda$ choisie, on réestime le modèle avec la pénalité et on calcule l'erreur quadratique moyenne.
+
+```{r}
+#| eval: false
+#| echo: true
+lambopt <- cv_output$lambda.min
+lasso_best <- 
+  glmnet::glmnet(
+    x = as.matrix(dbm_a[,1:10]),
+    y = dbm_a$ymontant,
+    alpha = 1, 
+    lambda = lambopt)
+# Prédictions et calcul de l'EQM
+pred <- predict(lasso_best, 
+                s = lambopt, 
+                newx = as.matrix(dbm_a[,-1]))
+eqm_lasso <- mean((pred - dbm_a$ymontant)^2)
+```
+
+# Motivation pour la moyenne de modèles
+
+Une seule base de données (un seul échantillon) à disposition!
+
+Peu d'hétérogénéité, hors cette dernière est présente 
+
+- (rappelez-vous l'incertitude de la validation croisée)
+
+# Moyenne de modèles 
+
+**Solution**: générer nous-mêmes $B$ échantillons différents à partir de l‘échantillon original.
+
+Autoamorçage nonparamétrique: échantillon choisi au hasard et avec remise dans l’échantillon original. 
+
+- Une même observation peut être sélectionnée plus d’une fois tandis qu’une autre peut ne pas être sélectionnée du tout.
+
+**Défaut**: très coûteux en calcul
+
+# Moyennes de modèles en pseudocode
+
+1. Échantillonnage aléatoire simple avec remise de $B$ jeux de données 
+
+Pour chaque jeu de données étiqueté $b=1, \ldots, B$:
+
+   2. Effectuer la sélection de variables
+   3. Sauvegarder les coefficients (0 si la variable est absente)
+
+Mettre en commun les résultats:
+
+4. Calculer la moyenne des coefficients
+5. Obtenir les prédictions
+
+\footnotesize
+
+Voir code en ligne
+
+\normalsize
+
+# Évaluation de la performance - 
+
+En incluant uniquement les variables de base
+
+| nombre de variables | $\mathsf{EQM}$ |méthode |
+|:----:|:-----:|:-----|
+| 15 | 25,69 | toutes les variables |
+| 12 | 25,53 | exhaustive - $\mathsf{AIC}$ |
+| 10 | 25,04 | exhaustive - $\mathsf{BIC}$ |
+
+
+En incluant les termes de base, les carrés et les interactions d'ordre 2.
+
+| nombre de variables | $\mathsf{EQM}$ | méthode |
+|:----:|:-----|:-----|
+| 104 | 19,63 | toutes les variables |
+| 21 | 12| séquentielle, choix selon $\mathsf{BIC}$ |
+| 15 | 12,31 | séquentielle, choix selon $\mathsf{AIC}$ |
+| 30 | 12 | LASSO, validation croisée avec 10 groupes |
+
+#  Récapitulatif
+
+
+- Le nombre de modèles possibles augmente rapidement avec le nombre de prédicteurs, .
+ - Si un modèle est mal spécifié (variables importantes manquantes), alors les estimations sont biaisées. 
+- Si le modèle est surspécifié, les coefficients correspondants aux variables superflues incluses sont en moyenne nuls, mais contribuent à l’augmentation de la variance 
+- **Compromis biais/variance**
+
+# Récapitulatif
+
+- La taille du modèle (le nombre de variables explicatives) est restreinte par le nombre d’observations disponibles.
+- En général, il faut s’assurer d’avoir suffisamment d’observations pour estimer de manière fiable les coefficients
+- Porter une attention particulière aux variables binaires et aux interactions avec ces dernières: si les effectifs de certaines modalités sont faibles, il y a danger surajustement.
+
+# Récapitulatif
+
+- En pratique, on cherche à essayer plusieurs modèle pour trouver un choix optimal de variables.
+- Une recherche exhaustive garantie le survol du plus grand nombre de modèles possibles, mais est coûteuse
+- On peut effectuer une recherche exhaustive à l'aide d'algorithmes d'optimisation pour un nombre réduit de variables (max 50)
+- Sinon, on a l'option d'utiliser un algorithme glouton qui ne couvre qu'un sous-ensemble de tous les modèles
+- Compromis coût de calcul vs nombre de modèles explorés
+- Possibilité de combiner des méthodes!
+
+# Récapitulatif
+
+Certaines méthodes de pénalisation directe changent la fonction objective:
+
+   - introduction de biais pour les coefficients
+   - idée globale: échanger biais contre variabilité moindre
+   
+   
+Une pénalité particulière (LASSO) contraint certains paramètres à être exactement nuls
+
+- correspond implicitement à une sélection de variables.
+
+# Récapitulatif
+
+- On applique le critère de sélection sur la liste de modèles candidats pour retenir celui qui donne la meilleure performance.
+- Pour éviter une sélection rigide, on peut perturber les données et répéter la procédure pour calculer une moyenne de modèles. Cette approche est très coûteuse en calcul.

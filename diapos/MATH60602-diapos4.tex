@@ -56,6 +56,8 @@
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
   \setmainfont[]{D-DIN}
+  \setsansfont[]{Latin Modern Sans}
+  \setmathfont[]{Latin Modern Math}
 \fi
 \usecolortheme{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
@@ -146,6 +148,7 @@
 \makeatother
 
 \usepackage{tabu}
+\usepackage{mathtools}
 \makeatletter
 \makeatother
 \makeatletter
@@ -217,7 +220,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Modèles prédictifs}
 \protect\hypertarget{moduxe8les-pruxe9dictifs}{}
@@ -336,7 +339,7 @@ On peut approximer l'aléa à l'aide du \textbf{résidu ordinaires}, soit
 \protect\hypertarget{erreur-quadratique-moyenne}{}
 L'erreur quadratique moyenne théorique est
 
-\[\mathsf{E} \left[\left\{ (Y - \widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)\right\}^2\right],\]
+\[\mathsf{E} \left[\left\{Y - \widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)\right\}^2\right],\]
 la moyenne de la différence au carré entre la vraie valeur de \(Y\) et
 la valeur prédite par le modèle.
 
@@ -352,8 +355,9 @@ Comment estimer les paramètres \(\beta_0, \ldots, \beta_p\)?
 quadratique moyenne \textbf{empirique} avec l'échantillon des \(n\)
 observations, soit
 
-\[\frac{e_1^2 + \cdots + e_n^2}{n}\] Solution explicite
-\(\widehat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{Y}\)!
+\[\frac{e_1^2 + \cdots + e_n^2}{n}\]
+
+Il existe une solution explicite au problème d'optimisation!
 \end{frame}
 
 \begin{frame}[fragile]{Estimation dans \textbf{R}}
@@ -489,7 +493,7 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
   Si la variable a \(K\) valeurs possibles (niveaux), le modèle inclut
   \(K-1\) indicatrices 0/1.
 \item
-  Par défaut dans \textbf{\$}, la catégorie de référence est la plus
+  Par défaut dans \textbf{R}, la catégorie de référence est la plus
   petite en ordre alphanumérique.
 \end{itemize}
 \end{frame}
@@ -514,12 +518,8 @@ La catégorie de référence est associée à l'ordonnée à l'origine (quand
 \texttt{cat2=0} et \texttt{cat3=0}).
 \end{frame}
 
-\begin{frame}{Prédiction vs inférence}
-\protect\hypertarget{pruxe9diction-vs-infuxe9rence}{}
-\end{frame}
-
-\begin{frame}[fragile]{Sélection de variables}
-\protect\hypertarget{suxe9lection-de-variables}{}
+\begin{frame}[fragile]{Sélection de variables et de modèles}
+\protect\hypertarget{suxe9lection-de-variables-et-de-moduxe8les}{}
 \begin{itemize}
 \tightlist
 \item
@@ -542,12 +542,144 @@ Notre but sera de sélectionner un \textbf{bon} modèle, selon les
 objectifs de l'étude
 \end{frame}
 
-\begin{frame}{}
-\protect\hypertarget{section}{}
+\begin{frame}{Prédiction vs inférence}
+\protect\hypertarget{pruxe9diction-vs-infuxe9rence}{}
+\textbf{Prédiction}: obtenir une estimation de \(\widehat{Y}\): on veut
+un modèle performant
+
+\textbf{Inférence}: estimer l'effet de variables explicatives, effectuer
+des tests d'hypothèse
+
+Pour l'inférence, il est préférable de spécifier le modèle dès le départ
+(devis expérimental) selon des considérations scientifiques et de s'y
+tenir.
 \end{frame}
 
-\begin{frame}{Illustration du surajustement}
-\protect\hypertarget{illustration-du-surajustement}{}
+\begin{frame}{Spécification adéquate d'un modèle}
+\protect\hypertarget{spuxe9cification-aduxe9quate-dun-moduxe8le}{}
+\begin{block}{Démonstration \textbf{R}}
+\protect\hypertarget{duxe9monstration-r}{}
+\begin{itemize}
+\tightlist
+\item
+  Omettre des termes importants mène à un \textbf{modèle biaisé}.
+\item
+  Ajouter des termes superflus augmente la \textbf{variabilité}.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Évaluer la performance d'un modèle}
+\protect\hypertarget{uxe9valuer-la-performance-dun-moduxe8le}{}
+On peut calculer l'erreur quadratique moyenne (EQM) sur l'ensemble des
+données qui servent à ajuster le modèle.
+
+Q: Est-ce que c'est un marqueur fiable de la performance du modèle?
+\end{frame}
+
+\begin{frame}[fragile]{Exemple avec la régression polynomiale}
+\protect\hypertarget{exemple-avec-la-ruxe9gression-polynomiale}{}
+On a simulé des observations d'un modèle polynomiale d'ordre \(K\), de
+la forme
+\[\mathsf{E}(Y \mid \mathbf{X}) = \beta_0 + \beta_1 \mathrm{X} + \cdots + \beta_K \mathrm{X}^K.\]
+
+On vise à estimer l'ordre du polynôme en effectuant des régressions
+linéaires.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(polynome, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\NormalTok{k }\OtherTok{\textless{}{-}}\NormalTok{ 4L}
+\FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =}\NormalTok{ k), }
+   \AttributeTok{data =}\NormalTok{ polynome)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Aperçu des données}
+\protect\hypertarget{aperuxe7u-des-donnuxe9es}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-5-1.pdf}
+
+}
+
+\end{figure}
+
+D'après vous, quelle est la vraie valeur de \(K\)?
+\end{frame}
+
+\begin{frame}{Ajustement de polynômes}
+\protect\hypertarget{ajustement-de-polynuxf4mes}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-6-1.pdf}
+
+}
+
+\end{figure}
+
+Ajustement pour des polynômes de degré \(K=1, 4, 10\).
+\end{frame}
+
+\begin{frame}[fragile]{Évaluation de la performance}
+\protect\hypertarget{uxe9valuation-de-la-performance}{}
+Pour \(K=1, \ldots, 10\):
+
+\begin{itemize}
+\tightlist
+\item
+  Ajuster le modèle linéaire
+\item
+  Obtenir les résidus ordinaires
+\item
+  Calculer l'erreur quadratique moyenne
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(polynome, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\NormalTok{eqm }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{length =}\NormalTok{ 10L, }\AttributeTok{mode =} \StringTok{"numeric"}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(K }\ControlFlowTok{in} \FunctionTok{seq\_len}\NormalTok{(}\DecValTok{10}\NormalTok{))\{}
+\NormalTok{ mod }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =}\NormalTok{ K), }\AttributeTok{data =}\NormalTok{ polynome)}
+\NormalTok{ eqm[K] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{resid}\NormalTok{(mod)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Estimation de l'erreur quadratique moyenne}
+\protect\hypertarget{estimation-de-lerreur-quadratique-moyenne}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-8-1.pdf}
+
+}
+
+\end{figure}
+
+Plus le modèle est complexe, plus l'erreur quadratique moyenne de
+l'échantillon d'apprentissage est petite!
+\end{frame}
+
+\begin{frame}{Suroptimisme}
+\protect\hypertarget{suroptimisme}{}
+L'erreur quadratique moyenne décroît mécaniquement à chaque fois qu'on
+ajoute une variable au modèle de régression.
+
+C'est pourquoi on ne peut pas l'utiliser comme outil de sélection de
+variables, autrement on va surestimer la performance
+(\textbf{suroptimisme}).
+\end{frame}
+
+\begin{frame}{Surajustement}
+\protect\hypertarget{surajustement}{}
+Un modèle plus complexe va toujours mieux s'ajuster aux données de
+l'échantillon.
+
+En revanche, il se \textbf{généralise} moins bien (notre objectif en
+prédiction).
+
 \begin{figure}
 
 {\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/overfitting-1.pdf}
@@ -557,24 +689,370 @@ objectifs de l'étude
 \end{figure}
 \end{frame}
 
-\begin{frame}
-\begin{block}{Séparation des données}
+\begin{frame}{Morale de l'histoire}
+\protect\hypertarget{morale-de-lhistoire}{}
+Nous nous sommes rendus coupables d'un péché capital en utilisant deux
+fois les données
+
+\begin{itemize}
+\tightlist
+\item
+  une fois pour l'ajustement,
+\item
+  une fois pour la validation.
+\end{itemize}
+
+C'est comme tremper deux fois un biscuit dans le verre de lait\ldots{}
+\end{frame}
+
+\begin{frame}{Estimation fiable de la performance}
+\protect\hypertarget{estimation-fiable-de-la-performance}{}
+\begin{itemize}
+\tightlist
+\item
+  Pénalisation de la complexité du modèle
+
+  \begin{itemize}
+  \tightlist
+  \item
+    critères d'information
+  \item
+    pénalité sur les coefficients (\emph{ridge}, LASSO)
+  \end{itemize}
+\item
+  Validation et entraînement avec des données différentes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    validation externe
+  \item
+    validation croisée
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pénalisation}
+\protect\hypertarget{puxe9nalisation}{}
+Utiliser toutes les données (échantillon de validation), mais ajouter
+une pénalité.
+
+Si le modèle est ajusté avec la méthode du maximum de vraisemblance,
+alors on a accès aux critères d'information.
+\end{frame}
+
+\begin{frame}{Lien entre régression linéaire et vraisemblance}
+\protect\hypertarget{lien-entre-ruxe9gression-linuxe9aire-et-vraisemblance}{}
+Si on suppose que les aléas sont indépendants et suivent une loi normale
+de variance \(\sigma^2\) constante, alors la log-vraisemblance s'écrit
+
+\begin{align*}
+\ell(\boldsymbol{Y}; \mathbf{X}, \boldsymbol{\beta}, \sigma) & = -\frac{n}{2}\ln(2\pi) -n\ln(\sigma) \\&\quad - \frac{1}{2\sigma^2}\sum_{i=1}^n (Y_i - \beta_0 - \cdots - \mathrm{X}_{ip}\beta_p)^2.
+\end{align*}
+
+Ainsi, l'estimateur des moindres carrés,
+\(\widehat{\boldsymbol{\beta}}\), correspond au maximum de vraisemblance
+des coefficients.
+\end{frame}
+
+\begin{frame}{Critères d'information}
+\protect\hypertarget{crituxe8res-dinformation}{}
+Les critères d'information sont de la forme \begin{align*}
+\mathsf{IC} &=-2 \ell(\widehat{\boldsymbol{\beta}}, \widehat{\sigma}^2) +\text{pénalité}\times \text{nb param} \\&= n \ln (\widehat{\mathsf{EQM}}) +\text{pénalité}\cdot \text{nb param}+ \text{constante},
+\end{align*}
+
+Le critère d'Akaike (\(\text{AIC}\)) utilise une pénalité de 2, le
+critère bayésien (\(\text{BIC}\)) de \(\ln(n)\).
+\end{frame}
+
+\begin{frame}[fragile]{Utiliser les critères d'information}
+\protect\hypertarget{utiliser-les-crituxe8res-dinformation}{}
+\begin{itemize}
+\tightlist
+\item
+  Plus la valeur du critère d'information, meilleure est l'adéquation
+  (et donc la performance).
+\item
+  La pénalité assure que les modèles plus simples ne sont pas
+  systématiquement retournés.
+\item
+  Le \(\textsf{BIC}\) retourne toujours des modèles plus parcimonieux
+  (simples) que le \(\textsf{AIC}\).
+\item
+  Génériques \texttt{logLik}, \texttt{AIC} et \texttt{BIC} en \textbf{R}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Illustration}
+\protect\hypertarget{illustration}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/fig-polynome-ajustement-1.pdf}
+
+}
+
+\caption{\label{fig-polynome-ajustement}Critères d'information en
+fonction de l'ordre du polynôme.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Séparation des données}
 \protect\hypertarget{suxe9paration-des-donnuxe9es}{}
 Ne pas utiliser les données employés pour ajuster un modèle pour
-\textbf{prédire la performance}
+\textbf{prédire la performance}.
 
 \begin{itemize}
 \tightlist
 \item
   échantillons d'apprentissage/validation/test (fixes)
 \item
-  validation croisée (avec \(K=5, 10\) groupes), mais \emph{résultat
-  aléatoire}
+  validation croisée
 \end{itemize}
-\end{block}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Validation externe}
+\protect\hypertarget{validation-externe}{}
+Séparer l'ensemble d'observations en plusieurs groupes
+
+\begin{itemize}
+\tightlist
+\item
+  l'échantillon d'apprentissage pour l'ajustement du modèle
+\item
+  l'échantillon de validation pour l'estimation de la performance
+\item
+  l'échantillon test pour l'inférence (optionnel)
+\end{itemize}
+
+En pratique, il faut beaucoup d'observations!
+\end{frame}
+
+\begin{frame}{Avantages et inconvénients de la validation externe}
+\protect\hypertarget{avantages-et-inconvuxe9nients-de-la-validation-externe}{}
+Applicable en toute généralité peu importe le type de modèle.
+
+Cette approche, qui compartimente les échantillons, n'est pas sans
+faille.
+
+\begin{itemize}
+\tightlist
+\item
+  On obtient un résultat différent selon la division
+\item
+  Gaspillage potentiel
+\item
+  Choix d'ordinaire aléatoire, mais choix particuliers de fenêtre selon
+  données (par ex., séries chronologiques)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Validation croisée}
+\protect\hypertarget{validation-croisuxe9e}{}
+Une autre méthode de rééchantillonage
+
+Diviser l'échantillon en \(K\) groupes d'observations de taille moyenne
+égale
+
+\begin{itemize}
+\tightlist
+\item
+  utiliser \(K-1\) groupes pour l'ajustement
+\item
+  estimer la performance avec les données du dernier groupe
+\end{itemize}
+
+Les regroupements sont aléatoires, tout comme la mesure finale de
+performance!
+\end{frame}
+
+\begin{frame}{Étapes de la validation croisée à \(K\) groupes}
+\protect\hypertarget{uxe9tapes-de-la-validation-croisuxe9e-uxe0-k-groupes}{}
+\begin{enumerate}
+\tightlist
+\item
+  Diviser l'échantillon au hasard en \(K\) parties
+  \(P_1, P_2, \ldots, P_K\) contenant toutes à peu près le même nombre
+  d'observations.
+\item
+  Pour \(j = 1\) à \(K\),
+
+  \begin{enumerate}
+  [i.]
+  \tightlist
+  \item
+    Enlever la partie \(j\).
+  \item
+    Estimer les paramètres du modèle en utilisant les observations des
+    \(K-1\) autres parties combinées.
+  \item
+    Calculer la mesure de performance (par exemple la somme du carré des
+    erreurs \(\{Y_i - \widehat{Y}_i\}^2\)) de ce modèle pour le groupe
+    \(P_j\).
+  \end{enumerate}
+\item
+  Combiner les \(K\) estimations de performance pour obtenir une mesure
+  de performance finale.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Illustration de la validation croisée}
+\protect\hypertarget{illustration-de-la-validation-croisuxe9e}{}
+\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/validationcroiseeillust-1.pdf}
+\end{frame}
+
+\begin{frame}{Combien de groupes \(K\) pour la validation croisée?}
+\protect\hypertarget{combien-de-groupes-k-pour-la-validation-croisuxe9e}{}
+La validation croisée est plus coûteuse parce qu'on doit ajuster \(K\)
+fois le modèles
+
+\begin{itemize}
+\tightlist
+\item
+  Pour la régression linéaire, choisir \(K=n\) (\emph{leave-one-out
+  cross-validation}) permet d'éviter de réajuster le modèle grâce à un
+  artifice de calcul.
+\item
+  On recommande habituellement de prendre \(K=\min\{n^{1/2}, 10\}\)
+  groupes.
+\item
+  les choix de \(K=5\) ou \(K=10\) sont ceux qui revient le plus souvent
+  en pratique.
+\end{itemize}
+
+\footnotesize
+
+Voir Davison \& Hinkley (1997), \emph{Bootstrap methods and their
+applications}, Section 6.4 pour une discussion plus étoffée et
+l'algorithme 6.5 pour une meilleure implémentation.
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Validation croisée = résultat aléatoire!}
+\protect\hypertarget{validation-croisuxe9e-ruxe9sultat-aluxe9atoire}{}
+Soit \(\widehat{\mathsf{EQM}}_{\text{VC}}\) l'estimation de l'erreur
+quadratique moyenne obtenue par validation croisée à \(K\) plis pour un
+modèle \(\mathcal{M}\) donné.
+
+Si on a un nombre similaire d'observations dans chaque groupe, on peut
+plutôt
+
+\begin{itemize}
+\tightlist
+\item
+  calculer l'erreur moyenne quadratique de chaque pli, disons
+  \(\widehat{\mathsf{EQM}}_{\text{VC}, k}\)
+\item
+  si \(K\) est suffisamment grand (disons \(K>10\)), on peut estimer
+  l'écart-type empirique de cette moyenne via
+  \[ \mathsf{sd}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \frac{1}{K-1} \sum_{k=1}^{K} (\widehat{\mathsf{EQM}}_{\text{VC}, k}-\widehat{\mathsf{EQM}}_{\text{VC}})^2\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Règle d'un écart-type}
+\protect\hypertarget{ruxe8gle-dun-uxe9cart-type}{}
+Suivant Breiman, on choisit le modèle le plus simple parmi un ensemble
+\(\mathcal{M}_0 \subset\cdots \subset \mathcal{M}_m\) qui satisfasse
+
+\[\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_i) \leq \min_{m = i+1}^M \widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m) + \mathsf{sd}\{\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m)\}\]
+
+Choisir le modèle le plus simple qui soit à au plus un écart-type de la
+performance des modèles plus compliqués.
+\end{frame}
+
+\begin{frame}[fragile]{Validation croisée en \textbf{R}}
+\protect\hypertarget{validation-croisuxe9e-en-r}{}
+Le paquet \texttt{caret} a une fonction pour faire la validation
+croisée.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{cv\_caret }\OtherTok{\textless{}{-}} 
+\NormalTok{  caret}\SpecialCharTok{::}\FunctionTok{train}\NormalTok{(}\AttributeTok{form =} \FunctionTok{formula}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =} \DecValTok{3}\NormalTok{)), }
+             \AttributeTok{data =}\NormalTok{ polynome, }
+             \AttributeTok{method =} \StringTok{"lm"}\NormalTok{,}
+             \AttributeTok{trControl =}\NormalTok{ caret}\SpecialCharTok{::}\FunctionTok{trainControl}\NormalTok{(}
+               \AttributeTok{method =} \StringTok{"cv"}\NormalTok{,}
+               \AttributeTok{number =} \DecValTok{10}\NormalTok{)) }\CommentTok{\#nb plis}
+\NormalTok{reqm\_cv }\OtherTok{\textless{}{-}}\NormalTok{ cv\_caret}\SpecialCharTok{$}\NormalTok{results}\SpecialCharTok{$}\NormalTok{RMSE }\CommentTok{\# racine EQM}
+\NormalTok{reqm\_sd\_cv }\OtherTok{\textless{}{-}}\NormalTok{ cv\_caret}\SpecialCharTok{$}\NormalTok{results}\SpecialCharTok{$}\NormalTok{RMSESD}
+\end{Highlighting}
+\end{Shaded}
+
+Aussi \texttt{boot::cv.glm()} qui inclut une correction de biais pour
+les modèles linéaires généralisé.
+\end{frame}
+
+\begin{frame}{Résultats de la validation croisée}
+\protect\hypertarget{ruxe9sultats-de-la-validation-croisuxe9e}{}
+\begin{figure}
+
+{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/fig-plotcv-1.pdf}
+
+}
+
+\caption{\label{fig-plotcv}Boîtes à moustaches des 100 estimations de
+l'erreur quadratique moyenne obtenues par validation croisée à 10 plis.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif}{}
+\begin{itemize}
+\tightlist
+\item
+  Le choix de la complexité d'un modèle est un compromis entre
+
+  \begin{itemize}
+  \tightlist
+  \item
+    le biais (modèle trop simple, mal spécifié) et
+  \item
+    la variance (même nombre d'observations/budget, plus de paramètres à
+    estimer, estimations moins fiables)
+  \end{itemize}
+\item
+  L'erreur quadratique moyenne est la mesure usuelle de la performance
+  d'un modèle linéaire
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-1}{}
+Si on estime la performance avec les mêmes données qui ont servi à
+l'ajustement, on surestime la performance
+
+\begin{itemize}
+\tightlist
+\item
+  l'erreur quadratique moyenne calculée sur les mêmes données qui ont
+  servi à l'entraînement est biaisée
+\item
+  cela mène à du \textbf{surajustement}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-2}{}
+Trois méthodes pour estimer de manière plus objective la performance
+d'un modèle
+
+\begin{itemize}
+\tightlist
+\item
+  Critères d'information (pénalisation)
+\item
+  Validation externe
+\item
+  Validation croisée
+\end{itemize}
+
+\footnotesize
+
+Vous devez être en mesure de nommer les forces et faiblesses et
+d'expliquer le fonctionnement (avec du pseudocode).
 \end{frame}
 
 

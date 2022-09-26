@@ -74,6 +74,8 @@ website:
               file: contenu/03-contenu.qmd
             - text: "4: Sélection de variables"
               file: contenu/04-contenu.qmd
+            - text: "5: Sélection de variables"
+              file: contenu/05-contenu.qmd
 
 
     - title: "Devoirs"
@@ -99,7 +101,7 @@ website:
         - text: "Exercices"
           file: exercices/index.qmd
         - section: "Analyse exploratoire"
-          contents: 
+          contents:
            - text: "Exercice 1"
              file: exercices/01-exercice.qmd
            - text: "Solution 1"

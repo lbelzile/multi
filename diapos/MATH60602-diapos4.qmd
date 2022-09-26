@@ -13,14 +13,756 @@ themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
 pdf-engine: xelatex
 cache: true
+code-line-numbers: true
+fig-align: 'center'
 mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
 keep-tex: true
 include-in-header: 
       text: |
         \usepackage{tabu}
+        \usepackage{mathtools}
 ---
 
-# Rappel sur la régression linéaire
+# Modèles prédictifs
 
-Bâtir un modèle pour une variable réponse $Y$ en fonction de variables explicatives $X_1, \ldots, X_p$
+**Objectif**: bâtir un modèle pour une variable réponse $Y$ en fonction de variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$.
+
+On s'intéresse à $$\underset{\text{vraie moyenne inconnue}}{f(\mathrm{X}_1, \ldots, \mathrm{X}_p)}.$$ 
+
+L'analyste détermine  $$\underset{\text{approximation}}{\widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)},$$ une fonction des variables explicatives.
+
+# Rappels sur la régression linéaire
+
+On spécifie que la **moyenne** de la variable réponse $Y$ est une fonction linéaire des variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$, soit
+
+$$\underset{\text{moyenne théorique}}{\mathsf{E}(Y \mid \mathbf{X})} = \underset{\text{
+somme pondérée des variables explicatives}}{\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}}.$$
+
+en supposant que l'écart entre les observations et cette moyenne est constant, 
+$$\mathsf{Va}(Y \mid \mathbf{X}) = \sigma^2.$$
+
+# Représentation alternative
+
+Pour la $i$e observation,
+
+$$\underset{\text{réponse}}{Y_i} = \underset{\text{prédicteur linéaire}}{\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}} + \underset{\text{aléa}}{\varepsilon_i}.$$
+
+
+
+- L'aléa $\varepsilon_i$ représente la distance **verticale** entre la vraie pente et l'observation
+- Autant d'aléas que d'observations ($n$), variable aléatoire inconnue...
+
+
+
+# Postulats
+
+
+
+- L'aléa $\varepsilon_i$ représente l'erreur, soit la différence entre la valeur observée et la moyenne de la population pour les même valeurs des variables explicatives.
+- On suppose que le modèle pour la moyenne est correctement spécifié: l'aléa a une moyenne théorique nulle, $\mathsf{E}(\varepsilon_i)=0$.
+- On suppose que les observations sont indépendantes les unes des autres.
+
+
+
+
+# Régression linéaire en deux dimensions
+
+Si $\mathsf{E}(Y)=\beta_0 + \beta_1 \mathrm{X}$, alors
+
+- $\beta_0$ représente l'ordonnée à l'origine (valeur quand $\mathrm{X}=0$.)
+- $\beta_1$ est la pente
+
+```{r, fig.width = 7, fig.height=5, out.width = '75%', fig.align = "center"}
+set.seed(60602)
+n <- 100L
+x <- runif(n = n)
+y <- 2 + x*5 + rnorm(n, sd = 0.5)
+library(ggplot2)
+ggplot(data.frame(x = x, y = y),
+       aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", 
+              se = FALSE, 
+              col ="black",
+              formula = y ~ x,
+              fullrange = TRUE) +
+  theme_classic()
+
+```
+
+# Résidus ordinaires
+
+L'estimation des paramètres $\widehat{\beta}_0, \cdots,  \widehat{\beta}_p$ nous donne
+$$\underset{\text{prédiction}}{\widehat{Y}_i} = \widehat{\beta}_0 + \widehat{\beta}_1\mathrm{X}_{i1} \cdots + \widehat{\beta}_p\mathrm{X}_{ip}.$$
+
+On peut approximer l'aléa à l'aide du **résidu ordinaires**, soit
+$$\underset{\text{résidu ordinaire}}{e_i} = \underset{\text{observation}}{Y_i} - \underset{\text{prédiction}}{\widehat{Y}_i}.$$
+
+- par construction, la moyenne des $e_i$ est zéro.
+- le résidu ordinaire est la distance verticale entre l'observation et la "droite" **ajustée**
+
+# Illustration des résidus ordinaires
+
+
+
+```{r distancevert, eval = TRUE, echo = FALSE, fig.width=7, fig.height=5, out.width = '80%', fig.align = 'center'}
+ols <- lm(y ~ x)
+vlines <- data.frame(x = x, y = y, y2 = fitted(ols))
+ggg <- ggplot2::ggplot(data = vlines,
+                       aes(x = x, y = y)) +
+   geom_point() +
+   geom_smooth(
+      method = "lm",
+      formula = y ~ x,
+      se = FALSE,
+      col = "black",
+      fullrange = TRUE
+   ) +
+   labs(x = "variable explicative",
+        y = "réponse") +
+   geom_segment(mapping = aes(
+      x = x, 
+      y = y2,
+      xend = x,
+      yend = y), 
+   arrow = arrow(length = unit(0.2,"cm")),
+   show.legend = FALSE) +
+   theme_classic()
+print(ggg)
+```
+
+
+# Erreur quadratique moyenne
+
+
+
+L'erreur quadratique moyenne théorique est
+
+$$\mathsf{E} \left[\left\{Y - \widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)\right\}^2\right],$$
+la moyenne de la différence au carré entre la vraie valeur de $Y$ et la valeur prédite par le modèle.
+
+En pratique, on remplace la moyenne théorique par une moyenne empirique obtenue à partir d'un échantillon aléatoire.
+
+
+# Estimation des paramètres
+
+Comment estimer les paramètres $\beta_0, \ldots, \beta_p$?
+
+**Optimisation**: trouver les valeurs qui minimisent l'erreur quadratique moyenne **empirique** avec l'échantillon des $n$ observations, soit
+
+$$\frac{e_1^2 + \cdots + e_n^2}{n}$$
+
+
+Il existe une solution explicite au problème d'optimisation!
+
+
+# Estimation dans **R**
+
+La fonction `lm` calcule l'ajustement du modèle linéaire.
+
+Arguments:
+
+- `formula`: formule de type `reponse ~  variables explicatives`, où les variables explicatives sont séparées par un signe `+`
+- `data`: base de données
+
+```{r, echo = TRUE, eval = FALSE}
+modlin <- lm(mpg ~ hp + wt, 
+             data = mtcars)
+summary(modlin)
+```
+
+# Sortie de `summary`
+
+\footnotesize 
+
+```{r, eval = TRUE, echo = FALSE}
+modlin <- lm(mpg ~ hp + wt, 
+             data = mtcars)
+summary(modlin)
+```
+
+\normalsize
+
+# Tableau de sortie
+
+- Formule de l'appel
+- Statistiques descriptives des résidus ordinaires $e_1, \ldots, e_n$.
+- Tableau des estimations
+   - Coefficients $\widehat{\beta}_j$
+   - Erreurs-types, $\mathsf{se}(\widehat{\beta}_j)$
+   - Statistique du test-_t_ pour $\mathscr{H}_0: \beta_j=0$, soit $t=\widehat{\beta}_j/\mathsf{se}(\widehat{\beta}_j)$
+   - Valeur-_p_ selon loi nulle $\mathsf{St}(n-p-1)$
+- Estimation de l'écart-type $\widehat{\sigma}$ et degrés de liberté $n-p-1$
+- Estimations du coefficient de détermination, $R^2$ et $R^2$ ajusté
+- Statistique $F$ d'ajustement global et valeur-$p$ de $\mathsf{F}(p, n - p - 1)$
+  - $\mathscr{H}_a$: modèle linéaire
+  - $\mathscr{H}_0$: modèle avec uniquement ordonnée à l'origine (chaque observation prédite par la moyenne des réponses, $\overline{Y}$)
+
+\normalsize
+
+# Quelques méthodes pour `lm`
+
+- `resid` pour les résidus ordinaires $e_i$
+- `fitted` pour les valeurs ajustées $\widehat{Y}_i$
+- `coef` pour les estimations des paramètres $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$
+- `plot` pour des diagnostics graphiques d'ajustement
+- `anova` pour la comparaison de modèles emboîtés
+- `predict` pour les prédictions (avec nouvelles données)
+- `confint` pour intervalles de confiance pour les paramètres.
+
+# Variables catégorielles
+
+- Les facteurs (`<factor>`) sont traités adéquatement par **R**.
+- Si la variable a $K$ valeurs possibles (niveaux), le modèle inclut $K-1$ indicatrices 0/1.
+- Par défaut dans **R**, la catégorie de référence est la plus petite en ordre alphanumérique.
+
+# Encodage des variables catégorielles
+
+Considérons une variable catégorielle `cat` avec niveaux `1`, `2`, et `3`.
+
+| `cat` | `cat2` | `cat3` |
+|:----:|:-----:|:-----:|
+|   1  |   0   |   0   |
+|   2  |   1   |   0   |
+|   3  |   0   |   1   |
+
+La catégorie de référence est associée à l'ordonnée à l'origine (quand `cat2=0` et `cat3=0`).
+
+
+# Sélection de variables et de modèles
+
+- Comment choisir quelles variables inclure?
+- Quel est la spécification adéquate pour $f(\mathrm{X}_1, \ldots, \mathrm{X}_p)$? 
+   - régression, réseaux de neurone, forêts aléatoires, etc.
+    - transformations de variables, `age`${}^2$, $\ln($`age`$)$, etc.
+
+Notre but sera de sélectionner un **bon** modèle, selon les objectifs de l'étude
+
+
+# Prédiction vs inférence
+
+**Prédiction**: obtenir une estimation de $\widehat{Y}$: on veut un modèle performant
+
+**Inférence**: estimer l'effet de variables explicatives, effectuer des tests d'hypothèse
+
+Pour l'inférence, il est préférable de spécifier le modèle dès le départ (devis expérimental) selon des considérations scientifiques et de s’y tenir.
+
+# Spécification adéquate d'un modèle
+
+## Démonstration **R**
+
+- Omettre des termes importants mène à un **modèle biaisé**.
+- Ajouter des termes superflus augmente la **variabilité**.
+
+
+# Évaluer la performance d'un modèle
+
+
+On peut calculer l'erreur quadratique moyenne (EQM) sur l'ensemble des données qui servent à ajuster le modèle.
+
+Q: Est-ce que c'est un marqueur fiable de la performance du modèle?
+
+# Exemple avec la régression polynomiale
+
+On a simulé des observations d'un modèle polynomiale d'ordre $K$, de la forme 
+$$\mathsf{E}(Y \mid \mathbf{X}) = \beta_0 + \beta_1 \mathrm{X} + \cdots + \beta_K \mathrm{X}^K.$$
+
+On vise à estimer l'ordre du polynôme en effectuant des régressions linéaires.
+
+```{r, eval = FALSE, echo = TRUE}
+data(polynome, package = "hecmulti")
+k <- 4L
+lm(y ~ poly(x, degree = k), 
+   data = polynome)
+```
+
+# Aperçu des données
+
+```{r, fig.height=5, fig.width=7, out.width='70%', fig.align = "center"}
+data(polynome, package = "hecmulti")
+library(ggplot2)
+ggplot(data = polynome, 
+       mapping = aes(x=x, y=y)) +
+ geom_point() +
+ theme_classic()
+```
+
+D'après vous, quelle est la vraie valeur de $K$?
+
+# Ajustement de polynômes
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig.align: 'center'
+#| out.width: '80%'
+#| fig.width: 8
+#| fig.height: 4
+data(polynome, package = "hecmulti")
+x0 <- seq(from = -6, to = 6, length.out = 1001L)
+
+mod <- lm(y ~ poly(x, degree = 10), data = polynome)
+ypred10 <- predict(mod, newdata = data.frame(x = x0))
+
+mod <- lm(y ~ poly(x, degree = 4), data = polynome)
+ypred4 <- predict(mod, newdata = data.frame(x = x0))
+
+mod <- lm(y ~ poly(x, degree = 1), data = polynome)
+ypred1 <- predict(mod, newdata = data.frame(x = x0))
+library(ggplot2)
+ggplot() +
+   geom_point(data = polynome,
+              aes(x = x, y = y)) +
+   geom_line(data = data.frame(x0, ypred1),
+              aes(x = x0, y = ypred1), color = 2) +
+   geom_line(data = data.frame(x0, ypred4),
+              aes(x = x0, y = ypred4), color = 3) +
+   geom_line(data = data.frame(x0, ypred10),
+              aes(x = x0, y = ypred10), color = 4) + 
+   theme_classic() +
+   scale_y_continuous(limits = c(-400,400))
+```
+
+Ajustement pour des polynômes de degré $K=1, 4, 10$.
+
+# Évaluation de la performance
+
+Pour $K=1, \ldots, 10$:
+
+- Ajuster le modèle linéaire 
+- Obtenir les résidus ordinaires
+- Calculer l'erreur quadratique moyenne
+
+```{r, eval = FALSE, echo = TRUE}
+data(polynome, package = "hecmulti")
+eqm <- vector(length = 10L, mode = "numeric")
+for(K in seq_len(10)){
+ mod <- lm(y ~ poly(x, degree = K), data = polynome)
+ eqm[K] <- mean(resid(mod)^2)
+}
+```
+
+
+# Estimation de l'erreur quadratique moyenne
+
+```{r, fig.width = 5, fig.height = 4, out.width = '70%', cache = TRUE, fig.align = 'center'}
+
+file <- "https://lbelzile.bitbucket.io/MATH60602/selection1_test.sas7bdat"
+test <- haven::read_sas(data_file = file)
+train <- polynome
+
+EQM <- matrix(0, nrow = 10, ncol = 7)
+for(i in seq_len(10)){
+  meanmod <- as.formula(paste0("y~", paste0("I(x^",1 :i,")", collapse= "+")))
+  mod <-  lm(meanmod, data = train)
+  # Calculer l'erreur moyenne dans les deux échantillons
+  EQM[i,1] <- mean(resid(mod)^2) #apprentissage
+  EQM[i,2] <-  mean((test$y - predict(mod, newdata = test))^2)
+}
+EQMdat <- data.frame(
+  ordre = rep(1:10, length.out = 20),
+           EQM = c(EQM[,1:2]),
+           echantillon =
+    factor(rep(c("apprentissage","théorique"), each = 10)))
+ggplot(data = EQMdat, aes(x=ordre, y=EQM, color=echantillon)) +
+  geom_line() +
+  geom_point(aes(shape=echantillon, color=echantillon)) +
+  labs(x = "ordre du polynôme",
+       subtitle = "erreur quadratique moyenne",
+       y = "",
+       color = "",
+       shape = "") +
+  theme(legend.position="bottom",
+        legend.title=element_blank()) +
+  scale_color_manual(values = MetBrewer::met.brewer("Hiroshige",
+                                           n =  2)) +
+  scale_x_continuous(breaks = 0:10,
+                     labels = as.character(0:10)) +
+  theme_classic() + 
+  theme(legend.position = c(0.8, 0.8))
+```
+
+Plus le modèle est complexe, plus l’erreur quadratique moyenne de l’échantillon d’apprentissage est petite!
+
+
+
+# Suroptimisme
+
+L'erreur quadratique moyenne décroît mécaniquement à chaque fois qu'on ajoute une variable au modèle de régression.
+
+C’est pourquoi on ne peut pas l’utiliser comme outil de sélection de variables, autrement on va surestimer la performance (**suroptimisme**).
+
+# Surajustement
+
+Un modèle plus complexe va toujours mieux s'ajuster aux données de l'échantillon.
+
+En revanche, il se **généralise** moins bien (notre objectif en prédiction).
+
+```{r overfitting, echo = FALSE, out.width = ".7\\linewidth", fig.align ='center'}
+hecblue <- rgb(red = 0, green = 60, blue = 113, max = 255)
+heccyan <- rgb(red = 0, green = 159, blue = 223, max = 255)
+make_poly_data = function(sample_size = 11) {
+  x = seq(0, 10)
+  y = 3 + x + 4 * x ^ 2 + rnorm(n = sample_size, mean = 0, sd = 20)
+  data.frame(x, y)
+}
+set.seed(1234)
+poly_data = make_poly_data()
+fit_quad = lm(y ~ poly(x, degree = 2), data = poly_data)
+fit_big  = lm(y ~ poly(x, degree = 10), data = poly_data)
+
+plot(y ~ x, data = poly_data, ylim = c(-100, 400), cex = 2, pch = 20)
+xplot = seq(0, 10, by = 0.1)
+lines(xplot, predict(fit_quad, newdata = data.frame(x = xplot)),
+      col = hecblue, lwd = 2, lty = 1)
+lines(xplot, predict(fit_big, newdata = data.frame(x = xplot)),
+      col = heccyan, lwd = 2, lty = 2)
+```
+
+# Morale de l'histoire
+
+Nous nous sommes rendus coupables d'un péché capital en utilisant deux fois les données
+
+- une fois pour l'ajustement,
+- une fois pour la validation.
+
+C'est comme tremper deux fois un biscuit dans le verre de lait...
+
+# Estimation fiable de la performance
+
+- Pénalisation de la complexité du modèle
+   - critères d'information
+   - pénalité sur les coefficients (_ridge_, LASSO)
+- Validation et entraînement avec des données différentes
+   - validation externe
+   - validation croisée
+
+# Pénalisation
+
+Utiliser toutes les données (échantillon de validation), mais ajouter une pénalité.
+
+Si le modèle est ajusté avec la méthode du maximum de vraisemblance, alors on a accès aux critères d'information.
+
+# Lien entre régression linéaire et vraisemblance
+
+Si on suppose que les aléas sont indépendants et suivent une loi normale de variance $\sigma^2$ constante, alors la log-vraisemblance s'écrit
+
+\begin{align*}
+\ell(\boldsymbol{Y}; \mathbf{X}, \boldsymbol{\beta}, \sigma) & = -\frac{n}{2}\ln(2\pi) -n\ln(\sigma) \\&\quad - \frac{1}{2\sigma^2}\sum_{i=1}^n (Y_i - \beta_0 - \cdots - \mathrm{X}_{ip}\beta_p)^2.
+\end{align*}
+
+Ainsi, l'estimateur des moindres carrés, $\widehat{\boldsymbol{\beta}}$, correspond au maximum de vraisemblance des coefficients.
+
+# Critères d'information
+
+
+Les critères d'information sont de la forme
+\begin{align*}
+\mathsf{IC} &=-2 \ell(\widehat{\boldsymbol{\beta}}, \widehat{\sigma}^2) +\text{pénalité}\times \text{nb param} \\&= n \ln (\widehat{\mathsf{EQM}}) +\text{pénalité}\cdot \text{nb param}+ \text{constante},
+\end{align*}
+
+Le critère d'Akaike ($\text{AIC}$) utilise une pénalité de 2, le critère bayésien ($\text{BIC}$) de $\ln(n)$.
+
+
+# Utiliser les critères d'information
+
+- Plus la valeur du critère d'information, meilleure est l'adéquation (et donc la performance).
+- La pénalité assure que les modèles plus simples ne sont pas systématiquement retournés.
+- Le $\textsf{BIC}$ retourne toujours des modèles plus parcimonieux (simples) que le $\textsf{AIC}$.
+- Génériques `logLik`, `AIC` et `BIC` en **R**
+
+# Illustration
+
+```{r}
+#| label: EQMa_comput
+#| eval: true
+#| echo: false
+#| cache: true
+#| message: false
+lmkfold <- function(formula, data, k, ...){
+  accu <- 0
+  k <- as.integer(k)
+  n <- nrow(data)
+  gp <- sample.int(n, n, replace = FALSE)
+  folds <- split(gp, cut(seq_along(gp), k, labels = FALSE))
+  for(i in 1 :k){
+   g <- as.integer(unlist(folds[i]))
+   fitlm <- lm(formula, data[-g,])
+   accu <- accu + sum((data[g, all.vars(formula)[1]] -predict(fitlm, newdata=data[g,]))^2)
+  }
+return(accu/n)
+}
+
+EQM <- matrix(0, nrow = 10, ncol = 7)
+EQMcv <- matrix(0, nrow = 10, ncol = 100)
+suppressPackageStartupMessages(library(caret))
+library(ggplot2)
+for(i in 1 :10){
+  set.seed(i*1000)
+  # Créer le modèle avec une chaîne de caractère pour le polynôme
+  meanmod <- as.formula(paste0("y~", paste0("I(x^",1 :i,")", collapse= "+")))
+  mod <-  lm(meanmod, data = train)
+  # Calculer l'erreur moyenne dans les deux échantillons
+  EQM[i,1 :2] <- c(mean(resid(mod)^2), #apprentissage
+               mean((test$y - predict(mod, newdata = test))^2)) #échantillon test
+  EQM[i,3] <- summary(mod)$r.squared
+  EQM[i,4] <- summary(mod)$adj.r.squared
+  EQM[i,5] <- AIC(mod)
+  EQM[i,6] <- BIC(mod)
+# validation croisée avec 10 groupes
+  EQMcv[i,] <-  replicate(n = 100L,
+                    train(form = meanmod, data = train, method = "lm",
+                trControl = trainControl(method = "cv",
+                                         number = 10))$results$RMSE^2)
+  # EQM[i,7] <- lmkfold(formula = meanmod, data = train, k = 10)
+}
+  EQM[,7] <- rowMeans(EQMcv)
+
+
+EQMdat <- data.frame(ordre = rep(1 :10, length.out = 20),
+           EQM = c(EQM[,1 :2]),
+           echantillon = factor(c(rep("apprentissage",10), rep("théorique", 10)))
+)
+```
+
+```{r}
+#| label: fig-polynome-ajustement
+#| eval: true
+#| echo: false
+#| out-width: '80%'
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Critères d'information en fonction de l'ordre du polynôme."
+EQM_sub <- EQM[,c(1,2,5,6)]
+colnames(EQM_sub) <- c("echantillon",
+                       "validation", 
+                       "AIC",
+                       "BIC")
+EQM_graph <- data.frame(ordre = 1:10, EQM_sub[,3:4]) |>
+  tidyr::pivot_longer(cols = -1,
+                      names_to = "methode",
+                      values_to = "eqm") # |>
+  # dplyr::mutate(methode = forcats::lvls_reorder(
+  #   factor(methode), idx = c(3L,4L,1L,2L)))
+ggplot(data = EQM_graph, 
+       aes(x = ordre, 
+           y = eqm, 
+           color = methode)) +
+  geom_line() +
+  geom_point(aes(shape=methode, color=methode)) +
+  labs(x = "ordre du polynôme",
+       y = "",
+       subtitle = "") +
+  scale_color_manual(values=MetBrewer::met.brewer("Hiroshige", 2)) +
+  scale_x_continuous(breaks = 0:10,
+                     labels = as.character(0:10)) +
+  theme_classic() +
+  theme(legend.position="bottom",
+        legend.title=element_blank())
+```
+ 
+---
+
+# Séparation des données
+
+Ne pas utiliser les données employés pour ajuster un modèle pour **prédire la performance**.
+
+- échantillons d'apprentissage/validation/test (fixes)
+- validation croisée
+
+# Validation externe
+
+Séparer l'ensemble d'observations en plusieurs groupes
+
+- l'échantillon d'apprentissage pour l'ajustement du modèle
+- l'échantillon de validation pour l'estimation de la performance
+- l'échantillon test pour l'inférence (optionnel)
+
+En pratique, il faut beaucoup d'observations!
+
+# Avantages et inconvénients de la validation externe
+
+Applicable en toute généralité peu importe le type de modèle.
+
+Cette approche, qui compartimente les échantillons, n'est pas sans faille.
+
+- On obtient un résultat différent selon la division
+- Gaspillage potentiel
+- Choix d'ordinaire aléatoire, mais choix particuliers de fenêtre selon données (par ex., séries chronologiques)
+
+# Validation croisée
+
+Une autre méthode de rééchantillonage
+
+Diviser l'échantillon en $K$ groupes d'observations de taille moyenne égale
+
+- utiliser $K-1$ groupes pour l'ajustement
+- estimer la performance avec les données du dernier groupe 
+
+Les regroupements sont aléatoires, tout comme la mesure finale de performance!
+
+# Étapes de la validation croisée à $K$ groupes
+
+1. Diviser l'échantillon au hasard en $K$ parties $P_1, P_2, \ldots, P_K$ contenant toutes à peu près le même nombre d'observations.
+2. Pour $j = 1$ à $K$,
+    i. Enlever la partie $j$.
+    ii. Estimer les paramètres du modèle en utilisant les observations des $K-1$ autres parties combinées.
+    iii. Calculer la mesure de performance (par exemple la somme du carré des erreurs $\{Y_i - \widehat{Y}_i\}^2$) de ce modèle pour le groupe $P_j$.
+3. Combiner les $K$ estimations de performance pour obtenir une mesure de performance finale.
+
+# Illustration de la validation croisée
+
+```{r}
+#| label: validationcroiseeillust
+#| eval: true
+#| echo: false
+#| out-width: '80%'
+
+col <- rep(1, 25)
+col[(0:4)*5+1:5] <- 2
+df <- data.frame(
+  x = rep(1:5, 5),
+  y = rep(1:5, each = 5),
+  identification = factor(col, labels = c("apprentissage","validation"))
+)
+ggplot(df, aes(x, y)) +
+  geom_tile(aes(fill = identification), colour = "white", lwd = 2) +
+  ylab("étape") +
+  xlab("division") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank()) +
+  scale_color_manual(values=MetBrewer::met.brewer("Hiroshige", 2)) +
+  scale_fill_manual(values=MetBrewer::met.brewer("Hiroshige", 2)) +
+  scale_y_continuous(
+    breaks = 1:5,
+    minor_breaks = NULL,
+    expand = c(0,0),
+    labels = 5:1)
+
+```
+
+# Combien de groupes $K$ pour la validation croisée?
+
+La validation croisée est plus coûteuse parce qu'on doit ajuster $K$ fois le modèles
+
+- Pour la régression linéaire, choisir $K=n$ (_leave-one-out cross-validation_) permet d'éviter de réajuster le modèle grâce à un artifice de calcul.
+- On recommande habituellement de prendre $K=\min\{n^{1/2}, 10\}$ groupes.
+- les choix de $K=5$ ou $K=10$ sont ceux qui revient le plus souvent en pratique.
+
+
+\footnotesize
+
+Voir Davison \& Hinkley (1997), *Bootstrap methods and their applications*, Section 6.4 pour une discussion plus étoffée et l'algorithme 6.5 pour une meilleure implémentation.
+
+\normalsize 
+
+# Validation croisée = résultat aléatoire!
+
+Soit $\widehat{\mathsf{EQM}}_{\text{VC}}$ l'estimation de l'erreur quadratique moyenne  obtenue par validation croisée à $K$ plis pour un modèle $\mathcal{M}$ donné.
+
+Si on a un nombre similaire d'observations dans chaque groupe, on peut plutôt
+
+- calculer l'erreur moyenne quadratique de chaque pli, disons $\widehat{\mathsf{EQM}}_{\text{VC}, k}$
+- si $K$ est suffisamment grand (disons $K>10$), on peut estimer l'écart-type empirique de cette moyenne via
+$$ \mathsf{sd}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \frac{1}{K-1} \sum_{k=1}^{K} (\widehat{\mathsf{EQM}}_{\text{VC}, k}-\widehat{\mathsf{EQM}}_{\text{VC}})^2$$
+
+
+# Règle d'un écart-type
+
+Suivant Breiman, on choisit le modèle le plus simple parmi un ensemble $\mathcal{M}_0 \subset\cdots \subset \mathcal{M}_m$ qui satisfasse
+
+$$\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_i) \leq \min_{m = i+1}^M \widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m) + \mathsf{sd}\{\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m)\}$$
+
+Choisir le modèle le plus simple qui soit à au plus un écart-type de la performance des modèles plus compliqués.
+
+# Validation croisée en **R**
+
+
+ Le paquet `caret` a une fonction pour faire la validation croisée.
+ 
+```{r, echo = TRUE, eval = FALSE}
+cv_caret <- 
+  caret::train(form = formula(y ~ poly(x, degree = 3)), 
+             data = polynome, 
+             method = "lm",
+             trControl = caret::trainControl(
+               method = "cv",
+               number = 10)) #nb plis
+reqm_cv <- cv_caret$results$RMSE # racine EQM
+reqm_sd_cv <- cv_caret$results$RMSESD
+```
+
+Aussi `boot::cv.glm()` qui inclut une correction de biais pour les modèles linéaires généralisé.
+
+# Résultats de la validation croisée
+
+
+```{r}
+#| label: fig-plotcv
+#| echo: false
+#| out-width: '100%'
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: 'center'
+#| cache: true
+#| fig-cap: "Boîtes à moustaches des 100 estimations de l'erreur quadratique moyenne obtenues par validation croisée à 10 plis."
+EQMdat <- data.frame(ordre = rep(1:10, length.out = 20),
+           EQM = c(EQM[,2], rowMeans(EQMcv)),
+           echantillon = factor(c(rep("théorique",10), rep("validation croisée", 10)))
+)
+ggplot(data = EQMdat, aes(x=ordre, y=EQM)) +
+  geom_boxplot(data = data.frame(EQM = c(t(EQMcv)),
+                                 ordre = rep(1:10, each=100)),
+               aes(group=ordre),
+               show.legend = FALSE,
+               outlier.shape=NA) +
+  #geom_line(aes(color=color=echantillon)) +
+  geom_point(aes(shape=echantillon, color=echantillon)) +
+  labs( x = "ordre du polynôme",
+        y = "",
+     subtitle = "") +
+  theme_classic() + 
+  theme(legend.position="bottom",
+        legend.title=element_blank()) +
+  scale_color_manual(values=c("#E69F00", "#56B4E9")) +
+  scale_x_continuous(breaks = 0:10,
+                     labels = as.character(0:10))
+
+```
+
+
+# Récapitulatif
+
+- Le choix de la complexité d'un modèle est un compromis entre 
+    - le biais (modèle trop simple, mal spécifié) et
+    - la variance (même nombre d'observations/budget, plus de paramètres à estimer, estimations moins fiables)
+- L'erreur quadratique moyenne est la mesure usuelle de la performance d'un modèle linéaire
+
+# Récapitulatif
+
+Si on estime la performance avec les mêmes données qui ont servi à l'ajustement, on surestime la performance
+
+- l'erreur quadratique moyenne calculée sur les mêmes données qui ont servi à l'entraînement est biaisée
+- cela mène à du **surajustement**
+   
+# Récapitulatif
+
+Trois méthodes pour estimer de manière plus objective la performance d'un modèle
+
+- Critères d'information (pénalisation)
+- Validation externe
+- Validation croisée
+
+
+\footnotesize 
+
+Vous devez être en mesure de nommer les forces et faiblesses et d'expliquer le fonctionnement (avec du pseudocode).
+
+
+
 
