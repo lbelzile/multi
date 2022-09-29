@@ -525,12 +525,12 @@ knitr::include_graphics("figures/fig-lassopath.pdf")
 
 ```{r}
 #| label: fig-lassopath
-#| eval: false
-#| echo: true
+#| eval: true
+#| echo: false
 #| fig.cap: "Coefficients du modèle en fonction de la pénalité"
 #| out.width: '80%'
 #| fig.width: 7
-#| fig.height: 4
+#| fig.height: 5
 lasso_path <- 
   glmnet::glmnet(
     x = as.matrix(as.matrix(matmod)),
@@ -548,7 +548,8 @@ Une fois la valeur de $\lambda$ choisie, on réestime le modèle avec la pénali
 ```{r}
 #| eval: false
 #| echo: true
-lambopt <- cv_output$lambda.min #ou cv_output$lambda.1se
+lambopt <- cv_output$lambda.min 
+ #ou cv_output$lambda.1se
 lasso_best <- 
   glmnet::glmnet(
     x = as.matrix(as.matrix(matmod)),
