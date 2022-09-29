@@ -42,14 +42,14 @@ But: maximiser les levées de fonds
 
 Clients qui ont 
 
-- plus de 18 ans
+- plus de 18 ans,
 - au moins un an d'historique avec l'entreprise et 
 - qui ont effectué au moins un achat au cours de la dernière année.
 
 Regroupements:
 
-- 1K personnes dans l'échantillon d'apprentissage
-- 100K personnes pour l'ensemble des autres clients
+- 1K personnes dans l'échantillon d'apprentissage,
+- 100K personnes pour l'ensemble des autres clients.
 
 # Liste des variables
 
@@ -57,8 +57,8 @@ Regroupements:
 \footnotesize 
 
 
-- `yachat`, une variable binaire qui indique si le client a acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon.
-- `ymontant`, le montant de l'achat si le client a acheté quelque chose.
+- `yachat`, une variable binaire qui indique si le client a acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon;
+- `ymontant`, le montant de l'achat si le client a acheté quelque chose;
 - `x1`: sexe de l'individu, soit homme (0) ou femme (1);
 - `x2`: l'âge (en année);
 - `x3`: variable catégorielle indiquant le revenu, soit moins de 35 000\$ (1), entre 35 000\$ et 75 000\$ (2) ou plus de 75 000$ (3);
@@ -225,10 +225,9 @@ Le modèle utilise les données des 210 personnes de l'échantillon d'apprentiss
 # Séparation de l'échantillon
 
 On conserve 100 000 observations test pour vérifier la performance
+
     - (oracle) réponses inconnues à toutes fins pratiques
 
-
-Trop peu de données (210) pour la validation externe.
 
 
 \footnotesize
@@ -239,75 +238,22 @@ Trop peu de données (210) pour la validation externe.
 #| cache: true
 data(dbm, package = "hecmulti")
 dbm_a <- dbm |>
-  dplyr::filter(test == 0, #données d'entraînement
-                !is.na(ymontant)) 
-# personnes qui ont acheté
+  dplyr::filter(
+    test == 0, #données d'entraînement
+    !is.na(ymontant)) # personnes qui ont acheté
 ```
 
 \normalsize
 
-# Recherche exhaustive
+# Recherche d'un modèle
 
 Idée initiale: 
 
-- essayer tous les modèles possibles .
-- estimer la performance (erreur quadratique moyenne) avec validation croisée ou critères d'information.
-- déterminer le meilleur modèle.
-
-# Fléau de la dimensionalité
-
-Combien de modèles incluant les combinaisons de $p$ variables?
-
-Dans l'exemple, $p=14$ variables de base en incluant les indicatrices pour les variables catégorielles multiniveaux (revenu `x3` et région `x4`)
+- essayer tous les modèles possibles,
+- estimer pour chacun la performance (erreur quadratique moyenne) avec validation croisée ou critères d'information,
+- déterminer le meilleur modèle parmi l'ensemble de modèles.
 
 
-Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles.
-
-```{r}
-#| label: tbl-02-table3
-#| echo: false
-#| eval: true
-#| tbl-cap: "Nombres de modèles en fonction du nombre de paramètres."
-#| warning: false
-p <- c(5,10,15,20,25,30)
-npar <- 2^p
-options(scipen=100)
-knitr::kable(x = data.frame(p = p, npar = npar),
-             digits = 0,
-             col.names = c("$p$",
-                          "nombre de paramètres"),
-            escape = FALSE,
-             booktabs = TRUE)
-```
-
-# Algorithme par séparation et évaluation
-
-Il est possible de déterminer certains modèles sous-optimaux.
-
-L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats.
-
-
-\footnotesize
-
-```{r}
-#| echo: true
-#| eval: true
-#| cache: true
-rec_ex <- leaps::regsubsets(
-  x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10, 
-  nvmax = 13L,
-  method = "exhaustive",
-  data = dbm_a)
-resume_rec_ex <- summary(rec_ex,
-                         matrix.logical = TRUE)
-# Trouver le modèle avec le plus petit BIC
-min_BIC <- which.min(resume_rec_ex$bic)
-# Nom des variables dans le modèle retenu
-rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
-```
-
-
-\normalsize
 
 # Approximation
 
@@ -335,9 +281,68 @@ formule <-
             I(x2^2) + I(x6^2) + I(x7^2) +
             I(x8^2) + I(x9^2) + I(x10^2))
 mod_complet <- lm(formule, data = dbm_a)
+# Matrice avec toutes les variables
+matmod <- model.matrix(mod_complet)
 ```
 
 Le modèle est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` variables.
+
+# Fléau de la dimensionalité
+
+Combien de modèles incluant les combinaisons de $p$ variables?
+
+Dans l'exemple, $p=14$ variables de base en incluant les indicatrices pour les variables catégorielles multiniveaux (revenu `x3` et région `x4`)
+
+
+Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles.
+
+```{r}
+#| label: tbl-02-table3
+#| echo: false
+#| eval: true
+#| tbl-cap: "Nombres de modèles en fonction du nombre de paramètres."
+#| warning: false
+p <- c(5,10,15,20,25,30)
+npar <- 2^p
+options(scipen=100)
+knitr::kable(x = data.frame(p = p, npar = npar),
+             digits = 0,
+             col.names = c("$p$",
+                          "nombre de paramètres"),
+            escape = FALSE,
+             booktabs = TRUE)
+```
+
+# Recherche exhaustive
+
+Essayer **tous** les modèles et choisir le meilleur (si $p$ est petit).
+
+
+L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux.
+
+
+\footnotesize
+
+```{r}
+#| echo: true
+#| eval: true
+#| cache: true
+# Recherche exhaustive avec variables de base
+rec_ex <- leaps::regsubsets(
+  x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10, 
+  nvmax = 13L,
+  method = "exhaustive",
+  data = dbm_a)
+resume_rec_ex <- summary(rec_ex,
+                         matrix.logical = TRUE)
+# Trouver le modèle avec le plus petit BIC
+min_BIC <- which.min(resume_rec_ex$bic)
+# Nom des variables dans le modèle retenu
+rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
+```
+
+
+\normalsize
 
 # Mot d'ordre
 
@@ -412,9 +417,9 @@ which.min(summary(rec_seq)$bic)
 # Sélection séquentielle avec critères d'informations en **R** 
 \footnotesize
 
-La procédure est plus longue à rouler(car les modèles linéaires sont ajustés)
+La procédure est plus longue à rouler (car les modèles linéaires sont ajustés).
 
-On ajoute ou retire la variable qui améliore le plus le critère de sélection  à chaque étape (différent de **SAS**).
+On ajoute ou retire la variable qui améliore le plus le critère de sélection  à chaque étape (comportement différent de **SAS**).
 
 ```{r}
 #| label: modele-sequentiel2
@@ -469,7 +474,8 @@ Pénalisation la norme de $\beta_1, \ldots, \beta_p$
     - pas invariant aux transformations affines (par ex., conversion de Celcius en Farenheit)
 
 **Solution**: standardiser variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ **et** variable réponse $\boldsymbol{y}$ (moyenne zéro, écart-type unitaire).
-   - vérifier selon le logiciel, cette étape peut-être effectuée implicitement
+
+- vérifier selon le logiciel, cette étape peut-être effectuée implicitement
 
 
 # LASSO
@@ -497,13 +503,13 @@ de valeurs candidates.
 #| eval: false
 #| echo: true
 library(glmnet)
-lambda_seq <- seq(from = 0.1, to = 2, by = 0.01)
+lambda_seq <- seq(from = 0.01, to = 2, by = 0.01)
 cv_output <- 
-  glmnet::cv.glmnet(x = as.matrix(dbm_a[,1:10]), 
+  glmnet::cv.glmnet(x = as.matrix(matmod), 
             y = dbm_a$ymontant, 
             alpha = 1, 
             lambda = lambda_seq)
-plot(cv.output)
+plot(cv_output)
 ```
 
 
@@ -515,26 +521,65 @@ On choisit typiquement $\lambda$ par validation croisée en appliquant la règle
 knitr::include_graphics("figures/fig-lassopath.pdf")
 ```
 
+# Paramètres
+
+```{r}
+#| label: fig-lassopath
+#| eval: false
+#| echo: true
+#| fig.cap: "Coefficients du modèle en fonction de la pénalité"
+#| out.width: '80%'
+#| fig.width: 7
+#| fig.height: 4
+lasso_path <- 
+  glmnet::glmnet(
+    x = as.matrix(as.matrix(matmod)),
+    y = dbm_a$ymontant,
+    alpha = 1, 
+    lambda = seq(from = 0.01, to = 10, by = 0.01))
+plot(lasso_path)
+```
+
+
 # Évaluation et prédiction
 
-Une fois la valeur de $\lambda$ choisie, on réestime le modèle avec la pénalité et on calcule l'erreur quadratique moyenne.
+Une fois la valeur de $\lambda$ choisie, on réestime le modèle avec la pénalité.
 
 ```{r}
 #| eval: false
 #| echo: true
-lambopt <- cv_output$lambda.min
+lambopt <- cv_output$lambda.min #ou cv_output$lambda.1se
 lasso_best <- 
   glmnet::glmnet(
-    x = as.matrix(dbm_a[,1:10]),
+    x = as.matrix(as.matrix(matmod)),
     y = dbm_a$ymontant,
     alpha = 1, 
     lambda = lambopt)
+```
+
+# Prédictions
+On crée une matrice avec les données de validation et on calcule l'erreur quadratique moyenne.
+
+\footnotesize 
+
+```{r}
+#| eval: false
+#| echo: true
 # Prédictions et calcul de l'EQM
+# Données externes
+dbm_v <- dbm |>
+  dplyr::filter(
+    test == 1,
+    !is.na(ymontant))
 pred <- predict(lasso_best, 
                 s = lambopt, 
-                newx = as.matrix(dbm_a[,-1]))
-eqm_lasso <- mean((pred - dbm_a$ymontant)^2)
+                newx = as.matrix(
+                  model.matrix(formule, 
+                               data = dbm_v)))
+eqm_lasso <- mean((pred - dbm_v$ymontant)^2)
 ```
+
+\normalsize
 
 # Motivation pour la moyenne de modèles
 
@@ -588,19 +633,19 @@ En incluant uniquement les variables de base
 En incluant les termes de base, les carrés et les interactions d'ordre 2.
 
 | nombre de variables | $\mathsf{EQM}$ | méthode |
-|:----:|:-----|:-----|
-| 104 | 19,63 | toutes les variables |
-| 21 | 12| séquentielle, choix selon $\mathsf{BIC}$ |
-| 15 | 12,31 | séquentielle, choix selon $\mathsf{AIC}$ |
-| 30 | 12 | LASSO, validation croisée avec 10 groupes |
+|:---:|:-------|:-------------------------|
+| 104 | 19,63  | toutes les variables     |
+| 21  | 12     | séquentielle, choix selon $\mathsf{AIC}$ |
+| 15  | 12,31  | séquentielle, choix selon $\mathsf{BIC}$ |
+| 30  | 12     | LASSO, validation croisée avec 10 groupes |
 
 #  Récapitulatif
 
 
-- Le nombre de modèles possibles augmente rapidement avec le nombre de prédicteurs, .
+- Le nombre de modèles possibles augmente rapidement avec le nombre de prédicteurs.
  - Si un modèle est mal spécifié (variables importantes manquantes), alors les estimations sont biaisées. 
-- Si le modèle est surspécifié, les coefficients correspondants aux variables superflues incluses sont en moyenne nuls, mais contribuent à l’augmentation de la variance 
-- **Compromis biais/variance**
+- Si le modèle est surspécifié, les coefficients correspondants aux variables superflues incluses sont en moyenne nuls, mais contribuent à l’augmentation de la variance. 
+- **Compromis biais/variance**.
 
 # Récapitulatif
 
@@ -621,15 +666,16 @@ En incluant les termes de base, les carrés et les interactions d'ordre 2.
 
 Certaines méthodes de pénalisation directe changent la fonction objective:
 
-   - introduction de biais pour les coefficients
-   - idée globale: échanger biais contre variabilité moindre
+   - introduction de biais pour les coefficients.
+   - idée globale: échanger biais contre variabilité moindre.
    
    
-Une pénalité particulière (LASSO) contraint certains paramètres à être exactement nuls
+Une pénalité particulière (LASSO) contraint certains paramètres à être exactement nuls,
 
 - correspond implicitement à une sélection de variables.
 
 # Récapitulatif
 
 - On applique le critère de sélection sur la liste de modèles candidats pour retenir celui qui donne la meilleure performance.
-- Pour éviter une sélection rigide, on peut perturber les données et répéter la procédure pour calculer une moyenne de modèles. Cette approche est très coûteuse en calcul.
+- Pour éviter une sélection rigide, on peut perturber les données et répéter la procédure pour calculer une moyenne de modèles. 
+- Cette approche est très coûteuse en calcul.

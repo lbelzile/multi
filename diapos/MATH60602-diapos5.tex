@@ -220,7 +220,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable, boxrule=0pt, frame hidden, enhanced, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, frame hidden, enhanced, interior hidden, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Présentation des données}
 \protect\hypertarget{pruxe9sentation-des-donnuxe9es}{}
@@ -247,7 +247,7 @@ Clients qui ont
 \begin{itemize}
 \tightlist
 \item
-  plus de 18 ans
+  plus de 18 ans,
 \item
   au moins un an d'historique avec l'entreprise et
 \item
@@ -259,9 +259,9 @@ Regroupements:
 \begin{itemize}
 \tightlist
 \item
-  1K personnes dans l'échantillon d'apprentissage
+  1K personnes dans l'échantillon d'apprentissage,
 \item
-  100K personnes pour l'ensemble des autres clients
+  100K personnes pour l'ensemble des autres clients.
 \end{itemize}
 \end{frame}
 
@@ -273,10 +273,10 @@ Regroupements:
 \tightlist
 \item
   \texttt{yachat}, une variable binaire qui indique si le client a
-  acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon.
+  acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon;
 \item
   \texttt{ymontant}, le montant de l'achat si le client a acheté quelque
-  chose.
+  chose;
 \item
   \texttt{x1}: sexe de l'individu, soit homme (0) ou femme (1);
 \item
@@ -433,10 +433,11 @@ d'apprentissage qui ont acheté suite à l'envoi du catalogue.
 
 \begin{frame}[fragile]{Séparation de l'échantillon}
 \protect\hypertarget{suxe9paration-de-luxe9chantillon}{}
-On conserve 100 000 observations test pour vérifier la performance -
-(oracle) réponses inconnues à toutes fins pratiques
+On conserve 100 000 observations test pour vérifier la performance
 
-Trop peu de données (210) pour la validation externe.
+\begin{verbatim}
+- (oracle) réponses inconnues à toutes fins pratiques
+\end{verbatim}
 
 \footnotesize
 
@@ -444,95 +445,29 @@ Trop peu de données (210) pour la validation externe.
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(dbm, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
 \NormalTok{dbm\_a }\OtherTok{\textless{}{-}}\NormalTok{ dbm }\SpecialCharTok{|\textgreater{}}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\CommentTok{\#données d\textquotesingle{}entraînement}
-                \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(ymontant)) }
-\CommentTok{\# personnes qui ont acheté}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}
+\NormalTok{    test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\CommentTok{\#données d\textquotesingle{}entraînement}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(ymontant)) }\CommentTok{\# personnes qui ont acheté}
 \end{Highlighting}
 \end{Shaded}
 
 \normalsize
 \end{frame}
 
-\begin{frame}{Recherche exhaustive}
-\protect\hypertarget{recherche-exhaustive}{}
+\begin{frame}{Recherche d'un modèle}
+\protect\hypertarget{recherche-dun-moduxe8le}{}
 Idée initiale:
 
 \begin{itemize}
 \tightlist
 \item
-  essayer tous les modèles possibles .
+  essayer tous les modèles possibles,
 \item
-  estimer la performance (erreur quadratique moyenne) avec validation
-  croisée ou critères d'information.
+  estimer pour chacun la performance (erreur quadratique moyenne) avec
+  validation croisée ou critères d'information,
 \item
-  déterminer le meilleur modèle.
+  déterminer le meilleur modèle parmi l'ensemble de modèles.
 \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Fléau de la dimensionalité}
-\protect\hypertarget{fluxe9au-de-la-dimensionalituxe9}{}
-Combien de modèles incluant les combinaisons de \(p\) variables?
-
-Dans l'exemple, \(p=14\) variables de base en incluant les indicatrices
-pour les variables catégorielles multiniveaux (revenu \texttt{x3} et
-région \texttt{x4})
-
-Chaque variable est incluse (ou pas): il y a
-\(2^p=2\times 2 \times \cdots \times 2\) (\(p\) fois) modèles.
-
-\hypertarget{tbl-02-table3}{}
-\begin{longtable}[]{@{}rr@{}}
-\caption{\label{tbl-02-table3}Nombres de modèles en fonction du nombre
-de paramètres.}\tabularnewline
-\toprule()
-\(p\) & nombre de paramètres \\
-\midrule()
-\endfirsthead
-\toprule()
-\(p\) & nombre de paramètres \\
-\midrule()
-\endhead
-5 & 32 \\
-10 & 1024 \\
-15 & 32768 \\
-20 & 1048576 \\
-25 & 33554432 \\
-30 & 1073741824 \\
-\bottomrule()
-\end{longtable}
-\end{frame}
-
-\begin{frame}[fragile]{Algorithme par séparation et évaluation}
-\protect\hypertarget{algorithme-par-suxe9paration-et-uxe9valuation}{}
-Il est possible de déterminer certains modèles sous-optimaux.
-
-L'algorithme par séparation et évaluation (\emph{branch and bound})
-recherche de manière efficace sans essayer tous les modèles candidats.
-
-\footnotesize
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{rec\_ex }\OtherTok{\textless{}{-}}\NormalTok{ leaps}\SpecialCharTok{::}\FunctionTok{regsubsets}\NormalTok{(}
-  \AttributeTok{x =}\NormalTok{ ymontant }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1}\SpecialCharTok{+}\NormalTok{x2}\SpecialCharTok{+}\NormalTok{x3}\SpecialCharTok{+}\NormalTok{x4}\SpecialCharTok{+}\NormalTok{x5}\SpecialCharTok{+}\NormalTok{x6}\SpecialCharTok{+}\NormalTok{x7}\SpecialCharTok{+}\NormalTok{x8}\SpecialCharTok{+}\NormalTok{x9}\SpecialCharTok{+}\NormalTok{x10, }
-  \AttributeTok{nvmax =}\NormalTok{ 13L,}
-  \AttributeTok{method =} \StringTok{"exhaustive"}\NormalTok{,}
-  \AttributeTok{data =}\NormalTok{ dbm\_a)}
-\NormalTok{resume\_rec\_ex }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(rec\_ex,}
-                         \AttributeTok{matrix.logical =} \ConstantTok{TRUE}\NormalTok{)}
-\CommentTok{\# Trouver le modèle avec le plus petit BIC}
-\NormalTok{min\_BIC }\OtherTok{\textless{}{-}} \FunctionTok{which.min}\NormalTok{(resume\_rec\_ex}\SpecialCharTok{$}\NormalTok{bic)}
-\CommentTok{\# Nom des variables dans le modèle retenu}
-\NormalTok{rec\_ex}\SpecialCharTok{$}\NormalTok{xnames[resume\_rec\_ex}\SpecialCharTok{$}\NormalTok{which[min\_BIC,]]}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
- [1] "(Intercept)" "x1"          "x32"         "x33"         "x45"        
- [6] "x5"          "x6"          "x7"          "x8"          "x10"        
-\end{verbatim}
-
-\normalsize
 \end{frame}
 
 \begin{frame}{Approximation}
@@ -569,11 +504,82 @@ d'ordre 2):
             \FunctionTok{I}\NormalTok{(x2}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x6}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x7}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
             \FunctionTok{I}\NormalTok{(x8}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x9}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x10}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
 \NormalTok{mod\_complet }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(formule, }\AttributeTok{data =}\NormalTok{ dbm\_a)}
+\CommentTok{\# Matrice avec toutes les variables}
+\NormalTok{matmod }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(mod\_complet)}
 \end{Highlighting}
 \end{Shaded}
 
 Le modèle est clairement \textbf{surajusté} avec 105 coefficients pour
 210 variables.
+\end{frame}
+
+\begin{frame}[fragile]{Fléau de la dimensionalité}
+\protect\hypertarget{fluxe9au-de-la-dimensionalituxe9}{}
+Combien de modèles incluant les combinaisons de \(p\) variables?
+
+Dans l'exemple, \(p=14\) variables de base en incluant les indicatrices
+pour les variables catégorielles multiniveaux (revenu \texttt{x3} et
+région \texttt{x4})
+
+Chaque variable est incluse (ou pas): il y a
+\(2^p=2\times 2 \times \cdots \times 2\) (\(p\) fois) modèles.
+
+\hypertarget{tbl-02-table3}{}
+\begin{longtable}[]{@{}rr@{}}
+\caption{\label{tbl-02-table3}Nombres de modèles en fonction du nombre
+de paramètres.}\tabularnewline
+\toprule()
+\(p\) & nombre de paramètres \\
+\midrule()
+\endfirsthead
+\toprule()
+\(p\) & nombre de paramètres \\
+\midrule()
+\endhead
+5 & 32 \\
+10 & 1024 \\
+15 & 32768 \\
+20 & 1048576 \\
+25 & 33554432 \\
+30 & 1073741824 \\
+\bottomrule()
+\end{longtable}
+\end{frame}
+
+\begin{frame}[fragile]{Recherche exhaustive}
+\protect\hypertarget{recherche-exhaustive}{}
+Essayer \textbf{tous} les modèles et choisir le meilleur (si \(p\) est
+petit).
+
+L'algorithme par séparation et évaluation (\emph{branch and bound})
+recherche de manière efficace sans essayer tous les modèles candidats et
+écarte d'office les modèles sous-optimaux.
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Recherche exhaustive avec variables de base}
+\NormalTok{rec\_ex }\OtherTok{\textless{}{-}}\NormalTok{ leaps}\SpecialCharTok{::}\FunctionTok{regsubsets}\NormalTok{(}
+  \AttributeTok{x =}\NormalTok{ ymontant }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1}\SpecialCharTok{+}\NormalTok{x2}\SpecialCharTok{+}\NormalTok{x3}\SpecialCharTok{+}\NormalTok{x4}\SpecialCharTok{+}\NormalTok{x5}\SpecialCharTok{+}\NormalTok{x6}\SpecialCharTok{+}\NormalTok{x7}\SpecialCharTok{+}\NormalTok{x8}\SpecialCharTok{+}\NormalTok{x9}\SpecialCharTok{+}\NormalTok{x10, }
+  \AttributeTok{nvmax =}\NormalTok{ 13L,}
+  \AttributeTok{method =} \StringTok{"exhaustive"}\NormalTok{,}
+  \AttributeTok{data =}\NormalTok{ dbm\_a)}
+\NormalTok{resume\_rec\_ex }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(rec\_ex,}
+                         \AttributeTok{matrix.logical =} \ConstantTok{TRUE}\NormalTok{)}
+\CommentTok{\# Trouver le modèle avec le plus petit BIC}
+\NormalTok{min\_BIC }\OtherTok{\textless{}{-}} \FunctionTok{which.min}\NormalTok{(resume\_rec\_ex}\SpecialCharTok{$}\NormalTok{bic)}
+\CommentTok{\# Nom des variables dans le modèle retenu}
+\NormalTok{rec\_ex}\SpecialCharTok{$}\NormalTok{xnames[resume\_rec\_ex}\SpecialCharTok{$}\NormalTok{which[min\_BIC,]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "(Intercept)" "x1"          "x32"         "x33"         "x45"        
+ [6] "x5"          "x6"          "x7"          "x8"          "x10"        
+\end{verbatim}
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Mot d'ordre}
@@ -776,8 +782,14 @@ Pénalisation la norme de \(\beta_1, \ldots, \beta_p\)
 
 \textbf{Solution}: standardiser variables explicatives
 \(\mathrm{X}_1, \ldots, \mathrm{X}_p\) \textbf{et} variable réponse
-\(\boldsymbol{y}\) (moyenne zéro, écart-type unitaire). - vérifier selon
-le logiciel, cette étape peut-être effectuée implicitement
+\(\boldsymbol{y}\) (moyenne zéro, écart-type unitaire).
+
+\begin{itemize}
+\tightlist
+\item
+  vérifier selon le logiciel, cette étape peut-être effectuée
+  implicitement
+\end{itemize}
 \end{frame}
 
 \begin{frame}{LASSO}
@@ -809,13 +821,13 @@ vecteur de valeurs candidates.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{library}\NormalTok{(glmnet)}
-\NormalTok{lambda\_seq }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from =} \FloatTok{0.1}\NormalTok{, }\AttributeTok{to =} \DecValTok{2}\NormalTok{, }\AttributeTok{by =} \FloatTok{0.01}\NormalTok{)}
+\NormalTok{lambda\_seq }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from =} \FloatTok{0.01}\NormalTok{, }\AttributeTok{to =} \DecValTok{2}\NormalTok{, }\AttributeTok{by =} \FloatTok{0.01}\NormalTok{)}
 \NormalTok{cv\_output }\OtherTok{\textless{}{-}} 
-\NormalTok{  glmnet}\SpecialCharTok{::}\FunctionTok{cv.glmnet}\NormalTok{(}\AttributeTok{x =} \FunctionTok{as.matrix}\NormalTok{(dbm\_a[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{]), }
+\NormalTok{  glmnet}\SpecialCharTok{::}\FunctionTok{cv.glmnet}\NormalTok{(}\AttributeTok{x =} \FunctionTok{as.matrix}\NormalTok{(matmod), }
             \AttributeTok{y =}\NormalTok{ dbm\_a}\SpecialCharTok{$}\NormalTok{ymontant, }
             \AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }
             \AttributeTok{lambda =}\NormalTok{ lambda\_seq)}
-\FunctionTok{plot}\NormalTok{(cv.output)}
+\FunctionTok{plot}\NormalTok{(cv\_output)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
@@ -835,27 +847,64 @@ valeur minimale).
 \end{figure}
 \end{frame}
 
+\begin{frame}[fragile]{Paramètres}
+\protect\hypertarget{paramuxe8tres}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{lasso\_path }\OtherTok{\textless{}{-}} 
+\NormalTok{  glmnet}\SpecialCharTok{::}\FunctionTok{glmnet}\NormalTok{(}
+    \AttributeTok{x =} \FunctionTok{as.matrix}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(matmod)),}
+    \AttributeTok{y =}\NormalTok{ dbm\_a}\SpecialCharTok{$}\NormalTok{ymontant,}
+    \AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }
+    \AttributeTok{lambda =} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from =} \FloatTok{0.01}\NormalTok{, }\AttributeTok{to =} \DecValTok{10}\NormalTok{, }\AttributeTok{by =} \FloatTok{0.01}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(lasso\_path)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
 \begin{frame}[fragile]{Évaluation et prédiction}
 \protect\hypertarget{uxe9valuation-et-pruxe9diction}{}
 Une fois la valeur de \(\lambda\) choisie, on réestime le modèle avec la
-pénalité et on calcule l'erreur quadratique moyenne.
+pénalité.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{lambopt }\OtherTok{\textless{}{-}}\NormalTok{ cv\_output}\SpecialCharTok{$}\NormalTok{lambda.min}
+\NormalTok{lambopt }\OtherTok{\textless{}{-}}\NormalTok{ cv\_output}\SpecialCharTok{$}\NormalTok{lambda.min }\CommentTok{\#ou cv\_output$lambda.1se}
 \NormalTok{lasso\_best }\OtherTok{\textless{}{-}} 
 \NormalTok{  glmnet}\SpecialCharTok{::}\FunctionTok{glmnet}\NormalTok{(}
-    \AttributeTok{x =} \FunctionTok{as.matrix}\NormalTok{(dbm\_a[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{]),}
+    \AttributeTok{x =} \FunctionTok{as.matrix}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(matmod)),}
     \AttributeTok{y =}\NormalTok{ dbm\_a}\SpecialCharTok{$}\NormalTok{ymontant,}
     \AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }
     \AttributeTok{lambda =}\NormalTok{ lambopt)}
-\CommentTok{\# Prédictions et calcul de l\textquotesingle{}EQM}
-\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_best, }
-                \AttributeTok{s =}\NormalTok{ lambopt, }
-                \AttributeTok{newx =} \FunctionTok{as.matrix}\NormalTok{(dbm\_a[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
-\NormalTok{eqm\_lasso }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{((pred }\SpecialCharTok{{-}}\NormalTok{ dbm\_a}\SpecialCharTok{$}\NormalTok{ymontant)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Prédictions}
+\protect\hypertarget{pruxe9dictions}{}
+On crée une matrice avec les données de validation et on calcule
+l'erreur quadratique moyenne.
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Prédictions et calcul de l\textquotesingle{}EQM}
+\CommentTok{\# Données externes}
+\NormalTok{dbm\_v }\OtherTok{\textless{}{-}}\NormalTok{ dbm }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}
+\NormalTok{    test }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(ymontant))}
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_best, }
+                \AttributeTok{s =}\NormalTok{ lambopt, }
+                \AttributeTok{newx =} \FunctionTok{as.matrix}\NormalTok{(}
+                  \FunctionTok{model.matrix}\NormalTok{(formule, }
+                               \AttributeTok{data =}\NormalTok{ dbm\_v)))}
+\NormalTok{eqm\_lasso }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{((pred }\SpecialCharTok{{-}}\NormalTok{ dbm\_v}\SpecialCharTok{$}\NormalTok{ymontant)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Motivation pour la moyenne de modèles}
@@ -950,8 +999,8 @@ nombre de variables & \(\mathsf{EQM}\) & méthode \\
 \midrule()
 \endhead
 104 & 19,63 & toutes les variables \\
-21 & 12 & séquentielle, choix selon \(\mathsf{BIC}\) \\
-15 & 12,31 & séquentielle, choix selon \(\mathsf{AIC}\) \\
+21 & 12 & séquentielle, choix selon \(\mathsf{AIC}\) \\
+15 & 12,31 & séquentielle, choix selon \(\mathsf{BIC}\) \\
 30 & 12 & LASSO, validation croisée avec 10 groupes \\
 \bottomrule()
 \end{longtable}
@@ -963,16 +1012,16 @@ nombre de variables & \(\mathsf{EQM}\) & méthode \\
 \tightlist
 \item
   Le nombre de modèles possibles augmente rapidement avec le nombre de
-  prédicteurs, .
+  prédicteurs.
 \item
   Si un modèle est mal spécifié (variables importantes manquantes),
   alors les estimations sont biaisées.
 \item
   Si le modèle est surspécifié, les coefficients correspondants aux
   variables superflues incluses sont en moyenne nuls, mais contribuent à
-  l'augmentation de la variance
+  l'augmentation de la variance.
 \item
-  \textbf{Compromis biais/variance}
+  \textbf{Compromis biais/variance}.
 \end{itemize}
 \end{frame}
 
@@ -1024,13 +1073,13 @@ objective:
 \begin{itemize}
 \tightlist
 \item
-  introduction de biais pour les coefficients
+  introduction de biais pour les coefficients.
 \item
-  idée globale: échanger biais contre variabilité moindre
+  idée globale: échanger biais contre variabilité moindre.
 \end{itemize}
 
 Une pénalité particulière (LASSO) contraint certains paramètres à être
-exactement nuls
+exactement nuls,
 
 \begin{itemize}
 \tightlist
@@ -1048,8 +1097,9 @@ exactement nuls
   pour retenir celui qui donne la meilleure performance.
 \item
   Pour éviter une sélection rigide, on peut perturber les données et
-  répéter la procédure pour calculer une moyenne de modèles. Cette
-  approche est très coûteuse en calcul.
+  répéter la procédure pour calculer une moyenne de modèles.
+\item
+  Cette approche est très coûteuse en calcul.
 \end{itemize}
 \end{frame}
 
