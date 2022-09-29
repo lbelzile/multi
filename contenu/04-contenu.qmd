@@ -25,9 +25,10 @@ title: "Sélection de variables"
 <iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
 -->
 
-## Exercices
+## Code
 
-- {{< fa file >}} [Exercices 3](/exercices/03-exercice.html)
+- {{< fa file >}} [Sélection de variables](/contenu/04-contenu.R)
+
 
 ## Objectifs d'apprentissage
 

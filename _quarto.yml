@@ -89,7 +89,7 @@ website:
           contents:
             - evaluations/01-devoir.qmd
             - evaluations/02-devoir.qmd
-        #    - evaluations/03-devoir.qmd
+            - evaluations/03-devoir.qmd
         #    - evaluations/04-devoir.qmd
         #    - evaluations/05-devoir.qmd
         #    - evaluations/06-devoir.qmd
