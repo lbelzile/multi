@@ -118,6 +118,15 @@ website:
           contents:
            - text: "Exercice 3"
              file: exercices/03-exercice.qmd
+           - text: "Solutions 3"
+             file: exercices/03-solution.qmd
+        - section: "Régression logistique"
+          contents:
+           - text: "Exercice 4"
+             file: exercices/04-exercice.qmd
+           - text: "Solutions 4"
+             file: exercices/04-solution.qmd
+
 
   page-footer:
     left: |

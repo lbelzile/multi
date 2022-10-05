@@ -1,0 +1,11 @@
+---
+title: "Régression logistique"
+---
+
+## Exercice 4.1
+
+Les données `logistclient` contiennent des données simulées pour un cas fictif de promotion pour des clients. 
+
+1. Estimez le modèle logistique pour la probabilité que `promo=1` avec les variables explicatives `nachats`, `sexe` et `tclient`.
+2. Interprétez les coefficients du modèle à l'échelle de la cote en terme de pourcentage d'augmentation ou de diminution.
+3. Testez si l'effet de `nachats` est statistiquement significatif à niveau $\alpha = 0.05$.

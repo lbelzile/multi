@@ -16,7 +16,7 @@ execute:
    - *Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l'ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?*
    - *Vérifiez s'il y a des variables catégorielles encodées comme des variables numériques.*
    
-On remarque avec l'aide `?college` que le nombre d'applications, `napplications`, le nombre d'admissions parmi ces applications `nadmission` et le nombre d'offres converties par les candidat.e.s, `ninscrits`, sont reliées et ne peuvent être employées.
+On remarque en consultant la documentation de la base de données à l'aide de `?college` que le nombre d'applications, `napplications`, le nombre d'admissions parmi ces applications `nadmission` et le nombre d'offres converties par les candidat.e.s, `ninscrits`, sont reliées et ne peuvent être employées.
 
 Plusieurs variables seront fortement corrélées parce qu'elles dépendent de la capacité d'accueil de l'établissement d'enseignement. Ainsi, on pourrait créer une variable qui représente le pourcentage de temps partiels pour les premiers cycles (plutôt que le décompte). Les variables `pourcentdoctorat` et `pourcentterminal`, sont fortement corrélées puisque la plupart des diplômes terminaux (incluant les titres professionnels, les doctorats de premier cycle en médecine, etc.) sont des PhD: le modèle choisira la variable la plus adéquate. Il n'y a pas de variables catégorielles hors variables binaires. Côté vérifications d'usage, on note que `tauxdiplom` et `pourcentdoctorat` sont supérieurs à 100%.
    
@@ -41,6 +41,9 @@ db <- college |>
              ninscrits))
 ```
 
+2. *Scindez la base de données en échantillon avec données d'entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire `60602` via `set.seed(60602)`.* 
+   - *Sélectionnez un modèle à l'aide d'une des méthodes couvertes, mais en basant votre choix sur l'erreur moyenne quadratique évaluée sur l'échantillon de validation.*
+
 On peut désormais considérer une séparation en tiers.
 Pour ce faire, je vais échantillonner des variables logiques vrais et faux avec une cote de 2 pour 1 et ensuite sélectionner les lignes qui correspondent.
 
@@ -54,26 +57,35 @@ db_a <- db[test,]
 db_v <- db[!test,]
 ```
 
-Pour l'estimation, on pourrait simplement calculer 
-
+Pour l'estimation, on pourrait simplement calculer l'erreur quadratique moyenne de validation pour tous les cinquante premiers modèles en considérant toutes les interactions d'ordre 2. 
 
 
 ```{r}
 formule <- formula(napplications ~ .^2)
-
-leaps::regsubsets(
+rec_seq <- leaps::regsubsets(
   x = formule, 
   data = db_a,
-  method = "seqrep")
+  method = "seqrep",
+  nvmax = 50)
+
+# Modèle avec la plus petite erreur moyenne quadratique
+eqm_mod <- eval_EQM_regsubsets(
+  model = rec_seq, 
+  select = 1:50,
+  formula = formule,
+  data = db_a,
+  newdata = db_v)
+library(ggplot2)
+ggplot(data = data.frame(
+  ntermes = 1:50,
+  reqm = eqm_mod, 
+  bic = summary(rec_seq)$bic),
+  mapping = aes(x = ntermes, y = reqm)) +
+  geom_line()
+# Nom des variables dans le modèle retenu
+rec_seq$xnames[resume_rec_seq$which[which.min(eqm_mod),]]
 ```
 
-# 
-leaps::regsubsets()
-```
-   
-   
-2. Scindez la base de données en échantillon avec données d'entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire `60602` via `set.seed(60602)`. 
-   - Sélectionnez un modèle à l'aide d'une des méthodes couvertes, mais en basant votre choix sur l'erreur moyenne quadratique évaluée sur l'échantillon de validation.
 3. Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.
 4. Créez un tableau avec le nombre de coefficients de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée. 
 5. Commentez sur le meilleur modèle parmi les combinaisons.

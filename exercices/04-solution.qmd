@@ -1,0 +1,46 @@
+---
+title: "Régression logistique"
+execute:
+  echo: true
+  eval: true
+  message: false
+  warning: false
+  error: false
+---
+
+
+## Exercice 4.1
+
+*Les données `logistclient` contiennent des données simulées pour un cas fictif de promotion pour des clients. 
+
+1. *Estimez le modèle logistique pour la probabilité que `promo=1` avec les variables explicatives `nachats`, `sexe` et `tclient`.*
+
+```{r}
+data(logistclient, package = "hecmulti")
+# Modèle logistique
+mod <- glm(promo ~ nachats + sexe + tclient, 
+           family = binomial(link = "logit"),
+           data = logistclient)
+# Coefficients du modèle et statistique de Wald
+summary(mod)
+
+# Cote
+exp(coef(mod))
+# Tests du rapport de vraisemblance
+car::Anova(mod, type = 3)
+# Intervalles de confiance profilés
+confint(mod)
+```
+
+
+2. *Interprétez les coefficients du modèle à l'échelle de la cote en terme de pourcentage d'augmentation ou de diminution.*
+
+
+- La cote pour l'offre promotionnelle (oui versus non) des hommes est 6.4% plus faible que celle des femmes, *ceteris paribus*
+- Le rapport de cotes pour `tclient` est 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs.
+- La cote de `nachats` augmente de 23.1% pour chaque augmentation du nombre d'achats dans le dernier mois,  *ceteris paribus*
+ 
+
+3. *Testez si l'effet de `nachats` est statistiquement significatif à niveau $\alpha = 0.05$.*
+
+- L'intervalle de confiance à 95% pour le rapport de cote de `nachats`}`, basé sur la vraisemblance profilée, est de $[1.15, 1.32]$; comme 1 est exclu, cette différence est statistiquement significative. 
