@@ -14,7 +14,7 @@ title: "Sélection de variables"
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 4 (Sélection de variables et de modèles)](https://lbelzile.github.io/math60602/04-selectionmodeles.html), Sections 4.1-4.4
+- {{< fa book >}} [Chapitre 4 (Sélection de variables et de modèles)](https://lbelzile.github.io/math60602/04-selectionmodeles.html), Sections 4.1-4.3
 
 
 ## Diapositives 

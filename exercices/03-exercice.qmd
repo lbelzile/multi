@@ -8,7 +8,7 @@ title: "Sélection de variables"
 Le but de l'exercice est de bâtir un modèle prédictif pour le nombre annuel de demandes d'admission à partir de la base de données `college`.
 
 1. Faites une analyse exploratoire des variables explicatives: 
-   - Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse
+   - Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse.
    - Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l'ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?
    - Vérifiez s'il y a des variables catégorielles encodées comme des variables numériques.
 2. Scindez la base de données en échantillon avec données d'entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire `60602` via `set.seed(60602)`. 

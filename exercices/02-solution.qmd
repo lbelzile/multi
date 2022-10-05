@@ -69,6 +69,7 @@ On peut constater en étudiant les chargements que le premier facteur est très 
 
 
 **4. Répétez l'exercice, cette fois avec la méthode du maximum de vraisemblance**
+
     - **Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?**
     - **Combien de facteurs les critères d'information recommendent-ils?**
     - **Si vous ajoutez des facteurs, est-ce que votre interprétation change?**

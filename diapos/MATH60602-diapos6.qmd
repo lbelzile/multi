@@ -1,0 +1,549 @@
+---
+title: "Régression logistique"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: lualatex
+cache: true
+code-line-numbers: true
+fig-align: 'center'
+mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+        \usepackage{mathtools}
+---
+
+
+# _Professional Rodeo Cowboys Association_ {#cowboy}
+
+L'exemple suivant est inspiré de l'article
+
+> Daneshvary, R. et Schwer, R. K. (2000) The Association Endorsement and Consumers' Intention to Purchase. _Journal of Consumer Marketing_ **17**, 203-213.
+
+**Objectif**: Les auteurs cherchent à voir si le fait qu'un produit soit recommandé par le _Professional Rodeo Cowboys Association_ (PRCA) a un effet sur les intentions d'achats. 
+
+
+
+# Données du PRCA
+
+On dispose de 500 observations sur les variables suivantes:
+\footnotesize 
+
+- $Y$: seriez-vous intéressé à acheter un produit recommandé par le PRCA
+    - $\texttt{0}$: non
+    - $\texttt{1}$: oui
+- $\mathrm{X}_1$: quel genre d'emploi occupez-vous?
+    - $\texttt{1}$: à la maison
+    - $\texttt{2}$: employé
+    - $\texttt{3}$: ventes/services
+    - $\texttt{4}$: professionnel
+    - $\texttt{5}$: agriculture/ferme
+- $\mathrm{X}_2$: revenu familial annuel
+    - $\texttt{1}$: moins de 25 000
+    - $\texttt{2}$: 25 000 à 39 999
+    - $\texttt{3}$: 40 000 à 59 999
+    - $\texttt{4}$: 60 000 à 79 999
+    - $\texttt{5}$: 80 000 et plus
+
+\normalsize
+
+# Données du PRCA    
+    
+\footnotesize
+
+- $\mathrm{X}_3$: sexe
+    - $\texttt{0}$: homme
+    - $\texttt{1}$: femme
+- $\mathrm{X}_4$: avez-vous déjà fréquenté une université?
+    - $\texttt{0}$: non
+    - $\texttt{1}$: oui
+- $\mathrm{X}_5$: âge (en années)
+- $\mathrm{X}_6$: combien de fois avez-vous assisté à un rodéo au cours de la dernière année?
+    - $\texttt{1}$: 10 fois ou plus
+    - $\texttt{2}$: entre six et neuf fois
+    - $\texttt{3}$: cinq fois ou moins
+
+\normalsize
+
+
+# Régression logistique
+
+Expliquer le comportement de la **moyenne** d'une variable binaire $Y\in\{0,1\}$ en utilisant un modèle de régression avec $p$ variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$.
+
+$$\underset{\text{moyenne théorique}}{\mathsf{E}(Y=1 \mid \mathbf{X})} = \underset{\text{probabilité de succès}}{\Pr(Y=1 \mid \mathbf{X})}=p$$
+
+# Objectif de la régression
+
+1) **Inférence** : comprendre comment et dans quelles mesures les variables $\mathbf{X}$ influencent la probabilité que $Y=1$.
+2) **Prédiction** : développer un modèle pour prévoir des valeurs de $Y$ ou la probabilité de succès à partir des $\mathbf{X}$.
+
+# Exemples
+
+- Est-ce qu'un client potentiel va répondre favorablement à une offre promotionnelle?
+- Est-ce qu'un client est satisfait du service après-vente?
+- Est-ce qu'un client va faire faillite ou non au cours des trois prochaines années.
+
+# Modéliser une probabilité avec une régression linéaire?
+
+- Aucune contrainte sur le prédicteur linéaire $\beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p$
+    - retourne des probabilités négatives ou supérieures à 1!
+- les données binaires ne respectent pas le postulat d'égalité des variances
+    - invalide résultat des tests d'hypothèse sur coefficients.
+ 
+# Illustration: linéaire vs logistique
+
+
+
+```{r}
+#| label: fig-demandecredit
+#| eval: true
+#| echo: false
+#| cache: true
+#| fig-cap: "Données de la réserve de Boston sur l'approbation de prêts hypothécaires (1990); données tirées de Stock et Watson (2007)."
+#| message: false
+#| warning: false
+#| out.width: '80%'
+#| fig.width: 7
+#| fig.height: 4
+library(ggplot2)
+data(HMDA, package = "AER")
+ggplot(data = HMDA[which(HMDA$pirat < 1 & HMDA$afam == "yes"),],
+       aes(y = ifelse(deny == "yes", 1, 0), 
+           x = pirat)) +
+  geom_hline(yintercept = c(0,1), 
+             alpha = 0.1, 
+             linetype = 2) + 
+  geom_point() +
+  stat_smooth(method = "lm", 
+              se = FALSE, 
+              fullrange = TRUE,
+              col = 4) +
+  stat_smooth(method = "glm", 
+              se = FALSE,
+              fullrange = TRUE,
+              method.args = list(family = "binomial"), col = 2) +
+  labs(subtitle = "demande d'approbation pour crédit hypothécaire", 
+       y = "",
+       x = "ratio paiements sur revenus") +
+  scale_y_continuous(breaks=c(0L,1L), 
+                     limits = c(0,1)) + 
+  scale_x_continuous(breaks = seq(0,1, by = 0.25), 
+                     limits = c(0,1),
+                     expand = c(0,0),
+                     labels = c("0","0.25","0.5","0.75","1")) + 
+  geom_text(data = tibble::tibble(
+    x = c(1,0.05), 
+    y = c(0.1,0.9), 
+    label = c("refusée", "acceptée")), 
+   aes(x = x, y = y, label = label),
+   hjust = "inward") +
+    theme_classic()
+```
+
+# Fonction de liaison
+
+Idée: appliquer une transformation au **prédicteur linéaire**
+$$\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p$$
+pour que la prédiction soit entre zéro et un.
+
+On considère
+\begin{align*}
+ p &= \textrm{expit}(\eta) = \frac{\exp(\eta)}{1+\exp(\eta)}
+= \frac{1}{1+\exp(-\eta)}.
+\end{align*}
+
+# Courbe sigmoïde
+
+
+
+```{r}
+#| label: fig-logitplot
+#| echo: false
+#| out-width: '90%'
+#| fig.height: 3
+#| fig.width: 10
+#| fig.cap: "Valeurs ajustées du modèle de régression logistique en fonction du prédicteur linéaire $\\eta$."
+#| eval: true
+#| fig.align: 'center'
+logit <- function(x){log(x/(1-x))}
+expit <- function(x){1/(1+exp(-x))}
+par(mar = c(4,4,1,0.1), bty = "l")
+curve(expit, 
+    ylim = c(0,1),
+    yaxs="i",
+    from = -3.5, 
+    to = 3.5, 
+    xlab = expression(eta), 
+    ylab = expression(p))
+
+```
+
+# Cote
+
+
+La cote donne le ratio de la probabilité de succès ($Y=1$) sur la probabilité d'échec ($Y=0$).
+
+\begin{align*}
+ \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
+\end{align*}
+
+# Cotes et probabilités
+
+
+```{r}
+#| label: tbl-cotes
+#| eval: true
+#| echo: false
+#| tbl-cap: "Cote et probabilité de succès"
+datf <- matrix("", nrow = 3, ncol = 10)
+datf[1,] <- c("\\(\\Pr(Y=1)\\)", sprintf(seq(0.1,0.9, by = 0.1),fmt = "%.1f"))
+datf[2,] <- c("cote", sprintf("%.2g",round(sapply(1:9, function(i){i/(10-i)}),2)))
+datf[3,] <- c("", paste0("\\(",c("\\frac{1}{9}","\\frac{1}{4}","\\frac{3}{7}","\\frac{2}{3}","1","\\frac{3}{2}","\\frac{7}{3}","4","9"),"\\)"))
+knitr::kable(datf[-1,], col.names = datf[1,],
+             row.names = FALSE,
+             booktabs = TRUE,
+             longtable = FALSE,
+             align =  paste0(c("l",rep("c", 9)),collapse = ""),
+             escape = FALSE) |>
+  kableExtra::kable_styling(full_width = TRUE)
+
+```
+
+# Ajustement du modèle
+
+La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien)
+
+- L'argument `family=binomial(link="logit)` permet de spécifier que l'on ajuste un modèle logistique
+
+
+# Modèle avec une seule variable
+
+
+```{r}
+#| label: logistique-init
+#| eval: false
+#| echo: true
+#| message: false
+data(logit1, package = "hecmulti")
+# Nombre d'observations par groupe
+with(logit1, table(y))
+# Ajustement du modèle avec une
+#  seule variable explicative
+modele1 <- glm(formula = y ~ x5,
+            family = binomial(link = "logit"),
+            data = logit1)
+```
+
+# Sortie
+
+Tableau résumé avec les coefficients (`summary`)
+
+```{r}
+#| eval: false
+#| echo: true
+summary(modele1)
+```
+
+Cote pour une augmentation d'une unité des variables explicatives
+
+```{r}
+#| eval: false
+#| echo: true
+cote <- exp(coef(modele1))
+confrcote <- exp(confint(modele1))
+```
+
+Significativité globale avec test du rapport de vraisemblance vs $\mathscr{H}_0: p_i = \mathrm{expit}(\beta_0)$
+
+```{r}
+#| eval: false
+#| echo: true
+anova(modele1, test = 'Chisq')
+```
+
+# Interprétation
+
+Par défaut, pour des variables $0/1$, le modèle décrit la probabilité de succès.
+
+
+```{r}
+#| label: logitplot2
+#| echo: false
+#| eval: true
+#| out.width: '70%'
+#| fig.align: 'center'
+#| fig.width: 7
+#| fig.height: 3 
+par(mar = c(4,4,1,0.1), bty = "l")
+curve(expit(-3.05 + 0.0749 * x), 
+    ylim = c(0,1),
+    yaxs = "i",
+    from = 18, 
+    to = 59, 
+    xlab = "âge (en années)", 
+    ylab = "p")
+
+```
+
+Si le coefficient $\beta_j$ de la variable $\mathrm{X}_j$ est positif, alors plus la variable augmente, plus $\Pr(Y=1)$ augmente.
+
+
+
+# Example avec données du PRCA
+
+Le modèle ajusté en termes de cote est
+\begin{align*}
+ \frac{\Pr(Y=1 \mid \mathrm{X}_5=x_5)}{\Pr(Y=0 \mid \mathrm{X}_5=x_5)} = \exp(-3.05)\exp(0.0749x_5).
+\end{align*}
+
+\small
+
+- Lorsque $\mathrm{X}_5$ augmente d'une année, la cote est multipliée par $\exp(0.0749) = 1.078$ peut importe la valeur de $x_5$. 
+- Pour deux personnes dont la différence d'âge
+    - est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
+    - est de 10 ans, la cote de la personne plus âgée est 112\% plus élevées (cote est multiplié par $1.078^{10} = 2.12$)
+
+\normalsize
+
+
+
+# Vraisemblance et estimation du modèle
+
+Pour un modèle probabiliste donné, on peut calculer la « probabilité » d'avoir obtenu les données de l'échantillon.
+
+Si on traite cette « probabilité » comme une fonction des paramètres, on l'appelle **vraisemblance**.
+
+
+**Maximum de vraisemblance**: valeurs des paramètres qui maximisent la fonction de vraisemblance.
+   - on cherche les valeurs des paramètres qui rendent les données les plus plausibles
+   
+# Vraisemblance d'une observation
+
+La vraisemblance d'une observation $Y_i \in \{0,1\}$ (loi Bernoulli/binomiale) est 
+
+\begin{align*}
+L(\boldsymbol{\beta}; y_i) = p_i^{y_i}(1-p_i)^{1-y_i} = \begin{cases} 
+p_i & y_i = 1 (\text{succès})\\
+1-p_i & y_i = 0 (\text{échec}) 
+\end{cases}
+\end{align*}
+et où $$p_i = \mathrm{expit}(\eta_i) = \frac{\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}{1+\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}.$$
+
+# Log vraisemblance
+
+Pour des questions de stabilité numérique, on maximise le logarithme naturel $\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})$ (transformation monotone croissante), qui après simplification s'écrit
+
+\begin{align*}
+ \ell(\boldsymbol{\beta}) &= \sum_{i=1}^n Y_i ( \beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}) \\&- \sum_{i=1}^n \ln\left\{1+\exp(\beta_0 + \cdots + \beta_p\mathrm{X}_{ip})\right\}
+\end{align*}
+
+Pas de solution explicite pour $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$ dans le cas de la régression logistique.
+
+
+# Prédiction des probabilités de succès
+
+Des estimés des paramètres $\widehat{\boldsymbol{\beta}}$, découle une estimation de $\Pr(Y=1)$ pour les valeurs $\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p$ d'un individu donné,
+\begin{align*}
+ \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_p\mathrm{X}_p).
+\end{align*}
+
+
+# Test du rapport de vraisemblance {.fragile}
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+Pour les modèles ajustés par maximum de vraisemblance.
+
+
+
+Comparaison de modèles **emboîtés**
+
+
+- Modèle complet (sous l'alternative) avec tous les paramètres
+- Modèle restreint (sous l'hypothèse nulle) sur lequel on impose $k\leq p$ restrictions (typiquement $\beta_j = 0, j \in \{1, \ldots, p\}$).
+
+
+:::
+
+::: {.column width="40%"}
+
+```{r}
+#| echo: false
+#| eval: true
+#| out.width: '100%'
+knitr::include_graphics("figures/poupeesrusses.jpg")
+```
+
+:::
+
+::::
+
+# Exemple
+
+Comparons un modèle avec et sans $X_6$.
+
+Variable catégorielle à trois niveaux (deux coefficients associés à $\mathrm{I}(\mathrm{X}_{6}=2)$ et $\mathrm{I}(\mathrm{X}_{6}=3)$.
+
+```{r}
+#| eval: true
+#| echo: true
+modele2 <-  glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
+                 data = hecmulti::logit1,
+                 family = binomial(link = "logit"))
+modele3 <-  glm(y ~ x1 + x2 + x3 + x4 + x5,
+                 data = hecmulti::logit1,
+                 family = binomial(link = "logit")) 
+```
+
+# Rapport de vraisemblance
+
+Le test est basé sur la statistique
+\begin{align*}
+ D = -2\{\ell(\widehat{\boldsymbol{\beta}}_0)-\ell(\widehat{\boldsymbol{\beta}})\}.
+\end{align*}
+
+Cette différence $D$, lorsque l'hypothèse $\mathscr{H}_0$ est vraie, suit approximativement une loi khi-deux $\chi^2_k$.
+
+# Exemple de test
+
+\footnotesize
+
+```{r}
+#| eval: true
+#| echo: true
+# modèle 2 (alternative), modèle 3 (nulle)
+anova(modele3, modele2, test = "LR")
+## Deviance = -2*log vraisemblance
+rvrais <- modele3$deviance - modele2$deviance
+pchisq(rvrais, df = 2, lower.tail = FALSE) # valeur-p
+```
+
+\normalsize
+
+# Tester la significativité des variables
+
+Si un paramètre n'est pas significativement différent de 0, cela veut dire qu'il n'y a pas de lien significatif entre la variable et la réponse *une fois que les autres variables* sont dans le modèle.
+
+\footnotesize
+
+```{r}
+#| eval: true
+#| echo: true
+car::Anova(modele2, type = "3")
+```
+
+\normalsize
+
+
+# Intervalles de confiance pour coefficients
+
+On peut fixer la valeur de $\beta_j$ et maximiser la vraisemblance pour les autres paramètres.
+
+La courbe de vraisemblance profilée résultante permet de déterminer l'intervalle de confiance pour le paramètre.
+
+Les intervalles de confiance de vraisemblance sont invariants aux reparamétrisation.
+
+# Intervalles de confiance
+
+```{r}
+#| label: fig-confint-modele2-logist
+#| echo: false
+#| eval: true
+#| out-width: '80%'
+#| fig-width: 10
+#| fit-height: 4
+#| fig-cap: "Intervalles de confiance profilés de niveau 95\\% pour les coefficients du modèle logistique (échelle exponentielle)."
+data(logit1, package = "hecmulti")
+modele2 <- glm(
+  y ~ x1 + x2 + x3 + x4 + x5 + x6,
+  data = logit1,
+  family = binomial(link = "logit")
+)
+modelsummary::modelplot(modele2, 
+                        exponentiate = TRUE,
+       coef_omit = 'Interc') + 
+  ggplot2::labs(x = paste0("exp(", expression(beta),")"))
+
+
+```
+
+
+# Tests et intervalles de confiances
+
+Comme $\exp(\cdot)$ est  une transformation monotone croissante, 
+$$\beta>0 \quad \iff \quad \exp(\beta)>1.$$
+
+Si la valeur postulée, par exemple $\mathscr{H}_0: \beta_j=0$ ou $\exp(\beta_j)=1$, est dans l'intervalle de confiance de niveau $1-\alpha$, on ne rejette pas l'hypothèse nulle.
+
+# Données complètes
+
+\footnotesize
+
+```{r}
+#| label: tbl-logit1-complet
+#| eval: true
+#| echo: false
+#| cache: true
+#| tbl-cap-location: bottom
+#| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
+data(logit1, package = "hecmulti")
+logit1 <- logit1 |> 
+  dplyr::mutate(y = factor(y),
+               x3 = factor(x3),
+               x4 = factor(x4))
+m1 <- glm(y ~ x1 + x2 + x3 + x4 + x5 + x6, 
+          family = binomial(link = "logit"),
+          data = logit1)
+tbl <- m1 |>
+  gtsummary::tbl_regression(
+  exponentiate = TRUE,
+  intercept = FALSE) |>
+  gtsummary::add_global_p() |>
+  gtsummary::bold_labels()
+tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
+# tbl$table_body$label[1] <- "cst"
+tbl$table_styling$footnote_abbrev$footnote <- 
+  c("cote = rapport de cote",
+    "IC = intervalle de confiance",
+    "ET = erreur-type")
+tbl |> 
+   gtsummary::as_gt() |>
+   gt::tab_options(table.width = gt::pct(100))
+```
+
+\normalsize
+
+# Multicolinéarité
+
+Il est difficile de départager l'effet individuel d'une variable explicative lorsqu'elle est fortement corrélée avec d'autres.
+
+
+La multicollinéarité ne dépend pas de la variable réponse $Y$, mais de la matrice $\mathbf{X}$ du modèle.
+
+# Multicolinéarité pour PRCA
+
+Mêmes diagnostics qu'en régression linéaire: considérer les facteurs d'inflation de la variance (`car::vif`).
+
+```{r}
+#| eval: true
+#| echo: true
+car::vif(modele2)
+```
+
+Pas d'inquiétude ici, coefficients faibles (inférieurs à 5)
+
+# Dichotomiser des variables continues

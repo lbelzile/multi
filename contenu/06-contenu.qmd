@@ -1,0 +1,32 @@
+---
+title: "Régression logistique"
+---
+
+## Contenu
+
+- Modèle de régression logistique
+- Cote
+- Interprétation des paramètres
+- Inférence statistique
+    - tests d'hypothèse
+    - intervalles de confiance
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 5 (Régression logistique)](https://lbelzile.github.io/math60602/05-reglogistique.html), Sections 5.1-5.2
+
+
+## Diapositives 
+
+- {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos6.pdf)
+
+<!--
+<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
+-->
+
+## Objectifs d'apprentissage
+
+- Être capable d'ajuster un modèle logistique avec **R**.
+- Pouvoir interpréter les coefficients d'un modèle logistique en terme d'augmentation ou de diminution de la cote.
+- Pouvoir tester la significativité globale et individuelle de variables explicatives à l'aide de tests de rapport de vraisemblance.
