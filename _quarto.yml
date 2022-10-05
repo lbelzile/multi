@@ -76,6 +76,8 @@ website:
               file: contenu/04-contenu.qmd
             - text: "5: Sélection de variables"
               file: contenu/05-contenu.qmd
+            - text: "6: Régression logistique"
+              file: contenu/06-contenu.qmd
 
 
     - title: "Devoirs"
