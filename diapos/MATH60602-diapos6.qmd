@@ -11,7 +11,7 @@ innertheme: Flip
 outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
-pdf-engine: lualatex
+pdf-engine: xelatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
@@ -39,7 +39,7 @@ L'exemple suivant est inspiré de l'article
 
 # Données du PRCA
 
-On dispose de 500 observations sur les variables suivantes:
+On dispose de 500 observations sur les variables suivantes dans la base de données `logit1`:
 \footnotesize 
 
 - $Y$: seriez-vous intéressé à acheter un produit recommandé par le PRCA
@@ -208,28 +208,23 @@ La cote donne le ratio de la probabilité de succès ($Y=1$) sur la probabilité
 #| eval: true
 #| echo: false
 #| tbl-cap: "Cote et probabilité de succès"
-datf <- matrix("", nrow = 3, ncol = 10)
-datf[1,] <- c("\\(\\Pr(Y=1)\\)", sprintf(seq(0.1,0.9, by = 0.1),fmt = "%.1f"))
-datf[2,] <- c("cote", sprintf("%.2g",round(sapply(1:9, function(i){i/(10-i)}),2)))
-datf[3,] <- c("", paste0("\\(",c("\\frac{1}{9}","\\frac{1}{4}","\\frac{3}{7}","\\frac{2}{3}","1","\\frac{3}{2}","\\frac{7}{3}","4","9"),"\\)"))
-knitr::kable(datf[-1,], col.names = datf[1,],
+datf <- matrix("", nrow = 2, ncol = 10)
+datf[1,] <- c("\\(p\\)", sprintf(seq(0.1,0.9, by = 0.1),fmt = "%.1f"))
+datf[2,] <- c("cote", paste0("\\(",c("\\frac{1}{9}","\\frac{1}{4}","\\frac{3}{7}","\\frac{2}{3}","1","\\frac{3}{2}","\\frac{7}{3}","4","9"),"\\)"))
+knitr::kable(datf[-1, , drop = FALSE], 
+             col.names = datf[1, , drop = FALSE],
              row.names = FALSE,
              booktabs = TRUE,
              longtable = FALSE,
              align =  paste0(c("l",rep("c", 9)),collapse = ""),
-             escape = FALSE) |>
-  kableExtra::kable_styling(full_width = TRUE)
-
+             escape = FALSE) 
 ```
 
 # Ajustement du modèle
 
 La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien pour régression linéaire).
 
-- L'argument `family=binomial(link="logit)` permet de spécifier que l'on ajuste un modèle logistique
-
-
-# Modèle avec une seule variable
+- L'argument `family=binomial(link="logit")` permet de spécifier que l'on ajuste un modèle logistique.
 
 
 ```{r}
@@ -238,8 +233,6 @@ La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par déf
 #| echo: true
 #| message: false
 data(logit1, package = "hecmulti")
-# Nombre d'observations par groupe
-with(logit1, table(y))
 # Ajustement du modèle avec une
 #  seule variable explicative
 modele1 <- glm(formula = y ~ x5,
@@ -257,21 +250,13 @@ Tableau résumé avec les coefficients (`summary`)
 summary(modele1)
 ```
 
-Cote pour une augmentation d'une unité des variables explicatives
+Cote pour une augmentation d'une unité des variables explicatives $\exp(\widehat{\beta})$
 
 ```{r}
 #| eval: false
 #| echo: true
 cote <- exp(coef(modele1))
 confrcote <- exp(confint(modele1))
-```
-
-Significativité globale avec test du rapport de vraisemblance vs $\mathscr{H}_0: p_i = \mathrm{expit}(\beta_0)$
-
-```{r}
-#| eval: false
-#| echo: true
-anova(modele1, test = 'Chisq')
 ```
 
 # Interprétation
@@ -453,9 +438,14 @@ car::Anova(modele2, type = "3")
 
 # Intervalles de confiance pour coefficients
 
-On peut fixer la valeur de $\beta_j$ et maximiser la vraisemblance pour les autres paramètres.
+On peut fixer la valeur de $\beta_j$ et maximiser la vraisemblance.
 
 La courbe de vraisemblance profilée résultante permet de déterminer l'intervalle de confiance pour le paramètre.
+
+```{r}
+confint(modele2)      # IC pour beta
+exp(confint(modele2)) #IC pour exp(beta)
+```
 
 Les intervalles de confiance de vraisemblance sont invariants aux reparamétrisation.
 
@@ -584,8 +574,8 @@ Si $Y$ est continue et qu'on cherche à estimer $\Pr(Y> c \mid \mathbf{X})$ pour
 
 \begin{align*}
 Y^{*} = \begin{cases}
-1 & Y > c, \\
-0 & Y \leq c.
+1, & Y > c; \\
+0, & Y \leq c.
 \end{cases}
 \end{align*}
 
@@ -613,6 +603,7 @@ où
 # Récapitulatif
 
 Le modèle est interprétable à l'échelle de la cote
+
 - La cote donne le rapport probabilité de réussite (1) sur probabilité d'échec (0)
 - Interprétation en terme de 
    - pourcentage d'augmentation si $\exp(\widehat{\eta}) > 1$, avec $\exp(\widehat{\eta})-1$.
