@@ -43,4 +43,4 @@ confint(mod)
 
 3. *Testez si l'effet de `nachats` est statistiquement significatif à niveau $\alpha = 0.05$.*
 
-- L'intervalle de confiance à 95% pour le rapport de cote de `nachats`}`, basé sur la vraisemblance profilée, est de $[1.15, 1.32]$; comme 1 est exclu, cette différence est statistiquement significative. 
+- L'intervalle de confiance à 95% pour le rapport de cote de `nachats`, basé sur la vraisemblance profilée, est de $[1.15, 1.32]$; comme 1 est exclu, cette différence est statistiquement significative. 
