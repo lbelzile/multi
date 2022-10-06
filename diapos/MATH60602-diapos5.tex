@@ -220,7 +220,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, breakable, enhanced, borderline west={3pt}{0pt}{shadecolor}, sharp corners, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, boxrule=0pt, interior hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, breakable, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Présentation des données}
 \protect\hypertarget{pruxe9sentation-des-donnuxe9es}{}
@@ -435,9 +435,11 @@ d'apprentissage qui ont acheté suite à l'envoi du catalogue.
 \protect\hypertarget{suxe9paration-de-luxe9chantillon}{}
 On conserve 100 000 observations test pour vérifier la performance
 
-\begin{verbatim}
-- (oracle) réponses inconnues à toutes fins pratiques
-\end{verbatim}
+\begin{itemize}
+\tightlist
+\item
+  (oracle) réponses inconnues à toutes fins pratiques
+\end{itemize}
 
 \footnotesize
 
@@ -525,25 +527,24 @@ Chaque variable est incluse (ou pas): il y a
 \(2^p=2\times 2 \times \cdots \times 2\) (\(p\) fois) modèles.
 
 \hypertarget{tbl-02-table3}{}
-\begin{longtable}[]{@{}rr@{}}
-\caption{\label{tbl-02-table3}Nombres de modèles en fonction du nombre
-de paramètres.}\tabularnewline
-\toprule()
-\(p\) & nombre de paramètres \\
-\midrule()
-\endfirsthead
-\toprule()
-\(p\) & nombre de paramètres \\
-\midrule()
-\endhead
-5 & 32 \\
-10 & 1024 \\
-15 & 32768 \\
-20 & 1048576 \\
-25 & 33554432 \\
-30 & 1073741824 \\
-\bottomrule()
-\end{longtable}
+\begin{table}
+\caption{\label{tbl-02-table3}Nombres de modèles en fonction du nombre de paramètres. }\tabularnewline
+
+\centering
+\begin{tabular}{rr}
+\toprule
+$p$ & nombre de paramètres\\
+\midrule
+5 & 32\\
+10 & 1024\\
+15 & 32768\\
+20 & 1048576\\
+25 & 33554432\\
+\addlinespace
+30 & 1073741824\\
+\bottomrule
+\end{tabular}
+\end{table}
 \end{frame}
 
 \begin{frame}[fragile]{Recherche exhaustive}
@@ -975,8 +976,8 @@ Voir code en ligne
 \normalsize
 \end{frame}
 
-\begin{frame}{Évaluation de la performance -}
-\protect\hypertarget{uxe9valuation-de-la-performance--}{}
+\begin{frame}{Évaluation de la performance}
+\protect\hypertarget{uxe9valuation-de-la-performance}{}
 En incluant uniquement les variables de base
 
 \begin{longtable}[]{@{}ccl@{}}

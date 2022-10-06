@@ -190,7 +190,7 @@ resultats <-data.frame(
   erreur = rep(c("validation croisée",
                   "validation externe"),
                   each = 2),
-  method = rep(c("sequentielle","lasso"), 
+  methode = rep(c("sequentielle","lasso"), 
                length.out = 4),
   reqm = c(reqm_seq_vc,
            reqm_lasso_vc,

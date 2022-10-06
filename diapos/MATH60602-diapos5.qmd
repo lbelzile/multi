@@ -11,7 +11,7 @@ innertheme: Flip
 outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
-pdf-engine: xelatex
+pdf-engine: lualatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
@@ -226,7 +226,7 @@ Le modèle utilise les données des 210 personnes de l'échantillon d'apprentiss
 
 On conserve 100 000 observations test pour vérifier la performance
 
-    - (oracle) réponses inconnues à toutes fins pratiques
+- (oracle) réponses inconnues à toutes fins pratiques
 
 
 
@@ -620,7 +620,7 @@ Voir code en ligne
 
 \normalsize
 
-# Évaluation de la performance - 
+# Évaluation de la performance
 
 En incluant uniquement les variables de base
 
