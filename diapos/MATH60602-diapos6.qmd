@@ -23,6 +23,7 @@ include-in-header:
       text: |
         \usepackage{tabu}
         \usepackage{mathtools}
+        \usepackage{mathrsfs}
 ---
 
 
@@ -172,7 +173,7 @@ On considère
 #| label: fig-logitplot
 #| echo: false
 #| out-width: '90%'
-#| fig.height: 3
+#| fig.height: 6
 #| fig.width: 10
 #| fig.cap: "Valeurs ajustées du modèle de régression logistique en fonction du prédicteur linéaire $\\eta$."
 #| eval: true
@@ -223,7 +224,7 @@ knitr::kable(datf[-1,], col.names = datf[1,],
 
 # Ajustement du modèle
 
-La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien)
+La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien pour régression linéaire).
 
 - L'argument `family=binomial(link="logit)` permet de spécifier que l'on ajuste un modèle logistique
 
@@ -327,7 +328,8 @@ Si on traite cette « probabilité » comme une fonction des paramètres, on l'a
 
 
 **Maximum de vraisemblance**: valeurs des paramètres qui maximisent la fonction de vraisemblance.
-   - on cherche les valeurs des paramètres qui rendent les données les plus plausibles
+
+- on cherche les valeurs des paramètres qui rendent les données les plus plausibles
    
 # Vraisemblance d'une observation
 
@@ -489,7 +491,7 @@ $$\beta>0 \quad \iff \quad \exp(\beta)>1.$$
 
 Si la valeur postulée, par exemple $\mathscr{H}_0: \beta_j=0$ ou $\exp(\beta_j)=1$, est dans l'intervalle de confiance de niveau $1-\alpha$, on ne rejette pas l'hypothèse nulle.
 
-# Données complètes
+# Coefficients pour données complètes
 
 \footnotesize
 
@@ -515,17 +517,47 @@ tbl <- m1 |>
   gtsummary::add_global_p() |>
   gtsummary::bold_labels()
 tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
+tbl$table_body <- tbl$table_body[1:15,]
 # tbl$table_body$label[1] <- "cst"
 tbl$table_styling$footnote_abbrev$footnote <- 
   c("cote = rapport de cote",
     "IC = intervalle de confiance",
     "ET = erreur-type")
 tbl |> 
-   gtsummary::as_gt() |>
+   gtsummary::as_gt()  |>
    gt::tab_options(table.width = gt::pct(100))
 ```
 
 \normalsize
+
+# Coefficients pour données complètes
+
+\footnotesize
+
+```{r}
+#| label: tbl-logit1-complet2
+#| eval: true
+#| echo: false
+#| cache: true
+#| tbl-cap-location: bottom
+#| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
+tbl <- m1 |>
+  gtsummary::tbl_regression(
+  exponentiate = TRUE,
+  intercept = FALSE) |>
+  gtsummary::add_global_p() |>
+  gtsummary::bold_labels()
+tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
+tbl$table_body <- tbl$table_body[-(1:15),]
+# tbl$table_body$label[1] <- "cst"
+tbl$table_styling$footnote_abbrev$footnote <- 
+  c("cote = rapport de cote",
+    "IC = intervalle de confiance",
+    "ET = erreur-type")
+tbl |> 
+   gtsummary::as_gt()  |>
+   gt::tab_options(table.width = gt::pct(100))
+```
 
 # Multicolinéarité
 
@@ -547,3 +579,51 @@ car::vif(modele2)
 Pas d'inquiétude ici, coefficients faibles (inférieurs à 5)
 
 # Dichotomiser des variables continues
+
+Si $Y$ est continue et qu'on cherche à estimer $\Pr(Y> c \mid \mathbf{X})$ pour une valeur $c$ donnée, il n'est **pas** recommandé de dichotomiser $Y$ via
+
+\begin{align*}
+Y^{*} = \begin{cases}
+1 & Y > c, \\
+0 & Y \leq c.
+\end{cases}
+\end{align*}
+
+et d'ajuster une régression logistique.
+
+Pourquoi? **On perd de l'information**.
+
+# Probabilité de dépassement
+
+On peut estimer plutôt une régression linéaire et prendre 
+$$\Pr(Y > c \mid \mathbf{X}) = \Phi\left(\frac{\widehat{\mu}-c}{\widehat{\sigma}}\right),$$
+
+où 
+
+- $\widehat{\mu}=\widehat{\beta}_0 +  \cdots + \beta_p\mathrm{X}_p$ est la moyenne prédite pour le profil donné, 
+- $\widehat{\sigma}$ est l'estimation de l'écart-type
+- $\Phi(\cdot)$ est la fonction de répartition d'une loi normale standard (`pnorm`)
+
+
+# Récapitulatif
+
+- Une régression logistique sert à modéliser la moyenne de **variables catégorielles**, typiquement binaires.
+- C'est un cas particulier d'un modèle de régression linéaire généralisée (GLM)
+
+# Récapitulatif
+
+Le modèle est interprétable à l'échelle de la cote
+- La cote donne le rapport probabilité de réussite (1) sur probabilité d'échec (0)
+- Interprétation en terme de 
+   - pourcentage d'augmentation si $\exp(\widehat{\eta}) > 1$, avec $\exp(\widehat{\eta})-1$.
+   - pourcentage de diminution si $\exp(\widehat{\eta}) < 1$, avec $1-\exp(\widehat{\eta})$
+
+# Récapitulatif
+
+- Estimation par maximum de vraisemblance
+- Tests d'hypothèse comparent modèles emboîtés 
+   - loi nulle asymptotique $\chi^2$
+   - degrés de liberté égal au nombre de restrictions
+- Intervalles de confiance de vraisemblance profilée
+   - invariants aux reparamétrisations
+
