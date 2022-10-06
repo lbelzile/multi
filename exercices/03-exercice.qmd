@@ -15,4 +15,4 @@ Le but de l'exercice est de bâtir un modèle prédictif pour le nombre annuel d
    - Sélectionnez un modèle à l'aide d'une des méthodes couvertes, mais en basant votre choix sur l'erreur moyenne quadratique évaluée sur l'échantillon de validation.
 3. Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.
 4. Créez un tableau avec le nombre de coefficients de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée. 
-5. Commentez sur le meilleur modèle parmi les combinaisons.
+

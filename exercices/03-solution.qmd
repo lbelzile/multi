@@ -6,6 +6,7 @@ execute:
   message: false
   warning: false
   error: false
+  cache: true
 ---
 
 ## Exercice 3.1
@@ -16,7 +17,7 @@ execute:
    - *Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l'ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?*
    - *Vérifiez s'il y a des variables catégorielles encodées comme des variables numériques.*
    
-On remarque en consultant la documentation de la base de données à l'aide de `?college` que le nombre d'applications, `napplications`, le nombre d'admissions parmi ces applications `nadmission` et le nombre d'offres converties par les candidat.e.s, `ninscrits`, sont reliées et ne peuvent être employées.
+On remarque en consultant la documentation de la base de données à l'aide de `?college` que le nombre de demandes d'admissions (`napplications`), le nombre d'admissions parmi ces applications `nadmission` et le nombre d'offres converties par les candidat.e.s, `ninscrits`, sont reliées et ne peuvent être employées.
 
 Plusieurs variables seront fortement corrélées parce qu'elles dépendent de la capacité d'accueil de l'établissement d'enseignement. Ainsi, on pourrait créer une variable qui représente le pourcentage de temps partiels pour les premiers cycles (plutôt que le décompte). Les variables `pourcentdoctorat` et `pourcentterminal`, sont fortement corrélées puisque la plupart des diplômes terminaux (incluant les titres professionnels, les doctorats de premier cycle en médecine, etc.) sont des PhD: le modèle choisira la variable la plus adéquate. Il n'y a pas de variables catégorielles hors variables binaires. Côté vérifications d'usage, on note que `tauxdiplom` et `pourcentdoctorat` sont supérieurs à 100%.
    
@@ -27,8 +28,10 @@ library(dplyr)
 data(college, package = "hecmulti")
 str(college)
 summary(college)
-summary(college)
-with(college, cor(pourcentdoctorat, pourcentterminal))
+# Est-ce que pourcentdoctorat < pourcenterminal?
+summary(with(college,
+             pourcentdoctorat/pourcentterminal))
+# Non
 db <- college |>
   mutate(
     tauxdiplom = pmin(tauxdiplom, 100),
@@ -61,31 +64,150 @@ Pour l'estimation, on pourrait simplement calculer l'erreur quadratique moyenne 
 
 
 ```{r}
+# Modèle avec interactions de toutes les variables
 formule <- formula(napplications ~ .^2)
+
+# Sélection séquentielle ascendante
 rec_seq <- leaps::regsubsets(
   x = formule, 
   data = db_a,
   method = "seqrep",
   nvmax = 50)
-
-# Modèle avec la plus petite erreur moyenne quadratique
-eqm_mod <- eval_EQM_regsubsets(
+bic_mod <- summary(rec_seq)$bic
+# Modèle avec la plus petite erreur 
+# moyenne quadratique de validation
+reqm_seq_ve_list <- 
+  hecmulti::eval_EQM_regsubsets(
   model = rec_seq, 
   select = 1:50,
   formula = formule,
   data = db_a,
   newdata = db_v)
-library(ggplot2)
-ggplot(data = data.frame(
-  ntermes = 1:50,
-  reqm = eqm_mod, 
-  bic = summary(rec_seq)$bic),
-  mapping = aes(x = ntermes, y = reqm)) +
-  geom_line()
-# Nom des variables dans le modèle retenu
-rec_seq$xnames[resume_rec_seq$which[which.min(eqm_mod),]]
+# La fonction calcule la racine EQM sur 
+# les données de validation
+mod_seq_ve <- which.min(reqm_seq_ve_list)
+nvar_seq_ve <- mod_seq_ve + 1
+reqm_seq_ve <- reqm_seq_ve_list[mod_seq_ve]
 ```
 
-3. Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.
-4. Créez un tableau avec le nombre de coefficients de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée. 
-5. Commentez sur le meilleur modèle parmi les combinaisons.
+Une logique similaire s'appliquerait avec le LASSO, même si c'est loin d'être la norme (on utilise d'ordinaire la validation croisée). Ici, on ajusterait le modèle avec plusieurs valeurs de $\lambda$, puis on calculerait l'erreur quadratique moyenne de validation.
+On prendra la valeur de la pénalisation $\lambda$ qui minimise cette dernière. Spécifier la séquence de valeurs de $\lambda$ à essayer nécessite un peu d'essai/erreur.
+
+```{r}
+# Obtenir X et y
+Xmat_a <- model.matrix(formule, data = db_a)[,-1]
+y_a <- db_a$napplications
+lambda_seq <- exp(seq(from = log(0.1),
+                  to = log(50), 
+                  length.out = 100L))
+lasso <- glmnet::glmnet(
+    x = Xmat_a,
+    y = y_a,
+    alpha = 1, 
+    lambda = lambda_seq)
+# Prédictions et calcul de l'EQM
+# On pourrait remplacer `newx` par 
+# d'autres données (validation externe)
+eqm_lasso_externe <- rep(0, length(lambda_seq))
+for(i in seq_along(lambda_seq)){
+  pred <- predict(
+    object = lasso, 
+    s = lambda_seq[i], 
+    newx = model.matrix(formule, data = db_v)[,-1])
+  eqm_lasso_externe[i] <- 
+    mean((pred - db_v$napplications)^2)
+}
+minl <- which.min(eqm_lasso_externe)
+lambda_opt <- lambda_seq[minl]
+# Nombre de coefficients non nuls
+nvar_lasso_ve <- Matrix::nnzero(lasso$beta[,minl, drop = FALSE])
+reqm_lasso_ve <- sqrt(eqm_lasso_externe[minl])
+```
+
+
+3. *Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.*
+
+On peut utiliser `boot::cv.glm` ou `caret::train` avec
+les différentes méthodes pour ajuster les modèles. Je fais varier le nombre maximal de variables pour retourner les différentes solutions. Comme le résultat de la validation croisée est aléatoire, on peut répéter cette étape pour réduire l'incertitude de prédiction et obtenir une meilleur valeur de l'écart-type.
+
+
+```{r}
+# Matrice du modèle complet, moins ordonnée à l'origine
+Xmat <- model.matrix(formule, data = db)[,-1]
+# Variable réponse
+y <- db$napplications
+seq_vc <- 
+  caret::train(form = formule,
+               data = db,
+               method = 'leapSeq',
+             tuneGrid = expand.grid(nvmax = 1:50),
+             trControl = caret::trainControl(
+               method = "repeatedcv",
+               number = 10,
+               repeats = 10))
+# Graphique de la racine de l'EQM en fonction de
+# nvmax
+plot(seq_vc)
+# Meilleur modèle
+mod_seq_vc <- which.min(seq_vc$results$RMSE)
+reqm_seq_vc <- min(seq_vc$results$RMSE)
+nvar_seq_vc <- seq_vc$results$nvmax[mod_seq_vc]
+## Calcul des prédictions
+# predict(seq_vc, newdata = db)
+```
+
+Les notes de cours donnent une approche pas à pas avec `glmnet` pour ajuster le LASSO en choisissant la valeur de $\lambda$ par validation croisée, mais on peut changer le type de model dans `caret` et utiliser les mêmes fonctionnalités.
+
+```{r}
+# Autre approche que glmnet
+lasso_vc <- 
+  caret::train(form = formule,
+               data = db,
+               method = 'glmnet',
+             tuneGrid = expand.grid(
+               alpha = 1,
+               lambda = lambda_seq),
+             trControl = caret::trainControl(
+               method = "repeatedcv",
+               number = 10,
+               repeats = 10))
+plot(lasso_vc)
+# Meilleur modèle
+mod_lasso_vc <- which.min(lasso_vc$results$RMSE)
+reqm_lasso_vc <- min(lasso_vc$results$RMSE)
+nvar_lasso_vc <- Matrix::nnzero(lasso_vc$finalModel$beta[, mod_lasso_vc, drop = FALSE])
+## Calcul des prédictions
+# predict(cv_eqm_seq, newdata = db)
+```
+
+4. *Créez un tableau avec le nombre de coefficients non-nuls de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée.*
+
+Il suffit de colliger notre estimation de l'erreur et le nombre de coefficients.
+
+
+```{r}
+resultats <-data.frame(
+  erreur = rep(c("validation croisée",
+                  "validation externe"),
+                  each = 2),
+  method = rep(c("sequentielle","lasso"), 
+               length.out = 4),
+  reqm = c(reqm_seq_vc,
+           reqm_lasso_vc,
+           reqm_seq_ve,
+           reqm_lasso_ve),
+  npar = c(nvar_seq_vc,
+           nvar_lasso_vc,
+           nvar_seq_ve,
+           nvar_lasso_ve))
+knitr::kable(resultats)
+```
+
+5. *Commentez sur le meilleur modèle parmi les combinaisons.*
+
+Si la taille de la base de données est plus conséquente, la validation croisée reste préférable à la validation externe, surtout si on répète cette méthode plusieurs fois pour réduire l'incertitude.^[Rien ne nous empêche de faire de même avec la validation externe, soit dit en passant.]
+Le nombre de paramètres dans le modèle LASSO peut sembler élevé, mais il faut garder en tête que les autres paramètres sont rétrécis vers zéro même s'ils sont non-nuls.
+
+Impossible de savoir quel est le meilleur modèle: le modèle avec la plus petite erreur quadratique moyenne est notre meilleur choix ici à défaut d'autres observations. Rappelez-vous qu'un modèle peut donner une bonne performance, mais être choisi parce qu'il surajuste une valeur aberrante.
+
+Le but de l'exercice était davantage de démontrer le travail que de faire une prédiction convaincante. Puisqu'on essaie de prédire une variable de dénombrement, un modèle plus adapté (modèle de régression binomiale négative, ou un modèle pour le log du nombre d'admission) pourrait probablement être plus adéquat dans la mesure où la variance de la réponse dépend de la taille de l'école.
