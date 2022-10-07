@@ -11,7 +11,7 @@ innertheme: Flip
 outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
-pdf-engine: xelatex
+pdf-engine: lualatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
@@ -217,7 +217,8 @@ knitr::kable(datf[-1, , drop = FALSE],
              booktabs = TRUE,
              longtable = FALSE,
              align =  paste0(c("l",rep("c", 9)),collapse = ""),
-             escape = FALSE) 
+             escape = FALSE,
+             format = "latex") 
 ```
 
 # Ajustement du modèle
@@ -443,6 +444,8 @@ On peut fixer la valeur de $\beta_j$ et maximiser la vraisemblance.
 La courbe de vraisemblance profilée résultante permet de déterminer l'intervalle de confiance pour le paramètre.
 
 ```{r}
+#| eval: false
+#| echo: true
 confint(modele2)      # IC pour beta
 exp(confint(modele2)) #IC pour exp(beta)
 ```

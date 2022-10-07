@@ -225,7 +225,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, enhanced, interior hidden, breakable, frame hidden, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, frame hidden, enhanced, breakable, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{\emph{Professional Rodeo Cowboys Association}}
 \protect\hypertarget{cowboy}{}
@@ -460,70 +460,18 @@ probabilité d'échec (\(Y=0\)).
 \begin{frame}{Cotes et probabilités}
 \protect\hypertarget{cotes-et-probabilituxe9s}{}
 \hypertarget{tbl-cotes}{}
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0465}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1318}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1318}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1318}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1318}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0543}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1318}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1318}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0543}}
-  >{\centering\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0543}}@{}}
-\caption{\label{tbl-cotes}Cote et probabilité de succès}\tabularnewline
-\toprule()
-\begin{minipage}[b]{\linewidth}\raggedright
-(p)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.2
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.3
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.4
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.5
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.6
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.7
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.8
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.9
-\end{minipage} \\
-\midrule()
-\endfirsthead
-\toprule()
-\begin{minipage}[b]{\linewidth}\raggedright
-(p)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.2
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.3
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.4
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.5
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.6
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.7
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.8
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-0.9
-\end{minipage} \\
-\midrule()
-\endhead
-cote & (\frac{1}{9}) & (\frac{1}{4}) & (\frac{3}{7}) & (\frac{2}{3}) &
-(1) & (\frac{3}{2}) & (\frac{7}{3}) & (4) & (9) \\
-\bottomrule()
-\end{longtable}
+\begin{table}
+\caption{\label{tbl-cotes}Cote et probabilité de succès }\tabularnewline
+
+\centering
+\begin{tabular}{lccccccccc}
+\toprule
+\(p\) & 0.1 & 0.2 & 0.3 & 0.4 & 0.5 & 0.6 & 0.7 & 0.8 & 0.9\\
+\midrule
+cote & \(\frac{1}{9}\) & \(\frac{1}{4}\) & \(\frac{3}{7}\) & \(\frac{2}{3}\) & \(1\) & \(\frac{3}{2}\) & \(\frac{7}{3}\) & \(4\) & \(9\)\\
+\bottomrule
+\end{tabular}
+\end{table}
 \end{frame}
 
 \begin{frame}[fragile]{Ajustement du modèle}
@@ -806,41 +754,12 @@ On peut fixer la valeur de \(\beta_j\) et maximiser la vraisemblance.
 La courbe de vraisemblance profilée résultante permet de déterminer
 l'intervalle de confiance pour le paramètre.
 
-\begin{verbatim}
-                  2.5 %      97.5 %
-(Intercept) -4.61883066 -0.99874984
-x12         -1.72420215  0.05426569
-x13         -1.54901702  0.19327640
-x14         -1.57729645  0.22211588
-x15         -1.31245964  0.58527619
-x22         -0.97175857  0.59651164
-x23         -1.40224186  0.27289938
-x24         -3.55887026 -1.36892325
-x25         -2.52741920 -0.17813092
-x3           0.85055238  1.87143210
-x4           1.26006609  2.43001850
-x5           0.07265668  0.14832237
-x62         -2.05089230 -0.71972379
-x63         -3.17313491 -1.69675600
-\end{verbatim}
-
-\begin{verbatim}
-                  2.5 %     97.5 %
-(Intercept) 0.009864324  0.3683396
-x12         0.178315264  1.0557651
-x13         0.212456712  1.2132181
-x14         0.206532716  1.2487161
-x15         0.269157210  1.7954868
-x22         0.378416980  1.8157737
-x23         0.246044748  1.3137680
-x24         0.028470971  0.2543807
-x25         0.079864870  0.8368329
-x3          2.340939573  6.4975949
-x4          3.525654492 11.3590922
-x5          1.075361280  1.1598867
-x62         0.128620085  0.4868867
-x63         0.041872127  0.1832771
-\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{confint}\NormalTok{(modele2)      }\CommentTok{\# IC pour beta}
+\FunctionTok{exp}\NormalTok{(}\FunctionTok{confint}\NormalTok{(modele2)) }\CommentTok{\#IC pour exp(beta)}
+\end{Highlighting}
+\end{Shaded}
 
 Les intervalles de confiance de vraisemblance sont invariants aux
 reparamétrisation.
