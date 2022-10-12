@@ -96,12 +96,21 @@ $$\underset{\text{moyenne théorique}}{\mathsf{E}(Y=1 \mid \mathbf{X})} = \under
 - Est-ce qu'un client est satisfait du service après-vente?
 - Est-ce qu'un client va faire faillite ou non au cours des trois prochaines années.
 
+# Inférence et interprétation
+
+Ce cours est consacré à l'estimation et l'interprétation des paramètres du modèle dans le cas binaire.
+
+
+
+Par convention, on désigne le résultat « $1$ » par un succès et « $0$ » par un échec.
+
 # Modéliser une probabilité avec une régression linéaire?
 
-- Aucune contrainte sur le prédicteur linéaire $\beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p$
-    - retourne des probabilités négatives ou supérieures à 1!
+Mauvaise idée!
+
+- Sans contrainte, on peut obtenir des probabilités négatives ou supérieures à 1!
 - les données binaires ne respectent pas le postulat d'égalité des variances
-    - invalide résultat des tests d'hypothèse sur coefficients.
+    - invalide les résultats des tests d'hypothèse pour les coefficients.
  
 # Illustration: linéaire vs logistique
 
@@ -191,36 +200,6 @@ curve(expit,
 
 ```
 
-# Cote
-
-
-La cote donne le ratio de la probabilité de succès ($Y=1$) sur la probabilité d'échec ($Y=0$).
-
-\begin{align*}
- \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
-\end{align*}
-
-# Cotes et probabilités
-
-
-```{r}
-#| label: tbl-cotes
-#| eval: true
-#| echo: false
-#| tbl-cap: "Cote et probabilité de succès"
-datf <- matrix("", nrow = 2, ncol = 10)
-datf[1,] <- c("\\(p\\)", sprintf(seq(0.1,0.9, by = 0.1),fmt = "%.1f"))
-datf[2,] <- c("cote", paste0("\\(",c("\\frac{1}{9}","\\frac{1}{4}","\\frac{3}{7}","\\frac{2}{3}","1","\\frac{3}{2}","\\frac{7}{3}","4","9"),"\\)"))
-knitr::kable(datf[-1, , drop = FALSE], 
-             col.names = datf[1, , drop = FALSE],
-             row.names = FALSE,
-             booktabs = TRUE,
-             longtable = FALSE,
-             align =  paste0(c("l",rep("c", 9)),collapse = ""),
-             escape = FALSE,
-             format = "latex") 
-```
-
 # Ajustement du modèle
 
 La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien pour régression linéaire).
@@ -234,9 +213,9 @@ La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par déf
 #| echo: true
 #| message: false
 data(logit1, package = "hecmulti")
-# Ajustement du modèle avec une
-#  seule variable explicative
-modele1 <- glm(formula = y ~ x5,
+# Ajustement du modèle avec toutes
+# les variables explicatives
+modele1 <- glm(formula = y ~ .,
             family = binomial(link = "logit"),
             data = logit1)
 ```
@@ -249,15 +228,6 @@ Tableau résumé avec les coefficients (`summary`)
 #| eval: false
 #| echo: true
 summary(modele1)
-```
-
-Cote pour une augmentation d'une unité des variables explicatives $\exp(\widehat{\beta})$
-
-```{r}
-#| eval: false
-#| echo: true
-cote <- exp(coef(modele1))
-confrcote <- exp(confint(modele1))
 ```
 
 # Interprétation
@@ -287,8 +257,63 @@ curve(expit(-3.05 + 0.0749 * x),
 Si le coefficient $\beta_j$ de la variable $\mathrm{X}_j$ est positif, alors plus la variable augmente, plus $\Pr(Y=1)$ augmente.
 
 
+# Rappel exponentiels et logarithme
 
-# Example avec données du PRCA
+Quelques propriétés de la fonction exponentielle:
+
+- $\exp(0) = 1$
+- $\exp(a + b) = \exp(a)\exp(b)$
+- $\exp(ab)= \exp(a)^b$
+
+Quelques propriétés de la fonction logarithmique
+
+- $\ln(1)=0$,
+- $\ln(\exp(x))=x$ (fonction inverse)
+- $\ln(ab) = \ln(a) + \ln(b)$
+
+
+# Cote
+
+Si on applique la transformation inverse, on obtient
+
+$$\ln\left(\frac{p}{1-p} \right) = \eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p.$$
+
+ou, en prenant l'exponentielle de chaque côté,
+
+$$ 
+\mathsf{cote} = \frac{p}{1-p} = \exp(\beta_0)\cdots\exp(\beta_p \mathrm{X}_p)
+$$
+
+**Modèle multiplicatif** pour la cote.
+
+# Cote et probabilité
+
+La cote est utilisée dans les paris sportifs
+\begin{align*}
+ \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
+\end{align*}
+
+
+```{r}
+#| label: tbl-cotes
+#| eval: true
+#| echo: false
+#| tbl-cap: "Cote et probabilité de succès"
+datf <- matrix("", nrow = 2, ncol = 10)
+datf[1,] <- c("\\(p\\)", sprintf(seq(0.1,0.9, by = 0.1),fmt = "%.1f"))
+datf[2,] <- c("cote", paste0("\\(",c("\\frac{1}{9}","\\frac{1}{4}","\\frac{3}{7}","\\frac{2}{3}","1","\\frac{3}{2}","\\frac{7}{3}","4","9"),"\\)"))
+knitr::kable(datf[-1, , drop = FALSE], 
+             col.names = datf[1, , drop = FALSE],
+             row.names = FALSE,
+             booktabs = TRUE,
+             longtable = FALSE,
+             align =  paste0(c("l",rep("c", 9)),collapse = ""),
+             escape = FALSE,
+             format = "latex") 
+```
+
+
+# Interprétation avec données du PRCA
 
 Le modèle ajusté en termes de cote est
 \begin{align*}
@@ -300,11 +325,91 @@ Le modèle ajusté en termes de cote est
 - Lorsque $\mathrm{X}_5$ augmente d'une année, la cote est multipliée par $\exp(0.0749) = 1.078$ peut importe la valeur de $x_5$. 
 - Pour deux personnes dont la différence d'âge
     - est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
-    - est de 10 ans, la cote de la personne plus âgée est 112\% plus élevées (cote est multiplié par $1.078^{10} = 2.12$)
+    - est de 10 ans, la cote de la personne plus âgée est 112\% plus élevée (cote multipliée par $\exp(10 \times 0.0749)=1.078^{10} = 2.12$)
 
 \normalsize
 
+# Modèle complet
 
+On considère le modèle avec toutes les variables explicatives:
+
+```{r}
+#| eval: false
+#| echo: true
+modele2 <- glm(
+  formula = y ~ .,
+  data = logit1,
+  family = binomial)
+exp(coef(modele2))
+```
+
+```{r}
+#| eval: true
+#| echo: false
+modele2 <- glm(
+  formula = y ~ .,
+  data = hecmulti::logit1,
+  family = binomial)
+round(exp(coef(modele2)), 3)
+```
+# Interprétation des coefficients
+
+Si on a plusieurs variables explicatives, les coefficients sont interprétés en modifiant une variable à la fois.
+
+On compare deux profils identiques, sauf pour la variable en question 
+
+- toute chose étant égale par ailleurs
+- *ceteris paribus*
+
+# Interprétation des coefficients
+
+**Variable continue**:
+
+- La cote de la personne plus âgée d'un an est 1.116 fois celle de la personne plus jeune, *ceteris paribus*, une augmentation de 11,6%
+
+# Variable binaire
+
+Le rapport de cote pour les femmes (`x3=1`) versus les hommes (`x3=0`) est de $\exp(\widehat{\beta}_{\mathrm{X}_3}) = 3.854$:
+
+- les femmes sont plus susceptibles de suivre les recommendations d'achat toute chose étant égale par ailleurs, 
+- Inversement, le rapport de cote homme/femme est de 1/3.854=0.259, 
+
+On peut donc conclure que:
+
+- la cote des femmes est 285.4% plus élevée que celle des hommes. 
+- la cote des hommes est 74.1% inférieure à celle des femmes.
+
+# Variable catégorielle
+
+Toutes les comparaisons sont effectuées avec la catégorie de référence.
+
+Pour `x1`, c'est à la maison. Le rapport de cote est
+$$\frac{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=2 (\text{employé}), \ldots\}}{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=1 (\text{maison}), \ldots\}} = \exp(\widehat{\beta}_{\mathrm{X}_{1}=2}) = 0.438$$
+
+Le coefficient pour $\mathrm{X}_{1}=1$ est zéro, d'où $\exp(\widehat{\beta}_{\mathrm{X}_{1}=1})=1$ (absent du tableau).
+
+On peut ordonner les type d'emploi selon la probabilité de succès à l'aide des coefficients: *ceteris paribus* on obtient le classement
+
+- employé < professionnel < ventes/service < agriculture < maison.
+
+# Invariance
+
+Si on voulait le rapport de cote employé vs professionnel, inutile de réajuster le modèle.
+
+On peut calculer 
+
+$$ 
+\dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
+$$
+
+Plutôt que de changer la catégorie de référence via
+
+```{r}
+#| eval: false
+#| echo: true
+logit2 <- logit1 |> 
+   mutate(x1 = relevel(x1, ref = 2))
+```
 
 # Vraisemblance et estimation du modèle
 
@@ -317,6 +422,7 @@ Si on traite cette « probabilité » comme une fonction des paramètres, on l'a
 
 - on cherche les valeurs des paramètres qui rendent les données les plus plausibles
    
+
 # Vraisemblance d'une observation
 
 La vraisemblance d'une observation $Y_i \in \{0,1\}$ (loi Bernoulli/binomiale) est 
@@ -329,23 +435,34 @@ p_i & y_i = 1 (\text{succès})\\
 \end{align*}
 et où $$p_i = \mathrm{expit}(\eta_i) = \frac{\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}{1+\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}.$$
 
+
+# Probabilité conjointe d'événements binaires
+
+- Si les observations sont indépendantes, la probabilité conjointe d'avoir un résultat donné est le produit des probabilités pour chaque observation. 
+- Il n'y a pas de solution explicite pour $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$ dans le cas de la régression logistique: il faut maximiser la vraisemblance.
+   
 # Log vraisemblance
 
-Pour des questions de stabilité numérique, on maximise le logarithme naturel $\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})$ (transformation monotone croissante), qui après simplification s'écrit
 
-\begin{align*}
- \ell(\boldsymbol{\beta}) &= \sum_{i=1}^n Y_i ( \beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}) \\&- \sum_{i=1}^n \ln\left\{1+\exp(\beta_0 + \cdots + \beta_p\mathrm{X}_{ip})\right\}
-\end{align*}
-
-Pas de solution explicite pour $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$ dans le cas de la régression logistique.
-
+- Pour des raisons de stabilité numérique, on maximise le logarithme naturel $\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})$ de la log vraisemblance conjointe de l'échantillon (transformation monotone croissante).
+- La log vraisemblance est simplement la somme des contributions individuelles.
+- On utilise la log vraisemblance $\ell$ comme mesure d'ajustement et pour construire des tests d'hypothèse.
 
 # Prédiction des probabilités de succès
 
-Des estimés des paramètres $\widehat{\boldsymbol{\beta}}$, découle une estimation de $\Pr(Y=1)$ pour les valeurs $\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p$ d'un individu donné,
+Des estimations des coefficients $\widehat{\beta}$ découlent une estimation de $\Pr(Y=1)$ pour les valeurs $\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p$ d'un individu donné,
 \begin{align*}
- \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_p\mathrm{X}_p).
+ \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_px_p).
 \end{align*}
+
+
+
+# Modèle nul
+
+Un modèle avec uniquement l'ordonnée à l'origine retournera $\widehat{p}$, la proportion empirique de succès.
+
+Comme pour la régression linéaire, c'est la moyenne des observations.
+
 
 
 # Test du rapport de vraisemblance {.fragile}
@@ -397,6 +514,18 @@ modele3 <-  glm(y ~ x1 + x2 + x3 + x4 + x5,
                  family = binomial(link = "logit")) 
 ```
 
+# Test d'hypothèse
+
+On test l'hypothèse nulle  $\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0$ (soit $k=2$ restrictions).
+
+L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
+
+Si la valeur $p$ est inférieure au seuil de signification, typiquement $\alpha = 0.05$, on rejette l'hypothèse nulle.
+
+ - on conclut que la variable explicative $\mathrm{X}_6$ améliore significativement l'ajustement du modèle.
+
+
+
 # Rapport de vraisemblance
 
 Le test est basé sur la statistique
@@ -439,18 +568,18 @@ car::Anova(modele2, type = "3")
 
 # Intervalles de confiance pour coefficients
 
-On peut fixer la valeur de $\beta_j$ et maximiser la vraisemblance.
+On peut aussi considérer des intervalles de confiance pour les coefficients individuels.
 
-La courbe de vraisemblance profilée résultante permet de déterminer l'intervalle de confiance pour le paramètre.
+Ceux obtenus par défaut dans **R** sont appelés *intervalles de confiance de vraisemblance profilée*.
 
 ```{r}
 #| eval: false
 #| echo: true
 confint(modele2)      # IC pour beta
-exp(confint(modele2)) #IC pour exp(beta)
+exp(confint(modele2)) # IC pour exp(beta)
 ```
 
-Les intervalles de confiance de vraisemblance sont invariants aux reparamétrisation.
+Ces intervalles sont invariants aux reparamétrisation: si $[b_i, b_s]$ est l'intervalle de vraisemblance profilée pour $\beta$, l'intervalle pour $\exp(\beta)$ est simplement $[\exp(b_i), \exp(b_s)]$.
 
 # Intervalles de confiance
 
@@ -471,7 +600,8 @@ modele2 <- glm(
 modelsummary::modelplot(modele2, 
                         exponentiate = TRUE,
        coef_omit = 'Interc') + 
-  ggplot2::labs(x = paste0("exp(", expression(beta),")"))
+  ggplot2::labs(x = paste0("exp(", expression(beta),")")) +
+  ggplot2::geom_vline(xintercept = 1)
 
 
 ```
@@ -609,8 +739,8 @@ Le modèle est interprétable à l'échelle de la cote
 
 - La cote donne le rapport probabilité de réussite (1) sur probabilité d'échec (0)
 - Interprétation en terme de 
-   - pourcentage d'augmentation si $\exp(\widehat{\eta}) > 1$, avec $\exp(\widehat{\eta})-1$.
-   - pourcentage de diminution si $\exp(\widehat{\eta}) < 1$, avec $1-\exp(\widehat{\eta})$
+   - pourcentage d'augmentation si $\exp(\widehat{\beta}) > 1$, avec $\exp(\widehat{\beta})-1$.
+   - pourcentage de diminution si $\exp(\widehat{\beta}) < 1$, avec $1-\exp(\widehat{\beta})$
 
 # Récapitulatif
 

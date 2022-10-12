@@ -225,7 +225,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, frame hidden, enhanced, breakable, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, sharp corners, interior hidden, borderline west={3pt}{0pt}{shadecolor}, frame hidden, breakable, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{\emph{Professional Rodeo Cowboys Association}}
 \protect\hypertarget{cowboy}{}
@@ -381,19 +381,24 @@ variables explicatives \(\mathrm{X}_1, \ldots, \mathrm{X}_p\).
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Inférence et interprétation}
+\protect\hypertarget{infuxe9rence-et-interpruxe9tation}{}
+Ce cours est consacré à l'estimation et l'interprétation des paramètres
+du modèle dans le cas binaire.
+
+Par convention, on désigne le résultat « \(1\) » par un succès et «
+\(0\) » par un échec.
+\end{frame}
+
 \begin{frame}{Modéliser une probabilité avec une régression linéaire?}
 \protect\hypertarget{moduxe9liser-une-probabilituxe9-avec-une-ruxe9gression-linuxe9aire}{}
+Mauvaise idée!
+
 \begin{itemize}
 \tightlist
 \item
-  Aucune contrainte sur le prédicteur linéaire
-  \(\beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p\)
-
-  \begin{itemize}
-  \tightlist
-  \item
-    retourne des probabilités négatives ou supérieures à 1!
-  \end{itemize}
+  Sans contrainte, on peut obtenir des probabilités négatives ou
+  supérieures à 1!
 \item
   les données binaires ne respectent pas le postulat d'égalité des
   variances
@@ -401,7 +406,7 @@ variables explicatives \(\mathrm{X}_1, \ldots, \mathrm{X}_p\).
   \begin{itemize}
   \tightlist
   \item
-    invalide résultat des tests d'hypothèse sur coefficients.
+    invalide les résultats des tests d'hypothèse pour les coefficients.
   \end{itemize}
 \end{itemize}
 \end{frame}
@@ -447,33 +452,6 @@ logistique en fonction du prédicteur linéaire \(\eta\).}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Cote}
-\protect\hypertarget{cote}{}
-La cote donne le ratio de la probabilité de succès (\(Y=1\)) sur la
-probabilité d'échec (\(Y=0\)).
-
-\begin{align*}
- \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
-\end{align*}
-\end{frame}
-
-\begin{frame}{Cotes et probabilités}
-\protect\hypertarget{cotes-et-probabilituxe9s}{}
-\hypertarget{tbl-cotes}{}
-\begin{table}
-\caption{\label{tbl-cotes}Cote et probabilité de succès }\tabularnewline
-
-\centering
-\begin{tabular}{lccccccccc}
-\toprule
-\(p\) & 0.1 & 0.2 & 0.3 & 0.4 & 0.5 & 0.6 & 0.7 & 0.8 & 0.9\\
-\midrule
-cote & \(\frac{1}{9}\) & \(\frac{1}{4}\) & \(\frac{3}{7}\) & \(\frac{2}{3}\) & \(1\) & \(\frac{3}{2}\) & \(\frac{7}{3}\) & \(4\) & \(9\)\\
-\bottomrule
-\end{tabular}
-\end{table}
-\end{frame}
-
 \begin{frame}[fragile]{Ajustement du modèle}
 \protect\hypertarget{ajustement-du-moduxe8le}{}
 La fonction \texttt{glm} dans \textbf{R} ajuste un modèle linéaire
@@ -489,9 +467,9 @@ généralisé (par défaut, Gaussien pour régression linéaire).
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(logit1, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\CommentTok{\# Ajustement du modèle avec une}
-\CommentTok{\#  seule variable explicative}
-\NormalTok{modele1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x5,}
+\CommentTok{\# Ajustement du modèle avec toutes}
+\CommentTok{\# les variables explicatives}
+\NormalTok{modele1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
             \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{),}
             \AttributeTok{data =}\NormalTok{ logit1)}
 \end{Highlighting}
@@ -505,16 +483,6 @@ Tableau résumé avec les coefficients (\texttt{summary})
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{summary}\NormalTok{(modele1)}
-\end{Highlighting}
-\end{Shaded}
-
-Cote pour une augmentation d'une unité des variables explicatives
-\(\exp(\widehat{\beta})\)
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{cote }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FunctionTok{coef}\NormalTok{(modele1))}
-\NormalTok{confrcote }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FunctionTok{confint}\NormalTok{(modele1))}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
@@ -536,8 +504,71 @@ Si le coefficient \(\beta_j\) de la variable \(\mathrm{X}_j\) est
 positif, alors plus la variable augmente, plus \(\Pr(Y=1)\) augmente.
 \end{frame}
 
-\begin{frame}{Example avec données du PRCA}
-\protect\hypertarget{example-avec-donnuxe9es-du-prca}{}
+\begin{frame}{Rappel exponentiels et logarithme}
+\protect\hypertarget{rappel-exponentiels-et-logarithme}{}
+Quelques propriétés de la fonction exponentielle:
+
+\begin{itemize}
+\tightlist
+\item
+  \(\exp(0) = 1\)
+\item
+  \(\exp(a + b) = \exp(a)\exp(b)\)
+\item
+  \(\exp(ab)= \exp(a)^b\)
+\end{itemize}
+
+Quelques propriétés de la fonction logarithmique
+
+\begin{itemize}
+\tightlist
+\item
+  \(\ln(1)=0\),
+\item
+  \(\ln(\exp(x))=x\) (fonction inverse)
+\item
+  \(\ln(ab) = \ln(a) + \ln(b)\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cote}
+\protect\hypertarget{cote}{}
+Si on applique la transformation inverse, on obtient
+
+\[\ln\left(\frac{p}{1-p} \right) = \eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p.\]
+
+ou, en prenant l'exponentielle de chaque côté,
+
+\[ 
+\mathsf{cote} = \frac{p}{1-p} = \exp(\beta_0)\cdots\exp(\beta_p \mathrm{X}_p)
+\]
+
+\textbf{Modèle multiplicatif} pour la cote.
+\end{frame}
+
+\begin{frame}{Cote et probabilité}
+\protect\hypertarget{cote-et-probabilituxe9}{}
+La cote est utilisée dans les paris sportifs \begin{align*}
+ \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
+\end{align*}
+
+\hypertarget{tbl-cotes}{}
+\begin{table}
+\caption{\label{tbl-cotes}Cote et probabilité de succès }\tabularnewline
+
+\centering
+\begin{tabular}{lccccccccc}
+\toprule
+\(p\) & 0.1 & 0.2 & 0.3 & 0.4 & 0.5 & 0.6 & 0.7 & 0.8 & 0.9\\
+\midrule
+cote & \(\frac{1}{9}\) & \(\frac{1}{4}\) & \(\frac{3}{7}\) & \(\frac{2}{3}\) & \(1\) & \(\frac{3}{2}\) & \(\frac{7}{3}\) & \(4\) & \(9\)\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Interprétation avec données du PRCA}
+\protect\hypertarget{interpruxe9tation-avec-donnuxe9es-du-prca}{}
 Le modèle ajusté en termes de cote est \begin{align*}
  \frac{\Pr(Y=1 \mid \mathrm{X}_5=x_5)}{\Pr(Y=0 \mid \mathrm{X}_5=x_5)} = \exp(-3.05)\exp(0.0749x_5).
 \end{align*}
@@ -558,11 +589,123 @@ Le modèle ajusté en termes de cote est \begin{align*}
     est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
   \item
     est de 10 ans, la cote de la personne plus âgée est 112\% plus
-    élevées (cote est multiplié par \(1.078^{10} = 2.12\))
+    élevée (cote multipliée par
+    \(\exp(10 \times 0.0749)=1.078^{10} = 2.12\))
   \end{itemize}
 \end{itemize}
 
 \normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Modèle complet}
+\protect\hypertarget{moduxe8le-complet}{}
+On considère le modèle avec toutes les variables explicatives:
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{modele2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}
+  \AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
+  \AttributeTok{data =}\NormalTok{ logit1,}
+  \AttributeTok{family =}\NormalTok{ binomial)}
+\FunctionTok{exp}\NormalTok{(}\FunctionTok{coef}\NormalTok{(modele2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(Intercept)         x12         x13         x14         x15         x22 
+      0.062       0.438       0.512       0.509       0.699       0.833 
+        x23         x24         x25          x3          x4          x5 
+      0.572       0.087       0.264       3.854       6.236       1.116 
+        x62         x63 
+      0.255       0.090 
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Interprétation des coefficients}
+\protect\hypertarget{interpruxe9tation-des-coefficients}{}
+Si on a plusieurs variables explicatives, les coefficients sont
+interprétés en modifiant une variable à la fois.
+
+On compare deux profils identiques, sauf pour la variable en question
+
+\begin{itemize}
+\tightlist
+\item
+  toute chose étant égale par ailleurs
+\item
+  \emph{ceteris paribus}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Interprétation des coefficients}
+\protect\hypertarget{interpruxe9tation-des-coefficients-1}{}
+\textbf{Variable continue}:
+
+\begin{itemize}
+\tightlist
+\item
+  La cote de la personne plus âgée d'un an est 1.116 fois celle de la
+  personne plus jeune, \emph{ceteris paribus}, une augmentation de
+  11,6\%
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Variable binaire}
+\protect\hypertarget{variable-binaire}{}
+Le rapport de cote pour les femmes (\texttt{x3=1}) versus les hommes
+(\texttt{x3=0}) est de \(\exp(\widehat{\beta}_{\mathrm{X}_3}) = 3.854\):
+
+\begin{itemize}
+\item
+  les femmes sont plus susceptibles de suivre les recommendations
+  d'achat toute chose étant égale par ailleurs, avec une cote 285.4\%.
+\item
+  Inversement, le rapport de cote homme/femme est de 1/3.854=0.259,
+\item
+  la cote des femmes est 74.1\% inférieure à celle des hommes.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Variable catégorielle}
+\protect\hypertarget{variable-catuxe9gorielle}{}
+Toutes les comparaisons sont effectuées avec la catégorie de référence.
+
+Pour \texttt{x1}, c'est à la maison. Le rapport de cote est
+\[\frac{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=2 (\text{employé}), \ldots\}}{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=1 (\text{maison}), \ldots\}} = \exp(\widehat{\beta}_{\mathrm{X}_{1}=2}) = 0.438\]
+
+Le coefficient pour \(\mathrm{X}_{1}=1\) est zéro, d'où
+\(\exp(\widehat{\beta}_{\mathrm{X}_{1}=1})=1\) (absent du tableau).
+
+On peut ordonner les type d'emploi selon la probabilité de succès à
+l'aide des coefficients: \emph{ceteris paribus} on obtient le classement
+
+\begin{itemize}
+\tightlist
+\item
+  employé \textless{} professionnel \textless{} ventes/service
+  \textless{} agriculture \textless{} maison.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Invariance}
+\protect\hypertarget{invariance}{}
+Si on voulait le rapport de cote employé vs professionnel, inutile de
+réajuster le modèle.
+
+On peut calculer
+
+\[ 
+\dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
+\]
+
+Plutôt que de changer la catégorie de référence.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{logit2 }\OtherTok{\textless{}{-}}\NormalTok{ logit1 }\SpecialCharTok{|\textgreater{}} 
+   \FunctionTok{mutate}\NormalTok{(}\AttributeTok{x1 =} \FunctionTok{relevel}\NormalTok{(x1, }\AttributeTok{ref =} \DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 \end{frame}
 
 \begin{frame}{Vraisemblance et estimation du modèle}
@@ -598,29 +741,55 @@ p_i & y_i = 1 (\text{succès})\\
 \[p_i = \mathrm{expit}(\eta_i) = \frac{\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}{1+\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}.\]
 \end{frame}
 
+\begin{frame}{Probabilité conjointe d'événements binaires}
+\protect\hypertarget{probabilituxe9-conjointe-duxe9vuxe9nements-binaires}{}
+\begin{itemize}
+\tightlist
+\item
+  Si les observations sont indépendantes, la probabilité conjointe
+  d'avoir un résultat donné est le produit des probabilités pour chaque
+  observation.
+\item
+  Il n'y a pas de solution explicite pour
+  \(\widehat{\beta}_0, \ldots, \widehat{\beta}_p\) dans le cas de la
+  régression logistique: il faut maximiser la vraisemblance.
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Log vraisemblance}
 \protect\hypertarget{log-vraisemblance}{}
-Pour des questions de stabilité numérique, on maximise le logarithme
-naturel \(\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})\)
-(transformation monotone croissante), qui après simplification s'écrit
-
-\begin{align*}
- \ell(\boldsymbol{\beta}) &= \sum_{i=1}^n Y_i ( \beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}) \\&- \sum_{i=1}^n \ln\left\{1+\exp(\beta_0 + \cdots + \beta_p\mathrm{X}_{ip})\right\}
-\end{align*}
-
-Pas de solution explicite pour
-\(\widehat{\beta}_0, \ldots, \widehat{\beta}_p\) dans le cas de la
-régression logistique.
+\begin{itemize}
+\tightlist
+\item
+  Pour des raisons de stabilité numérique, on maximise le logarithme
+  naturel \(\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})\) de la
+  log vraisemblance conjointe de l'échantillon (transformation monotone
+  croissante).
+\item
+  La log vraisemblance est simplement la somme des contributions
+  individuelles.
+\item
+  On utilise la log vraisemblance \(\ell\) comme mesure d'ajustement et
+  pour construire des tests d'hypothèse.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Prédiction des probabilités de succès}
 \protect\hypertarget{pruxe9diction-des-probabilituxe9s-de-succuxe8s}{}
-Des estimés des paramètres \(\widehat{\boldsymbol{\beta}}\), découle une
+Des estimations des coefficients \(\widehat{\beta}\) découlent une
 estimation de \(\Pr(Y=1)\) pour les valeurs
 \(\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p\) d'un individu donné,
 \begin{align*}
- \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_p\mathrm{X}_p).
+ \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_px_p).
 \end{align*}
+\end{frame}
+
+\begin{frame}{Modèle nul}
+\protect\hypertarget{moduxe8le-nul}{}
+Un modèle avec uniquement l'ordonnée à l'origine retournera
+\(\widehat{p}\), la proportion empirique de succès.
+
+Comme pour la régression linéaire, c'est la moyenne des observations.
 \end{frame}
 
 \begin{frame}[fragile]{Test du rapport de vraisemblance}
@@ -665,6 +834,25 @@ Variable catégorielle à trois niveaux (deux coefficients associés à
                  \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{)) }
 \end{Highlighting}
 \end{Shaded}
+\end{frame}
+
+\begin{frame}{Test d'hypothèse}
+\protect\hypertarget{test-dhypothuxe8se}{}
+On test l'hypothèse nulle
+\(\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0\)
+(soit \(k=2\) restrictions).
+
+L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
+
+Si la valeur \(p\) est inférieure au seuil de signification, typiquement
+\(\alpha = 0.05\), on rejette l'hypothèse nulle.
+
+\begin{itemize}
+\tightlist
+\item
+  on conclut que la variable explicative \(\mathrm{X}_6\) améliore
+  significativement l'ajustement du modèle.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Rapport de vraisemblance}
@@ -749,20 +937,22 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 \begin{frame}[fragile]{Intervalles de confiance pour coefficients}
 \protect\hypertarget{intervalles-de-confiance-pour-coefficients}{}
-On peut fixer la valeur de \(\beta_j\) et maximiser la vraisemblance.
+On peut aussi considérer des intervalles de confiance pour les
+coefficients individuels.
 
-La courbe de vraisemblance profilée résultante permet de déterminer
-l'intervalle de confiance pour le paramètre.
+Ceux obtenus par défaut dans \textbf{R} sont appelés \emph{intervalles
+de confiance de vraisemblance profilée}.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{confint}\NormalTok{(modele2)      }\CommentTok{\# IC pour beta}
-\FunctionTok{exp}\NormalTok{(}\FunctionTok{confint}\NormalTok{(modele2)) }\CommentTok{\#IC pour exp(beta)}
+\FunctionTok{exp}\NormalTok{(}\FunctionTok{confint}\NormalTok{(modele2)) }\CommentTok{\# IC pour exp(beta)}
 \end{Highlighting}
 \end{Shaded}
 
-Les intervalles de confiance de vraisemblance sont invariants aux
-reparamétrisation.
+Ces intervalles sont invariants aux reparamétrisation: si \([b_i, b_s]\)
+est l'intervalle de vraisemblance profilée pour \(\beta\), l'intervalle
+pour \(\exp(\beta)\) est simplement \([\exp(b_i), \exp(b_s)]\).
 \end{frame}
 
 \begin{frame}{Intervalles de confiance}
@@ -952,11 +1142,11 @@ Le modèle est interprétable à l'échelle de la cote
   \begin{itemize}
   \tightlist
   \item
-    pourcentage d'augmentation si \(\exp(\widehat{\eta}) > 1\), avec
-    \(\exp(\widehat{\eta})-1\).
+    pourcentage d'augmentation si \(\exp(\widehat{\beta}) > 1\), avec
+    \(\exp(\widehat{\beta})-1\).
   \item
-    pourcentage de diminution si \(\exp(\widehat{\eta}) < 1\), avec
-    \(1-\exp(\widehat{\eta})\)
+    pourcentage de diminution si \(\exp(\widehat{\beta}) < 1\), avec
+    \(1-\exp(\widehat{\beta})\)
   \end{itemize}
 \end{itemize}
 \end{frame}
