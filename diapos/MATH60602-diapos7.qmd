@@ -11,7 +11,7 @@ innertheme: Flip
 outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
-pdf-engine: lualatex
+pdf-engine: xelatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
@@ -66,12 +66,12 @@ de la performance n'est (toujours) pas recommandé.
 
 Plutôt, considérer
 
-- la validation croisée
-- la division de l'échantillon
+- la validation croisée,
+- la division de l'échantillon.
 
 # Base de données marketing
 
-On considère un modèle pour `yachat`, le fait qu'une personne achète suite à l'envoi d'un catalogue
+On considère un modèle pour `yachat`, le fait qu'une personne achète suite à l'envoi d'un catalogue.
 
 ```{r, echo = TRUE, eval = TRUE}
 data(dbm, package = "hecmulti")
@@ -85,7 +85,7 @@ dbm_class <- dbm |>
 
 # Estimation avec validation croisée
 
-On utilise la fonction `train` du paquet `caret`, avec le modèle linéaire généralisé
+On utilise la fonction `train` du paquet `caret`, avec le modèle linéaire généralisé.
 
 ```{r, warning=FALSE, message=FALSE, echo = TRUE, eval = TRUE}
 set.seed(202209)
@@ -104,11 +104,14 @@ cv_glm <-
 
 
 ```{r}
-#| label: fig-classification0
+#| label: figclassification0
 #| echo: false
 #| eval: true
 #| cache: true
-#| fig-cap: "Répartition des probabilités de succès prédites par validation croisée."
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: '80%'
+#| fig-align: 'center'
 data(dbm, package = 'hecmulti')
 # Transformer les variables catégorielles en facteurs
 # Ne conserver que l'échantillon d'apprentissage
@@ -180,6 +183,12 @@ perfo0 <- perfo(prob = train_prob, resp = train$yachat)
 perfo1 <- perfo(prob = loocv_prob, resp = train$yachat)
 ```
 
+\footnotesize 
+
+Répartition des probabilités de succès prédites par validation croisée.
+
+\normalsize 
+
 # Performance
 
 On peut varier le point de coupure et regarder pour chaque valeur de $c$ la classification résultante.
@@ -189,12 +198,13 @@ On peut varier le point de coupure et regarder pour chaque valeur de $c$ la clas
 #| eval: false
 #| echo: true
 # predict retourne une matrice n x 2 
-# avec [P(Y=1), P(Y=0)]
-predprob <- predict(cv_glm, type = "prob")[,1]
+# avec [P(Y=0), P(Y=1)]
+predprob <- predict(cv_glm, type = "prob")[,2]
+classif <- with(dbm, yachat[test == 0])
 # Tableau de la performance
 hecmulti::perfo_logistique(
   prob = predprob,
-  resp = with(dbm, yachat[test == 0]))
+  resp = classif)
 ```
 
 # Matrice de confusion
@@ -215,3 +225,162 @@ knitr::kable(x = confumat,
                 booktabs = TRUE,
              format = "latex")
 ```
+
+
+# Classification et mesures de performance
+
+\footnotesize 
+
+Les estimés empiriques sont simplement obtenus en calculant les rapports du nombre d'observations dans chaque classe.
+
+\normalsize 
+
+```{r}
+#| label: tableconfumat2
+#| eval: true
+#| echo: false
+confumat <- perfo1$confusion
+rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
+colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
+confumat_th <- confumat
+confumat_th[1:4] <- c("VP","FN","FP","VN")
+tab1 <- knitr::kable(x = confumat,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+tab2 <- knitr::kable(x = confumat_th,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+knitr::kables(list(tab1, tab2))
+
+```
+
+
+- La **sensibilité** est le taux de succès correctement classés, $\Pr(Y=1, \widehat{Y}=1 \mid Y=1)$, soit $\mathsf{VP}/(\mathsf{VP}+\mathsf{FN})$.
+- La **spécificité** est le taux d'échecs correctement classés, $\Pr(Y=0, \widehat{Y}=0 \mid Y=0)$, soit $\mathsf{VN}/(\mathsf{VN}+\mathsf{FP})$.
+- Le taux de **faux positifs** est $\Pr(Y=0, \widehat{Y}=1 \mid \widehat{Y}=1)$.
+- Le taux de **faux négatifs** est $\Pr(Y=1, \widehat{Y}=0 \mid \widehat{Y}=0)$.
+
+# Choix d'un point de coupure.
+
+On peut faire varier le point de coupure et choisir celui qui minimise le  taux de mauvaise classification, $(\mathsf{FP} + \mathsf{FN})/n$.
+
+Ici, avec $c=0.465$, on obtient 15.3\%.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: '80%'
+#| fig-align: 'center'
+library(ggplot2)
+ggplot(data = perfo1$table,
+       aes(x = coupe, 
+           y = 100 - pcorrect)) +
+  geom_line() +
+  geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) + 
+  labs(x = "point de coupure",
+       y = "",
+       subtitle = "taux de mauvaise classification (pourcentage)") +
+  scale_x_continuous(expand = c(0.01,0.01),
+                     breaks = c(0,0.25,0.5,0.75,1),
+                     labels = c("0","0.25","0.5","0.75","1")) + 
+  theme_classic()
+```
+
+# Fonction d'efficacité du récepteur
+
+Graphique de la sensibilité en fonction de un moins la spécificité, en faisant varier le point de coupure, souvent appelé courbe ROC (de l'anglais *receiver operating characteristic*).
+
+La fonction `hecmulti::courbe_roc` permet de tracer la courbe et de calculer l’aire sous la courbe. 
+
+```{r}
+#| eval: false
+#| echo: true
+roc <- hecmulti::courbe_roc(
+  resp = classif,
+  prob = predprob,
+  plot = TRUE)
+print(roc)
+## Pour extraire l'aire sous la courbe, roc$aire
+```
+
+
+# Courbe ROC
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '80%'
+#| fig-align: 'center'
+predprob <- predict(cv_glm, type = "prob")[,2]
+classif <- with(dbm, yachat[test == 0])
+roc <- hecmulti::courbe_roc(
+  resp = classif,
+  prob = predprob,
+  plot = TRUE)
+## Pour extraire l'aire sous la courbe, roc$aire
+```
+
+# Aire sous la courbe
+
+- Plus la courbe se rapproche de (0, 1) (coin supérieur gauche), meilleure est la classification.
+- Autrement dit, plus l'aire sous la courbe est près de 1, mieux c’est.
+- Une aire sous la courbe de 0.5 (ligne diagonale) correspond à la performance d'une allocation aléatoire.
+
+# Courbe lift
+
+À quelle point notre modèle est meileur qu'une assignation aléatoire?
+
+- Ordonner les probabilités de succès estimées par le modèle, $\widehat{p}$, en ordre croissant.
+- Regarder quelle pourcentage de ces derniers seraient bien classifiés (le nombre de vrais positifs sur le nombre de succès).
+La référence est la ligne diagonale, qui correspond à une détection aléatoire.
+
+# Code pour produire la courbe lift 
+
+```{r}
+#| label: figcourbe-lift
+#| eval: false
+#| echo: true
+tab_lift <- hecmulti::courbe_lift(
+  prob = 1-predprob,
+  resp = classif, 
+  plot = TRUE)
+tab_lift
+```
+
+# Courbe lift
+
+```{r}
+#| label: figcourbe-lift-pr
+#| eval: true
+#| echo: false
+tab_lift <- hecmulti::courbe_lift(
+  prob = 1-predprob,
+  resp = classif, 
+  plot = TRUE)
+tab_lift
+```
+
+
+# Tableau du lift
+
+```{r}
+#| label: tbl-lift
+#| echo: false
+#| eval: true
+#| tbl-cap: "Tableau du lift (déciles)."
+knitr::kable(tab_lift, 
+             booktabs = TRUE,
+             digits = 2,
+             format = "latex") |>
+  kableExtra::kable_styling(full_width = TRUE)
+```
+
+\footnotesize 
+Si on classifiait comme acheteurs les 10\% qui ont la plus forte probabilité estimée d'achat, on détecterait 81 des 210 clients.
+
+Le lift est le nombre détecté par le modèle sur proportion au hasard.
+\normalsize

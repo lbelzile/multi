@@ -147,6 +147,20 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
@@ -221,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, frame hidden, sharp corners, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Rappel}
 \protect\hypertarget{rappel}{}
@@ -285,16 +299,16 @@ Plutôt, considérer
 \begin{itemize}
 \tightlist
 \item
-  la validation croisée
+  la validation croisée,
 \item
-  la division de l'échantillon
+  la division de l'échantillon.
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Base de données marketing}
 \protect\hypertarget{base-de-donnuxe9es-marketing}{}
 On considère un modèle pour \texttt{yachat}, le fait qu'une personne
-achète suite à l'envoi d'un catalogue
+achète suite à l'envoi d'un catalogue.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -312,7 +326,7 @@ achète suite à l'envoi d'un catalogue
 \begin{frame}[fragile]{Estimation avec validation croisée}
 \protect\hypertarget{estimation-avec-validation-croisuxe9e}{}
 On utilise la fonction \texttt{train} du paquet \texttt{caret}, avec le
-modèle linéaire généralisé
+modèle linéaire généralisé.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -333,14 +347,17 @@ modèle linéaire généralisé
 \protect\hypertarget{pruxe9dictions}{}
 \begin{figure}
 
-{\centering \includegraphics{MATH60602-diapos7_files/figure-beamer/fig-classification0-1.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/figclassification0-1.pdf}
 
 }
 
-\caption{\label{fig-classification0}Répartition des probabilités de
-succès prédites par validation croisée.}
-
 \end{figure}
+
+\footnotesize
+
+Répartition des probabilités de succès prédites par validation croisée.
+
+\normalsize
 \end{frame}
 
 \begin{frame}[fragile]{Performance}
@@ -351,12 +368,13 @@ On peut varier le point de coupure et regarder pour chaque valeur de
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# predict retourne une matrice n x 2 }
-\CommentTok{\# avec [P(Y=1), P(Y=0)]}
-\NormalTok{predprob }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(cv\_glm, }\AttributeTok{type =} \StringTok{"prob"}\NormalTok{)[,}\DecValTok{1}\NormalTok{]}
+\CommentTok{\# avec [P(Y=0), P(Y=1)]}
+\NormalTok{predprob }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(cv\_glm, }\AttributeTok{type =} \StringTok{"prob"}\NormalTok{)[,}\DecValTok{2}\NormalTok{]}
+\NormalTok{classif }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(dbm, yachat[test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{])}
 \CommentTok{\# Tableau de la performance}
 \NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{perfo\_logistique}\NormalTok{(}
   \AttributeTok{prob =}\NormalTok{ predprob,}
-  \AttributeTok{resp =} \FunctionTok{with}\NormalTok{(dbm, yachat[test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{]))}
+  \AttributeTok{resp =}\NormalTok{ classif)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
@@ -380,6 +398,192 @@ coupure donné.
 \bottomrule
 \end{tabular}
 \end{table}
+\end{frame}
+
+\begin{frame}{Classification et mesures de performance}
+\protect\hypertarget{classification-et-mesures-de-performance}{}
+\footnotesize
+
+Les estimés empiriques sont simplement obtenus en calculant les rapports
+du nombre d'observations dans chaque classe.
+
+\normalsize
+
+\begin{table}
+
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & 109 & 52\\
+\(\widehat{Y}=0\) & 101 & 738\\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & VP & FP\\
+\(\widehat{Y}=0\) & FN & VN\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  La \textbf{sensibilité} est le taux de succès correctement classés,
+  \(\Pr(Y=1, \widehat{Y}=1 \mid Y=1)\), soit
+  \(\mathsf{VP}/(\mathsf{VP}+\mathsf{FN})\).
+\item
+  La \textbf{spécificité} est le taux d'échecs correctement classés,
+  \(\Pr(Y=0, \widehat{Y}=0 \mid Y=0)\), soit
+  \(\mathsf{VN}/(\mathsf{VN}+\mathsf{FP})\).
+\item
+  Le taux de \textbf{faux positifs} est
+  \(\Pr(Y=0, \widehat{Y}=1 \mid \widehat{Y}=1)\).
+\item
+  Le taux de \textbf{faux négatifs} est
+  \(\Pr(Y=1, \widehat{Y}=0 \mid \widehat{Y}=0)\).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Choix d'un point de coupure.}
+\protect\hypertarget{choix-dun-point-de-coupure.}{}
+On peut faire varier le point de coupure et choisir celui qui minimise
+le taux de mauvaise classification, \((\mathsf{FP} + \mathsf{FN})/n\).
+
+Ici, avec \(c=0.465\), on obtient 15.3\%.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-7-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Fonction d'efficacité du récepteur}
+\protect\hypertarget{fonction-defficacituxe9-du-ruxe9cepteur}{}
+Graphique de la sensibilité en fonction de un moins la spécificité, en
+faisant varier le point de coupure, souvent appelé courbe ROC (de
+l'anglais \emph{receiver operating characteristic}).
+
+La fonction \texttt{hecmulti::courbe\_roc} permet de tracer la courbe et
+de calculer l'aire sous la courbe.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{roc }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{courbe\_roc}\NormalTok{(}
+  \AttributeTok{resp =}\NormalTok{ classif,}
+  \AttributeTok{prob =}\NormalTok{ predprob,}
+  \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(roc)}
+\DocumentationTok{\#\# Pour extraire l\textquotesingle{}aire sous la courbe, roc$aire}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Courbe ROC}
+\protect\hypertarget{courbe-roc}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-9-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Aire sous la courbe}
+\protect\hypertarget{aire-sous-la-courbe}{}
+\begin{itemize}
+\tightlist
+\item
+  Plus la courbe se rapproche de (0, 1) (coin supérieur gauche),
+  meilleure est la classification.
+\item
+  Autrement dit, plus l'aire sous la courbe est près de 1, mieux c'est.
+\item
+  Une aire sous la courbe de 0.5 (ligne diagonale) correspond à la
+  performance d'une allocation aléatoire.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Courbe lift}
+\protect\hypertarget{courbe-lift}{}
+À quelle point notre modèle est meileur qu'une assignation aléatoire?
+
+\begin{itemize}
+\tightlist
+\item
+  Ordonner les probabilités de succès estimées par le modèle,
+  \(\widehat{p}\), en ordre croissant.
+\item
+  Regarder quelle pourcentage de ces derniers seraient bien classifiés
+  (le nombre de vrais positifs sur le nombre de succès). La référence
+  est la ligne diagonale, qui correspond à une détection aléatoire.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Code pour produire la courbe lift}
+\protect\hypertarget{code-pour-produire-la-courbe-lift}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{tab\_lift }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{courbe\_lift}\NormalTok{(}
+  \AttributeTok{prob =} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{predprob,}
+  \AttributeTok{resp =}\NormalTok{ classif, }
+  \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{tab\_lift}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Courbe lift}
+\protect\hypertarget{courbe-lift-1}{}
+\includegraphics{MATH60602-diapos7_files/figure-beamer/figcourbe-lift-pr-1.pdf}
+
+\begin{verbatim}
+    pourcent hasard modele       lift
+10%       10     21      0 0.00000000
+20%       20     42      0 0.00000000
+30%       30     63      1 0.01587302
+40%       40     84      6 0.07142857
+50%       50    105     15 0.14285714
+60%       60    126     27 0.21428571
+70%       70    147     51 0.34693878
+80%       80    168     83 0.49404762
+90%       90    189    129 0.68253968
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Tableau du lift}
+\protect\hypertarget{tableau-du-lift}{}
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\toprule
+  & pourcent & hasard & modele & lift\\
+\midrule
+10\% & 10 & 21 & 0 & 0.00\\
+20\% & 20 & 42 & 0 & 0.00\\
+30\% & 30 & 63 & 1 & 0.02\\
+40\% & 40 & 84 & 6 & 0.07\\
+50\% & 50 & 105 & 15 & 0.14\\
+\addlinespace
+60\% & 60 & 126 & 27 & 0.21\\
+70\% & 70 & 147 & 51 & 0.35\\
+80\% & 80 & 168 & 83 & 0.49\\
+90\% & 90 & 189 & 129 & 0.68\\
+\bottomrule
+\end{tabu}
+
+\footnotesize
+
+Si on classifiait comme acheteurs les 10\% qui ont la plus forte
+probabilité estimée d'achat, on détecterait 81 des 210 clients.
+
+Le lift est le nombre détecté par le modèle sur proportion au hasard.
+\normalsize
 \end{frame}
 
 
