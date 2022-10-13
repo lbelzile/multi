@@ -1,5 +1,5 @@
 ---
-title: "Régression logistique"
+title: "Régression logistique: prédiction et classification"
 subtitle: "Analyse multidimensionnelle appliquée"
 date: "automne 2022"
 author: "Léo Belzile"
@@ -11,7 +11,7 @@ innertheme: Flip
 outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
-pdf-engine: xelatex
+pdf-engine: lualatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
@@ -53,7 +53,7 @@ Choisir un point de coupure $c$:
 
 # Qualité de l'ajustement
 
-L'erreur quadratique pour une variable binaire est
+L'erreur quadratique pour un problème de classification est
 $$(Y-\widehat{Y})^2 = \begin{cases} 1, & Y \neq \widehat{Y}; \\0, & Y = \widehat{Y}.\end{cases}$$
 et donc on obtient le **taux de mauvaise classification** si on calcule la moyenne.
 
@@ -61,13 +61,9 @@ Plus le taux de mauvaise classification est petit, meilleure est la capacité pr
 
 # Estimation de la performance du modèle
 
-Utiliser les mêmes données pour l'ajustement et l'estimation
-de la performance n'est (toujours) pas recommandé.
+Utiliser les mêmes données pour l'ajustement et l'estimation de la performance n'est (toujours) pas recommandé.
 
-Plutôt, considérer
-
-- la validation croisée,
-- la division de l'échantillon.
+Plutôt, considérer la validation croisée ou la division de l'échantillon.
 
 # Base de données marketing
 
@@ -209,7 +205,7 @@ hecmulti::perfo_logistique(
 
 # Matrice de confusion
 
-On peut classer les observations dans un tableau pour un point de coupure donné.
+On peut classifier les observations dans un tableau pour un point de coupure donné.
 
 ```{r}
 #| label: tbl-confumat
@@ -266,9 +262,7 @@ knitr::kables(list(tab1, tab2))
 
 # Choix d'un point de coupure.
 
-On peut faire varier le point de coupure et choisir celui qui minimise le  taux de mauvaise classification, $(\mathsf{FP} + \mathsf{FN})/n$.
-
-Ici, avec $c=0.465$, on obtient 15.3\%.
+On peut faire varier le point de coupure et choisir celui qui maximise le taux de bonne classification, $\widehat{\Pr}(Y = \widehat{Y})$.
 
 ```{r}
 #| fig-width: 8
@@ -289,6 +283,176 @@ ggplot(data = perfo1$table,
                      labels = c("0","0.25","0.5","0.75","1")) + 
   theme_classic()
 ```
+
+Avec $c=0.465$, on obtient un taux de mauvaise classification de 15.3\%.
+
+# Matrice de gain
+
+Il est également possible d'assigner un poids différent à chaque événement selon le scénario et chercher à maximiser le gain.
+
+
+```{r}
+#| label: tbl-tableconfumat4
+#| eval: true
+#| echo: false
+#| tbl-cap: "Matrice de gain (cas général)"
+confumat_tbclassif <- confumat
+confumat_tbclassif[1:4] <- c("$c_{11}$","$c_{01}$","$c_{10}$","$c_{00}$")
+tab1 <- knitr::kable(x = confumat_tbclassif,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+tab1
+
+```
+
+
+
+On calcule le gain en faisant la somme des entrées fois les poids, soit $$\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.$$
+
+# Gain pour taux de bonne classification
+
+Si on cherche à maximiser le taux de bonne classification, cela revient à assigner les poids suivants.
+
+
+```{r}
+#| label: tbl-tableconfumat3
+#| tbl-cap: "Matrice de gain pour le taux de bonne classification."
+#| eval: true
+#| echo: false
+#| fig-align: 'center'
+confumat_tbclassif <- confumat
+confumat_tbclassif[1:4] <- c("$1$","$0$","$0$","$1$")
+tab1 <- knitr::kable(x = confumat_tbclassif,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex",)
+tab1
+
+```
+
+# Coûts et bénéfices du ciblage marketing
+
+
+
+- Si on n'envoie pas de catalogue, notre gain est nul. 
+- Si on envoie le catalogue 
+   - à un client qui n'achète pas, on perd 10$ (le coût de l'envoi). 
+   - à un client qui achète, notre revenu net est de 57\$ (revenu moyen moins coût de l'envoi).
+
+
+
+```{r}
+#| label: tbl-dbm-ymontant-apprentissage
+#| echo: false
+#| eval: true
+#| tbl-cap: "Statistiques descriptives des montants d'achats pour la base de données marketing."
+data(dbm, package = "hecmulti")
+dbm |>
+  dplyr::filter(test == 0,
+                  !is.na(ymontant))  |>
+  dplyr::summarize("n" = length(ymontant), 
+            "moyenne" = round(mean(ymontant),2), 
+            "écart-type" =round(sd(ymontant),2), 
+            "minimum" = min(ymontant), 
+            "maximum" = max(ymontant)) |>
+knitr::kable(booktabs = TRUE) |>
+    kableExtra::kable_styling(full_width = TRUE)
+```
+\footnotesize 
+Statistiques descriptives des montants d'achats pour la base de données marketing.
+
+\normalsize
+
+
+```{r}
+#| label: tbl-tableconfumat5
+#| eval: true
+#| echo: false
+#| tbl-cap: "Matrice de gain pour ciblage marketing."
+confumat_tbclassif <- confumat
+confumat_tbclassif[1:4] <- c("$57$","$0$","$-10$","$0$")
+knitr::kable(x = confumat_tbclassif,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+```
+
+
+# Point de coupure avec gain
+
+```{r}
+#| label: fig-coupure-pondere-fake
+#| eval: false
+#| echo: true
+#| cache: true
+#| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
+formule = formula(yachat ~ x1 + x2 + x3 +
+                    x4 + x5 + x6 + x7 + 
+                    x8 + x9 + x10)
+modele <- glm(formule, 
+              family = binomial, 
+              data = hecmulti::dbm)
+coupe <- hecmulti::select_pcoupe(
+  modele = modele, 
+  c00 = 0, 
+  c01 = 0, 
+  c10 = -10, 
+  c11 = 57,
+  plot = TRUE)
+```
+
+\footnotesize
+
+
+La fonction `select_pcoupe` estime le gain pour différents points de coupures, avec probabilités estimées par validation croisée avec `ncv` groupes, répétée `nrep` fois.
+
+\normalsize
+
+# Calcul du gain
+
+
+```{r}
+#| label: fig-coupure-pondere
+#| eval: true
+#| echo: false
+#| cache: true
+#| fig-align: 'center'
+#| out-width: '80%'
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
+formule = formula(yachat ~ x1 + x2 + x3 +
+                    x4 + x5 + x6 + x7 + 
+                    x8 + x9 + x10)
+modele <- glm(formule, 
+              family = binomial, 
+              data = hecmulti::dbm)
+coupe <- hecmulti::select_pcoupe(
+  modele = modele, 
+  c00 = 0, 
+  c01 = 0, 
+  c10 = -10, 
+  c11 = 57,
+  plot = TRUE)
+```
+
+
+
+# Point de coupure optimal et explication
+
+Dans l'exemple, le point de coupure qui maximise le gain est `r coupe$optim`. Avec ce point de coupure, on estime que 
+
+- le taux de bonne classification est de `r round(perfo1$table[24,"pcorrect"], 2)` 
+- la sensibilité est de `r round(perfo1$table[24,"sensi"], 2)`. 
+
+Ainsi, on va détecter environ `r round(perfo1$table[24,"sensi"],2)`\% des clients qui achètent. 
+
+Il est coûteux de rater un client potentiel, donc la stratégie optimale est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs d'entre eux n'achètent rien. 
+
 
 # Fonction d'efficacité du récepteur
 
@@ -345,7 +509,7 @@ La référence est la ligne diagonale, qui correspond à une détection aléatoi
 #| eval: false
 #| echo: true
 tab_lift <- hecmulti::courbe_lift(
-  prob = 1-predprob,
+  prob = predprob,
   resp = classif, 
   plot = TRUE)
 tab_lift
@@ -358,10 +522,9 @@ tab_lift
 #| eval: true
 #| echo: false
 tab_lift <- hecmulti::courbe_lift(
-  prob = 1-predprob,
+  prob = predprob,
   resp = classif, 
   plot = TRUE)
-tab_lift
 ```
 
 
@@ -372,15 +535,137 @@ tab_lift
 #| echo: false
 #| eval: true
 #| tbl-cap: "Tableau du lift (déciles)."
-knitr::kable(tab_lift, 
+knitr::kable(tab_lift[,-1], 
              booktabs = TRUE,
              digits = 2,
-             format = "latex") |>
-  kableExtra::kable_styling(full_width = TRUE)
+             col.names = c("hasard", 
+                           "modèle", 
+                           "lift"),
+             format = "latex") 
 ```
 
 \footnotesize 
 Si on classifiait comme acheteurs les 10\% qui ont la plus forte probabilité estimée d'achat, on détecterait 81 des 210 clients.
 
-Le lift est le nombre détecté par le modèle sur proportion au hasard.
+Le lift est le nombre détecté par le modèle sur la proportion détectée par hasard.
 \normalsize
+
+# Calibration du modèle
+
+Certains modèles sont trop confiants dans leurs prédictions (surajustement).
+
+
+une statistique simple proposée par [Spiegelhalter (1986)]( https://doi.org/10.1002/sim.4780050506) peut être utile à cette fin. Pour une variable Bernoulli $Y \in \{0,1\}$, l'erreur quadratique moyenne s'écrit
+\begin{align*}
+\overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
+\\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
+\end{align*}
+
+Si notre modèle était parfaitement calibré, $\mathsf{E}_0(Y_i)=p_i$ et $\mathsf{Va}_0(Y_i) = p_i(1-p_i)$.
+
+# Test de Spiegelhalter
+
+On peut calculer la moyenne et la variance attendue sous l'hypothèse nulle et construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506). $$Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}$$ 
+
+Sous l'hypothèse nulle de calibration parfaite, $Z \sim \mathsf{No}(0,1)$ en grand échantillon. 
+
+
+# Calibration du modèle 
+
+```{r}
+#| label: classification
+#| eval: true
+#| echo: true
+hecmulti::calibration(
+   prob = predprob, 
+   resp = classif)
+```
+
+Il n'y a pas de preuve ici que le modèle est mal calibré.
+
+# Sélection de variables en régression logistique
+
+Même principes que précédemment, mais les modèles de régression logistique sont plus coûteux à estimer.
+
+On peut utiliser les critères d'information puisque le modèle est ajusté par maximum de vraisemblance.
+
+
+# Fonctions **R** pour la sélection de modèles
+
+- `glmbb::glmbb` permet une recherche exhaustive de tous les sous-modèles à au plus une certaine distance (`cutoff`) du modèle avec le plus petit critère d'information (`criterion`).
+- `step` permet de faire une recherche séquentielle avec un critère d'information.
+- `glmulti::glmulti` permet une recherche exhaustive (`method = "h"`) ou par le biais d'un algorithme génétique (`method = "g"`).
+- `glmnet::glmnet` permet d'ajuster le modèle avec pénalité LASSO.
+
+Voir le [code en ligne](https://lbelzile.github.io/math60602/05-reglogistique.html#s%C3%A9lection-de-variables-en-r%C3%A9gression-logistique).
+
+# Objectif du ciblage marketing
+
+Déterminer si le revenu prévu justifie l'envoi du catalogue
+
+$$\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).$$
+
+On peut combiner un modèle de régression logistique avec la régression linéaire (ajustés simultanément avec un modèle Heckit).
+
+Ou simplement ignorer le montant d'achat et envoyer un catalogue si la probabilité d'achat excède notre point de coupure optimal.
+
+# Stratégie de référence
+
+- Parmi les 100K clients, 23 179 auraient acheté si on leur avait envoyé le catalogue
+- Ces clients auraient généré des revenus de 1 601 212\$.
+- Si on enlève le coût des envois (100 000 $\times$ 10\$), la stratégie de référence permet un revenu net de 601 212\$.
+
+
+# Stratégie d'ajustement
+
+
+En résumé, la procédure numérique à réaliser est la suivante:
+
+- Choisir les variables à essayer (termes quadratiques, interactions, etc.)
+- Choisir l'algorithme ou la méthode de sélection du modèle.
+- Construire un catalogue de modèles: pour chacun, calculer les prédictions par validation croisée.
+- Calculer le point de coupure optimal pour chaque modèle et le gain associé.
+- Sélectionner le modèle qui **maximise le gain**.
+
+# Prédiction et envoi
+
+- Prédire les 100 000 observations de l'échantillon test.
+- Envoyer un catalogue si la probabilité d'achat excède le point de coupure.
+- Calculer le revenu résultant:
+    - zéro si on n'envoie pas de catalogue
+    - $-10$ si la personne n'achète pas
+    - $-10$ plus l'achat si la personne achète.
+
+**En pratique**, on ne pourrait pas *a priori* connaître le revenu résultant de cette stratégie.
+
+# Conclusion
+
+
+Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus de 978 226\$.
+
+C’est une énorme amélioration, de plus de 56%, par rapport à la stratégie de référence.
+
+
+# Récapitulatif
+
+- La classification est une forme d'apprentissage supervisée.
+- On peut assigner l'observation à la classe la plus plausible, ou déterminer un point de coupure.
+- Si on a un objectif particulier (fonction de gain), on peut optimiser les profits en assignant une importance différente à chaque scénario.
+- On peut catégoriser les observations dans une matrice de confusion.
+
+# Récapitulatif
+
+- On s'intéresse à
+   - la spécificité (proportion d'échecs correctement classifiés) 
+   - la sensibilité (proportion de succès correctement classifiés)
+   - le taux de bonne classification
+   - le taux de faux positifs ou faux négatifs
+- L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe ROC) et le lift donnent une mesure de la qualité des prédictions.
+
+# Récapitulatif
+
+- Les principes de sélection de variable couverts précédemment s'appliquent toujours (recherche exhaustive, séquentielle et LASSO).
+- On peut calculer les critères d'information puisque le modèle est ajusté par maximum de vraisemblance.
+- Attention au surajustement! Suspect si les probabilités estimées sont près de 0/1 (vérifier la calibration).
+- Deux étapes: sélectionner le modèle (variables) et le point de coupure.
+- D'autres modèles que la régression logistique (arbres de régression, etc.) sont envisageables pour la classification.

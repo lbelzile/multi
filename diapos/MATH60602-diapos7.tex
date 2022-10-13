@@ -147,20 +147,6 @@
 \def\fps@figure{htbp}
 \makeatother
 
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
@@ -222,12 +208,12 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Régression logistique},
+  pdftitle={Régression logistique: prédiction et classification},
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Régression logistique}
+\title{Régression logistique: prédiction et classification}
 \subtitle{Analyse multidimensionnelle appliquée}
 \author{Léo Belzile}
 \date{automne 2022}
@@ -235,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, frame hidden, sharp corners, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, breakable, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Rappel}
 \protect\hypertarget{rappel}{}
@@ -280,7 +266,7 @@ Choisir un point de coupure \(c\):
 
 \begin{frame}{Qualité de l'ajustement}
 \protect\hypertarget{qualituxe9-de-lajustement}{}
-L'erreur quadratique pour une variable binaire est
+L'erreur quadratique pour un problème de classification est
 \[(Y-\widehat{Y})^2 = \begin{cases} 1, & Y \neq \widehat{Y}; \\0, & Y = \widehat{Y}.\end{cases}\]
 et donc on obtient le \textbf{taux de mauvaise classification} si on
 calcule la moyenne.
@@ -294,15 +280,8 @@ capacité prédictive du modèle.
 Utiliser les mêmes données pour l'ajustement et l'estimation de la
 performance n'est (toujours) pas recommandé.
 
-Plutôt, considérer
-
-\begin{itemize}
-\tightlist
-\item
-  la validation croisée,
-\item
-  la division de l'échantillon.
-\end{itemize}
+Plutôt, considérer la validation croisée ou la division de
+l'échantillon.
 \end{frame}
 
 \begin{frame}[fragile]{Base de données marketing}
@@ -381,7 +360,7 @@ On peut varier le point de coupure et regarder pour chaque valeur de
 
 \begin{frame}{Matrice de confusion}
 \protect\hypertarget{matrice-de-confusion}{}
-On peut classer les observations dans un tableau pour un point de
+On peut classifier les observations dans un tableau pour un point de
 coupure donné.
 
 \hypertarget{tbl-confumat}{}
@@ -450,10 +429,8 @@ du nombre d'observations dans chaque classe.
 
 \begin{frame}{Choix d'un point de coupure.}
 \protect\hypertarget{choix-dun-point-de-coupure.}{}
-On peut faire varier le point de coupure et choisir celui qui minimise
-le taux de mauvaise classification, \((\mathsf{FP} + \mathsf{FN})/n\).
-
-Ici, avec \(c=0.465\), on obtient 15.3\%.
+On peut faire varier le point de coupure et choisir celui qui maximise
+le taux de bonne classification, \(\widehat{\Pr}(Y = \widehat{Y})\).
 
 \begin{figure}
 
@@ -462,6 +439,167 @@ Ici, avec \(c=0.465\), on obtient 15.3\%.
 }
 
 \end{figure}
+
+Avec \(c=0.465\), on obtient un taux de mauvaise classification de
+15.3\%.
+\end{frame}
+
+\begin{frame}{Matrice de gain}
+\protect\hypertarget{matrice-de-gain}{}
+Il est également possible d'assigner un poids différent à chaque
+événement selon le scénario et chercher à maximiser le gain.
+
+\hypertarget{tbl-tableconfumat4}{}
+\begin{table}
+\caption{\label{tbl-tableconfumat4}Matrice de gain (cas général) }\tabularnewline
+
+\centering
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & $c_{11}$ & $c_{10}$\\
+\(\widehat{Y}=0\) & $c_{01}$ & $c_{00}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On calcule le gain en faisant la somme des entrées fois les poids, soit
+\[\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.\]
+\end{frame}
+
+\begin{frame}{Gain pour taux de bonne classification}
+\protect\hypertarget{gain-pour-taux-de-bonne-classification}{}
+Si on cherche à maximiser le taux de bonne classification, cela revient
+à assigner les poids suivants.
+
+\hypertarget{tbl-tableconfumat3}{}
+\begin{table}
+\caption{\label{tbl-tableconfumat3}Matrice de gain pour le taux de bonne classification. }\tabularnewline
+
+\centering
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & $1$ & $0$\\
+\(\widehat{Y}=0\) & $0$ & $1$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Coûts et bénéfices du ciblage marketing}
+\protect\hypertarget{couxfbts-et-buxe9nuxe9fices-du-ciblage-marketing}{}
+\begin{itemize}
+\tightlist
+\item
+  Si on n'envoie pas de catalogue, notre gain est nul.
+\item
+  Si on envoie le catalogue
+
+  \begin{itemize}
+  \tightlist
+  \item
+    à un client qui n'achète pas, on perd 10\$ (le coût de l'envoi).
+  \item
+    à un client qui achète, notre revenu net est de 57\$ (revenu moyen
+    moins coût de l'envoi).
+  \end{itemize}
+\end{itemize}
+
+\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\toprule
+n & moyenne & écart-type & minimum & maximum\\
+\midrule
+210 & 67.29 & 13.24 & 25 & 109\\
+\bottomrule
+\end{tabu}
+
+\footnotesize
+
+Statistiques descriptives des montants d'achats pour la base de données
+marketing.
+
+\normalsize
+
+\hypertarget{tbl-tableconfumat5}{}
+\begin{table}
+\caption{\label{tbl-tableconfumat5}Matrice de gain pour ciblage marketing. }\tabularnewline
+
+\centering
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & $57$ & $-10$\\
+\(\widehat{Y}=0\) & $0$ & $0$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Point de coupure avec gain}
+\protect\hypertarget{point-de-coupure-avec-gain}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{formule }\OtherTok{=} \FunctionTok{formula}\NormalTok{(yachat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}
+\NormalTok{                    x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+}\NormalTok{ x6 }\SpecialCharTok{+}\NormalTok{ x7 }\SpecialCharTok{+} 
+\NormalTok{                    x8 }\SpecialCharTok{+}\NormalTok{ x9 }\SpecialCharTok{+}\NormalTok{ x10)}
+\NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(formule, }
+              \AttributeTok{family =}\NormalTok{ binomial, }
+              \AttributeTok{data =}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{dbm)}
+\NormalTok{coupe }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{select\_pcoupe}\NormalTok{(}
+  \AttributeTok{modele =}\NormalTok{ modele, }
+  \AttributeTok{c00 =} \DecValTok{0}\NormalTok{, }
+  \AttributeTok{c01 =} \DecValTok{0}\NormalTok{, }
+  \AttributeTok{c10 =} \SpecialCharTok{{-}}\DecValTok{10}\NormalTok{, }
+  \AttributeTok{c11 =} \DecValTok{57}\NormalTok{,}
+  \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\footnotesize
+
+La fonction \texttt{select\_pcoupe} estime le gain pour différents
+points de coupures, avec probabilités estimées par validation croisée
+avec \texttt{ncv} groupes, répétée \texttt{nrep} fois.
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Calcul du gain}
+\protect\hypertarget{calcul-du-gain}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/fig-coupure-pondere-1.pdf}
+
+}
+
+\caption{\label{fig-coupure-pondere}Estimation du gain moyen en fonction
+du point de coupure pour l'exemple de base de données marketing.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Point de coupure optimal et explication}
+\protect\hypertarget{point-de-coupure-optimal-et-explication}{}
+Dans l'exemple, le point de coupure qui maximise le gain est 0.13. Avec
+ce point de coupure, on estime que
+
+\begin{itemize}
+\tightlist
+\item
+  le taux de bonne classification est de 70.3
+\item
+  la sensibilité est de 90.95.
+\end{itemize}
+
+Ainsi, on va détecter environ 90.95\% des clients qui achètent.
+
+Il est coûteux de rater un client potentiel, donc la stratégie optimale
+est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs
+d'entre eux n'achètent rien.
 \end{frame}
 
 \begin{frame}[fragile]{Fonction d'efficacité du récepteur}
@@ -489,7 +627,7 @@ de calculer l'aire sous la courbe.
 \protect\hypertarget{courbe-roc}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-9-1.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-15-1.pdf}
 
 }
 
@@ -532,7 +670,7 @@ de calculer l'aire sous la courbe.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{tab\_lift }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{courbe\_lift}\NormalTok{(}
-  \AttributeTok{prob =} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{predprob,}
+  \AttributeTok{prob =}\NormalTok{ predprob,}
   \AttributeTok{resp =}\NormalTok{ classif, }
   \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
 \NormalTok{tab\_lift}
@@ -540,50 +678,271 @@ de calculer l'aire sous la courbe.
 \end{Shaded}
 \end{frame}
 
-\begin{frame}[fragile]{Courbe lift}
+\begin{frame}{Courbe lift}
 \protect\hypertarget{courbe-lift-1}{}
 \includegraphics{MATH60602-diapos7_files/figure-beamer/figcourbe-lift-pr-1.pdf}
-
-\begin{verbatim}
-    pourcent hasard modele       lift
-10%       10     21      0 0.00000000
-20%       20     42      0 0.00000000
-30%       30     63      1 0.01587302
-40%       40     84      6 0.07142857
-50%       50    105     15 0.14285714
-60%       60    126     27 0.21428571
-70%       70    147     51 0.34693878
-80%       80    168     83 0.49404762
-90%       90    189    129 0.68253968
-\end{verbatim}
 \end{frame}
 
 \begin{frame}{Tableau du lift}
 \protect\hypertarget{tableau-du-lift}{}
-\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\hypertarget{tbl-lift}{}
+\begin{table}
+\caption{\label{tbl-lift}Tableau du lift (déciles). }\tabularnewline
+
+\centering
+\begin{tabular}{lrrr}
 \toprule
-  & pourcent & hasard & modele & lift\\
+  & hasard & modèle & lift\\
 \midrule
-10\% & 10 & 21 & 0 & 0.00\\
-20\% & 20 & 42 & 0 & 0.00\\
-30\% & 30 & 63 & 1 & 0.02\\
-40\% & 40 & 84 & 6 & 0.07\\
-50\% & 50 & 105 & 15 & 0.14\\
+10\% & 21 & 81 & 3.86\\
+20\% & 42 & 127 & 3.02\\
+30\% & 63 & 159 & 2.52\\
+40\% & 84 & 183 & 2.18\\
+50\% & 105 & 195 & 1.86\\
 \addlinespace
-60\% & 60 & 126 & 27 & 0.21\\
-70\% & 70 & 147 & 51 & 0.35\\
-80\% & 80 & 168 & 83 & 0.49\\
-90\% & 90 & 189 & 129 & 0.68\\
+60\% & 126 & 204 & 1.62\\
+70\% & 147 & 209 & 1.42\\
+80\% & 168 & 210 & 1.25\\
+90\% & 189 & 210 & 1.11\\
 \bottomrule
-\end{tabu}
+\end{tabular}
+\end{table}
 
 \footnotesize
 
 Si on classifiait comme acheteurs les 10\% qui ont la plus forte
 probabilité estimée d'achat, on détecterait 81 des 210 clients.
 
-Le lift est le nombre détecté par le modèle sur proportion au hasard.
-\normalsize
+Le lift est le nombre détecté par le modèle sur la proportion détectée
+par hasard. \normalsize
+\end{frame}
+
+\begin{frame}{Calibration du modèle}
+\protect\hypertarget{calibration-du-moduxe8le}{}
+Certains modèles sont trop confiants dans leurs prédictions
+(surajustement).
+
+une statistique simple proposée par
+\href{https://doi.org/10.1002/sim.4780050506}{Spiegelhalter (1986)} peut
+être utile à cette fin. Pour une variable Bernoulli \(Y \in \{0,1\}\),
+l'erreur quadratique moyenne s'écrit \begin{align*}
+\overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
+\\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
+\end{align*}
+
+Si notre modèle était parfaitement calibré, \(\mathsf{E}_0(Y_i)=p_i\) et
+\(\mathsf{Va}_0(Y_i) = p_i(1-p_i)\).
+\end{frame}
+
+\begin{frame}{Test de Spiegelhalter}
+\protect\hypertarget{test-de-spiegelhalter}{}
+On peut calculer la moyenne et la variance attendue sous l'hypothèse
+nulle et construire une statistique de test
+\href{https://doi.org/10.1002/sim.4780050506}{(Spiegelhalter, 1986)}.
+\[Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}\]
+
+Sous l'hypothèse nulle de calibration parfaite,
+\(Z \sim \mathsf{No}(0,1)\) en grand échantillon.
+\end{frame}
+
+\begin{frame}[fragile]{Calibration du modèle}
+\protect\hypertarget{calibration-du-moduxe8le-1}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{calibration}\NormalTok{(}
+   \AttributeTok{prob =}\NormalTok{ predprob, }
+   \AttributeTok{resp =}\NormalTok{ classif)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Test de calibration de Spiegelhalter (1986)
+Statistique de test: 0.28 
+valeur-p: 0.782
+\end{verbatim}
+
+Il n'y a pas de preuve ici que le modèle est mal calibré.
+\end{frame}
+
+\begin{frame}{Sélection de variables en régression logistique}
+\protect\hypertarget{suxe9lection-de-variables-en-ruxe9gression-logistique}{}
+Même principes que précédemment, mais les modèles de régression
+logistique sont plus coûteux à estimer.
+
+On peut utiliser les critères d'information puisque le modèle est ajusté
+par maximum de vraisemblance.
+\end{frame}
+
+\begin{frame}[fragile]{Fonctions \textbf{R} pour la sélection de
+modèles}
+\protect\hypertarget{fonctions-r-pour-la-suxe9lection-de-moduxe8les}{}
+\begin{itemize}
+\tightlist
+\item
+  \texttt{glmbb::glmbb} permet une recherche exhaustive de tous les
+  sous-modèles à au plus une certaine distance (\texttt{cutoff}) du
+  modèle avec le plus petit critère d'information (\texttt{criterion}).
+\item
+  \texttt{step} permet de faire une recherche séquentielle avec un
+  critère d'information.
+\item
+  \texttt{glmulti::glmulti} permet une recherche exhaustive
+  (\texttt{method\ =\ "h"}) ou par le biais d'un algorithme génétique
+  (\texttt{method\ =\ "g"}).
+\item
+  \texttt{glmnet::glmnet} permet d'ajuster le modèle avec pénalité
+  LASSO.
+\end{itemize}
+
+Voir le
+\href{https://lbelzile.github.io/math60602/05-reglogistique.html\#s\%C3\%A9lection-de-variables-en-r\%C3\%A9gression-logistique}{code
+en ligne}.
+\end{frame}
+
+\begin{frame}{Objectif du ciblage marketing}
+\protect\hypertarget{objectif-du-ciblage-marketing}{}
+Déterminer si le revenu prévu justifie l'envoi du catalogue
+
+\[\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).\]
+
+On peut combiner un modèle de régression logistique avec la régression
+linéaire (ajustés simultanément avec un modèle Heckit).
+
+Ou simplement ignorer le montant d'achat et envoyer un catalogue si la
+probabilité d'achat excède notre point de coupure optimal.
+\end{frame}
+
+\begin{frame}{Stratégie de référence}
+\protect\hypertarget{stratuxe9gie-de-ruxe9fuxe9rence}{}
+\begin{itemize}
+\tightlist
+\item
+  Parmi les 100K clients, 23 179 auraient acheté si on leur avait envoyé
+  le catalogue
+\item
+  Ces clients auraient généré des revenus de 1 601 212\$.
+\item
+  Si on enlève le coût des envois (100 000 \(\times\) 10\$), la
+  stratégie de référence permet un revenu net de 601 212\$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stratégie d'ajustement}
+\protect\hypertarget{stratuxe9gie-dajustement}{}
+En résumé, la procédure numérique à réaliser est la suivante:
+
+\begin{itemize}
+\tightlist
+\item
+  Choisir les variables à essayer (termes quadratiques, interactions,
+  etc.)
+\item
+  Choisir l'algorithme ou la méthode de sélection du modèle.
+\item
+  Construire un catalogue de modèles: pour chacun, calculer les
+  prédictions par validation croisée.
+\item
+  Calculer le point de coupure optimal pour chaque modèle et le gain
+  associé.
+\item
+  Sélectionner le modèle qui \textbf{maximise le gain}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Prédiction et envoi}
+\protect\hypertarget{pruxe9diction-et-envoi}{}
+\begin{itemize}
+\tightlist
+\item
+  Prédire les 100 000 observations de l'échantillon test.
+\item
+  Envoyer un catalogue si la probabilité d'achat excède le point de
+  coupure.
+\item
+  Calculer le revenu résultant:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    zéro si on n'envoie pas de catalogue
+  \item
+    \(-10\) si la personne n'achète pas
+  \item
+    \(-10\) plus l'achat si la personne achète.
+  \end{itemize}
+\end{itemize}
+
+\textbf{En pratique}, on ne pourrait pas \emph{a priori} connaître le
+revenu résultant de cette stratégie.
+\end{frame}
+
+\begin{frame}{Conclusion}
+\protect\hypertarget{conclusion}{}
+Si on avait fait une bête recherche séquentielle et qu'on avait pris le
+modèle avec le plus petit BIC (8 variables explicatives), on aurait
+dégagé des revenus de 978 226\$.
+
+C'est une énorme amélioration, de plus de 56\%, par rapport à la
+stratégie de référence.
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif}{}
+\begin{itemize}
+\tightlist
+\item
+  La classification est une forme d'apprentissage supervisée.
+\item
+  On peut assigner l'observation à la classe la plus plausible, ou
+  déterminer un point de coupure.
+\item
+  Si on a un objectif particulier (fonction de gain), on peut optimiser
+  les profits en assignant une importance différente à chaque scénario.
+\item
+  On peut catégoriser les observations dans une matrice de confusion.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-1}{}
+\begin{itemize}
+\tightlist
+\item
+  On s'intéresse à
+
+  \begin{itemize}
+  \tightlist
+  \item
+    la spécificité (proportion d'échecs correctement classifiés)
+  \item
+    la sensibilité (proportion de succès correctement classifiés)
+  \end{itemize}
+\item
+  L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe
+  ROC) et le lift donne une mesure de la qualité des prédictions.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-2}{}
+\begin{itemize}
+\tightlist
+\item
+  Les mêmes principes de sélection de variable s'appliquent (recherche
+  exhaustive, séquentielle et LASSO).
+\item
+  On peut calculer les critères d'information puisque le modèle est
+  ajusté par maximum de vraisemblance.
+\item
+  Attention au surajustement! Suspect si les probabilités estimées sont
+  près de 0/1 (vérifier la calibration).
+\item
+  Deux étapes: sélectionner le modèle (variables) et le point de
+  coupure.
+\item
+  D'autres modèles que la régression logistique (arbres de régression,
+  etc.) sont envisageables pour la classification.
+\end{itemize}
 \end{frame}
 
 

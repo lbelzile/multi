@@ -78,6 +78,8 @@ website:
               file: contenu/05-contenu.qmd
             - text: "6: Régression logistique"
               file: contenu/06-contenu.qmd
+            - text: "7: Classification"
+              file: contenu/07-contenu.qmd
 
 
     - title: "Devoirs"

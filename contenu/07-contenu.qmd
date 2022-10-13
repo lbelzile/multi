@@ -1,0 +1,29 @@
+---
+title: "Régression logistique"
+---
+
+## Contenu
+
+- Classification
+- Matrice de gain et point de coupure
+- Mesures de la qualité de la classification: gain, fonction d'efficacité du récepteur, courbe lift
+
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 5 (Régression logistique)](https://lbelzile.github.io/math60602/05-reglogistique.html), Section 5.3
+
+## Diapositives 
+
+- {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos7.pdf)
+
+<!--
+<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
+-->
+
+## Objectifs d'apprentissage
+
+- Être capable de calculer la spécificité, la sensibilité, etc. d'une classification.
+- Déterminer la qualité d'un modèle de classification à l'aide de diagnostics graphiques.
+

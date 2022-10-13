@@ -48,3 +48,24 @@ On obtiendrait la même conclusion avec la statistique du test de rapport de vra
 exp(confint(mod)) #IC pour rapport de cote
 car::Anova(mod, type = 3) # tests de rapport de vraisemblance
 ```
+
+
+4. *Choisissez un point de coupure pour la classification pour maximiser le taux de bonne classification.* 
+   i. *Pour le point de coupure choisi, construisez une matrice de confusion.*
+   ii. *Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.*
+   
+```{r, eval = FALSE, echo = FALSE}
+pcoupure_select <- hecmulti::select_pcoupe(mod)
+with(pcoupure_select, pcoupe[which.max(gain)])
+predict()
+
+hecmulti::perfo_logistique()
+```
+   
+   
+5. *Produisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l'aire sous la
+courbe estimée à l’aide de la validation croisée.*
+
+
+
+6. *Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?*
