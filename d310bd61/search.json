@@ -1,0 +1,443 @@
+[
+  {
+    "objectID": "contenu/01-contenu.html",
+    "href": "contenu/01-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Plan de cours et objectifs d’apprentissage\nSurvol du contenu du cours\nConsidérations éthiques: discussion de l’article How Companies Learn Your Secrets, via ZoneCours\nAnalyse exploratoire des données"
+  },
+  {
+    "objectID": "contenu/01-contenu.html#avant-le-cours",
+    "href": "contenu/01-contenu.html#avant-le-cours",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Avant le cours",
+    "text": "Avant le cours\n\nSe familiariser avec le plan de cours, le contenu des séances, le forum en ligne, les exercices et les devoirs.\nS’inscrire sur Piazza."
+  },
+  {
+    "objectID": "contenu/01-contenu.html#lectures",
+    "href": "contenu/01-contenu.html#lectures",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Lectures",
+    "text": "Lectures\n\n\n\n\n\n\nAvertissement\n\n\n\nIdéalement, je vous encourage à lire les notes de cours avant de venir en classe. Cela vous permettra de venir avec des questions en tête et de demander des éclaircissements.\n\n\n\n Chapitre 2 (Analyse exploratoire des données)"
+  },
+  {
+    "objectID": "contenu/01-contenu.html#diapositives",
+    "href": "contenu/01-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\n\n Survol des sujets\n Graphiques et analyse exploratoire"
+  },
+  {
+    "objectID": "contenu/01-contenu.html#activités",
+    "href": "contenu/01-contenu.html#activités",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Activités",
+    "text": "Activités\nAtelier de visualisation: vous devrez analyser des graphiques en équipes et donner une appréciation d’ensemble de l’efficacité du graphique pour transmettre une histoire en plus d’identifier les informations suivantes:\n\nles variables\nla dimension à laquelle elles sont affectées (axes des abscisse, axe des ordonnées, couleur, forme, taille, etc.)\nle type de représentation (diagramme en bâton, nuage de point, en violon, etc.)\nles forces et faiblesses des représentations graphiques (absence de légende, problème de lisibilité, etc.)"
+  },
+  {
+    "objectID": "contenu/01-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/01-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nRéaliser une analyse exploratoire et formuler des questions en lien avec une base de données.\nDécomposer un graphique en éléments et déterminer la représentation adéquate pour une question donnée."
+  },
+  {
+    "objectID": "contenu/01-contenu.html#ressources-complémentaires",
+    "href": "contenu/01-contenu.html#ressources-complémentaires",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Ressources complémentaires",
+    "text": "Ressources complémentaires\n\nChapitre 7 de R for Data Science par Garrett Grolemund et Hadley Wickham\nChapitre 1 de Data Visualization: A practical introduction par Kieran Healy\nFeuille aide-mémoire de DataViz"
+  },
+  {
+    "objectID": "contenu/02-contenu.html",
+    "href": "contenu/02-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Bases de la programmation R\nVisualisation graphique\nManipulation de bases de données"
+  },
+  {
+    "objectID": "contenu/02-contenu.html#avant-le-cours",
+    "href": "contenu/02-contenu.html#avant-le-cours",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Avant le cours",
+    "text": "Avant le cours\n\nTéléchargez et installez R et RStudio en suivant le guide."
+  },
+  {
+    "objectID": "contenu/02-contenu.html#diapositives",
+    "href": "contenu/02-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\nChaque heure de la séance sera consacré à un sujet différent. Vous pouvez télécharger l’archive contenant les documents et les données pour les exercices réalisés en classe.\n\n\n\n\n\n\nAstuce\n\n\n\nSi vous tapez? (ou shift + /) en naviguant à travers la série de diapositives, vous obtiendrez une liste d’options.\n\n\n\n Ouvrir dans une nouvelle fenêtre  Télécharger au format PDF\n\n\n\n\n\n\n\n\n\n\n Ouvrir dans une nouvelle fenêtre  Télécharger au format PDF\n\n\n\n\n\n\n\n\n\n\n Ouvrir dans une nouvelle fenêtre  Télécharger au format PDF"
+  },
+  {
+    "objectID": "contenu/02-contenu.html#exercices",
+    "href": "contenu/02-contenu.html#exercices",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Exercices",
+    "text": "Exercices\n\n Exercices 1"
+  },
+  {
+    "objectID": "contenu/02-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/02-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nPouvoir utiliser R à partir d’un environnement de développement intégré (EDI)\nÊtre en mesure de réaliser un graphique (histogramme, boîte à moustaches, nuage de points, diagramme à bande)\nIdentifier les éléments géométriques d’un graphique\nÊtre capable d’extraire des statistiques descriptives, manipuler, transformer, extraire des variables d’une base de données"
+  },
+  {
+    "objectID": "contenu/03-contenu.html",
+    "href": "contenu/03-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Analyse en composantes principales\nAnalyse factorielle exploratoire"
+  },
+  {
+    "objectID": "contenu/03-contenu.html#lecture",
+    "href": "contenu/03-contenu.html#lecture",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Lecture",
+    "text": "Lecture\n\n Chapitre 3 (Réduction de la dimension)"
+  },
+  {
+    "objectID": "contenu/03-contenu.html#diapositives",
+    "href": "contenu/03-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\n\n Réduction de la dimension"
+  },
+  {
+    "objectID": "contenu/03-contenu.html#exercices",
+    "href": "contenu/03-contenu.html#exercices",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Exercices",
+    "text": "Exercices\n\n Exercices 2"
+  },
+  {
+    "objectID": "contenu/03-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/03-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nReconnaître les situations où la réduction de la dimension est utile\nPouvoir déterminer le nombre adéquats de composantes principales ou de facteurs\nPouvoir lister les avantages et inconvénients des méthodes d’estimation pour l’analyse factorielle\nPouvoir calculer des échelles et vérifier leur cohérence interne."
+  },
+  {
+    "objectID": "contenu/04-contenu.html",
+    "href": "contenu/04-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Rappels sur la régression\nSurajustement\nMéthodes d’estimation de l’erreur:\n\npénalisation,\nvalidation croisée et\nvalidation externe"
+  },
+  {
+    "objectID": "contenu/04-contenu.html#lecture",
+    "href": "contenu/04-contenu.html#lecture",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Lecture",
+    "text": "Lecture\n\n Chapitre 4 (Sélection de variables et de modèles), Sections 4.1-4.3"
+  },
+  {
+    "objectID": "contenu/04-contenu.html#diapositives",
+    "href": "contenu/04-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\n\n Sélection de variables"
+  },
+  {
+    "objectID": "contenu/04-contenu.html#code",
+    "href": "contenu/04-contenu.html#code",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Code",
+    "text": "Code\n\n Sélection de variables"
+  },
+  {
+    "objectID": "contenu/04-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/04-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nÊtre capable d’ajuster un modèle linéaire avec R\nÊtre en mesure de décrire le suroptimisme et son impact sur l’évaluation de modèles\nPouvoir expliquer les avantages et inconvénients des méthodes d’estimation de l’erreur"
+  },
+  {
+    "objectID": "contenu/05-contenu.html",
+    "href": "contenu/05-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Méthodes de sélection de variables: recherches exhaustives et procédures séquentielles\nModèle LASSO\nMoyenne de modèles"
+  },
+  {
+    "objectID": "contenu/05-contenu.html#lecture",
+    "href": "contenu/05-contenu.html#lecture",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Lecture",
+    "text": "Lecture\n\n Chapitre 4 (Sélection de variables et de modèles), Sections 4.4-4.6"
+  },
+  {
+    "objectID": "contenu/05-contenu.html#diapositives",
+    "href": "contenu/05-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\n\n Sélection de variables"
+  },
+  {
+    "objectID": "contenu/05-contenu.html#exercices",
+    "href": "contenu/05-contenu.html#exercices",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Exercices",
+    "text": "Exercices\n\n Exercices 3"
+  },
+  {
+    "objectID": "contenu/05-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/05-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nÊtre capable d’ajuster les procédures de sélections couvertes dans R\nPouvoir calculer la performance manuellement d’un modèle\nÊtre en mesure de diagnostiquer le surajustement et d’appliquer une procédure de sélection de variables"
+  },
+  {
+    "objectID": "contenu/06-contenu.html",
+    "href": "contenu/06-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Modèle de régression logistique\nCote\nInterprétation des paramètres\nInférence statistique\n\ntests d’hypothèse\nintervalles de confiance"
+  },
+  {
+    "objectID": "contenu/06-contenu.html#lecture",
+    "href": "contenu/06-contenu.html#lecture",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Lecture",
+    "text": "Lecture\n\n Chapitre 5 (Régression logistique), Sections 5.1-5.2"
+  },
+  {
+    "objectID": "contenu/06-contenu.html#diapositives",
+    "href": "contenu/06-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\n\n Régression logistique"
+  },
+  {
+    "objectID": "contenu/06-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/06-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nÊtre capable d’ajuster un modèle logistique avec R.\nPouvoir interpréter les coefficients d’un modèle logistique en terme d’augmentation ou de diminution de la cote.\nPouvoir tester la significativité globale et individuelle de variables explicatives à l’aide de tests de rapport de vraisemblance."
+  },
+  {
+    "objectID": "contenu/07-contenu.html",
+    "href": "contenu/07-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Classification\nMatrice de gain et point de coupure\nMesures de la qualité de la classification: gain, fonction d’efficacité du récepteur, courbe lift"
+  },
+  {
+    "objectID": "contenu/07-contenu.html#lecture",
+    "href": "contenu/07-contenu.html#lecture",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Lecture",
+    "text": "Lecture\n\n Chapitre 5 (Régression logistique), Section 5.3"
+  },
+  {
+    "objectID": "contenu/07-contenu.html#diapositives",
+    "href": "contenu/07-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\n\n Régression logistique"
+  },
+  {
+    "objectID": "contenu/07-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/07-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nÊtre capable de calculer la spécificité, la sensibilité, etc. d’une classification.\nDéterminer la qualité d’un modèle de classification à l’aide de diagnostics graphiques."
+  },
+  {
+    "objectID": "contenu/index.html",
+    "href": "contenu/index.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Un guide d’installation pour R et RStudio et des ressources sont également mises à disposition."
+  },
+  {
+    "objectID": "contenu/installation.html",
+    "href": "contenu/installation.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Installer R\nPour commencer, on installe la dernière version de R (la machine qui fait les calculs), actuellement 4.2.1 (Funny-Looking Kid).\n\nAllez sur le site du Comprehensive R Archive Network (CRAN): https://cran.r-project.org/\nCliquez sur “Download R for XXX”, où XXX est Mac ou Windows:\n\n\n\n\n\n\nSi vous utilisez macOS, faites défiler le menu jusqu’au premier fichier .pkg de la liste et téléchargez-le.\n\n\n\n\n\nSi vous utilisez Windows, choisissez “base” (ou cliquez sur l’hyperlien en gras “install R for the first time”) et téléchargez le programme.\n\n\n\n\n\n\nDouble cliquez sur le fichier de téléchargement. Approuvez toutes les requêtes, comme pour n’importe quel autre programme.\n\n4a. Si vous utilisez macOS, téléchargez et installez XQuartz.\n4b. Si vous utilisez Windows, téléchargez et installez Rtools\n\n\nInstaller RStudio\nUne fois R installée, nous installerons une interface utilisateur graphique, RStudio, pour interagir avec R.\n\nNaviguez jusqu’à la section de téléchargements gratuits du site de RStudio: https://www.rstudio.com/products/rstudio/download/#download\nLe site internet devrait automatiquement détecter votre système d’exploitation (Linux, macOS ou Windows). Cliquez sur le bouton pour lancer le téléchargement:\n\n\n\n\n\n\nSinon, naviguez vers le tableau et choisissez la version de RStudion adéquate.\n\n\n\n\n\n\nDouble-cliquez sur le fichier de téléchargement (potentiellement caché dans votre dossier de Téléchargements). Installez comme n’importe lequel autre logiciel.\n\nDouble-cliquez sur l’icône RStudio pour lancer l’application.\n\n\nInstaller tidyverse\nLes paquets R sont faciles à installer avec l’interface graphique. Sélectionnez le panneau “packages”, cliquez sur “Install,” tapez le nom du paquet que vous voulez installer et appuyer sur la touche Retour.\n\n\n\n\n\nLe paquet tidyverse est une collection d’une douzaine de paquets (incluant ggplot2 et dplyr) qui fonctionnent ensemble selon une syntaxe commune. L’installer (ou charger le paquet) inclura automatiquement toutes les dépendances associées\n\n\n\n\n\nNotez que RStudio génère le code R pour l’installation: install.packages(\"tidyverse\"). Vous pourriez utiliser directement cette fonction et faire copier-coller dans la console pour installer les paquets du tidyverse.\n\n\nInstaller tinytex\nQuand vous créez un fichier Rmarkdown (.Rmd) ou Quarto (.qmd) pour créer un document reproductible qui inclut calculs et texte et que vous tricotez ce dernier en PDF, R utilise le programme de typographie scientifique LaTeX. L’installation la plus aisée pour ce dernier, si votre machine n’a pas déjà de suite LaTeX, est d’installer le paquet tinytex pour obtenir une version minimale qui prend moins d’espace.\nPour installer tinytex:\n\nUtilisez l’onglet Packages dans le panneau RStudio pour installer tinytex, comme n’importe quel autre paquet. Sinon, tapez install.packages(\"tinytex\") dans la console.\nExécutez tinytex::install_tinytex() dans la console.\nAttendez que le téléchargement soit complété. Vous devriez ensuite être en mesure de tricoter des documents PDF."
+  },
+  {
+    "objectID": "contenu/ressourcesR.html",
+    "href": "contenu/ressourcesR.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Les ressources didactiques listées sur le CRAN\nIntroduction to R and RStudio par Open Intro Stat\nTeacups, giraffes & statistics: révise les concepts statistiques et les bases de la programmation\nle livret RYouWithMe de R-Ladies Sydney\nle livre R for Data Science, qui adhère aux principes du tidyverse.\nle paquet R DoSStoolkit, développé à l’université de Toronto\nla documentation d’introverse\nles feuilles d’aide mémoire de RStudio, aussi disponibles depuis le menu Aide dans RStudio\n\nVous pouvez installer le paquet hecmulti, de même que les paquets employés dans les notes de cours,à l’aide des commandes suivantes:\n\nlib <- c(\"remotes\", \"psych\", \"glmnet\", \"caret\", \n         \"leaps\", \"car\", \"MASS\", \"glmbb\", \"AER\",\n         \"tidyverse\", \"nnet\", \"mice\", \"survminer\", \n         \"coin\",\"survival\", \"patchwork\", \"sampleSelection\",\n         \"Hmisc\", \"aod\", \"cluster\", \"NbClust\",\n         \"emmeans\", \"ROCR\", \"factoextra\", \"muhaz\",\n         \"summarytools\", \"flexclust\", \"dummies\", \"gridExtra\"\n         )\nfor(pack in lib){\n  if(!require(pack, quietly = TRUE)){\n    install.packages(pack)\n  }\n}\n\nremotes::install_github(\"lbelzile/hecmulti\")"
+  },
+  {
+    "objectID": "evaluations/01-devoir.html",
+    "href": "evaluations/01-devoir.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Transformez la variable catégorielle sexe en variable binaire entière avec homme=0, femme=1, et NA pour les valeurs manquantes.\nRé-étiquetez les situations familiales (famiq) selon que la personne est seule (seu) ou en couple (cou). Transformez les valeurs manquantes (inc pour inconnu) en NA (voir dplyr::na_if).\nÉliminez les observations pour lesquelles la variable age est manquante.\nCréez une colonne, nbjd, qui représente le nombre total de jours à débit des trois derniers mois. Éliminez les variables utilisées lors de la création de nbjd.\nConsidérez le nombre total de cartes ntcas. Y a-t-il des incohérences en lien avec les autres variables?\nQue représentent les variables manquantes résiduelles de zocnb? Indice: voir la question précédente.\n\nExpliquez pourquoi il serait logique de remplacer ces valeurs manquantes par des valeurs numériques (laquelle).\nEffectuez la modification.\n\nProduisez un histogramme de la variable ancienneté du compte (relat) avec ggplot. Que remarquez-vous?\nProduisez un nuage de point de relat et age et commentez (quel est le lien entre relat et age)?\n\nLa plupart des manipulations sont à effectuer directement; votre code et la base de données feront foi de votre travail.\nIndication: Si vous modifiez une variable, assurez-vous d’écraser la colonne existante (par exemple, la base de données devrait contenir une colonne sexe encodée 0L/1L/NA).\nVous devez remettre trois fichiers sur ZoneCours,\n\nun rapport au format PDF\nvotre code R ou un fichier Rmarkdown\nla base de données créée à la suite des manipulations, au format CSV (valeurs séparées par des virgules), à l’aide de la commande write.csv(db, file = \"d1_matricule.csv\") où db est le nom de votre base de données.\n\nTous vos fichiers seront nommés selon la convention d1_matricule.extension en remplaçant matricule par votre numéro d’étudiant(e) et .extension par .pdf, .R, .Rmd et .csv, selon le type du fichier.\nAssurez-vous que vous n’avez pas supprimé la variable matric.\nAstuces: vous pouvez utiliser la fonction knitr::purl() pour extraire le code R d’un fichier Rmarkdown (extension .Rmd)."
+  },
+  {
+    "objectID": "evaluations/02-devoir.html",
+    "href": "evaluations/02-devoir.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "La variable condition indique le groupe expérimental (zéro pour groupe contrôle, un pour douleur).\nIndication: utilisez la matrice de covariance pour vos analyses factorielles\n\nPourquoi n’est-il pas nécessaire de standardiser les variables avant de procéder à l’analyse exploratoire? Justifiez votre réponse\nEffectuez une analyse factorielle exploratoire à l’aide de la méthode des composantes principales.\n\nEn utilisant le critère de Kaiser (valeurs propres) ou le diagramme d’éboulis, déterminez un nombre adéquat de facteurs à employer.\nProduisez un diagramme d’éboulis et rapportez ce dernier.\nQuel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?\n\nRépétez la procédure, cette fois avec la méthode d’estimation par maximum de vraisemblance.\n\nRapportez les valeurs des critères d’information (AIC et BIC) pour \\(m=2, \\ldots, 6\\) facteurs dans un tableau.\nQuel nombre optimal de facteurs ces différents critères retournent-ils?\nY a-t-il un problème avec la solution de l’un d’entre eux?\n\nComparez les regroupements obtenus avec les deux méthodes: est-ce que les regroupements sont semblables (c’est-à-dire, est-ce que les variables retournées dans les regroupements sont associées aux mêmes facteurs)?\nÉtiquetez les facteurs obtenus avec la méthode des composantes principales et \\(m=5\\) facteurs. Expliquez brièvement leur signification. Utilisez le seuil de coupure \\(r=0.5\\) pour les chargements avec rotation varimax pour déterminer si une variable fait partie d’un facteur.\nCréez des échelles à partir des facteurs et calculez leur cohérence interne: rapportez le \\(\\alpha\\) de Cronbach pour chacun des facteurs.\nRetournez un tableau de statistiques descriptives (moyenne et écart-type uniquement) pour chaque échelle, par condition expérimental (condition). Arrondissez à deux chiffres après la virgule et commentez sur les différences entre groupes, le cas échéant.\n\nVous devez remettre\n\nun rapport au format PDF et\nvotre code R ou un fichier Rmarkdown (extensions .R ou .Rmd)\n\nNommez ces derniers selon la convention d2_matricule.pdf, d2_matricule.R, etc.\n\n\n\n\nRéférences\n\nBastian, B., Jetten, J., & Ferris, L. J. (2014). Pain as social glue: Shared pain increases cooperation. Psychological Science, 25(11), 2079–2085. https://doi.org/10.1177/0956797614545886"
+  },
+  {
+    "objectID": "evaluations/03-devoir.html",
+    "href": "evaluations/03-devoir.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "On cherche à estimer le total du solde de la carte de crédit Visa Première (credm, en francs) à l’aide d’autres variables explicatives présentes dans la base de données visacredm; 25 données sont intentionnellement manquantes pour permettre d’évaluer vos modèles finaux et faire un classement des équipes.\n\nFaites une analyse exploratoire des données et vérifiez\n\n\ns’il ne vaudrait mieux pas retirer certaines variables explicatives avec beaucoup de valeurs manquantes.\nque les variables catégorielles sont adéquatement traitées comme des facteurs (factor).\ns’il ne vaudrait mieux pas fusionner des modalités de variables catégorielles si le nombre d’observation par modalité est trop faible.\nqu’il n’y a pas de variable explicative dérivée de la variable réponse.\nque le sous-ensemble des observations employé est adéquat.\nqu’il n’y a pas d’anomalies ou de valeurs aberrantes (par ex., 999 pour valeurs manquantes) qui viendraient fausser les résultats.\n(facultatif) si vous ne devriez pas inclure de nouvelles variables qui sont des transformations, notamment\n\najouter une variable binaire (0/1) pour une variable strictement positive avec excès de zéros\ntransformation monotone, par exemple \\(x \\mapsto \\ln(x + 1)\\), si la variable est non-négative et la relation avec la réponse est nonlinéaire.\n\n\nRésumez votre analyse en une page maximum (texte et graphiques): ne soulevez que les points importants.\n\nChoisissez un modèle à l’aide des méthodes de sélection couvertes en classe (sélection exhaustive, séquentielle, pénalité LASSO, etc.) Vous devez adéquatement estimer votre erreur moyenne quadratique en utilisant l’une des options suivantes :\n\n\npénalisation (sélection avec critères d’information)1\nvalidation croisée à cinq ou 10 plis.\nséparation de la base de données en échantillons d’entraînement (2/3) et de validation (1/3).\n\nRapportez l’erreur moyenne quadratique pour les différents modèles estimés dans un tableau et justifiez adéquatement votre choix final.\n\nÉcrivez un rapport résumant vos trouvailles et détaillant votre démarche.\n\nVous devez remettre les documents suivants:\n\nvotre rapport au format PDF\nvotre code R ou un fichier Rmarkdown\nune base de données en format CSV2\n\nUtilisez la convention de nomenclature d3_matricule.extension, où matricule est le matricule de l’étudiant(e) qui soumet le rapport et extension est un de pdf, R, csv.\nLa base de données devrait contenir uniquement deux colonnes et les 25 lignes correspondant aux données manquantes pour credm:\n\nla première colonne pour les matricules (matric),\nla deuxième colonne pour les prédictions (predict) selon votre modèle préféré parmi tous ceux essayés.\n\nIndication : vérifiez votre base de données pour vous assurer de respecter les consignes (pénalités salées pour toute personne qui déroge aux consignes).\nAssurez-vous également que les prédictions sont sensées et cohérentes avec ce qui est présent dans la base de données (avez-vous des prédictions en dehors de l’étendue des données d’entraînement)? Vous ne devriez pas avoir de valeurs manquantes.\nVous serez évalués sur votre méthodologie, et non pas la performance relative de votre modèle par rapport à celles des autres étudiant(e)s : en revanche, les deux sont typiquement corrélées. Vous devez expliquer clairement votre démarche (méthodologie) dans votre rapport et décrire le modèle que vous avez retenu (méthode et nombre de variables final). Prenez garde au surajustement!\n\n\n\n\nNotes de bas de page\n\n\nNotez que le modèle LASSO n’est pas ajusté par maximum de vraisemblance!↩︎\nDisponible à l’aide de la commande write.csv(..., file = \"d3_matricule.csv\", row.names = FALSE)↩︎"
+  },
+  {
+    "objectID": "evaluations/index.html",
+    "href": "evaluations/index.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:\n\n110%: Devoir 100% complété. Travail de qualité exceptionnelle démontrant un engagement soutenu avec le cours et une réflexion poussée. L’écriture du document soumis est claire, concise et le français est excellent. Je n’assignerai pas ces notes régulièrement.\n100%: Devoir 100% complété avec erreurs mineures.\n75%: Devoir majoritairement complété (plus de 70%), la plupart des réponses sont correctes.\n50%: Devoir complété à moins de 70% et/ou pour lequel la plupart des réponses sont incorrectes. Témoigne d’un besoin d’amélioration; j’espère ne pas assigner cette note fréquemment.\n0%: Devoir non remis, ou visiblement bâclé.\n\nTout travail remis hors délai sera pénalisé de 5% par jour de retard.\nEn vertu de la politique de l’école, la note obtenue lors des travaux d’équipe contribue à la note globale seulement si la note combinée des évaluations individuelles est supérieure à 50%. Autrement, la note finale de l’étudiant(e) est calculée au pro rata des évaluations individuelles."
+  },
+  {
+    "objectID": "exercices/01-exercice.html",
+    "href": "exercices/01-exercice.html",
+    "title": "Analyse exploratoire",
+    "section": "",
+    "text": "La base de données aerien du paquet hecmulti contient les résultats de sondages pour une compagnie aérienne non identifiée.\nEffectuez une analyse exploratoire des données aerien:\n\nFormulez des questions en lien avec la description de la base de données préliminaires à l’analyse exploratoire.\nExaminez la base de données; identifiez le type de variable et leur nature.\nY a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?\nCalculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?\nReprésentez graphiquement la distribution de quelques variables de la base de données selon les différents niveaux de satisfaction.\nRésumez les faits saillants de votre analyse exploratoire en cinq à 10 points."
+  },
+  {
+    "objectID": "exercices/01-solution.html",
+    "href": "exercices/01-solution.html",
+    "title": "Analyse exploratoire",
+    "section": "",
+    "text": "On commence par charger la base de données\n\n\nCode\n# remotes::install_github(\"lbelzile/hecmulti\")\ndata(aerien, package = \"hecmulti\")\n# Consulter la fiche descriptive\n# ? hecmulti::aerien\n\n\n1. Formulez des questions en lien avec la description de la base de données préliminaires à l’analyse exploratoire.\nPour démarrer notre analyse exploratoire, on formule quelques questions. Par exemple:\n\nQuel est le profil socio-démographique des clients (âge, sexe, clientèle affaires)\nQuelle proportion de réponses au sondage sont manquantes et quel est le lien avec le type de vol (via distance_vol)? On peut penser que l’offre alimentaire dépend de la durée.\nDans quelle mesure le délai à l’arrivée impacte la satisfaction globale?\nQuel est le lien entre les réponses et le profil socio-démographique?\nEst-ce que les personnes qui voyagent en classe supérieure (ou pour des motifs d’affaires) sont plus ou moins critiques?\nEst-ce que les délais au départ ou à l’arrivée peuvent être négatifs (vol en avance)?\n\n2. Examinez la base de données; identifiez le type de variable et leur nature.\n\n\nCode\ndplyr::glimpse(aerien)\n\n\nRows: 129,880\nColumns: 23\n$ sexe                            <fct> femme, femme, homme, homme, femme, hom…\n$ loyaute_consommateur            <fct> oui, oui, non, oui, oui, oui, oui, oui…\n$ age                             <int> 52, 36, 20, 44, 49, 16, 77, 43, 47, 46…\n$ type_deplacement                <fct> affaires, affaires, affaires, affaires…\n$ classe                          <fct> eco, affaire, eco, affaire, eco, eco, …\n$ distance_vol                    <dbl> 160, 2863, 192, 3377, 1182, 311, 3987,…\n$ service_internet_en_vol         <int> 5, 1, 2, 0, 2, 3, 5, 2, 5, 2, 4, 2, 5,…\n$ temps_arrivee_depart_convenable <int> 4, 1, 0, 0, 3, 3, 5, 2, 2, 2, 1, 5, 5,…\n$ facilite_reservation_en_ligne   <int> 3, 3, 2, 0, 4, 3, 5, 2, 2, 2, 1, 5, 5,…\n$ localisation_porte              <int> 4, 1, 4, 2, 3, 3, 5, 2, 2, 2, 1, 5, 5,…\n$ nourriture                      <int> 3, 5, 2, 3, 4, 5, 3, 4, 5, 3, 5, 1, 4,…\n$ preenregistrement_en_ligne      <int> 4, 4, 2, 4, 1, 5, 5, 4, 5, 4, 1, 3, 5,…\n$ confort_siege                   <int> 3, 5, 2, 4, 2, 3, 5, 5, 5, 4, 5, 4, 5,…\n$ divertissement_en_vol           <int> 5, 4, 2, 1, 2, 5, 5, 4, 5, 4, 3, 2, 5,…\n$ service_embarquement            <int> 5, 4, 4, 1, 2, 4, 5, 4, 2, 4, 3, 2, 5,…\n$ service_espace_jambes           <int> 5, 4, 1, 1, 2, 3, 5, 4, 2, 4, 4, 2, 5,…\n$ gestion_bagages                 <int> 5, 4, 3, 1, 2, 1, 5, 4, 5, 4, 3, 2, 5,…\n$ service_enregistrement          <int> 2, 3, 2, 3, 4, 1, 4, 5, 3, 5, 1, 3, 5,…\n$ service_vol                     <int> 5, 4, 2, 1, 2, 2, 5, 4, 3, 4, 3, 2, 5,…\n$ proprete                        <int> 5, 5, 2, 4, 4, 5, 3, 3, 5, 4, 4, 4, 3,…\n$ delai_depart_min                <int> 50, 0, 0, 0, 0, 0, 0, 77, 1, 28, 29, 1…\n$ delai_arrivee_min               <int> 44, 0, 0, 6, 20, 0, 0, 65, 0, 14, 19, …\n$ satisfaction                    <fct> oui, oui, non, oui, oui, oui, oui, oui…\n\n\nLa plupart des variables sont des variables entières (int) formées d’échelles de Likert plus valeurs manquantes encodées 0. L’identifiant, le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l’indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (dbl). Les délais sont encodées avec des valeurs entières (valeur arrondie). Les colonnes 7 à 20 encodent les réponses au questionnaire.\n3. Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?\nOui, il y a des valeurs manquantes. Selon la description, toutes les valeurs 0 dans les questionnaires qui peut encoder deux situations: non-réponse ou non-applicable. Les imputer par la moyenne serait donc illogique, puisque certains services (divertissement, nourriture) ne sont pas offerts dans les vols. On pourrait segmenter manuellement la base de données pour séparer selon le type de vol.\nIl serait possible en revanche d’imputer l’information pour les valeurs de délai (393 valeurs manquantes).\n4. Calculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?\nA minima, il faut transformer les zéros en valeurs manquantes pour éviter de fausser les résultats. Il serait aussi préférable de transformer les scores des items du questionnaire en variables catégorielles.\n\n\nCode\nlibrary(dplyr)\n# Remplacer valeurs manquantes (0 en NA)\naerien <- aerien |> \n  mutate_at(7:20, ~na_if(., 0))\n  # Statistiques descriptives\nsummary(aerien)\n\n\n    sexe       loyaute_consommateur      age         type_deplacement\n femme:65899   non: 23780           Min.   : 7.00   affaires :89693  \n homme:63981   oui:106100           1st Qu.:27.00   personnel:40187  \n                                    Median :40.00                    \n                                    Mean   :39.43                    \n                                    3rd Qu.:51.00                    \n                                    Max.   :85.00                    \n                                                                     \n     classe       distance_vol  service_internet_en_vol\n affaire:62160   Min.   :  31   Min.   :1.000          \n eco    :58309   1st Qu.: 414   1st Qu.:2.000          \n ecoplus: 9411   Median : 844   Median :3.000          \n                 Mean   :1190   Mean   :2.814          \n                 3rd Qu.:1744   3rd Qu.:4.000          \n                 Max.   :4983   Max.   :5.000          \n                                NA's   :3916           \n temps_arrivee_depart_convenable facilite_reservation_en_ligne\n Min.   :1.000                   Min.   :1.000                \n 1st Qu.:2.000                   1st Qu.:2.000                \n Median :3.000                   Median :3.000                \n Mean   :3.223                   Mean   :2.883                \n 3rd Qu.:4.000                   3rd Qu.:4.000                \n Max.   :5.000                   Max.   :5.000                \n NA's   :6681                    NA's   :5682                 \n localisation_porte   nourriture    preenregistrement_en_ligne confort_siege  \n Min.   :1.000      Min.   :1.000   Min.   :1.000              Min.   :1.000  \n 1st Qu.:2.000      1st Qu.:2.000   1st Qu.:2.000              1st Qu.:2.000  \n Median :3.000      Median :3.000   Median :4.000              Median :4.000  \n Mean   :2.977      Mean   :3.208   Mean   :3.332              Mean   :3.441  \n 3rd Qu.:4.000      3rd Qu.:4.000   3rd Qu.:4.000              3rd Qu.:5.000  \n Max.   :5.000      Max.   :5.000   Max.   :5.000              Max.   :5.000  \n NA's   :1          NA's   :132     NA's   :3080               NA's   :1      \n divertissement_en_vol service_embarquement service_espace_jambes\n Min.   :1.000         Min.   :1.000        Min.   :1.000        \n 1st Qu.:2.000         1st Qu.:2.000        1st Qu.:2.000        \n Median :4.000         Median :4.000        Median :4.000        \n Mean   :3.359         Mean   :3.383        Mean   :3.366        \n 3rd Qu.:4.000         3rd Qu.:4.000        3rd Qu.:4.000        \n Max.   :5.000         Max.   :5.000        Max.   :5.000        \n NA's   :18            NA's   :5            NA's   :598          \n gestion_bagages service_enregistrement  service_vol       proprete    \n Min.   :1.000   Min.   :1.000          Min.   :1.000   Min.   :1.000  \n 1st Qu.:3.000   1st Qu.:3.000          1st Qu.:3.000   1st Qu.:2.000  \n Median :4.000   Median :3.000          Median :4.000   Median :3.000  \n Mean   :3.632   Mean   :3.306          Mean   :3.642   Mean   :3.287  \n 3rd Qu.:5.000   3rd Qu.:4.000          3rd Qu.:5.000   3rd Qu.:4.000  \n Max.   :5.000   Max.   :5.000          Max.   :5.000   Max.   :5.000  \n                 NA's   :1              NA's   :5       NA's   :14     \n delai_depart_min  delai_arrivee_min satisfaction\n Min.   :   0.00   Min.   :   0.00   non:73452   \n 1st Qu.:   0.00   1st Qu.:   0.00   oui:56428   \n Median :   0.00   Median :   0.00               \n Mean   :  14.71   Mean   :  15.09               \n 3rd Qu.:  12.00   3rd Qu.:  13.00               \n Max.   :1592.00   Max.   :1584.00               \n                   NA's   :393                   \n\n\nCode\n# Voir décompte pour éléments du questionnaire\naerien |> \n  mutate_at(7:20, ~factor(., ordered = TRUE)) |>\n  # Statistiques descriptives\n  summary()\n\n\n    sexe       loyaute_consommateur      age         type_deplacement\n femme:65899   non: 23780           Min.   : 7.00   affaires :89693  \n homme:63981   oui:106100           1st Qu.:27.00   personnel:40187  \n                                    Median :40.00                    \n                                    Mean   :39.43                    \n                                    3rd Qu.:51.00                    \n                                    Max.   :85.00                    \n                                                                     \n     classe       distance_vol  service_internet_en_vol\n affaire:62160   Min.   :  31   1   :22328             \n eco    :58309   1st Qu.: 414   2   :32320             \n ecoplus: 9411   Median : 844   3   :32185             \n                 Mean   :1190   4   :24775             \n                 3rd Qu.:1744   5   :14356             \n                 Max.   :4983   NA's: 3916             \n                                                       \n temps_arrivee_depart_convenable facilite_reservation_en_ligne\n 1   :19409                      1   :21886                   \n 2   :21534                      2   :30051                   \n 3   :22378                      3   :30393                   \n 4   :31880                      4   :24444                   \n 5   :27998                      5   :17424                   \n NA's: 6681                      NA's: 5682                   \n                                                              \n localisation_porte nourriture   preenregistrement_en_ligne confort_siege\n 1   :21991         1   :16051   1   :13261                 1   :15108   \n 2   :24296         2   :27383   2   :21934                 2   :18529   \n 3   :35717         3   :27794   3   :27117                 3   :23328   \n 4   :30466         4   :30563   4   :38468                 4   :39756   \n 5   :17409         5   :27957   5   :26020                 5   :33158   \n NA's:    1         NA's:  132   NA's: 3080                 NA's:    1   \n                                                                         \n divertissement_en_vol service_embarquement service_espace_jambes\n 1   :15675            1   :14787           1   :12895           \n 2   :21968            2   :18351           2   :24540           \n 3   :23884            3   :28542           3   :25056           \n 4   :36791            4   :38703           4   :35886           \n 5   :31544            5   :29492           5   :30905           \n NA's:   18            NA's:    5           NA's:  598           \n                                                                 \n gestion_bagages service_enregistrement service_vol  proprete    \n 1: 9028         1   :16108             1   : 8862   1   :16729  \n 2:14362         2   :16102             2   :14308   2   :20113  \n 3:25851         3   :35453             3   :25316   3   :30639  \n 4:46761         4   :36333             4   :47323   4   :33969  \n 5:33878         5   :25883             5   :34066   5   :28416  \n                 NA's:    1             NA's:    5   NA's:   14  \n                                                                 \n delai_depart_min  delai_arrivee_min satisfaction\n Min.   :   0.00   Min.   :   0.00   non:73452   \n 1st Qu.:   0.00   1st Qu.:   0.00   oui:56428   \n Median :   0.00   Median :   0.00               \n Mean   :  14.71   Mean   :  15.09               \n 3rd Qu.:  12.00   3rd Qu.:  13.00               \n Max.   :1592.00   Max.   :1584.00               \n                   NA's   :393                   \n\n\nCode\n# Moyenne et écart-type par variable\n# selon niveau de satisfaction\naerien |>\n  group_by(satisfaction) |>\n  summarize(across(where(is.numeric), \n            ~ mean(.x, na.rm = TRUE),\n            .names = \"moy_{.col}\")) |> \n  # Pivoter tableau\n  tidyr::pivot_longer(cols = -1,\n                      names_to = \"variable\",\n                      names_prefix = \"moy_\",\n                      values_to = \"moyenne\") |>\n  arrange(variable) |> # trier\n  knitr::kable(digits = 2)\n\n\n\n\n\nsatisfaction\nvariable\nmoyenne\n\n\n\n\nnon\nage\n37.65\n\n\noui\nage\n41.74\n\n\nnon\nconfort_siege\n3.04\n\n\noui\nconfort_siege\n3.97\n\n\nnon\ndelai_arrivee_min\n17.06\n\n\noui\ndelai_arrivee_min\n12.53\n\n\nnon\ndelai_depart_min\n16.41\n\n\noui\ndelai_depart_min\n12.51\n\n\nnon\ndistance_vol\n929.72\n\n\noui\ndistance_vol\n1529.54\n\n\nnon\ndivertissement_en_vol\n2.89\n\n\noui\ndivertissement_en_vol\n3.96\n\n\nnon\nfacilite_reservation_en_ligne\n2.62\n\n\noui\nfacilite_reservation_en_ligne\n3.24\n\n\nnon\ngestion_bagages\n3.37\n\n\noui\ngestion_bagages\n3.97\n\n\nnon\nlocalisation_porte\n2.98\n\n\noui\nlocalisation_porte\n2.97\n\n\nnon\nnourriture\n2.96\n\n\noui\nnourriture\n3.53\n\n\nnon\npreenregistrement_en_ligne\n2.71\n\n\noui\npreenregistrement_en_ligne\n4.15\n\n\nnon\nproprete\n2.93\n\n\noui\nproprete\n3.75\n\n\nnon\nservice_embarquement\n3.02\n\n\noui\nservice_embarquement\n3.86\n\n\nnon\nservice_enregistrement\n3.04\n\n\noui\nservice_enregistrement\n3.65\n\n\nnon\nservice_espace_jambes\n3.01\n\n\noui\nservice_espace_jambes\n3.83\n\n\nnon\nservice_internet_en_vol\n2.40\n\n\noui\nservice_internet_en_vol\n3.39\n\n\nnon\nservice_vol\n3.39\n\n\noui\nservice_vol\n3.97\n\n\nnon\ntemps_arrivee_depart_convenable\n3.29\n\n\noui\ntemps_arrivee_depart_convenable\n3.14\n\n\n\n\n\nOn note que 82 pourcent des résultats sont pour des clients. L’âge médian est de 40 ans, et la majorité des déplacements sont pour affaires, soit environ 69 pourcent. Il y a presque autant d’hommes que de femmes. Les personnes qui disposent d’une carte fidélité voyagent davantage en classe affaire (presque la moitié des vols).\n\n\nCode\naerien |> \n  group_by(loyaute_consommateur, \n           classe) |> \n  summarise(cnt = n()) |>\n  mutate(freq = formattable::percent(cnt / sum(cnt))) |>\n  knitr::kable()\n\n\n\n\n\nloyaute_consommateur\nclasse\ncnt\nfreq\n\n\n\n\nnon\naffaire\n9231\n38.82%\n\n\nnon\neco\n13634\n57.33%\n\n\nnon\necoplus\n915\n3.85%\n\n\noui\naffaire\n52929\n49.89%\n\n\noui\neco\n44675\n42.11%\n\n\noui\necoplus\n8496\n8.01%\n\n\n\n\n\nIl y a une forte corrélation entre certains items du questionnaire, ce qui est logique parce que ces questions capturent souvent des concepts communs (services, enregistrement, confort).\n\n\nCode\ncorrplot::corrplot(\n  corr = cor(aerien[,7:20], \n             use = \"pairwise.complete.obs\"), \n  diag = FALSE,\n  type = \"upper\", \n  tl.pos = \"n\") # pas de nom\n\n\n\n\n\n5. Représentez graphiquement la distribution de quelques variables de la base de données selon les différents niveaux de satisfaction.\n\n\nCode\nlibrary(ggplot2)\ntheme_set(theme_classic())\ng1 <- ggplot(data = aerien, \n       aes(x = loyaute_consommateur,\n           fill = satisfaction)) +\n  geom_bar(position = \"fill\") +\n  labs(y = \"\", \n       x = \"loyauté du consommateur\")\n\ng2 <- aerien |>\n  count(service_internet_en_vol, \n        satisfaction) |>\n  group_by(satisfaction) |>\n  mutate(pct = n / sum(n)) |>\n  ggplot(aes(x = service_internet_en_vol,\n             y = pct,\n           fill = satisfaction)) +\n  geom_bar(stat = \"identity\",\n           position = \"dodge2\") +\n  labs(y = \"\", \n       subtitle = \"Pourcentage des réponses\",\n       x = \"service internet en vol\")\n\ng3 <- aerien |>\n  count(preenregistrement_en_ligne, \n        satisfaction) |>\n  group_by(satisfaction) |>\n  mutate(pct = n / sum(n)) |>\n  ggplot(aes(x = preenregistrement_en_ligne,\n             y = pct,\n           fill = satisfaction)) +\n  geom_bar(stat = \"identity\",\n           position = \"dodge2\") +\n  labs(y = \"\", \n       subtitle = \"Pourcentage des réponses\",\n       x = \"préenregistrement en ligne\")\n\ng4 <- ggplot(data = aerien, \n       aes(x = delai_arrivee_min,\n           fill = satisfaction)) +\n  geom_histogram(boundary = 0,\n                 binwidth = 2,\n                 position = \"dodge2\") +\n  coord_trans(x = 'log1p',\n              y = 'log1p') +\n  labs(y = \"\", \n       x = \"délai à l'arrivée (en minutes)\")\n\ng5 <- ggplot(data = aerien,\n             aes(x = delai_depart_min,\n                 y = delai_arrivee_min),\n             alpha = 0.5) +\n  geom_point() +\n  labs(x = \"délais au départ (en minutes)\",\n       y = \"délais à l'arrivée (en minutes)\") +\n  coord_trans(x = \"log1p\",\n              y = \"log1p\")\n\nlibrary(patchwork)\n# Imprimer plusieurs graphiques\n(g1 + g2) / (g3 + g4) +\n  plot_layout(guides = \"collect\") & theme(legend.position = \"bottom\")\n\n\n\n\n\nCode\ng5\n\n\n\n\n\nOn voit clairement qu’il y a de grandes disparités pour la satisfaction. Il est peu surprenant de constater que les personnes qui ne sont pas globalement satisfaites accordent des notes plus faibles aux différents items du questionnaire. Certains items (accès internet en vol, facilité du préenregistrement) semblent avec un impact important sur la satisfaction globale.\nÀ mesure que les délais au départ augmentent, la relation avec le délai à l’arrivée se renforce, mais la corrélation linéaire est plus faible pour les petits retards. On voit que seuls sont enregistrés les retards (un vol qui arrive à l’avance est comptabilisé comme étant à l’heure avec une valeur de zéro).\n6. Résumez les faits saillants de votre analyse exploratoire en cinq à 10 points.\n\nSans surprise, les personnes qui ne sont globalement pas satisfaites accordent des notes plus faibles dans le questionnaire. Leurs vols sont en moyenne sur de plus courtes distances et ont de plus long délais à l’arrivée.\nLe nombre de vols en classe affaire est surreprésenté dans la base de données.\nLa clientèle affaire détient davantage de compte de fidélité; ce segment est moins critique des vols, mais pourrait ne pas bénéficier des même services.\nLes délais au départ et à l’arrivée ne sont comptabilisés que s’ils sont positifs.\nLes délais de retard importants à l’arrivée et au départ sont davantage corrélés à mesure que le retard augmente."
+  },
+  {
+    "objectID": "exercices/02-exercice.html",
+    "href": "exercices/02-exercice.html",
+    "title": "Analyse factorielle",
+    "section": "",
+    "text": "Les données sondage_entreprise contiennent les résultats d’un sondage effectué par une compagnie auprès de ses employés. Le but de l’exercice est d’ajuster un modèle d’analyse factorielle exploratoire (avec rotation varimax) aux données.\n\nProduisez des statistiques descriptives pour les variables q8 à q17\nCombien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.\nUtilisez la méthode d’estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d’analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?\nRépétez l’exercice, cette fois avec la méthode du maximum de vraisemblance\n\nEst-ce qu’un de ces modèles ajustés est un cas de quasi-Heywood?\nCombien de facteurs les critères d’information recommendent-ils?\nSi vous ajoutez des facteurs, est-ce que votre interprétation change?\n\nCréez des échelles et vérifiez leur cohérence interne."
+  },
+  {
+    "objectID": "exercices/02-exercice.html#exercice-2.2",
+    "href": "exercices/02-exercice.html#exercice-2.2",
+    "title": "Analyse factorielle",
+    "section": "Exercice 2.2",
+    "text": "Exercice 2.2\nEffectuez une analyse factorielle exploratoire des données aerien_facto: cette base de données contient toutes les questions en lien avec la satisfaction de la base de données aerien. Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).\n\nAjustez un modèle avec la méthode des composantes principales et une rotation varimax.\n\nCombien de facteurs le critère des valeurs propres suggère-t-il?\nCombien de facteurs le diagramme d’éboulis suggère-t-il?\nInterprétez les chargements obtenus suite à la rotation. Commentez sur l’interprétabilité de ces derniers.\nEn utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.\n\nRépétez l’exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.\n\nQu’arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement."
+  },
+  {
+    "objectID": "exercices/02-solution.html",
+    "href": "exercices/02-solution.html",
+    "title": "Analyse factorielle",
+    "section": "",
+    "text": "Les données sondage_entreprise contiennent les résultats d’un sondage effectué par une compagnie auprès de ses employés.\n1. Produisez des statistiques descriptives pour les variables q8 à q17.\n\n\nCode\ndata(sondage_entreprise, package = \"hecmulti\")\nstr(sondage_entreprise) #aperçu de la base de données\n\n\nClasses 'tbl_df', 'tbl' and 'data.frame':   482 obs. of  10 variables:\n $ q8 : int  4 3 5 3 3 4 1 3 2 3 ...\n $ q9 : int  3 3 5 3 3 4 1 4 2 3 ...\n $ q10: int  4 3 5 2 3 4 1 5 4 5 ...\n $ q11: int  4 3 5 2 3 5 1 4 4 4 ...\n $ q12: int  4 3 5 3 3 5 1 4 3 3 ...\n $ q13: int  4 2 5 4 4 5 1 4 3 4 ...\n $ q14: int  2 3 5 4 3 5 1 4 3 3 ...\n $ q15: int  3 3 5 3 3 5 1 3 3 2 ...\n $ q16: int  3 3 5 3 3 3 1 3 3 2 ...\n $ q17: int  4 3 5 3 3 4 1 3 3 4 ...\n\n\nOn peut utiliser summary pour obtenir les statistiques descriptives, mais les échelles de Likert sont toutes de 1 à 5.\n\n\n\n\nTableau 1:  Statistiques descriptives des questions du sondage en entreprise. \n \n  \n    moyenne \n    écart-type \n    histogramme \n  \n \n\n  \n    3.44 \n    0.91 \n    ▁▁▇▅▂ \n  \n  \n    3.39 \n    0.97 \n    ▁▂▇▆▂ \n  \n  \n    4.33 \n    0.73 \n    ▁▁▂▇▇ \n  \n  \n    4.10 \n    0.84 \n    ▁▁▂▇▆ \n  \n  \n    3.83 \n    0.89 \n    ▁▁▇▇▆ \n  \n  \n    4.02 \n    0.84 \n    ▁▁▃▇▆ \n  \n  \n    3.88 \n    0.96 \n    ▁▁▅▇▅ \n  \n  \n    3.54 \n    0.85 \n    ▁▁▇▅▂ \n  \n  \n    3.54 \n    0.91 \n    ▁▁▇▆▃ \n  \n  \n    3.51 \n    0.84 \n    ▁▁▇▅▂ \n  \n\n\n\n\n\n\nOn peut voir sur le corrélogramme que toutes les variables sont très corrélées entre elles.\n\n\nCode\ncorrplot::corrplot(corr = cor(sondage_entreprise),\n                   type = \"upper\", \n                   diag = FALSE)\n\n\n\n\n\n2. Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.\n\n\nCode\nnrow(sondage_entreprise)\n\n\nIl y a 482 observations et 10 variables. C’est suffisant pour une analyse factorielle, mais le nombre de facteurs ne sera probablement pas très élevé.\n3. Utilisez la méthode d’estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d’analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?\n\n\nCode\nlibrary(hecmulti)\n# Composantes principales, critère de Kaiser\nafk <- factocp(sondage_entreprise, \n               cor = TRUE)\nspectral <- eigen(cor(sondage_entreprise))\nhecmulti::eboulis(spectral)\n\n\n\n\n\nCode\nprint(afk, cutoff = 0.5)\n\n\n$loadings\n\nLoadings:\n    F1     F2    \nq8  -0.836       \nq9  -0.850       \nq10        -0.814\nq11        -0.619\nq12        -0.716\nq13        -0.821\nq14 -0.652       \nq15 -0.633       \nq16 -0.677       \nq17 -0.713       \n\n                  F1    F2\nSS loadings    3.698 2.797\nProportion Var 0.370 0.280\nCumulative Var 0.370 0.649\n\n$rotmat\n           [,1]      [,2]\n[1,]  0.7762843 0.6303829\n[2,] -0.6303829 0.7762843\n\n\nLe critère de Kaiser (valeurs propres supérieures à 1) avec la matrice de corrélation suggère deux facteurs. Le diagramme d’éboulis donne deux facteurs également avec la matrice de corrélation.\nOn peut constater en étudiant les chargements que le premier facteur est très corrélé avec plusieurs variables. En augmentant le point de coupure, on obtient un regroupement avec grosso-modo pour le facteur 1 (Q8-Q9 et Q14-Q17) les questions qui se réfèrent à la réputation sociale de l’entreprise et la balance pour le facteur 2 (Q10-Q13) pour la réputation sur le plan de la gestion. Seule la question Q15 semble un peu à part\n4. Répétez l’exercice, cette fois avec la méthode du maximum de vraisemblance\n- **Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?**\n- **Combien de facteurs les critères d'information recommendent-ils?**\n- **Si vous ajoutez des facteurs, est-ce que votre interprétation change?**\n\n\nCode\nres_tableau <- ajustement_factanal(\n  factors = 1:4, \n  covmat = cor(sondage_entreprise),\n  n.obs = nrow(sondage_entreprise))\nknitr::kable(res_tableau)\n\n\n\n\n\nk\nAIC\nBIC\npval\nnpar\nheywood\n\n\n\n\n1\n2671.696\n2755.255\n< 2.2e-16\n20\n0\n\n\n2\n2469.875\n2591.036\n< 2.2e-16\n29\n0\n\n\n3\n2401.128\n2555.712\n6.646e-05\n37\n0\n\n\n4\n2374.255\n2558.084\n0.5227\n44\n1\n\n\n\n\n\nOn voit que le modèle AIC suggère un modèle à quatre facteurs (un cas de quasi-Heywood), tandis que le BIC suggère plutôt trois facteurs. Le test du rapport de vraisemblance comparant la corrélation empirique au modèle d’analyse factorielle indique que le modèle est raisonnable à partir de quatre. Le problème de convergence nous amène à interpréter les résultats pour le modèle à quatre facteurs avec un grin de sel.\nPuisque la corrélation est très élevée, il est difficile ici d’interpréter les facteurs résultants parce que plusieurs variables sont corrélées avec de multiples facteurs. On peut augmenter le point de coupure à 0.5 pour déterminer les amalgames suivants:\n\nLe facteur 1 incluant Q8, Q9, Q16 et Q17 font référence à la réputation sociale et éthique de l’entreprise\nle facteur 2 comprenant Q10-Q13 correspond à la perception financière (innovation, gestion, finances)\nle facteur 3 regroupe Q9, Q11 et Q14 (éthique, confiance et innovation)\n\nL’interprétation change puisque ce qui était dans le premier facteur se retrouve dans le troisième, avec Q9 qui est présente dans les deux. En pratique, on pourrait décider de l’associer à l’une ou l’autre des échelles, selon la cohérence interne, et la logique.\n5. Créez des échelles et vérifiez leur cohérence interne. \n\n\nCode\ne1 <- sondage_entreprise |> \n  dplyr::select(c(q8:q9, q14:q17))\nalphaC(e1)\n\n\n[1] 0.8768725\n\n\nCode\nechelle1 <- rowMeans(e1)\n\ne2 <- sondage_entreprise |> \n  dplyr::select(c(q10:q13))\nalphaC(e2)\n\n\n[1] 0.8292554\n\n\nCode\nechelle2 <- rowMeans(e1)\n\n\nOn voit que les deux échelles créées ont un \\(\\alpha\\) de Cronbach de plus de 0.8, donc les échelles sont cohérentes. C’est en grande partie dû à la forte corrélation observée entre tous les items"
+  },
+  {
+    "objectID": "exercices/02-solution.html#exercice-2.2",
+    "href": "exercices/02-solution.html#exercice-2.2",
+    "title": "Analyse factorielle",
+    "section": "Exercice 2.2",
+    "text": "Exercice 2.2\nEffectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données aerien. Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).\n1. Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.\n\nCombien de facteurs le critère des valeurs propres suggère-t-il?\nCombien de facteurs le diagramme d’éboulis suggère-t-il?\nInterprétez les chargements obtenus suite à la rotation. Commentez sur l’interprétabilité de ces derniers.\nEn utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.\n\nLa base de données est la même que celle de l’Exercice 1.1, mais on ne sélectionne que les colonnes 7 à 20 qui correspondent aux réponses du questionnaire.\nIl faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir ?cor); j’utilise ici use = pairwise.complete.obs qui utilise toutes les paires.1\n\n\nCode\nlibrary(hecmulti)\nlibrary(dplyr)\ndata(aerien, package = \"hecmulti\")\nbd <- aerien |> \n  mutate_at(7:20,\n            ~na_if(., 0)) |>\n  select(7:20)\ncorbd <- cor(bd, \n             use = \"pairwise.complete.obs\")\nafk <- factocp(covmat = corbd)\neboulis(eigen(corbd))\n\n\n\n\n\nCode\n# Copier noms de variables\nrownames(afk$loadings) <- colnames(bd)\nprint(afk, \n      cutoff = 0.4)\n\n\n$loadings\n\nLoadings:\n                                F1     F2     F3     F4    \nservice_internet_en_vol                -0.698         0.450\ntemps_arrivee_depart_convenable        -0.773              \nfacilite_reservation_en_ligne          -0.831              \nlocalisation_porte                     -0.804              \nnourriture                       0.858                     \npreenregistrement_en_ligne                            0.813\nconfort_siege                    0.813                     \ndivertissement_en_vol            0.803         0.444       \nservice_embarquement                           0.774       \nservice_espace_jambes                          0.595       \ngestion_bagages                                0.826       \nservice_enregistrement                                0.518\nservice_vol                                    0.844       \nproprete                         0.880                     \n\n                  F1    F2    F3    F4\nSS loadings    2.949 2.463 2.665 1.429\nProportion Var 0.211 0.176 0.190 0.102\nCumulative Var 0.211 0.387 0.577 0.679\n\n$rotmat\n           [,1]        [,2]       [,3]        [,4]\n[1,]  0.7073582 -0.26756771  0.5522576  0.35080391\n[2,]  0.3270379  0.92656348  0.1200968 -0.14178537\n[3,] -0.5658174  0.08130568  0.8163773 -0.08226889\n[4,] -0.2693348  0.25154925 -0.1188123  0.92198989\n\n\nLe diagramme d’éboulis suggère quatre facteurs, idem pour le critère de Kaiser.\nSi on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une corrélation suffisante pour être considérés lors de la création d’échelles, on obtient la division suivante:\n\nLe facteur 1 inclut les items 5, 7, 8 et 14 (nourriture, confort du siège et divertissement en vol, proprete) qui sont tous en lien avec l’offre de service en vol\nLe facteur 2 inclut items 1-4 (service internet en vol, temps d’arrivée et de départ convenable, facilité de réservation en ligne et localisation de la porte). Difficilement interprétable à cause d’internet, sinon rattachés à l’expérience client avant le vol.\nLe facteur 3 inclut les items 9, 11, 13 (embarquement, gestion des bagages et service en vol). Les questions sont en lien avec les contacts avec le personnel de bord et la rapidité du service.\nLe facteur 4 inclut l’item 6, peut-être 12, les deux en lien avec l’enregistrement\n\nAugmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.\n\n\nCode\nprint(\n  c(F1 = alphaC(bd |> select(c(5,7,8)), \n       na.rm = TRUE),\n  F2 = alphaC(bd |> select(1:4),\n       na.rm = TRUE),\n  F3 = alphaC(bd |> select(c(9,11,13)),\n       na.rm = TRUE),\n  F4 = alphaC(bd |> select(c(6,12)),\n       na.rm = TRUE)), \n  digits = 2)\n\n\n  F1   F2   F3   F4 \n0.82 0.80 0.79 0.37 \n\n\nSi les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n’ont pas un \\(\\alpha\\) de Cronbach supérieur à 0.6.\n2. Répétez l’exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.\n\nQu’arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.\n\n\n\nCode\nhecmulti::ajustement_factanal(covmat = corbd,\n                              n.obs = nrow(na.omit(bd)), \n                              factors = 1:7) |>\n  knitr::kable(digits = 2)\n\n\n\n\n\nk\nAIC\nBIC\npval\nnpar\nheywood\n\n\n\n\n1\n1373466.2\n1373737.6\n< 2.2e-16\n28\n0\n\n\n2\n1199520.3\n1199917.6\n< 2.2e-16\n41\n0\n\n\n3\n1027721.9\n1028235.6\n< 2.2e-16\n53\n0\n\n\n4\n989241.7\n989862.0\n< 2.2e-16\n64\n0\n\n\n5\n965748.7\n966465.9\n< 2.2e-16\n74\n0\n\n\n6\n962429.3\n963233.7\n< 2.2e-16\n83\n0\n\n\n7\n960890.1\n961772.0\n< 2.2e-16\n91\n1\n\n\n\n\n\nEn raison du nombre excessivement élevé d’observations, l’ajustement du modèle est médiocre et les critères d’information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n’est pas adéquate et on rejette à coup sûr le test d’hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l’analyse factorielle parce que notre puissance est élevée vu qu’on a 119567 réponses complètes.\nÀ partir de 7 facteurs, l’optimisation ne converge pas et retourne un cas de Heywood.\nAinsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu’une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible."
+  },
+  {
+    "objectID": "exercices/03-exercice.html",
+    "href": "exercices/03-exercice.html",
+    "title": "Sélection de variables",
+    "section": "",
+    "text": "Le but de l’exercice est de bâtir un modèle prédictif pour le nombre annuel de demandes d’admission à partir de la base de données college.\n\nFaites une analyse exploratoire des variables explicatives:\n\nQuelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse.\nComparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l’ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?\nVérifiez s’il y a des variables catégorielles encodées comme des variables numériques.\n\nScindez la base de données en échantillon avec données d’entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire 60602 via set.seed(60602).\n\nSélectionnez un modèle à l’aide d’une des méthodes couvertes, mais en basant votre choix sur l’erreur moyenne quadratique évaluée sur l’échantillon de validation.\n\nRépétez la sélection, cette fois en prenant comme critère pour l’erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.\nCréez un tableau avec le nombre de coefficients de votre modèle final et un estimé de l’erreur moyenne quadratique obtenu par validation externe ou croisée."
+  },
+  {
+    "objectID": "exercices/03-solution.html",
+    "href": "exercices/03-solution.html",
+    "title": "Sélection de variables",
+    "section": "",
+    "text": "Notes de bas de page\n\n\nRien ne nous empêche de faire de même avec la validation externe, soit dit en passant.↩︎"
+  },
+  {
+    "objectID": "exercices/04-exercice.html",
+    "href": "exercices/04-exercice.html",
+    "title": "Régression logistique",
+    "section": "",
+    "text": "Les données logistclient contiennent des données simulées pour un cas fictif de promotion pour des clients.\n\nEstimez le modèle logistique pour la probabilité que promo=1 avec les variables explicatives nachats, sexe et tclient.\nInterprétez les coefficients du modèle à l’échelle de la cote en terme de pourcentage d’augmentation ou de diminution.\nTestez si l’effet de nachats est statistiquement significatif à niveau \\(\\alpha = 0.05\\).\nChoisissez un point de coupure pour la classification pour maximiser le taux de bonne classification.\n\nPour le point de coupure choisi, construisez une matrice de confusion.\nCalculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.\n\nProduisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l’aire sous la courbe estimée à l’aide de la validation croisée.\nCalculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?"
+  },
+  {
+    "objectID": "exercices/04-solution.html",
+    "href": "exercices/04-solution.html",
+    "title": "Régression logistique",
+    "section": "",
+    "text": "Les données logistclient contiennent des données simulées pour un cas fictif de promotion pour des clients.\n\nEstimez le modèle logistique pour la probabilité que promo=1 avec les variables explicatives nachats, sexe et tclient.\n\n\n\nCode\ndata(logistclient, package = \"hecmulti\")\n# Modèle logistique\nmod <- glm(promo ~ nachats + sexe + tclient, \n           family = binomial(link = \"logit\"),\n           data = logistclient)\n# Coefficients du modèle et statistique de Wald\nsummary(mod)\n\n\n\nCall:\nglm(formula = promo ~ nachats + sexe + tclient, family = binomial(link = \"logit\"), \n    data = logistclient)\n\nDeviance Residuals: \n    Min       1Q   Median       3Q      Max  \n-1.7552  -1.0874  -0.7992   1.1806   1.7042  \n\nCoefficients:\n                   Estimate Std. Error z value Pr(>|z|)    \n(Intercept)        -0.98615    0.24634  -4.003 6.25e-05 ***\nnachats             0.20775    0.03509   5.921 3.20e-09 ***\nsexe               -0.26796    0.13872  -1.932   0.0534 .  \ntclientoccasionnel  0.06873    0.15638   0.439   0.6603    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n(Dispersion parameter for binomial family taken to be 1)\n\n    Null deviance: 1384.5  on 999  degrees of freedom\nResidual deviance: 1330.6  on 996  degrees of freedom\nAIC: 1338.6\n\nNumber of Fisher Scoring iterations: 4\n\n\n\nInterprétez les coefficients du modèle à l’échelle de la cote en terme de pourcentage d’augmentation ou de diminution.\n\n\n\nCode\nexp(coef(mod)) # Cote\n\n\n       (Intercept)            nachats               sexe tclientoccasionnel \n         0.3730111          1.2309041          0.7649396          1.0711432 \n\n\n\nLa cote pour l’offre promotionnelle (oui versus non) des hommes est 23.5% plus faible que celle des femmes, ceteris paribus\nLe rapport de cotes pour tclient fréquent/occasionnel est 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs. De manière équivalente, la cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, ceteris paribus.\nLa cote de nachats augmente de 23.1% pour chaque augmentation du nombre d’achats dans le dernier mois, ceteris paribus\n\n\nTestez si l’effet de nachats est statistiquement significatif à niveau \\(\\alpha = 0.05\\).\n\n\nL’intervalle de confiance à 95% pour le rapport de cote de nachats, basé sur la vraisemblance profilée, est de \\([1.15, 1.32]\\); comme 1 est exclu, cette différence est statistiquement significative.\n\nOn obtiendrait la même conclusion avec la statistique du test de rapport de vraisemblance, ici \\(37.237\\) pour 1 degré de liberté. La probabilité, si \\(\\beta_{\\text{nachats}}=0\\), d’obtenir une telle différence d’ajustement est inférieure à \\(10^{-4}\\), bien en deça du seuil de significativité. On rejette l’hypothèse nulle et on conclut que le nombre d’achat est important pour expliquer si une personne s’est prévalue de l’offre promotionnelle.\n\n\nCode\nexp(confint(mod)) #IC pour rapport de cote\n\n\n                       2.5 %    97.5 %\n(Intercept)        0.2292101 0.6025441\nnachats            1.1500139 1.3197437\nsexe               0.5825467 1.0037294\ntclientoccasionnel 0.7889239 1.4568553\n\n\nCode\ncar::Anova(mod, type = 3) # tests de rapport de vraisemblance\n\n\nAnalysis of Deviance Table (Type III tests)\n\nResponse: promo\n        LR Chisq Df Pr(>Chisq)    \nnachats   37.237  1  1.046e-09 ***\nsexe       3.737  1    0.05322 .  \ntclient    0.193  1    0.66011    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\n\nChoisissez un point de coupure pour la classification pour maximiser le taux de bonne classification.\n\nPour le point de coupure choisi, construisez une matrice de confusion.\nCalculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.\n\n\n\n\n\n\nProduisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l’aire sous la courbe estimée à l’aide de la validation croisée.\nCalculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?"
+  },
+  {
+    "objectID": "exercices/index.html",
+    "href": "exercices/index.html",
+    "title": "Exercices",
+    "section": "",
+    "text": "Cette section contient des exercices de pratique avec les solutions."
+  },
+  {
+    "objectID": "exercices/installation.html",
+    "href": "exercices/installation.html",
+    "title": "Installer R et RStudio",
+    "section": "",
+    "text": "Installer R\nPour commencer, on installe la dernière version de R (la machine qui fait les calculs), actuellement 4.2.1 (Funny-Looking Kid).\n\nAllez sur le site du Comprehensive R Archive Network (CRAN): https://cran.r-project.org/\nCliquez sur “Download R for XXX”, où XXX est Mac ou Windows:\n\n\n\n\n\n\nSi vous utilisez macOS, faites défiler le menu jusqu’au premier fichier .pkg de la liste et téléchargez-le.\n\n\n\n\n\nSi vous utilisez Windows, choisissez “base” (ou cliquez sur l’hyperlien en gras “install R for the first time”) et téléchargez le programme.\n\n\n\n\n\n\nDouble cliquez sur le fichier de téléchargement. Approuvez toutes les requêtes, comme pour n’importe quel autre programme.\nSi vous utilisez macOS, téléchargez et installez XQuartz. Cette étape n’est pas nécessaire sur Windows.\n\n\n\nInstaller RStudio\nUne fois R installée, nous installerons une interface utilisateur graphique, RStudio, pour interagir avec R.\n\nNaviguez jusqu’à la section de téléchargements gratuits du site de RStudio: https://www.rstudio.com/products/rstudio/download/#download\nLe site internet devrait automatiquement détecter votre système d’exploitation (Linux, macOS ou Windows). Cliquez sur le bouton pour lancer le téléchargement:\n\n\n\n\n\n\nSinon, naviguez vers le tableau et choisissez la version de RStudion adéquate.\n\n\n\n\n\n\nDouble-cliquez sur le fichier de téléchargement (potentiellement caché dans votre dossier de Téléchargements). Installez comme n’importe lequel autre logiciel.\n\nDouble-cliquez sur l’icône RStudio pour lancer l’application.\n\n\nInstaller tidyverse\nLes paquets R sont faciles à installer avec l’interface graphique. Sélectionnez le panneau “packages”, cliquez sur “Install,” tapez le nom du paquet que vous voulez installer et appuyer sur la touche Retour.\n\n\n\n\n\nLe paquet tidyverse est une collection d’une douzaine de paquets (incluant ggplot2 et dplyr) qui fonctionnent ensemble selon une syntaxe commune. L’installer (ou charger le paquet) inclura automatiquement toutes les dépendances associées\n\n\n\n\n\nNotez que RStudio génère le code R pour l’installation: install.packages(\"tidyverse\"). Vous pourriez utiliser directement cette fonction et faire copier-coller dans la console pour installer les paquets du tidyverse.\n\n\nInstaller tinytex\nQuand vous créez un fichier Rmarkdown (.Rmd) ou Quarto (.qmd) pour créer un document reproductible qui inclut calculs et texte et que vous tricotez ce dernier en PDF, R utilise le programme de typographie scientifique LaTeX. L’installation la plus aisée pour ce dernier, si votre machine n’a pas déjà de suite LaTeX, est d’installer le paquet tinytex pour obtenir une version minimale qui prend moins d’espace.\nPour installer tinytex:\n\nUtilisez l’onglet Packages dans le panneau RStudio pour installer tinytex, comme n’importe quel autre paquet. Sinon, tapez install.packages(\"tinytex\") dans la console.\nExécutez tinytex::install_tinytex() dans la console.\nAttendez que le téléchargement soit complété. Vous devriez ensuite être en mesure de tricoter des documents PDF."
+  },
+  {
+    "objectID": "horaire.html",
+    "href": "horaire.html",
+    "title": "Horaire",
+    "section": "",
+    "text": "Contenu (): Cette page contient la liste des lectures, activités et enregistrements pour cette semaine.\nExercices (): Cette page contient des exercices pratiques en R avec solutionnaire. Ces derniers vous serviront de pratique en vue de la complétion des devoirs.\nDevoirs (): Cette page contient des instructions sur les devoirs.\n\n\n\n\n\n\n\n\n\n\nTitre\n\n\nContenu\n\n\nExemple\n\n\nEvaluation\n\n\n\n\n\n\nSession 1\n\n\n\n\n29 août– 1 septembre\n\n\nIntroduction et analyse exploratoire\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 2\n\n\n\n\n 8 septembre–12 septembre\n\n\nProgrammation\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 3\n\n\n\n\n15 septembre–19 septembre\n\n\nRéduction de la dimension\n\n\n\n\n\n\n\n\n\n\n\n\n\n25 septembre\n\n\nDevoir 1  (heure limite 23:55:00)\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 4\n\n\n\n\n22 septembre–26 septembre\n\n\nSélection de variables\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 5\n\n\n\n\n29 septembre– 5 octobre\n\n\nSélection de variables\n\n\n\n\n\n\n\n\n\n\n\n\n\n 5 octobre\n\n\nDevoir 2  (heure limite 23:55:00)\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 6\n\n\n\n\n 6 octobre–11 octobre\n\n\nRégression logistique : bases\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 7\n\n\n\n\n13 octobre–17 octobre\n\n\nRégression logistique : prédiction\n\n\n\n\n\n\n\n\n\n\n\n\n\n19 octobre\n\n\nDevoir 3  (heure limite 23:55:00)\n\n\n\n\n\n\n\n\n\n\n\n\n\nRelâche\n\n\n\n\n20 octobre–26 octobre\n\n\nRelâche\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 8\n\n\n\n\n27 octobre–31 octobre\n\n\nRégression logistique: données multinomiales\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 9\n\n\n\n\n 3 novembre– 7 novembre\n\n\nAnalyse de regroupements\n\n\n\n\n\n\n\n\n\n\n\n\n\n 9 novembre\n\n\nDevoir 4  (heure limite 23:55:00)\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 10\n\n\n\n\n10 novembre–14 novembre\n\n\nAnalyse de regroupements\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 11\n\n\n\n\n17 novembre–21 novembre\n\n\nAnalyse de survie\n\n\n\n\n\n\n\n\n\n\n\n\n\n23 novembre\n\n\nDevoir 5  (heure limite 23:55:00)\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 12\n\n\n\n\n24 novembre–28 novembre\n\n\nAnalyse de survie\n\n\n\n\n\n\n\n\n\n\n\n\n\nSession 13\n\n\n\n\n 1 décembre– 5 décembre\n\n\nDonnées manquantes et révision\n\n\n\n\n\n\n\n\n\n\n\n\n\n 7 décembre\n\n\nDevoir 6  (heure limite 23:55:00)"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Enseignant\n\n   Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\nDétails du cours\n\n   automne 2022\n   jeudi (J01) et lundi (S01)\n   12h à 15h (J01) et 18h45 à 21h45 (S01)\n   Decelles, Victoriaville\n\n\n\nContact\nMerci de publier toute question relative au contenu du cours sur le forum Piazza. Pour toute autre question, je suis plus facilement joignable par courriel."
+  },
+  {
+    "objectID": "syllabus.html",
+    "href": "syllabus.html",
+    "title": "Plan de cours",
+    "section": "",
+    "text": "Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\n\n\n   automne 2022\n   jeudi (J01) et lundi (S01)\n   12h à 15h (J01) et 18h45 à 21h45 (S01)\n   Decelles, Victoriaville"
+  },
+  {
+    "objectID": "syllabus.html#thèmes-couverts",
+    "href": "syllabus.html#thèmes-couverts",
+    "title": "Plan de cours",
+    "section": "Thèmes couverts",
+    "text": "Thèmes couverts\n\nAnalyse exploratoire\nAnalyse factorielle exploratoire (analyse en composantes principales)\nAnalyse de regroupements\nSélection de variables pour les modèles de régression\nSélection logistique (incluant les données multinomiales, modèle à cotes proportionnelles)\nAnalyse de survie\nDonnées manquantes"
+  },
+  {
+    "objectID": "syllabus.html#clientèle-cible",
+    "href": "syllabus.html#clientèle-cible",
+    "title": "Plan de cours",
+    "section": "Clientèle cible",
+    "text": "Clientèle cible\nCours obligatoire de spécialisation dans le programme de M.Sc. (spécialisation intelligence d’affaires) et dans le microprogramme en exploitation de données en intelligence d’affaires."
+  },
+  {
+    "objectID": "syllabus.html#cours-incompatible",
+    "href": "syllabus.html#cours-incompatible",
+    "title": "Plan de cours",
+    "section": "Cours incompatible",
+    "text": "Cours incompatible\nVous ne pouvez pas vous inscrire à ce cours si vous avez postulé ou réussi le cours MATH 60603(A), ou si MATH 60603(A) fait partie de votre structure."
+  },
+  {
+    "objectID": "syllabus.html#logiciels-et-programmation",
+    "href": "syllabus.html#logiciels-et-programmation",
+    "title": "Plan de cours",
+    "section": "Logiciels et programmation",
+    "text": "Logiciels et programmation\nNous utiliserons le langage de programmation R. Les notes de cours et les exercices contiennent des scripts pour vous aider. La courbe d’apprentissage est abrupte, mais nous consacrerons la deuxième séances de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des instructions pour installer, R, Rstudio et d’autres utilitaires ici.\nChercher sur un moteur de recherche des sujets liés à R est parfois fastidieux; essayez rstats comme mot-clé si r ne retourne rien. Le forum de question StackOverflow, un site de questions et réponses pour la programmation, ainsi que la communauté RStudio, un forum dédié à RStudio et au tidyverse, sont d’autres ressources utiles."
+  },
+  {
+    "objectID": "syllabus.html#manuel",
+    "href": "syllabus.html#manuel",
+    "title": "Plan de cours",
+    "section": "Manuel",
+    "text": "Manuel\nLes notes de cours en ligne font office d’ouvrage de référence."
+  },
+  {
+    "objectID": "syllabus.html#consignes-pandémiques",
+    "href": "syllabus.html#consignes-pandémiques",
+    "title": "Plan de cours",
+    "section": "Consignes pandémiques",
+    "text": "Consignes pandémiques\nConsultez le site web de l’école pour les dernières mesures sanitaires en vigueur.\nÀ compter du trimestre d’automne 2022, la COVID-19 (test positif ou symptômes s’y apparentant) sera considérée en vertu du règlement pédagogique comme toute autre maladie, à l’exception qu’elle sera jugée d’office comme un motif valable sans billet médical requis. Pour tous les autres motifs d’absence, la procédure en vigueur avant la pandémie (article 3.3.1) se poursuit.\nSi un membre de la communauté étudiante doit s’absenter pour un motif lié à la COVID-19, voici la procédure à suivre :\n\nEn cas d’absence pour une ou plusieurs séances de cours : l’étudiant(e) continue de remplir le formulaire d’avis d’absence générant un courriel automatique à votre attention, précisant sa date de retour sur le campus. Il reviendra à chaque étudiant(e) de faire les démarches pour rattraper le contenu manqué (article 2.1 du règlement pédagogique).\nEn cas d’absence à l’examen final : la procédure demeure la même qu’aux trimestres précédents. L’étudiant(e) doit remplir le formulaire avis d’absence au plus tard cinq jours ouvrables suivant la date de l’examen. Le Registrariat recevra et traitera ce formulaire selon le processus habituel. Si le motif de l’absence est jugé valable, l’examen sera différé au prochain trimestre où le cours est offert.\n\nLe masque de procédure n’est plus obligatoire sur le campus. Cependant, afin de limiter la propagation de la COVID-19, certaines mesures sanitaires demeurent recommandées notamment la distanciation physique, les barrières physiques et le port du masque de procédure. Ces consignes relèvent désormais d’un choix personnel. L’École continue de fournir gratuitement pour celles et ceux qui le désirent:\n\nMasques de procédure;\nGel hydroalcoolique;\nBoîtes de tests rapides, disponibles à la Boutique COOP de l’édifice Côte-Sainte-Catherine ainsi qu’à la ZoneInfo à l’édifice Decelles."
+  }
+]
