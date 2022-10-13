@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.163">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Analyse multidimensionnelle appliquée - Horaire</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Analyse multidimensionnelle appliquée</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./syllabus.html">Syllabus</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./horaire.html" aria-current="page">Horaire</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./contenu/index.html">Contenu</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./evaluations/index.html">Évaluations</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./exercices/index.html">Exercices</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://lbelzile.github.io/math60602">Notes</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://lbelzile.github.io/hecmulti"><i class="bi bi-inbox-fill" role="img" aria-label="Données">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Horaire</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<div class="schedule-page">
+<ul>
+<li><a href="./contenu/"><strong>Contenu</strong></a> (<i class="fa-solid fa-book-open-reader" aria-hidden="true"></i>): Cette page contient la liste des lectures, activités et enregistrements pour cette semaine.</li>
+<li><a href="./exercices/"><strong>Exercices</strong></a> (<i class="fa-solid fa-laptop-code" aria-hidden="true"></i>): Cette page contient des exercices pratiques en <strong>R</strong> avec solutionnaire. Ces derniers vous serviront de pratique en vue de la complétion des devoirs.</li>
+<li><a href="./evaluations/"><strong>Devoirs</strong></a> (<i class="fa-solid fa-pen-ruler" aria-hidden="true"></i>): Cette page contient des instructions sur les devoirs.</li>
+</ul>
+<section id="contenu" class="level3">
+<h3 class="anchored" data-anchor-id="contenu">Contenu</h3>
+
+<table class="schedule-table table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+</th>
+<th style="text-align:left;">
+Titre
+</th>
+<th style="text-align:center;">
+Contenu
+</th>
+<th style="text-align:center;">
+Exemple
+</th>
+<th style="text-align:center;">
+Evaluation
+</th>
+</tr>
+</thead>
+<tbody>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 1</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>29 août</strong>–<strong> 1 septembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Introduction et analyse exploratoire</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./contenu/01-contenu.html"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 2</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong> 8 septembre</strong>–<strong>12 septembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Programmation</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./contenu/02-contenu.html"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 3</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>15 septembre</strong>–<strong>19 septembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Réduction de la dimension</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./contenu/03-contenu.html"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>25 septembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+Devoir 1  <small>(heure limite 23:55:00)</small>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./evaluations/01-devoir.html"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 4</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>22 septembre</strong>–<strong>26 septembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Sélection de variables</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./contenu/04-contenu.html"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 5</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>29 septembre</strong>–<strong> 5 octobre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Sélection de variables</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./contenu/05-contenu.html"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong> 5 octobre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+Devoir 2  <small>(heure limite 23:55:00)</small>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./evaluations/02-devoir.html"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 6</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong> 6 octobre</strong>–<strong>11 octobre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Régression logistique&nbsp;: bases</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./contenu/06-contenu.html"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 7</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>13 octobre</strong>–<strong>17 octobre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Régression logistique&nbsp;: prédiction</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./contenu/07-contenu.html"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>19 octobre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+Devoir 3  <small>(heure limite 23:55:00)</small>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="./evaluations/03-devoir.html"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Relâche</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>20 octobre</strong>–<strong>26 octobre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+Relâche
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 8</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>27 octobre</strong>–<strong>31 octobre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Régression logistique: données multinomiales</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="contenu/08-contenu.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 9</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong> 3 novembre</strong>–<strong> 7 novembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Analyse de regroupements</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="contenu/09-contenu.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong> 9 novembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+Devoir 4  <small>(heure limite 23:55:00)</small>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="evaluations/04-devoir.qmd"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 10</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>10 novembre</strong>–<strong>14 novembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Analyse de regroupements</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="contenu/10-contenu.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 11</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>17 novembre</strong>–<strong>21 novembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Analyse de survie</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="contenu/11-contenu.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>23 novembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+Devoir 5  <small>(heure limite 23:55:00)</small>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="evaluations/05-devoir.qmd"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 12</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong>24 novembre</strong>–<strong>28 novembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Analyse de survie</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="contenu/12-contenu.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="5" style="border-bottom: 2px solid #000000;">
+<strong>Session 13</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong> 1 décembre</strong>–<strong> 5 décembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+<span class="content-title">Données manquantes et révision</span>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="contenu/13-contenu.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;width: 30%; padding-right: 20px;padding-left: 2em;" indentlevel="1">
+<strong> 7 décembre</strong>
+</td>
+<td style="text-align:left;width: 40%; ">
+Devoir 6  <small>(heure limite 23:55:00)</small>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>
+</td>
+<td style="text-align:center;width: 10%; ">
+<a href="evaluations/06-devoir.qmd"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>
+</td>
+</tr>
+</tbody>
+
+</table>
+</section>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
+  </div>
+</footer>
+
+
+
+</body></html>
