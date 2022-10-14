@@ -16,6 +16,8 @@ execute:
 1. *Estimez le modèle logistique pour la probabilité que `promo=1` avec les variables explicatives `nachats`, `sexe` et `tclient`.*
 
 ```{r}
+#| eval: true
+#| echo: true
 data(logistclient, package = "hecmulti")
 # Modèle logistique
 mod <- glm(promo ~ nachats + sexe + tclient, 
@@ -30,7 +32,7 @@ summary(mod)
 2. *Interprétez les coefficients du modèle à l'échelle de la cote en terme de pourcentage d'augmentation ou de diminution.*
 
 ```{r}
-exp(coef(mod)) # Cote
+exp(coef(mod)) # Rapport de cote
 ```
 
 - La cote pour l'offre promotionnelle (oui versus non) des hommes est 23.5% plus faible que celle des femmes, *ceteris paribus*
@@ -54,18 +56,100 @@ car::Anova(mod, type = 3) # tests de rapport de vraisemblance
    i. *Pour le point de coupure choisi, construisez une matrice de confusion.*
    ii. *Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.*
    
-```{r, eval = FALSE, echo = FALSE}
-pcoupure_select <- hecmulti::select_pcoupe(mod)
-with(pcoupure_select, pcoupe[which.max(gain)])
-predict()
-
-hecmulti::perfo_logistique()
+```{r}
+#| eval: true
+#| echo: true
+#| cache: true
+#| message: false
+#| warning: false
+library(dplyr)
+set.seed(60602)
+fit_cv <- caret::train(
+  #mettre formule en premier!
+  form = formula(mod),
+  data = logistclient,
+  method = "glm",
+  family = binomial(link = "logit"),
+  trControl = caret::trainControl(
+                 method = "repeatedcv",
+                 number = 10,
+                 repeats = 10,
+                 savePredictions = "final"))
+# Calculer moyenne des prédictions, réordonner
+pred <- fit_cv$pred |> 
+  arrange(rowIndex) |> 
+  group_by(rowIndex) |> 
+  summarize(prediction = mean(pred)) |>
+  pull()
+resp <- logistclient$promo
 ```
+
+```{r}
+#| eval: true
+#| echo: true
+library(hecmulti)
+library(ggplot2)
+tableau <- perfo_logistique(prob = pred, 
+                             resp = resp)
+# Graphique du taux de bonne classification
+# selon le point de coupure
+ggplot(data = tableau, 
+       aes(x = coupe, y = pcorrect)) + 
+  geom_line() + 
+  theme_classic() + 
+  scale_y_continuous(limits = c(0, 100),
+                     expand = c(0,0)) + 
+  labs(x = "point de coupure",
+       y = "",
+       subtitle = "Taux de bonne classification")
+opt <- which.max(tableau$pcorrect)
+knitr::kable(tableau[opt,])
+```
+
+On ajuste avec `caret::train` le modèle et on calcule la prédiction à l'aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction retourne 10000 prédictions, pêle-mêle après inspection. On réordonne par observation d'abord pour s'assurer d'une correspondance avec la variable réponse, puis on calcule la moyenne de probabilités prédites par les différents modèles. 
+
+Ensuite, il suffit de passer les valeurs de la variable réponse et nos probabilités de succès prédites aux différentes fonctions.
    
-   
+Si on considère des points de coupure de 0.01 à 0.99 en incréments de 0.01, on obtient un point de coupure optimal à
+`r tableau[opt,"coupe"]`. On note que le taux de bonne classification change assez peu au final.
+
+```{r}
+#| label: tbl-confusion
+#| eval: true
+#| echo: false
+#| tbl-cap: "Matrice de confusion avec point de coupure optimal"
+confumat <- with(
+  tableau[opt,],
+  matrix(c(VP, FN, FP, VN), nrow = 2, ncol = 2))
+rownames(confumat) <- c("$\\widehat{Y}=1$","$\\widehat{Y}=0$")
+colnames(confumat) <- c("$Y=1$","$Y=0$")
+knitr::kable(x = confumat,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE)
+```
+Ainsi, si on fait les calculs à la main, on estime 
+
+- la spécificité $\mathsf{VN}/(\mathsf{VN} + \mathsf{FN})$, soit `r tableau[opt,"VN"]` / (`r tableau[opt,"VN"]` + `r tableau[opt,"FN"]`) ou `r round(tableau[opt,"VN"] / (tableau[opt,"VN"] + tableau[opt,"FN"]), 3)`.
+- la sensibilité $\mathsf{VP}/(\mathsf{VP} + \mathsf{FP})$, soit `r tableau[opt,"VP"]` / (`r tableau[opt,"VP"]` + `r tableau[opt,"FP"]`) ou `r round(tableau[opt,"VP"] / (tableau[opt,"VP"] + tableau[opt,"FP"]), 3)`.
+- le taux de bonne classification $\mathsf{VN} + \mathsf{VP}/(\mathsf{VN} + \mathsf{VP} + \mathsf{FN} + \mathsf{FP})$, soit (`r tableau[opt,"VP"]` + `r tableau[opt,"VN"]`) / 1000 ou `r (tableau[opt,"VP"] + tableau[opt,"VN"])/1000`.
+
+Ces valeurs coincident, à arrondi près, avec ce qui est reporté dans le tableau.
+
+
 5. *Produisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l'aire sous la
 courbe estimée à l’aide de la validation croisée.*
 
+```{r}
+roc <- courbe_roc(prob = pred, resp = resp)
+```
 
+On obtient une estimation de l'aire sous la courbe de `r round(roc$aire, 3)`.
 
 6. *Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?*
+
+```{r}
+calibration(prob = pred, resp = resp)
+```
+L'hypothèse nulle est que le modèle est calibré; ici, la valeur-$p$ est près de 0.5, donc on ne rejette pas l'hypothèse nulle et on conclut qu'il n'y a pas de preuve de surajustement.
+

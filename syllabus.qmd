@@ -92,11 +92,11 @@ Selon l'avancement du cours, les dates de remise pourraient être décalées. Vo
 
 **Dates de remise:**
 
-- Devoir 1 (individuel), date limite le mercredi 21 septembre (extension jusqu'au dimanche 25 septembre)
+- Devoir 1 (individuel), date limite le dimanche 25 septembre
 - Devoir 2 (individuel), date limite le mercredi 5 octobre
-- Devoir 3 (équipe), date limite le mercredi 19 octobre
-- Devoir 4 (équipe), date limite le mercredi 9 novembre
-- Devoir 5 (équipe), date limite le mercredi 23 novembre
+- Devoir 3 (équipe), date limite le dimanche 23 octobre
+- Devoir 4 (équipe), date limite le dimanche 13 novembre
+- Devoir 5 (équipe), date limite le dimanche 27 novembre
 - Devoir 6 (individuel), date limite le mercredi 7 décembre
 
 

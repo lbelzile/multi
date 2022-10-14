@@ -24,7 +24,7 @@ csl: files/bib/apa.csl
 toc-title: "Table des matières"
 website:
   title: "Analyse multidimensionnelle appliquée"
-  site-url: "https://lbelzile.github.io/math60602"
+  site-url: "https://lbelzile.github.io/multi"
   description: "Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l'aide de logiciels appropriés."
 
   navbar:
