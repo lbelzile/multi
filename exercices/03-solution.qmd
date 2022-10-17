@@ -173,11 +173,14 @@ lasso_vc <-
                repeats = 10))
 plot(lasso_vc)
 # Meilleur modèle
-mod_lasso_vc <- which.min(lasso_vc$results$RMSE)
+coefs_lasso_cv <- coef(object = lasso_vc$finalModel, 
+              s = lasso_vc$bestTune$lambda)
+# Nombre de paramètres non-nuls pour la solution
+nvar_lasso_vc <- Matrix::nnzero(coefs_lasso_cv)
+# Estimation de la racine de l'erreur quadratique moyenne
 reqm_lasso_vc <- min(lasso_vc$results$RMSE)
-nvar_lasso_vc <- Matrix::nnzero(lasso_vc$finalModel$beta[, mod_lasso_vc, drop = FALSE])
-## Calcul des prédictions
-# predict(cv_eqm_seq, newdata = db)
+## Calcul des prédictions - comme avec n'importe quel modèle
+# predict(lasso_vc, newdata = db)
 ```
 
 4. *Créez un tableau avec le nombre de coefficients non-nuls de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée.*
