@@ -25,6 +25,7 @@ On devra retirer la variable catégorielle `nom`, qui a une modalité différent
    
 ```{r}
 library(dplyr)
+library(hecmulti)
 data(college, package = "hecmulti")
 str(college)
 summary(college)
@@ -73,9 +74,25 @@ rec_seq <- leaps::regsubsets(
   data = db_a,
   method = "seqrep",
   nvmax = 50)
+```
+
+Si `regsubsets` permet de recouvrer les différents modèles, il n'y a pas d'utilitaire pour obtenir le résumé et les prédictions. Le paquet `hecmulti` inclut une fonction pour faire les prédictions d'un modèle donné. À des fins d'illustration, on considère celui qui a le plus petit critère BIC intra-échantillon d'apprentissage.
+
+```{r}
+#| eval: false
+#| echo: true
+# Calculer les BIC 
 bic_mod <- summary(rec_seq)$bic
+# Prédire du modèle avec id variables
+# Ici, celui avec le plus petit BIC du lot
+predict(rec_seq, id = which.min(bic_mod))
+```
+
+Ici, on s'intéresse uniquement au calcul de l'erreur quadratique moyenne pour les modèles choisis par la procédure de recherche séquentielle. La fonction `eval_EQM_regsubsets` fait le calcul et nous retourne un vecteur avec toutes les mesures. On choisit le modèle qui minimise l'erreur.
+
+```{r}
 # Modèle avec la plus petite erreur 
-# moyenne quadratique de validation
+# moyenne quadratique de validation externe
 reqm_seq_ve_list <- 
   hecmulti::eval_EQM_regsubsets(
   model = rec_seq, 
@@ -86,7 +103,8 @@ reqm_seq_ve_list <-
 # La fonction calcule la racine EQM sur 
 # les données de validation
 mod_seq_ve <- which.min(reqm_seq_ve_list)
-nvar_seq_ve <- mod_seq_ve + 1
+nvar_seq_ve <- mod_seq_ve + 1 
+# nombre variables + ordonnée à l'origine.
 reqm_seq_ve <- reqm_seq_ve_list[mod_seq_ve]
 ```
 
