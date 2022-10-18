@@ -18,6 +18,7 @@ execute:
 ```{r}
 #| eval: true
 #| echo: true
+library(hecmulti)
 data(logistclient, package = "hecmulti")
 # Modèle logistique
 mod <- glm(promo ~ nachats + sexe + tclient, 
@@ -62,32 +63,18 @@ car::Anova(mod, type = 3) # tests de rapport de vraisemblance
 #| cache: true
 #| message: false
 #| warning: false
-library(dplyr)
 set.seed(60602)
-fit_cv <- caret::train(
-  #mettre formule en premier!
-  form = formula(mod),
-  data = logistclient,
-  method = "glm",
-  family = binomial(link = "logit"),
-  trControl = caret::trainControl(
-                 method = "repeatedcv",
-                 number = 10,
-                 repeats = 10,
-                 savePredictions = "final"))
-# Calculer moyenne des prédictions, réordonner
-pred <- fit_cv$pred |> 
-  arrange(rowIndex) |> 
-  group_by(rowIndex) |> 
-  summarize(prediction = mean(pred)) |>
-  pull()
+pred <- hecmulti::predvc(mod)
 resp <- logistclient$promo
 ```
+
+
+On prend le modèle ajusté avec `glm` et on calcule la prédiction à l'aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction `predvc` retourne la moyenne des prédictions (ici, des probabilités) pour chacune des 1000 observations.
 
 ```{r}
 #| eval: true
 #| echo: true
-library(hecmulti)
+
 library(ggplot2)
 tableau <- perfo_logistique(prob = pred, 
                              resp = resp)
@@ -106,7 +93,6 @@ opt <- which.max(tableau$pcorrect)
 knitr::kable(tableau[opt,])
 ```
 
-On ajuste avec `caret::train` le modèle et on calcule la prédiction à l'aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction retourne 10000 prédictions, pêle-mêle après inspection. On réordonne par observation d'abord pour s'assurer d'une correspondance avec la variable réponse, puis on calcule la moyenne de probabilités prédites par les différents modèles. 
 
 Ensuite, il suffit de passer les valeurs de la variable réponse et nos probabilités de succès prédites aux différentes fonctions.
    
@@ -149,7 +135,8 @@ On obtient une estimation de l'aire sous la courbe de `r round(roc$aire, 3)`.
 6. *Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?*
 
 ```{r}
-calibration(prob = pred, resp = resp)
+hecmulti::calibration(prob = pred, resp = resp)
 ```
+
 L'hypothèse nulle est que le modèle est calibré; ici, la valeur-$p$ est près de 0.5, donc on ne rejette pas l'hypothèse nulle et on conclut qu'il n'y a pas de preuve de surajustement.
 

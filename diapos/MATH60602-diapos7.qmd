@@ -48,8 +48,9 @@ Choisir un point de coupure $c$:
 - si $\widehat{p} < c$, on assigne $\widehat{Y}=0$.
 - si $\widehat{p} \geq c$, on assigne $\widehat{Y}=1$.
 
-- Un point de coupure de $c=0.5$ revient à assigner l'observation à la classe (catégorie) la plus probable.
-- Si $c=0$, on catégorise toutes les observations en succès avec $\widehat{Y}_i=1$ $(i=1, \ldots, n)$.
+Un point de coupure de $c=0.5$ revient à assigner l'observation à la classe (catégorie) la plus probable.
+
+Qu'arrive t'il si $c=0$ ou $c=1$? **Exemple au tableau**
 
 # Qualité de l'ajustement
 
@@ -59,12 +60,6 @@ et donc on obtient le **taux de mauvaise classification** si on calcule la moyen
 
 Plus le taux de mauvaise classification est petit, meilleure est la capacité prédictive du modèle.
 
-# Estimation de la performance du modèle
-
-Utiliser les mêmes données pour l'ajustement et l'estimation de la performance n'est (toujours) pas recommandé.
-
-Plutôt, considérer la validation croisée ou la division de l'échantillon.
-
 # Base de données marketing
 
 On considère un modèle pour `yachat`, le fait qu'une personne achète suite à l'envoi d'un catalogue.
@@ -73,26 +68,27 @@ On considère un modèle pour `yachat`, le fait qu'une personne achète suite à
 data(dbm, package = "hecmulti")
 formule <- formula("yachat ~ x1 + x2 + x3 +
                 x4 + x5 + x6 + x7 + x8 + x9 + x10")
-dbm_class <- dbm |>
-  dplyr::filter(test == 0) |>
-  # pour caret, convertir 0/1 en facteurs
-  dplyr::mutate(yachat = factor(yachat))
+modele <- glm(formule,
+              data = dbm, 
+              family = binomial,
+              subset = test == 0)
 ```
 
-# Estimation avec validation croisée
 
-On utilise la fonction `train` du paquet `caret`, avec le modèle linéaire généralisé.
+# Estimation de la performance du modèle
 
-```{r, warning=FALSE, message=FALSE, echo = TRUE, eval = TRUE}
+Utiliser les mêmes données pour l'ajustement et l'estimation de la performance n'est (toujours) pas recommandé.
+
+Plutôt, considérer la validation croisée ou la division de l'échantillon.
+
+```{r}
+#| eval: false
+#| echo: true
 set.seed(202209)
-cv_glm <- 
-  caret::train(form = formule,
-             data = dbm_class,
-             method = "glm",
-             family = binomial(link = "logit"),
-             trControl = caret::trainControl(
-               method = "cv",
-               number = 10))
+# Option par défaut: 
+# validation croisée à 10 plis
+# 10 répétitions
+predprob <- hecmulti::predvc(modele)
 ```
 
 
@@ -105,7 +101,7 @@ cv_glm <-
 #| eval: true
 #| cache: true
 #| fig-width: 8
-#| fig-height: 4
+#| fig-height: 6
 #| out-width: '80%'
 #| fig-align: 'center'
 data(dbm, package = 'hecmulti')
@@ -114,24 +110,20 @@ data(dbm, package = 'hecmulti')
 train <- dbm[(dbm$test == 0),]
 # Formule pour la moyenne du modèle logistique
 form <- formula("yachat ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10")
+mod <- glm(data = train,
+           formula = form, 
+           family = binomial)
 # Créer un conteneur pour les probabilités
-n <- nrow(train)
-loocv_prob <- rep(0, n)
-# Calculer la prédiction avec validation croisée (n groupes)
-# On retourne la probabilité de façon à obtenir le taux de mauvaise classification
-# la sensibilité et la spécificité pour différents seuils
-for(i in seq_len(n)){
-   mod <- glm(data = train, 
-              formula = form, 
-              family=binomial(link="logit"),
-              subset = -i)
-   loocv_prob[i] <- predict(mod, newdata = train[i,], type = "response")
-}
+set.seed(60602)
+prob <- hecmulti::predvc(mod)
 # Histogramme des probabilités prédites par validation croisée avec n groupes
-hist(loocv_prob, 
-     breaks = 25, 
-     xlab = "Probabilité d'achat prédite", 
-     ylab = "densité", main = "")
+library(ggplot2)
+ggplot(data = data.frame(x = prob),
+       aes(x = x)) +
+  geom_histogram() + 
+  labs(x = "probabilité d'achat prédite", 
+       y = "") +
+  theme_minimal()
 #  Modèle complet et valeurs prédites
 train_prob <- fitted(glm(data = train, 
                          formula = form, 
@@ -176,7 +168,7 @@ perfo <- function(prob, resp, plot = FALSE){
 }
 # Performance du modèle avec données d'apprentissage
 perfo0 <- perfo(prob = train_prob, resp = train$yachat)
-perfo1 <- perfo(prob = loocv_prob, resp = train$yachat)
+perfo1 <- perfo(prob = prob, resp = train$yachat)
 ```
 
 \footnotesize 
@@ -185,17 +177,39 @@ Répartition des probabilités de succès prédites par validation croisée.
 
 \normalsize 
 
-# Performance
+# Choix d'un point de coupure.
 
-On peut varier le point de coupure et regarder pour chaque valeur de $c$ la classification résultante.
+On peut faire varier le point de coupure et choisir celui qui maximise le taux de bonne classification, $\widehat{\Pr}(Y = \widehat{Y})$.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: '80%'
+#| fig-align: 'center'
+library(ggplot2)
+ggplot(data = perfo1$table,
+       aes(x = coupe, 
+           y = 100 - pcorrect)) +
+  geom_line() +
+  geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) + 
+  labs(x = "point de coupure",
+       y = "",
+       subtitle = "taux de mauvaise classification (pourcentage)") +
+  scale_x_continuous(expand = c(0.01,0.01),
+                     breaks = c(0,0.25,0.5,0.75,1),
+                     labels = c("0","0.25","0.5","0.75","1")) + 
+  theme_classic()
+```
+
+Avec $c=0.465$, on obtient un taux de mauvaise classification de 15.3\%.
+
+# Performance et classification
+
 
 
 ```{r}
 #| eval: false
 #| echo: true
-# predict retourne une matrice n x 2 
-# avec [P(Y=0), P(Y=1)]
-predprob <- predict(cv_glm, type = "prob")[,2]
 classif <- with(dbm, yachat[test == 0])
 # Tableau de la performance
 hecmulti::perfo_logistique(
@@ -259,32 +273,6 @@ knitr::kables(list(tab1, tab2))
 - La **spécificité** est le taux d'échecs correctement classés, $\Pr(Y=0, \widehat{Y}=0 \mid Y=0)$, soit $\mathsf{VN}/(\mathsf{VN}+\mathsf{FP})$.
 - Le taux de **faux positifs** est $\Pr(Y=0, \widehat{Y}=1 \mid \widehat{Y}=1)$.
 - Le taux de **faux négatifs** est $\Pr(Y=1, \widehat{Y}=0 \mid \widehat{Y}=0)$.
-
-# Choix d'un point de coupure.
-
-On peut faire varier le point de coupure et choisir celui qui maximise le taux de bonne classification, $\widehat{\Pr}(Y = \widehat{Y})$.
-
-```{r}
-#| fig-width: 8
-#| fig-height: 4
-#| out-width: '80%'
-#| fig-align: 'center'
-library(ggplot2)
-ggplot(data = perfo1$table,
-       aes(x = coupe, 
-           y = 100 - pcorrect)) +
-  geom_line() +
-  geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) + 
-  labs(x = "point de coupure",
-       y = "",
-       subtitle = "taux de mauvaise classification (pourcentage)") +
-  scale_x_continuous(expand = c(0.01,0.01),
-                     breaks = c(0,0.25,0.5,0.75,1),
-                     labels = c("0","0.25","0.5","0.75","1")) + 
-  theme_classic()
-```
-
-Avec $c=0.465$, on obtient un taux de mauvaise classification de 15.3\%.
 
 # Matrice de gain
 

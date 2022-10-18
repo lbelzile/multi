@@ -221,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, boxrule=0pt, sharp corners, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, interior hidden, boxrule=0pt, breakable, frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Rappel}
 \protect\hypertarget{rappel}{}
@@ -251,17 +251,17 @@ pour chaque ligne de la base de données.
 Choisir un point de coupure \(c\):
 
 \begin{itemize}
+\tightlist
 \item
   si \(\widehat{p} < c\), on assigne \(\widehat{Y}=0\).
 \item
   si \(\widehat{p} \geq c\), on assigne \(\widehat{Y}=1\).
-\item
-  Un point de coupure de \(c=0.5\) revient à assigner l'observation à la
-  classe (catégorie) la plus probable.
-\item
-  Si \(c=0\), on catégorise toutes les observations en succès avec
-  \(\widehat{Y}_i=1\) \((i=1, \ldots, n)\).
 \end{itemize}
+
+Un point de coupure de \(c=0.5\) revient à assigner l'observation à la
+classe (catégorie) la plus probable.
+
+Qu'arrive t'il si \(c=0\) ou \(c=1\)? \textbf{Exemple au tableau}
 \end{frame}
 
 \begin{frame}{Qualité de l'ajustement}
@@ -275,15 +275,6 @@ Plus le taux de mauvaise classification est petit, meilleure est la
 capacité prédictive du modèle.
 \end{frame}
 
-\begin{frame}{Estimation de la performance du modèle}
-\protect\hypertarget{estimation-de-la-performance-du-moduxe8le}{}
-Utiliser les mêmes données pour l'ajustement et l'estimation de la
-performance n'est (toujours) pas recommandé.
-
-Plutôt, considérer la validation croisée ou la division de
-l'échantillon.
-\end{frame}
-
 \begin{frame}[fragile]{Base de données marketing}
 \protect\hypertarget{base-de-donnuxe9es-marketing}{}
 On considère un modèle pour \texttt{yachat}, le fait qu'une personne
@@ -294,30 +285,29 @@ achète suite à l'envoi d'un catalogue.
 \FunctionTok{data}\NormalTok{(dbm, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
 \NormalTok{formule }\OtherTok{\textless{}{-}} \FunctionTok{formula}\NormalTok{(}\StringTok{"yachat \textasciitilde{} x1 + x2 + x3 +}
 \StringTok{                x4 + x5 + x6 + x7 + x8 + x9 + x10"}\NormalTok{)}
-\NormalTok{dbm\_class }\OtherTok{\textless{}{-}}\NormalTok{ dbm }\SpecialCharTok{|\textgreater{}}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
-  \CommentTok{\# pour caret, convertir 0/1 en facteurs}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{yachat =} \FunctionTok{factor}\NormalTok{(yachat))}
+\NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(formule,}
+              \AttributeTok{data =}\NormalTok{ dbm, }
+              \AttributeTok{family =}\NormalTok{ binomial,}
+              \AttributeTok{subset =}\NormalTok{ test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
 
-\begin{frame}[fragile]{Estimation avec validation croisée}
-\protect\hypertarget{estimation-avec-validation-croisuxe9e}{}
-On utilise la fonction \texttt{train} du paquet \texttt{caret}, avec le
-modèle linéaire généralisé.
+\begin{frame}[fragile]{Estimation de la performance du modèle}
+\protect\hypertarget{estimation-de-la-performance-du-moduxe8le}{}
+Utiliser les mêmes données pour l'ajustement et l'estimation de la
+performance n'est (toujours) pas recommandé.
+
+Plutôt, considérer la validation croisée ou la division de
+l'échantillon.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{202209}\NormalTok{)}
-\NormalTok{cv\_glm }\OtherTok{\textless{}{-}} 
-\NormalTok{  caret}\SpecialCharTok{::}\FunctionTok{train}\NormalTok{(}\AttributeTok{form =}\NormalTok{ formule,}
-             \AttributeTok{data =}\NormalTok{ dbm\_class,}
-             \AttributeTok{method =} \StringTok{"glm"}\NormalTok{,}
-             \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{),}
-             \AttributeTok{trControl =}\NormalTok{ caret}\SpecialCharTok{::}\FunctionTok{trainControl}\NormalTok{(}
-               \AttributeTok{method =} \StringTok{"cv"}\NormalTok{,}
-               \AttributeTok{number =} \DecValTok{10}\NormalTok{))}
+\CommentTok{\# Option par défaut: }
+\CommentTok{\# validation croisée à 10 plis}
+\CommentTok{\# 10 répétitions}
+\NormalTok{predprob }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{predvc}\NormalTok{(modele)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
@@ -339,16 +329,27 @@ Répartition des probabilités de succès prédites par validation croisée.
 \normalsize
 \end{frame}
 
-\begin{frame}[fragile]{Performance}
-\protect\hypertarget{performance}{}
-On peut varier le point de coupure et regarder pour chaque valeur de
-\(c\) la classification résultante.
+\begin{frame}{Choix d'un point de coupure.}
+\protect\hypertarget{choix-dun-point-de-coupure.}{}
+On peut faire varier le point de coupure et choisir celui qui maximise
+le taux de bonne classification, \(\widehat{\Pr}(Y = \widehat{Y})\).
 
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-4-1.pdf}
+
+}
+
+\end{figure}
+
+Avec \(c=0.465\), on obtient un taux de mauvaise classification de
+15.3\%.
+\end{frame}
+
+\begin{frame}[fragile]{Performance et classification}
+\protect\hypertarget{performance-et-classification}{}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\CommentTok{\# predict retourne une matrice n x 2 }
-\CommentTok{\# avec [P(Y=0), P(Y=1)]}
-\NormalTok{predprob }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(cv\_glm, }\AttributeTok{type =} \StringTok{"prob"}\NormalTok{)[,}\DecValTok{2}\NormalTok{]}
 \NormalTok{classif }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(dbm, yachat[test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{])}
 \CommentTok{\# Tableau de la performance}
 \NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{perfo\_logistique}\NormalTok{(}
@@ -425,23 +426,6 @@ du nombre d'observations dans chaque classe.
   Le taux de \textbf{faux négatifs} est
   \(\Pr(Y=1, \widehat{Y}=0 \mid \widehat{Y}=0)\).
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Choix d'un point de coupure.}
-\protect\hypertarget{choix-dun-point-de-coupure.}{}
-On peut faire varier le point de coupure et choisir celui qui maximise
-le taux de bonne classification, \(\widehat{\Pr}(Y = \widehat{Y})\).
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-7-1.pdf}
-
-}
-
-\end{figure}
-
-Avec \(c=0.465\), on obtient un taux de mauvaise classification de
-15.3\%.
 \end{frame}
 
 \begin{frame}{Matrice de gain}
@@ -590,12 +574,12 @@ ce point de coupure, on estime que
 \begin{itemize}
 \tightlist
 \item
-  le taux de bonne classification est de 70.3
+  le taux de bonne classification est de 70.5
 \item
-  la sensibilité est de 90.95.
+  la sensibilité est de 90.48.
 \end{itemize}
 
-Ainsi, on va détecter environ 90.95\% des clients qui achètent.
+Ainsi, on va détecter environ 90.48\% des clients qui achètent.
 
 Il est coûteux de rater un client potentiel, donc la stratégie optimale
 est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs
