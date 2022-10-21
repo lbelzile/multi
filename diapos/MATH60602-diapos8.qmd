@@ -101,26 +101,589 @@ C’est une énorme amélioration, de plus de 56%, par rapport à la stratégie 
 
 # Régression pour données multinomiale
 
-On considère une variable catégorielle avec $k \ge 2$ niveaux.
+On considère une variable réponse catégorielle avec $K \ge 2$ modalités.
 
 **Objectif**: modéliser la probabilité de chaque catégorie de la variable réponse.
 
-- Comme avec la régression logistique, on fixe une catégorie de référence (étiquetée `0`).
-- On modélise le log de la cote (logit) de chacune des autres catégories par rapport à la référence.
+Soit la probabilité d'appartenir à la modalité $k$, $$p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).$$ 
+
+La somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
+
+# Modèle multinomial logistique 
+
+Comme avec la régression logistique, on fixe une catégorie de référence (disons `1`) et on modélise le log de la cote de chacune des autres catégories par rapport à cette référence,
 \begin{align*}
- \ln\left(\frac{p_{i1}}{p_{i0}}\right) = \beta_{01} + \beta_{11} \mathrm{X}_i, \, \ldots, \, \ln\left(\frac{p_{iK}}{p_{i0}}\right) = \beta_{0K} + \beta_{1K} \mathrm{X}_i,
+ \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \beta_{1j} \mathrm{X}_{i1} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
 \end{align*}
-où $p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i)$ $(k=0, \ldots, K)$. 
+
+- Avec $K$ modalités et $p$ variables explicatives, on obtiendra $(K-1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
+
+L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
 
 # Modèle logistique multinomial et probabilités 
 
-On peut exprimer le modèle en termes des probabilités,
+On peut aussi exprimer le modèle en termes des probabilités,
 \begin{align*}
- p_{i0} &= \Pr(Y_i=0 \mid \mathrm{X}_i) = \frac{1}{1+ \sum_{j=1}^K\exp(\beta_{0j}+\beta_{1j}\mathrm{X}_i)}\\
- p_{ik} &= \Pr(Y_i=k \mid \mathrm{X}_i) = \frac{\exp(\beta_{0k}+\beta_{1k}\mathrm{X}_i)}{1+ \sum_{j=1}^K\exp(\beta_{0k}+\beta_{1k}\mathrm{X}_i)}, \qquad k =1, \ldots, K.
+ p_{i1} &= \Pr(Y_i=1 \mid \mathbf{X}_i) = \frac{1}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}\\
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) = \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =2, \ldots, K.
+\end{align*}
+où $\eta_{ij}$ est le prédicteur linéaire de l'individu $i$ pour le log de la cote de $Y_i=j$ versus la référence $Y_i=1$.
+
+# Taux de participation lors des élections américaines
+
+Les [données](https://github.com/fivethirtyeight/data/tree/master/non-voters) de cet exemple sont tirées d'un sondage Ipsos réalisé pour le site de nouvelles *FiveThirtyEight*. 
+
+La base de données `vote` contient 5837 observations avec les pondérations associées.
+
+Nous allons modéliser l'intention de vote, `catvote` à l'aide d'une régression logistique multinomiale.
+
+# Analyse exploratoire
+
+```{r}
+#| label: fig-multinom_means-Ipsos
+#| echo: false
+#| eval: true
+#| out-width: '80%'
+#| fig-width: 8
+#| fig-height: 6
+#| cache: true
+#| fig-cap: "Proportion des modalités des variables sociodémographiques des données de participation électorale."
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+data(vote, package = "hecmulti")
+g1 <- vote |> 
+  dplyr::count(revenu, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = revenu)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "revenu", 
+       x = "", y = "", fill = "vote") +
+  theme_classic()
+g2 <- vote |> 
+  dplyr::count(sexe, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = sexe)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "sexe", 
+       x = "", y = "", fill = "vote") +
+  theme_classic()
+g3 <- vote |> 
+  dplyr::count(race, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = race)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "race", 
+       x = "", y = "", fill = "vote")+
+  theme_classic()
+g4 <- vote |> 
+  dplyr::count(educ, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = educ)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "niveau d'éducation", 
+       x = "", y = "", fill = "vote")+
+  theme_classic()
+g5 <- vote |> 
+  dplyr::count(affiliation, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = affiliation)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top", 
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "affiliation politique", 
+       x = "", y = "", fill = "vote")+
+  theme_classic()
+g6 <- vote |> 
+  mutate(agecat = with(vote, cut(age, c(20,40,60,100)))) |>
+  dplyr::count(agecat, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = agecat)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top", 
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100"),
+                     expand = c(0,0)) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "âge", 
+       x = "", y = "", fill = "vote") +
+  theme_classic()
+(g1 + g2) / (g3 +g4) / (g5 + g6) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+```
+
+
+# Analyse exploratoire  (`age`)
+
+```{r}
+#| label: fig-vote-age
+#| eval: true
+#| echo: false
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: '70%'
+#| fig-cap: "Fréquence de vote selon l'âge."
+ggplot(data = vote, 
+       aes(x = age, fill = catvote)) +
+  geom_density(alpha = 0.2) + 
+  labs(fill = "vote", 
+       x = "âge (années)", 
+       y = "densité") + 
+  theme(legend.position = "bottom") +
+  theme_minimal()
+```
+Notez le comportement des jeunes voteurs (bimodal). Ces personnes n'ont souvent eu qu'une seule occasion de voter...
+
+
+# Ajustement du modèle
+
+La fonction `multinom` du paquet `nnet` ajuste le modèle multinomial logistique.
+
+```{r}
+#| label: mullogit
+#| eval: true
+#| echo: true
+data(vote, package = "hecmulti")
+levels(vote$catvote)
+# Modèle multinomial
+multi1 <- nnet::multinom(
+  catvote ~ age + sexe + race + revenu + educ, 
+  data = vote,     # base de données
+  weights = poids, # poids de sondage
+  trace = FALSE)   # infos sur convergence
+```
+
+# Méthodes **R** pour l'analyse
+
+```{r}
+#| eval: false
+#| echo: true
+# Tableau résumé de l'ajustement
+summary(multi1)
+# Estimations des coefficients
+coef(multi1)
+# Intervalles de confiance (Wald)
+confint(multi1)
+# Critères d'information
+AIC(multi1)
+BIC(multi1)
+# Prédiction: probabilité de chaque modalité
+predict(multi1, type = "probs")
+# Prédiction: classe la plus susceptible
+predict(multi1, type = "class")
+```
+
+# Comparaison de modèles emboîtés
+
+Le modèle avec uniquement l'ordonnée à l'origine possède $K-1$ paramètres.
+Il retourne comme probabilité prédite la proportion empirique de chaque catégorie.
+
+```{r}
+#| eval: false
+#| echo: true
+multi0 <- nnet::multinom(catvote ~ 1,
+                         weights = poids,
+                         data = vote,
+                         trace = FALSE)
+# Test de rapport de vraisemblance
+anova(multi0, multi1)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+multi0 <- nnet::multinom(catvote ~ 1,
+                         weights = poids,
+                         data = vote,
+                         trace = FALSE)
+# Test de rapport de vraisemblance
+options(knitr.kable.NA = '')
+knitr::kable(anova(multi0, multi1)[,-1], digits = 2)
+```
+
+# Prédictions
+
+Pour un profil $\mathbf{X}_i$ donné, on peut 
+
+- calculer chacun des $K-1$ prédicteurs linéaires $\widehat{\eta}_{i2}, \ldots, \widehat{\eta}_{iK}$.
+- écrire $p_{ik} = p_{i1}\exp(\widehat{\eta}_{ik})$ (formule de la cote)
+- substituer cette mesure dans l'équation $p_{i1} + \cdots + p_{iK}=1$
+- isoler la prédiction numérique pour $p_{i1}$.
+- en déduire les probabilités de succès de chaque modalité de $Y$.
+
+**Exemple au tableau**
+
+
+# Classification
+
+La prédiction du modèle est une probabilité pour chacune des $K$ modalités.
+
+
+On peut toujours classifier les événements 
+
+- avec $K-1$ points de coupure...
+- ou assigner à la modalité la plus probable
+
+Avec les prédictions, on peut comparer les observations et les prédictions à l'aide d'une matrice de confusion $K \times K$.
+
+- Le taux de bonne classification est toujours valide
+- Il existe des extensions multidimensionnelles de l'aire sous la courbe
+
+# Commentaires
+
+- Contrairement à la régression logistique, le nombre de paramètres augmente rapidement avec le nombre de variables explicatives, $p$.
+- Il y a moins d'information pour estimer les paramètres qu'une régression linéaire: prévoir de plus grandes tailles d'échantillon.
+- Attention aux modalités à faible fréquence et à la répartition des variables explicatives au sein des différentes modalités.
+
+# Données ordinales
+
+Outre la régression multinomiale logistique, on peut également considérer la *régression logistique cumulative à cotes proportionnelles*.
+
+
+- modèle plus parcimonieux que le modèle multinomial logistique,
+- mais au prix de postulats supplémentaires...
+
+En **R**, la variable réponse doit être de classe `ordered`, un facteur dont les niveaux sont ordonnés en ordre croissant.
+```{r}
+#| echo: true
+#| eval: true
+class(hecmulti::vote$catvote)
+```
+
+# Notation du modèle
+
+La survie $S_{ij}$ est la probabilité que $Y_i$ soit plus grand ou égal à $j$,
+\begin{align*}
+S_{ij}=\sum_{k=j}^K p_{ik}= \Pr(Y_{i} \ge j \mid \mathbf{X}_{i}), \qquad j=2, \ldots, K.
 \end{align*}
 
-- La  somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
-- Le modèle logistique multinomial ne fait que combiner plusieurs logit dans un seul modèle.
-- L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
-- Avec $K + 1$ niveaux et $p$ variables explicatives, on obtiendra $(K+1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
+- La survie est une fonction décroissante
+- $S_{i1}=1$ et
+- $S_{iK} = \Pr(Y_i=K \mid \mathbf{X}_{i})=p_{iK}$.
+
+# Formulation du modèle
+
+Le modèle logistique cumulé spécifie que 
+\begin{align*}
+\ln \left(\frac{S_{ij}}{1-S_{ij}}\right) = \beta_{0j} + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}, \quad \qquad  j=2, \ldots, K.
+\end{align*}
+
+Il y a donc $K-1$ équations logistiques. 
+
+- Les paramètres associés aux variables explicatives, $\beta_1, \ldots, \beta_p$ sont les **mêmes** pour chacune des log-cotes
+- mais il y a une ordonnée à l'origine différente par rapport de cote. 
+
+
+# Interprétation des paramètres
+
+On considère la cote de $S_{ij}$ (versus $1-S_{ij}$), qui mesure à quel point il est plus probable que $Y_i$ prenne une valeur supérieure ou égale à $j$ par rapport à une valeur inférieure à $j$, avec
+\begin{align*}
+\frac{\Pr(Y_i \geq j \mid \mathbf{X}_i)}{\Pr(Y_i < j \mid \mathbf{X}_i)} = \frac{S_{ij}}{1-S_{ij}} = \exp( \beta_{0j} + \beta_1\mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}).
+\end{align*}
+
+Pour chaque augmentation d'une unité de $\mathrm{X}_j$, la cote $S_k$ versus $(1-S_k)$ est multipliée par $\exp(\beta_j)$, peu importe la valeur de $Y$. 
+
+# Interprétation des coefficients
+
+```{r}
+#| label: tbl-ordered-logistic
+#| tbl-cap: "Tableau des estimations des coefficients du modèle pour réponses ordinales pour la régression logistique à cotes proportionnelles avec sexe."
+#| echo: false
+#| eval: true
+#| message: false
+#| warning: false
+multi2a <- MASS::polr(catvote ~ sexe, 
+                      data = vote,
+                      subset = age > 30,
+                      weights = poids,
+                      method = "logistic", 
+                      Hess = TRUE)
+# multi2b <- nnet::multinom(
+#   catvote ~ affiliation, 
+#   data = vote,
+#   subset = age > 30,
+#   weights = poids,
+#   Hess = TRUE,
+#   trace = FALSE)
+rapp <- summary(multi2a)
+coefs <- rapp$coefficients
+options(knitr.kable.NA = '')
+tabcoef <- tibble::as_tibble(coefs[,1:2])
+tabcoef <- cbind("effet" = c("sexe [homme]","cst [rarement/jamais|sporadiquement]","cst [sporadiquement|toujours]"), tabcoef)
+kableExtra::kbl(tabcoef,
+	        longtable = FALSE, 
+	        booktabs = TRUE,
+          col.names = c("effet","coefficient","erreur-type"),
+          digits = 3,
+	        format = "latex")
+pval_lrt_multi2a_drop1 <- sprintf(round(drop1(multi2a, test = "Chisq")[2,4],3), fmt = "%.3f")
+```
+
+Les hommes de plus de 30 ans sont plus susceptibles de voter fréquemment que les femmes. 
+
+La cote catégorie plus fréquente de vote (vs moins fréquente) pour les hommes est $\exp(`r sprintf(round(as.numeric(coef(multi2a)),3), fmt = "%.3f")`)=`r sprintf(round(exp(as.numeric(coef(multi2a))),3), fmt = "%.3f")`$ fois celle des femmes, soit une diminution de $`r round(100*(1-exp(as.numeric(coef(multi2a)))), 1)`\%$ de la cote.
+
+# Ajustement dans **R**
+
+Pour simplifier, on utilise uniquement `sexe` comme variable explicative.
+
+```{r}
+#| label: ordinal-logistique
+#| eval: false
+#| echo: true
+#| warning: false
+#| error: false
+# with(vote, is.ordered(catvote))
+multi2a <- MASS::polr(
+  catvote ~ sexe, 
+  data = vote, 
+  subset = age > 30,
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+summary(multi2a)
+```
+
+```{r}
+#| label: ordinal-logistique-eval
+#| eval: true
+#| echo: false
+#| warning: false
+#| error: false
+# with(vote, is.ordered(catvote))
+multi2a <- MASS::polr(
+  catvote ~ sexe, 
+  data = vote, 
+  subset = age > 30,
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+```
+
+
+# Méthodes pour `polr`
+
+
+```{r}
+#| echo: true
+#| eval: false
+# IC pour beta_x (vraisemblance profilée)
+confint(multi2a)
+# On peut obtenir les intervalles de Wald 
+# avec confint.default (PAS RECOMMANDÉ)
+
+# Critères d'information
+AIC(multi2a); BIC(multi2a)
+# Tableau des coefficients 
+# Coefficients (variables explicatives)
+coef(multi2a)
+# Ordonnées à l'origine:
+multi2a$zeta
+```
+
+# Postulat de rapport de cote constant
+
+Une des hypothèses de ce modèle est que les effets des variables explicatives sont les mêmes pour chaque équation. 
+
+- $\mathscr{H}_0$ : l'effet de chaque variable est le même pour les $K$ logit du modèle multinomial logistique, soit $\beta_{11} = \cdots =\beta_{1K}$, $\ldots$, $\beta_{p1} = \cdots =\beta_{pK}$.
+
+Une très petite valeur-$p$ (rejet de $\mathscr{H}_0$) pour ce test serait une indication que le modèle multinomial logistique serait préférable. 
+
+# Test de rapport de vraisemblance 
+
+Ce test compare les deux modèles emboîtés, avec 
+
+- hypothèse nulle $\mathscr{H}_0$: modèle cumulatif à cotes proportionnelles, avec $p+K-1$ paramètres
+- hypothèse alternative $\mathscr{H}_a$: modèle multinomial, avec $(K-1)\times(p+1)$ paramètres
+
+
+```{r}
+#| eval: true
+#| echo: true
+multi2b <- nnet::multinom(catvote ~ sexe, 
+  data = vote,  subset = age > 30, 
+  weights = poids, trace = FALSE)
+# Valeur-p du test de rapport de vraisemblance
+pchisq(q = deviance(multi2a) - deviance(multi2b),
+       df = length(coef(multi2a)), 
+       lower.tail = FALSE)
+```
+
+Le modèle sous $\mathscr{H}_0$ semble être une simplification adéquate.
+
+# Test du rapport de vraisemblance
+
+
+```{r}
+#| eval: true
+#| echo: false
+multi3a <- MASS::polr(
+  catvote ~ age, 
+  data = vote, 
+  subset = age > 30,
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+multi3b <- nnet::multinom(catvote ~ age, 
+  data = vote,  subset = age > 30, 
+  weights = poids, trace = FALSE)
+# Valeur-p du test de rapport de vraisemblance
+pval <- pchisq(q = deviance(multi3a) - deviance(multi3b),
+       df = length(coef(multi2a)), 
+       lower.tail = FALSE)
+```
+
+Si on ajuste plutôt le modèle avec uniquement `age`, la valeur-$p$ est inférieure à $10^{-5}$: le modèle cumulatif à cote proportionnelles ne serait pas une simplification adéquate.
+
+On peut également effectuer des tests pour déterminer la significativité
+
+ - la significativité globale (ordonnée à l'origine vs modèle complet)
+ - l'effet d'une variable explicative (modèle complet, moins une variable)
+
+# Comparaison des prédictions 
+
+\footnotesize 
+Prédictions pour le modèle avec uniquement `age` comme variable explicative.
+
+```{r}
+#| label: fig-predmultinom
+#| fig-cap: "Probabilités prédites pour chaque modalité selon l'âge."
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: '70%'
+#| cache: true
+#| eval: true
+#| echo: false
+#| warning: false
+library(MASS)
+multi3a <- MASS::polr(
+  catvote ~ scale(age, scale = FALSE), 
+  data = vote,
+  subset = age > 30, 
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+
+multi3b <- nnet::multinom(
+  catvote ~ scale(age, scale = FALSE), 
+  data = vote,
+  subset = age > 30, 
+  weights = poids,
+  Hess = TRUE,
+  trace = FALSE)
+xpred <- seq(30, 95, by = 0.1) - mean(vote$age)
+nobs <- length(xpred)
+pred1 <- predict(multi3b, 
+                 newdata = data.frame(age = xpred),
+                 type = "prob")
+pred2 <- predict(multi3a, 
+                 newdata = data.frame(age = xpred),
+                 type = "prob")
+df <- data.frame(
+  x = rep(xpred + mean(vote$age), length.out = 6*nobs),
+  modele = factor(rep(c("multinomial", "ordinal"), 
+                       each = 3*nobs)),
+  reponse = factor(c(rep(c("rarement/jamais",
+                    "sporadiquement",
+                    "toujours"), 
+                  each = nobs),
+                  rep(c("rarement/jamais",
+                    "sporadiquement",
+                    "toujours"), 
+                  each = nobs))),
+  pred = c(pred1, pred2))
+                  
+ggplot2::ggplot(
+  data = df,
+  mapping = ggplot2::aes(
+    x = x,
+    y = pred,
+    color = reponse,
+    linetype = modele)) + 
+  ggplot2::geom_line() +
+  ggplot2::labs(y = "probabilité prédite",
+       linetype = "modèle",
+       color = "vote",
+       x = "âge (années)") +
+  MetBrewer::scale_color_met_d("Hiroshige") + 
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom") 
+```
+
+\normalsize
+
+# Récapitulatif
+
+- La régression multinomiale logistique pour une variable catégorielle à $K$ niveaux est une extension directe de la régression logistique pour données binaires
+   - la somme des probabilités vaut 1.
+   - il y a $K-1$ équations de cote en termes des variables explicatives,
+   - donc le nombre de paramètres croît rapidement.
+   
+# Récapitulatif
+
+On met beaucoup l'accent sur l'interprétation des coefficients à l'échelle de la cote.
+
+   - rapports de cote = modèle multiplicatif: la cote de catégorie $k$ vs référence est multipliée par $\exp(\beta_{jk})$ pour chaque augmentation de $\mathrm{X}_j$ d'une unité.
+   - les coefficients manquants (cote de $Y=k$ vs $Y=l$) peut être déduits par des manipulations algébriques.
+    
+# Récapitulatif
+
+Les outils usuels d'inférence pour les modèles estimés par maximum de vraisemblance sont applicables.
+
+ - intervalles de confiance (Wald ou vraisemblance profilée)
+ - tests de rapport de vraisemblance
+ - critères d'information
+
+# Récapitulatif
+
+Côté classification, on va règle générale assigner à la classe la plus probable.
+
+- il existe des équivalents multidimensionnels directs à ce qu'on a couvert (matrice de confusion, taux de bonne classification, gain, etc.) 
+- certains concepts (sensibilité, spécificité, fonction d'efficacité du récepteur) ne sont en revanche pas applicables ou n'ont pas d'équivalent.
+
+# Récapitulatif
+
+Le modèle cumulatif à cote proportionnelle est une simplification du modèle multinomial pour des **données ordinales**.
+
+- On suppose que l'effet des variables est le même pour la cote de la survie de chaque modalité.
+- Moins de paramètres, mais postulat à vérifier (via test de rapport de vraisemblance).

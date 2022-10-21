@@ -84,6 +84,46 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
@@ -181,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, breakable, frame hidden, interior hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, interior hidden, boxrule=0pt, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Sélection de variables en régression logistique}
 \protect\hypertarget{suxe9lection-de-variables-en-ruxe9gression-logistique}{}
@@ -261,8 +301,8 @@ En résumé, la procédure numérique à réaliser est la suivante:
   Construire un catalogue de modèles: pour chacun, calculer les
   prédictions par validation croisée.
 \item
-  Calculer le point de coupure optimal pour chaque modèle et le gain
-  associé.
+  Calculer le point de coupure optimal pour chaque modèle selon la
+  fonction de gain moyen.
 \item
   Sélectionner le modèle qui \textbf{maximise le gain}.
 \end{itemize}
@@ -324,6 +364,566 @@ stratégie de référence.
 \item
   D'autres modèles que la régression logistique (arbres de régression,
   etc.) sont envisageables pour la classification.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Régression pour données multinomiale}
+\protect\hypertarget{ruxe9gression-pour-donnuxe9es-multinomiale}{}
+On considère une variable réponse catégorielle avec \(K \ge 2\)
+modalités.
+
+\textbf{Objectif}: modéliser la probabilité de chaque catégorie de la
+variable réponse.
+
+Soit la probabilité d'appartenir à la modalité \(k\),
+\[p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).\]
+
+La somme des probabilités, \(p_{i0} + \cdots + p_{iK}\), vaut 1.
+\end{frame}
+
+\begin{frame}[fragile]{Modèle multinomial logistique}
+\protect\hypertarget{moduxe8le-multinomial-logistique}{}
+Comme avec la régression logistique, on fixe une catégorie de référence
+(disons \texttt{1}) et on modélise le log de la cote de chacune des
+autres catégories par rapport à cette référence, \begin{align*}
+ \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \beta_{1j} \mathrm{X}_{i1} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
+\end{align*}
+
+\begin{itemize}
+\tightlist
+\item
+  Avec \(K\) modalités et \(p\) variables explicatives, on obtiendra
+  \((K-1)\times (p+1)\) paramètres à estimer, en incluant l'ordonnée à
+  l'origine.
+\end{itemize}
+
+L'interprétation des paramètres se fait comme en régression logistique
+sauf qu'il faut y aller équation par équation.
+\end{frame}
+
+\begin{frame}{Modèle logistique multinomial et probabilités}
+\protect\hypertarget{moduxe8le-logistique-multinomial-et-probabilituxe9s}{}
+On peut aussi exprimer le modèle en termes des probabilités,
+\begin{align*}
+ p_{i1} &= \Pr(Y_i=1 \mid \mathbf{X}_i) = \frac{1}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}\\
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) = \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =2, \ldots, K.
+\end{align*} où \(\eta_{ij}\) est le prédicteur linéaire de l'individu
+\(i\) pour le log de la cote de \(Y_i=j\) versus la référence \(Y_i=1\).
+\end{frame}
+
+\begin{frame}[fragile]{Taux de participation lors des élections
+américaines}
+\protect\hypertarget{taux-de-participation-lors-des-uxe9lections-amuxe9ricaines}{}
+Les
+\href{https://github.com/fivethirtyeight/data/tree/master/non-voters}{données}
+de cet exemple sont tirées d'un sondage Ipsos réalisé pour le site de
+nouvelles \emph{FiveThirtyEight}.
+
+La base de données \texttt{vote} contient 5837 observations avec les
+pondérations associées.
+
+Nous allons modéliser l'intention de vote, \texttt{catvote} à l'aide
+d'une régression logistique multinomiale.
+\end{frame}
+
+\begin{frame}{Analyse exploratoire}
+\protect\hypertarget{analyse-exploratoire}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos8_files/figure-beamer/fig-multinom_means-Ipsos-1.pdf}
+
+}
+
+\caption{\label{fig-multinom_means-Ipsos}Proportion des modalités des
+variables sociodémographiques des données de participation électorale.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Analyse exploratoire (\texttt{age})}
+\protect\hypertarget{analyse-exploratoire-age}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos8_files/figure-beamer/fig-vote-age-1.pdf}
+
+}
+
+\caption{\label{fig-vote-age}Fréquence de vote selon l'âge.}
+
+\end{figure}
+
+Notez le comportement des jeunes voteurs (bimodal). Ces personnes n'ont
+souvent eu qu'une seule occasion de voter\ldots{}
+\end{frame}
+
+\begin{frame}[fragile]{Ajustement du modèle}
+\protect\hypertarget{ajustement-du-moduxe8le}{}
+La fonction \texttt{multinom} du paquet \texttt{nnet} ajuste le modèle
+multinomial logistique.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(vote, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\FunctionTok{levels}\NormalTok{(vote}\SpecialCharTok{$}\NormalTok{catvote)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "rarement/jamais" "sporadiquement"  "toujours"       
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Modèle multinomial}
+\NormalTok{multi1 }\OtherTok{\textless{}{-}}\NormalTok{ nnet}\SpecialCharTok{::}\FunctionTok{multinom}\NormalTok{(}
+\NormalTok{  catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ revenu }\SpecialCharTok{+}\NormalTok{ educ, }
+  \AttributeTok{data =}\NormalTok{ vote,     }\CommentTok{\# base de données}
+  \AttributeTok{weights =}\NormalTok{ poids, }\CommentTok{\# poids de sondage}
+  \AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{)   }\CommentTok{\# infos sur convergence}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Méthodes \textbf{R} pour l'analyse}
+\protect\hypertarget{muxe9thodes-r-pour-lanalyse}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Tableau résumé de l\textquotesingle{}ajustement}
+\FunctionTok{summary}\NormalTok{(multi1)}
+\CommentTok{\# Estimations des coefficients}
+\FunctionTok{coef}\NormalTok{(multi1)}
+\CommentTok{\# Intervalles de confiance (Wald)}
+\FunctionTok{confint}\NormalTok{(multi1)}
+\CommentTok{\# Critères d\textquotesingle{}information}
+\FunctionTok{AIC}\NormalTok{(multi1)}
+\FunctionTok{BIC}\NormalTok{(multi1)}
+\CommentTok{\# Prédiction: probabilité de chaque modalité}
+\FunctionTok{predict}\NormalTok{(multi1, }\AttributeTok{type =} \StringTok{"probs"}\NormalTok{)}
+\CommentTok{\# Prédiction: classe la plus susceptible}
+\FunctionTok{predict}\NormalTok{(multi1, }\AttributeTok{type =} \StringTok{"class"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Comparaison de modèles emboîtés}
+\protect\hypertarget{comparaison-de-moduxe8les-embouxeetuxe9s}{}
+Le modèle avec uniquement l'ordonnée à l'origine possède \(K-1\)
+paramètres. Il retourne comme probabilité prédite la proportion
+empirique de chaque catégorie.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{multi0 }\OtherTok{\textless{}{-}}\NormalTok{ nnet}\SpecialCharTok{::}\FunctionTok{multinom}\NormalTok{(catvote }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{,}
+                         \AttributeTok{weights =}\NormalTok{ poids,}
+                         \AttributeTok{data =}\NormalTok{ vote,}
+                         \AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{)}
+\CommentTok{\# Test de rapport de vraisemblance}
+\FunctionTok{anova}\NormalTok{(multi0, multi1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}rrlrrr@{}}
+\toprule()
+Resid. df & Resid. Dev & Test & Df & LR stat. & Pr(Chi) \\
+\midrule()
+\endhead
+11670 & 12476.43 & & & & \\
+11650 & 11306.87 & 1 vs 2 & 20 & 1169.56 & 0 \\
+\bottomrule()
+\end{longtable}
+\end{frame}
+
+\begin{frame}{Prédictions}
+\protect\hypertarget{pruxe9dictions}{}
+Pour un profil \(\mathbf{X}_i\) donné, on peut
+
+\begin{itemize}
+\tightlist
+\item
+  calculer chacun des \(K-1\) prédicteurs linéaires
+  \(\widehat{\eta}_{i2}, \ldots, \widehat{\eta}_{iK}\).
+\item
+  écrire \(p_{ik} = p_{i1}\exp(\widehat{\eta}_{ik})\) (formule de la
+  cote)
+\item
+  substituer cette mesure dans l'équation \(p_{i1} + \cdots + p_{iK}=1\)
+\item
+  isoler la prédiction numérique pour \(p_{i1}\).
+\item
+  en déduire les probabilités de succès de chaque modalité de \(Y\).
+\end{itemize}
+
+\textbf{Exemple au tableau}
+\end{frame}
+
+\begin{frame}{Classification}
+\protect\hypertarget{classification}{}
+La prédiction du modèle est une probabilité pour chacune des \(K\)
+modalités.
+
+On peut toujours classifier les événements
+
+\begin{itemize}
+\tightlist
+\item
+  avec \(K-1\) points de coupure\ldots{}
+\item
+  ou assigner à la modalité la plus probable
+\end{itemize}
+
+Avec les prédictions, on peut comparer les observations et les
+prédictions à l'aide d'une matrice de confusion \(K \times K\).
+
+\begin{itemize}
+\tightlist
+\item
+  Le taux de bonne classification est toujours valide
+\item
+  Il existe des extensions multidimensionnelles de l'aire sous la courbe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Commentaires}
+\protect\hypertarget{commentaires}{}
+\begin{itemize}
+\tightlist
+\item
+  Contrairement à la régression logistique, le nombre de paramètres
+  augmente rapidement avec le nombre de variables explicatives, \(p\).
+\item
+  Il y a moins d'information pour estimer les paramètres qu'une
+  régression linéaire: prévoir de plus grandes tailles d'échantillon.
+\item
+  Attention aux modalités à faible fréquence et à la répartition des
+  variables explicatives au sein des différentes modalités.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Données ordinales}
+\protect\hypertarget{donnuxe9es-ordinales}{}
+Outre la régression multinomiale logistique, on peut également
+considérer la \emph{régression logistique cumulative à cotes
+proportionnelles}.
+
+\begin{itemize}
+\tightlist
+\item
+  modèle plus parcimonieux que le modèle multinomial logistique,
+\item
+  mais au prix de postulats supplémentaires\ldots{}
+\end{itemize}
+
+En \textbf{R}, la variable réponse doit être de classe \texttt{ordered},
+un facteur dont les niveaux sont ordonnés en ordre croissant.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{class}\NormalTok{(hecmulti}\SpecialCharTok{::}\NormalTok{vote}\SpecialCharTok{$}\NormalTok{catvote)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "ordered" "factor" 
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Notation du modèle}
+\protect\hypertarget{notation-du-moduxe8le}{}
+La survie \(S_{ij}\) est la probabilité que \(Y_i\) soit plus grand ou
+égal à \(j\), \begin{align*}
+S_{ij}=\sum_{k=j}^K p_{ik}= \Pr(Y_{i} \ge j \mid \mathbf{X}_{i}), \qquad j=2, \ldots, K.
+\end{align*}
+
+\begin{itemize}
+\tightlist
+\item
+  La survie est une fonction décroissante
+\item
+  \(S_{i1}=1\) et
+\item
+  \(S_{iK} = \Pr(Y_i=K \mid \mathbf{X}_{i})=p_{iK}\).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Formulation du modèle}
+\protect\hypertarget{formulation-du-moduxe8le}{}
+Le modèle logistique cumulé spécifie que \begin{align*}
+\ln \left(\frac{S_{ij}}{1-S_{ij}}\right) = \beta_{0j} + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}, \quad \qquad  j=2, \ldots, K.
+\end{align*}
+
+Il y a donc \(K-1\) équations logistiques.
+
+\begin{itemize}
+\tightlist
+\item
+  Les paramètres associés aux variables explicatives,
+  \(\beta_1, \ldots, \beta_p\) sont les \textbf{mêmes} pour chacune des
+  log-cotes
+\item
+  mais il y a une ordonnée à l'origine différente par rapport de cote.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Interprétation des paramètres}
+\protect\hypertarget{interpruxe9tation-des-paramuxe8tres}{}
+On considère la cote de \(S_{ij}\) (versus \(1-S_{ij}\)), qui mesure à
+quel point il est plus probable que \(Y_i\) prenne une valeur supérieure
+ou égale à \(j\) par rapport à une valeur inférieure à \(j\), avec
+\begin{align*}
+\frac{\Pr(Y_i \geq j \mid \mathbf{X}_i)}{\Pr(Y_i < j \mid \mathbf{X}_i)} = \frac{S_{ij}}{1-S_{ij}} = \exp( \beta_{0j} + \beta_1\mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}).
+\end{align*}
+
+Pour chaque augmentation d'une unité de \(\mathrm{X}_j\), la cote
+\(S_k\) versus \((1-S_k)\) est multipliée par \(\exp(\beta_j)\), peu
+importe la valeur de \(Y\).
+\end{frame}
+
+\begin{frame}{Interprétation des coefficients}
+\protect\hypertarget{interpruxe9tation-des-coefficients}{}
+\hypertarget{tbl-ordered-logistic}{}
+\begin{table}
+\caption{\label{tbl-ordered-logistic}Tableau des estimations des coefficients du modèle pour réponses
+ordinales pour la régression logistique à cotes proportionnelles avec
+sexe. }\tabularnewline
+
+\centering
+\begin{tabular}[t]{lrr}
+\toprule
+effet & coefficient & erreur-type\\
+\midrule
+sexe [homme] & -0.166 & 0.055\\
+cst [rarement/jamais|sporadiquement] & -1.297 & 0.044\\
+cst [sporadiquement|toujours] & 0.865 & 0.041\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Les hommes de plus de 30 ans sont plus susceptibles de voter fréquemment
+que les femmes.
+
+La cote catégorie plus fréquente de vote (vs moins fréquente) pour les
+hommes est \(\exp(-0.166)=0.847\) fois celle des femmes, soit une
+diminution de \(15.3\%\) de la cote.
+\end{frame}
+
+\begin{frame}[fragile]{Ajustement dans \textbf{R}}
+\protect\hypertarget{ajustement-dans-r}{}
+Pour simplifier, on utilise uniquement \texttt{sexe} comme variable
+explicative.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# with(vote, is.ordered(catvote))}
+\NormalTok{multi2a }\OtherTok{\textless{}{-}}\NormalTok{ MASS}\SpecialCharTok{::}\FunctionTok{polr}\NormalTok{(}
+\NormalTok{  catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sexe, }
+  \AttributeTok{data =}\NormalTok{ vote, }
+  \AttributeTok{subset =}\NormalTok{ age }\SpecialCharTok{\textgreater{}} \DecValTok{30}\NormalTok{,}
+  \AttributeTok{weights =}\NormalTok{ poids,}
+  \AttributeTok{method =} \StringTok{"logistic"}\NormalTok{, }
+  \AttributeTok{Hess =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{summary}\NormalTok{(multi2a)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Méthodes pour \texttt{polr}}
+\protect\hypertarget{muxe9thodes-pour-polr}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# IC pour beta\_x (vraisemblance profilée)}
+\FunctionTok{confint}\NormalTok{(multi2a)}
+\CommentTok{\# On peut obtenir les intervalles de Wald }
+\CommentTok{\# avec confint.default (PAS RECOMMANDÉ)}
+
+\CommentTok{\# Critères d\textquotesingle{}information}
+\FunctionTok{AIC}\NormalTok{(multi2a); }\FunctionTok{BIC}\NormalTok{(multi2a)}
+\CommentTok{\# Tableau des coefficients }
+\CommentTok{\# Coefficients (variables explicatives)}
+\FunctionTok{coef}\NormalTok{(multi2a)}
+\CommentTok{\# Ordonnées à l\textquotesingle{}origine:}
+\NormalTok{multi2a}\SpecialCharTok{$}\NormalTok{zeta}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Postulat de rapport de cote constant}
+\protect\hypertarget{postulat-de-rapport-de-cote-constant}{}
+Une des hypothèses de ce modèle est que les effets des variables
+explicatives sont les mêmes pour chaque équation.
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathscr{H}_0\) : l'effet de chaque variable est le même pour les
+  \(K\) logit du modèle multinomial logistique, soit
+  \(\beta_{11} = \cdots =\beta_{1K}\), \(\ldots\),
+  \(\beta_{p1} = \cdots =\beta_{pK}\).
+\end{itemize}
+
+Une très petite valeur-\(p\) (rejet de \(\mathscr{H}_0\)) pour ce test
+serait une indication que le modèle multinomial logistique serait
+préférable.
+\end{frame}
+
+\begin{frame}[fragile]{Test de rapport de vraisemblance}
+\protect\hypertarget{test-de-rapport-de-vraisemblance}{}
+Ce test compare les deux modèles emboîtés, avec
+
+\begin{itemize}
+\tightlist
+\item
+  hypothèse nulle \(\mathscr{H}_0\): modèle cumulatif à cotes
+  proportionnelles, avec \(p+K-1\) paramètres
+\item
+  hypothèse alternative \(\mathscr{H}_a\): modèle multinomial, avec
+  \((K-1)\times(p+1)\) paramètres
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{multi2b }\OtherTok{\textless{}{-}}\NormalTok{ nnet}\SpecialCharTok{::}\FunctionTok{multinom}\NormalTok{(catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sexe, }
+  \AttributeTok{data =}\NormalTok{ vote,  }\AttributeTok{subset =}\NormalTok{ age }\SpecialCharTok{\textgreater{}} \DecValTok{30}\NormalTok{, }
+  \AttributeTok{weights =}\NormalTok{ poids, }\AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{)}
+\CommentTok{\# Valeur{-}p du test de rapport de vraisemblance}
+\FunctionTok{pchisq}\NormalTok{(}\AttributeTok{q =} \FunctionTok{deviance}\NormalTok{(multi2a) }\SpecialCharTok{{-}} \FunctionTok{deviance}\NormalTok{(multi2b),}
+       \AttributeTok{df =} \FunctionTok{length}\NormalTok{(}\FunctionTok{coef}\NormalTok{(multi2a)), }
+       \AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7886889
+\end{verbatim}
+
+Le modèle sous \(\mathscr{H}_0\) semble être une simplification
+adéquate.
+\end{frame}
+
+\begin{frame}[fragile]{Test du rapport de vraisemblance}
+\protect\hypertarget{test-du-rapport-de-vraisemblance}{}
+Si on ajuste plutôt le modèle avec uniquement \texttt{age}, la
+valeur-\(p\) est inférieure à \(10^{-5}\): le modèle cumulatif à cote
+proportionnelles ne serait pas une simplification adéquate.
+
+On peut également effectuer des tests pour déterminer la significativité
+
+\begin{itemize}
+\tightlist
+\item
+  la significativité globale (ordonnée à l'origine vs modèle complet)
+\item
+  l'effet d'une variable explicative (modèle complet, moins une
+  variable)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Comparaison des prédictions}
+\protect\hypertarget{comparaison-des-pruxe9dictions}{}
+\footnotesize
+
+Prédictions pour le modèle avec uniquement \texttt{age} comme variable
+explicative.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos8_files/figure-beamer/fig-predmultinom-1.pdf}
+
+}
+
+\caption{\label{fig-predmultinom}Probabilités prédites pour chaque
+modalité selon l'âge.}
+
+\end{figure}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-1}{}
+\begin{itemize}
+\tightlist
+\item
+  La régression multinomiale logistique pour une variable catégorielle à
+  \(K\) niveaux est une extension directe de la régression logistique
+  pour données binaires
+
+  \begin{itemize}
+  \tightlist
+  \item
+    la somme des probabilités vaut 1.
+  \item
+    il y a \(K-1\) équations de cote en termes des variables
+    explicatives,
+  \item
+    donc le nombre de paramètres croît rapidement.
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-2}{}
+On met beaucoup l'accent sur l'interprétation des coefficients à
+l'échelle de la cote.
+
+\begin{itemize}
+\tightlist
+\item
+  rapports de cote = modèle multiplicatif: la cote de catégorie \(k\) vs
+  référence est multipliée par \(\exp(\beta_{jk})\) pour chaque
+  augmentation de \(\mathrm{X}_j\) d'une unité.
+\item
+  les coefficients manquants (cote de \(Y=k\) vs \(Y=l\)) peut être
+  déduits par des manipulations algébriques.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-3}{}
+Les outils usuels d'inférence pour les modèles estimés par maximum de
+vraisemblance sont applicables.
+
+\begin{itemize}
+\tightlist
+\item
+  intervalles de confiance (Wald ou vraisemblance profilée)
+\item
+  tests de rapport de vraisemblance
+\item
+  critères d'information
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-4}{}
+Côté classification, on va règle générale assigner à la classe la plus
+probable.
+
+\begin{itemize}
+\tightlist
+\item
+  il existe des équivalents multidimensionnels directs à ce qu'on a
+  couvert (matrice de confusion, taux de bonne classification, gain,
+  etc.)
+\item
+  certains concepts (sensibilité, spécificité, fonction d'efficacité du
+  récepteur) ne sont en revanche pas applicables ou n'ont pas
+  d'équivalent.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-5}{}
+Le modèle cumulatif à cote proportionnelle est une simplification du
+modèle multinomial pour des \textbf{données ordinales}.
+
+\begin{itemize}
+\tightlist
+\item
+  On suppose que l'effet des variables est le même pour la cote de la
+  survie de chaque modalité.
+\item
+  Moins de paramètres, mais postulat à vérifier (via test de rapport de
+  vraisemblance).
 \end{itemize}
 \end{frame}
 

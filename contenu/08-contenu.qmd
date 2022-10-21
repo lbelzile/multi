@@ -1,0 +1,33 @@
+---
+title: "Régression multinomiale"
+---
+
+## Contenu
+
+- Modèles de prédiction avec variables binaires
+- Stratégie ce ciblage client (fin)
+- Modèles de régression pour données multinomiales
+
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 5 (Régression logistique)](https://lbelzile.github.io/math60602/05-reglogistique.html), Sections 5.3.5 et 5.4
+
+## Diapositives 
+
+- {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos8.pdf)
+
+<!--
+<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
+-->
+
+## Objectifs d'apprentissage
+
+- À l'aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification
+- Être en mesure d'expliquer le ciblage et d'offrir des stratégies pour la prédiction.
+- Être capable d'interpréter les coefficients d'un modèle multinomial logistique ou d'un modèle cumulatif à cotes proportionnelles
+- Pouvoir effectuer un test du postulat de cotes proportionnelles
+- Être en mesure de calculer les prédictions d'un modèle multinomial logistique simple
+
+

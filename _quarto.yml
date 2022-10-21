@@ -80,6 +80,8 @@ website:
               file: contenu/06-contenu.qmd
             - text: "7: Classification"
               file: contenu/07-contenu.qmd
+            - text: "7: Régression multinomiale"
+              file: contenu/08-contenu.qmd
 
 
     - title: "Devoirs"
