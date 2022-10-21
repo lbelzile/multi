@@ -69,7 +69,7 @@ En résumé, la procédure numérique à réaliser est la suivante:
 - Choisir les variables à essayer (termes quadratiques, interactions, etc.)
 - Choisir l'algorithme ou la méthode de sélection du modèle.
 - Construire un catalogue de modèles: pour chacun, calculer les prédictions par validation croisée.
-- Calculer le point de coupure optimal pour chaque modèle et le gain associé.
+- Calculer le point de coupure optimal pour chaque modèle selon la fonction de gain moyen.
 - Sélectionner le modèle qui **maximise le gain**.
 
 # Prédiction et envoi
@@ -99,3 +99,28 @@ C’est une énorme amélioration, de plus de 56%, par rapport à la stratégie 
 - Deux étapes: sélectionner le modèle (variables) et le point de coupure.
 - D'autres modèles que la régression logistique (arbres de régression, etc.) sont envisageables pour la classification.
 
+# Régression pour données multinomiale
+
+On considère une variable catégorielle avec $k \ge 2$ niveaux.
+
+**Objectif**: modéliser la probabilité de chaque catégorie de la variable réponse.
+
+- Comme avec la régression logistique, on fixe une catégorie de référence (étiquetée `0`).
+- On modélise le log de la cote (logit) de chacune des autres catégories par rapport à la référence.
+\begin{align*}
+ \ln\left(\frac{p_{i1}}{p_{i0}}\right) = \beta_{01} + \beta_{11} \mathrm{X}_i, \, \ldots, \, \ln\left(\frac{p_{iK}}{p_{i0}}\right) = \beta_{0K} + \beta_{1K} \mathrm{X}_i,
+\end{align*}
+où $p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i)$ $(k=0, \ldots, K)$. 
+
+# Modèle logistique multinomial et probabilités 
+
+On peut exprimer le modèle en termes des probabilités,
+\begin{align*}
+ p_{i0} &= \Pr(Y_i=0 \mid \mathrm{X}_i) = \frac{1}{1+ \sum_{j=1}^K\exp(\beta_{0j}+\beta_{1j}\mathrm{X}_i)}\\
+ p_{ik} &= \Pr(Y_i=k \mid \mathrm{X}_i) = \frac{\exp(\beta_{0k}+\beta_{1k}\mathrm{X}_i)}{1+ \sum_{j=1}^K\exp(\beta_{0k}+\beta_{1k}\mathrm{X}_i)}, \qquad k =1, \ldots, K.
+\end{align*}
+
+- La  somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
+- Le modèle logistique multinomial ne fait que combiner plusieurs logit dans un seul modèle.
+- L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
+- Avec $K + 1$ niveaux et $p$ variables explicatives, on obtiendra $(K+1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
