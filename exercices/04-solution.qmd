@@ -135,7 +135,7 @@ On obtient une estimation de l'aire sous la courbe de `r round(roc$aire, 3)`.
 6. *Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?*
 
 ```{r}
-hecmulti::calibration(prob = pred, resp = resp)
+calibration(prob = pred, resp = resp)
 ```
 
 L'hypothèse nulle est que le modèle est calibré; ici, la valeur-$p$ est près de 0.5, donc on ne rejette pas l'hypothèse nulle et on conclut qu'il n'y a pas de preuve de surajustement.

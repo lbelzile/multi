@@ -80,7 +80,7 @@ website:
               file: contenu/06-contenu.qmd
             - text: "7: Classification"
               file: contenu/07-contenu.qmd
-            - text: "7: Régression multinomiale"
+            - text: "8: Régression multinomiale"
               file: contenu/08-contenu.qmd
 
 
@@ -96,7 +96,7 @@ website:
             - evaluations/01-devoir.qmd
             - evaluations/02-devoir.qmd
             - evaluations/03-devoir.qmd
-        #    - evaluations/04-devoir.qmd
+            - evaluations/04-devoir.qmd
         #    - evaluations/05-devoir.qmd
         #    - evaluations/06-devoir.qmd
     - title: "Exercices"
