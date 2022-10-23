@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Évaluations</title>
+<title>Analyse multidimensionnelle appliquée - Régression multinomiale</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,10 +86,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../horaire.html">Horaire</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../contenu/index.html">Contenu</a>
+    <a class="nav-link active" href="../contenu/index.html" aria-current="page">Contenu</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../evaluations/index.html" aria-current="page">Évaluations</a>
+    <a class="nav-link" href="../evaluations/index.html">Évaluations</a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../exercices/index.html">Exercices</a>
@@ -114,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Évaluations</h1>
+      <h1 class="quarto-secondary-nav-title">Régression multinomiale</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -129,12 +129,12 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/index.html" class="sidebar-item-text sidebar-link active">Notation</a>
+  <a href="../contenu/index.html" class="sidebar-item-text sidebar-link">Contenu</a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Devoirs</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Ressources</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -142,22 +142,62 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/01-devoir.html" class="sidebar-item-text sidebar-link">Devoir 1</a>
+  <a href="../contenu/ressourcesR.html" class="sidebar-item-text sidebar-link">Ressources <strong>R</strong></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/02-devoir.html" class="sidebar-item-text sidebar-link">Devoir 2</a>
+  <a href="../contenu/installation.html" class="sidebar-item-text sidebar-link">Installer <strong>R</strong> et RStudio</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Matériel pédagogique</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../contenu/01-contenu.html" class="sidebar-item-text sidebar-link">1: Introduction</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/03-devoir.html" class="sidebar-item-text sidebar-link">Devoir 3</a>
+  <a href="../contenu/02-contenu.html" class="sidebar-item-text sidebar-link">2: Programmation en <strong>R</strong></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/04-devoir.html" class="sidebar-item-text sidebar-link">Devoir 4</a>
+  <a href="../contenu/03-contenu.html" class="sidebar-item-text sidebar-link">3: Réduction de la dimension</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../contenu/04-contenu.html" class="sidebar-item-text sidebar-link">4: Sélection de variables</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../contenu/05-contenu.html" class="sidebar-item-text sidebar-link">5: Sélection de variables</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../contenu/06-contenu.html" class="sidebar-item-text sidebar-link">6: Régression logistique</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../contenu/07-contenu.html" class="sidebar-item-text sidebar-link">7: Classification</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../contenu/08-contenu.html" class="sidebar-item-text sidebar-link active">8: Régression multinomiale</a>
   </div>
 </li>
       </ul>
@@ -167,29 +207,60 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table des matières</h2>
+   
+  <ul>
+  <li><a href="#contenu" id="toc-contenu" class="nav-link active" data-scroll-target="#contenu">Contenu</a></li>
+  <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture">Lecture</a></li>
+  <li><a href="#diapositives" id="toc-diapositives" class="nav-link" data-scroll-target="#diapositives">Diapositives</a></li>
+  <li><a href="#objectifs-dapprentissage" id="toc-objectifs-dapprentissage" class="nav-link" data-scroll-target="#objectifs-dapprentissage">Objectifs d’apprentissage</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header">
-<h2 class="title d-none d-lg-block anchored display-7">Évaluations</h2>
+<h2 class="title d-none d-lg-block anchored display-7">Régression multinomiale</h2>
 
 </header>
 
-<p>En plus de l’examen final, vous aurez six devoirs à compléter. Chaque devoir est noté sur 10 points; votre note sera basée sur le total de vos cinq meilleurs devoirs.</p>
-<p>Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:</p>
+<section id="contenu" class="level2">
+<h2 class="anchored" data-anchor-id="contenu">Contenu</h2>
 <ul>
-<li>110%: Devoir 100% complété. Travail de qualité exceptionnelle démontrant un engagement soutenu avec le cours et une réflexion poussée. L’écriture du document soumis est claire, concise et le français est excellent. Je n’assignerai pas ces notes régulièrement.</li>
-<li>100%: Devoir 100% complété avec erreurs mineures.</li>
-<li>75%: Devoir majoritairement complété (plus de 70%), la plupart des réponses sont correctes.</li>
-<li>50%: Devoir complété à moins de 70% et/ou pour lequel la plupart des réponses sont incorrectes. Témoigne d’un besoin d’amélioration; j’espère ne pas assigner cette note fréquemment.</li>
-<li>0%: Devoir non remis, ou visiblement bâclé.</li>
+<li>Modèles de prédiction avec variables binaires</li>
+<li>Stratégie ce ciblage client (fin)</li>
+<li>Modèles de régression pour données multinomiales</li>
 </ul>
-<p>Tout travail remis hors délai sera pénalisé de 5% par jour de retard.</p>
-<p>En vertu de la politique de l’école, la note obtenue lors des travaux d’équipe contribue à la note globale seulement si la note combinée des évaluations individuelles est supérieure à 50%. Autrement, la note finale de l’étudiant(e) est calculée au pro rata des évaluations individuelles.</p>
+</section>
+<section id="lecture" class="level2">
+<h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
+<ul>
+<li><i class="fa-solid fa-book" aria-hidden="true"></i> <a href="https://lbelzile.github.io/math60602/05-reglogistique.html">Chapitre 5 (Régression logistique)</a>, Sections 5.3.5 et 5.4</li>
+</ul>
+</section>
+<section id="diapositives" class="level2">
+<h2 class="anchored" data-anchor-id="diapositives">Diapositives</h2>
+<ul>
+<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../diapos/MATH60602-diapos8.pdf">Régression logistique</a></li>
+</ul>
+<!--
+<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
+-->
+</section>
+<section id="objectifs-dapprentissage" class="level2">
+<h2 class="anchored" data-anchor-id="objectifs-dapprentissage">Objectifs d’apprentissage</h2>
+<ul>
+<li>À l’aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification</li>
+<li>Être en mesure d’expliquer le ciblage et d’offrir des stratégies pour la prédiction.</li>
+<li>Être capable d’interpréter les coefficients d’un modèle multinomial logistique ou d’un modèle cumulatif à cotes proportionnelles</li>
+<li>Pouvoir effectuer un test du postulat de cotes proportionnelles</li>
+<li>Être en mesure de calculer les prédictions d’un modèle multinomial logistique simple</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

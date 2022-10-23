@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Évaluations</title>
+<title>Analyse multidimensionnelle appliquée - Devoir 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,25 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
+}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
 }
 </style>
 
@@ -60,10 +79,11 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -89,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../contenu/index.html">Contenu</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../evaluations/index.html" aria-current="page">Évaluations</a>
+    <a class="nav-link" href="../evaluations/index.html">Évaluations</a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../exercices/index.html">Exercices</a>
@@ -112,59 +132,10 @@ ul.task-list li input[type="checkbox"] {
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Évaluations</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
-      </button>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../evaluations/index.html" class="sidebar-item-text sidebar-link active">Notation</a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Devoirs</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../evaluations/01-devoir.html" class="sidebar-item-text sidebar-link">Devoir 1</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../evaluations/02-devoir.html" class="sidebar-item-text sidebar-link">Devoir 2</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../evaluations/03-devoir.html" class="sidebar-item-text sidebar-link">Devoir 3</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../evaluations/04-devoir.html" class="sidebar-item-text sidebar-link">Devoir 4</a>
-  </div>
-</li>
-      </ul>
-  </li>
-    </ul>
-    </div>
-</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
@@ -173,25 +144,57 @@ ul.task-list li input[type="checkbox"] {
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header">
-<h2 class="title d-none d-lg-block anchored display-7">Évaluations</h2>
+<h2 class="title anchored display-7">Devoir 2</h2>
 
 </header>
 
-<p>En plus de l’examen final, vous aurez six devoirs à compléter. Chaque devoir est noté sur 10 points; votre note sera basée sur le total de vos cinq meilleurs devoirs.</p>
-<p>Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:</p>
+<p>Les observations de la base de données <a href="https://lbelzile.github.io/hecmulti/reference/bjffacto.html"><code>bjffacto</code></a> sont tirées de l’article <span class="citation" data-cites="Bastian:2014">Bastian et al. (<a href="#ref-Bastian:2014" role="doc-biblioref">2014</a>)</span> et sont rattachées à une expérience en psychologie visant à corroborer l’hypothèse qu’il y a une coopération accrue entre individus sujets à une expérience traumatisante. La moitié des participant(e)s a dû plonger sa main dans un bain d’eau glacé, tandis que l’autre moitié a dû faire la même chose dans un bain d’eau tiède; les deux groupes devaient ensuite faire un jeu visant à identifier leur niveau de coopération.</p>
+<p>La variable <code>condition</code> indique le groupe expérimental (zéro pour groupe contrôle, un pour douleur).</p>
+<p><strong>Indication</strong>: utilisez la matrice de <em>corrélation</em> pour effectuer l’analyse factorielle.</p>
+<ol type="1">
+<li>Pourquoi n’est-il pas nécessaire de standardiser les variables avant de procéder à la création d’échelles dans cet exemple? Justifiez votre réponse.</li>
+<li>Effectuez une analyse factorielle exploratoire à l’aide de la méthode des composantes principales.
+<ol type="a">
+<li>Combien de facteurs le critère de Kaiser (valeurs propres) suggère-t-il?</li>
+<li>Produisez un diagramme d’éboulis et rapportez ce dernier. Commentez sur le choix de facteurs selon le critère de Cattel (coude), au vu de la taille de l’échantillon.</li>
+<li>Quel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+</ol></li>
+<li>Répétez la procédure, cette fois avec la méthode d’estimation par maximum de vraisemblance.
+<ol type="a">
+<li>Rapportez les valeurs des critères d’information (AIC et BIC) pour <span class="math inline">\(m=2, \ldots, 6\)</span> facteurs dans un tableau.</li>
+<li>Quel nombre optimal de facteurs ces différents critères retournent-ils?</li>
+<li>Y a-t-il un problème avec la solution de l’un d’entre eux?</li>
+</ol></li>
+<li>Comparez les regroupements obtenus avec les deux méthodes d’estimation (composantes principales et maximum de vraisemblance) pour la solution à <span class="math inline">\(k=2\)</span> facteurs: est-ce que les regroupements sont semblables (c’est-à-dire, est-ce que les variables retournées dans les regroupements sont associées aux mêmes facteurs)?<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li>Étiquetez les facteurs obtenus avec la méthode des composantes principales et <span class="math inline">\(k=2\)</span> facteurs. Expliquez brièvement leur signification.</li>
+<li><ol type="a">
+<li>Créez des échelles à partir des facteurs. Utilisez le seuil de coupure <span class="math inline">\(c=0.4\)</span> pour les chargements pour déterminer si une variable fait partie d’une échelle.</li>
+<li>Estimez la cohérence interne des échelles à l’aide du <span class="math inline">\(\alpha\)</span> de Cronbach et commentez.</li>
+</ol></li>
+<li>Retournez un tableau de statistiques descriptives (moyenne et écart-type uniquement) des échelles, par condition expérimental (<code>condition</code>). Arrondissez à deux chiffres après la virgule et commentez sur les différences entre groupes, le cas échéant.</li>
+</ol>
+<p>Vous devez remettre</p>
 <ul>
-<li>110%: Devoir 100% complété. Travail de qualité exceptionnelle démontrant un engagement soutenu avec le cours et une réflexion poussée. L’écriture du document soumis est claire, concise et le français est excellent. Je n’assignerai pas ces notes régulièrement.</li>
-<li>100%: Devoir 100% complété avec erreurs mineures.</li>
-<li>75%: Devoir majoritairement complété (plus de 70%), la plupart des réponses sont correctes.</li>
-<li>50%: Devoir complété à moins de 70% et/ou pour lequel la plupart des réponses sont incorrectes. Témoigne d’un besoin d’amélioration; j’espère ne pas assigner cette note fréquemment.</li>
-<li>0%: Devoir non remis, ou visiblement bâclé.</li>
+<li>un rapport au format PDF et</li>
+<li>votre code <strong>R</strong> ou un fichier Rmarkdown (extensions <code>.R</code> ou <code>.Rmd</code>)</li>
 </ul>
-<p>Tout travail remis hors délai sera pénalisé de 5% par jour de retard.</p>
-<p>En vertu de la politique de l’école, la note obtenue lors des travaux d’équipe contribue à la note globale seulement si la note combinée des évaluations individuelles est supérieure à 50%. Autrement, la note finale de l’étudiant(e) est calculée au pro rata des évaluations individuelles.</p>
+<p>Nommez ces derniers selon la convention <code>d2_matricule.pdf</code>, <code>d2_matricule.R</code>, etc.</p>
 
 
 
-</main> <!-- /main -->
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-Bastian:2014" class="csl-entry" role="doc-biblioentry">
+Bastian, B., Jetten, J., &amp; Ferris, L. J. (2014). Pain as social glue: Shared pain increases cooperation. <em>Psychological Science</em>, <em>25</em>(11), 2079–2085. <a href="https://doi.org/10.1177/0956797614545886">https://doi.org/10.1177/0956797614545886</a>
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Vous pouvez extraire les variances des composantes principales à partir de <code>eigen(...)$values</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Il est possible que les signes soient différents, ou que l’ordre des facteurs soit différent. Cela ne devrait pas affecter votre conclusion.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

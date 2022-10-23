@@ -2,110 +2,122 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/01-contenu.html</loc>
-    <lastmod>2022-10-18T03:35:21.506Z</lastmod>
+    <lastmod>2022-10-23T18:04:46.435Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/02-contenu.html</loc>
-    <lastmod>2022-10-18T03:35:22.236Z</lastmod>
+    <lastmod>2022-10-23T18:04:47.085Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/03-contenu.html</loc>
-    <lastmod>2022-10-18T03:35:22.826Z</lastmod>
+    <lastmod>2022-10-23T18:04:47.645Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/04-contenu.html</loc>
-    <lastmod>2022-10-18T03:35:23.476Z</lastmod>
+    <lastmod>2022-10-23T18:04:48.185Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/05-contenu.html</loc>
-    <lastmod>2022-10-18T03:35:24.016Z</lastmod>
+    <lastmod>2022-10-23T18:04:48.745Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/06-contenu.html</loc>
-    <lastmod>2022-10-18T03:35:24.586Z</lastmod>
+    <lastmod>2022-10-23T18:04:49.315Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/07-contenu.html</loc>
-    <lastmod>2022-10-18T03:35:25.106Z</lastmod>
+    <lastmod>2022-10-23T18:04:49.845Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lbelzile.github.io/multi/contenu/08-contenu.html</loc>
+    <lastmod>2022-10-23T18:04:50.375Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/index.html</loc>
-    <lastmod>2022-10-18T03:35:25.696Z</lastmod>
+    <lastmod>2022-10-23T18:04:50.945Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/installation.html</loc>
-    <lastmod>2022-10-18T03:35:26.346Z</lastmod>
+    <lastmod>2022-10-23T18:04:51.595Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/ressourcesR.html</loc>
-    <lastmod>2022-10-18T03:35:27.086Z</lastmod>
+    <lastmod>2022-10-23T18:04:52.385Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/evaluations/01-devoir.html</loc>
-    <lastmod>2022-10-18T03:35:27.696Z</lastmod>
+    <lastmod>2022-10-23T18:04:52.945Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lbelzile.github.io/multi/evaluations/02-devoir-2023.html</loc>
+    <lastmod>2022-10-23T18:04:53.565Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/evaluations/02-devoir.html</loc>
-    <lastmod>2022-10-18T03:35:28.226Z</lastmod>
+    <lastmod>2022-10-23T18:04:54.155Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/evaluations/03-devoir.html</loc>
-    <lastmod>2022-10-18T03:35:28.806Z</lastmod>
+    <lastmod>2022-10-23T18:04:54.775Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lbelzile.github.io/multi/evaluations/04-devoir.html</loc>
+    <lastmod>2022-10-23T18:04:55.475Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/evaluations/index.html</loc>
-    <lastmod>2022-10-18T03:35:29.326Z</lastmod>
+    <lastmod>2022-10-23T18:04:56.015Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/01-exercice.html</loc>
-    <lastmod>2022-10-18T03:35:29.886Z</lastmod>
+    <lastmod>2022-10-23T18:04:56.585Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/01-solution.html</loc>
-    <lastmod>2022-10-18T03:35:30.956Z</lastmod>
+    <lastmod>2022-10-23T18:04:57.565Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/02-exercice.html</loc>
-    <lastmod>2022-10-18T03:35:31.506Z</lastmod>
+    <lastmod>2022-10-23T18:04:58.125Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/02-solution.html</loc>
-    <lastmod>2022-10-18T03:35:32.526Z</lastmod>
+    <lastmod>2022-10-23T18:04:59.135Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/03-exercice.html</loc>
-    <lastmod>2022-10-18T03:35:33.096Z</lastmod>
+    <lastmod>2022-10-23T18:04:59.725Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/03-solution.html</loc>
-    <lastmod>2022-10-18T03:35:34.046Z</lastmod>
+    <lastmod>2022-10-23T18:05:00.695Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/04-exercice.html</loc>
-    <lastmod>2022-10-18T03:35:34.626Z</lastmod>
+    <lastmod>2022-10-23T18:05:01.235Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/04-solution.html</loc>
-    <lastmod>2022-10-18T03:35:35.506Z</lastmod>
+    <lastmod>2022-10-23T18:05:02.115Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/index.html</loc>
-    <lastmod>2022-10-18T03:35:36.026Z</lastmod>
+    <lastmod>2022-10-23T18:05:02.675Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/installation.html</loc>
-    <lastmod>2022-10-18T03:35:36.686Z</lastmod>
+    <lastmod>2022-10-23T18:05:03.315Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/horaire.html</loc>
-    <lastmod>2022-10-18T03:35:37.536Z</lastmod>
+    <lastmod>2022-10-23T18:05:04.135Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/index.html</loc>
-    <lastmod>2022-10-18T03:35:38.126Z</lastmod>
+    <lastmod>2022-10-23T18:05:04.705Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/syllabus.html</loc>
-    <lastmod>2022-10-18T03:35:38.836Z</lastmod>
+    <lastmod>2022-10-23T18:05:05.435Z</lastmod>
   </url>
 </urlset>
