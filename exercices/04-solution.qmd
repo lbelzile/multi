@@ -37,7 +37,7 @@ exp(coef(mod)) # Rapport de cote
 ```
 
 - La cote pour l'offre promotionnelle (oui versus non) des hommes est 23.5% plus faible que celle des femmes, *ceteris paribus*
-- Le rapport de cotes pour `tclient` fréquent/occasionnel est 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs. De manière équivalente, la cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, *ceteris paribus*.
+- La cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, *ceteris paribus*. De manière équivalente, le rapport de cotes pour `tclient` fréquent sur occasionnel est de1/1.0711 = 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs. 
 - La cote de `nachats` augmente de 23.1% pour chaque augmentation du nombre d'achats dans le dernier mois,  *ceteris paribus*
  
 
@@ -64,10 +64,14 @@ car::Anova(mod, type = 3) # tests de rapport de vraisemblance
 #| message: false
 #| warning: false
 set.seed(60602)
+# Prédictions par validation croisée 
+# (moyenne de 10 réplications, K=10 plis)
 pred <- hecmulti::predvc(mod)
+# Extraire la variable réponse binaire 0/1
 resp <- logistclient$promo
 ```
 
+**Notez que les prédictions obtenues par validation croisée sont aléatoires, donc les résultats (aire sous la courbe, valeur-$p$ du test d'adéquation, etc.)  peuvent varier si vous n'utilisez pas le même germe aléatoire.**
 
 On prend le modèle ajusté avec `glm` et on calcule la prédiction à l'aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction `predvc` retourne la moyenne des prédictions (ici, des probabilités) pour chacune des 1000 observations.
 
