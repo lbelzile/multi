@@ -286,6 +286,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#exercice-4.1" id="toc-exercice-4.1" class="nav-link active" data-scroll-target="#exercice-4.1">Exercice 4.1</a></li>
+  <li><a href="#exercice-4.2" id="toc-exercice-4.2" class="nav-link" data-scroll-target="#exercice-4.2">Exercice 4.2</a></li>
   </ul>
 </nav>
     </div>
@@ -369,7 +370,7 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 <ul>
 <li>La cote pour l’offre promotionnelle (oui versus non) des hommes est 23.5% plus faible que celle des femmes, <em>ceteris paribus</em></li>
-<li>Le rapport de cotes pour <code>tclient</code> fréquent/occasionnel est 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs. De manière équivalente, la cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, <em>ceteris paribus</em>.</li>
+<li>La cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, <em>ceteris paribus</em>. De manière équivalente, le rapport de cotes pour <code>tclient</code> fréquent sur occasionnel est de1/1.0711 = 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs.</li>
 <li>La cote de <code>nachats</code> augmente de 23.1% pour chaque augmentation du nombre d’achats dans le dernier mois, <em>ceteris paribus</em></li>
 </ul>
 <ol start="3" type="1">
@@ -414,14 +415,18 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li><em>Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.</em></li>
 </ol></li>
 </ol>
-<div class="cell" data-hash="04-solution_cache/html/unnamed-chunk-4_32a814c89836ae3f017dcdd09700e278">
+<div class="cell" data-hash="04-solution_cache/html/unnamed-chunk-4_c94090c9ee5c1ed1e04f5dc32d817a4a">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60602</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> hecmulti<span class="sc">::</span><span class="fu">predvc</span>(mod)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> logistclient<span class="sc">$</span>promo</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prédictions par validation croisée </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (moyenne de 10 réplications, K=10 plis)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> hecmulti<span class="sc">::</span><span class="fu">predvc</span>(mod)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraire la variable réponse binaire 0/1</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> logistclient<span class="sc">$</span>promo</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p><strong>Notez que les prédictions obtenues par validation croisée sont aléatoires, donc les résultats (aire sous la courbe, valeur-<span class="math inline">\(p\)</span> du test d’adéquation, etc.) peuvent varier si vous n’utilisez pas le même germe aléatoire.</strong></p>
 <p>On prend le modèle ajusté avec <code>glm</code> et on calcule la prédiction à l’aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction <code>predvc</code> retourne la moyenne des prédictions (ici, des probabilités) pour chacune des 1000 observations.</p>
 <div class="cell">
 <details open="">
@@ -553,7 +558,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">calibration</span>(<span class="at">prob =</span> pred, <span class="at">resp =</span> resp)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">calibration</span>(<span class="at">prob =</span> pred, <span class="at">resp =</span> resp)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Test de calibration de Spiegelhalter (1986)
@@ -562,11 +567,62 @@ valeur-p: 0.581</code></pre>
 </div>
 </div>
 <p>L’hypothèse nulle est que le modèle est calibré; ici, la valeur-<span class="math inline">\(p\)</span> est près de 0.5, donc on ne rejette pas l’hypothèse nulle et on conclut qu’il n’y a pas de preuve de surajustement.</p>
+</section>
+<section id="exercice-4.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-4.2">Exercice 4.2</h2>
+<p>On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (1) à très satisfait (5). Les 1000 observations se trouvent dans la base de données <code>multinom</code> du paquet <code>hecmulti</code>.</p>
+<p>Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.</p>
+<ol type="1">
+<li><em>Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec <code>1</code> comme catégorie de référence, <code>1</code> pour revenu et <code>sec</code> pour éducation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> et utilisez ce dernier pour répondre aux autres questions.</em></li>
+</ol>
+<p>On peut regarder directement la sortie du test du score pour l’hypothèse des cotes proportionnelles; le modèle ordinal a 10 paramètres, contre 28 pour le modèle multinomial logistique. On peutfaire un test du rapport de vraisemblance en comparant la différence des log-vraisemblance des deux modèles emboîtés. La valeur-<span class="math inline">\(p\)</span> estimée est <span class="math inline">\(8.8 \times 10^{-4}\)</span>$. Le modèle à cote proportionnelle n’est pas adéquat.</p>
+<ol start="2" type="1">
+<li><em>Interprétez l’effet des variables éducation et sexe pour la catégorie 2 (pra rapport à 1).</em></li>
+</ol>
+<ul>
+<li>La cote pour les femmes pour insatisfait par rapport à très insatisfait est 42.4% plus élevée que pour les hommes, toute chose étant égale par ailleurs.</li>
+<li>La cote pour les individus qui ont un diplôme collégial pour insatisfait par rapport à très insatisfait est 10.4% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.</li>
+<li>La cote pour les individus qui ont un diplôme universitaire pour insatisfait par rapport à très insatisfait est 31.6% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.</li>
+</ul>
+<ol start="3" type="1">
+<li><em>Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?</em></li>
+</ol>
+<p>La statistique pour le test du rapport de vraisemblance que tous les coefficients associés aux covariables sont nuls (24 paramètres) est 55.41, et si le modèle sans covariable était vrai, cette statistique serait approximativement <span class="math inline">\(\chi^2_{24}\)</span>. La valeur-<span class="math inline">\(p\)</span> est 0.0003 et on conclut qu’au moins une covariable est utile pour prédire une cote par rapport au modèle avec une probabilité constante.</p>
+<ol start="4" type="1">
+<li><em>Est-ce que l’effet de la variable âge est globalement significatif?</em></li>
+</ol>
+<p>Puisqu’on modélise quatre rapport de cotes à l’aide d’un modèle logistique, d’où <span class="math inline">\(\beta_{\texttt{age}_2}=\beta_{\texttt{age}_3}=\beta_{\texttt{age}_4}=\beta_{\texttt{age}_5}=0.\)</span> On peut obtenir la valeur-<span class="math inline">\(p\)</span> avec le tableau d’analyse de déviance, qui rapporte la valeur du test de rapport de vraisemblance. On conclut que l’âge impacte la probabilité des différents items de satisfaction.</p>
+<ol start="5" type="1">
+<li><em>Fournissez un intervalle de confiance à niveau 95% pour l’effet multiplicatif d’une augmentation d’une unité de la variable âge pour chacune des cote par rapport à très insatisfait (<code>1</code>). Que concluez-vous sur l’effet de âge pour les réponses 2 à 5 par rapport à 1?</em></li>
+</ol>
+<p>Les intervalles de confiance sont</p>
+<ul>
+<li><span class="math inline">\([0.975; 1.011]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{2|1}}\)</span> (pas significatif),</li>
+<li><span class="math inline">\([0.871; 0.963]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{3|1}}\)</span> (significatif),</li>
+<li><span class="math inline">\([0.941; 0.989]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{4|1}}\)</span> (significatif) et</li>
+<li><span class="math inline">\([0.988; 1.021]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{5|1}}\)</span> (pas significatif).</li>
+</ul>
+<ol start="6" type="1">
+<li><em>Écrivez l’équation de la cote ajustée pour satisfait (<code>4</code>) par rapport à très insatisfait (<code>1</code>).</em></li>
+</ol>
+<p>Pour obtenir l’équation ajustée, on utilise uniquement les coefficients pour <span class="math inline">\(Y=4\)</span> dans le tableau des coefficients. <span class="math display">\[\begin{align*}
+\frac{\Pr(Y=4 \mid\boldsymbol{X})}{\Pr(Y=1 \mid \boldsymbol{X})} &amp; =\exp(-0.502 - 0.035\texttt{age} + 0.676 \texttt{cegep} + 0.8\texttt{uni} \\&amp;-0.038 \texttt{revenu}_2 +0.009 \texttt{revenu}_3 + 0.613 \texttt{sexe})
+\end{align*}\]</span></p>
+<ol start="7" type="1">
+<li><em>Prédisez la probabilité qu’un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?</em></li>
+</ol>
+<p>Les probabilités prédites sont (0.321; 0.222; 0.039; 0.127; 0.292). La modalité la plus susceptible est donc très insatisfait (<code>1</code>).</p>
 
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Utilisez la fonction <code>relevel</code> pour changer la catégorie de référence, avec <code>relevel(educ, ref = 'sec')</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
