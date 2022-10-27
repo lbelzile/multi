@@ -17,6 +17,7 @@ title: "Régression multinomiale"
 ## Diapositives 
 
 - {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos8.pdf)
+- {{< fa code >}} [Code](/diapos/MATH60602-diapos8.R)
 
 <!--
 <iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>

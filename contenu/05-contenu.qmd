@@ -17,7 +17,7 @@ title: "Sélection de variables"
 ## Diapositives 
 
 - {{< fa file >}} [Sélection de variables](/diapos/MATH60602-diapos5.pdf)
-
+- {{< fa code >}} [Code](/diapos/MATH60602-diapos5.R)
 <!--
 <iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
 -->

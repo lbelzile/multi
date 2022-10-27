@@ -139,8 +139,58 @@ On obtient une estimation de l'aire sous la courbe de `r round(roc$aire, 3)`.
 6. *Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?*
 
 ```{r}
-calibration(prob = pred, resp = resp)
+hecmulti::calibration(prob = pred, resp = resp)
 ```
 
 L'hypothèse nulle est que le modèle est calibré; ici, la valeur-$p$ est près de 0.5, donc on ne rejette pas l'hypothèse nulle et on conclut qu'il n'y a pas de preuve de surajustement.
+
+
+## Exercice 4.2
+
+
+On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (1) à très satisfait (5). Les 1000 observations se trouvent dans la base de données `multinom` du paquet `hecmulti`.
+
+
+Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu. 
+
+1. *Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.*
+
+On peut regarder directement la sortie du test du score pour l'hypothèse des cotes proportionnelles; le modèle ordinal a 10 paramètres, contre 28 pour le modèle multinomial logistique. On peutfaire un test du rapport de vraisemblance en comparant la différence des log-vraisemblance des deux modèles emboîtés. La valeur-$p$ estimée est $8.8 \times 10^{-4}$$. Le modèle à cote proportionnelle n'est pas adéquat.
+
+
+2. *Interprétez l’effet des variables éducation et sexe pour la catégorie 2 (pra rapport à 1).*
+
+
+- La cote pour les femmes pour insatisfait par rapport à très insatisfait est 42.4% plus élevée que pour les hommes, toute chose étant égale par ailleurs.
+- La cote pour les individus qui ont un diplôme collégial  pour insatisfait par rapport à très insatisfait est 10.4% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.
+- La cote pour les individus qui ont un diplôme universitaire  pour insatisfait par rapport à très insatisfait est 31.6% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.
+
+
+3. *Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?*
+
+La statistique pour le test du rapport de vraisemblance que tous les coefficients associés aux covariables sont nuls (24 paramètres) est 55.41, et si le modèle sans covariable était vrai, cette statistique serait approximativement $\chi^2_{24}$. La valeur-$p$ est 0.0003 et on conclut qu'au moins une covariable est utile pour prédire une cote par rapport au modèle avec une probabilité constante.
+
+4. *Est-ce que l'effet de la variable âge est globalement significatif?*
+
+Puisqu'on modélise quatre rapport de cotes à l'aide d'un modèle logistique, d'où $\beta_{\texttt{age}_2}=\beta_{\texttt{age}_3}=\beta_{\texttt{age}_4}=\beta_{\texttt{age}_5}=0.$ On peut obtenir la valeur-$p$ avec le tableau d'analyse de déviance, qui rapporte la valeur du test de rapport de vraisemblance. On conclut que l'âge impacte la probabilité des différents items de satisfaction.
+
+5. *Fournissez un intervalle de confiance à niveau 95% pour l'effet multiplicatif d'une augmentation d'une unité de la variable âge pour chacune des cote par rapport à très insatisfait (`1`). Que concluez-vous sur l'effet de âge pour les réponses 2 à 5 par rapport à 1?*
+
+Les intervalles de confiance sont
+
+- $[0.975;  1.011]$ pour $\beta_{\texttt{age}_{2|1}}$ (pas significatif),
+- $[0.871; 0.963]$ pour $\beta_{\texttt{age}_{3|1}}$ (significatif),
+- $[0.941; 0.989]$ pour $\beta_{\texttt{age}_{4|1}}$ (significatif) et 
+- $[0.988; 1.021]$ pour $\beta_{\texttt{age}_{5|1}}$ (pas significatif).
+
+6. *Écrivez l'équation de la cote ajustée pour satisfait (`4`) par rapport à très insatisfait (`1`).*
+
+Pour obtenir l'équation ajustée, on utilise uniquement les coefficients pour $Y=4$ dans le tableau des coefficients.
+\begin{align*}
+\frac{\Pr(Y=4 \mid\boldsymbol{X})}{\Pr(Y=1 \mid \boldsymbol{X})} & =\exp(-0.502 - 0.035\texttt{age} + 0.676 \texttt{cegep} + 0.8\texttt{uni} \\&-0.038 \texttt{revenu}_2 +0.009 \texttt{revenu}_3 + 0.613 \texttt{sexe})
+\end{align*}
+
+7. *Prédisez la probabilité qu'un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?*
+
+Les probabilités prédites sont (0.321; 0.222; 0.039; 0.127; 0.292). La modalité la plus susceptible est donc très insatisfait (`1`).
 
