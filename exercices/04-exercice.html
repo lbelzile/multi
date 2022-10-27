@@ -264,10 +264,10 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="exercice-4.2" class="level1">
 <h1>Exercice 4.2</h1>
-<p>On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (1) à très satisfait (5). Les 1000 observations se trouvent dans la base de données <code>multinom</code> du paquet <code>hecmulti</code>.</p>
+<p>On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (<code>1</code>) à très satisfait (<code>5</code>). Les 1000 observations se trouvent dans la base de données <code>multinom</code> du paquet <code>hecmulti</code>.</p>
 <p>Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.</p>
 <ol type="1">
-<li>Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec <code>1</code> comme catégorie de référence, <code>1</code> pour revenu et <code>sec</code> pour éducation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> et utilisez ce dernier pour répondre aux autres questions.</li>
+<li>Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec <code>1</code> comme catégorie de référence pour la satisfaction, <code>1</code> pour revenu et <code>sec</code> pour éducation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> et utilisez ce dernier pour répondre aux autres questions.</li>
 <li>Interprétez l’effet des variables éducation et sexe pour la catégorie 2 par rapport à 1.</li>
 <li>Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?</li>
 <li>Est-ce que l’effet de la variable âge est globalement significatif?</li>
