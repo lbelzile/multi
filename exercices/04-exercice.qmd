@@ -20,12 +20,12 @@ courbe estimée à l’aide de la validation croisée.
 # Exercice 4.2
 
 
-On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (1) à très satisfait (5). Les 1000 observations se trouvent dans la base de données `multinom` du paquet `hecmulti`.
+On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (`1`) à très satisfait (`5`). Les 1000 observations se trouvent dans la base de données `multinom` du paquet `hecmulti`.
 
 
 Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu. 
 
-1. Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.
+1. Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence pour la satisfaction, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.
 2.  Interprétez l’effet des variables éducation et sexe pour la catégorie 2 par rapport à 1.
 3. Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?
 4. Est-ce que l'effet de la variable âge est globalement significatif?
