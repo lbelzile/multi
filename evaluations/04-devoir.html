@@ -214,19 +214,20 @@ div.csl-indent {
 <section id="question-1" class="level1">
 <h1>Question 1</h1>
 <p>Le modèle de <span class="citation" data-cites="Bradley.Terry:1952">Bradley &amp; Terry (<a href="#ref-Bradley.Terry:1952" role="doc-biblioref">1952</a>)</span> décrit la probabilité que le résultat de l’ «équipe <span class="math inline">\(i\)</span>» soit supérieur à celui de l’«équipe» <span class="math inline">\(j\)</span>, <span class="math display">\[\Pr(Y_i &gt; Y_j)= \frac{\exp(\beta_i)}{\exp(\beta_i) + \exp(\beta_j)}, \quad i, j \in \{1, \ldots, K\},\]</span> en assumant que les doublons (égalité) ne surviennent pas.</p>
-<p>Ce modèle simple peut servir pour prédire le classement d’équipes sportives: si on écrit le modèle en terme de cote, on obtient <span class="math display">\[\ln\left\{\frac{\Pr{Y_i&gt;Y_j}}{\Pr(Y_j&gt;Y_i)}\right\}= \beta_i - \beta_j.\]</span> avec <span class="math inline">\(\beta_{\text{ref}}=0\)</span> pour un niveau de référence <span class="math inline">\(\text{ref} \in \{1, \ldots, K\}\)</span>. Un paramètre du modèle n’est pas identifiable.</p>
-<p>Le modèle décrit ci-dessus peut être ajusté à l’aide d’une régression logistique avec un ensemble de <span class="math inline">\(K-1\)</span> variable indicatrices<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, où pour le match <span class="math inline">\(i\)</span> et l’équipe <span class="math inline">\(k=2, \ldots, K\)</span>, on a <span class="math display">\[\begin{align*}
+<p>Ce modèle simple peut servir pour prédire le classement d’équipes sportives: si on écrit le modèle en terme de cote, on obtient pour l’équipe <span class="math inline">\(i\)</span> à domicile et l’équipe <span class="math inline">\(j\)</span> en visite <span class="math display">\[\ln\left\{\frac{\Pr(\text{victoire équipe $i$ (domicile)})}{\Pr(\text{victoire équipe $j$ (visiteur)})}\right\}= \beta_i - \beta_j.\]</span></p>
+<p>Un paramètre du modèle n’est pas identifiable: une des catégories <span class="math inline">\(\text{ref} \in \{1, \ldots, K\}\)</span> sert de référence et le coefficient correspondant est nul, soit <span class="math inline">\(\beta_{\text{ref}}=0\)</span>.</p>
+<p>Le modèle décrit ci-dessus peut être ajusté à l’aide d’une régression logistique avec un ensemble de <span class="math inline">\(K-1\)</span> variable explicatives<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> où pour le match <span class="math inline">\(i\)</span> et l’équipe <span class="math inline">\(k=2, \ldots, K\)</span>, on a <span class="math display">\[\begin{align*}
 X_{ik} = \begin{cases}
-1 &amp; k = i,\\
--1 &amp; k = j,\\
-0 &amp; \text{sinon}.
+\hphantom{-}1, &amp; k = i,\\
+-1, &amp; k = j,\\
+\hphantom{-}0, &amp; \text{sinon}.
 \end{cases}
 \end{align*}\]</span></p>
-<p>On peut généraliser ce modèle en incluant un autre paramètre, <span class="math inline">\(\alpha\)</span>, qui capture l’effet du jeu à domicile: <span class="math inline">\(\alpha\)</span> est simplement le paramètre pour l’ordonnée à l’origine.</p>
-<p>La base de données <code>lnh</code> du paquet <code>hecmulti</code> contient les résultats de chaque partie par équipe, tandis que <code>lnh_BT</code> fournit les données dans un format propice pour l’ajustement du modèle de Bradley–Terry.</p>
-<p>Ajustez le modèle de Bradley–Terry aux données <code>lnh_BT</code> (utilisez la formule <code>vainqueur ~ .</code> pour ajuster le modèle avec toutes les équipes).</p>
+<p>Le modèle Bradley–Terry de base n’a pas d’ordonnée à l’origine, mais on peut généraliser le modèle en l’incluant. Cela ajoute un autre paramètre, <span class="math inline">\(\alpha\)</span>, qui capture l’effet du jeu à domicile: si <span class="math inline">\(Y_i\)</span> est le score de l’équipe à domicile et <span class="math inline">\(Y_j\)</span> l’équation devient <span class="math display">\[\ln\left\{\frac{\Pr(\text{victoire équipe $i$ (domicile)})}{\Pr(\text{victoire équipe $j$ (visiteur)})}\right\}= \alpha + \beta_i - \beta_j,\]</span> où <span class="math inline">\(\alpha\)</span> est simplement le paramètre pour l’ordonnée à l’origine.</p>
+<p>La base de données <code>lnh</code> du paquet <code>hecmulti</code> contient les résultats de chaque partie par équipe, tandis que <code>lnh_BT</code> fournit les mêmes données, mais dans un format propice pour l’ajustement du modèle de Bradley–Terry.</p>
+<p>Ajustez le modèle de Bradley–Terry aux données <code>lnh_BT</code> (utilisez la formule <code>vainqueur ~ .</code> pour ajuster le modèle avec toutes les équipes). La catégorie de référence est <code>Anaheim Ducks</code>.</p>
 <ol type="1">
-<li>Interprétez le coefficient pour l’ordonnée à domicile en terme de pourcentage d’augmentation ou de diminution de la cote par rapport à la référence jouer à l’extérieur.</li>
+<li>Interprétez le coefficient pour l’ordonnée à l’origine <span class="math inline">\(\alpha\)</span> en terme de pourcentage d’augmentation ou de diminution de la cote par rapport à la référence jouer à l’extérieur.</li>
 <li>Calculez un intervalle de confiance de niveau 95% pour l’ordonnée à l’origine et déterminez si jouer à domicile impacte significativement le score.</li>
 <li>Fournissez un tableau avec le classement des cinq premières équipes qui ont la plus grande chance de succès selon le modèle.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
 <li>Pour chaque match, utilisez le modèle logistique pour prédire l’équipe gagnante. Construisez une matrice de confusion (1 pour une victoire de l’équipe à domicile, 0 sinon) et rapportez cette dernière.</li>
@@ -245,15 +246,15 @@ X_{ik} = \begin{cases}
 <li>Interpétez l’effet d’une augmentation de l’échelle de risque de forte aversion (<code>risque = 1</code>) à en quête de risque (<code>risque = 4</code>) en terme de pourcentage d’augmentation ou diminution de la cote pour
 <ul>
 <li>un score aléatoire (<code>aleatoire</code>) de 1 point supérieur à la moyenne des scores de l’échantillon et</li>
-<li>un score pour <code>epistemique</code> moyen.</li>
+<li>un score pour <code>epistemique</code> égal à la moyenne de l’échantillon.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
 </ul></li>
 <li>Vérifiez l’hypothèse de modération des auteurs en déterminant si l’effet des termes d’interaction est significativement non-nul à niveau 5%.
 <ul>
 <li>Rapportez les valeurs des statistiques de test et les valeur-<span class="math inline">\(p\)</span> associées. Commentez sur les résultats obtenus.</li>
 </ul></li>
-<li>Produisez un graphique de la probabilité prédite d’investir (axe des ordonnées) en fonction de l’échelle pour la perception de l’aléatoire (<code>aleatoire</code>, axe des abcisses) pour une personne avec un score égal à la moyenne.
+<li>Produisez un graphique de la probabilité prédite d’investir (axe des ordonnées) en fonction de l’échelle pour la perception de l’aléatoire (<code>aleatoire</code>, axe des abcisses) pour une personne avec un score <code>epistemique</code> égal à la moyenne.
 <ul>
-<li>Tracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l’autre avec un score de 4 (en quête de risque).<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+<li>Tracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l’autre avec un score de 4 (en quête de risque).<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></li>
 <li>En vous basant sur le graphique, commentez sur les différences estimées en terme de décision d’investissement, selon le profil de risque.</li>
 </ul></li>
 </ol>
@@ -276,7 +277,8 @@ Walters, D. J., Ulkumen, G., Tannenbaum, D., Erner, C., &amp; Fox, C. R. (2022).
 <li id="fn1"><p>Il n’y a pas de variable explicative <span class="math inline">\(X_{\text{ref}}\)</span> pour la catégorie de référence, autrement les données seraient colinéaires.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Attention à la catégorie de référence.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Notez que les auteurs de l’article ont centré préalablement les variables explicatives (c’est-à-dire, en soustrayant la moyenne de chacune des colonnes).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Astuce: créez une base de données (<code>data.frame</code>) avec une séquence adéquate de valeurs de <code>aleatoire</code> pour les valeurs données de <code>risque</code> et de <code>epistemique</code>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><em>Astuce</em>: vous pouvez calculer le rapport de cote en remplaçant les coefficients dans l’équation, ou prédire les probabilités pour les deux profils de personnes présentés et calculer le rapport de cote.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Astuce: créez une base de données (<code>data.frame</code>) avec une séquence adéquate de valeurs de <code>aleatoire</code> pour les valeurs données de <code>risque</code> et de <code>epistemique</code>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

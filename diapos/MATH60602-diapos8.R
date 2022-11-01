@@ -9,10 +9,11 @@ data(vote, package = "hecmulti")
 levels(vote$catvote)
 # Modèle multinomial
 multi1 <- nnet::multinom(
-  catvote ~ age + sexe + race + revenu + educ,
-  data = vote,     # base de données
-  weights = poids, # poids de sondage
-  trace = FALSE)   # infos sur convergence
+  catvote ~ age + sexe + race + revenu + educ + affiliation,
+  data = vote,       # base de données
+  subset = age > 30, # sous-ensemble
+  weights = poids,   # poids de sondage
+  trace = FALSE)     # infos sur convergence
 
 
 ## -----------------------------------------------------------------------------
@@ -32,14 +33,18 @@ predict(multi1, type = "class")
 
 
 ## -----------------------------------------------------------------------------
+# Modèle avec uniquement l'ordonnée à l'origine (~ 1)
+# Il faut qu'on utilise les mêmes données pour la comparaison!
 multi0 <- nnet::multinom(catvote ~ 1,
                          weights = poids,
                          data = vote,
+                         subset = age > 30,
                          trace = FALSE)
 # Test de rapport de vraisemblance
 anova(multi0, multi1)
 
 ## -----------------------------------------------------------------------------
+# Modèle logistique à cote proportionnelle
 with(vote, is.ordered(catvote))
 multi2a <- MASS::polr(
   catvote ~ sexe,
@@ -54,8 +59,7 @@ summary(multi2a)
 -----------------------------------------------------------------------------
 # IC pour beta_x (vraisemblance profilée)
 confint(multi2a)
-# On peut obtenir les intervalles de Wald
-# avec confint.default (PAS RECOMMANDÉ)
+
 
 # Critères d'information
 AIC(multi2a); BIC(multi2a)
@@ -67,12 +71,22 @@ multi2a$zeta
 
 
 ## -----------------------------------------------------------------------------
-multi2b <- nnet::multinom(catvote ~ sexe,
-  data = vote,  subset = age > 30,
-  weights = poids, trace = FALSE)
+multi2b <- nnet::multinom(
+   catvote ~ sexe,
+   data = vote,  
+   subset = age > 30,
+   weights = poids, 
+   trace = FALSE)
+   
+# Combien de paramètres de plus avec modèle logistique?
+# Même nombre d'ordonnées à l'origine, mais pour les p variables explicatives
+# (K-1)*p vs p  paramètres, une différence de (K-2) * p 
+difddl <- (length(multi2a$zeta) - 1) * length(coef(multi2a))
 # Valeur-p du test de rapport de vraisemblance
+# Probabilité qu'une variable khi-deux avec ddl(0)-ddl(1)
+#  dépasse la valeur numérique de la statistique
 pchisq(q = deviance(multi2a) - deviance(multi2b),
-       df = length(coef(multi2a)),
+       df = difddl,
        lower.tail = FALSE)
 
 
