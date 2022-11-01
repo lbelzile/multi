@@ -30,10 +30,10 @@ include-in-header:
 
 # Sélection de variables en régression logistique
 
-Même principes que précédemment, mais les modèles de régression logistique sont plus coûteux à estimer.
-
-On peut utiliser les critères d'information puisque le modèle est ajusté par maximum de vraisemblance.
-
+- On applique les mêmes principes que précédemment.
+- Notre mesure d'ajustement (gain, taux de bonne classification, log-vraisemblance) peut différer selon l'objectif.
+- Les modèles de régression logistique sont plus coûteux à estimer.
+- Pour la classification, le point de coupure est à déterminer.
 
 # Fonctions **R** pour la sélection de modèles
 
@@ -94,10 +94,10 @@ C’est une énorme amélioration, de plus de 56%, par rapport à la stratégie 
 # Récapitulatif
 
 - Les principes de sélection de variable couverts précédemment s'appliquent toujours (recherche exhaustive, séquentielle et LASSO).
-- On peut calculer les critères d'information puisque le modèle est ajusté par maximum de vraisemblance.
+- On peut aussi calculer les critères d'information puisque le modèle est ajusté par maximum de vraisemblance.
 - Attention au surajustement! Suspect si les probabilités estimées sont près de 0/1 (vérifier la calibration).
 - Deux étapes: sélectionner le modèle (variables) et le point de coupure.
-- D'autres modèles que la régression logistique (arbres de régression, etc.) sont envisageables pour la classification.
+- D'autres modèles que la régression logistique (arbres de classification, etc.) sont envisageables pour la classification.
 
 # Régression pour données multinomiale
 
@@ -287,10 +287,11 @@ data(vote, package = "hecmulti")
 levels(vote$catvote)
 # Modèle multinomial
 multi1 <- nnet::multinom(
-  catvote ~ age + sexe + race + revenu + educ, 
-  data = vote,     # base de données
-  weights = poids, # poids de sondage
-  trace = FALSE)   # infos sur convergence
+  catvote ~ age + sexe + race + revenu + educ + affiliation, 
+  data = vote,       # base de données
+  subset = age > 30, # sous-ensemble des données
+  weights = poids,   # poids de sondage
+  trace = FALSE)     # infos sur convergence
 ```
 
 # Méthodes **R** pour l'analyse
@@ -323,6 +324,7 @@ Il retourne comme probabilité prédite la proportion empirique de chaque catég
 #| echo: true
 multi0 <- nnet::multinom(catvote ~ 1,
                          weights = poids,
+			 subset = age > 30,
                          data = vote,
                          trace = FALSE)
 # Test de rapport de vraisemblance
@@ -333,6 +335,7 @@ anova(multi0, multi1)
 #| eval: true
 #| echo: false
 multi0 <- nnet::multinom(catvote ~ 1,
+			 subset = age > 30,
                          weights = poids,
                          data = vote,
                          trace = FALSE)
@@ -449,7 +452,7 @@ rapp <- summary(multi2a)
 coefs <- rapp$coefficients
 options(knitr.kable.NA = '')
 tabcoef <- tibble::as_tibble(coefs[,1:2])
-tabcoef <- cbind("effet" = c("sexe [homme]","cst [rarement/jamais|sporadiquement]","cst [sporadiquement|toujours]"), tabcoef)
+tabcoef <- cbind("effet" = c("sexe [homme]","cst [rarement/jamais|occasionnellement]","cst [occasionnellement|toujours]"), tabcoef)
 kableExtra::kbl(tabcoef,
 	        longtable = FALSE, 
 	        booktabs = TRUE,
@@ -525,7 +528,7 @@ multi2a$zeta
 
 Une des hypothèses de ce modèle est que les effets des variables explicatives sont les mêmes pour chaque équation. 
 
-- $\mathscr{H}_0$ : l'effet de chaque variable est le même pour les $K$ logit du modèle multinomial logistique, soit $\beta_{11} = \cdots =\beta_{1K}$, $\ldots$, $\beta_{p1} = \cdots =\beta_{pK}$.
+- $\mathscr{H}_0$ : l'effet de chaque variable est le même pour les $K$ logit du modèle .
 
 Une très petite valeur-$p$ (rejet de $\mathscr{H}_0$) pour ce test serait une indication que le modèle multinomial logistique serait préférable. 
 
@@ -624,11 +627,11 @@ df <- data.frame(
   modele = factor(rep(c("multinomial", "ordinal"), 
                        each = 3*nobs)),
   reponse = factor(c(rep(c("rarement/jamais",
-                    "sporadiquement",
+                    "occasionnellement",
                     "toujours"), 
                   each = nobs),
                   rep(c("rarement/jamais",
-                    "sporadiquement",
+                    "occasionnellement",
                     "toujours"), 
                   each = nobs))),
   pred = c(pred1, pred2))

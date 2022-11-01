@@ -19,29 +19,30 @@ $$\Pr(Y_i > Y_j)= \frac{\exp(\beta_i)}{\exp(\beta_i) + \exp(\beta_j)}, \quad i, 
 en assumant que les doublons (égalité) ne surviennent pas.
 
 
-Ce modèle simple peut servir pour prédire le classement d'équipes sportives: si on écrit le modèle en terme de cote, on obtient
-$$\ln\left\{\frac{\Pr{Y_i>Y_j}}{\Pr(Y_j>Y_i)}\right\}= \beta_i - \beta_j.$$
-avec $\beta_{\text{ref}}=0$ pour un niveau de référence $\text{ref} \in \{1, \ldots, K\}$. Un paramètre du modèle n'est pas identifiable.
+Ce modèle simple peut servir pour prédire le classement d'équipes sportives: si on écrit le modèle en terme de cote, on obtient pour l'équipe $i$ à domicile et l'équipe $j$ en visite 
+$$\ln\left\{\frac{\Pr(\text{victoire équipe $i$ (domicile)})}{\Pr(\text{victoire équipe $j$ (visiteur)})}\right\}= \beta_i - \beta_j.$$
 
 
+Un paramètre du modèle n'est pas identifiable: une des catégories $\text{ref} \in \{1, \ldots, K\}$ sert de référence et le coefficient correspondant est nul, soit $\beta_{\text{ref}}=0$. 
 
-Le modèle décrit ci-dessus peut être ajusté à l'aide d'une régression logistique avec un ensemble de $K-1$ variable indicatrices^[Il n'y a pas de variable explicative $X_{\text{ref}}$ pour la catégorie de référence, autrement les données seraient colinéaires.], où pour le match $i$ et l'équipe $k=2, \ldots, K$, on a 
+Le modèle décrit ci-dessus peut être ajusté à l'aide d'une régression logistique avec un ensemble de $K-1$ variable explicatives^[Il n'y a pas de variable explicative $X_{\text{ref}}$ pour la catégorie de référence, autrement les données seraient colinéaires.] où pour le match $i$ et l'équipe $k=2, \ldots, K$, on a 
 \begin{align*}
 X_{ik} = \begin{cases}
- 1 & k = i,\\
- -1 & k = j,\\
- 0 & \text{sinon}.
+ \hphantom{-}1, & k = i,\\
+ -1, & k = j,\\
+ \hphantom{-}0, & \text{sinon}.
 \end{cases}
 \end{align*}
 
+Le modèle Bradley--Terry de base n'a pas d'ordonnée à l'origine, mais on peut généraliser le modèle en l'incluant. Cela ajoute un autre paramètre, $\alpha$, qui capture l'effet du jeu à domicile: si $Y_i$ est le score de l'équipe à domicile et $Y_j$ l'équation devient
+$$\ln\left\{\frac{\Pr(\text{victoire équipe $i$ (domicile)})}{\Pr(\text{victoire équipe $j$ (visiteur)})}\right\}= \alpha + \beta_i - \beta_j,$$
+où $\alpha$ est simplement le paramètre pour l'ordonnée à l'origine.
 
-On peut généraliser ce modèle en incluant un autre paramètre, $\alpha$, qui capture l'effet du jeu à domicile: $\alpha$ est simplement le paramètre pour l'ordonnée à l'origine.
+La base de données `lnh` du paquet `hecmulti` contient les résultats de chaque partie par équipe, tandis que `lnh_BT` fournit les mêmes données, mais dans un format propice pour l'ajustement du modèle de Bradley--Terry. 
 
-La base de données `lnh` du paquet `hecmulti` contient les résultats de chaque partie par équipe, tandis que `lnh_BT` fournit les données dans un format propice pour l'ajustement du modèle de Bradley--Terry. 
+Ajustez le modèle de Bradley--Terry aux données `lnh_BT` (utilisez la formule `vainqueur ~ .` pour ajuster le modèle avec toutes les équipes). La catégorie de référence est `Anaheim Ducks`.
 
-Ajustez le modèle de Bradley--Terry aux données `lnh_BT` (utilisez la formule `vainqueur ~ .` pour ajuster le modèle avec toutes les équipes).
-
-1. Interprétez le coefficient pour l'ordonnée à domicile en terme de pourcentage d'augmentation ou de diminution de la cote par rapport à la référence jouer à l'extérieur.
+1. Interprétez le coefficient pour l'ordonnée à l'origine $\alpha$ en terme de pourcentage d'augmentation ou de diminution de la cote par rapport à la référence jouer à l'extérieur.
 2. Calculez un intervalle de confiance de niveau 95% pour l'ordonnée à l'origine et déterminez si jouer à domicile impacte significativement le score.
 3. Fournissez un tableau avec le classement des cinq premières équipes qui ont la plus grande chance de succès selon le modèle.^[Attention à la catégorie de référence.]
 4. Pour chaque match, utilisez le modèle logistique pour prédire l'équipe gagnante. Construisez une matrice de confusion (1 pour une victoire de l'équipe à domicile, 0 sinon) et rapportez cette dernière.
@@ -58,12 +59,12 @@ Les données `compinvest` fournissent les observations de l'étude.
 Ajustez un modèle logistique avec effets principaux (`risque`, `aleatoire`, `epistemique`) et une interaction entre risque et aléatoire, ainsi que risque et épistémique comme dans l'article.
 
 1. Rapportez un tableau des coefficients du modèle et comparez avec les résultats du Tableau 3 de la prépublication.^[Notez que les auteurs de l'article ont centré préalablement les variables explicatives (c'est-à-dire, en soustrayant la moyenne de chacune des colonnes).]
-2. Interpétez l'effet d'une augmentation de l'échelle de risque  de forte aversion (`risque = 1`) à en quête de risque (`risque = 4`) en terme de pourcentage d'augmentation ou diminution de la cote pour     
+2. Interpétez l'effet d'une augmentation de l'échelle de risque  de forte aversion (`risque = 1`) à en quête de risque (`risque = 4`) en terme de pourcentage d'augmentation ou diminution de la cote pour       
     - un score aléatoire (`aleatoire`) de 1 point supérieur à la moyenne des scores de l'échantillon et 
-    - un score pour `epistemique` moyen.
+    - un score pour `epistemique` égal à la moyenne de l'échantillon.^[*Astuce*: vous pouvez calculer le rapport de cote en remplaçant les coefficients dans l'équation, ou prédire les probabilités pour les deux profils de personnes présentés et calculer le rapport de cote.]
 3. Vérifiez l'hypothèse de modération des auteurs en déterminant si l'effet des termes d'interaction est significativement non-nul à niveau 5%. 
     - Rapportez les valeurs des statistiques de test et les valeur-$p$ associées. Commentez sur les résultats obtenus.
-4. Produisez un graphique de la probabilité prédite d'investir (axe des ordonnées) en fonction de l'échelle pour la perception de l'aléatoire (`aleatoire`, axe des abcisses) pour une personne avec un score \code{epistemique} égal à la moyenne. 
+4. Produisez un graphique de la probabilité prédite d'investir (axe des ordonnées) en fonction de l'échelle pour la perception de l'aléatoire (`aleatoire`, axe des abcisses) pour une personne avec un score `epistemique` égal à la moyenne. 
    - Tracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l'autre avec un score de 4 (en quête de risque).^[Astuce: créez une base de données (`data.frame`) avec une séquence adéquate de valeurs de `aleatoire` pour les valeurs données de `risque` et de `epistemique`.]
    - En vous basant sur le graphique, commentez sur les différences estimées en terme de décision d'investissement, selon le profil de risque.
 

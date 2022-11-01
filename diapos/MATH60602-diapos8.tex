@@ -147,6 +147,20 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
@@ -221,15 +235,22 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, interior hidden, boxrule=0pt, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable, frame hidden, enhanced, interior hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Sélection de variables en régression logistique}
 \protect\hypertarget{suxe9lection-de-variables-en-ruxe9gression-logistique}{}
-Même principes que précédemment, mais les modèles de régression
-logistique sont plus coûteux à estimer.
-
-On peut utiliser les critères d'information puisque le modèle est ajusté
-par maximum de vraisemblance.
+\begin{itemize}
+\tightlist
+\item
+  On applique les mêmes principes que précédemment.
+\item
+  Notre mesure d'ajustement (gain, taux de bonne classification,
+  log-vraisemblance) peut différer selon l'objectif.
+\item
+  Les modèles de régression logistique sont plus coûteux à estimer.
+\item
+  Pour la classification, le point de coupure est à déterminer.
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Fonctions \textbf{R} pour la sélection de
@@ -353,8 +374,8 @@ stratégie de référence.
   Les principes de sélection de variable couverts précédemment
   s'appliquent toujours (recherche exhaustive, séquentielle et LASSO).
 \item
-  On peut calculer les critères d'information puisque le modèle est
-  ajusté par maximum de vraisemblance.
+  On peut aussi calculer les critères d'information puisque le modèle
+  est ajusté par maximum de vraisemblance.
 \item
   Attention au surajustement! Suspect si les probabilités estimées sont
   près de 0/1 (vérifier la calibration).
@@ -362,8 +383,8 @@ stratégie de référence.
   Deux étapes: sélectionner le modèle (variables) et le point de
   coupure.
 \item
-  D'autres modèles que la régression logistique (arbres de régression,
-  etc.) sont envisageables pour la classification.
+  D'autres modèles que la régression logistique (arbres de
+  classification, etc.) sont envisageables pour la classification.
 \end{itemize}
 \end{frame}
 
@@ -469,17 +490,18 @@ multinomial logistique.
 \end{Shaded}
 
 \begin{verbatim}
-[1] "rarement/jamais" "sporadiquement"  "toujours"       
+[1] "rarement/jamais"   "occasionnellement" "toujours"         
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Modèle multinomial}
 \NormalTok{multi1 }\OtherTok{\textless{}{-}}\NormalTok{ nnet}\SpecialCharTok{::}\FunctionTok{multinom}\NormalTok{(}
-\NormalTok{  catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ revenu }\SpecialCharTok{+}\NormalTok{ educ, }
-  \AttributeTok{data =}\NormalTok{ vote,     }\CommentTok{\# base de données}
-  \AttributeTok{weights =}\NormalTok{ poids, }\CommentTok{\# poids de sondage}
-  \AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{)   }\CommentTok{\# infos sur convergence}
+\NormalTok{  catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ revenu }\SpecialCharTok{+}\NormalTok{ educ }\SpecialCharTok{+}\NormalTok{ affiliation, }
+  \AttributeTok{data =}\NormalTok{ vote,       }\CommentTok{\# base de données}
+  \AttributeTok{subset =}\NormalTok{ age }\SpecialCharTok{\textgreater{}} \DecValTok{30}\NormalTok{, }\CommentTok{\# sous{-}ensemble des données}
+  \AttributeTok{weights =}\NormalTok{ poids,   }\CommentTok{\# poids de sondage}
+  \AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{)     }\CommentTok{\# infos sur convergence}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
@@ -515,6 +537,7 @@ empirique de chaque catégorie.
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{multi0 }\OtherTok{\textless{}{-}}\NormalTok{ nnet}\SpecialCharTok{::}\FunctionTok{multinom}\NormalTok{(catvote }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{,}
                          \AttributeTok{weights =}\NormalTok{ poids,}
+             \AttributeTok{subset =}\NormalTok{ age }\SpecialCharTok{\textgreater{}} \DecValTok{30}\NormalTok{,}
                          \AttributeTok{data =}\NormalTok{ vote,}
                          \AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{)}
 \CommentTok{\# Test de rapport de vraisemblance}
@@ -527,8 +550,8 @@ empirique de chaque catégorie.
 Resid. df & Resid. Dev & Test & Df & LR stat. & Pr(Chi) \\
 \midrule()
 \endhead
-11670 & 12476.43 & & & & \\
-11650 & 11306.87 & 1 vs 2 & 20 & 1169.56 & 0 \\
+9692 & 9781.07 & & & & \\
+9668 & 8504.74 & 1 vs 2 & 24 & 1276.33 & 0 \\
 \bottomrule()
 \end{longtable}
 \end{frame}
@@ -692,8 +715,8 @@ sexe. }\tabularnewline
 effet & coefficient & erreur-type\\
 \midrule
 sexe [homme] & -0.166 & 0.055\\
-cst [rarement/jamais|sporadiquement] & -1.297 & 0.044\\
-cst [sporadiquement|toujours] & 0.865 & 0.041\\
+cst [rarement/jamais|occasionnellement] & -1.297 & 0.044\\
+cst [occasionnellement|toujours] & 0.865 & 0.041\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -755,9 +778,7 @@ explicatives sont les mêmes pour chaque équation.
 \tightlist
 \item
   \(\mathscr{H}_0\) : l'effet de chaque variable est le même pour les
-  \(K\) logit du modèle multinomial logistique, soit
-  \(\beta_{11} = \cdots =\beta_{1K}\), \(\ldots\),
-  \(\beta_{p1} = \cdots =\beta_{pK}\).
+  \(K\) logit du modèle .
 \end{itemize}
 
 Une très petite valeur-\(p\) (rejet de \(\mathscr{H}_0\)) pour ce test

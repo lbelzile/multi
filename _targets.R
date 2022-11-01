@@ -19,11 +19,11 @@ tar_option_set(
 here_rel <- function(...) {fs::path_rel(here::here(...))}
 
 # Load functions for the pipeline
-# source("R/tar_slides.R")
+source("R/tar_slides.R")
 
  list(
  ## Xaringan slides
- 
+
   ### Knit xaringan slides ----
   #
   # Use dynamic branching to get a list of all .Rmd files in slides/ and knit them
@@ -46,8 +46,24 @@ here_rel <- function(...) {fs::path_rel(here::here(...))}
   #           pattern = map(xaringan_html_files),
   #           format = "file"),
 
- 
-  ## Class schedule file ----
+  tar_files(path_eval_quarto,
+    list.files(here_rel("evaluations"),
+               pattern = "\\.qmd",
+               full.names = TRUE)
+  ),
+  tar_target(evaluations_pdfs,
+             quarto_to_pdf(path_eval_quarto),
+             pattern = map(path_eval_quarto)),
+
+  # tar_files(path_exercice_quarto,
+  #           list.files(here_rel("exercices"),
+  #                      pattern = "\\.qmd",
+  #                      full.names = TRUE)
+  # ),
+  # tar_target(exercices_pdfs,
+  #            quarto_to_pdf(path_exercice_quarto),
+  #            pattern = map(path_exercice_quarto)),
+  # Class schedule file ----
   tar_target(schedule_file, here_rel("files", "horaire.csv"), format = "file"),
 
 

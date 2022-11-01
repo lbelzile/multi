@@ -5,7 +5,6 @@ title: "Régression multinomiale"
 ## Contenu
 
 - Modèles de prédiction avec variables binaires
-- Stratégie ce ciblage client (fin)
 - Modèles de régression pour données multinomiales
 
 

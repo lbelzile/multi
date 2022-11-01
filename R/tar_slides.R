@@ -23,3 +23,12 @@ xaringan_to_pdf <- function(slide_path) {
 
   return(paste0(tools::file_path_sans_ext(slide_path), ".pdf"))
 }
+
+quarto_to_pdf <- function(file_path) {
+  path_sans_ext <- tools::file_path_sans_ext(file_path)
+  quarto::quarto_render(input = file_path,
+                     output_file = paste0(path_sans_ext, ".pdf"),
+                     output_format = "pdf")
+
+  return(paste0(tools::file_path_sans_ext(file_path), ".pdf"))
+}
