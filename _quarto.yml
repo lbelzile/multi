@@ -12,6 +12,7 @@ project:
     - "diapos/libs/"
     - "diapos/css/"
     - "diapos/*_files/"
+    - "evaluations/*.pdf"
 
 
 # See https://quarto.org/docs/projects/code-execution.html#freeze
@@ -82,6 +83,8 @@ website:
               file: contenu/07-contenu.qmd
             - text: "8: Régression multinomiale"
               file: contenu/08-contenu.qmd
+            - text: "9: Analyse de survie"
+              file: contenu/09-contenu.qmd
 
 
     - title: "Devoirs"
@@ -130,7 +133,10 @@ website:
              file: exercices/04-exercice.qmd
            - text: "Solutions 4"
              file: exercices/04-solution.qmd
-
+        - section: "Analyse de survie"
+          contents:
+           - text: "Exercice 5"
+             file: exercices/05-exercice.qmd
 
   page-footer:
     left: |

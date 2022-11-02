@@ -1,0 +1,43 @@
+---
+title: "Analyse de survie"
+---
+
+
+## Exercice 5.1
+
+@Fotopoulos.Louri:2000 considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 pour pour répondre aux questions suivantes:
+
+1. Quel type de mécanisme de censure est présent dans ces données?
+2. Donnez une estimation de la probabilité qu’une entreprise survive plus de trois ans.
+3. Donnez une estimation de la probabilité qu’une entreprise survive exactement 4 ans.
+4. Quel pourcentage des observations sont censurées?
+5. Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.
+
+Le tableau 3 fournit les estimations d'un modèle à risques proportionnels de Cox.
+
+6. Comparez les modèles (1) et (2). Est-ce que l'effet de cohorte impacte la survie?
+7. Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (`FIXED_ASSET`) et le montant de la dette (`DEBT`) sur la durée de vie des entreprises.
+
+## Exercice 5.2
+
+ Un commerce de chaussures de Montréal veut optimiser son inventaire afin de maximiser ses profits et fait appel à votre société de conseil. La base de données `chaussures` contient des observations fictives et les variables suivantes:
+
+- `statut`: variable catégorielle, `0` s'il est vendu, `1` si l'article est toujours en stock, `2` s'il est déstocké (les modèles invendus après 40 mois en magasins sont passés aux pertes et profits).
+- `temps`: temps de stockage de l'article (en mois).
+- `prix`: prix de vente réelle de l'article (avec rabais si applicable), arrondi à l'unité près.
+- `sexe`: variable catégorielle, `0` pour modèle pour homme, `1` pour femme.
+
+Notre objectif premier est d'estimer le temps qu'un article passe en stock avant d'être vendu.
+
+
+1. Que représente la censure dans cet exemple?
+2. Estimez le temps de stockage à l'aide d'un modèle de Kaplan--Meier et rapportez les estimés des quartiles.
+3. Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.
+   - Rapportez et interprétez les coefficients des variables. Est-ce que les effets estimés sont significatifs?
+4. Tracez les estimés des courbes de survie d'une chaussure de l'année dont le prix de vente est 120\$ pour les modèles pour homme et pour femme.
+
+On vous informe que, pour éliminer les invendus lors de l'arrivée de nouveaux modèles, l'entreprise offre une réduction de 20\% après 15 mois.
+
+5.  Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?
+6. On pourrait considérer un modèle à risque non-proportionnels contenant une interaction entre le prix et le temps de manière à ajuster le même modèle. Expliquez comment cela pourrait être fait de manière à obtenir les mêmes estimés des paramètres.
+

@@ -34,13 +34,13 @@ X_{ik} = \begin{cases}
 \end{cases}
 \end{align*}
 
-Le modèle Bradley--Terry de base n'a pas d'ordonnée à l'origine, mais on peut généraliser le modèle en l'incluant. Cela ajoute un autre paramètre, $\alpha$, qui capture l'effet du jeu à domicile: si $Y_i$ est le score de l'équipe à domicile et $Y_j$ l'équation devient
+Le modèle Bradley--Terry de base n'a pas d'ordonnée à l'origine. Si on l'ajoute, l'équation du modèle pour une partie devient
 $$\ln\left\{\frac{\Pr(\text{victoire équipe $i$ (domicile)})}{\Pr(\text{victoire équipe $j$ (visiteur)})}\right\}= \alpha + \beta_i - \beta_j,$$
-où $\alpha$ est simplement le paramètre pour l'ordonnée à l'origine.
+où $\beta_i$ représente la force de l'équipe à domicile, $\beta_j$ la force de l'équipe en visite et l'ordonnée à l'origine $\alpha$ capture l'effet du jeu à domicile.
 
 La base de données `lnh` du paquet `hecmulti` contient les résultats de chaque partie par équipe, tandis que `lnh_BT` fournit les mêmes données, mais dans un format propice pour l'ajustement du modèle de Bradley--Terry. 
 
-Ajustez le modèle de Bradley--Terry aux données `lnh_BT` (utilisez la formule `vainqueur ~ .` pour ajuster le modèle avec toutes les équipes). La catégorie de référence est `Anaheim Ducks`.
+Ajustez le modèle de Bradley--Terry aux données `lnh_BT` (utilisez la formule `vainqueur ~ .` pour ajuster le modèle avec toutes les équipes). La catégorie de référence est `Anaheim Ducks`, qui n'apparaît pas dans les sorties.
 
 1. Interprétez le coefficient pour l'ordonnée à l'origine $\alpha$ en terme de pourcentage d'augmentation ou de diminution de la cote par rapport à la référence jouer à l'extérieur.
 2. Calculez un intervalle de confiance de niveau 95% pour l'ordonnée à l'origine et déterminez si jouer à domicile impacte significativement le score.

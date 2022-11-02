@@ -1,0 +1,32 @@
+---
+title: "Analyse de survie"
+---
+
+## Contenu
+
+- Introduction à l'analyse de survie
+- Estimateur de Kaplan--Meier
+- Modèle à risques proportionnels de Cox
+
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 6 (analyse de survie)](https://lbelzile.github.io/math60602/06-survie.html), Sections 6.1 à 6.5
+
+## Diapositives 
+
+- {{< fa file >}} [Analyse de survie](/diapos/MATH60602-diapos9.pdf)
+- {{< fa code >}} [Code](/diapos/MATH60602-diapos9.R)
+
+<!--
+<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
+-->
+
+## Objectifs d'apprentissage
+
+- Décrire la censure à droite dans un problème de survie.
+- Pouvoir interpréter un tableau de survie et les estimations associées.
+- Interpréter les coefficients d'un modèle de Cox.
+
+
