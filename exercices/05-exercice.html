@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Contenu</title>
+<title>Analyse multidimensionnelle appliquée - Analyse de survie</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,25 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
+}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
 }
 </style>
 
@@ -86,13 +105,13 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../horaire.html">Horaire</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../contenu/index.html" aria-current="page">Contenu</a>
+    <a class="nav-link" href="../contenu/index.html">Contenu</a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../evaluations/index.html">Évaluations</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../exercices/index.html">Exercices</a>
+    <a class="nav-link active" href="../exercices/index.html" aria-current="page">Exercices</a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="https://lbelzile.github.io/math60602">Notes</a>
@@ -114,7 +133,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Contenu</h1>
+      <h1 class="quarto-secondary-nav-title">Analyse de survie</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -129,12 +148,12 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/index.html" class="sidebar-item-text sidebar-link active">Contenu</a>
+  <a href="../exercices/index.html" class="sidebar-item-text sidebar-link">Exercices</a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Ressources</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Analyse exploratoire</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -142,19 +161,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/ressourcesR.html" class="sidebar-item-text sidebar-link">Ressources <strong>R</strong></a>
+  <a href="../exercices/01-exercice.html" class="sidebar-item-text sidebar-link">Exercice 1</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/installation.html" class="sidebar-item-text sidebar-link">Installer <strong>R</strong> et RStudio</a>
+  <a href="../exercices/01-solution.html" class="sidebar-item-text sidebar-link">Solution 1</a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Matériel pédagogique</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Analyse factorielle</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -162,47 +181,67 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/01-contenu.html" class="sidebar-item-text sidebar-link">1: Introduction</a>
+  <a href="../exercices/02-exercice.html" class="sidebar-item-text sidebar-link">Exercice 2</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/02-contenu.html" class="sidebar-item-text sidebar-link">2: Programmation en <strong>R</strong></a>
+  <a href="../exercices/02-solution.html" class="sidebar-item-text sidebar-link">Solutions 2</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Sélection de variables</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/03-exercice.html" class="sidebar-item-text sidebar-link">Exercice 3</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/03-contenu.html" class="sidebar-item-text sidebar-link">3: Réduction de la dimension</a>
+  <a href="../exercices/03-solution.html" class="sidebar-item-text sidebar-link">Solutions 3</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Régression logistique</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/04-exercice.html" class="sidebar-item-text sidebar-link">Exercice 4</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/04-contenu.html" class="sidebar-item-text sidebar-link">4: Sélection de variables</a>
+  <a href="../exercices/04-solution.html" class="sidebar-item-text sidebar-link">Solutions 4</a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse de survie</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/05-contenu.html" class="sidebar-item-text sidebar-link">5: Sélection de variables</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/06-contenu.html" class="sidebar-item-text sidebar-link">6: Régression logistique</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/07-contenu.html" class="sidebar-item-text sidebar-link">7: Classification</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/08-contenu.html" class="sidebar-item-text sidebar-link">8: Régression multinomiale</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/09-contenu.html" class="sidebar-item-text sidebar-link">9: Analyse de survie</a>
+  <a href="../exercices/05-exercice.html" class="sidebar-item-text sidebar-link active">Exercice 5</a>
   </div>
 </li>
       </ul>
@@ -212,22 +251,84 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table des matières</h2>
+   
+  <ul>
+  <li><a href="#exercice-5.1" id="toc-exercice-5.1" class="nav-link active" data-scroll-target="#exercice-5.1">Exercice 5.1</a></li>
+  <li><a href="#exercice-5.2" id="toc-exercice-5.2" class="nav-link" data-scroll-target="#exercice-5.2">Exercice 5.2</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header">
-<h2 class="title d-none d-lg-block anchored display-7">Contenu</h2>
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Analyse de survie</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
 
 </header>
 
-<p>Cliquez sur les onglets de droite pour naviguer vers le contenu et le matériel pédagogique de chaque séance de cours.</p>
-<p>Un guide d’installation pour <strong>R</strong> et RStudio et des ressources sont également mises à disposition.</p>
+<section id="exercice-5.1" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-5.1">Exercice 5.1</h2>
+<p><span class="citation" data-cites="Fotopoulos.Louri:2000">Fotopoulos &amp; Louri (<a href="#ref-Fotopoulos.Louri:2000" role="doc-biblioref">2000</a>)</span> considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 pour pour répondre aux questions suivantes:</p>
+<ol type="1">
+<li>Quel type de mécanisme de censure est présent dans ces données?</li>
+<li>Donnez une estimation de la probabilité qu’une entreprise survive plus de trois ans.</li>
+<li>Donnez une estimation de la probabilité qu’une entreprise survive exactement 4 ans.</li>
+<li>Quel pourcentage des observations sont censurées?</li>
+<li>Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.</li>
+</ol>
+<p>Le tableau 3 fournit les estimations d’un modèle à risques proportionnels de Cox.</p>
+<ol start="6" type="1">
+<li>Comparez les modèles (1) et (2). Est-ce que l’effet de cohorte impacte la survie?</li>
+<li>Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (<code>FIXED_ASSET</code>) et le montant de la dette (<code>DEBT</code>) sur la durée de vie des entreprises.</li>
+</ol>
+</section>
+<section id="exercice-5.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-5.2">Exercice 5.2</h2>
+<p>Un commerce de chaussures de Montréal veut optimiser son inventaire afin de maximiser ses profits et fait appel à votre société de conseil. La base de données <code>chaussures</code> contient des observations fictives et les variables suivantes:</p>
+<ul>
+<li><code>statut</code>: variable catégorielle, <code>0</code> s’il est vendu, <code>1</code> si l’article est toujours en stock, <code>2</code> s’il est déstocké (les modèles invendus après 40 mois en magasins sont passés aux pertes et profits).</li>
+<li><code>temps</code>: temps de stockage de l’article (en mois).</li>
+<li><code>prix</code>: prix de vente réelle de l’article (avec rabais si applicable), arrondi à l’unité près.</li>
+<li><code>sexe</code>: variable catégorielle, <code>0</code> pour modèle pour homme, <code>1</code> pour femme.</li>
+</ul>
+<p>Notre objectif premier est d’estimer le temps qu’un article passe en stock avant d’être vendu.</p>
+<ol type="1">
+<li>Que représente la censure dans cet exemple?</li>
+<li>Estimez le temps de stockage à l’aide d’un modèle de Kaplan–Meier et rapportez les estimés des quartiles.</li>
+<li>Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.
+<ul>
+<li>Rapportez et interprétez les coefficients des variables. Est-ce que les effets estimés sont significatifs?</li>
+</ul></li>
+<li>Tracez les estimés des courbes de survie d’une chaussure de l’année dont le prix de vente est 120$ pour les modèles pour homme et pour femme.</li>
+</ol>
+<p>On vous informe que, pour éliminer les invendus lors de l’arrivée de nouveaux modèles, l’entreprise offre une réduction de 20% après 15 mois.</p>
+<ol start="5" type="1">
+<li>Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?</li>
+<li>On pourrait considérer un modèle à risque non-proportionnels contenant une interaction entre le prix et le temps de manière à ajuster le même modèle. Expliquez comment cela pourrait être fait de manière à obtenir les mêmes estimés des paramètres.</li>
+</ol>
 
 
 
-</main> <!-- /main -->
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-Fotopoulos.Louri:2000" class="csl-entry" role="doc-biblioentry">
+Fotopoulos, G., &amp; Louri, H. (2000). Determinants of hazard confronting new entry: Does financial structure matter? <em>Review of Industrial Organization</em>, <em>17</em>(3), 285–300. <a href="https://doi.org/10.1023/A:1007862922531">https://doi.org/10.1023/A:1007862922531</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
