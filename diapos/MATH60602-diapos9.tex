@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners, boxrule=0pt, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, boxrule=0pt, interior hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de survie}
 \protect\hypertarget{analyse-de-survie}{}
@@ -649,21 +649,47 @@ niveau (\%) & quantile & IC 95\% (borne inf.) & IC 95\% (borne sup.)\\
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Remarques}
-\protect\hypertarget{remarques}{}
+\begin{frame}[fragile]{Estimateur déficient et moyenne restreinte}
+\protect\hypertarget{estimateur-duxe9ficient-et-moyenne-restreinte}{}
 \begin{itemize}
 \tightlist
 \item
   Si la plus grande observation est censurée, la courbe de survie de
-  l'estimateur de Kaplan--Meier n'atteindra pas zéro.
+  l'estimateur de Kaplan--Meier n'atteindra jamais zéro.
 \item
   Si la plus grande observation n'est pas censurée à droite, il est
-  possible d'estimer la moyenne (aire sous la courbe sous la fonction de
-  survie). Autrement, on obtiendra une borne inférieure (sous-estimation
-  de la moyenne).
+  possible d'estimer la moyenne.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    aire sous la courbe
+  \item
+    autrement, on obtient une borne inférieure (sous-estimation de la
+    moyenne), appelée \emph{moyenne restreinte}.
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{print}\NormalTok{(kapm, }\AttributeTok{print.rmean =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  La moyenne estimée via Kaplan--Meier est 125 semaines
+  (\texttt{rmean}).\\
 \item
   Les statistiques descriptives usuelles sont à proscrire! Elles ne
   tiennent pas compte de la censure.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Par exemple, la moyenne empirique ici est de 107.788 semaines.
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -1038,7 +1064,7 @@ sexe & age\\
 \protect\hypertarget{graphique-des-fonctions-de-survie}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/unnamed-chunk-17-1.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/unnamed-chunk-18-1.pdf}
 
 }
 

@@ -387,11 +387,22 @@ knitr::kable(quantiles,
 - L'estimé du temps de survie médian est de 114 semaines: on estime que la moitié des clients vont avoir une durée d'abonnement supérieure (ou inférieure) à 114 semaines.
 - Un intervalle de confiance (IC) de niveau 95%, pour le temps médian est [110, 119] semaines (IC de Wald, transformé).
 
-# Remarques
+# Estimateur déficient et moyenne restreinte
 
-- Si la plus grande observation est censurée, la courbe de survie de l'estimateur de Kaplan--Meier n'atteindra pas zéro.
-- Si la plus grande observation n'est pas censurée à droite, il est possible d'estimer la moyenne (aire sous la courbe sous la fonction de survie). Autrement, on obtiendra une borne inférieure (sous-estimation de la moyenne).
-- Les statistiques descriptives usuelles sont à proscrire! Elles ne tiennent pas compte de la censure.
+- Si la plus grande observation est censurée, la courbe de survie de l'estimateur de Kaplan--Meier n'atteindra jamais zéro.
+- Si la plus grande observation n'est pas censurée à droite, il est possible d'estimer la moyenne.
+   - aire sous la courbe
+   - autrement, on obtient une borne inférieure (sous-estimation de la moyenne), appelée *moyenne restreinte*.
+
+```{r}
+#| eval: false
+#| echo: true
+print(kapm, print.rmean = TRUE)
+```
+
+- La moyenne estimée via Kaplan--Meier est 125 semaines (`rmean`).  
+- Les statistiques descriptives usuelles sont à proscrire! Elles ne tiennent pas compte de la censure. 
+   - Par exemple, la moyenne empirique ici est de `r with(survie1, mean(temps))` semaines.
 
 
 #  Comparaison de plusieurs courbes de survie
@@ -410,7 +421,7 @@ Les deux tests utilisés habituellement sont
  
 # Comparaison de la survie selon le sexe
  
- 
+
 ```{r}
 #| label: test-lograng
 #| eval: true
