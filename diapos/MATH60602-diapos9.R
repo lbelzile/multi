@@ -32,7 +32,7 @@ cox <- coxph(
     age + sexe + region + service,
   data = survie1,
   ties = "exact") # gestion des doublons
-# Les autres options, "breslow" et "cox",
+# Les autres options, "breslow" et "efron",
 # sont moins coûteuses
 
 # Tableau résumé avec coefficients,
