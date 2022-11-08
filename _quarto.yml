@@ -85,6 +85,8 @@ website:
               file: contenu/08-contenu.qmd
             - text: "9: Analyse de survie"
               file: contenu/09-contenu.qmd
+            - text: "10: Analyse de survie"
+              file: contenu/10-contenu.qmd  
 
 
     - title: "Devoirs"

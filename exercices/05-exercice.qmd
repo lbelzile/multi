@@ -9,7 +9,7 @@ title: "Analyse de survie"
 
 1. Quel type de mécanisme de censure est présent dans ces données?
 2. Donnez une estimation de la probabilité qu’une entreprise survive trois ans ou plus.
-3. Donnez une estimation de la probabilité qu’une entreprise survive 4 ans et demi.
+3. Donnez une estimation de la probabilité qu’une entreprise survive entre 4 et 5 ans, soit l'intervalle [4,5) ans
 4. Quel pourcentage des observations sont censurées?
 5. Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.
 
