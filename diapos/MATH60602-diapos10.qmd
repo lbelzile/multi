@@ -1,0 +1,394 @@
+---
+title: "Analyse de survie, analyse de regroupements"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: lualatex
+cache: true
+code-line-numbers: true
+fig-align: 'center'
+mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+        \usepackage{mathtools}
+        \usepackage{mathrsfs}
+---
+```{r}
+#| label: setup06
+#| include: false
+#| message: false
+#| warning: false
+# automatically create a bib database for R packages
+library(knitr)
+library(kableExtra)
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+set.seed(1014)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  cache = TRUE,
+  out.width = "80%",
+  fig.align = 'center',
+  fig.width = 8.5,
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+options(knitr.table.format = function() {
+  if (knitr::is_latex_output()) 
+    "latex" else "html"
+})
+
+options(dplyr.print_min = 6, dplyr.print_max = 6)
+options(knitr.graphics.auto_pdf = TRUE)
+options(scipen = 1, digits = 3)
+library(viridis)
+library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
+library(poorman, quietly = TRUE, warn.conflicts = FALSE)
+library(patchwork)
+
+safe_colorblind_palette <- MetBrewer::met.brewer("Hiroshige",10)
+
+options(ggplot2.continuous.colour="viridis")
+options(ggplot2.continuous.fill = "viridis")
+scale_colour_discrete <- scale_color_manual(MetBrewer::met.brewer("Hiroshige",10))
+scale_fill_discrete <- scale_fill_manual(MetBrewer::met.brewer("Hiroshige",10))
+theme_set(theme_classic())
+```
+
+# Modèle à risques proportionnels de Cox 
+
+Le **modèle à risques proportionnels de Cox** pour $\mathbf{X}$ au temps $t$ est
+\begin{align*}
+h(t; \mathbf{X}) = h_0(t)\exp(\beta_1\mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p),
+\end{align*}
+où $h_0(t)$ est la fonction de risque de base qui remplace l'ordonnée à l'origine.
+
+- Postulat de risques proportionnels: le rapport de risque pour deux observations ne varie pas en fonction du temps $t$.
+
+# Postulat de risques proportionnels
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-risquepropfig
+#| out-width: '90%'
+#| fig-width: 9
+#| fig-height: 6
+#| cache: true
+#| fig-cap: "Courbes de risques proportionnelles (panneau supérieur) et non proportionnelles (panneau inférieur)."
+hazard <- function(x){
+  1/53*(3*pexp(x, rate = 1/300) + 25*dnorm(x, 10, 5) +
+    3*pgamma(x, shape = 5, scale = 5) +
+    2*pgamma(x, shape = 6, scale = 5) + 
+    20*pexp(x, rate = 1/400))
+}
+
+hazard2 <- function(x){
+  (40*pexp(x, rate = 1/300) + 25*dnorm(x, 10, 5) -
+     20*pgamma(x, shape = 5, scale = 5) +
+     40*pgamma(x, shape = 1, scale = 5) - 
+     20*pexp(x, rate = 1/400))/20
+}
+
+temps <- seq(0, 60, length.out = 1001)
+survrisque <- data.frame(
+  temps = temps,
+  risque1 = hazard(temps),
+  risque2 = hazard2(temps)
+)
+survie1 <- function(temps,cst = 1){
+  sapply(temps, function(ti){
+    exp(-cst*integrate(hazard, lower = 0, upper = ti)$value)
+  })
+}
+
+survie2 <- function(temps,cst = 1){
+  sapply(temps, function(ti){
+    exp(-cst*integrate(hazard2, lower = 0, upper = ti)$value)
+  })
+}
+
+fsurvie1 <- data.frame(
+  temps = temps,
+  survie1a = survie1(temps, cst = 1),
+  survie1b = survie1(temps, cst = 2)
+)
+temps2 <- seq(0, 12, length.out = 1001)
+
+fsurvie2 <- data.frame(
+  temps = temps2,
+  survie2a = survie1(temps2, cst = 12),
+  survie2b = survie2(temps2)
+)
+g1 <- ggplot(data = survrisque,
+       aes(x = temps)) +
+  geom_line(aes(y = risque1),
+                color = safe_colorblind_palette[1]) +
+  geom_line(aes(y = 2*risque1),
+                color = safe_colorblind_palette[8]) +
+  scale_y_continuous(limits = c(0, 0.5),
+                     expand = c(0, 0)) +
+  labs(x = "temps",
+       y = "",
+       subtitle = "risque") +
+  theme_classic()
+
+g2 <- ggplot(data = survrisque,
+             aes(x = temps)) +
+  geom_hline(yintercept = .5) +
+  scale_y_continuous(limits = c(0, 2),
+                     expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, 60),
+                     expand = c(0, 0)) +
+  labs(x = "temps",
+       y = "",
+       subtitle = "rapport de risque") +
+  theme_classic()
+
+
+g3 <- ggplot(data = fsurvie1,
+             aes(x = temps)) +
+  geom_line(aes(y = survie1a), col = safe_colorblind_palette[1]) +
+  geom_line(aes(y = survie1b), col = safe_colorblind_palette[8])  +
+  scale_y_continuous(limits = c(0, 1),
+                     expand = c(0,0)) +
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(0, 61)) + 
+  labs(x = "temps",
+       y = "",
+       subtitle = "survie") +
+  theme_classic()
+
+
+g4 <- ggplot(data = survrisque,
+             aes(x = temps)) +
+  geom_line(aes(y = risque2),
+            color = safe_colorblind_palette[1]) +
+  geom_line(aes(y = 12*risque1),
+            color = safe_colorblind_palette[8]) +
+  scale_y_continuous(limits = c(0, 2),
+                     expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, 60),
+                     expand = c(0, 0)) +
+  labs(x = "temps",
+       y = "",
+       subtitle = "risque") +
+  theme_classic()
+
+g5 <- ggplot(data = survrisque,
+             aes(x = temps)) +
+  geom_line(aes(y = risque2/risque1)) +
+  scale_y_continuous(limits = c(0, 60),
+                     expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, 60),
+                     expand = c(0, 0)) +
+  labs(x = "temps",
+       y = "",
+       subtitle = "rapport de risque") +
+  theme_classic()
+
+g6 <- ggplot(data = fsurvie2,
+             aes(x = temps)) +
+  geom_line(aes(y = survie2a), 
+            col = safe_colorblind_palette[8]) +
+  geom_line(aes(y = survie2b),
+            col = safe_colorblind_palette[1]) +
+  scale_y_continuous(limits = c(0, 1),
+                     expand = c(0,0)) +
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(0, 12)) + 
+  labs(x = "temps",
+       y = "",
+       subtitle = "survie") +
+  theme_classic()
+(g1 + g2 + g3) / (g4 + g5 + g6)
+
+```
+# Absence de proportionnalité et stratification
+On peut modéliser la non-proportionnalité par la **stratification** pour une variable catégorielle $Z=1, \ldots, K$.
+
+Supposons que l'effet de $Z$ sur le risque varie dans le temps.
+
+On écrit alors 
+\begin{align*}
+h(t; \mathbf{X}, Z=k) = h_k(t)\exp(\beta_1\mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p),
+\end{align*}
+où $h_k$ est la fonction de risque pour $Z=k$.
+
+Dans ce modèle
+
+- On suppose que l'effet des variables explicatives $\mathbf{X}$ est le même peut importe la valeur de $Z$.
+- L'effet de $Z=k$ vs $Z=j$ pour un même ensemble de variables explicatives $\mathbf{X}$ est $h_k(t)/h_j(t)$, qui dépend du temps.
+
+# Stratification
+
+- **Avantage**: on peut modéliser n'importe quel changement du risque en fonction de $Z$.
+- **Désavantage**: on perd la variable explicative $Z$, donc on ne peut tester son effet (pas de coefficient)... on peut résumer l'information pour la variable $Z$ en calculant par exemple les différences de survie à des temps donnés.
+- **Désavantage**: la fonction de risque est estimée pour chaque sous-groupe de $Z$ (plus faible taille d'échantillon).
+
+
+Idéalement, utiliser la stratification avec des variables secondaires ou de contrôles.
+
+# Modèle de Cox avec stratification dans **R**
+
+```{r}
+#| label: cox-stratification
+#| eval: false
+#| echo: true
+library(survival)
+data(survie1, package = "hecmulti")
+# Stratification par service
+cox_strat <- coxph(
+  Surv(temps, 1-censure) ~ age + sexe + strata(service), 
+  data = survie1)
+# Décompte par service
+with(survie1, table(service))
+# Coefficients
+summary(cox_strat)
+```
+
+# Sorties
+
+```{r}
+#| label: tbl-nserv
+#| tbl-cap: "Décompte du nombre d'observations par service."
+#| eval: true
+#| echo: false
+#| cache: true
+nserv <- with(hecmulti::survie1, table(service))
+knitr::kable(data.frame(
+  "0" = nserv[1], 
+  "1" = nserv[2], 
+  "2" = nserv[3], 
+  "3" = nserv[4]),
+             booktabs = TRUE, 
+  col.names = paste0(0:3))
+```
+
+
+```{r}
+#| label: tbl-coxstratif
+#| tbl-cap: "Rapport de risques pour un modèle de Cox stratifié par service."
+#| eval: true
+#| echo: false
+library(survival)
+cox7 <- coxph(Surv(temps, 1-censure) ~ 
+                age + sexe + strata(service), 
+              data = hecmulti::survie1,
+              ties = "exact")
+tab7 <- broom::tidy(cox7, 
+            exponentiate = TRUE, 
+            conf.int = TRUE)[,-(3:5)]
+colnames(tab7) <- c("terme",
+                    "exp(coef)",
+                    "borne inf.", 
+                    "borne sup.")
+knitr::kable(tab7,
+               digits = 2,
+               booktabs = TRUE) |>
+  kableExtra::kable_styling()
+```
+
+# Courbes de survie du modèle stratifié
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| fig-width: 7
+#| fig-height: 5
+#| out-width: '85%'
+#| fig-align: 'center'
+#| warning: false
+#| cache: true
+pred <- survfit(cox7, 
+        newdata = data.frame(service = factor(c(0,1,2,3)),
+                             sexe = rep(0,4),
+                             age = 40), 
+        type = "kaplan-meier")
+profil <- 0:3
+survcurves <- with(pred,
+  data.frame(
+    temps = time,
+    censure = n.censor > 0,
+    survie = c(surv),
+    groupe = factor(unlist(sapply(1:4, function(i){rep(profil[i], strata[i])}))))
+  )
+
+ggplot(data = survcurves, 
+       aes(x = temps, 
+           y = survie,
+           color = groupe,
+           group = groupe)) +
+  geom_step() +
+  ggplot2::scale_y_continuous(
+    expand = c(0,0),
+    limits = c(0,1), 
+    breaks = seq(0, 1, by = 0.25),
+    labels = c("0","0.25","0.5","0.75","1")) + 
+  theme_classic() +
+  ggplot2::theme(legend.position = "bottom") + 
+  ggplot2::labs(x = "temps d'abonnement (en semaines)", 
+       subtitle = "Fonction de survie",
+       y = "",
+       color = 'service')
+```
+
+
+# Extensions du modèle de Cox
+
+
+1. Inclusion de variables explicatives dont la valeur change dans le temps.
+2. Modèle à risques compétitifs.
+
+# Évolution temporelle de variables explicatives
+
+On considère une extension du modèle de Cox qui permet d'inclure des variables explicatives dont la valeur change dans le temps.
+
+
+Supposons que la variable $\mathrm{X}_1$ change au fil du temps et que les autres demeurent fixes, tel que
+\begin{align*}
+h(t; \boldsymbol{x}) = h_0(t) \exp\{\beta_1x_1(t) + \cdots + \beta_px_p\},
+\end{align*}
+où $x_1(t)$ indique que la valeur de $\mathrm{X}_1$ dépend du temps $t$.
+
+
+# Risques compétitifs
+
+```{r}
+#| echo: false
+#| eval: false
+library(survival)
+mgus2 <- survival::mgus2
+event <- with(mgus2, ifelse(pstat==1, 1, 2*death))
+event <- factor(event, 0:2, c("censored", "progression", "death"))
+etime <- with(mgus2, ifelse(pstat==1, ptime, futime))
+cfit1 <- coxph(Surv(etime, event=="pcm") ~ age + sex + mspike, mgus2)
+etime <- with(mgus2, ifelse(pstat==0, futime, ptime))
+event <- with(mgus2, ifelse(pstat==0, 2*death, 1))
+event <- factor(event, 0:2, labels=c("censor", "pcm", "death"))
+cfit2 <- coxph(Surv(etime, event=="death") ~ age + sex + mspike, mgus2)
+cfit1 <- coxph(Surv(etime, event=="pcm") ~ age + sex + mspike, mgus2)
+newdata <- expand.grid(sex=c("F", "M"), age=c(60, 80), mspike=1.2)
+newdata
+temp <- matrix(list(), 3,3)
+dimnames(temp) <- list(from=c("Entry", "PCM", "Death"),
+                       to =c("Entry", "PCM", "Death"))
+temp[1,2] <- list(survfit(cfit1, newdata, std.err=FALSE))
+temp[1,3] <- list(survfit(cfit2, newdata, std.err=FALSE))
+csurv <- survfit(temp, p0 =c(1,0,0))
+```

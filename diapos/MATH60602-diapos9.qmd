@@ -529,8 +529,6 @@ Le modèle de Cox est un modèle multiplicatif:
 - Pour chaque augmentation d'une unité de $\mathrm{X}_i$, le risque que l'événement survienne est multiplié par $\exp(\beta)$, *ceteris paribus*.
 
 
-Le terme **risques proportionnels** fait référence au fait que le rapport de risque ne dépend pas du temps.
-
 # Modèle de Cox dans **R**
 
 Le modèle de Cox, `coxph`, inclut un objet de classe `Surv()` avec le temps de défaillance et l'indicateur de censure comme variable réponse.
