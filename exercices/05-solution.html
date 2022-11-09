@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.11">
+<meta name="generator" content="quarto-1.1.163">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -354,7 +354,8 @@ div.csl-indent {
 <ol type="1">
 <li><em>Quel type de mécanisme de censure est présent dans ces données?</em></li>
 </ol>
-<p>Censure par intervalle (nombre connu à une année près, seule l’année du début et le nombre de bilans sont connus des auteurs) et censure à droite (certaines firmes sont encore en activité en 1992 à la fin de la période de collecte de données).</p>
+<p>Censure par intervalle (nombre connu à une année près, seule l’année du début d’activités et le nombre de bilans sont connus des auteurs) et censure à droite (certaines firmes sont encore en activité en 1992 à la fin de la période de collecte de données).</p>
+<p>On pourrait ignorer la censure par intervalle en associant chaque intervalle de la forme <span class="math inline">\([t, t+1)\)</span> à la valeur <span class="math inline">\(t\)</span>.</p>
 <ol start="2" type="1">
 <li><em>Donnez une estimation de la probabilité qu’une entreprise survive trois ans et plus.</em></li>
 </ol>
@@ -364,7 +365,7 @@ div.csl-indent {
 </ol>
 <p>Puisque la fonction de survie empirique est constante, cela revient à la probabilité de défaillance dans l’intervalle [4,5) ans, soit <span class="math display">\[\begin{align*}
 \Pr\{T \in [4,5)\} &amp;= \Pr(T \ge 5) - \Pr(T \ge 4) \\&amp;= 0.5525 - 0.5023 \\&amp;= 0.0502.
-\end{align*}\]</span></p>
+\end{align*}\]</span> Si on traçait la courbe de Kaplan–Meier, cette probabilité correspond à la hauteur de la contre-marche entre 4 et 5 ans.</p>
 <ol start="4" type="1">
 <li><em>Quel pourcentage des observations sont censurées?</em></li>
 </ol>
