@@ -85,14 +85,8 @@ theme_set(theme_classic())
 
 La survie est caractérisée par la présence d'information **partielle**.
 
-Les données sont sujettes à **troncation** et à **censure**.
+Les données sont sujettes à **troncature** et à **censure**.
 
-
-# Étude sur le chômage
-
-- Certaines personnes seront déjà au chômage au début de l'étude (troncature à gauche): le temps réel sera supérieur à la durée écoulée
-- Certaines personnes ont trouvé un emploi entre deux prises de contact, mais la date exacte est inconnue (censure par intervalle).
-- D'autres personnes seront toujours au chômage en juin à la fin de l'étude (censure à droite). 
 
 # Définition de la censure
 
@@ -102,16 +96,61 @@ Le temps réel de l'événement n'est pas observé (information partielle).
 - Censure à gauche: l'événement survient avant le temps $t$, donc la vraie valeur est inférieure à la valeur observée ($T < t$)
 - Censure par intervalle: l'événement est survenu dans la plage $[t_1, t_2]$ (données arrondies)
 
-# Définitions de la troncation
+# Définitions de la troncature
 
 La plage des valeurs possibles est tronquée.
 
-- Troncation à gauche: le temps minimum est supérieur à $t_0$
-- Troncation à droite: le temps maximum est inférieur à $t_1$
-- Troncation par intervalle: le temps de l'événement doit survenir entre $t_0$ et $t_1$.
+- troncature à gauche: le temps minimum est supérieur à $t_0$
+- troncature à droite: le temps maximum est inférieur à $t_1$
+- troncature par intervalle: le temps de l'événement doit survenir entre $t_0$ et $t_1$.
 
-Exemple de troncation par intervalle: on s'intéresse à la durée de la relation d'emploi. Seules les personnes à l'emploi de HEC qui ont pris leur retraite entre 2009 et 2021 sont considérées pour l'étude.
 
+# Exemple: étude sur le chômage
+
+- Certaines personnes seront déjà au chômage au début de l'étude (troncature à gauche): le temps réel sera supérieur à la durée écoulée
+- Certaines personnes ont trouvé un emploi entre deux prises de contact, mais la date exacte est inconnue (censure par intervalle).
+- D'autres personnes seront toujours au chômage à la fin de l'étude (censure à droite). 
+
+# Diagramme de Lexis
+
+
+:::: {.columns}
+
+
+::: {.column width="50%"}
+```{r}
+#| eval: true
+#| echo: false
+#| fig-cap: "Diagramme de Lexis pour données tronquées à gauche ($A$ et $C$) et censurées à droite ($C$ et $D$)."
+knitr::include_graphics("figures/Lexis_censure.pdf")
+```
+
+:::
+
+::: {.column width="40%"}
+
+- On trace une droite de pente 1 représentant la durée en fonction du temps (date au calendrier).
+- La fenêtre définit la période de collecte de donnée. 
+- On peut lire le temps initial et le temps final sur l'axe des $y$.
+- La censure est indiquée par des cercles, les événements par des croix.
+
+:::
+
+::::
+
+
+
+
+# Troncature par intervalle
+
+```{r}
+#| eval: true
+#| echo: false
+knitr::include_graphics("figures/lexis_troncationintervalle.pdf")
+```
+
+\footnotesize 
+On s'intéresse à la durée de la relation d'emploi:  seules les personnes à l'emploi qui ont pris leur retraite entre 2009 et 2021 sont considérées pour l'étude.
 
 # Exemple de données de survie
 
@@ -179,7 +218,7 @@ On considère l'exemple d'une entreprise de télécommunications qui veut conna�
 
 Les données `survie1` contiennent les variables suivantes.
 
-- $\texttt{temps}$: temps (en semaines) que le client est resté abonné au service de téléphone cellulaire. Il s'agit du vrai temps si le client n'est plus abonné et d'une borne inférieur si le client est toujours abonné.
+- $\texttt{temps}$: temps (en semaines) que le client est resté abonné au service de téléphone cellulaire. Il s'agit du vrai temps si le client n'est plus abonné et d'une borne inférieure si le client est toujours abonné.
 - `censure`: variable binaire qui indique si la variable `t` est censurée (`0` si le client est toujours abonné) ou non (`1`, la variable `t` est la durée finale de l'abonnement).
 - `age`: âge du client au début de l'abonnement.
 - `sexe`: sexe du client, soit femme (`1`), soit homme (`0`).
@@ -209,44 +248,39 @@ donne la probabilité que le temps de survie soit supérieur à $t$.
 
 La **fonction de risque** (en anglais, _hazard_) est 
 \begin{align*}
-h(t) =  \frac{f(t)}{S(t)}
+h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
 \end{align*}
 où $f(t)$ est la fonction de densité (pour $T$ continu) ou de masse pour $T$ discret.
 
 
-Cette fonction est importante car il s'agit de celle que nous allons modéliser avec le modèle de régression de Cox.
+Plus le risque est élevé au temps $t$, plus l'événement est susceptible d'arriver.
 
 # Fonction de risque (bis)
 
-Dans le cas discret où le temps peut seulement prendre les valeurs $0, 1, 2, \ldots$, la fonction de risque est
+Dans le cas discret où le temps peut seulement prendre les valeurs $0, 1, 2, \ldots$, le risque est
 \begin{align*}
-h(t)= \frac{f(t)}{S(t)} = \Pr(T=t \mid T > t) = \frac{\Pr(T=t)}{\Pr(T >t)}.
+h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
 \end{align*}
-Le risque est alors la probabilité conditionnelle que l'événement survienne au temps $t$, étant donné qu'il n'était pas survenu avant. 
+la probabilité conditionnelle que l'événement survienne au temps $t$, étant donné qu'il n'était pas survenu juste avant.
 
 
 # Risque vs survie
 
 
-Les fonctions de survie et de risque sont intimement reliées et 
+Les fonctions de survie et de risque sont intimement reliées, avec
 \begin{align*}
 h(t) = - \frac{\mathrm{d} \ln\{S(t)\}}{\mathrm{d} t}, \qquad \qquad S(t) = \exp \left\{ -\int_0^t h(u) \mathrm{d} u\right\}.
 \end{align*}
-Ainsi, si on connaît la fonction de survie, on peut retrouver la fonction de risque et vice-versa. 
 
-Par conséquent, un modèle pour la fonction de survie spécifie une fonction de risque (et vice-versa).
+Cette équation sert à illustrer qu'un modèle pour la fonction de survie spécifie une fonction de risque (et vice-versa).
+
+Un profil avec un risque plus élevé (pour tout temps $t$) aura une survie plus courte.
 
 # Estimateur de Kaplan--Meier
 
 L'estimateur de Kaplan--Meier est un estimateur de la fonction de survie en présense de censure à droite. 
 
 Cette méthode est nonparamétrique en ce sens qu'on ne suppose aucun modèle et qu'on suppose uniquement que la censure est non-informative. 
-
-
-Si l'échantillon ne contient aucune observation censurée, l'estimateur de Kaplan--Meier est
-$$\widehat{S}(t) = \frac{\#\{t_i > t\}}{n}$$
-la proportion des observations dans l'échantillon qui possède un temps de survie supérieur à $t$
-
 
 # Kaplan--Meier avec **R**
 
@@ -262,7 +296,7 @@ data(survie1, package = "hecmulti")
 # "0" pour censuré à droite, "1" pour événement
 kapm <- survfit(
   Surv(temps, censure) ~ 1, 
-  #aucune variable explicative
+  #~1 => aucune variable explicative
   type = "kaplan-meier", 
   conf.type = "log", #type d'intervalle de conf.
   data = survie1)
@@ -286,7 +320,8 @@ quantile(kapm)
 
 Parmi les 500 observations, il y a 
 
-- 334 clients qui ont terminé leur abonnement et - 166 qui sont censurées à droite.
+- 334 clients qui ont terminé leur abonnement et 
+- 166 qui sont censurées à droite.
 
 La fonction résumé (`summary`) renvoit l'estimation de la fonction de survie pour chaque temps d'échec (événement).
 
@@ -331,7 +366,7 @@ knitr::kable(km_subtab,
 
 \footnotesize 
 
-Probabilité estimée que le temps d'abonnement dépasse 30 semaines de 0.986 ($\widehat{S}(30)$).
+La probabilité estimée que le temps d'abonnement dépasse 30 semaines est 0.986.
 
 \normalsize
 
@@ -362,7 +397,39 @@ autoplot(kapm) +
 ```
 
 
+# Comprendre l'estimateur de Kaplan--Meier
+
+- On parle d'**échec** au temps $t_i$ si $T = t_i$ et $C=0$ (événement observé au temps $t_i$).
+- Le nombre de **personnes à risque** au temps $t_i$ est le total des observations dont le temps mesuré excède $t_i$ (censure et événements postérieurs à $t_i$)
+
+**Construction**:
+
+- Ordonner les temps (uniques) où il y a des échecs (temps où `censure = 1`), disons $t_{(1)} \leq \cdots \leq t_{(m)}$
+- À chaque temps $t_{(i)}$ $(i=1, \ldots m)$, on calcule le nombre de personnes à risque, $r_i$, et le nombre d'échecs, $d_i$.
+- Le risque empirique est $\widehat{h}_i = r_i/d_i$, la proportion d'échecs parmi les personnes à risque.
+
+# Dérivation de Kaplan--Meier
+
+L'estimateur de Kaplan--Meier définit une **fonction escalier**
+\footnotesize
+
+- Entre $t=0$ et $t=t_{(1)}$, la survie est de 1.
+- Entre $t=t_{(1)}$ et $t=t_{(2)}$, la survie est $1-\widehat{h}_1$.
+- Entre $t=t_{(2)}$ et $t=t_{(3)}$, la survie est $(1-\widehat{h}_1) \times (1-\widehat{h}_2)$.
+
+\normalsize
+Pour un temps $t$ donné, on multiplie tous les termes ($1-\widehat{h}_i$) des temps d'échecs passés,
+\begin{align*}
+ \widehat{S}(t) = \prod_{i: t_{(i)} < t} \left( 1- \widehat{h}_i\right).
+\end{align*}
+
+- la survie ne change qu'aux valeurs de $t_{(i)}$ ($i=1, \ldots, m$)
+- les contre-marches interviennent uniquement aux temps observés d'**échecs**.
+- si la plus grande observation est censurée, la courbe de survie n'atteindra jamais zéro.
+
 # Quantiles de la fonction de survie
+
+On obtient le quantile à partir du tableau: c'est le premier temps d'échec où la survie est inférieure au quantile (la ligne horizontale au quantile traverse une contre-marche).
 
 ```{r}
 #| echo: false
@@ -389,7 +456,7 @@ knitr::kable(quantiles,
 
 # Estimateur déficient et moyenne restreinte
 
-- Si la plus grande observation est censurée, la courbe de survie de l'estimateur de Kaplan--Meier n'atteindra jamais zéro.
+
 - Si la plus grande observation n'est pas censurée à droite, il est possible d'estimer la moyenne.
    - aire sous la courbe
    - autrement, on obtient une borne inférieure (sous-estimation de la moyenne), appelée *moyenne restreinte*.
@@ -412,7 +479,7 @@ Si on sépare l'échantillon selon une variable catégorielle en $K$ groupes, on
 On peut tester l'égalité des fonctions de survie, c'est-à-dire, les hypothèses 
 
 - $\mathscr{H}_0: S_1(t) = \cdots = S_K(t)$ pour tout $t$ et 
-- $\mathscr{H}_a$ les courbe de survies diffèrent  pour au moins une valeur de $t$. 
+- $\mathscr{H}_a$: les courbe de survies diffèrent  pour au moins une valeur de $t$. 
 
 Les deux tests utilisés habituellement sont 
 
@@ -421,6 +488,7 @@ Les deux tests utilisés habituellement sont
  
 # Comparaison de la survie selon le sexe
  
+On stratifie l'échantillon selon le sexe.
 
 ```{r}
 #| label: test-lograng
@@ -429,6 +497,8 @@ Les deux tests utilisés habituellement sont
 survdiff(formula = Surv(temps, censure) ~ sexe, 
          data = survie1)
 ```
+
+\footnotesize
 
 - La fonction `survdiff` avec la formule retourne le résultat du test asymptotique du log-rang pour l'hypothèse d'égalité des fonctions de survie. 
 - La valeur-$p$ du test est inférieure à $10^{-4}$: on rejette $\mathscr{H}_0$ pour conclure qu'il y a une différence significative entre les deux courbes de survie.
@@ -478,12 +548,12 @@ L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables explicative
 
 
 - L'analyse de survie est l'étude de temps d'attente (variable positive) avant que survienne un événement.
-- L'étude des temps de défaillance nécessite l'utilisation d'outils statistiques spécifiques en raison des mécanismes de censure et de troncation.
+- L'étude des temps de défaillance nécessite l'utilisation d'outils statistiques spécifiques en raison des mécanismes de censure et de troncature.
 
 # Récapitulatif
 
 - La fonction de survie $S(t)$ encode la probabilité que le temps de défaillance excède le temps $t$.
-- La fonction de risque encode la probabilité de mourir au temps $t$ sachant qu'on a survécu jusque là.
+- La fonction de risque encode la probabilité de mourir juste après le temps $t$ sachant qu'on a survécu jusque là.
 - La connaissance de la fonction de survie permet d'obtenir la fonction de risque et vice-versa.
 
 # Récapitulatif
@@ -748,15 +818,18 @@ plot(coxzph_out)
 
 # Test du score pour risques proportionnels
 
+Test du score de Grampsch et Therneau (1994) pour les coefficients constants dans le temps avec 
 
-Postulat de risques proportionnels: test du score de Grampsch et Therneau (1994) pour les coefficients constants dans le temps et valeur-$p$ asymptotique basée sur la loi nulle khi-deux.
+- $\mathscr{H}_0$: $\beta(t)=c$ est constant (risques proportionnels)
+- $\mathscr{H}_a$: $\beta(t) \neq c$ (risques non proportionnels, coefficient variable).
+
 
 ```{r}
 #| label: tbl-coxph-hypothese
 #| eval: true
 #| echo: false
 #| cache: false
-#| tbl-cap: "Tests du score"
+#| tbl-cap: "Tests du score avec valeur-$p$ basée sur la loi nulle khi-deux."
 tab3 <- as.data.frame(coxzph_out$table)
 tab3$p <- format.pval(tab3$p, digits = 2, eps = 1e-4)
 tab3 <- cbind(effet = tolower(rownames(tab3)), tab3)
@@ -770,6 +843,7 @@ knitr::kable(tab3,
 ```
 
 \footnotesize 
+
 Postulat pas respecté pour `service`:  augmentation au fil du temps pour tous les groupes. Il faudrait ajouter une interaction ou stratifier par `service`.
 
 # Postulat de risques proportionnels
