@@ -550,7 +550,7 @@ Les représentations graphiques donnent la probabilité d'être dans une situati
 #| fig-cap: "Probabilité d'événement sans variable explicative (Kaplan-Meier, gauche) et avec âge, service et sexe (modèle de Cox, droite)."
 #| eval: true
 #| echo: false
-#| out-width: '90%'
+#| out-width: '100%'
 #| fig-width: 8
 #| fig-height: 4
 par(mfrow = c(1,2), bty = "l")

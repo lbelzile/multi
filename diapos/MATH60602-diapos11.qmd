@@ -1,0 +1,212 @@
+---
+title: "Analyse de regroupements"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: lualatex
+code-line-numbers: true
+fig-align: 'center'
+mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+        \usepackage{mathtools}
+        \usepackage{mathrsfs}
+---
+
+# Analyse de regroupements
+
+
+```{r}
+#| label: setup
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| cache: false
+library(knitr)
+library(kableExtra)
+set.seed(1014)
+library(hecmulti)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  cache = TRUE,
+  out.width = "80%",
+  fig.align = 'center',
+  fig.width = 8.5,
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+options(knitr.table.format = function() {
+  if (knitr::is_latex_output()) 
+    "latex" else "html"
+})
+
+options(dplyr.print_min = 6, dplyr.print_max = 6)
+options(knitr.graphics.auto_pdf = TRUE)
+options(scipen = 1, digits = 3)
+library(viridis)
+library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
+library(poorman, quietly = TRUE, warn.conflicts = FALSE)
+library(patchwork)
+
+safe_colorblind_palette <- MetBrewer::met.brewer("Hiroshige",10)
+
+options(ggplot2.continuous.colour="viridis")
+options(ggplot2.continuous.fill = "viridis")
+scale_colour_discrete <- scale_color_manual(MetBrewer::met.brewer("Hiroshige",10))
+scale_fill_discrete <- scale_fill_manual(MetBrewer::met.brewer("Hiroshige",10))
+theme_set(theme_classic())
+```
+
+**Objectif**: regrouper des **observations** de telle sorte que 
+
+- les observations d’un même groupe soient le plus semblables possible,
+- les groupes soient le plus différent possible les uns des autres.
+
+Chaque observation se voit assigner une étiquette de groupe.
+
+Analyse **descriptive** des segments.
+
+# Illustration
+
+
+```{r}
+#| label: fig-regroupements-bidons
+#| fig-cap: "Données simulées avec deux regroupements hypothétiques."
+#| echo: false
+#| cache: false
+set.seed(1234)
+dat <- rbind(
+  mvtnorm::rmvnorm(n = 50, 
+                 mean = c(-10,0), 
+                 sigma = rWishart(n = 1, 
+                                  df = 5, 
+                                  Sigma = diag(0.25,2,2))[,,1]),
+  mvtnorm::rmvt(n = 100, 
+                sigma = cbind(c(2,-1), c(-1,1.2)),
+                df = 3, 
+                delta = c(6,8)))
+dat <- data.frame(dat)
+colnames(dat) <- c("x1", "x2")
+ggplot(data = dat, aes(x = x1, y = x2)) + 
+  geom_point() + 
+  labs(x = "variable 1",
+       y = "variable 2") + 
+  theme_minimal()
+```
+
+
+# Analogie avec analyse factorielle
+
+En analyse factorielle, on combine des variables similaires (colonnes).
+
+Pour l'analyse de regroupements, on regroupe des observations (lignes).
+
+```{r}
+include_graphics(path = "figures/tidy-data.png")
+```
+
+Ce sont des méthodes dites d'**apprentissage non-supervisé**: l’objectif est de déduire la structure présente dans un ensemble de points $\mathbf{X}$ sans étiquette préalable (contrairement à la classification).
+
+# Exemples
+
+- Programmes de fidélisation et résolution d'entités
+- Segmentation de la clientèle de transport en commun et élaboration de forfaits 
+- Démarchage d'organismes de charité
+
+# Structure de la base de données
+
+Quelles variables $\mathrm{X}_1, \ldots, \mathrm{X}_p$ sont d'intérêt?
+
+- Choisir des variables pertinentes pour faire ressortir les différences
+- Créer de nouvelles variables explicatives
+
+
+Regrouper les bases de données marketing par identifiant client (aggrégation).
+
+# Exemple avec transport en commun
+
+La carte Opus enregistre 
+
+- les temps de passage
+- le type de déplacement (REM, métro, bus)
+- le nombre de passages
+- les abonnements
+- le profil client (études, rabais pour personnes âgées)
+
+# Quelles variables créer ou conserver?
+
+- Nombre de passages mensuels
+- Abonnement mensuel ou annuel (oui/non)
+- Type de déplacement (soir, jour)
+- Nombre d'allers-retours hebdomadaires en heure de pointe
+- Variabilité de la fréquentation
+
+
+# Diviser pour régner
+
+Souvent, il existe une division naturelle des données
+
+Les jeunes avec des abonnements de transport publics l'utilisent principalement pour aller à l'école
+
+On peut faire la segmentation **séparément** pour ces sous-groupes.
+
+#  À votre tour
+
+Vous avez toutes les données transactionnelles associées à des comptes d'épicerie avec un compte de fidélisation. 
+
+
+Quelles variables créez vous à partir des données aggrégées pour créer des segments?
+
+
+# Choix des variables 
+
+Recommandations: choisir les variables pertinentes qui font ressortir les effets voulus.
+
+- inclure de nombreuses variables similaires dilue les différences.
+- transformer les variables pour diminuer la corrélation 
+
+Typiquement, ne pas utiliser les variables sociodémographiques (âge, revenu, sexe, etc.)
+
+- on compare plutôt leur répartition au sein des regroupements.
+
+# Exemple: typologie des votants en France
+
+```{r}
+knitr::include_graphics("figures/typologie-vote-france.jpg")
+```
+
+
+# Exemple - dons à un organisme de charité
+
+La base de données `dons` contient `r nrow(hecmulti::dons)` observations pour `r ncol(hecmulti::dons)` variables.
+
+- Trois grandes catégories: personnes qui n'ont pas donné, dons uniques, dons multiples.
+- variables sociodémographiques, valeur des dons (min, max) et des promesses, nombre de dons, fréquence, 
+
+Une rapide exploration des données révèle que près de 61% des employé(e)s n’ont pas donné à l’organisme. 
+
+Une poignée de dons sont très élevés, mais la plupart des montants tourne autour de 5\$, 10\$, 20\$, etc.
+
+
+# Étapes d'une analyse de regroupements
+
+1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
+2. Décider quel méthode et quelle mesure de dissemblance/similarité seront utilisées pour la segmentation.
+3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) 
+4. Procéder à l'analyse de regroupements.
+5. Calculer une mesure de qualité.
+6. Assigner les étiquettes aux observations et calculer un prototype de groupe. 
+7. Interpréter les regroupements obtenus.
