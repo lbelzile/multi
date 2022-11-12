@@ -180,6 +180,11 @@ div.csl-indent {
   <a href="../evaluations/04-devoir.html" class="sidebar-item-text sidebar-link">Devoir 4</a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/05-devoir.html" class="sidebar-item-text sidebar-link">Devoir 5</a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -197,16 +202,17 @@ div.csl-indent {
 
 </header>
 
+<p><a href="MATH60602-A22-Devoir2.pdf">Téléchargez la version PDF de l’énoncé</a></p>
 <p>Les observations de la base de données <a href="https://lbelzile.github.io/hecmulti/reference/bjffacto.html"><code>bjffacto</code></a> sont tirées de l’article <span class="citation" data-cites="Bastian:2014">Bastian et al. (<a href="#ref-Bastian:2014" role="doc-biblioref">2014</a>)</span> et sont rattachées à une expérience en psychologie visant à corroborer l’hypothèse qu’il y a une coopération accrue entre individus sujets à une expérience traumatisante. La moitié des participant(e)s a dû plonger sa main dans un bain d’eau glacé, tandis que l’autre moitié a dû faire la même chose dans un bain d’eau tiède; les deux groupes devaient ensuite faire un jeu visant à identifier leur niveau de coopération.</p>
 <p>La variable <code>condition</code> indique le groupe expérimental (zéro pour groupe contrôle, un pour douleur).</p>
-<p><strong>Indication</strong>: utilisez la matrice de covariance pour vos analyses factorielles</p>
+<p><strong>Indication</strong>: utilisez la matrice de <em>corrélation</em> pour effectuer l’analyse factorielle.</p>
 <ol type="1">
-<li>Pourquoi n’est-il pas nécessaire de standardiser les variables avant de procéder à l’analyse exploratoire? Justifiez votre réponse</li>
+<li>Pourquoi n’est-il pas nécessaire de standardiser les variables avant de procéder à la création d’échelles dans cet exemple? Justifiez votre réponse.</li>
 <li>Effectuez une analyse factorielle exploratoire à l’aide de la méthode des composantes principales.
 <ol type="a">
-<li>En utilisant le critère de Kaiser (valeurs propres) ou le diagramme d’éboulis, déterminez un nombre adéquat de facteurs à employer.</li>
-<li>Produisez un diagramme d’éboulis et rapportez ce dernier.</li>
-<li>Quel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?</li>
+<li>Combien de facteurs le critère de Kaiser (valeurs propres) suggère-t-il?</li>
+<li>Produisez un diagramme d’éboulis et rapportez ce dernier. Commentez sur le choix de facteurs selon le critère de Cattel (coude), au vu de la taille de l’échantillon.</li>
+<li>Quel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
 </ol></li>
 <li>Répétez la procédure, cette fois avec la méthode d’estimation par maximum de vraisemblance.
 <ol type="a">
@@ -214,10 +220,13 @@ div.csl-indent {
 <li>Quel nombre optimal de facteurs ces différents critères retournent-ils?</li>
 <li>Y a-t-il un problème avec la solution de l’un d’entre eux?</li>
 </ol></li>
-<li>Comparez les regroupements obtenus avec les deux méthodes: est-ce que les regroupements sont semblables (c’est-à-dire, est-ce que les variables retournées dans les regroupements sont associées aux mêmes facteurs)?</li>
-<li>Étiquetez les facteurs obtenus avec la méthode des composantes principales et <span class="math inline">\(m=5\)</span> facteurs. Expliquez brièvement leur signification. Utilisez le seuil de coupure <span class="math inline">\(r=0.5\)</span> pour les chargements avec rotation varimax pour déterminer si une variable fait partie d’un facteur.</li>
-<li>Créez des échelles à partir des facteurs et calculez leur cohérence interne: rapportez le <span class="math inline">\(\alpha\)</span> de Cronbach pour chacun des facteurs.</li>
-<li>Retournez un tableau de statistiques descriptives (moyenne et écart-type uniquement) pour chaque échelle, par condition expérimental (<code>condition</code>). Arrondissez à deux chiffres après la virgule et commentez sur les différences entre groupes, le cas échéant.</li>
+<li>Comparez les regroupements obtenus avec les deux méthodes d’estimation (composantes principales et maximum de vraisemblance) pour la solution à <span class="math inline">\(k=2\)</span> facteurs: est-ce que les regroupements sont semblables (c’est-à-dire, est-ce que les variables retournées dans les regroupements sont associées aux mêmes facteurs)?<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li>Étiquetez les facteurs obtenus avec la méthode des composantes principales et <span class="math inline">\(k=2\)</span> facteurs. Expliquez brièvement leur signification.</li>
+<li><ol type="a">
+<li>Créez des échelles à partir des facteurs. Utilisez le seuil de coupure <span class="math inline">\(c=0.4\)</span> pour les chargements pour déterminer si une variable fait partie d’une échelle.</li>
+<li>Estimez la cohérence interne des échelles à l’aide du <span class="math inline">\(\alpha\)</span> de Cronbach et commentez.</li>
+</ol></li>
+<li>Retournez un tableau de statistiques descriptives (moyenne et écart-type uniquement) des échelles, par condition expérimental (<code>condition</code>). Arrondissez à deux chiffres après la virgule et commentez sur les différences entre groupes, le cas échéant.</li>
 </ol>
 <p>Vous devez remettre</p>
 <ul>
@@ -229,11 +238,18 @@ div.csl-indent {
 
 
 
+
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
 <div id="ref-Bastian:2014" class="csl-entry" role="doc-biblioentry">
 Bastian, B., Jetten, J., &amp; Ferris, L. J. (2014). Pain as social glue: Shared pain increases cooperation. <em>Psychological Science</em>, <em>25</em>(11), 2079–2085. <a href="https://doi.org/10.1177/0956797614545886">https://doi.org/10.1177/0956797614545886</a>
 </div>
-</div></section></div></main> <!-- /main -->
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+
+<ol>
+<li id="fn1"><p>Vous pouvez extraire les variances des composantes principales à partir de <code>eigen(...)$values</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Il est possible que les signes soient différents, ou que l’ordre des facteurs soit différent. Cela ne devrait pas affecter votre conclusion.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

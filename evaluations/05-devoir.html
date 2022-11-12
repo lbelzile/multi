@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Devoir 3</title>
+<title>Analyse multidimensionnelle appliquée - Devoir 5</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -115,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Devoir 3</h1>
+      <h1 class="quarto-secondary-nav-title">Devoir 5</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -153,7 +153,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/03-devoir.html" class="sidebar-item-text sidebar-link active">Devoir 3</a>
+  <a href="../evaluations/03-devoir.html" class="sidebar-item-text sidebar-link">Devoir 3</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -163,7 +163,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/05-devoir.html" class="sidebar-item-text sidebar-link">Devoir 5</a>
+  <a href="../evaluations/05-devoir.html" class="sidebar-item-text sidebar-link active">Devoir 5</a>
   </div>
 </li>
       </ul>
@@ -179,68 +179,55 @@ ul.task-list li input[type="checkbox"] {
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header">
-<h2 class="title d-none d-lg-block anchored display-7">Devoir 3</h2>
+<h2 class="title d-none d-lg-block anchored display-7">Devoir 5</h2>
 
 </header>
 
-<p><a href="MATH60602-A22-Devoir3.pdf">Téléchargez la version PDF de l’énoncé</a></p>
+<p><a href="MATH60602-A22-Devoir5.pdf">Téléchargez la version PDF de l’énoncé</a></p>
 <p>Ce travail est à réaliser en équipe (minimum deux, maximum quatre personnes).</p>
-<p>On cherche à estimer le total du solde de la carte de crédit Visa Première (<code>credm</code>, en francs) à l’aide d’autres variables explicatives présentes dans la base de données <a href="https://lbelzile.github.io/hecmulti/reference/visacredm.html"><code>visacredm</code></a>; 25 données sont intentionnellement manquantes pour permettre d’évaluer vos modèles finaux et faire un classement des équipes.</p>
-<ol type="1">
-<li>Faites une analyse exploratoire des données et vérifiez</li>
-</ol>
-<ul>
-<li>s’il ne vaudrait mieux pas retirer certaines variables explicatives avec beaucoup de valeurs manquantes.</li>
-<li>que les variables catégorielles sont adéquatement traitées comme des facteurs (<code>factor</code>).</li>
-<li>s’il ne vaudrait mieux pas fusionner des modalités de variables catégorielles si le nombre d’observation par modalité est trop faible.</li>
-<li>qu’il n’y a pas de variable explicative dérivée de la variable réponse.</li>
-<li>que le sous-ensemble des observations employé est adéquat.</li>
-<li>qu’il n’y a pas d’anomalies ou de valeurs aberrantes (par ex., <code>999</code> pour valeurs manquantes) qui viendraient fausser les résultats.</li>
-<li>(<em>facultatif</em>) si vous ne devriez pas inclure de nouvelles variables qui sont des transformations, notamment
-<ul>
-<li>ajouter une variable binaire (0/1) pour une variable strictement positive avec excès de zéros</li>
-<li>transformation monotone, par exemple <span class="math inline">\(x \mapsto \ln(x + 1)\)</span>, si la variable est non-négative et la relation avec la réponse est nonlinéaire.</li>
-</ul></li>
-</ul>
-<p>Résumez votre analyse en une page maximum (texte et graphiques): ne soulevez que les points importants.</p>
-<ol start="2" type="1">
-<li>Choisissez un modèle à l’aide des méthodes de sélection couvertes en classe (sélection exhaustive, séquentielle, pénalité LASSO, etc.) Vous devez adéquatement estimer votre erreur moyenne quadratique en utilisant l’une des options suivantes :</li>
-</ol>
-<ol type="a">
-<li>pénalisation (sélection avec critères d’information)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
-<li>validation croisée à cinq ou 10 plis.</li>
-<li>séparation de la base de données en échantillons d’entraînement (2/3) et de validation (1/3).</li>
-</ol>
-<p>Rapportez l’erreur moyenne quadratique pour les différents modèles estimés dans un tableau et justifiez adéquatement votre choix final.</p>
-<ol start="3" type="1">
-<li>Écrivez un rapport résumant vos trouvailles et détaillant votre démarche.</li>
-</ol>
 <p>Vous devez remettre les documents suivants:</p>
 <ul>
 <li>votre rapport au format PDF</li>
 <li>votre code <strong>R</strong> ou un fichier Rmarkdown</li>
-<li>une base de données en format CSV<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
 </ul>
-<p>Utilisez la convention de nomenclature <code>d3_matricule.extension</code>, où <code>matricule</code> est le matricule de l’étudiant(e) qui soumet le rapport et <code>extension</code> est un de <code>pdf</code>, <code>R</code>, <code>csv</code>.</p>
-<p>La base de données devrait contenir uniquement deux colonnes et les 25 lignes correspondant aux données manquantes pour <code>credm</code>:</p>
+<p>Utilisez la convention de nomenclature <code>d5_matricule.extension</code>, où <code>matricule</code> est le matricule de l’étudiant(e) qui soumet le rapport et <code>extension</code> est un de <code>pdf</code>, <code>R</code> ou <code>Rmd</code>.</p>
+<p>Dans le cadre d’un programme gouvernemental, on s’intéresse au nombre de semaines de paiements écoulé entre une perte d’emploi et un nouvel emploi pour des chômeurs et chômeuses âgé(e)s entre 18 et 65 ans, dans le but d’élaborer un programme de formation destiné au chômage de longue durée. La base de données <code>chomage</code> contient un échantillon de <span class="math inline">\(n=2\ 500\)</span> personnes inscrites à l’Assurance emploi entre mars 2020 et décembre 2021.</p>
 <ul>
-<li>la première colonne pour les matricules (<code>matric</code>),</li>
-<li>la deuxième colonne pour les prédictions (<code>predict</code>) selon votre modèle préféré parmi tous ceux essayés.</li>
+<li><code>duree</code>: nombre de semaines de prestations payées par le programme d’assurance emploi.</li>
+<li><code>dureemin</code>: nombre de semaines de prestations déjà écoulées au début de la collecte de données.</li>
+<li><code>age</code>: variable catégorielle pour la tranche d’âge, soit [18,25), [25,50) et [50,65) ans.</li>
+<li><code>formation</code>: variable catégorielle, soit <code>aucune</code>, <code>secondaire</code>, <code>professionnel</code>, <code>collegial</code> ou <code>universitaire</code>.</li>
+<li><code>sexe</code>: variable catégorielle binaire; soit <code>femme</code> ou <code>homme</code>.</li>
+<li><code>retrait</code>: <code>1</code> si la personne bénéficiaire se désinscrit du programme avant la fin de la période maximale de prestation parce qu’elle cesse de chercher un emploi, <code>2</code> si elle trouve un emploi, <code>0</code> sinon.</li>
+<li><code>montant</code>: montant hebdomadaire des prestations, allant jusqu’à 55% de la rémunération hebdomadaire avant perte d’emploi jusqu’à concurrence de 547$ par semaine.</li>
+<li><code>nheures</code>: nombre d’heures cumulées à l’emploi avant d’être au chômage, soit un minimum de 14 semaines (420 heures) ou 22 semaines (700 heures) dépendamment du taux de chômage de la région et du nombre d’heures d’emploi assurables dans la période de référence.</li>
+<li><code>prestationmax</code>: <a href="https://web.archive.org/web/20210215104440/https://www.canada.ca/fr/emploi-developpement-social/programmes/assurance-emploi/ae-liste/rapports/prestations-reguliere/duree.html">durée maximale pour les prestations</a></li>
 </ul>
-<p>Indication : vérifiez votre base de données pour vous assurer de respecter les consignes (pénalités salées pour toute personne qui déroge aux consignes).</p>
-<p>Assurez-vous également que les prédictions sont sensées et cohérentes avec ce qui est présent dans la base de données (avez-vous des prédictions en dehors de l’étendue des données d’entraînement)? Vous ne devriez pas avoir de valeurs manquantes.</p>
-<p>Vous serez évalués sur votre méthodologie, et non pas la performance relative de votre modèle par rapport à celles des autres étudiant(e)s : en revanche, les deux sont typiquement corrélées. Vous devez expliquer clairement votre démarche (méthodologie) dans votre rapport et décrire le modèle que vous avez retenu (méthode et nombre de variables final). Prenez garde au surajustement!</p>
-
-
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
-
-<ol>
-<li id="fn1"><p>Notez que le modèle LASSO n’est pas ajusté par maximum de vraisemblance!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Disponible à l’aide de la commande <code>write.csv(..., file = "d3_matricule.csv", row.names = FALSE)</code><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<ol type="1">
+<li>On s’intéresse d’abord au nombre de semaines qu’une personne <strong>passe au chômage</strong>. On suppose qu’aucun suivi n’est effectué par les employé(e)s de Service Canada au delà de la durée maximale de prestation.
+<ol type="a">
+<li>À quoi correspond la censure à droite dans l’étude?</li>
+<li>Rapportez le nombre d’observations censurées.</li>
+</ol></li>
+<li>Supposons que l’on veuille comparer les courbes de survie selon le sexe et la formation (conjointement) en utilisant l’estimateur de Kaplan–Meier:
+<ol type="a">
+<li>Testez l’égalité des courbes de survie à l’aide du test du log-rang. Écrivez les hypothèses nulle et alternative, la valeur de la statistique, la valeur-<span class="math inline">\(p\)</span> et la conclusion du test.</li>
+<li>Produisez un graphique illustrant les courbes de survie des 10 sous-groupes.</li>
+<li>Rapportez l’estimé de la survie à 30 semaines pour une femme de 62 ans qui dispose d’une formation technique (collégial) à l’aide de votre modèle.</li>
+</ol></li>
+<li>Le modèle de régression à risques proportionnels de Cox permettrait également de tester cette hypothèse. Quelles variables explicatives devriez-vous inclure pour ce faire dans le modèle et sous quelle forme?</li>
+<li><a href="https://lactualite.com/lactualite-affaires/plus-simple-et-moins-chiche/">Quels sont les critères pour l’éligibilité aux paiements de l’assurance emploi</a>? Expliquez en quoi l’estimation précédente est faussée à cause de ces omissions.</li>
+<li>Dans le cadre de l’étude, il serait aussi opportun de considérer le temps avant que la personne ne <strong>retrouve un emploi</strong>. Construisez un modèle de Cox à risques proportionnels avec <code>sexe</code>, <code>age</code>, <code>formation</code>, <code>montant</code> et <code>montantmax</code>, une variable binaire indiquant si le revenu éligible égale ou excède 547$ par semaine.
+<ol type="a">
+<li>Interprétez l’effet de la rénumération hebdomadaire sur le risque de retrouver un emploi, incluant le cas où le ou la bénéficiaire reçoit le montant maximum.</li>
+<li>Toute chose étant égale par ailleurs, classez le temps médian avant le retour à l’emploi selon la formation, du plus long au plus court.</li>
+<li>À l’aide du test de score, vérifiez le postulat de risque proportionnels. Rapportez la valeur-<span class="math inline">\(p\)</span> et les conclusions des tests.</li>
+</ol></li>
 </ol>
-</section></div></main> <!-- /main -->
+
+
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
