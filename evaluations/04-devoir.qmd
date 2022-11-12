@@ -1,6 +1,7 @@
 ---
 title: "Devoir 4"
 ---
+[Téléchargez la version PDF de l'énoncé](MATH60602-A22-Devoir4.pdf)
 
 Ce travail est à réaliser en équipe (minimum deux, maximum quatre personnes). 
 
@@ -45,10 +46,11 @@ Ajustez le modèle de Bradley--Terry aux données `lnh_BT` (utilisez la formule 
 1. Interprétez le coefficient pour l'ordonnée à l'origine $\alpha$ en terme de pourcentage d'augmentation ou de diminution de la cote par rapport à la référence jouer à l'extérieur.
 2. Calculez un intervalle de confiance de niveau 95% pour l'ordonnée à l'origine et déterminez si jouer à domicile impacte significativement le score.
 3. Fournissez un tableau avec le classement des cinq premières équipes qui ont la plus grande chance de succès selon le modèle.^[Attention à la catégorie de référence.]
-4. Pour chaque match, utilisez le modèle logistique pour prédire l'équipe gagnante. Construisez une matrice de confusion (1 pour une victoire de l'équipe à domicile, 0 sinon) et rapportez cette dernière.
-5. Calculez le taux de bonne classification, la sensibilité et la spécificité avec un point de coupure de 0.5 (assignation à l'événement ou à la classe la plus probable).
-6. Produisez un graphique de la fonction d'efficacité du récepteur et rapportez l'aire sous la courbe. Commentez sur la qualité prédictive globale du modèle.
-7. Retournez le lift pour le 40e percentile des succès.
+4. Pour chaque match, utilisez le modèle logistique pour prédire l'équipe gagnante.
+   a) Construisez une matrice de confusion (1 pour une victoire de l'équipe à domicile, 0 sinon)  avec un point de coupure de 0.5 (assignation à l'événement ou à la classe la plus probable) et rapportez cette dernière.
+   b)  Calculez le taux de bonne classification, la sensibilité et la spécificité à partir de votre matrice de confusion.
+5. Produisez un graphique de la fonction d'efficacité du récepteur et rapportez l'aire sous la courbe. Commentez sur la qualité prédictive globale du modèle.
+6. Retournez le lift pour le 40e percentile des succès et interprétez ce dernier.
 
 # Question 2
 

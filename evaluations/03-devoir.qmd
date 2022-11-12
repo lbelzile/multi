@@ -2,6 +2,8 @@
 title: "Devoir 3"
 ---
 
+[Téléchargez la version PDF de l'énoncé](MATH60602-A22-Devoir3.pdf)
+
 Ce travail est à réaliser en équipe (minimum deux, maximum quatre personnes). 
 
 On cherche à estimer le total du solde de la carte de crédit Visa Première (`credm`, en francs) à l'aide d'autres variables explicatives présentes dans la base de données [`visacredm`](https://lbelzile.github.io/hecmulti/reference/visacredm.html); 25 données sont intentionnellement manquantes pour permettre d'évaluer vos modèles finaux et faire un classement des équipes.

@@ -256,7 +256,7 @@ library(survival)
 data(survie1, package = "hecmulti")
 # Stratification par service
 cox_strat <- coxph(
-  Surv(temps, 1-censure) ~ age + sexe + strata(service), 
+  Surv(temps, censure) ~ age + sexe + strata(service), 
   data = survie1)
 # Décompte par service
 with(survie1, table(service))

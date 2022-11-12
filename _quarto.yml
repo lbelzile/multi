@@ -102,7 +102,7 @@ website:
             - evaluations/02-devoir.qmd
             - evaluations/03-devoir.qmd
             - evaluations/04-devoir.qmd
-        #    - evaluations/05-devoir.qmd
+            - evaluations/05-devoir.qmd
         #    - evaluations/06-devoir.qmd
     - title: "Exercices"
       style: "docked"
