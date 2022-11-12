@@ -352,6 +352,102 @@ ggplot(data = survcurves,
 ```
 
 
+# Risques non proportionnels
+
+Si le postulat de risques proportionnels n'est pas validé, l'effet d'au moins une des variables explicatives dépend du temps.
+
+On peut considérer une modification du modèle de Cox qui inclut une interaction avec le temps, par exemple
+\begin{align*}
+h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
+\end{align*}
+si l'effet de la variable explicative $Z(t)$ --- ou la variable elle même -- varie en fonction du temps.
+
+# Exemple 1 - augmentation de l'âge
+
+L'âge (en années) augmente à mesure que le temps d'abonnement (en semaines) passe, d'où $\texttt{age}(t) = \texttt{age} + t/52$.
+
+
+```{r}
+#| label: interaction-temps-age
+#| echo: true
+#| eval: false
+cox_np <- survival::coxph(
+    Surv(temps, censure) ~ 
+     tt(age) + sexe + service, 
+     data = survie1, 
+     tt = function(x, t, ...){x + t/52})
+summary(cox_np)
+```
+\footnotesize 
+
+On spécifie avec l'option `tt()` dans la formule la variable qui change dans le temps et par la suite la nature de l'interaction temporelle avec l'argument `tt`.
+
+La variable qui dépend du temps doit être créée à l'intérieur de l'appel à `coxph`.
+
+
+
+# Exemple 2 - effet de service croissant
+
+Supposons que l'impact du nombre de services varie comme suit,
+\begin{align*}
+&h(t, \text{age}, \text{sexe}, \texttt{service = i}) \\ &\qquad = h_0(t)\exp(\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{age}} \texttt{age} + \beta_{\texttt{service}_i} + \beta_{\texttt{service}_i*t}t).
+\end{align*}
+
+Il faut transformer les variables catégorielles en indicateurs binaires pour que le logiciel puisse ajuster le modèle.
+
+# Code **R** pour service
+
+```{r}
+#| label: interaction-temps-service
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+# Créer variables binaires par service
+library(dplyr)
+survie1_modif <- survie1 |>
+  mutate(service1 = service == 1,
+         service2 = service == 2,
+         service3 = service == 3)
+cox_np <- survival::coxph(
+    Surv(temps, censure) ~ 
+     age + sexe + service + 
+      tt(service1) + tt(service2) + tt(service3), 
+     data = survie1_modif, 
+     tt = function(x, t, ...){t * x})
+```
+
+# Coefficients et tests
+
+```{r}
+#| label: tbl-cox-nph
+#| echo: false
+#| eval: true
+#| tbl-cap: "Rapport de risque et intervalles de confiance à niveau 95% pour le modèle à risques non proportionnels (interaction linéaire entre temps et service)."
+#| cache: true
+scnp <- summary(cox_np)$coefficients
+tab6 <- broom::tidy(cox_np,
+            exponentiate = TRUE, 
+            conf.int = TRUE)[,-c(3,6,7)]
+colnames(tab6) <- c("terme",
+                    "exp(coef)",
+                    "test de Wald",
+                    "valeur-p")
+tab6[,4] <- format.pval(tab6[,4], eps = 1e-3, digits = 3)
+knitr::kable(tab6,
+               digits = c(2,3,3),
+               booktabs = TRUE,
+             linesep = "") |>
+  kableExtra::kable_styling()
+```
+
+# Interprétation des résultats
+
+- Les coefficients pour l'interaction avec $t$ sont petits parce que la plage de $t$ (0 à 200 semaines) est énorme.
+- Les coefficients sont positifs: le risque augmente avec le temps. L'impact des rabais pour services multiples diminue avec le temps.
+- Deux des termes d'interaction sont significatifs à niveau 5% (statistiques de Wald $Z$ de `r round(summary(cox_np)$coefficients[6,4],3)`, `r round(summary(cox_np)$coefficients[7,4],3)` et `r round(summary(cox_np)$coefficients[8,4],3)` et valeurs-$p$ correspondantes de `r round(summary(cox_np)$coefficients[6,5],3)`, `r round(summary(cox_np)$coefficients[7,5],3)` et `r round(summary(cox_np)$coefficients[8,5],3)`).
+
+
 # Évolution temporelle de variables explicatives
 
 On considère une extension du modèle de Cox qui permet d'inclure des variables explicatives dont la valeur change dans le temps.
@@ -398,7 +494,8 @@ On doit formatter la base de données comme suit.
 data(survie3, package = "hecmulti")
 knitr::kable(survie3 |> dplyr::filter(id <= 5),
              digits = 0,
-             booktabs = TRUE) |>
+             booktabs = TRUE,
+             linesep = "") |>
   kableExtra::kable_styling()
 ```
 
@@ -435,18 +532,6 @@ Pour le temps de service d'un employé, on veut faire la distinction entre
 - un renvoi
 - la retraite
 
-# Modèle à risques compétitifs
-
-Supposons qu'il y a $K$ manières possibles que l'événement survienne; on spécifie une fonction de risque pour chaque manière,
-\begin{align*}
-h_1(t; \mathbf{X})&= h_{01}(t) \exp(\beta_{11}\mathrm{X}_1 + \cdots + \beta_{p1} \mathrm{X}_p)\\
-&\vdots\\
-h_K(t; \mathbf{X})&= h_{0K}(t) \exp(\beta_{1K}\mathrm{X}_1 + \cdots + \beta_{pK} \mathrm{X}_p)\\
-\end{align*}
-Notez que les coefficients sont différents d'une équation à l'autre.
-
-
-
 # Exemple
 
 
@@ -457,9 +542,42 @@ Supposons que nous avons trois causes possibles pour la perte d'un client. La va
 - `3` désabonnement pour aller chez le compétiteur B
 - `4` désabonnement parce qu'il n'a plus besoin de cellulaire.
 
+# Transition d'un état à l'autre
+
+
+:::: {.columns}
+
+::: {.column width="60%"}
+```{r}
+knitr::include_graphics("figures/transition_etats_modele_risque_competitifs.pdf")
+```
+:::
+
+::: {.column width="40%"}
+
+Modèle avec transition d'un état de base (abonné) vers un état absorbant (désabonnement, soit chez compétiteur $A$, compétiteur $B$ ou abandon du cellulaire).
+
+:::
+
+::::
+
+# Modèle à risques compétitifs
+
+Pour estimer la probabilité d'un événement au fil du temps, on peut ajuster plusieurs modèles de Cox.
+
+On spécifie une fonction de risque pour chaque événement compétitif,
+\begin{align*}
+h_1(t; \mathbf{X})&= h_{01}(t) \exp(\beta_{11}\mathrm{X}_1 + \cdots + \beta_{p1} \mathrm{X}_p),\\
+&\vdots\\
+h_K(t; \mathbf{X})&= h_{0K}(t) \exp(\beta_{1K}\mathrm{X}_1 + \cdots + \beta_{pK} \mathrm{X}_p).\\
+\end{align*}
+Notez que les coefficients sont différents d'une équation à l'autre.
+
+On peut estimer les paramètres de chaque équation du modèle de Cox séparément sans perte de précision en modifiant la définition de l'événement. 
+
+
 # Code **R** pour risque compétitif (1)
 
-On peut estimer les paramètres de chaque équation du modèle de Cox séparément sans perte de précision. 
 
 Deux options: ajuster chaque modèle séparément en traitant tout événement autre que celui d'intérêt comme de la censure à droite.
 
@@ -502,19 +620,20 @@ knitr::kable(tab_rcA,
   kableExtra::kable_styling()
 ```
 
-Selo le modèle, le risque *de quitter pour aller chez le compétiteur A* d'une femme est 0.48 fois celui d'un homme.
+Selon le modèle, le risque *de quitter pour aller chez le compétiteur A* d'une femme est 0.48 fois celui d'un homme.
 
 # Code **R** pour risque compétitif (2)
 
-Créer une variable avec identifiant `1:n` (si une seule transition est possible).
+Créer une variable avec identifiant $1, \ldots, n$.
 
 Passer la variable état comme **facteur**, avec transition depuis catégorie de référence (ici `censure=1`, soit abonné)
 
 ```{r}
 #| eval: true
 #| echo: true
+n <- nrow(survie4)
 surv4 <- survie4 |> 
-  dplyr::mutate(id = seq_len(dplyr::n()))
+  dplyr::mutate(id = seq_len(n))
 rc_cox <- coxph(Surv(time = temps, 
              event = factor(censure)) ~ 
                sexe + age + service,
@@ -522,9 +641,11 @@ rc_cox <- coxph(Surv(time = temps,
              id = id)
 ```
 
-# Code **R** pour risques compétitifs (Kaplan--Meier)
+\footnotesize
 
-Modèle avec transition d'un état de base (abonné) vers un état absorbant (désabonnement, soit chez compétiteur A ou B ou abandon du cellulaire).
+L'identifiant sert dans les cas où on peut transiter entre plusieurs états et il y a plusieurs observations pour un même individu.
+
+# Code **R** pour risques compétitifs (Kaplan--Meier)
 
 Ajuster le modèle multi-état avec un **facteur** pour l'événement, où la catégorie de référence est abonnement (`censure=1`).
 
@@ -556,7 +677,9 @@ Les représentations graphiques donnent la probabilité d'être dans une situati
 par(mfrow = c(1,2), bty = "l")
 plot(rc_km, noplot = NULL, 
      col = 1:4,
-     ylab = "probabilité dans l'état")
+     ylab = "probabilité dans l'état",
+     ylim = c(0,1),
+     yaxs = "i")
 legend("topright",
        legend = c("abonnement", 
                   "A","B","fin"),
@@ -564,102 +687,11 @@ legend("topright",
 plot(survfit(rc_cox, 
              newdata = hecmulti::survie4[1,]),
      noplot = NULL,
-     col = 1:4)
+     col = 1:4,
+     ylim = c(0,1),
+     yaxs = "i")
 ```
 
-
-# Risques non proportionnels
-
-Si le postulat de risques proportionnels n'est pas validé, l'effet d'au moins une des variables explicatives dépend du temps.
-
-On peut considérer une modification du modèle de Cox qui inclut une interaction avec le temps, par exemple
-\begin{align*}
-h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
-\end{align*}
-si l'effet de la variable explicative $Z$ --- ou la variable elle même -- varie en fonction du temps.
-
-# Exemple 1 - augmentation de l'âge
-
-L'âge (en années) augmente à mesure que le temps d'abonnement (en semaines) passe, d'où $\texttt{age}(t) = \texttt{age} + t/52$.
-
-
-```{r}
-#| label: interaction-temps-age
-#| echo: true
-#| eval: false
-cox_np <- survival::coxph(
-    Surv(temps, censure) ~ 
-     tt(age) + sexe + service, 
-     data = survie1, 
-     tt = function(x, t, ...){x + t/52})
-summary(cox_np)
-```
-\footnotesize 
-
-On spécifie avec l'option `tt()` dans la formule la variable qui change dans le temps et par la suite la nature de l'interaction temporelle avec l'argument `tt`.
-
-La variable qui dépend du temps doit être créée à l'intérieur de l'appel à `coxph`.
-
-
-
-# Exemple 2 - effet de service croissant
-
-Il faut transformer les variables catégorielles en indicateurs binaires.
-
-Supposons que l'impact du nombre de services varie comme suit,
-\begin{align*}
-&h(t, \text{age}, \text{sexe}, \texttt{service = i}) \\ &\qquad = h_0(t)\exp(\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{age}} \texttt{age} + \beta_{\texttt{service}_i} + \beta_{\texttt{service}_i*t}t).
-\end{align*}
-
-
-# Code **R** pour service
-
-```{r}
-#| label: interaction-temps-service
-#| echo: true
-#| eval: true
-# Créer variables binaires par service
-service_bin <- model.matrix(~service, 
-                            data = survie1)[,-1]
-# enlever ordonnée à l'origine (première colonne de uns)
-# Concaténer par colonne
-survie1m <- cbind(survie1, service_bin) 
-cox_np <- survival::coxph(
-    Surv(temps, censure) ~ 
-     age + sexe + service + 
-      tt(service1) + tt(service2) + tt(service3), 
-     data = survie1m, 
-     tt = function(x, t, ...){t * x})
-```
-
-# Coefficients et tests
-
-```{r}
-#| label: tbl-cox-nph
-#| echo: false
-#| eval: true
-#| tbl-cap: "Rapport de risque et intervalles de confiance à niveau 95% pour le modèle à risques non proportionnels (interaction linéaire entre temps et service)."
-#| cache: true
-scnp <- summary(cox_np)$coefficients
-tab6 <- broom::tidy(cox_np,
-            exponentiate = TRUE, 
-            conf.int = TRUE)[,-c(3,6,7)]
-colnames(tab6) <- c("terme",
-                    "exp(coef)",
-                    "test de Wald",
-                    "valeur-p")
-tab6[,4] <- format.pval(tab6[,4], eps = 1e-3, digits = 3)
-knitr::kable(tab6,
-               digits = c(2,3,3),
-               booktabs = TRUE) |>
-  kableExtra::kable_styling()
-```
-
-# Interprétation des résultats
-
-- Les coefficients pour l'interaction avec $t$ sont petits parce que la plage de $t$ (0 à 200 semaines) est énorme.
-- Les coefficients sont positifs: le risque augmente avec le temps. L'impact des rabais pour services multiples diminue avec le temps.
-- Deux des termes d'interaction sont significatifs à niveau 5% (statistiques de Wald $Z$ de `r round(summary(cox_np)$coefficients[6,4],3)`, `r round(summary(cox_np)$coefficients[7,4],3)` et `r round(summary(cox_np)$coefficients[8,4],3)` et valeurs-$p$ correspondantes de `r round(summary(cox_np)$coefficients[6,5],3)`, `r round(summary(cox_np)$coefficients[7,5],3)` et `r round(summary(cox_np)$coefficients[8,5],3)`).
 
 
 

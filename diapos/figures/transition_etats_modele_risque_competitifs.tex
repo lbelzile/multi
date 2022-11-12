@@ -1,0 +1,34 @@
+% Created by tikzDevice version 0.12.3.1 on 2021-05-14 16:45:18
+% !TEX encoding = UTF-8 Unicode
+\documentclass[10pt]{article}
+\usepackage{tikz}
+
+\usepackage[active,tightpage,psfixbb]{preview}
+
+\usepackage{amsmath}
+\PreviewEnvironment{pgfpicture}
+
+\setlength\PreviewBorder{0pt}
+
+\usepackage{fourier}
+
+\DeclareMathAlphabet{\mathdis}{OT1}{pag}{m}{n}
+\begin{document}
+
+\begin{tikzpicture}[x=25pt,y=25pt, auto,
+ block/.style ={rectangle, draw=blue, thick, fill=blue!20, text width=8em,align=center, rounded corners, minimum height=2em},
+ block1/.style ={rectangle, draw=blue, thick, fill=blue!20, text width=8em,align=center, rounded corners, minimum height=2em},
+ line/.style ={draw, thick, -latex',shorten >=2pt}]
+\definecolor{fillColor}{RGB}{255,255,255}
+
+\draw (-2, 0)  node[block] (A) {abonnement};
+\draw (2, 3)   node[block] (B) {abonnement};
+\draw (2, 1)   node[block] (C) {compétiteur $A$};
+\draw (2, -1)   node[block] (D) {compétiteur $B$};
+\draw (2, -3)   node[block] (E) {plus de cellulaire};
+\draw[-latex] (A) |- (B);
+\draw[-latex] (A) |- (C);
+\draw[-latex] (A) |- (D);
+\draw[-latex] (A) |- (E);
+\end{tikzpicture}
+\end{document}

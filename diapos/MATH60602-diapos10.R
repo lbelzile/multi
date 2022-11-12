@@ -4,7 +4,7 @@ library(survival)
 data(survie1, package = "hecmulti")
 # Stratification par service
  cox_strat <- coxph(
-   Surv(temps, 1-censure) ~ age + sexe + strata(service),
+   Surv(temps, censure) ~ age + sexe + strata(service),
    # si on inclut une variable (forcément catégorielle!) dans "strata",
    # cela revient à subdiviser l'échantillon selon la strate
    # et estimer le risque de base séparément pour chaque sous-groupe
@@ -115,16 +115,24 @@ cox_np <- coxph(
 ## -----------------------------------------------------------------------------
 # tt() ne gère pas les variables catégorielles, il faut donc créer des variables binaires
 # model.matrix crée la matrice du modèle avec les indicateurs
+
+survie1_modif <- survie1 |>
+  dplyr:: mutate(service1 = service == 1,
+                 service2 = service == 2,
+                 service3 = service == 3)
+# Avec plusieurs catégories,cela devient fastidieux. 
+# Voici une autre méthode plus efficace, mais moins transparente
+# Créer la matrice de modèle avec indicateurs binaires pour service
 service_bin <- model.matrix(~service, 
                             data = survie1)[,-1]
 # enlever ordonnée à l'origine (première colonne de uns)
 # Concaténer par colonne pour obtenir une base de données avec toutes les colonnes
-survie1m <- cbind(survie1, service_bin) 
+survie1_modif <- cbind(survie1, service_bin) 
 cox_np <- survival::coxph(
     Surv(temps, censure) ~ 
      age + sexe + service +  # notez que service est AUSSI incluse (effet principal)
       tt(service1) + tt(service2) + tt(service3),  # interactions avec le temps, plusieurs termes
-     data = survie1m, 
+     data = survie1_modif, 
      tt = function(x, t, ...){t * x})
 
 # Tableau résumé - on remarque que deux des trois interactions sont significatives
