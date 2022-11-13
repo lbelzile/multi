@@ -120,8 +120,8 @@ knitr::kable(x = confumat,
 ```
 Ainsi, si on fait les calculs à la main, on estime 
 
-- la spécificité $\mathsf{VN}/(\mathsf{VN} + \mathsf{FN})$, soit `r tableau[opt,"VN"]` / (`r tableau[opt,"VN"]` + `r tableau[opt,"FN"]`) ou `r round(tableau[opt,"VN"] / (tableau[opt,"VN"] + tableau[opt,"FN"]), 3)`.
-- la sensibilité $\mathsf{VP}/(\mathsf{VP} + \mathsf{FP})$, soit `r tableau[opt,"VP"]` / (`r tableau[opt,"VP"]` + `r tableau[opt,"FP"]`) ou `r round(tableau[opt,"VP"] / (tableau[opt,"VP"] + tableau[opt,"FP"]), 3)`.
+- la sensibilité, $\mathsf{VP}/(\mathsf{VP} + \mathsf{FN})$, soit `r tableau[opt,"VP"]` / (`r tableau[opt,"VP"]` + `r tableau[opt,"FN"]`) ou `r round(tableau[opt,"VP"] / (tableau[opt,"VP"] + tableau[opt,"FN"]), 3)`.
+- la spécificité, $\mathsf{VN}/(\mathsf{VN} + \mathsf{FP})$, soit `r tableau[opt,"VN"]` / (`r tableau[opt,"VN"]` + `r tableau[opt,"FP"]`) ou `r round(tableau[opt,"VN"] / (tableau[opt,"VN"] + tableau[opt,"FP"]), 3)`.
 - le taux de bonne classification $\mathsf{VN} + \mathsf{VP}/(\mathsf{VN} + \mathsf{VP} + \mathsf{FN} + \mathsf{FP})$, soit (`r tableau[opt,"VP"]` + `r tableau[opt,"VN"]`) / 1000 ou `r (tableau[opt,"VP"] + tableau[opt,"VN"])/1000`.
 
 Ces valeurs coincident, à arrondi près, avec ce qui est reporté dans le tableau.
