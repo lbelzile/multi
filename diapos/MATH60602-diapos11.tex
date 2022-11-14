@@ -195,7 +195,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden, boxrule=0pt, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, sharp corners, enhanced, borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -212,7 +212,8 @@ que
 
 Chaque observation se voit assigner une étiquette de groupe.
 
-Analyse \textbf{descriptive} des segments.
+On procède ensuite à une analyse \textbf{descriptive}, segment par
+segment.
 \end{frame}
 
 \begin{frame}{Illustration}
@@ -237,7 +238,7 @@ Pour l'analyse de regroupements, on regroupe des observations (lignes).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/tidy-data.png}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/tidy-data-sub.png}
 
 }
 
@@ -260,6 +261,12 @@ classification).
   forfaits
 \item
   Démarchage d'organismes de charité
+\item
+  Segmentation de
+  \href{https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/}{quartiers
+  de Los Angeles} et de
+  \href{https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/}{New
+  York} selon leur vote
 \end{itemize}
 \end{frame}
 
@@ -275,8 +282,8 @@ Quelles variables \(\mathrm{X}_1, \ldots, \mathrm{X}_p\) sont d'intérêt?
   Créer de nouvelles variables explicatives
 \end{itemize}
 
-Regrouper les bases de données marketing par identifiant client
-(aggrégation).
+Pour les données longitudinales, on va typiquement aggréger les bases de
+données marketing par identifiant client.
 \end{frame}
 
 \begin{frame}{Exemple avec transport en commun}
@@ -317,10 +324,10 @@ La carte Opus enregistre
 
 \begin{frame}{Diviser pour régner}
 \protect\hypertarget{diviser-pour-ruxe9gner}{}
-Souvent, il existe une division naturelle des données
+Souvent, il existe une division naturelle des données.
 
 Les jeunes avec des abonnements de transport publics l'utilisent
-principalement pour aller à l'école
+principalement pour aller à l'école.
 
 On peut faire la segmentation \textbf{séparément} pour ces sous-groupes.
 \end{frame}
@@ -412,8 +419,302 @@ tourne autour de 5\$, 10\$, 20\$, etc.
   Assigner les étiquettes aux observations et calculer un prototype de
   groupe.
 \item
-  Interpréter les regroupements obtenus.
+  Interpréter les regroupements obtenus à partir des prototypes.
 \end{enumerate}
+\end{frame}
+
+\begin{frame}{Mesures de dissemblance et de similarité}
+\protect\hypertarget{mesures-de-dissemblance-et-de-similarituxe9}{}
+Comment mesurer si deux observations appartiennent à un même
+regroupement et sont similaires?
+
+Une mesure de dissemblance sert à quantifier la proximité de deux objets
+à partir de leurs coordoonnées.
+
+Elle mesure la distance entre deux vecteurs d'observations (deux lignes
+de la base de données) et en se basant sur les variables explicatives.
+\end{frame}
+
+\begin{frame}{Mesures de dissemblance}
+\protect\hypertarget{mesures-de-dissemblance}{}
+Quelques propriétés des mesures de dissemblance:
+
+\begin{enumerate}
+\tightlist
+\item
+  positivité: la distance entre deux observations est nulle si et
+  seulement si on a les mêmes caractéristiques pour toutes les variables
+  explicatives et strictement positive sinon.
+\item
+  la dissemblance est la même peu importe l'ordre des observations
+  (symmétrie)
+\end{enumerate}
+
+Toute distance est une mesure de dissemblance.
+\end{frame}
+
+\begin{frame}{Distance Euclidienne}
+\protect\hypertarget{distance-euclidienne}{}
+La mesure de dissemblance la plus utilisée en pratique est la distance
+euclidienne entre sujets.
+
+La distance entre les vecteurs ligne \(\mathbf{X}_i\) et
+\(\mathbf{X}_j\) est \begin{align*}
+d(\mathbf{X}_i, \mathbf{X}_j; l_2) = \left\{(X_{i1}-X_{j1})^2 + \cdots + (X_{ip}-X_{jp})^2\right\}^{1/2}.
+\end{align*} C'est tout simplement la longueur du segment qui relie deux
+points dans l'espace \(p\) dimensionnel.
+\end{frame}
+
+\begin{frame}{Autres mesures de dissemblance}
+\protect\hypertarget{autres-mesures-de-dissemblance}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/distance.pdf}
+
+}
+
+\end{figure}
+
+\begin{itemize}
+\tightlist
+\item
+  La distance de Manhattan est la somme des valeurs absolues entre
+  chaque composante, \(|X_{i1}-X_{j1}| + \cdots + |X_{ip}-X_{jp}|\).
+\item
+  La distance \(l_\infty\), soit le maximum des différences entre les
+  coordonnées des vecteurs d'observations \(i\) et \(j\),
+  \(\max_{k=1}^p |X_{ik}-X_{jk}|\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Autres mesures de dissemblance}
+\protect\hypertarget{autres-mesures-de-dissemblance-1}{}
+Pour les données catégorielles nominales, on peut assigner une
+dissemblance de 0 si les variables ont la même modalité et 1 sinon.
+
+Pour le cas de variables mixtes, la distance de Gower permet de traiter
+les valeurs manquantes et standardise automatiquement.
+\end{frame}
+
+\begin{frame}{Être aux abonnés absents}
+\protect\hypertarget{uxeatre-aux-abonnuxe9s-absents}{}
+Attention aux valeurs manquantes, rarement supportées par les
+algorithmes d'analyse de regroupements.
+
+Quelques solutions
+
+\begin{itemize}
+\tightlist
+\item
+  ignorer la variable explicative
+\item
+  faire une segmentation manuelle si les valeurs manquantes déterminent
+  des regroupements (ex: temps entre dons valide uniquement pour dons
+  multiples).
+\item
+  imputer les données manquantes (voir chapitre sur les données
+  manquantes)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Au plus fort la poche}
+\protect\hypertarget{au-plus-fort-la-poche}{}
+Le poids accordé à une variable explicative dépend de son étendu et de
+sa variabilité.
+
+\begin{itemize}
+\tightlist
+\item
+  Plus la variable est grande, plus elle aura un impact dans le calcul
+  des distances
+\item
+  Problème de standardisation (résultats différents selon les unités de
+  mesure)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Standardisation}
+\protect\hypertarget{standardisation}{}
+Généralement, on standardise les données avant l'analyse de
+regroupements.
+
+\begin{itemize}
+\tightlist
+\item
+  Soustraire la moyenne et diviser par l'écart-type empiriques (fonction
+  \texttt{scale} dans \textbf{R})
+\item
+  utiliser mesures robustes: soustraire médiane et diviser par l'écart
+  absolu à la médiane (mad)
+\end{itemize}
+
+Notez qu'il est illogique de standardiser les variables catégorielles
+(déclarer obligatoirement variables en facteurs!)
+\end{frame}
+
+\begin{frame}{Mesures de similarité}
+\protect\hypertarget{mesures-de-similarituxe9}{}
+Certains algorithmes utilisent directement une matrice de similarité
+\(\mathbf{S}\) qui encode plutôt l'information à propos des points
+avoisinants.
+
+Plus les observations sont similaires, plus elles sont proches.
+
+\begin{itemize}
+\tightlist
+\item
+  toute mesure de dissimilarité peut être convertie en mesure de
+  similarité
+\item
+  similarité de Gower
+\item
+  voisinage \(\epsilon\): toute paire d'observation à distance au plus
+  \(\epsilon\) a une similarité de \(s=1\) et \(s=0\) sinon.
+\item
+  \(k\) plus proches voisins: similarité de \(S_{ij}=1\) si
+  l'observation \(\mathbf{X}_j\) est un des \(k\) plus proches voisins
+  d'observation \(\mathbf{X}_i\) (ou vice-versa)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Algorithmes pour la segmentation}
+\protect\hypertarget{algorithmes-pour-la-segmentation}{}
+L'analyse de regroupements cherche à créer une division de \(n\)
+observations de \(p\) variables en \(k\) regroupements.
+
+\begin{enumerate}
+\tightlist
+\item
+  méthodes basées sur la connectivité (regroupements hiérarchiques,
+  AGNES et DIANA)
+\item
+  méthodes basées sur les centroïdes et les médoïdes (\(k\)-moyennes,
+  \(k\)-médoides PAM, CLARA)
+\item
+  mélanges de modèles (mélanges Gaussiens, etc.)
+\item
+  méthodes basées sur la densité (DBScan)
+\item
+  méthodes spectrales
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Méthodes basées sur les centroïdes et les médoïdes}
+\protect\hypertarget{muxe9thodes-basuxe9es-sur-les-centrouxefdes-et-les-muxe9douxefdes}{}
+On assigne chaque observation à un de \(K\) regroupements (le nombre
+\(K\) est fixé apriori) représenté par un prototype, disons
+\(\boldsymbol{\mu}_k\) pour le regroupement \(k\).
+
+On cherche à assigner les observations aux groupes de manière à
+minimiser la distance avec les prototypes.
+\end{frame}
+
+\begin{frame}{\(K\) moyennes}
+\protect\hypertarget{k-moyennes}{}
+L'allocation optimale de \(n\) observations à \(K\) groupes est un
+problème NP complet.
+
+La fonction objective considère la distance totale entre observations et
+prototypes \begin{equation}\protect\hypertarget{eq-fobjKmoy}{}{
+\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\frac{1}{n}\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
+}\label{eq-fobjKmoy}\end{equation}
+\end{frame}
+
+\begin{frame}{Initialisation des \(K\)-moyennes}
+\protect\hypertarget{initialisation-des-k-moyennes}{}
+\textbf{Initialisation}: on sélectionne préalablement
+
+\begin{itemize}
+\tightlist
+\item
+  un nombre \(K\) de regroupements et
+\item
+  les coordonnées de départ pour les prototypes.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Algorithme EM}
+\protect\hypertarget{algorithme-em}{}
+L'algorithme de type EM itère entre deux étapes:
+
+\begin{enumerate}
+\tightlist
+\item
+  \textbf{Assignation} (étape E): calculer la distance entre chaque
+  observation et les prototypes; assigner chaque observation au
+  prototype le plus près.
+\item
+  \textbf{Mise à jour} (étape M): calculer les nouveaux prototypes de
+  chaque groupe --- avec la distance Euclidienne, c'est simplement le
+  barycentre (moyenne variable par variable) des observations du
+  regroupement.
+\end{enumerate}
+
+L'algorithme termine après un nombre prédéfini d'itérations ou lorsque
+l'assignation ne change plus (solution locale).
+\end{frame}
+
+\begin{frame}{Animation}
+\protect\hypertarget{animation}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-kmoy-animation.gif}
+
+}
+
+\caption{\label{fig-kmoyanimation}Animation de l'algorithme des
+\(K\)-moyennes avec \(K=3\) regroupements.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Séparation linéaire de l'espace}
+\protect\hypertarget{suxe9paration-linuxe9aire-de-lespace}{}
+Avec la distance Euclidienne, la partition de l'espace est linéaire.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-kmoy-animation.gif}
+
+}
+
+\caption{\label{fig-voronoy}Animation de l'algorithme des \(K\)-moyennes
+avec \(K=3\) regroupements.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Commentaires}
+\protect\hypertarget{commentaires}{}
+Probablement la méthode de regroupement la plus populaire en raison de
+son faible coût (linéaire en \(n\) et \(p\)).
+
+Prédiction: On pourrait ainsi assigner de nouvelles observations au
+barycentre le plus près.
+\end{frame}
+
+\begin{frame}{Forces et faiblesses}
+\protect\hypertarget{forces-et-faiblesses}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(+\)) Complexité \textbf{linéaire} dans la dimension et dans le
+  nombre de variables.
+\item
+  (\(+\)) L'algorithme converge rapidement vers une solution locale
+  (garantie théorique).
+\item
+  (\(-\)) Regroupements globulaires d'apparence sphérique (distance
+  Euclidienne).
+\item
+  (\(-\)) Chaque observation est assignée à un seul des \(K\)
+  regroupements (partition rigide).
+\item
+  (\(-\)) Valeurs aberrantes pas étiquetées à part (manque de robustesse
+  pour moyenne)
+\item
+  (\(-\)) Sensible aux valeurs initiales des prototypes.
+\end{itemize}
 \end{frame}
 
 

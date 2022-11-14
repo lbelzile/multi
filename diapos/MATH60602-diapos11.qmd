@@ -72,12 +72,12 @@ theme_set(theme_classic())
 
 **Objectif**: regrouper des **observations** de telle sorte que 
 
-- les observations d’un même groupe soient le plus semblables possible,
+- les observations d'un même groupe soient le plus semblables possible,
 - les groupes soient le plus différent possible les uns des autres.
 
 Chaque observation se voit assigner une étiquette de groupe.
 
-Analyse **descriptive** des segments.
+On procède ensuite à une analyse **descriptive**, segment par segment.
 
 # Illustration
 
@@ -115,16 +115,17 @@ En analyse factorielle, on combine des variables similaires (colonnes).
 Pour l'analyse de regroupements, on regroupe des observations (lignes).
 
 ```{r}
-include_graphics(path = "figures/tidy-data.png")
+include_graphics(path = "figures/tidy-data-sub.png")
 ```
 
-Ce sont des méthodes dites d'**apprentissage non-supervisé**: l’objectif est de déduire la structure présente dans un ensemble de points $\mathbf{X}$ sans étiquette préalable (contrairement à la classification).
+Ce sont des méthodes dites d'**apprentissage non-supervisé**: l'objectif est de déduire la structure présente dans un ensemble de points $\mathbf{X}$ sans étiquette préalable (contrairement à la classification).
 
 # Exemples
 
 - Programmes de fidélisation et résolution d'entités
 - Segmentation de la clientèle de transport en commun et élaboration de forfaits 
 - Démarchage d'organismes de charité
+- Segmentation de [quartiers de Los Angeles](https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/) et de [New York](https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/) selon leur vote
 
 # Structure de la base de données
 
@@ -134,7 +135,7 @@ Quelles variables $\mathrm{X}_1, \ldots, \mathrm{X}_p$ sont d'intérêt?
 - Créer de nouvelles variables explicatives
 
 
-Regrouper les bases de données marketing par identifiant client (aggrégation).
+Pour les données longitudinales, on va typiquement aggréger les bases de données marketing par identifiant client.
 
 # Exemple avec transport en commun
 
@@ -157,9 +158,9 @@ La carte Opus enregistre
 
 # Diviser pour régner
 
-Souvent, il existe une division naturelle des données
+Souvent, il existe une division naturelle des données.
 
-Les jeunes avec des abonnements de transport publics l'utilisent principalement pour aller à l'école
+Les jeunes avec des abonnements de transport publics l'utilisent principalement pour aller à l'école.
 
 On peut faire la segmentation **séparément** pour ces sous-groupes.
 
@@ -196,7 +197,7 @@ La base de données `dons` contient `r nrow(hecmulti::dons)` observations pour `
 - Trois grandes catégories: personnes qui n'ont pas donné, dons uniques, dons multiples.
 - variables sociodémographiques, valeur des dons (min, max) et des promesses, nombre de dons, fréquence, 
 
-Une rapide exploration des données révèle que près de 61% des employé(e)s n’ont pas donné à l’organisme. 
+Une rapide exploration des données révèle que près de 61% des employé(e)s n'ont pas donné à l'organisme. 
 
 Une poignée de dons sont très élevés, mais la plupart des montants tourne autour de 5\$, 10\$, 20\$, etc.
 
@@ -209,4 +210,174 @@ Une poignée de dons sont très élevés, mais la plupart des montants tourne au
 4. Procéder à l'analyse de regroupements.
 5. Calculer une mesure de qualité.
 6. Assigner les étiquettes aux observations et calculer un prototype de groupe. 
-7. Interpréter les regroupements obtenus.
+7. Interpréter les regroupements obtenus à partir des prototypes.
+
+# Mesures de dissemblance et de similarité
+
+Comment mesurer si deux observations appartiennent à un même regroupement et sont similaires?
+
+Une mesure de dissemblance sert à quantifier la proximité de deux objets à partir de leurs coordoonnées. 
+
+Elle mesure la distance entre deux vecteurs d'observations (deux lignes de la base de données) et en se basant sur les variables explicatives.
+
+# Mesures de dissemblance
+
+Quelques propriétés des mesures de dissemblance:
+
+1. positivité: la distance entre deux observations est nulle si et seulement si on a les mêmes caractéristiques pour toutes les variables explicatives et strictement positive sinon.
+2. la dissemblance est la même peu importe l'ordre des observations (symmétrie)
+
+Toute distance est une mesure de dissemblance.
+
+# Distance Euclidienne
+
+La mesure de dissemblance la plus utilisée en pratique est la distance euclidienne entre sujets.
+
+La distance entre les vecteurs ligne $\mathbf{X}_i$ et $\mathbf{X}_j$ est
+\begin{align*}
+d(\mathbf{X}_i, \mathbf{X}_j; l_2) = \left\{(X_{i1}-X_{j1})^2 + \cdots + (X_{ip}-X_{jp})^2\right\}^{1/2}.
+\end{align*}
+C'est tout simplement la longueur du segment qui relie deux points dans l'espace $p$ dimensionnel. 
+
+# Autres mesures de dissemblance
+
+
+```{r}
+knitr::include_graphics("figures/distance.pdf")
+```
+
+- La distance de Manhattan est la somme des valeurs absolues entre chaque composante, $|X_{i1}-X_{j1}| + \cdots + |X_{ip}-X_{jp}|$.
+- La distance $l_\infty$, soit le maximum des différences entre les coordonnées des vecteurs d'observations $i$ et $j$, $\max_{k=1}^p |X_{ik}-X_{jk}|$
+
+
+
+# Autres mesures de dissemblance
+
+Pour les données catégorielles nominales, on peut assigner une dissemblance de 0 si les variables ont la même modalité et 1 sinon. 
+
+Pour le cas de variables mixtes, la distance de Gower permet de traiter
+les valeurs manquantes et standardise automatiquement.
+
+# Être aux abonnés absents
+
+Attention aux valeurs manquantes, rarement supportées par les algorithmes d'analyse de regroupements.
+
+Quelques solutions
+
+- ignorer la variable explicative
+- faire une segmentation manuelle si les valeurs manquantes déterminent des regroupements (ex: temps entre dons valide uniquement pour dons multiples).
+- imputer les données manquantes (voir chapitre sur les données manquantes)
+ 
+# Au plus fort la poche
+
+Le poids accordé à une variable explicative dépend de son étendu et de sa variabilité.
+
+- Plus la variable est grande, plus elle aura un impact dans le calcul des distances
+- Problème de standardisation (résultats différents selon les unités de mesure)
+
+# Standardisation
+
+Généralement, on standardise les données avant l'analyse de regroupements.
+
+- Soustraire la moyenne et diviser par l'écart-type empiriques (fonction `scale` dans **R**)
+- utiliser mesures robustes: soustraire médiane et diviser par l'écart absolu à la médiane (mad)
+
+
+Notez qu'il est illogique de standardiser les variables catégorielles (déclarer obligatoirement variables en facteurs!)
+
+# Mesures de similarité
+
+Certains algorithmes utilisent directement une matrice de similarité $\mathbf{S}$ qui encode plutôt l'information à propos des points avoisinants. 
+
+Plus les observations sont similaires, plus elles sont proches.
+
+- toute mesure de dissimilarité peut être convertie en mesure de similarité
+- similarité de Gower
+- voisinage $\epsilon$: toute paire d'observation à distance au plus $\epsilon$ a une similarité de $s=1$ et $s=0$ sinon.
+- $k$ plus proches voisins: similarité de $S_{ij}=1$ si l'observation $\mathbf{X}_j$ est un des $k$ plus proches voisins d'observation $\mathbf{X}_i$ (ou vice-versa)
+
+
+# Algorithmes pour la segmentation
+
+L'analyse de regroupements cherche à créer une division de $n$ observations de $p$ variables en $k$ regroupements.
+
+1. méthodes basées sur la connectivité (regroupements hiérarchiques, AGNES et DIANA)
+2. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides  PAM, CLARA)
+3. mélanges de modèles (mélanges Gaussiens, etc.)
+4. méthodes basées sur la densité (DBScan)
+5. méthodes spectrales
+
+# Méthodes basées sur les centroïdes et les médoïdes 
+
+
+On assigne chaque observation à un de $K$ regroupements (le nombre $K$ est fixé apriori) représenté par un prototype, disons $\boldsymbol{\mu}_k$ pour le regroupement $k$. 
+
+On cherche à assigner les observations aux groupes de manière à minimiser la distance avec les prototypes.
+
+# $K$ moyennes
+
+L'allocation optimale de $n$ observations à $K$ groupes est un problème NP complet.
+
+La fonction objective considère la distance totale entre observations et prototypes
+$$
+\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\frac{1}{n}\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
+$$ {#eq-fobjKmoy}
+
+# Initialisation des $K$-moyennes
+
+**Initialisation**: on sélectionne préalablement 
+
+- un nombre $K$ de regroupements et 
+- les coordonnées de départ pour les prototypes. 
+
+
+# Algorithme EM
+
+L'algorithme de type EM itère entre deux étapes:
+
+1. **Assignation** (étape E): calculer la distance entre chaque observation et les prototypes; assigner chaque observation au prototype le plus près.
+2. **Mise à jour** (étape M): calculer les nouveaux prototypes de chaque groupe --- avec la distance Euclidienne, c'est simplement le barycentre (moyenne variable par variable) des observations du regroupement.
+
+L'algorithme termine après un nombre prédéfini d'itérations ou lorsque l'assignation ne change plus (solution locale).
+
+# Animation
+
+Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroupements_files/figure-html/fig-kmoy-animation-.gif).
+
+```{r}
+#| eval: false
+#| echo: false
+#| label: fig-kmoyanimation
+#| fig-cap: "Animation de l'algorithme des $K$-moyennes avec $K=3$ regroupements."
+knitr::include_graphics("figures/fig-kmoy-animation.gif")
+```
+
+# Séparation linéaire de l'espace
+
+Avec la distance Euclidienne, la partition de l'espace est linéaire.
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-voronoy
+#| fig-cap: "Animation de l'algorithme des $K$-moyennes avec $K=3$ regroupements."
+knitr::include_graphics("figures/fig-kmoy-animation.gif")
+```
+
+
+
+# Commentaires
+
+Probablement la méthode de regroupement la plus populaire en raison de son faible coût (linéaire en $n$ et $p$).
+
+Prédiction: On pourrait ainsi assigner de nouvelles observations au barycentre le plus près.
+
+# Forces et faiblesses
+
+- ($+$) Complexité **linéaire** dans la dimension et dans le nombre de variables.
+- ($+$) L'algorithme converge rapidement vers une solution locale (garantie théorique).
+- ($-$) Regroupements globulaires d'apparence sphérique (distance Euclidienne). 
+- ($-$) Chaque observation est assignée à un seul des $K$ regroupements (partition rigide). 
+- ($-$) Valeurs aberrantes pas étiquetées à part (manque de robustesse pour moyenne)
+- ($-$) Sensible aux valeurs initiales des prototypes.
+
