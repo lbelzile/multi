@@ -84,6 +84,46 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
@@ -195,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, sharp corners, enhanced, borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, sharp corners, boxrule=0pt, enhanced, interior hidden, borderline west={3pt}{0pt}{shadecolor}, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -267,6 +307,9 @@ classification).
   de Los Angeles} et de
   \href{https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/}{New
   York} selon leur vote
+\item
+  \href{https://www.cbc.ca/news/canada/calgary/danielle-smith-alberta-moderate-middle-ucp-ndp-poll-1.6651460}{Profils
+  des électeurs albertains}
 \end{itemize}
 \end{frame}
 
@@ -423,6 +466,40 @@ tourne autour de 5\$, 10\$, 20\$, etc.
 \end{enumerate}
 \end{frame}
 
+\begin{frame}[fragile]{Modification des données}
+\protect\hypertarget{modification-des-donnuxe9es}{}
+On se concentre sur les personnes qui ont fait plusieurs dons.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{donsmult }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{dons }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(ndons }\SpecialCharTok{\textgreater{}}\NormalTok{ 1L) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{mtdons =}\NormalTok{ vdons}\SpecialCharTok{/}\NormalTok{ndons,}
+         \AttributeTok{snrefus =}\NormalTok{ nrefus}\SpecialCharTok{/}\NormalTok{anciennete}\SpecialCharTok{*}\FunctionTok{mean}\NormalTok{(anciennete),}
+         \AttributeTok{mpromesse =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{           npromesse }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{\textasciitilde{}}\NormalTok{ vpromesse}\SpecialCharTok{/}\NormalTok{npromesse,}
+           \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \DecValTok{0}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{c}\NormalTok{(}
+\NormalTok{    vradiations, }\CommentTok{\# valeurs manquantes}
+\NormalTok{    nindecis, vdons, ddonsmax,}
+\NormalTok{    ddonsmin, vdonsmin, npromesse,}
+\NormalTok{    vpromesse, nrefus, nradiations)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{relocate}\NormalTok{(mtdons)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Corrélation pour nouvelles données}
+\protect\hypertarget{corruxe9lation-pour-nouvelles-donnuxe9es}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-6-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
 \begin{frame}{Mesures de dissemblance et de similarité}
 \protect\hypertarget{mesures-de-dissemblance-et-de-similarituxe9}{}
 Comment mesurer si deux observations appartiennent à un même
@@ -496,6 +573,27 @@ Pour le cas de variables mixtes, la distance de Gower permet de traiter
 les valeurs manquantes et standardise automatiquement.
 \end{frame}
 
+\begin{frame}[fragile]{Dissemblances dans \textbf{R}}
+\protect\hypertarget{dissemblances-dans-r}{}
+Avec notre base de données \texttt{donsmult}, le stockage des distances
+prend environ 1.5GB!
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Distance Euclidienne, de Manhattan, de Gower}
+\NormalTok{d1 }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(donsmult, }\AttributeTok{method =} \StringTok{"euclidean"}\NormalTok{)}
+\NormalTok{d2 }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(donsmult, }\AttributeTok{method =} \StringTok{"minkowski"}\NormalTok{, }\AttributeTok{p =} \DecValTok{1}\NormalTok{)}
+\NormalTok{d3 }\OtherTok{\textless{}{-}}\NormalTok{ cluster}\SpecialCharTok{::}\FunctionTok{daisy}\NormalTok{(donsmult, }\AttributeTok{metric =} \StringTok{"gower"}\NormalTok{)}
+\CommentTok{\# Voir aussi ?flexclust::dist2}
+\end{Highlighting}
+\end{Shaded}
+
+\footnotesize
+
+Les objets de class \texttt{dist} ne stockent que la matrice
+triangulaire inférieure (symmétrie).
+\end{frame}
+
 \begin{frame}{Être aux abonnés absents}
 \protect\hypertarget{uxeatre-aux-abonnuxe9s-absents}{}
 Attention aux valeurs manquantes, rarement supportées par les
@@ -552,29 +650,23 @@ Notez qu'il est illogique de standardiser les variables catégorielles
 (déclarer obligatoirement variables en facteurs!)
 \end{frame}
 
-\begin{frame}{Mesures de similarité}
-\protect\hypertarget{mesures-de-similarituxe9}{}
-Certains algorithmes utilisent directement une matrice de similarité
-\(\mathbf{S}\) qui encode plutôt l'information à propos des points
-avoisinants.
-
-Plus les observations sont similaires, plus elles sont proches.
-
-\begin{itemize}
-\tightlist
-\item
-  toute mesure de dissimilarité peut être convertie en mesure de
-  similarité
-\item
-  similarité de Gower
-\item
-  voisinage \(\epsilon\): toute paire d'observation à distance au plus
-  \(\epsilon\) a une similarité de \(s=1\) et \(s=0\) sinon.
-\item
-  \(k\) plus proches voisins: similarité de \(S_{ij}=1\) si
-  l'observation \(\mathbf{X}_j\) est un des \(k\) plus proches voisins
-  d'observation \(\mathbf{X}_i\) (ou vice-versa)
-\end{itemize}
+\begin{frame}[fragile]{Standardisation avec \textbf{R}}
+\protect\hypertarget{standardisation-avec-r}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Standardisation usuelle}
+\CommentTok{\# (soustraire la moyenne, diviser par écart{-}type)}
+\NormalTok{donsmult\_std }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(donsmult)}
+\CommentTok{\# Extraire moyenne et écart{-}type}
+\NormalTok{dm\_moy }\OtherTok{\textless{}{-}} \FunctionTok{attr}\NormalTok{(donsmult\_std, }\StringTok{"scaled:center"}\NormalTok{)}
+\NormalTok{dm\_std }\OtherTok{\textless{}{-}} \FunctionTok{attr}\NormalTok{(donsmult\_std, }\StringTok{"scaled:scale"}\NormalTok{)}
+\CommentTok{\# Standardisation robuste}
+\NormalTok{donsmult\_std\_rob }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}
+\NormalTok{  donsmult,}
+  \AttributeTok{MARGIN =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{FUN =} \ControlFlowTok{function}\NormalTok{(x)\{(x }\SpecialCharTok{{-}} \FunctionTok{median}\NormalTok{(x))}\SpecialCharTok{/}\FunctionTok{mad}\NormalTok{(x)\})}
+\end{Highlighting}
+\end{Shaded}
 \end{frame}
 
 \begin{frame}{Algorithmes pour la segmentation}
@@ -599,6 +691,20 @@ observations de \(p\) variables en \(k\) regroupements.
 \end{enumerate}
 \end{frame}
 
+\begin{frame}{Critères pour sélection}
+\protect\hypertarget{crituxe8res-pour-suxe9lection}{}
+\begin{itemize}
+\tightlist
+\item
+  Complexité: plus un algorithme a une complexité élevée (temps de
+  calcul et de stockage), moins il sera susceptible d'être applicable à
+  des mégadonnées.
+\item
+  Choix des hyperparamètres: plusieurs paramètres (nombre de groupes,
+  rayon, choix de la dissemblance, etc.) à spécifier selon les méthodes.
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Méthodes basées sur les centroïdes et les médoïdes}
 \protect\hypertarget{muxe9thodes-basuxe9es-sur-les-centrouxefdes-et-les-muxe9douxefdes}{}
 On assigne chaque observation à un de \(K\) regroupements (le nombre
@@ -611,13 +717,16 @@ minimiser la distance avec les prototypes.
 
 \begin{frame}{\(K\) moyennes}
 \protect\hypertarget{k-moyennes}{}
-L'allocation optimale de \(n\) observations à \(K\) groupes est un
-problème NP complet.
+Probablement la méthode de regroupement la plus populaire en raison de
+son faible coût (linéaire en \(n\) et \(p\)).
 
 La fonction objective considère la distance totale entre observations et
 prototypes \begin{equation}\protect\hypertarget{eq-fobjKmoy}{}{
 \min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\frac{1}{n}\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
 }\label{eq-fobjKmoy}\end{equation}
+
+L'allocation optimale de \(n\) observations à \(K\) groupes est un
+problème NP complet.
 \end{frame}
 
 \begin{frame}{Initialisation des \(K\)-moyennes}
@@ -645,27 +754,15 @@ L'algorithme de type EM itère entre deux étapes:
   prototype le plus près.
 \item
   \textbf{Mise à jour} (étape M): calculer les nouveaux prototypes de
-  chaque groupe --- avec la distance Euclidienne, c'est simplement le
-  barycentre (moyenne variable par variable) des observations du
-  regroupement.
+  chaque groupe.
 \end{enumerate}
 
 L'algorithme termine après un nombre prédéfini d'itérations ou lorsque
 l'assignation ne change plus (solution locale).
-\end{frame}
 
-\begin{frame}{Animation}
-\protect\hypertarget{animation}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-kmoy-animation.gif}
-
-}
-
-\caption{\label{fig-kmoyanimation}Animation de l'algorithme des
-\(K\)-moyennes avec \(K=3\) regroupements.}
-
-\end{figure}
+Visionner l'animation
+\href{https://lbelzile.github.io/math60602/03-regroupements_files/figure-html/fig-kmoy-animation-.gif}{en
+ligne}.
 \end{frame}
 
 \begin{frame}{Séparation linéaire de l'espace}
@@ -674,29 +771,19 @@ Avec la distance Euclidienne, la partition de l'espace est linéaire.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-kmoy-animation.gif}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-voronoikmoy.png}
 
 }
 
-\caption{\label{fig-voronoy}Animation de l'algorithme des \(K\)-moyennes
-avec \(K=3\) regroupements.}
+\caption{\label{fig-voronoy}Partitions de Voronoï pour les regroupements
+avec séparateur linéaire.}
 
 \end{figure}
-\end{frame}
-
-\begin{frame}{Commentaires}
-\protect\hypertarget{commentaires}{}
-Probablement la méthode de regroupement la plus populaire en raison de
-son faible coût (linéaire en \(n\) et \(p\)).
-
-Prédiction: On pourrait ainsi assigner de nouvelles observations au
-barycentre le plus près.
 \end{frame}
 
 \begin{frame}{Forces et faiblesses}
 \protect\hypertarget{forces-et-faiblesses}{}
 \begin{itemize}
-\tightlist
 \item
   (\(+\)) Complexité \textbf{linéaire} dans la dimension et dans le
   nombre de variables.
@@ -707,13 +794,376 @@ barycentre le plus près.
   (\(-\)) Regroupements globulaires d'apparence sphérique (distance
   Euclidienne).
 \item
-  (\(-\)) Chaque observation est assignée à un seul des \(K\)
-  regroupements (partition rigide).
+  (\(+\)) Pour les prédictions, on peut assigner les nouvelles
+  observations au barycentre le plus près. \# Performance
 \item
-  (\(-\)) Valeurs aberrantes pas étiquetées à part (manque de robustesse
-  pour moyenne)
+  (\(-\)) Chaque observation est assignée à un seul des \(K\)
+  regroupements (partition rigide). - (\(-\)) Valeurs aberrantes pas
+  étiquetées à part (manque de robustesse pour moyenne).
 \item
   (\(-\)) Sensible aux valeurs initiales des prototypes.
+\item
+  (\(-\)) Les prototypes ne correspondent pas à des observations du
+  groupe.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Performance des \(K\)-moyennes}
+\protect\hypertarget{performance-des-k-moyennes}{}
+Illustration de segmentations problématiques avec \(K\)-moyennes
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/kmoyperfo-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Hyperparamètres avec \(K\)-moyennes}
+\protect\hypertarget{hyperparamuxe8tres-avec-k-moyennes}{}
+\begin{enumerate}
+\tightlist
+\item
+  le choix de la mesure de distance
+\item
+  les valeurs initiales des prototypes
+\item
+  le nombre de groupes \(K\)
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Distance}
+\protect\hypertarget{distance}{}
+Avec la distance Euclidienne \(l_2\), les prototypes correspondent avec
+le barycentre (moyenne variable par variable) des observations du
+regroupement.
+
+Avec la distance de Manhattan \(l_1\), les prototypes correspondent avec
+la médiane variable par variable (\(K\)-médianes).
+
+Autrement, optimisation nécessaire dans l'étape \(M\) de l'algorithme.
+\end{frame}
+
+\begin{frame}{Initialisation}
+\protect\hypertarget{initialisation}{}
+Choisir aléatoirement \(K\) observations dans la base de données.
+
+Répéter plusieurs fois et prendre la segmentation avec la valeur
+optimale de la fonction objective.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/fig-kmoyenne-mauvais-1.pdf}
+
+}
+
+\caption{\label{fig-kmoyenne-mauvais}Résultat d'une analyse de
+regroupement avec \(K=3\) groupes avec une mauvaise initialisation
+principale (gauche) et une bonne initialisation (droite).}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{K-moyennes dans \textbf{R}}
+\protect\hypertarget{k-moyennes-dans-r}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
+\NormalTok{kmoy5 }\OtherTok{\textless{}{-}} \FunctionTok{kmeans}\NormalTok{(}
+   \AttributeTok{x =}\NormalTok{ donsmult\_std, }\CommentTok{\# données}
+   \AttributeTok{centers =}\NormalTok{ 5L, }\CommentTok{\# nb groupes}
+   \AttributeTok{nstart =} \DecValTok{10}\NormalTok{, }\CommentTok{\# nb initialisation aléatoire}
+   \AttributeTok{iter.max =} \DecValTok{25}\NormalTok{) }\CommentTok{\# nb étapes maximum dans optimisation }
+
+\NormalTok{kmoy5}\SpecialCharTok{$}\NormalTok{cluster }\CommentTok{\# étiquettes}
+\NormalTok{kmoy5}\SpecialCharTok{$}\NormalTok{size }\CommentTok{\# répartition}
+\NormalTok{kmoy5}\SpecialCharTok{$}\NormalTok{tot.withinss }\CommentTok{\# fonction objective minimal}
+\NormalTok{kmoy5}\SpecialCharTok{$}\NormalTok{centers }\CommentTok{\# barycentres (données standardisées)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Algorithme des \(K\)-moyennes\({}^{++}\)}
+\protect\hypertarget{algorithme-des-k-moyennes}{}
+Choisir des observations comme valeurs initiales, mais avec
+échantillonnage préférentiel (points éloignés les uns des autres).
+
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\tightlist
+\item
+  sélectionner une observation au hasard pour \(\boldsymbol{\mu}_1\)
+\end{enumerate}
+
+Pour \(k=2, \ldots, K\)
+
+\begin{enumerate}
+\tightlist
+\item
+  calcul de la distance carrée minimale entre l'observation
+  \(\mathbf{X}_i\) et les prototypes précédemment choisis,
+  \begin{align*}
+  p_i = \min \{d(\mathbf{X}_i, \boldsymbol{\mu}_1; l_2)^2, \ldots, d(\mathbf{X}_i, \boldsymbol{\mu}_{k-1}; l_2)^2)\}
+  \end{align*}
+\item
+  Choisir le prototype initial \(\boldsymbol{\mu}_k\) au hasard parmi
+  les observations avec une probabilité de \(p_i/\sum_{j} p_j\) pour
+  l'observation \(\mathbf{X}_i\).
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{\(K\)-moyennes\({}^{++}\) dans \textbf{R}}
+\protect\hypertarget{k-moyennes-dans-r-1}{}
+Utiliser le paquet \texttt{flexclust}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
+\NormalTok{kmoypp5 }\OtherTok{\textless{}{-}}\NormalTok{ flexclust}\SpecialCharTok{::}\FunctionTok{kcca}\NormalTok{(}
+  \AttributeTok{x =}\NormalTok{ donsmult\_std,}
+  \AttributeTok{k =} \DecValTok{5}\NormalTok{, }\CommentTok{\# nb groupes}
+  \AttributeTok{family =}\NormalTok{ flexclust}\SpecialCharTok{::}\FunctionTok{kccaFamily}\NormalTok{(}\StringTok{"kmeans"}\NormalTok{),}
+  \AttributeTok{control =} \FunctionTok{list}\NormalTok{(}\AttributeTok{initcent =} \StringTok{"kmeanspp"}\NormalTok{))}
+\CommentTok{\# Vérifier répartition}
+\NormalTok{kmed5}\SpecialCharTok{@}\NormalTok{clusinfo}
+\CommentTok{\# Coordonnées des prototypes standardisés}
+\NormalTok{kmed5}\SpecialCharTok{@}\NormalTok{centers}
+\CommentTok{\# Étiquettes}
+\NormalTok{kmed5}\SpecialCharTok{@}\NormalTok{cluster}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Choix du nombre de regroupements}
+\protect\hypertarget{choix-du-nombre-de-regroupements}{}
+Plusieurs critères généralement applicables
+
+\begin{itemize}
+\tightlist
+\item
+  silhouettes (\texttt{cluster::silhouette})
+\item
+  statistique d'écart (\texttt{cluster::clusGap})
+\end{itemize}
+
+Critères plus spécifiques aux \(K\)-moyennes rattachés à la fonction
+objective
+
+\begin{itemize}
+\tightlist
+\item
+  graphique du \(R^2\)
+\item
+  critère d'information bayésien ``BIC''
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Somme du carré des distances intra-groupes}
+\protect\hypertarget{somme-du-carruxe9-des-distances-intra-groupes}{}
+La fonction objective de l'Equation~\ref{eq-fobjKmoy} avec la distance
+Euclidienne représente la somme du carré des distances (SCD)
+\begin{align*}
+\mathsf{SCD}_K &= \mathsf{SCD}_{1,K} + \cdots + \mathsf{SCD}_{K,K};
+\intertext{où}
+\mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|_2,
+\end{align*} est la somme des distance \(l_2\) entre les observation du
+groupe \(G_k\) et leur barycentre \(\boldsymbol{\mu}_k\).
+
+Avec un seul groupe, la distance par rapport à la moyenne est
+\(\mathsf{SCT} = \mathsf{SCD}_{1}\).
+\end{frame}
+
+\begin{frame}{Somme du carré des distances}
+\protect\hypertarget{somme-du-carruxe9-des-distances}{}
+La valeur optimale de la somme du carré des distances mesure va
+mécaniquement\({}^{*}\) diminuer quand \(K\) augmente
+\(\mathsf{SCD}_1 > \mathsf{SCD}_2 \cdots\).
+
+En pratique, cela peut ne pas être le cas si le minimum local est
+sous-optimal.
+
+Si la réduction de la somme du carré des distances est négligeable, on
+pourrait penser que l'ajout d'un groupe supplémentaire.
+\end{frame}
+
+\begin{frame}{Critères \(R^2\) et ``BIC''}
+\protect\hypertarget{crituxe8res-r2-et-bic}{}
+On peut mesurer le pourcentage de variance expliquée,
+\[R^2_K = 1-\frac{\mathsf{SCD}_K}{\mathsf{SCT}}.\]
+
+On cherche un point d'inflexion (coude) à partir duquel l'amélioration
+est négligeable.
+
+Puisque la somme du carré des distances diminue avec \(K\), on peut
+considérer l'ajout d'une pénalité pour le nombre de paramètres estimés
+
+\[\textsf{BIC}=\mathsf{SCD}_K + \ln(n)Kp\]
+
+La plus petite valeur du ``\(\textsf{BIC}\)'' est préférable.
+\end{frame}
+
+\begin{frame}{Graphique de coefficient de détermination \(R^2\)}
+\protect\hypertarget{graphique-de-coefficient-de-duxe9termination-r2}{}
+Le pourcentage de variance expliqué augmente de manière plus ou moins
+constante jusqu'à 8 ou 9 composantes.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-16-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Critère BIC}
+\protect\hypertarget{crituxe8re-bic}{}
+Le critère suggère aussi un nombre élevé de regroupements, ici 15
+(nombre maximum de 15).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-17-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Silhouettes}
+\protect\hypertarget{silhouettes}{}
+Pour chaque observation \(\mathbf{X}_i\), on calcule
+
+\begin{itemize}
+\tightlist
+\item
+  \(a_i\), la moyenne des dissimilarités entre \(\mathbf{X}_i\) et les
+  observations de son regroupement
+\item
+  \(b_i\), le minimum parmi les \(K-1\) dissimilarités moyennes entre
+  \(\mathbf{X}_i\) et les observations de chaque autre regroupement.
+\end{itemize}
+
+On calcule la silhouette \[s_i=\frac{b_i-a_i}{\max\{a_i, b_i\}}\]
+
+Il est possible que la silhouette \(s_i\) soit négative: cela indique
+généralement des observations mal regroupées.
+
+De bons regroupements seront obtenus si la silhouette moyenne est
+élevée.
+\end{frame}
+
+\begin{frame}{Graphique des silhouettes}
+\protect\hypertarget{graphique-des-silhouettes}{}
+\footnotesize
+
+Coûteux en calcul (nécessite matrice de dissemblance), possible de faire
+avec un sous-échantillon aléatoire.
+
+La segmentation de droite de la Figure~\ref{fig-silhouette} est
+supérieure parce que les regroupements sont plus homogènes et mieux
+équilibrés.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/fig-silhouette-1.pdf}
+
+}
+
+\caption{\label{fig-silhouette}Profil des silhouettes pour deux
+regroupements d'un jeu de données.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Silhouettes avec segmentation des \(K\)-moyennes}
+\protect\hypertarget{silhouettes-avec-segmentation-des-k-moyennes}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-19-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Règle importante pour le choix de \(K\)}
+\protect\hypertarget{ruxe8gle-importante-pour-le-choix-de-k}{}
+Utilisez votre jugement (et le gros bon sens).
+
+Les segments doivent être interprétables.
+
+Vérifiez que la taille des segments n'est pas fortement débalancée.
+\end{frame}
+
+\begin{frame}{Statistiques descriptives par segment}
+\protect\hypertarget{statistiques-descriptives-par-segment}{}
+\footnotesize
+
+\hypertarget{tbl-kmoy5resume}{}
+\begin{table}
+\caption{\label{tbl-kmoy5resume}Moyenne des variables explicatives par segment (segmentation avec
+K-moyennes et cinq regroupements). }\tabularnewline
+
+\centering
+\begin{tabular}{lrrrrr}
+\toprule
+  & 1 & 2 & 3 & 4 & 5\\
+\midrule
+décompte & 991 & 77 & 4480 & 4231 & 3838\\
+mtdons & 13.91 & 408.42 & 15.33 & 12.11 & 24.16\\
+ndons & 2.97 & 12.16 & 3.98 & 4.61 & 13.64\\
+recence & 64.62 & 60.55 & 29.02 & 172.41 & 27.72\\
+anciennete & 219.36 & 259.48 & 83.25 & 247.80 & 252.41\\
+vdonsmax & 22.39 & 991.30 & 22.55 & 19.23 & 58.90\\
+ddons & 7.50 & 1.91 & 1.60 & 1.87 & 1.65\\
+nrefusconsec & 1.82 & 0.56 & 0.62 & 3.16 & 0.47\\
+snrefus & 3.18 & 0.87 & 4.24 & 2.72 & 1.05\\
+mpromesse & 15.32 & 554.82 & 17.67 & 7.63 & 44.24\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Interprétation des segments}
+\protect\hypertarget{interpruxe9tation-des-segments}{}
+Les regroupements obtenus sont interprétables:
+
+\begin{itemize}
+\tightlist
+\item
+  Groupe 1: Petits donateurs, faible nombre de dons. N'ont pas donné
+  depuis longtemps. Refus fréquents et délai entre dons élevés
+\item
+  Groupe 2: Grands donateurs fidèles: plus petit groupe. Ces personnes
+  ont fait plusieurs dons, leur valeur maximale est élevée. N'ont pas
+  donné récemment.
+\item
+  Groupe 3: Petits donateurs récidivistes. Dons plus élevés que la
+  moyenne mais beaucoup de dons de faible valeur et peu fréquents.
+\item
+  Groupe 4: Petits nouveaux. Moins d'ancienneté, dons fréquents et refus
+  fréquents relativement à l'ancienneté.
+\item
+  Groupe 5: Petits donateurs inactifs. Plutôt anciens, plusieurs refus.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif}{}
+\begin{itemize}
+\tightlist
+\item
+  L'analyse de regroupement (\emph{clustering}) est une méthode
+  d'apprentissage non-supervisée
+\item
+  Plusieurs choix de l'analyste (mesure de dissemblance, algorithme,
+  choix des hyperparamètres) peut donner une segmentation différente
+\item
+  L'algorithme des \(K\)-moyennes est le plus employé et son faible coût
+  permet son utilisation avec des mégadonnées.
 \end{itemize}
 \end{frame}
 

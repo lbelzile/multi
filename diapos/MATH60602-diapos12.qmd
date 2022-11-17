@@ -1,0 +1,16 @@
+
+
+# Mesures de similarité
+
+Certains algorithmes utilisent directement une matrice de similarité $\mathbf{S}$ qui encode plutôt l'information à propos des points avoisinants. 
+
+Plus les observations sont similaires, plus elles sont proches.
+
+Les mesures dissemblance peuvent être convertie en mesure de similarité.
+
+En haute dimension, il est intéressant d'obtenir une matrice de similarité creuse (avec beaucoup de zéros).
+
+- Méthodes de noyau à support compact
+- voisinage $\epsilon$: toute paire d'observation à distance au plus $\epsilon$ a une similarité de $s=1$ et $s=0$ sinon.
+- $k$ plus proches voisins: similarité de $S_{ij}=1$ si l'observation $\mathbf{X}_j$ est un des $k$ plus proches voisins d'observation $\mathbf{X}_i$ (ou vice-versa)
+

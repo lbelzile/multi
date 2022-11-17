@@ -126,6 +126,7 @@ Ce sont des méthodes dites d'**apprentissage non-supervisé**: l'objectif est d
 - Segmentation de la clientèle de transport en commun et élaboration de forfaits 
 - Démarchage d'organismes de charité
 - Segmentation de [quartiers de Los Angeles](https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/) et de [New York](https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/) selon leur vote
+- [Profils des électeurs albertains](https://www.cbc.ca/news/canada/calgary/danielle-smith-alberta-moderate-middle-ucp-ndp-poll-1.6651460)
 
 # Structure de la base de données
 
@@ -212,6 +213,38 @@ Une poignée de dons sont très élevés, mais la plupart des montants tourne au
 6. Assigner les étiquettes aux observations et calculer un prototype de groupe. 
 7. Interpréter les regroupements obtenus à partir des prototypes.
 
+# Modification des données
+
+On se concentre sur les personnes qui ont fait plusieurs dons.
+
+
+```{r}
+#| eval: true
+#| echo: true
+donsmult <- hecmulti::dons |>
+  filter(ndons > 1L) |>
+  mutate(mtdons = vdons/ndons,
+         snrefus = nrefus/anciennete*mean(anciennete),
+         mpromesse = case_when(
+           npromesse > 0 ~ vpromesse/npromesse,
+           TRUE ~ 0)) |>
+  select(!c(
+    vradiations, # valeurs manquantes
+    nindecis, vdons, ddonsmax,
+    ddonsmin, vdonsmin, npromesse,
+    vpromesse, nrefus, nradiations)) |>
+  relocate(mtdons)
+```
+
+# Corrélation pour nouvelles données
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '60%'
+corrplot::corrplot(cor(donsmult))
+```
+
 # Mesures de dissemblance et de similarité
 
 Comment mesurer si deux observations appartiennent à un même regroupement et sont similaires?
@@ -258,6 +291,24 @@ Pour les données catégorielles nominales, on peut assigner une dissemblance de
 Pour le cas de variables mixtes, la distance de Gower permet de traiter
 les valeurs manquantes et standardise automatiquement.
 
+# Dissemblances dans **R**
+
+Avec notre base de données `donsmult`, le stockage des distances prend environ 1.5GB!
+
+```{r}
+#| eval: false
+#| echo: true
+# Distance Euclidienne, de Manhattan, de Gower
+d1 <- dist(donsmult, method = "euclidean")
+d2 <- dist(donsmult, method = "minkowski", p = 1)
+d3 <- cluster::daisy(donsmult, metric = "gower")
+# Voir aussi ?flexclust::dist2
+```
+
+\footnotesize 
+
+Les objets de class `dist` ne stockent que la matrice triangulaire inférieure (symmétrie).
+
 # Être aux abonnés absents
 
 Attention aux valeurs manquantes, rarement supportées par les algorithmes d'analyse de regroupements.
@@ -285,17 +336,23 @@ Généralement, on standardise les données avant l'analyse de regroupements.
 
 Notez qu'il est illogique de standardiser les variables catégorielles (déclarer obligatoirement variables en facteurs!)
 
-# Mesures de similarité
+# Standardisation avec **R**
 
-Certains algorithmes utilisent directement une matrice de similarité $\mathbf{S}$ qui encode plutôt l'information à propos des points avoisinants. 
-
-Plus les observations sont similaires, plus elles sont proches.
-
-- toute mesure de dissimilarité peut être convertie en mesure de similarité
-- similarité de Gower
-- voisinage $\epsilon$: toute paire d'observation à distance au plus $\epsilon$ a une similarité de $s=1$ et $s=0$ sinon.
-- $k$ plus proches voisins: similarité de $S_{ij}=1$ si l'observation $\mathbf{X}_j$ est un des $k$ plus proches voisins d'observation $\mathbf{X}_i$ (ou vice-versa)
-
+```{r}
+#| eval: true
+#| echo: true
+# Standardisation usuelle
+# (soustraire la moyenne, diviser par écart-type)
+donsmult_std <- scale(donsmult)
+# Extraire moyenne et écart-type
+dm_moy <- attr(donsmult_std, "scaled:center")
+dm_std <- attr(donsmult_std, "scaled:scale")
+# Standardisation robuste
+donsmult_std_rob <- apply(
+  donsmult,
+  MARGIN = 2,
+  FUN = function(x){(x - median(x))/mad(x)})
+```
 
 # Algorithmes pour la segmentation
 
@@ -307,6 +364,12 @@ L'analyse de regroupements cherche à créer une division de $n$ observations de
 4. méthodes basées sur la densité (DBScan)
 5. méthodes spectrales
 
+# Critères pour sélection
+
+- Complexité: plus un algorithme a une complexité élevée (temps de calcul et de stockage), moins il sera susceptible d'être applicable à des mégadonnées.
+- Choix des hyperparamètres: plusieurs paramètres (nombre de groupes, rayon, choix de la dissemblance, etc.) à spécifier selon les méthodes.
+
+
 # Méthodes basées sur les centroïdes et les médoïdes 
 
 
@@ -316,12 +379,15 @@ On cherche à assigner les observations aux groupes de manière à minimiser la 
 
 # $K$ moyennes
 
-L'allocation optimale de $n$ observations à $K$ groupes est un problème NP complet.
+Probablement la méthode de regroupement la plus populaire en raison de son faible coût (linéaire en $n$ et $p$).
 
 La fonction objective considère la distance totale entre observations et prototypes
 $$
 \min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\frac{1}{n}\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
 $$ {#eq-fobjKmoy}
+
+
+L'allocation optimale de $n$ observations à $K$ groupes est un problème NP complet.
 
 # Initialisation des $K$-moyennes
 
@@ -336,11 +402,11 @@ $$ {#eq-fobjKmoy}
 L'algorithme de type EM itère entre deux étapes:
 
 1. **Assignation** (étape E): calculer la distance entre chaque observation et les prototypes; assigner chaque observation au prototype le plus près.
-2. **Mise à jour** (étape M): calculer les nouveaux prototypes de chaque groupe --- avec la distance Euclidienne, c'est simplement le barycentre (moyenne variable par variable) des observations du regroupement.
+2. **Mise à jour** (étape M): calculer les nouveaux prototypes de chaque groupe.
+
+
 
 L'algorithme termine après un nombre prédéfini d'itérations ou lorsque l'assignation ne change plus (solution locale).
-
-# Animation
 
 Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroupements_files/figure-html/fig-kmoy-animation-.gif).
 
@@ -349,7 +415,7 @@ Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroup
 #| echo: false
 #| label: fig-kmoyanimation
 #| fig-cap: "Animation de l'algorithme des $K$-moyennes avec $K=3$ regroupements."
-knitr::include_graphics("figures/fig-kmoy-animation.gif")
+# knitr::include_graphics("figures/fig-kmoy-animation.gif")
 ```
 
 # Séparation linéaire de l'espace
@@ -360,24 +426,485 @@ Avec la distance Euclidienne, la partition de l'espace est linéaire.
 #| eval: true
 #| echo: false
 #| label: fig-voronoy
-#| fig-cap: "Animation de l'algorithme des $K$-moyennes avec $K=3$ regroupements."
-knitr::include_graphics("figures/fig-kmoy-animation.gif")
+#| fig-cap: "Partitions de Voronoï pour les regroupements avec séparateur linéaire."
+knitr::include_graphics("figures/fig-voronoikmoy.png")
 ```
 
 
 
-# Commentaires
-
-Probablement la méthode de regroupement la plus populaire en raison de son faible coût (linéaire en $n$ et $p$).
-
-Prédiction: On pourrait ainsi assigner de nouvelles observations au barycentre le plus près.
 
 # Forces et faiblesses
 
 - ($+$) Complexité **linéaire** dans la dimension et dans le nombre de variables.
 - ($+$) L'algorithme converge rapidement vers une solution locale (garantie théorique).
 - ($-$) Regroupements globulaires d'apparence sphérique (distance Euclidienne). 
-- ($-$) Chaque observation est assignée à un seul des $K$ regroupements (partition rigide). 
-- ($-$) Valeurs aberrantes pas étiquetées à part (manque de robustesse pour moyenne)
+- ($+$) Pour les prédictions, on peut assigner les nouvelles observations au barycentre le plus près.
+# Performance
+
+- ($-$) Chaque observation est assignée à un seul des $K$ regroupements (partition rigide). - ($-$) Valeurs aberrantes pas étiquetées à part (manque de robustesse pour moyenne).
 - ($-$) Sensible aux valeurs initiales des prototypes.
+- ($-$) Les prototypes ne correspondent pas à des observations du groupe.
+
+# Performance des $K$-moyennes
+
+Illustration de segmentations problématiques avec $K$-moyennes
+
+
+```{r}
+#| label: kmoyperfo
+#| echo: false
+#| cache: true
+#| message: false
+#| fig-width: 8
+#| fig-height: 8
+#| out-width: '80%'
+set.seed(1234)
+#https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_assumptions.html
+# Figure 9.1 in Bishop
+library(poorman)
+library(ggplot2)
+x1 <- rbind(mvtnorm::rmvnorm(n=200, mean = c(-10,-5), sigma = diag(2)),
+            mvtnorm::rmvnorm(n=200, mean = c(-2.5,0), sigma = diag(2)),
+            mvtnorm::rmvnorm(n=200, mean = c(2.5,0), sigma = diag(2)))
+x2 <- rbind(mvtnorm::rmvnorm(n=200, mean = c(-3,3), sigma = cbind(c(1,1.1), c(1.1,1.5))),
+            mvtnorm::rmvnorm(n=200, mean = c(-2,0.5), sigma = cbind(c(1,1.1), c(1.1,1.5))),
+            mvtnorm::rmvnorm(n=200, mean = c(1,1), sigma = cbind(c(1,1.1), c(1.1,1.5))))
+set.seed(1234)
+x3 <- rbind(mvtnorm::rmvnorm(n=200, mean = c(-3,2.5), sigma = diag(rep(3,2L))),
+            mvtnorm::rmvnorm(n=200, mean = c(-3,-1.5), sigma = diag(rep(0.25,2L))),
+            mvtnorm::rmvnorm(n=200, mean = c(1.5,4), sigma = diag(rep(0.5,2L))))
+df1 <- data.frame(x = x1[,1], 
+                  y = x1[,2], 
+                  class = rep(1:3, each = 200), 
+                  cluster = kmeans(x = x1, nstart = 10L, centers = 2L)$cluster)
+g1 <- ggplot(data = df1, aes(x = x, y = y, col = factor(cluster))) +
+  geom_point(show.legend = FALSE) + 
+  scale_color_manual(values=viridis::viridis(3)) + 
+  theme_minimal() + 
+  theme(
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(),
+)
+df2 <- data.frame(x = x2[,1], 
+                  y = x2[,2], 
+                  class = rep(1:3, each = 200), 
+                  cluster = kmeans(x = x2[,1:2], nstart = 10L, centers = 3L)$cluster)
+g2 <- ggplot(data = df2, aes(x=x,y=y, col = factor(cluster))) +
+  geom_point(show.legend = FALSE) + 
+  scale_color_manual(values=viridis::viridis(3)) + 
+  theme_minimal() + 
+  theme(
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(),
+)
+df3 <- data.frame(x = x3[,1], 
+                  y = x3[,2],
+                  cluster = kmeans(x = x3, nstart = 10L, centers = 3L)$cluster)
+g3 <- ggplot(data = df3, aes(x = x, y = y, col = factor(cluster))) +
+  geom_point(show.legend = FALSE) + 
+  scale_color_manual(values=viridis::viridis(3)) + 
+  theme_minimal() + 
+  theme(
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(),
+)
+x4 <- rbind(cbind(rnorm(125) + 2.5, rep(0, 125)),
+            cbind(rnorm(200) + 2.5, 1+ rexp(200, rate = 0.25) ))#mlbench::mlbench.spirals(200,1,0.025)$x
+#https://smorbieu.gitlab.io/k-means-is-not-all-about-sunshines-and-rainbows/
+# df4 <- {
+#     generateUniformData <- function(cluster, minX, maxX) {
+#         x = runif(500, min = minX, max = maxX)
+#         y = runif(500, min = -4, max = 9)
+#         data.frame(x, y) %>% mutate(class=cluster)
+#     }
+# 
+# generateUniformData(1, -4, 1) %>% bind_rows(generateUniformData(2, 3, 9)) %>%
+#   mutate(class = factor(class))
+# }
+df4 <- data.frame(x = x4[,2], 
+                  y = x4[,1], 
+                  cluster = kmeans(x = x4, nstart = 10L, centers = 2)$cluster)
+g4 <- ggplot(data = df4, aes(x = x, y = y, col = factor(cluster))) +
+  geom_point(show.legend = FALSE) + 
+  scale_color_manual(values=viridis::viridis(2)) + 
+  theme_minimal() + 
+  theme(
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(),
+)
+library(patchwork)
+(g1 + g4) / (g2 + g3)
+```
+
+
+
+# Hyperparamètres avec $K$-moyennes
+
+1. le choix de la mesure de distance
+2. les valeurs initiales des prototypes
+3. le nombre de groupes $K$ 
+
+
+# Distance
+
+Avec la distance Euclidienne $l_2$, les prototypes correspondent avec le barycentre (moyenne variable par variable) des observations du regroupement.
+
+Avec la distance de Manhattan $l_1$, les prototypes correspondent avec la médiane variable par variable ($K$-médianes).
+
+Autrement, optimisation nécessaire dans l'étape $M$ de l'algorithme.
+
+# Initialisation
+
+Choisir aléatoirement $K$ observations dans la base de données. 
+
+Répéter plusieurs fois et prendre la segmentation avec la valeur optimale de la fonction objective.
+
+
+
+```{r}
+#| label: fig-kmoyenne-mauvais
+#| echo: false
+#| eval: true
+#| fig.cap: "Résultat d'une analyse de regroupement avec $K=3$ groupes avec une mauvaise initialisation principale (gauche) et une bonne initialisation (droite)."
+set.seed(1234)
+set1 <- mvtnorm::rmvnorm(n = 300, c(14,12), matrix(c(4,0.5,0.5,5),2))
+set2 <- mvtnorm::rmvnorm(n = 300, c(5.5,-1), matrix(c(1,0.5,0.5,6),2))
+set3 <- mvtnorm::rmvnorm(n = 300, c(0,0), matrix(c(2,0,0,2),2))
+db <- rbind(set1, set2, set3)
+colnames(db) <- c("X1", "X2")
+DF <- tibble::as_tibble(db)
+
+kmoy1 <- kmeans(x = DF, 
+       centers = rbind(c(5, 0), c(0,0), c(15,10)), 
+       iter.max = 25L, 
+       algorithm = "Lloyd")
+kmoy2 <- kmeans(x = DF, 
+       centers = rbind(c(0,2.5), c(12,12), c(20,20)), 
+       iter.max = 25L, 
+       algorithm = "Lloyd")
+
+DF$cluster1 <- factor(kmoy1$cluster)
+DF$cluster2 <- factor(kmoy2$cluster)
+g1 <- ggplot(data = DF,
+       mapping = aes(x = X1, 
+                     y = X2, 
+                     color = cluster1)) +
+  geom_point() + 
+  theme_minimal() + 
+  theme(legend.position = 'none') +
+  labs(x = "",
+       y = "")
+g2 <- ggplot(data = DF,
+       mapping = aes(x = X1, 
+                     y = X2, 
+                     color = cluster2)) +
+  geom_point() + theme_minimal() +
+  theme(legend.position = 'none') +
+  labs(x = "",
+       y = "")
+g2 + g1
+```
+
+# K-moyennes dans **R**
+
+```{r}
+#| eval: false
+#| echo: true
+set.seed(60602)
+kmoy5 <- kmeans(
+   x = donsmult_std, # données
+   centers = 5L, # nb groupes
+   nstart = 10, # nb initialisation aléatoire
+   iter.max = 25) # nb étapes maximum dans optimisation 
+
+kmoy5$cluster # étiquettes
+kmoy5$size # répartition
+kmoy5$tot.withinss # fonction objective minimal
+kmoy5$centers # barycentres (données standardisées)
+```
+
+# Algorithme des $K$-moyennes${}^{++}$
+
+Choisir des observations comme valeurs initiales, mais avec échantillonnage préférentiel (points éloignés les uns des autres).
+
+0. sélectionner une observation au hasard pour $\boldsymbol{\mu}_1$
+
+Pour $k=2, \ldots, K$
+
+1. calcul de la distance carrée minimale entre l'observation $\mathbf{X}_i$ et les prototypes précédemment choisis,
+\begin{align*}
+p_i = \min \{d(\mathbf{X}_i, \boldsymbol{\mu}_1; l_2)^2, \ldots, d(\mathbf{X}_i, \boldsymbol{\mu}_{k-1}; l_2)^2)\}
+\end{align*}
+2. Choisir le prototype initial $\boldsymbol{\mu}_k$ au hasard parmi les observations avec une probabilité de $p_i/\sum_{j} p_j$ pour l'observation $\mathbf{X}_i$.
+
+#  $K$-moyennes${}^{++}$ dans **R**
+
+Utiliser le paquet `flexclust` 
+```{r}
+#| eval: false
+#| echo: true
+set.seed(60602)
+kmoypp5 <- flexclust::kcca(
+  x = donsmult_std,
+  k = 5, # nb groupes
+  family = flexclust::kccaFamily("kmeans"),
+  control = list(initcent = "kmeanspp"))
+# Vérifier répartition
+kmed5@clusinfo
+# Coordonnées des prototypes standardisés
+kmed5@centers
+# Étiquettes
+kmed5@cluster
+```
+
+# Choix du nombre de regroupements
+
+Plusieurs critères généralement applicables
+
+- silhouettes (`cluster::silhouette`)
+- statistique d'écart (`cluster::clusGap`)
+
+Critères plus spécifiques aux $K$-moyennes rattachés à la fonction objective
+
+- graphique du $R^2$
+- critère d'information bayésien "BIC"
+
+# Somme du carré des distances intra-groupes
+
+La fonction objective de l'@eq-fobjKmoy avec la distance Euclidienne représente la somme du carré des distances (SCD) 
+\begin{align*}
+\mathsf{SCD}_K &= \mathsf{SCD}_{1,K} + \cdots + \mathsf{SCD}_{K,K};
+\intertext{où}
+\mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|_2,
+\end{align*}
+est la somme des distance $l_2$ entre les observation du groupe $G_k$ et leur barycentre $\boldsymbol{\mu}_k$.
+
+Avec un seul groupe, la distance par rapport à la moyenne est $\mathsf{SCT} = \mathsf{SCD}_{1}$.
+
+
+
+# Somme du carré des distances
+
+La valeur optimale de la somme du carré des distances mesure va mécaniquement${}^{*}$ diminuer  quand $K$ augmente $\mathsf{SCD}_1 > \mathsf{SCD}_2 \cdots$.
+
+En pratique, cela peut ne pas être le cas si le minimum local est sous-optimal. 
+
+Si la réduction de la somme du carré des distances est négligeable, on pourrait penser que l'ajout d'un groupe supplémentaire.
+
+# Critères $R^2$ et "BIC"
+
+On peut mesurer le pourcentage de variance expliquée, $$R^2_K = 1-\frac{\mathsf{SCD}_K}{\mathsf{SCT}}.$$ 
+
+On cherche un point d'inflexion (coude) à partir duquel l'amélioration est négligeable.
+
+
+Puisque la somme du carré des distances diminue avec $K$, on peut considérer l'ajout d'une pénalité pour le nombre de paramètres estimés
+
+$$\textsf{BIC}=\mathsf{SCD}_K + \ln(n)Kp$$
+
+La plus petite valeur du "$\textsf{BIC}$" est préférable.
+
+# Graphique de coefficient de détermination $R^2$
+
+Le pourcentage de variance expliqué augmente de manière plus ou moins constante jusqu'à 8 ou 9 composantes.
+
+```{r}
+#| eval: true
+#| echo: false
+#| cache: true
+library(hecmulti)
+set.seed(60602)
+kmoy <- list()
+ngmax <- 15L
+for(i in seq_len(ngmax)){
+ kmoy[[i]] <- kmeans(donsmult_std,
+                     centers = i,
+                     nstart = 20,
+                     iter.max = 50)
+}
+
+# Déterminer le nombre de groupes avec critères
+
+# Somme carré intra-groupes et somme carré totale
+scd <- sapply(kmoy, function(x){x$tot.withinss})
+
+# Homogénéité et pourcentage de variance expliquée
+# Graphique du R-carré et du R-carré semi-partiel
+homogene <- homogeneite(scd, which = 1)
+```
+
+# Critère BIC
+
+Le critère suggère aussi un nombre élevé de regroupements, ici `r which.min(sapply(kmoy, BIC))` (nombre maximum de `r length(kmoy)`).
+
+```{r}
+#| eval: true
+#| echo: false
+#| cache: true
+bic_kmoy <- sapply(kmoy, BIC)
+ggplot(data = data.frame(bic = bic_kmoy,
+                         ng = seq_along(kmoy)),
+       mapping = aes(x = ng, y = bic)) +
+  geom_line() +
+  scale_x_continuous(breaks = seq_along(kmoy)) +
+  labs(x = "nombre de regroupements",
+       y = "",
+       subtitle = "Critère BIC (somme du carré des distances)") +
+  theme_classic()
+
+```
+
+# Silhouettes
+
+Pour chaque observation $\mathbf{X}_i$, on calcule
+ 
+
+- $a_i$, la moyenne des dissimilarités entre $\mathbf{X}_i$ et les observations de son regroupement
+- $b_i$, le minimum parmi les $K-1$ dissimilarités  moyennes entre $\mathbf{X}_i$ et les observations de chaque autre regroupement. 
+
+On calcule la silhouette
+$$s_i=\frac{b_i-a_i}{\max\{a_i, b_i\}}$$
+
+
+Il est possible que la silhouette $s_i$ soit négative: cela indique généralement des observations mal regroupées.
+
+De bons regroupements seront obtenus si la silhouette moyenne est élevée.
+
+# Graphique des silhouettes
+
+\footnotesize
+Coûteux en calcul (nécessite matrice de dissemblance), possible de faire avec un sous-échantillon aléatoire.
+
+La segmentation de droite de la @fig-silhouette est supérieure parce que les regroupements sont plus homogènes et mieux équilibrés.
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-silhouette
+#| fig-cap: "Profil des silhouettes pour deux regroupements d'un jeu de données."
+par(mfrow=c(1,2))
+library(cluster)
+cols <- MetBrewer::MetPalettes$Hiroshige[[1]][c(10,5,1)]
+#Même résultat avec hclust
+m1 <- cluster::agnes(x=iris[,1:4],
+                     metric = "canberra", 
+                     method = "single")
+s1 <- silhouette(cutree(m1, k = 3), dist(iris[,1:4]))
+plot(s1, 
+     main="", 
+     sub = paste0("moyenne des silhouettes: ", round(mean(s1[,3]),2)), 
+     xlab = "silhouette", 
+     col = cols) 
+abline(v=mean(s1[,3]))
+kpam <- pam(iris[,1:4], k=3)
+s.pam <- silhouette(kpam)
+plot(s.pam, 
+     main="", 
+     sub = paste0("moyenne des silhouettes: ", round(mean(s.pam[,3]),2)), 
+     xlab = "silhouette", 
+     col = cols)
+abline(v = mean(s.pam[,3]))
+```
+
+# Silhouettes avec segmentation des $K$-moyennes
+
+```{r}
+#| eval: true
+#| echo: false
+#| cache: true
+#| out-width: '80%'
+set.seed(60602)
+kmoy5 <- kmeans(
+   x = donsmult_std, # données
+   centers = 5L, # nb groupes
+   nstart = 10, # nb initialisation aléatoire
+   iter.max = 25)
+sub <- sample.int(
+  n = nrow(donsmult),
+  size = 2500)
+dist_sub <- cluster::daisy(
+  x = donsmult_std[sub,],
+  metric = "euclidean")
+scale_colour_discrete <- 
+  silhouettes_kmoy <-     
+    cluster::silhouette(x = kmoy5$cluster[sub],
+               dist = dist_sub)
+g1 <- factoextra::fviz_silhouette(silhouettes_kmoy,
+                            print.summary = FALSE)
+g1 +
+  labs(title = "",
+       y = "",
+       subtitle = "silhouette",
+       caption = "silhouette moyenne: 0.32") +
+  scale_color_manual(values  =  MetBrewer::met.brewer("Hiroshige",5)[1:5]) + 
+  theme(legend.position = "none")
+```
+
+# Règle importante pour le choix de $K$
+
+Utilisez votre jugement (et le gros bon sens). 
+
+Les segments doivent être interprétables.
+
+
+Vérifiez que la taille des segments n'est pas fortement débalancée.
+
+# Statistiques descriptives par segment
+
+\footnotesize
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: tbl-kmoy5resume
+#| tbl-cap: "Moyenne des variables explicatives par segment (segmentation avec $K$-moyennes et cinq regroupements)."
+set.seed(60602)
+kmoy5 <- kmeans(
+   x = donsmult_std, # données
+   centers = 5L, # nb groupes
+   nstart = 10, # nb initialisation aléatoire
+   iter.max = 25)
+kmoy5_tab <- donsmult |>
+  dplyr::group_by(groupe = kmoy5$cluster) |>
+  dplyr::summarise_all(mean) |> 
+  t() |>
+  as.data.frame()
+kmoy5_tab[] = lapply(kmoy5_tab, 
+                     function(x){sprintf("%.2f", x)})
+rownames(kmoy5_tab)[1] <- "décompte"
+kmoy5_tab[1,] <- as.character(table(kmoy5$cluster))
+knitr::kable(kmoy5_tab, 
+             align = "r", 
+             booktabs = TRUE,
+             row.names = TRUE, 
+             linesep = "",
+             col.names = 1:5) |>
+      kableExtra::kable_styling()
+```
+
+# Interprétation des segments
+
+Les regroupements obtenus sont interprétables:
+
+- Groupe 1: Petits donateurs, faible nombre de dons. N'ont pas donné depuis longtemps. Refus fréquents et délai entre dons élevés
+- Groupe 2: Grands donateurs fidèles: plus petit groupe. Ces personnes ont fait plusieurs dons, leur valeur maximale est élevée. N'ont pas donné récemment.
+- Groupe 3: Petits donateurs récidivistes. Dons plus élevés que la moyenne mais beaucoup de dons de faible valeur et peu fréquents.
+- Groupe 4: Petits nouveaux. Moins d'ancienneté, dons fréquents et refus fréquents relativement à l'ancienneté.
+- Groupe 5: Petits donateurs inactifs. Plutôt anciens, plusieurs refus.
+
+
+# Récapitulatif
+
+- L'analyse de regroupement (*clustering*) est une méthode d'apprentissage non-supervisée
+- Plusieurs choix de l'analyste (mesure de dissemblance, algorithme, choix des hyperparamètres) peut donner une segmentation différente
+- L'algorithme des $K$-moyennes est le plus employé et son faible coût permet son utilisation avec des mégadonnées.
+
 

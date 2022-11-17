@@ -5,7 +5,7 @@ title: "Analyse de survie"
 
 ## Exercice 5.1
 
-*@Fotopoulos.Louri:2000 considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 pour pour répondre aux questions suivantes:*
+*@Fotopoulos.Louri:2000 considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l'article pour pour répondre aux questions suivantes:*
 
 
 
@@ -36,7 +36,7 @@ Il y a 219 observations au total et $38=13+25$ firmes sont toujours en activité
 
 Non, puisque les plus grandes temps observés sont censurées et l'estimation de la fonction de survie s'arrête à 0.2921; la fonction de survie ne traverse pas la valeur horizontale de 0.25
 
-*Le tableau 3 fournit les estimations d'un modèle à risques proportionnels de Cox.*
+*Le Tableau 3 de l'article fournit les estimations d'un modèle à risques proportionnels de Cox.*
 
 6. *Comparez les modèles (1) et (2). Est-ce que l'effet de cohorte impacte la survie?*
 
@@ -100,7 +100,8 @@ quantile(km)$quantile
 Les quartiles sont 5 mois (25% des chaussures sont en inventaire moins de ce temps), 8 mois (temps médian en stock) et 12 mois (75% des chaussures sont vendues dans l'année de leur achat).
 
 3. *Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.*
-   - *Rapportez et interprétez les coefficients des variables. Est-ce que les effets estimés sont significatifs?*
+   - *Rapportez et interprétez les coefficients des variables.*
+   - *Est-ce que les effets estimés sont significatifs?*
    
 ```{r}
 modcox <- coxph(
@@ -152,16 +153,17 @@ Pour les chaussures mises au rabais on a une plage de $(0, 15]$ avec censure à 
 #| message: false
 #| warning: false
 library(dplyr)
+chaussures1 <- chaussures |>
+  dplyr::mutate(
+    temps0 = 0, 
+    # censure si chaussures invendues après 15 semaines
+    statut = ifelse(temps > 15, 1, statut),
+    # enlever rabais pour obtenir prix initial
+    prix = ifelse(temps > 15, prix/0.8, prix),
+    temps = pmin(temps, 15))
 chaussures2 <- chaussures |>
   dplyr::filter(temps > 15) |> 
-  # souliers dont le prix change
-  dplyr::mutate(prix = 0.8*prix, # 20% rabais
-                temps0 = 15) 
-chaussures1 <- chaussures |>
-  dplyr::mutate(temps0 = 0, 
-                statut = ifelse(temps > 15, 1, statut),
-  # censure si chaussures invendues après 15 semaines
-                temps = pmin(temps, 15))
+  dplyr::mutate(temps0 = 15) 
 modcox2 <- coxph(
   Surv(time = temps0, 
        time2 = temps,
@@ -184,9 +186,15 @@ h(t; \texttt{sexe}, \texttt{prix}) = h_0(t) \exp \left\{\beta_{\texttt{sexe}}\te
 Notez que, si on inclut $\texttt{prix}$ et un terme d'interaction, on se retrouverait avec deux coefficients pour le prix plutôt qu'un seul.
 
 ```{r}
+# Calculer prix initial
+chaussures <- chaussures |>
+  dplyr::mutate(
+    prixinit = ifelse(temps > 15, 
+                      prix/0.8, 
+                      prix))
 modcox3 <- coxph(
   Surv(time = temps,
-       event = statut == 0) ~ sexe + tt(prix),
+       event = statut == 0) ~ sexe + tt(prixinit),
   data = chaussures,
   tt = function(x, t, ...){ x-0.2*I(t>15)*x})
 summary(modcox3)

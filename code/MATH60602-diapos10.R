@@ -12,10 +12,55 @@ data(survie1, package = "hecmulti")
    # peut importe le service
    data = survie1)
 # Décompte par service
-with(survie1, table(service))
+with(survie1, table(service, censure))
 ## # Coefficients
 summary(cox_strat)
 
+
+## -----------------------------------------------------------------------------
+
+# Risque nonproportionnel avec interaction dans le temps
+# Il faut OBLIGATOIREMENT modifier la variable à l'intérieur de coxph
+cox_np <- coxph(
+     Surv(temps, censure) ~
+      tt(age) + sexe + service, # la variable modifiée est dans tt()
+      data = survie1,
+      # définir avec une fonction la nature de l'interaction temporelle
+      tt = function(x, t, ...){x + t/52}) 
+      
+# Le tableau résumé inclura des coefficients et des tests pour les effets      
+ summary(cox_np)
+# Remarque technique: on ne peut PAS comparer un modèle avec les effets qui dépendent du temps
+# à un modèle à risque proportionnel ordinaire en calculant la statistique du rapport de vraisemblance
+# à la main...
+
+## -----------------------------------------------------------------------------
+# tt() ne gère pas les variables catégorielles, il faut donc créer des variables binaires
+# model.matrix crée la matrice du modèle avec les indicateurs
+
+survie1_modif <- survie1 |>
+  dplyr:: mutate(service1 = service == 1,
+                 service2 = service == 2,
+                 service3 = service == 3)
+# Avec plusieurs catégories,cela devient fastidieux. 
+# Voici une autre méthode plus efficace, mais moins transparente
+# Créer la matrice de modèle avec indicateurs binaires pour service
+service_bin <- model.matrix(~service, 
+                            data = survie1)[,-1]
+# enlever ordonnée à l'origine (première colonne de uns)
+# Concaténer par colonne pour obtenir une base de données avec toutes les colonnes
+survie1_modif <- cbind(survie1, service_bin) 
+cox_np <- survival::coxph(
+    Surv(temps, censure) ~ 
+     age + sexe + service +  # notez que service est AUSSI incluse (effet principal)
+      tt(service1) + tt(service2) + tt(service3),  # interactions avec le temps, plusieurs termes
+     data = survie1_modif, 
+     tt = function(x, t, ...){t * x})
+
+# Tableau résumé - on remarque que deux des trois interactions sont significatives
+# et que l'effet n'est sans doute pas le même pour le surenchérissement
+# l'effet protecteur diminue
+summary(cox_np)
 
 ## -----------------------------------------------------------------------------
 
@@ -28,7 +73,7 @@ data(survie3, package = "hecmulti")
 cox4 <- coxph(Surv(time = debut,
                     time2 = fin,
                     event = evenement) ~
-                age + sexe + region + service,
+                age + sexe + service,
               data = survie3)
 # Voir "tmerge" et la vignette de Therneau, Crowson et Atkinson dans le paquet "survival"
 # https://cran.r-project.org/web/packages/survival/vignettes/timedep.pdf
@@ -95,47 +140,3 @@ plot(survfit(rc_cox, newdata = hecmulti::survie4[1,]),
      col = 1:4)
 
 
-## -----------------------------------------------------------------------------
-
-# Risque nonproportionnel avec interaction dans le temps
-# Il faut OBLIGATOIREMENT modifier la variable à l'intérieur de coxph
-cox_np <- coxph(
-     Surv(temps, censure) ~
-      tt(age) + sexe + service, # la variable modifiée est dans tt()
-      data = survie1,
-      # définir avec une fonction la nature de l'interaction temporelle
-      tt = function(x, t, ...){x + t/52}) 
-      
-# Le tableau résumé inclura des coefficients et des tests pour les effets      
- summary(cox_np)
-# Remarque technique: on ne peut PAS comparer un modèle avec les effets qui dépendent du temps
-# à un modèle à risque proportionnel ordinaire en calculant la statistique du rapport de vraisemblance
-# à la main...
-
-## -----------------------------------------------------------------------------
-# tt() ne gère pas les variables catégorielles, il faut donc créer des variables binaires
-# model.matrix crée la matrice du modèle avec les indicateurs
-
-survie1_modif <- survie1 |>
-  dplyr:: mutate(service1 = service == 1,
-                 service2 = service == 2,
-                 service3 = service == 3)
-# Avec plusieurs catégories,cela devient fastidieux. 
-# Voici une autre méthode plus efficace, mais moins transparente
-# Créer la matrice de modèle avec indicateurs binaires pour service
-service_bin <- model.matrix(~service, 
-                            data = survie1)[,-1]
-# enlever ordonnée à l'origine (première colonne de uns)
-# Concaténer par colonne pour obtenir une base de données avec toutes les colonnes
-survie1_modif <- cbind(survie1, service_bin) 
-cox_np <- survival::coxph(
-    Surv(temps, censure) ~ 
-     age + sexe + service +  # notez que service est AUSSI incluse (effet principal)
-      tt(service1) + tt(service2) + tt(service3),  # interactions avec le temps, plusieurs termes
-     data = survie1_modif, 
-     tt = function(x, t, ...){t * x})
-
-# Tableau résumé - on remarque que deux des trois interactions sont significatives
-# et que l'effet n'est sans doute pas le même pour le surenchérissement
-# l'effet protecteur diminue
-summary(cox_np)

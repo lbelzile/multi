@@ -94,7 +94,7 @@ ggplot(data = tableau,
        y = "",
        subtitle = "Taux de bonne classification")
 opt <- which.max(tableau$pcorrect)
-knitr::kable(tableau[opt,])
+knitr::kable(tableau[opt,], digits = 2)
 ```
 
 

@@ -87,7 +87,8 @@ website:
               file: contenu/09-contenu.qmd
             - text: "10: Analyse de survie"
               file: contenu/10-contenu.qmd  
-
+            - text: "11: Analyse de regroupements"
+              file: contenu/11-contenu.qmd 
 
     - title: "Devoirs"
       style: "docked"
@@ -141,6 +142,10 @@ website:
              file: exercices/05-exercice.qmd
            - text: "Solutions 5"
              file: exercices/05-solution.qmd
+        - section: "Analyse de regroupements"
+          contents:
+           - text: "Exercice 6"
+             file: exercices/06-exercice.qmd
 
   page-footer:
     left: |

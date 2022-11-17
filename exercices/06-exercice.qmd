@@ -1,0 +1,21 @@
+---
+title: "Analyse de regroupements"
+---
+
+## Exercice 6.1
+
+Les données fictives `regroupement1` sont inspirées de @Hsu.Lee:2002. Ces données contiennent des échelles pour certains éléments d'un questionnaire. Ce dernier a été élaboré afin d’évaluer l’importance de 55 caractéristiques des opérateurs de voyages organisés en autobus et des voyages eux-mêmes à l’aide d’une échelle de Likert à cinq points, allant de extrêmement important (5) à pas du tout important (1). 
+
+
+Les variables représentent les activités sociales, les politiques de l’opérateur et références, la flexibilité des horaires, la santé et sécurité, le matériel publicitaire et la réputation.
+
+1. Faites une analyse en composantes principales et projetez les observations sur un nuage de points avec les deux premières composantes principales.
+2. Doit-on standardiser les données avant d'effectuer l'analyse?
+3. Utilisez l'algorithme des $K$-moyennes en faisant varier le nombre de groupes de 1 à 10. Utilisez une dizaine d'initialisations aléatoires.
+  a) Sélectionnez un nombre de regroupement adéquat en vous basant sur les critères suivants
+      i) le coefficient de détermination
+      ii) la statistique d'écart de @Tibshirani.Walther.Hastie:2001
+      iii) le critère BIC
+  b) Retournez le nombre d'observation par groupe pour la valeur de $K$ choisie.
+  c) Rapportez les statistiques descriptives (moyennes, etc.) de chaque segment
+  d) Interprétez les profils obtenus.

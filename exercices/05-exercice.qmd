@@ -5,7 +5,7 @@ title: "Analyse de survie"
 
 ## Exercice 5.1
 
-@Fotopoulos.Louri:2000 considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 pour pour répondre aux questions suivantes:
+@Fotopoulos.Louri:2000 considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l'article pour pour répondre aux questions suivantes:
 
 1. Quel type de mécanisme de censure est présent dans ces données?
 2. Donnez une estimation de la probabilité qu’une entreprise survive trois ans ou plus.
@@ -13,7 +13,7 @@ title: "Analyse de survie"
 4. Quel pourcentage des observations sont censurées?
 5. Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.
 
-Le tableau 3 fournit les estimations d'un modèle à risques proportionnels de Cox.
+Le Tableau 3 de l'article fournit les estimations d'un modèle à risques proportionnels de Cox.
 
 6. Comparez les modèles (1) et (2). Est-ce que l'effet de cohorte impacte la survie?
 7. Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (`FIXED_ASSET`) et le montant de la dette (`DEBT`) sur la durée de vie des entreprises.
@@ -33,7 +33,8 @@ Notre objectif premier est d'estimer le temps qu'un article passe en stock avant
 1. Que représente la censure dans cet exemple?
 2. Estimez le temps de stockage à l'aide d'un modèle de Kaplan--Meier et rapportez les estimés des quartiles.
 3. Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.
-   - Rapportez et interprétez les coefficients des variables. Est-ce que les effets estimés sont significatifs?
+   - Rapportez et interprétez les coefficients des variables. 
+   - Est-ce que les effets estimés sont significatifs?
 4. Tracez les estimés des courbes de survie d'une chaussure de l'année dont le prix de vente est 120\$ pour les modèles pour homme et pour femme.
 
 On vous informe que, pour éliminer les invendus lors de l'arrivée de nouveaux modèles, l'entreprise offre une réduction de 20\% après 15 mois.

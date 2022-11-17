@@ -13,6 +13,8 @@ Vous devez remettre les documents suivants:
 
 Utilisez la convention de nomenclature `d5_matricule.extension`, où `matricule` est le matricule de l'étudiant(e) qui soumet le rapport et `extension` est un de `pdf`, `R` ou `Rmd`.  
 
+**Note** Retéléchargez le paquet `hecmulti` via `remotes::install_github("lbelzile/hecmulti")` (version > 2022.11.12) et redémarrez **R** avant de commencer le devoir.
+
 
 Dans le cadre d'un programme gouvernemental, on s'intéresse au nombre de semaines de paiements écoulé entre une perte d'emploi et un nouvel emploi pour des chômeurs et chômeuses âgé(e)s entre 18 et 65 ans, dans le but d'élaborer un programme de formation destiné au chômage de longue durée. La base de données `chomage` contient un échantillon de $n=2\ 500$ personnes inscrites à l'Assurance emploi entre mars 2020 et décembre 2021. 
 

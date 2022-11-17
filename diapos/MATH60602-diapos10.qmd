@@ -259,7 +259,7 @@ cox_strat <- coxph(
   Surv(temps, censure) ~ age + sexe + strata(service), 
   data = survie1)
 # Décompte par service
-with(survie1, table(service))
+with(survie1, table(censure, service))
 # Coefficients
 summary(cox_strat)
 ```
@@ -268,18 +268,18 @@ summary(cox_strat)
 
 ```{r}
 #| label: tbl-nserv
-#| tbl-cap: "Décompte du nombre d'observations par service."
+#| tbl-cap: "Décompte du nombre d'observations par service et status."
 #| eval: true
 #| echo: false
 #| cache: true
-nserv <- with(hecmulti::survie1, table(service))
+nserv <- with(hecmulti::survie1, table(service, censure))
 knitr::kable(data.frame(
-  "0" = nserv[1], 
-  "1" = nserv[2], 
-  "2" = nserv[3], 
-  "3" = nserv[4]),
-             booktabs = TRUE, 
-  col.names = paste0(0:3))
+    "0" = nserv[1,], 
+    "1" = nserv[2,], 
+    "2" = nserv[3,], 
+    "3" = nserv[4,]),
+    booktabs = TRUE, 
+    col.names = paste0(0:3))
 ```
 
 
@@ -289,7 +289,7 @@ knitr::kable(data.frame(
 #| eval: true
 #| echo: false
 library(survival)
-cox7 <- coxph(Surv(temps, 1-censure) ~ 
+cox7 <- coxph(Surv(temps, censure) ~ 
                 age + sexe + strata(service), 
               data = hecmulti::survie1,
               ties = "exact")
@@ -358,13 +358,13 @@ Si le postulat de risques proportionnels n'est pas validé, l'effet d'au moins u
 
 On peut considérer une modification du modèle de Cox qui inclut une interaction avec le temps, par exemple
 \begin{align*}
-h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
+h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z(t) Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
 \end{align*}
-si l'effet de la variable explicative $Z(t)$ --- ou la variable elle même -- varie en fonction du temps.
+si l'effet de la variable explicative $Z(t)$, $\beta_Z(t)$ --- ou la variable elle même -- varie en fonction du temps.
 
 # Exemple 1 - augmentation de l'âge
 
-L'âge (en années) augmente à mesure que le temps d'abonnement (en semaines) passe, d'où $\texttt{age}(t) = \texttt{age} + t/52$.
+Ici, le coefficient est supposé constante mais l'âge (en années) augmente à mesure que le temps d'abonnement (en semaines) passe, d'où $\texttt{age}(t) = \texttt{age} + t/52$.
 
 
 ```{r}
@@ -512,7 +512,7 @@ data(survie3, package = "hecmulti")
 cox4 <- coxph(Surv(time = debut, 
                    time2 = fin, 
                    event = evenement) ~ 
-                age + sexe + region + service, 
+                age + sexe + service, 
               data = survie3)
 ```
 
@@ -561,7 +561,7 @@ Modèle avec transition d'un état de base (abonné) vers un état absorbant (d�
 
 ::::
 
-# Modèle à risques compétitifs
+# Modèle à risques compétitifs avec modèle de Cox
 
 Pour estimer la probabilité d'un événement au fil du temps, on peut ajuster plusieurs modèles de Cox.
 
@@ -692,6 +692,30 @@ plot(survfit(rc_cox,
      yaxs = "i")
 ```
 
+# Récapitulatif
 
+Si le postulat de risques proportionnels ne tient pas, on peut considérer des modifications du modèle de Cox.
 
+- stratification (uniquement pour variables catégorielles) pour estimer le risque de base séparément sur chaque sous-groupe).
+- modèle à risques non-proportionnels avec variable ou coefficient qui varient selon le temps
+
+# Récapitulatif
+
+Si les variables explicatives changent au fil du temps, on peut traiter le cas de figure en décomposant la contribution de l'observation en plusieurs segments
+
+- chaque segment autre que terminal est traité comme de la censure à droite
+- les segments sont sujets à troncature à gauche.
+
+La base de données doit contenir le temps initial et le temps final de l'intervalle, en plus de l'indicateur.
+
+Il y a un lien possible avec le modèle à risque proportionnels si l'effet est le même pour tous (comme l'âge).
+
+# Récapitulatif
+
+Le modèle multi-état (modèle à risques compétitifs) permet d'estimer la probabilité de chaque transition.
+
+- la survie pour l'événement de base reste le même (désabonnement)
+- à chaque temps donné, la probabilité conjointe de chaque $K+1$ possibilités est 1.
+
+Dans **R**, s'assurer que la catégorie de référence est l'état de départ.
 
