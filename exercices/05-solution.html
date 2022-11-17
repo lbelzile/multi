@@ -315,6 +315,21 @@ div.csl-indent {
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Analyse de regroupements</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/06-exercice.html" class="sidebar-item-text sidebar-link">Exercice 6</a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -350,7 +365,7 @@ div.csl-indent {
 
 <section id="exercice-5.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-5.1">Exercice 5.1</h2>
-<p><em><span class="citation" data-cites="Fotopoulos.Louri:2000">Fotopoulos &amp; Louri (<a href="#ref-Fotopoulos.Louri:2000" role="doc-biblioref">2000</a>)</span> considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 pour pour répondre aux questions suivantes:</em></p>
+<p><em><span class="citation" data-cites="Fotopoulos.Louri:2000">Fotopoulos &amp; Louri (<a href="#ref-Fotopoulos.Louri:2000" role="doc-biblioref">2000</a>)</span> considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l’article pour pour répondre aux questions suivantes:</em></p>
 <ol type="1">
 <li><em>Quel type de mécanisme de censure est présent dans ces données?</em></li>
 </ol>
@@ -374,7 +389,7 @@ div.csl-indent {
 <li><em>Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.</em></li>
 </ol>
 <p>Non, puisque les plus grandes temps observés sont censurées et l’estimation de la fonction de survie s’arrête à 0.2921; la fonction de survie ne traverse pas la valeur horizontale de 0.25</p>
-<p><em>Le tableau 3 fournit les estimations d’un modèle à risques proportionnels de Cox.</em></p>
+<p><em>Le Tableau 3 de l’article fournit les estimations d’un modèle à risques proportionnels de Cox.</em></p>
 <ol start="6" type="1">
 <li><em>Comparez les modèles (1) et (2). Est-ce que l’effet de cohorte impacte la survie?</em></li>
 </ol>
@@ -464,7 +479,8 @@ div.csl-indent {
 <ol start="3" type="1">
 <li><em>Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.</em>
 <ul>
-<li><em>Rapportez et interprétez les coefficients des variables. Est-ce que les effets estimés sont significatifs?</em></li>
+<li><em>Rapportez et interprétez les coefficients des variables.</em></li>
+<li><em>Est-ce que les effets estimés sont significatifs?</em></li>
 </ul></li>
 </ol>
 <div class="cell">
@@ -541,23 +557,24 @@ Score (logrank) test = 238.9  on 2 df,   p=&lt;2e-16</code></pre>
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>chaussures2 <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># souliers dont le prix change</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">prix =</span> <span class="fl">0.8</span><span class="sc">*</span>prix, <span class="co"># 20% rabais</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">temps0 =</span> <span class="dv">15</span>) </span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>chaussures1 <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">temps0 =</span> <span class="dv">0</span>, </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">statut =</span> <span class="fu">ifelse</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>, <span class="dv">1</span>, statut),</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># censure si chaussures invendues après 15 semaines</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">temps =</span> <span class="fu">pmin</span>(temps, <span class="dv">15</span>))</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>modcox2 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(<span class="at">time =</span> temps0, </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">time2 =</span> temps,</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> sexe <span class="sc">+</span> prix,</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">full_join</span>(chaussures1, </span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>                          chaussures2))</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modcox2)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>chaussures1 <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">temps0 =</span> <span class="dv">0</span>, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># censure si chaussures invendues après 15 semaines</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">statut =</span> <span class="fu">ifelse</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>, <span class="dv">1</span>, statut),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># enlever rabais pour obtenir prix initial</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">prix =</span> <span class="fu">ifelse</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>, prix<span class="sc">/</span><span class="fl">0.8</span>, prix),</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">temps =</span> <span class="fu">pmin</span>(temps, <span class="dv">15</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>chaussures2 <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">temps0 =</span> <span class="dv">15</span>) </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>modcox2 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(<span class="at">time =</span> temps0, </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">time2 =</span> temps,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> sexe <span class="sc">+</span> prix,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">full_join</span>(chaussures1, </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>                          chaussures2))</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modcox2)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
@@ -566,20 +583,20 @@ coxph(formula = Surv(time = temps0, time2 = temps, event = statut ==
 
   n= 7553, number of events= 5880 
 
-           coef  exp(coef)   se(coef)       z Pr(&gt;|z|)    
-sexe -0.1640819  0.8486725  0.0262256  -6.257 3.94e-10 ***
-prix -0.0137594  0.9863349  0.0009722 -14.153  &lt; 2e-16 ***
+          coef exp(coef)  se(coef)       z Pr(&gt;|z|)    
+sexe -0.116920  0.889657  0.026250  -4.454 8.43e-06 ***
+prix -0.042049  0.958823  0.001034 -40.665  &lt; 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
      exp(coef) exp(-coef) lower .95 upper .95
-sexe    0.8487      1.178    0.8062    0.8934
-prix    0.9863      1.014    0.9845    0.9882
+sexe    0.8897      1.124    0.8450    0.9366
+prix    0.9588      1.043    0.9569    0.9608
 
-Concordance= 0.589  (se = 0.005 )
-Likelihood ratio test= 247.3  on 2 df,   p=&lt;2e-16
-Wald test            = 238.6  on 2 df,   p=&lt;2e-16
-Score (logrank) test = 238.4  on 2 df,   p=&lt;2e-16</code></pre>
+Concordance= 0.675  (se = 0.004 )
+Likelihood ratio test= 1922  on 2 df,   p=&lt;2e-16
+Wald test            = 1686  on 2 df,   p=&lt;2e-16
+Score (logrank) test = 1683  on 2 df,   p=&lt;2e-16</code></pre>
 </div>
 </div>
 <p>La différence est à peine perceptible, une différence de quatres chiffres après la virgule pour <span class="math inline">\(\exp(\widehat{\beta}_{\text{prix}})\)</span>. Les coefficients sont toujours significatifs.</p>
@@ -592,36 +609,42 @@ h(t; \texttt{sexe}, \texttt{prix}) = h_0(t) \exp \left\{\beta_{\texttt{sexe}}\te
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>modcox3 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(<span class="at">time =</span> temps,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> sexe <span class="sc">+</span> <span class="fu">tt</span>(prix),</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> chaussures,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tt =</span> <span class="cf">function</span>(x, t, ...){ x<span class="fl">-0.2</span><span class="sc">*</span><span class="fu">I</span>(t<span class="sc">&gt;</span><span class="dv">15</span>)<span class="sc">*</span>x})</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modcox3)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer prix initial</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>chaussures <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">prixinit =</span> <span class="fu">ifelse</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>, </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                      prix<span class="sc">/</span><span class="fl">0.8</span>, </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                      prix))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>modcox3 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(<span class="at">time =</span> temps,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> sexe <span class="sc">+</span> <span class="fu">tt</span>(prixinit),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> chaussures,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">tt =</span> <span class="cf">function</span>(x, t, ...){ x<span class="fl">-0.2</span><span class="sc">*</span><span class="fu">I</span>(t<span class="sc">&gt;</span><span class="dv">15</span>)<span class="sc">*</span>x})</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modcox3)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 coxph(formula = Surv(time = temps, event = statut == 0) ~ sexe + 
-    tt(prix), data = chaussures, tt = function(x, t, ...) {
+    tt(prixinit), data = chaussures, tt = function(x, t, ...) {
     x - 0.2 * I(t &gt; 15) * x
 })
 
   n= 6807, number of events= 5880 
 
-               coef  exp(coef)   se(coef)       z Pr(&gt;|z|)    
-sexe     -0.1640819  0.8486725  0.0262256  -6.257 3.94e-10 ***
-tt(prix) -0.0137594  0.9863349  0.0009722 -14.153  &lt; 2e-16 ***
+                  coef exp(coef)  se(coef)       z Pr(&gt;|z|)    
+sexe         -0.116920  0.889657  0.026250  -4.454 8.43e-06 ***
+tt(prixinit) -0.042049  0.958823  0.001034 -40.665  &lt; 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-         exp(coef) exp(-coef) lower .95 upper .95
-sexe        0.8487      1.178    0.8062    0.8934
-tt(prix)    0.9863      1.014    0.9845    0.9882
+             exp(coef) exp(-coef) lower .95 upper .95
+sexe            0.8897      1.124    0.8450    0.9366
+tt(prixinit)    0.9588      1.043    0.9569    0.9608
 
-Concordance= 0.589  (se = 0.004 )
-Likelihood ratio test= 247.3  on 2 df,   p=&lt;2e-16
-Wald test            = 238.6  on 2 df,   p=&lt;2e-16
-Score (logrank) test = 238.4  on 2 df,   p=&lt;2e-16</code></pre>
+Concordance= 0.675  (se = 0.004 )
+Likelihood ratio test= 1922  on 2 df,   p=&lt;2e-16
+Wald test            = 1686  on 2 df,   p=&lt;2e-16
+Score (logrank) test = 1683  on 2 df,   p=&lt;2e-16</code></pre>
 </div>
 </div>
 <p>Une fois qu’on a obtenu les estimations, on peut vérifier que les coefficients sont les mêmes</p>
