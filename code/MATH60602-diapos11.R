@@ -23,16 +23,21 @@ data(dons, package = "hecmulti")
 # Données bidons avec regroupements, pour illustration
 data(regroupements1, package = "hecmulti")
 
+dons |>
+  filter(ndons >= 1) |>
+  str()
+  summarize_all(.funs = mean, na.rm = TRUE)
 
 # Segmentation naturelle des donneurs
 # Aucun don / un seul don / dons multiples
 donsmult <- dons |>
   dplyr::filter(ndons > 1L) |>
-  dplyr::mutate(mtdons = vdons/ndons,
-         snrefus = nrefus/anciennete*mean(anciennete),
-         mpromesse = dplyr::case_when(
-           npromesse > 0 ~ vpromesse/npromesse,
-           TRUE ~ 0)) |>
+  dplyr::mutate(
+    mtdons = vdons/ndons,
+    snrefus = nrefus/anciennete*mean(anciennete),
+    mpromesse = dplyr::case_when(
+      npromesse > 0 ~ vpromesse/npromesse,
+      TRUE ~ 0)) |>
   dplyr::select(!c(vradiations, # valeurs manquantes
             nindecis,
             vdons,
@@ -114,6 +119,10 @@ for(i in seq_len(ngmax)){
                      nstart = 10)
 }
 
+kmoy5 <- kmoy[[5]]
+kmoy5$size # nombre d'observations par groupe
+kmoy5$withinss # valeur du critère (fonction objective)
+t(t(kmoy5$centers)*dm_std + dm_moy)
 # Déterminer le nombre de groupes avec critères
 
 # Somme carré intra-groupes et somme carré totale
@@ -121,7 +130,7 @@ scd <- sapply(kmoy, function(x){x$tot.withinss})
 
 # Homogénéité et pourcentage de variance expliquée
 # Graphique du R-carré et du R-carré semi-partiel
-homogene <- homogeneite(scd)
+homogene <- hecmulti::homogeneite(scd, which = 1)
 bic_kmoy <- sapply(kmoy, BIC)
 ggplot(data = data.frame(bic = bic_kmoy,
                          ng = seq_along(kmoy)),
@@ -152,16 +161,18 @@ dist_sub <- cluster::daisy(
   metric = "euclidean")
 for(i in seq_len(ngmax-1L)){
   silhouettes_kmoy[i] <- summary(
-    cluster::silhouette(x = kmoy[[i+1]]$cluster[sub],
-               dist = dist_sub))$avg.width
+    cluster::silhouette(
+      x = kmoy[[i+1]]$cluster[sub],
+      dist = dist_sub))$avg.width
 }
 # Classement (du plus grand au plus petit)
 order(silhouettes_kmoy, decreasing = TRUE) + 1
 # Suggère 8 regroupements
 # Visualisation des silhouettes (ici avec 5 regroupements)
 factoextra::fviz_silhouette(
-  cluster::silhouette(x = kmoy[[5]]$cluster[sub],
-             dist = dist_sub))
+  cluster::silhouette(
+    x = kmoy[[8]]$cluster[sub],
+    dist = dist_sub))
 # Statistique de la brèche
 # ATTENTION aussi intensif en calcul
 gap <- cluster::clusGap(donsmult_std[sub,],

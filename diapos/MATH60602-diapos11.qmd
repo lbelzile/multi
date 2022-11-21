@@ -170,7 +170,7 @@ On peut faire la segmentation **séparément** pour ces sous-groupes.
 Vous avez toutes les données transactionnelles associées à des comptes d'épicerie avec un compte de fidélisation. 
 
 
-Quelles variables créez vous à partir des données aggrégées pour créer des segments?
+Quelles variables pourriez-vous créer à partir des données aggrégées pour créer des segments?
 
 
 # Choix des variables 
@@ -178,7 +178,7 @@ Quelles variables créez vous à partir des données aggrégées pour créer des
 Recommandations: choisir les variables pertinentes qui font ressortir les effets voulus.
 
 - inclure de nombreuses variables similaires dilue les différences.
-- transformer les variables pour diminuer la corrélation 
+- transformez les variables pour diminuer la corrélation.
 
 Typiquement, ne pas utiliser les variables sociodémographiques (âge, revenu, sexe, etc.)
 
@@ -196,7 +196,7 @@ knitr::include_graphics("figures/typologie-vote-france.jpg")
 La base de données `dons` contient `r nrow(hecmulti::dons)` observations pour `r ncol(hecmulti::dons)` variables.
 
 - Trois grandes catégories: personnes qui n'ont pas donné, dons uniques, dons multiples.
-- variables sociodémographiques, valeur des dons (min, max) et des promesses, nombre de dons, fréquence, 
+- valeur des dons (total, min, max) et des promesses, nombre de dons, fréquence, ancienneté, etc. 
 
 Une rapide exploration des données révèle que près de 61% des employé(e)s n'ont pas donné à l'organisme. 
 
@@ -206,10 +206,9 @@ Une poignée de dons sont très élevés, mais la plupart des montants tourne au
 # Étapes d'une analyse de regroupements
 
 1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
-2. Décider quel méthode et quelle mesure de dissemblance/similarité seront utilisées pour la segmentation.
-3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) 
-4. Procéder à l'analyse de regroupements.
-5. Calculer une mesure de qualité.
+2. Décider quel méthode sea utilisée pour la segmentation.
+3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissemblance
+5. Calculer une mesure de qualité de la segmentation.
 6. Assigner les étiquettes aux observations et calculer un prototype de groupe. 
 7. Interpréter les regroupements obtenus à partir des prototypes.
 
@@ -251,7 +250,11 @@ Comment mesurer si deux observations appartiennent à un même regroupement et s
 
 Une mesure de dissemblance sert à quantifier la proximité de deux objets à partir de leurs coordoonnées. 
 
-Elle mesure la distance entre deux vecteurs d'observations (deux lignes de la base de données) et en se basant sur les variables explicatives.
+Plus la dissemblance est élevée, moins les observations sont semblables (plus éloignées).
+
+Elle mesure la distance entre deux vecteurs d'observations (deux lignes de la base de données) en se basant sur les variables explicatives.
+
+
 
 # Mesures de dissemblance
 
@@ -262,7 +265,7 @@ Quelques propriétés des mesures de dissemblance:
 
 Toute distance est une mesure de dissemblance.
 
-# Distance Euclidienne
+# Distance euclidienne
 
 La mesure de dissemblance la plus utilisée en pratique est la distance euclidienne entre sujets.
 
@@ -298,7 +301,7 @@ Avec notre base de données `donsmult`, le stockage des distances prend environ 
 ```{r}
 #| eval: false
 #| echo: true
-# Distance Euclidienne, de Manhattan, de Gower
+# Distance euclidienne, de Manhattan, de Gower
 d1 <- dist(donsmult, method = "euclidean")
 d2 <- dist(donsmult, method = "minkowski", p = 1)
 d3 <- cluster::daisy(donsmult, metric = "gower")
@@ -334,7 +337,7 @@ Généralement, on standardise les données avant l'analyse de regroupements.
 - utiliser mesures robustes: soustraire médiane et diviser par l'écart absolu à la médiane (mad)
 
 
-Notez qu'il est illogique de standardiser les variables catégorielles (déclarer obligatoirement variables en facteurs!)
+Notez qu'il est illogique de standardiser les variables catégorielles (déclarer obligatoirement les variables binaires en facteurs et traiter à part!)
 
 # Standardisation avec **R**
 
@@ -383,7 +386,7 @@ Probablement la méthode de regroupement la plus populaire en raison de son faib
 
 La fonction objective considère la distance totale entre observations et prototypes
 $$
-\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\frac{1}{n}\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
+\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
 $$ {#eq-fobjKmoy}
 
 
@@ -420,7 +423,7 @@ Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroup
 
 # Séparation linéaire de l'espace
 
-Avec la distance Euclidienne, la partition de l'espace est linéaire.
+Avec la distance euclidienne, la partition de l'espace est linéaire.
 
 ```{r}
 #| eval: true
@@ -437,7 +440,7 @@ knitr::include_graphics("figures/fig-voronoikmoy.png")
 
 - ($+$) Complexité **linéaire** dans la dimension et dans le nombre de variables.
 - ($+$) L'algorithme converge rapidement vers une solution locale (garantie théorique).
-- ($-$) Regroupements globulaires d'apparence sphérique (distance Euclidienne). 
+- ($-$) Regroupements globulaires d'apparence sphérique (distance euclidienne). 
 - ($+$) Pour les prédictions, on peut assigner les nouvelles observations au barycentre le plus près.
 # Performance
 
@@ -555,7 +558,7 @@ library(patchwork)
 
 # Distance
 
-Avec la distance Euclidienne $l_2$, les prototypes correspondent avec le barycentre (moyenne variable par variable) des observations du regroupement.
+Avec la distance euclidienne $l_2$, les prototypes correspondent avec le barycentre (moyenne variable par variable) des observations du regroupement.
 
 Avec la distance de Manhattan $l_1$, les prototypes correspondent avec la médiane variable par variable ($K$-médianes).
 
@@ -679,7 +682,7 @@ Critères plus spécifiques aux $K$-moyennes rattachés à la fonction objective
 
 # Somme du carré des distances intra-groupes
 
-La fonction objective de l'@eq-fobjKmoy avec la distance Euclidienne représente la somme du carré des distances (SCD) 
+La fonction objective de l'@eq-fobjKmoy avec la distance euclidienne représente la somme du carré des distances (SCD) 
 \begin{align*}
 \mathsf{SCD}_K &= \mathsf{SCD}_{1,K} + \cdots + \mathsf{SCD}_{K,K};
 \intertext{où}
@@ -870,7 +873,7 @@ set.seed(60602)
 kmoy5 <- kmeans(
    x = donsmult_std, # données
    centers = 5L, # nb groupes
-   nstart = 10, # nb initialisation aléatoire
+   nstart = 20, # nb initialisation aléatoire
    iter.max = 25)
 kmoy5_tab <- donsmult |>
   dplyr::group_by(groupe = kmoy5$cluster) |>
