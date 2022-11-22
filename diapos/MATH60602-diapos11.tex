@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, breakable, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, frame hidden, breakable, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -676,15 +676,15 @@ observations de \(p\) variables en regroupements.
 \begin{enumerate}
 \tightlist
 \item
-  méthodes basées sur la connectivité (regroupements hiérarchiques,
-  AGNES et DIANA)
+  méthodes basées sur la connectivité (regroupements hiérarchiques
+  agglomératifs et divisifs)
 \item
   méthodes basées sur les centroïdes et les médoïdes (\(k\)-moyennes,
-  \(k\)-médoides PAM, CLARA)
+  \(k\)-médoides)
 \item
-  mélanges de modèles (mélanges Gaussiens, etc.)
+  mélanges de modèles
 \item
-  méthodes basées sur la densité (DBScan)
+  méthodes basées sur la densité
 \item
   méthodes spectrales
 \end{enumerate}
@@ -762,7 +762,9 @@ l'assignation ne change plus (solution locale).
 
 Visionner l'animation
 \href{https://lbelzile.github.io/math60602/03-regroupements_files/figure-html/fig-kmoy-animation-.gif}{en
-ligne}.
+ligne} ou
+\href{https://www.naftaliharris.com/blog/visualizing-k-means-clustering/}{ce
+site}.
 \end{frame}
 
 \begin{frame}{Forces et faiblesses}

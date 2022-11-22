@@ -366,10 +366,10 @@ Quelques solutions
 
 L'analyse de regroupements cherche à créer une division de $n$ observations de $p$ variables en regroupements.
 
-1. méthodes basées sur la connectivité (regroupements hiérarchiques, AGNES et DIANA)
-2. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides  PAM, CLARA)
-3. mélanges de modèles (mélanges Gaussiens, etc.)
-4. méthodes basées sur la densité (DBScan)
+1. méthodes basées sur la connectivité (regroupements hiérarchiques agglomératifs et divisifs)
+2. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides)
+3. mélanges de modèles
+4. méthodes basées sur la densité
 5. méthodes spectrales
 
 # Critères pour sélection
@@ -416,7 +416,7 @@ L'algorithme de type EM itère entre deux étapes:
 
 L'algorithme termine après un nombre prédéfini d'itérations ou lorsque l'assignation ne change plus (solution locale).
 
-Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroupements_files/figure-html/fig-kmoy-animation-.gif).
+Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroupements_files/figure-html/fig-kmoy-animation-.gif) ou [ce site](https://www.naftaliharris.com/blog/visualizing-k-means-clustering/).
 
 ```{r}
 #| eval: false

@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, breakable, enhanced, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Algorithmes pour l'analyse de regroupements}
 \protect\hypertarget{algorithmes-pour-lanalyse-de-regroupements}{}
@@ -257,58 +257,6 @@ observations de \(p\) variables en regroupements.
 \item
   méthodes spectrales
 \end{enumerate}
-\end{frame}
-
-\begin{frame}[fragile]{\(K\)-médianes}
-\protect\hypertarget{k-muxe9dianes}{}
-Illustration de la répartition/interprétation avec \(K=5\) groupes
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
-\NormalTok{kmed5 }\OtherTok{\textless{}{-}}\NormalTok{ flexclust}\SpecialCharTok{::}\FunctionTok{kcca}\NormalTok{(}
-  \AttributeTok{x =}\NormalTok{ donsmult\_std,}
-  \AttributeTok{k =} \DecValTok{5}\NormalTok{,}
-  \AttributeTok{family =}\NormalTok{ flexclust}\SpecialCharTok{::}\FunctionTok{kccaFamily}\NormalTok{(}\StringTok{"kmedians"}\NormalTok{),}
-  \AttributeTok{control =} \FunctionTok{list}\NormalTok{(}\AttributeTok{initcent =} \StringTok{"kmeanspp"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Différences de segmentation}
-\protect\hypertarget{diffuxe9rences-de-segmentation}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-acpkmoy5-1.pdf}
-
-}
-
-\caption{\label{fig-acpkmoy5}Nuage de points des deux premières
-composantes principales des observations de dons multiples avec les
-étiquettes des regroupements obtenus selon la méthodes des
-\(K\)-moyennes et \(K\)-médianes avec \(K=5\) regroupements.}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Commentaire sur \(K\)-médianes}
-\protect\hypertarget{commentaire-sur-k-muxe9dianes}{}
-Avec les \(K\)-médianes, les personnes qui ont fait des dons plus élevés
-sont fusionnés avec d'autres personnes qui ont fait des dons moins
-élevés et les groupes sont davantage de taille comparable.
-
-Selon l'objectif des regroupements, cela peut être avantageux, mais
-cibler les donateurs les plus généreux semble plus logique dans le
-contexte.
-\end{frame}
-
-\begin{frame}{\(K\)-médoïdes.}
-\protect\hypertarget{k-muxe9douxefdes.}{}
-Dans les \(K\)-médoïdes, on choisit une observation comme prototype.
-
-Puisque qu'on considère chaque observation comme candidat à devenir un
-médoïde à chaque étape, le coût de calcul est prohibitif en grande
-dimension.
 \end{frame}
 
 \begin{frame}{Algorithme de partition autour des médoïdes (PAM)}
@@ -343,15 +291,16 @@ dimension.
 \begin{frame}{Algorithme CLARA (1/2)}
 \protect\hypertarget{algorithme-clara-12}{}
 L'algorithme CLARA, décrit dans Kaufman \& Rousseeuw (1990), réduit le
-coût de calcul et de stockage en
+coût de calcul et de stockage.
 
 \begin{itemize}
 \tightlist
 \item
-  divisant l'échantillon en \(S\) sous-échantillons de taille
-  approximativement égale (par défaut \(S=5\))
+  Diviser l'échantillon en \(S\) sous-échantillons de taille
+  approximativement égale de taille \(n_S\) (typiquement
+  \(K \ll n_S < 1000\))
 \item
-  et en utilisant l'algorithme PAM sur chacun.
+  Utiliser l'algorithme PAM sur chaque sous-échantillon.
 \end{itemize}
 
 Une fois les médoïdes obtenus, le reste de toutes les observations de
@@ -360,11 +309,12 @@ l'échantillon sont assignées au regroupement du médoïde le plus près.
 
 \begin{frame}{Algorithme CLARA (2/2)}
 \protect\hypertarget{algorithme-clara-22}{}
-La qualité de la segmentation pour chacune des segmentations est
+La qualité de la segmentation pour chacune des \(S\) segmentations est
 calculée en obtenant la distance moyenne entre les médoïdes et les
 observations.
 
-On retourne la meilleure (celle qui a la plus petite distance moyenne).
+On retourne la meilleure segmentation parmi les \(S\) (celle qui a la
+plus petite distance moyenne).
 \end{frame}
 
 \begin{frame}[fragile]{PAM et CLARA dans \textbf{R}}
@@ -387,28 +337,13 @@ Disponible depuis le paquet \texttt{cluster}.
 \end{Shaded}
 \end{frame}
 
-\begin{frame}{Avantages et inconvénients des \(K\)-médoïdes}
-\protect\hypertarget{avantages-et-inconvuxe9nients-des-k-muxe9douxefdes}{}
-\begin{itemize}
-\tightlist
-\item
-  (+) les prototypes sont des observations de l'échantillon.
-\item
-  (+) la fonction objective est moins impactée par les extrêmes.
-\item
-  (-) le coût de calcul est prohibitif avec des mégadonnées (problème
-  combinatoire). PAM fonctionne avec maximum 1000 observations.
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Valeurs initiales et paramètres}
 \protect\hypertarget{valeurs-initiales-et-paramuxe8tres}{}
 Même hyperparamètres que \(K\)-moyennes (dissemblance, nombre de
 regroupements, initialisation et séparation).
 
 Comme les \(K\)-moyennes, on fera plusieurs essais pour trouver de
-bonnes valeurs de départ. On peut tracer le profil des silhouettes
-(Figure~\ref{fig-clarasilhouette})
+bonnes valeurs de départ. On peut tracer le profil des silhouettes.
 
 \begin{figure}
 
@@ -425,42 +360,606 @@ multiples avec l'algorithme CLARA pour \(K=5\) regroupements.}
 \begin{frame}[fragile]{Prototypes}
 \protect\hypertarget{prototypes}{}
 Puisque les prototypes (médoïdes) sont des observations, on peut
-simplement extraire leur identifiant
+simplement extraire leur identifiant.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{medoides\_orig }\OtherTok{\textless{}{-}}\NormalTok{ donsmult[kmedoide[[}\DecValTok{4}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{i.med,]}
-\NormalTok{medoides\_orig}
+\NormalTok{medoides\_orig }\OtherTok{\textless{}{-}}\NormalTok{ donsmult[kmedoide5}\SpecialCharTok{$}\NormalTok{i.med,]}
 \CommentTok{\# Taille des regroupements}
-\NormalTok{kmedoide[[}\DecValTok{4}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{clusinfo}
+\NormalTok{kmedoide5}\SpecialCharTok{$}\NormalTok{clusinfo}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
 
-\begin{frame}{Mesures de similarité}
-\protect\hypertarget{mesures-de-similarituxe9}{}
-Certains algorithmes utilisent directement une matrice de similarité
-\(\mathbf{S}\) qui encode plutôt l'information à propos des points
-avoisinants.
+\begin{frame}{Avantages et inconvénients des \(K\)-médoïdes}
+\protect\hypertarget{avantages-et-inconvuxe9nients-des-k-muxe9douxefdes}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(-\)) solution approximative pour grand échantillons
+\item
+  (\(+\)) les prototypes sont des observations de l'échantillon.
+\item
+  (\(+\)) la fonction objective est moins impactée par les extrêmes.
+\item
+  (\(-\)) le coût de calcul est prohibitif avec des mégadonnées
+  (problème combinatoire) avec complexité \(\mathrm{O}(n^2)\). PAM
+  fonctionne avec maximum 1000 observations.
+\end{itemize}
+\end{frame}
 
-Plus les observations sont similaires, plus elles sont proches.
+\begin{frame}{Mélange de modèles}
+\protect\hypertarget{muxe9lange-de-moduxe8les}{}
+On suppose qu'on a \(K\) groupes, chacun caractérisé par une densité de
+dimension \(p\), soit \(f_k(\boldsymbol{X}_i;\boldsymbol{\theta}_k)\) si
+\(\boldsymbol{X}_i\) provient du groupe \(k=1, \ldots, K\).
 
-Les mesures dissemblance peuvent être convertie en mesure de similarité.
+Généralement, on choisit une loi normale multidimensionnelle pour le
+\(k\)e groupe \(G\), \begin{align*}
+\boldsymbol{X} \mid G=k \sim \mathsf{No}_p(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+\end{align*}
 
-En haute dimension, il est intéressant d'obtenir une matrice de
-similarité creuse (avec beaucoup de zéros).
+La probabilité qu'une observation soit tirée du groupe \(G=k\) est
+\(\pi_k\).
+\end{frame}
+
+\begin{frame}{Estimation du mélange de modèle}
+\protect\hypertarget{estimation-du-muxe9lange-de-moduxe8le}{}
+La vraisemblance est une fonction des paramètres \(\boldsymbol{\mu}_k\),
+\(\boldsymbol{\Sigma}_k\) et de la probabilité \(\pi_k\) qu'une
+observation \(\mathbf{X}_i\) tombe dans le groupe \(k\), \begin{align*}
+ L_i(\{\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k, \boldsymbol{\pi}_k\}_{k-1}^K; \mathbf{X}_i)= \sum_{k=1}^K\pi_k
+f_{k}(\boldsymbol{X}_i \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k).
+\end{align*}
+
+Le maximum de vraisemblance est obtenu à l'aide de l'algorithme
+d'espérance-maximisation en augmentant les observations avec un
+indicateur de groupe.
 
 \begin{itemize}
 \tightlist
 \item
-  Méthodes de noyau à support compact
+  Étape E: assignation aux groupes (multinomiale).
 \item
-  voisinage \(\epsilon\): toute paire d'observation à distance au plus
-  \(\epsilon\) a une similarité de \(s=1\) et \(s=0\) sinon.
+  Étape \(M\): estimation des probabilités, des moyennes et variances.
+\end{itemize}
+
+Le mélange de modèle nous donne accès à la probabilité \(\pi_k\) qu'une
+observation appartiennent au groupe \(G_k\) (\textbf{assignation
+probabiliste}).
+\end{frame}
+
+\begin{frame}{Fléau de la dimension}
+\protect\hypertarget{fluxe9au-de-la-dimension}{}
+Chacune des \(K\) matrice de covariance contient \(p(p+1)/2\)
+paramètres!
+
+En paramétrisant ces dernière, on peut réduire le nombre de paramètres à
+estimer.
+
+\begin{itemize}
+\tightlist
 \item
-  \(k\) plus proches voisins: similarité de \(S_{ij}=1\) si
-  l'observation \(\mathbf{X}_j\) est un des \(k\) plus proches voisins
-  d'observation \(\mathbf{X}_i\) (ou vice-versa)
+  compromis entre simplicité (d'estimation) et nombre de paramètres
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Paramétrisation des matrices de covariance}
+\protect\hypertarget{paramuxe9trisation-des-matrices-de-covariance}{}
+La matrice de covariance dans \texttt{mclust} est paramétrisée en
+fonction de
+
+\begin{itemize}
+\tightlist
+\item
+  \(\lambda\), qui contrôle le volume,
+\item
+  une matrice diagonale \(\mathbf{A}\) qui contrôle les variances de
+  chaque observation et
+\item
+  \(\mathbf{D}\) une matrice orthogonale qui permet de créer de la
+  corrélation entre observations.
+\end{itemize}
+
+Un index \(k\) spécifie que cette composante varie d'un regroupement à
+l'autre.
+\end{frame}
+
+\begin{frame}[fragile]{Paramétrisation des variables}
+\protect\hypertarget{paramuxe9trisation-des-variables}{}
+Voir \texttt{mclust.options("emModelNames")} et la documentation dans le
+Tableau 3 de
+\href{https://journal.r-project.org/archive/2016/RJ-2016-021/RJ-2016-021.pdf}{l'article
+sur \texttt{mclust}}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/mclust5-parametrization.png}
+
+}
+
+\caption{\label{fig-modeles}Forme des ellipsoïdes pour le mélange de
+modèle selon la forme de la structure de covariance. Tirée de
+\href{(https://journal.r-project.org/archive/2016/RJ-2016-021/RJ-2016-021.pdf)}{\texttt{mclust5}},
+licence \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Paquet \texttt{mclust}}
+\protect\hypertarget{paquet-mclust}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\DocumentationTok{\#\# Mélanges de modèles gaussiens}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(mclust)}
+\NormalTok{mmg }\OtherTok{\textless{}{-}} \FunctionTok{Mclust}\NormalTok{(}\AttributeTok{data =}\NormalTok{ donsmult\_std,}
+       \AttributeTok{G =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{,}
+       \CommentTok{\# Ajouter composante uniforme}
+       \CommentTok{\#  pour bruit (aberrances)}
+       \AttributeTok{initialization =} \FunctionTok{list}\NormalTok{(}\AttributeTok{noise =} \ConstantTok{TRUE}\NormalTok{))}
+\CommentTok{\# Résumé de la segmentation}
+\FunctionTok{summary}\NormalTok{(mmg)}
+\end{Highlighting}
+\end{Shaded}
+
+On peut obtenir les étiquettes (avec \texttt{0} pour le bruit) avec
+\texttt{mmg\$classification}.
+\end{frame}
+
+\begin{frame}{Hyperparamètres}
+\protect\hypertarget{hyperparamuxe8tres}{}
+\begin{itemize}
+\tightlist
+\item
+  le nombre de regroupements \(K\)
+\item
+  la forme des ellipsoïdes (structure de covariance)
+\item
+  les valeurs pour l'initialisation.
+\end{itemize}
+
+Les mêmes considérations pratiques qu'avec les \(K\)-moyennes
+s'appliquent.
+
+En pratique, on ajuste le modèle avec différent nombre de regroupements
+et différentes structures de covariance et on prend le modèle avec le
+plus petit BIC.
+\end{frame}
+
+\begin{frame}[fragile]{Sélection des hyperparamètres}
+\protect\hypertarget{suxe9lection-des-hyperparamuxe8tres}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{plot}\NormalTok{(mmg, }\AttributeTok{what =} \StringTok{"BIC"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\footnotesize
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-mclustbic-1.pdf}
+
+}
+
+\caption{\label{fig-mclustbic}Valeur du négatif du BIC pour les mélanges
+de modèles gaussiens selon le nombre de regroupements et la structure de
+covariance.}
+
+\end{figure}
+
+Le logiciel n'arrive pas à estimer certains modèles complexes quand le
+nombre de groupes est trop élevé.
+\end{frame}
+
+\begin{frame}{Représentation graphique des regroupements}
+\protect\hypertarget{repruxe9sentation-graphique-des-regroupements}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-classifreducmclust-1.pdf}
+
+}
+
+\caption{\label{fig-classifreducmclust}Projection des observations,
+colorées par regroupement (gauche) et structure des regroupements avec
+ellipsoides de confiance (droite).}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Avantages et inconvénients des mélanges de
+modèles}
+\protect\hypertarget{avantages-et-inconvuxe9nients-des-muxe9langes-de-moduxe8les}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(+\)) approche est plus flexible que les \(K\)-moyennes.
+\item
+  (\(+\)) l'ajout d'une composante uniforme permet de gérer les
+  aberrances (supporté par \texttt{mclust}).
+\item
+  (\(+\)) l'algorithme EM garantie la convergence à un minimum local
+  (comme pour les \(K\)-moyennes)
+\item
+  (\(+\)) on obtient une assignation probabiliste plutôt que rigide
+\item
+  (\(-\)) le coût de calcul est plus élevé que les \(K\)-moyennes
+\item
+  (\(-\)) le nombre de paramètre des matrices de covariance augmente
+  rapidement avec la dimension \(p\).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Méthodes basées sur la densité}
+\protect\hypertarget{muxe9thodes-basuxe9es-sur-la-densituxe9}{}
+L'algorithme DBSCAN (\emph{density-based spatial clustering of
+applications with noise}) est une méthode de partitionnement basée sur
+la densité des points.
+
+L'idée de base de l'algorithme est de tracer une boule de rayon
+\(\epsilon\) autour de chaque observation et de voir si elle inclut
+d'autres observations.
+\end{frame}
+
+\begin{frame}{Mécanisme d'assignation}
+\protect\hypertarget{muxe9canisme-dassignation}{}
+L'algorithme classe les observations en trois catégories:
+
+\begin{itemize}
+\tightlist
+\item
+  Un point central est une observation qui possède \(M-1\) voisins à
+  distance \(\epsilon\).
+\item
+  Un point frontière est un point qui est distant de moins de
+  \(\epsilon\) d'un point central, sans en être un.
+\item
+  Un point isolé est une observation qui n'est pas rattachée à aucun
+  regroupement.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Algorithme DBSCAN}
+\protect\hypertarget{algorithme-dbscan}{}
+L'algorithme répète les étapes suivantes jusqu'à ce que chaque
+observation ait été visitée.
+
+\begin{enumerate}
+\tightlist
+\item
+  Choisir un point aléatoirement parmi ceux qui n'ont pas été visités.
+\item
+  Si le point n'est pas étiqueté, calculer le nombre de points voisins
+  qui se trouvent dans un rayon \(\epsilon\): s'il y a moins de \(M\)
+  observations, provisoirement étiqueter l'observation comme point
+  isolé, sinon comme point central.
+\item
+  Si l'observation est un point central avec \(M-1\) voisins ou plus,
+  créer un regroupement.
+\item
+  Étiqueter chaque point à distance \(\epsilon\) créé et l'ajouter au
+  regroupement, ainsi que tout point à distance \(\epsilon\) de ces
+  voisins.
+\end{enumerate}
+
+\href{https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/}{Ce
+site web} offre une visualisation interactive des différentes étapes de
+l'algorithme et de comparer la performance de DBSCAN selon le type de
+regroupements.
+\end{frame}
+
+\begin{frame}{Hyperparamètres}
+\protect\hypertarget{hyperparamuxe8tres-1}{}
+\begin{itemize}
+\tightlist
+\item
+  le rayon \(\epsilon\) et
+\item
+  le nombre minimal de points pour former un regroupement, \(M\)
+\end{itemize}
+
+Hyperparamètres \(M\) et \(\epsilon\) corrélés: si on augmente le nombre
+minimal de point \(M\) par regroupement, il faudra également augmenter
+le rayon \(\epsilon\) pour éviter d'avoir un nombre trop élevé de points
+isolés et d'aberrances.
+\end{frame}
+
+\begin{frame}{Classification avec DBSCAN}
+\protect\hypertarget{classification-avec-dbscan}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-dbscan1-1.pdf}
+
+}
+
+\caption{\label{fig-dbscan1}Illustration de la classification des points
+avec DBSCAN: toutes les observations sont assignées à un regroupement,
+moins une aberrance.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Choix des hyperparamètres}
+\protect\hypertarget{choix-des-hyperparamuxe8tres}{}
+Avec \(p\) variables explicatives, on recommande \(M > p+1\).
+
+Pour \(\varepsilon\), considérer les \(M\) plus proches voisins.
+
+La fonction \texttt{kNNdistplot} du paquet \texttt{dbscan} permet de
+tracer un graphique de la distance moyenne des \(k\) plus proches
+voisins pour chaque observation:
+
+\begin{itemize}
+\tightlist
+\item
+  en prenant \(k=M-1\), calculer la distance entre le \(k\) plus proche
+  voisin de chaque observation.
+\item
+  ordonner ces distances.
+\item
+  choisir \(\epsilon\) selon coude
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Critère du coude}
+\protect\hypertarget{crituxe8re-du-coude}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-dbscan2-1.pdf}
+
+}
+
+\caption{\label{fig-dbscan2}Graphique des distances entre chaque
+observation et son troisième plus proche voisin (gauche), en fonction du
+pourcentage d'observations à moins de cette distance et regroupements
+obtenus avec DBSCAN avec \(M=10\) et \(\epsilon=1.1\) (droite).}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Avantages et inconvénients de DBSCAN (1/2)}
+\protect\hypertarget{avantages-et-inconvuxe9nients-de-dbscan-12}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(-\)) le traitement des aberrances est automatique et l'algorithme
+  est robuste.
+\item
+  (\(+\)) le nombre de regroupements n'a pas à être spécifié apriori.
+\item
+  (\(+\)) la forme des regroupements est arbitraire, peut être non
+  convexe et de taille différente.
+\item
+  (+/-) la complexité de l'algorithme est d'au mieux
+  \(\mathrm{O}(n\ln n)\) (calcul) et \(\mathrm{O}(n)\) pour le stockage
+  puisque chaque point est visité à tour de rôle et comparé aux autres
+  pour trouver les plus proches voisins.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Avantages et inconvénients de DBSCAN (2/2)}
+\protect\hypertarget{avantages-et-inconvuxe9nients-de-dbscan-22}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(-\)) les hyperparamètres ont une interprétation physique
+\item
+  (\(-\)) leur choix n'est pas aisé
+\item
+  (\(-\)) DBSCAN ne permet pas de traiter le cas où la densité des
+  regroupements change et risque de fusionner des regroupements s'il y a
+  une série d'observations qui permet de relier deux regroupements.
+\item
+  (\(-\)) comme la plupart des algorithmes, le voisinage des points
+  devient épars quand \(p\) augmente en raison du fléau de la dimension.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Regroupements hiérarchiques}
+\protect\hypertarget{regroupements-hiuxe9rarchiques}{}
+Méthode déterministe de regroupement à partir d'une matrice de
+dissimilarité.
+
+\begin{enumerate}
+\tightlist
+\item
+  Initialisation: chaque observation est assignée à son propre groupe.
+\item
+  les deux groupes les plus rapprochés sont fusionnés; la distance entre
+  le nouveau groupe et les autres regroupements est recalculée.
+\item
+  on répète l'étape 2 jusqu'à obtenir un seul regroupement.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Fonction de liaison}
+\protect\hypertarget{fonction-de-liaison}{}
+Il y a plusieurs façons de calculer la distance entre deux groupes
+d'observations de plusieurs observations, notamment
+
+\begin{itemize}
+\tightlist
+\item
+  liaison simple (\texttt{method\ =\ single}): plus proches voisins
+\item
+  liaison complète (\texttt{method\ =\ complete}): voisins les plus
+  éloignés
+\item
+  liaison moyenne (\texttt{method\ =\ average}): utilise la moyenne des
+  distances entre toutes les paires de sujets (un pour chaque groupe)
+  provenant des deux groupes.
+\item
+  méthode de Ward (\texttt{method\ =\ ward.D2}): calcul de l'homogénéité
+  globale
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Illustration des mesures de liaison}
+\protect\hypertarget{illustration-des-mesures-de-liaison}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-distances-1.pdf}
+
+}
+
+\caption{\label{fig-distances}Distances entre regroupements selon la
+liaison (simple, complète, barycentre, homogenéité de Ward).}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Méthode de Ward}
+\protect\hypertarget{muxe9thode-de-ward}{}
+La méthode de Ward utilise l'homogénéité comme critère.
+
+Pour chaque groupe, on calcule la somme des carrés des distances par
+rapport à la moyenne du groupe, disons \(\mathsf{SCD}_k\)
+(\(k=1, \ldots, M\)).
+
+On calcule ensuite l'homogénéité globale en faisant la somme,
+\(\mathrm{H}^{(M)} = \mathsf{SCD}_1 + \cdots + \mathsf{SCD}_M\).
+
+La méthode de Ward va fusionner les deux groupes qui feront augmenter le
+moins possible l'homogénéité.
+\end{frame}
+
+\begin{frame}[fragile]{Méthodes hiérarchiques et coût de calcul}
+\protect\hypertarget{muxe9thodes-hiuxe9rarchiques-et-couxfbt-de-calcul}{}
+Les algorithmes de regroupement hiérarchiques stockent une matrice de
+dissemblance \(n \times n\): coût de stockage quadratique
+\(\mathrm{O}(n^2)\).
+
+Généralement, le coût de calcul est au mieux \(\Omega(n^2)\) et au pire
+\(\mathrm{O}(n^3)\).
+
+Pour la méthode de liaison simple, un algorithme permet d'obtenir un
+coût de calcul quadratique de \(\mathrm{O}(n^2)\) sans stocker la
+matrice de dissemblance, d'où un coût de stockage linéaire de
+\(\mathrm{O}(n)\).
+
+\texttt{stat::hclust} permet de faire des regroupements agglomératifs,
+mais le paquet \texttt{fastcluster} propose une version avec une
+empreinte mémoire inférieure (*plus rapide!)
+\end{frame}
+
+\begin{frame}[fragile]{Genie}
+\protect\hypertarget{genie}{}
+Alternative de Gagolewski (2016) qui modifie la fonction de liaison
+simple en retenant son efficacité de calcul.
+
+Plutôt que de simplement trouver la paire de regroupements à distance
+minimale, cette fusion n'est appliquée que si une mesure d'inéquité est
+inférieur à un seuil spécifié par l'utilisateur.
+
+Si les regroupements sont fortement inéquitables, la fusion survient
+entre les regroupements dont un de la taille minimale courante.
+
+L'implémentation \textbf{R} dans le paquet \texttt{genieclust} est
+nettement plus rapide que les autres alternative.
+\end{frame}
+
+\begin{frame}{Performance relative}
+\protect\hypertarget{performance-relative}{}
+\begin{itemize}
+\item
+  \textbf{Liaison simple}: fonctionne bien si l'écart entre deux
+  regroupements est suffisamment grand. S'il y a du bruit entre deux
+  regroupements, la qualité des regroupements en sera affectée. Souvent
+  quelques valeurs isolées et un seul grand regroupement
+\item
+  \textbf{Liaison complète}: moins sensible au bruit et aux faibles
+  écarts entre regroupements, mais a tendance à casser les regroupements
+  globulaires.
+\item
+  \textbf{Homogénéité de Ward}: le critère ressemble à celui des
+  \(K\)-moyennes.
+\end{itemize}
+
+Voir la page
+\href{https://scikit-learn.org/stable/auto_examples/cluster/plot_linkage_comparison.html}{scikit-learn}
+pour une illustration.
+\end{frame}
+
+\begin{frame}{Hyperparamètres des méthodes hiérarchiques}
+\protect\hypertarget{hyperparamuxe8tres-des-muxe9thodes-hiuxe9rarchiques}{}
+\begin{enumerate}
+\tightlist
+\item
+  choix de la fonction de liaison (et hyperparamètres associés)
+\item
+  mesure de dissemblance
+\item
+  nombre de regroupements
+\end{enumerate}
+
+On peut représenter le modèle à l'aide d'un arbre, où les feuilles
+indiquent les regroupements à chaque étape jusqu'à la racine à la
+dernière étape (\textbf{dendrogramme}).
+
+La distance entre chaque embranchement est déterminée par notre critère:
+cela nous permet de sélectionner un nombre de regroupements \(K\) après
+inspection visuelle du dendrogramme.
+
+On élague l'arbre à la hauteur voulue.
+\end{frame}
+
+\begin{frame}{Dendrogramme}
+\protect\hypertarget{dendrogramme}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-dendrogramme-1.pdf}
+
+}
+
+\caption{\label{fig-dendrogramme}Dendrogramme pour l'exemple de
+regroupement hiérarchique avec la méthode de Ward et 20 observations.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Critères pour Ward}
+\protect\hypertarget{crituxe8res-pour-ward}{}
+On peut choisir \(K\) à partir du pourcentage de variance expliquée,
+\(R^2\) en calculant
+\[R^2_{(M)} = 1-\mathrm{H}_{(M)}/\mathrm{H}_{(1)},\] où
+\(\mathrm{H}_{(1)}\) est l'homogénéité globale avec un seul groupe.
+
+Le R-carré semi-partiel mesure la perte d'homogénéité d'une étape à
+l'autre, renormalisée par
+\[R^2_{\text{sp}(M)} =\frac{\mathrm{H}_{(M)} - \mathrm{H}_{(M-1)}}{\mathrm{H}_{(1)}},\]
+
+mesure la perte d'homogénéité (relative) en combinant ces deux groupes.
+
+On cherche un point d'inflection (un coude).
+\end{frame}
+
+\begin{frame}{Critères d'homogénéité (Ward)}
+\protect\hypertarget{crituxe8res-dhomoguxe9nuxe9ituxe9-ward}{}
+\end{frame}
+
+\begin{frame}{Avantages et inconvénient, regroupements hiérarchiques}
+\protect\hypertarget{avantages-et-inconvuxe9nient-regroupements-hiuxe9rarchiques}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(+\)) la solution du regroupement hiérarchique est toujours la même
+  (déterministe)
+\item
+  (\(-\)) l'assignation d'une observation à un regroupement est finale
+\item
+  (\(-\)) les aberrances ne sont pas traitées et sont souvent assignées
+  dans des regroupements à part
+\item
+  (\(+\)) les méthodes d'arborescence sont faciles à expliquer
+\item
+  (\(-\)) le nombre de groupes n'a pas à être spécifié apriori (une
+  seule estimation)
+\item
+  (\(-\)) le coût de calcul est prohibitif, avec une complexité
+  quadratique de \(\mathrm{O}(n^2)\) pour la méthode de liaison simple
+  et autrement \(\mathrm{O}(n^3)\) pour la plupart des autres fonctions
+  de liaison.
 \end{itemize}
 \end{frame}
 
