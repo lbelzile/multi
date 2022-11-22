@@ -1,0 +1,469 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{D-DIN}
+  \setsansfont[]{Latin Modern Sans}
+  \setmathfont[]{Latin Modern Math}
+\fi
+\usecolortheme{Flip}
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+\useinnertheme{Flip}
+\useoutertheme{Flip}
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{tabu}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Analyse de regroupements},
+  pdfauthor={Léo Belzile},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Analyse de regroupements}
+\subtitle{Analyse multidimensionnelle appliquée}
+\author{Léo Belzile}
+\date{automne 2022}
+\institute{HEC Montréal}
+
+\begin{document}
+\frame{\titlepage}
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
+
+\begin{frame}{Algorithmes pour l'analyse de regroupements}
+\protect\hypertarget{algorithmes-pour-lanalyse-de-regroupements}{}
+L'analyse de regroupements cherche à créer une division de \(n\)
+observations de \(p\) variables en regroupements.
+
+\begin{enumerate}
+\tightlist
+\item
+  méthodes basées sur la connectivité (regroupements hiérarchiques,
+  AGNES et DIANA)
+\item
+  méthodes basées sur les centroïdes et les médoïdes (\(k\)-moyennes,
+  \(k\)-médoides PAM, CLARA)
+\item
+  mélanges de modèles (mélanges Gaussiens, etc.)
+\item
+  méthodes basées sur la densité (DBScan)
+\item
+  méthodes spectrales
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{\(K\)-médianes}
+\protect\hypertarget{k-muxe9dianes}{}
+Illustration de la répartition/interprétation avec \(K=5\) groupes
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
+\NormalTok{kmed5 }\OtherTok{\textless{}{-}}\NormalTok{ flexclust}\SpecialCharTok{::}\FunctionTok{kcca}\NormalTok{(}
+  \AttributeTok{x =}\NormalTok{ donsmult\_std,}
+  \AttributeTok{k =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{family =}\NormalTok{ flexclust}\SpecialCharTok{::}\FunctionTok{kccaFamily}\NormalTok{(}\StringTok{"kmedians"}\NormalTok{),}
+  \AttributeTok{control =} \FunctionTok{list}\NormalTok{(}\AttributeTok{initcent =} \StringTok{"kmeanspp"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Différences de segmentation}
+\protect\hypertarget{diffuxe9rences-de-segmentation}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-acpkmoy5-1.pdf}
+
+}
+
+\caption{\label{fig-acpkmoy5}Nuage de points des deux premières
+composantes principales des observations de dons multiples avec les
+étiquettes des regroupements obtenus selon la méthodes des
+\(K\)-moyennes et \(K\)-médianes avec \(K=5\) regroupements.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Commentaire sur \(K\)-médianes}
+\protect\hypertarget{commentaire-sur-k-muxe9dianes}{}
+Avec les \(K\)-médianes, les personnes qui ont fait des dons plus élevés
+sont fusionnés avec d'autres personnes qui ont fait des dons moins
+élevés et les groupes sont davantage de taille comparable.
+
+Selon l'objectif des regroupements, cela peut être avantageux, mais
+cibler les donateurs les plus généreux semble plus logique dans le
+contexte.
+\end{frame}
+
+\begin{frame}{\(K\)-médoïdes.}
+\protect\hypertarget{k-muxe9douxefdes.}{}
+Dans les \(K\)-médoïdes, on choisit une observation comme prototype.
+
+Puisque qu'on considère chaque observation comme candidat à devenir un
+médoïde à chaque étape, le coût de calcul est prohibitif en grande
+dimension.
+\end{frame}
+
+\begin{frame}{Algorithme de partition autour des médoïdes (PAM)}
+\protect\hypertarget{algorithme-de-partition-autour-des-muxe9douxefdes-pam}{}
+\begin{enumerate}
+\tightlist
+\item
+  Initialisation: sélectionner \(K\) des \(n\) observations comme
+  médoïdes initiaux.
+\item
+  Assigner chaque observation au médoïde le plus près.
+\item
+  Calculer la dissimilarité totale entre chaque médoïde et les
+  observations de son groupe.
+\item
+  Pour chaque médoïde \((k=1, \ldots, K\)):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    considérer tous les \(n-K\) observations à tour de rôle et permuter
+    le médoïde avec l'observation.\\
+  \item
+    calculer la distance totale et sélectionner l'observation qui
+    diminue le plus la distance totale.
+  \end{itemize}
+\item
+  Répéter les étapes 2 à 4 jusqu'à ce que les médoïdes ne changent plus.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Algorithme CLARA (1/2)}
+\protect\hypertarget{algorithme-clara-12}{}
+L'algorithme CLARA, décrit dans Kaufman \& Rousseeuw (1990), réduit le
+coût de calcul et de stockage en
+
+\begin{itemize}
+\tightlist
+\item
+  divisant l'échantillon en \(S\) sous-échantillons de taille
+  approximativement égale (par défaut \(S=5\))
+\item
+  et en utilisant l'algorithme PAM sur chacun.
+\end{itemize}
+
+Une fois les médoïdes obtenus, le reste de toutes les observations de
+l'échantillon sont assignées au regroupement du médoïde le plus près.
+\end{frame}
+
+\begin{frame}{Algorithme CLARA (2/2)}
+\protect\hypertarget{algorithme-clara-22}{}
+La qualité de la segmentation pour chacune des segmentations est
+calculée en obtenant la distance moyenne entre les médoïdes et les
+observations.
+
+On retourne la meilleure (celle qui a la plus petite distance moyenne).
+\end{frame}
+
+\begin{frame}[fragile]{PAM et CLARA dans \textbf{R}}
+\protect\hypertarget{pam-et-clara-dans-r}{}
+Disponible depuis le paquet \texttt{cluster}.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
+\NormalTok{kmedoide5 }\OtherTok{\textless{}{-}}\NormalTok{ cluster}\SpecialCharTok{::}\FunctionTok{clara}\NormalTok{(}
+   \AttributeTok{x =}\NormalTok{ donsmult\_std,}
+   \AttributeTok{k =}\NormalTok{ 5L, }\CommentTok{\# nombre de groupes}
+   \AttributeTok{sampsize =} \DecValTok{500}\NormalTok{, }\CommentTok{\#taille échantillon pour PAM}
+   \AttributeTok{metric =} \StringTok{"euclidean"}\NormalTok{, }\CommentTok{\# distance l2}
+   \CommentTok{\#cluster.only = TRUE, \# ne conserver que étiquettes}
+   \AttributeTok{rngR =} \ConstantTok{TRUE}\NormalTok{, }\CommentTok{\# germe aléatoire depuis R}
+   \AttributeTok{pamLike =} \ConstantTok{TRUE}\NormalTok{, }\CommentTok{\# même algorithme que PAM}
+   \AttributeTok{samples =} \DecValTok{10}\NormalTok{) }\CommentTok{\#nombre de répétitions aléatoires}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Avantages et inconvénients des \(K\)-médoïdes}
+\protect\hypertarget{avantages-et-inconvuxe9nients-des-k-muxe9douxefdes}{}
+\begin{itemize}
+\tightlist
+\item
+  (+) les prototypes sont des observations de l'échantillon.
+\item
+  (+) la fonction objective est moins impactée par les extrêmes.
+\item
+  (-) le coût de calcul est prohibitif avec des mégadonnées (problème
+  combinatoire). PAM fonctionne avec maximum 1000 observations.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Valeurs initiales et paramètres}
+\protect\hypertarget{valeurs-initiales-et-paramuxe8tres}{}
+Même hyperparamètres que \(K\)-moyennes (dissemblance, nombre de
+regroupements, initialisation et séparation).
+
+Comme les \(K\)-moyennes, on fera plusieurs essais pour trouver de
+bonnes valeurs de départ. On peut tracer le profil des silhouettes
+(Figure~\ref{fig-clarasilhouette})
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-clarasilhouette-1.pdf}
+
+}
+
+\caption{\label{fig-clarasilhouette}Silhouettes pour les données de dons
+multiples avec l'algorithme CLARA pour \(K=5\) regroupements.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Prototypes}
+\protect\hypertarget{prototypes}{}
+Puisque les prototypes (médoïdes) sont des observations, on peut
+simplement extraire leur identifiant
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{medoides\_orig }\OtherTok{\textless{}{-}}\NormalTok{ donsmult[kmedoide[[}\DecValTok{4}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{i.med,]}
+\NormalTok{medoides\_orig}
+\CommentTok{\# Taille des regroupements}
+\NormalTok{kmedoide[[}\DecValTok{4}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{clusinfo}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Mesures de similarité}
+\protect\hypertarget{mesures-de-similarituxe9}{}
+Certains algorithmes utilisent directement une matrice de similarité
+\(\mathbf{S}\) qui encode plutôt l'information à propos des points
+avoisinants.
+
+Plus les observations sont similaires, plus elles sont proches.
+
+Les mesures dissemblance peuvent être convertie en mesure de similarité.
+
+En haute dimension, il est intéressant d'obtenir une matrice de
+similarité creuse (avec beaucoup de zéros).
+
+\begin{itemize}
+\tightlist
+\item
+  Méthodes de noyau à support compact
+\item
+  voisinage \(\epsilon\): toute paire d'observation à distance au plus
+  \(\epsilon\) a une similarité de \(s=1\) et \(s=0\) sinon.
+\item
+  \(k\) plus proches voisins: similarité de \(S_{ij}=1\) si
+  l'observation \(\mathbf{X}_j\) est un des \(k\) plus proches voisins
+  d'observation \(\mathbf{X}_i\) (ou vice-versa)
+\end{itemize}
+\end{frame}
+
+
+
+\end{document}

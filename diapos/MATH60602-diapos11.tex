@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, sharp corners, boxrule=0pt, enhanced, interior hidden, borderline west={3pt}{0pt}{shadecolor}, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, breakable, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -254,6 +254,29 @@ Chaque observation se voit assigner une étiquette de groupe.
 
 On procède ensuite à une analyse \textbf{descriptive}, segment par
 segment.
+\end{frame}
+
+\begin{frame}{Exemples}
+\protect\hypertarget{exemples}{}
+\begin{itemize}
+\tightlist
+\item
+  Programmes de fidélisation et résolution d'entités
+\item
+  Segmentation de la clientèle de transport en commun et élaboration de
+  forfaits
+\item
+  Démarchage d'organismes de charité
+\item
+  Segmentation de
+  \href{https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/}{quartiers
+  de Los Angeles} et de
+  \href{https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/}{New
+  York} selon leur vote
+\item
+  \href{https://www.cbc.ca/news/canada/calgary/danielle-smith-alberta-moderate-middle-ucp-ndp-poll-1.6651460}{Profils
+  des électeurs albertains}
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Illustration}
@@ -288,29 +311,6 @@ Ce sont des méthodes dites d'\textbf{apprentissage non-supervisé}:
 l'objectif est de déduire la structure présente dans un ensemble de
 points \(\mathbf{X}\) sans étiquette préalable (contrairement à la
 classification).
-\end{frame}
-
-\begin{frame}{Exemples}
-\protect\hypertarget{exemples}{}
-\begin{itemize}
-\tightlist
-\item
-  Programmes de fidélisation et résolution d'entités
-\item
-  Segmentation de la clientèle de transport en commun et élaboration de
-  forfaits
-\item
-  Démarchage d'organismes de charité
-\item
-  Segmentation de
-  \href{https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/}{quartiers
-  de Los Angeles} et de
-  \href{https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/}{New
-  York} selon leur vote
-\item
-  \href{https://www.cbc.ca/news/canada/calgary/danielle-smith-alberta-moderate-middle-ucp-ndp-poll-1.6651460}{Profils
-  des électeurs albertains}
-\end{itemize}
 \end{frame}
 
 \begin{frame}{Structure de la base de données}
@@ -365,6 +365,15 @@ La carte Opus enregistre
 \end{itemize}
 \end{frame}
 
+\begin{frame}{À votre tour}
+\protect\hypertarget{uxe0-votre-tour}{}
+Vous avez toutes les données transactionnelles associées à des comptes
+d'épicerie avec un compte de fidélisation.
+
+Quelles variables pourriez-vous créer à partir des données aggrégées
+pour créer des segments?
+\end{frame}
+
 \begin{frame}{Diviser pour régner}
 \protect\hypertarget{diviser-pour-ruxe9gner}{}
 Souvent, il existe une division naturelle des données.
@@ -373,15 +382,6 @@ Les jeunes avec des abonnements de transport publics l'utilisent
 principalement pour aller à l'école.
 
 On peut faire la segmentation \textbf{séparément} pour ces sous-groupes.
-\end{frame}
-
-\begin{frame}{À votre tour}
-\protect\hypertarget{uxe0-votre-tour}{}
-Vous avez toutes les données transactionnelles associées à des comptes
-d'épicerie avec un compte de fidélisation.
-
-Quelles variables créez vous à partir des données aggrégées pour créer
-des segments?
 \end{frame}
 
 \begin{frame}{Choix des variables}
@@ -394,7 +394,7 @@ les effets voulus.
 \item
   inclure de nombreuses variables similaires dilue les différences.
 \item
-  transformer les variables pour diminuer la corrélation
+  transformez les variables pour diminuer la corrélation.
 \end{itemize}
 
 Typiquement, ne pas utiliser les variables sociodémographiques (âge,
@@ -405,17 +405,6 @@ revenu, sexe, etc.)
 \item
   on compare plutôt leur répartition au sein des regroupements.
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Exemple: typologie des votants en France}
-\protect\hypertarget{exemple-typologie-des-votants-en-france}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/typologie-vote-france.jpg}
-
-}
-
-\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Exemple - dons à un organisme de charité}
@@ -429,8 +418,8 @@ variables.
   Trois grandes catégories: personnes qui n'ont pas donné, dons uniques,
   dons multiples.
 \item
-  variables sociodémographiques, valeur des dons (min, max) et des
-  promesses, nombre de dons, fréquence,
+  valeur des dons (total, min, max) et des promesses, nombre de dons,
+  fréquence, ancienneté, etc.
 \end{itemize}
 
 Une rapide exploration des données révèle que près de 61\% des
@@ -438,32 +427,6 @@ employé(e)s n'ont pas donné à l'organisme.
 
 Une poignée de dons sont très élevés, mais la plupart des montants
 tourne autour de 5\$, 10\$, 20\$, etc.
-\end{frame}
-
-\begin{frame}{Étapes d'une analyse de regroupements}
-\protect\hypertarget{uxe9tapes-dune-analyse-de-regroupements}{}
-\begin{enumerate}
-\tightlist
-\item
-  Choisir les variables pertinentes à l'analyse. Cette étape peut
-  nécessiter de créer, transformer de nouvelles variables ou d'aggréger
-  les données.
-\item
-  Décider quel méthode et quelle mesure de dissemblance/similarité
-  seront utilisées pour la segmentation.
-\item
-  Choisir les hyperparamètres de l'algorithme (nombre de regroupements,
-  rayon, etc.)
-\item
-  Procéder à l'analyse de regroupements.
-\item
-  Calculer une mesure de qualité.
-\item
-  Assigner les étiquettes aux observations et calculer un prototype de
-  groupe.
-\item
-  Interpréter les regroupements obtenus à partir des prototypes.
-\end{enumerate}
 \end{frame}
 
 \begin{frame}[fragile]{Modification des données}
@@ -493,7 +456,41 @@ On se concentre sur les personnes qui ont fait plusieurs dons.
 \protect\hypertarget{corruxe9lation-pour-nouvelles-donnuxe9es}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-6-1.pdf}
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-5-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Étapes d'une analyse de regroupements}
+\protect\hypertarget{uxe9tapes-dune-analyse-de-regroupements}{}
+\begin{enumerate}
+\tightlist
+\item
+  Choisir les variables pertinentes à l'analyse. Cette étape peut
+  nécessiter de créer, transformer de nouvelles variables ou d'aggréger
+  les données.
+\item
+  Décider quel méthode sera utilisée pour la segmentation.
+\item
+  Choisir les hyperparamètres de l'algorithme (nombre de regroupements,
+  rayon, etc.) et la mesure de dissemblance.
+\item
+  Assigner les étiquettes aux observations et calculer un prototype de
+  groupe.
+\item
+  Valider la qualité de la segmentation.
+\item
+  Interpréter les regroupements obtenus à partir des prototypes.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Exemple: typologie des votants en France}
+\protect\hypertarget{exemple-typologie-des-votants-en-france}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/typologie-vote-france.jpg}
 
 }
 
@@ -508,8 +505,8 @@ regroupement et sont similaires?
 Une mesure de dissemblance sert à quantifier la proximité de deux objets
 à partir de leurs coordoonnées.
 
-Elle mesure la distance entre deux vecteurs d'observations (deux lignes
-de la base de données) et en se basant sur les variables explicatives.
+Plus la dissemblance est élevée, moins les observations sont semblables
+(plus éloignées).
 \end{frame}
 
 \begin{frame}{Mesures de dissemblance}
@@ -530,13 +527,13 @@ Quelques propriétés des mesures de dissemblance:
 Toute distance est une mesure de dissemblance.
 \end{frame}
 
-\begin{frame}{Distance Euclidienne}
+\begin{frame}{Distance euclidienne}
 \protect\hypertarget{distance-euclidienne}{}
 La mesure de dissemblance la plus utilisée en pratique est la distance
-euclidienne entre sujets.
+euclidienne.
 
 La distance entre les vecteurs ligne \(\mathbf{X}_i\) et
-\(\mathbf{X}_j\) est \begin{align*}
+\(\mathbf{X}_j\) (deux lignes de la base de données) est \begin{align*}
 d(\mathbf{X}_i, \mathbf{X}_j; l_2) = \left\{(X_{i1}-X_{j1})^2 + \cdots + (X_{ip}-X_{jp})^2\right\}^{1/2}.
 \end{align*} C'est tout simplement la longueur du segment qui relie deux
 points dans l'espace \(p\) dimensionnel.
@@ -576,11 +573,11 @@ les valeurs manquantes et standardise automatiquement.
 \begin{frame}[fragile]{Dissemblances dans \textbf{R}}
 \protect\hypertarget{dissemblances-dans-r}{}
 Avec notre base de données \texttt{donsmult}, le stockage des distances
-prend environ 1.5GB!
+prend environ 750MB!
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\CommentTok{\# Distance Euclidienne, de Manhattan, de Gower}
+\CommentTok{\# Distance euclidienne, de Manhattan, de Gower}
 \NormalTok{d1 }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(donsmult, }\AttributeTok{method =} \StringTok{"euclidean"}\NormalTok{)}
 \NormalTok{d2 }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(donsmult, }\AttributeTok{method =} \StringTok{"minkowski"}\NormalTok{, }\AttributeTok{p =} \DecValTok{1}\NormalTok{)}
 \NormalTok{d3 }\OtherTok{\textless{}{-}}\NormalTok{ cluster}\SpecialCharTok{::}\FunctionTok{daisy}\NormalTok{(donsmult, }\AttributeTok{metric =} \StringTok{"gower"}\NormalTok{)}
@@ -592,27 +589,6 @@ prend environ 1.5GB!
 
 Les objets de class \texttt{dist} ne stockent que la matrice
 triangulaire inférieure (symmétrie).
-\end{frame}
-
-\begin{frame}{Être aux abonnés absents}
-\protect\hypertarget{uxeatre-aux-abonnuxe9s-absents}{}
-Attention aux valeurs manquantes, rarement supportées par les
-algorithmes d'analyse de regroupements.
-
-Quelques solutions
-
-\begin{itemize}
-\tightlist
-\item
-  ignorer la variable explicative
-\item
-  faire une segmentation manuelle si les valeurs manquantes déterminent
-  des regroupements (ex: temps entre dons valide uniquement pour dons
-  multiples).
-\item
-  imputer les données manquantes (voir chapitre sur les données
-  manquantes)
-\end{itemize}
 \end{frame}
 
 \begin{frame}{Au plus fort la poche}
@@ -647,7 +623,8 @@ regroupements.
 \end{itemize}
 
 Notez qu'il est illogique de standardiser les variables catégorielles
-(déclarer obligatoirement variables en facteurs!)
+(déclarer obligatoirement les variables binaires en facteurs et traiter
+à part!)
 \end{frame}
 
 \begin{frame}[fragile]{Standardisation avec \textbf{R}}
@@ -669,10 +646,32 @@ Notez qu'il est illogique de standardiser les variables catégorielles
 \end{Shaded}
 \end{frame}
 
+\begin{frame}{Être aux abonnés absents}
+\protect\hypertarget{uxeatre-aux-abonnuxe9s-absents}{}
+Attention aux valeurs manquantes, rarement supportées par les
+algorithmes d'analyse de regroupements.
+
+Quelques solutions
+
+\begin{itemize}
+\tightlist
+\item
+  ignorer les variables explicatives avec beaucoup de valeurs
+  manquantes.
+\item
+  faire une segmentation manuelle si les valeurs manquantes déterminent
+  des regroupements (ex: temps entre dons valide uniquement pour dons
+  multiples).
+\item
+  imputer les données manquantes (voir chapitre sur les données
+  manquantes)
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Algorithmes pour la segmentation}
 \protect\hypertarget{algorithmes-pour-la-segmentation}{}
 L'analyse de regroupements cherche à créer une division de \(n\)
-observations de \(p\) variables en \(k\) regroupements.
+observations de \(p\) variables en regroupements.
 
 \begin{enumerate}
 \tightlist
@@ -722,11 +721,12 @@ son faible coût (linéaire en \(n\) et \(p\)).
 
 La fonction objective considère la distance totale entre observations et
 prototypes \begin{equation}\protect\hypertarget{eq-fobjKmoy}{}{
-\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\frac{1}{n}\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
+\mathsf{SCD}_K = \min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
 }\label{eq-fobjKmoy}\end{equation}
 
 L'allocation optimale de \(n\) observations à \(K\) groupes est un
-problème NP complet.
+problème NP complet: on cherchera plutôt une solution approximative au
+problème d'optimisation.
 \end{frame}
 
 \begin{frame}{Initialisation des \(K\)-moyennes}
@@ -765,25 +765,10 @@ Visionner l'animation
 ligne}.
 \end{frame}
 
-\begin{frame}{Séparation linéaire de l'espace}
-\protect\hypertarget{suxe9paration-linuxe9aire-de-lespace}{}
-Avec la distance Euclidienne, la partition de l'espace est linéaire.
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-voronoikmoy.png}
-
-}
-
-\caption{\label{fig-voronoy}Partitions de Voronoï pour les regroupements
-avec séparateur linéaire.}
-
-\end{figure}
-\end{frame}
-
 \begin{frame}{Forces et faiblesses}
 \protect\hypertarget{forces-et-faiblesses}{}
 \begin{itemize}
+\tightlist
 \item
   (\(+\)) Complexité \textbf{linéaire} dans la dimension et dans le
   nombre de variables.
@@ -792,14 +777,23 @@ avec séparateur linéaire.}
   (garantie théorique).
 \item
   (\(-\)) Regroupements globulaires d'apparence sphérique (distance
-  Euclidienne).
+  euclidienne).
 \item
   (\(+\)) Pour les prédictions, on peut assigner les nouvelles
-  observations au barycentre le plus près. \# Performance
+  observations au barycentre le plus près.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Performance}
+\protect\hypertarget{performance}{}
+\begin{itemize}
+\tightlist
 \item
   (\(-\)) Chaque observation est assignée à un seul des \(K\)
-  regroupements (partition rigide). - (\(-\)) Valeurs aberrantes pas
-  étiquetées à part (manque de robustesse pour moyenne).
+  regroupements (partition rigide).
+\item
+  (\(-\)) Valeurs aberrantes pas étiquetées à part (manque de robustesse
+  pour moyenne).
 \item
   (\(-\)) Sensible aux valeurs initiales des prototypes.
 \item
@@ -821,6 +815,22 @@ Illustration de segmentations problématiques avec \(K\)-moyennes
 \end{figure}
 \end{frame}
 
+\begin{frame}{Séparation linéaire de l'espace}
+\protect\hypertarget{suxe9paration-linuxe9aire-de-lespace}{}
+Avec la distance euclidienne, la partition de l'espace est linéaire.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-voronoikmoy.png}
+
+}
+
+\caption{\label{fig-voronoy}Partitions de Voronoï pour les regroupements
+avec séparateur linéaire.}
+
+\end{figure}
+\end{frame}
+
 \begin{frame}{Hyperparamètres avec \(K\)-moyennes}
 \protect\hypertarget{hyperparamuxe8tres-avec-k-moyennes}{}
 \begin{enumerate}
@@ -836,7 +846,7 @@ Illustration de segmentations problématiques avec \(K\)-moyennes
 
 \begin{frame}{Distance}
 \protect\hypertarget{distance}{}
-Avec la distance Euclidienne \(l_2\), les prototypes correspondent avec
+Avec la distance euclidienne \(l_2\), les prototypes correspondent avec
 le barycentre (moyenne variable par variable) des observations du
 regroupement.
 
@@ -871,7 +881,7 @@ principale (gauche) et une bonne initialisation (droite).}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
-\NormalTok{kmoy5 }\OtherTok{\textless{}{-}} \FunctionTok{kmeans}\NormalTok{(}
+\NormalTok{kmoy5 }\OtherTok{\textless{}{-}} \FunctionTok{kmeans}\NormalTok{( }\CommentTok{\# distance euclidienne }
    \AttributeTok{x =}\NormalTok{ donsmult\_std, }\CommentTok{\# données}
    \AttributeTok{centers =}\NormalTok{ 5L, }\CommentTok{\# nb groupes}
    \AttributeTok{nstart =} \DecValTok{10}\NormalTok{, }\CommentTok{\# nb initialisation aléatoire}
@@ -963,7 +973,7 @@ objective
 \begin{frame}{Somme du carré des distances intra-groupes}
 \protect\hypertarget{somme-du-carruxe9-des-distances-intra-groupes}{}
 La fonction objective de l'Equation~\ref{eq-fobjKmoy} avec la distance
-Euclidienne représente la somme du carré des distances (SCD)
+euclidienne représente la somme du carré des distances (SCD)
 \begin{align*}
 \mathsf{SCD}_K &= \mathsf{SCD}_{1,K} + \cdots + \mathsf{SCD}_{K,K};
 \intertext{où}
@@ -1112,16 +1122,16 @@ K-moyennes et cinq regroupements). }\tabularnewline
 \toprule
   & 1 & 2 & 3 & 4 & 5\\
 \midrule
-décompte & 991 & 77 & 4480 & 4231 & 3838\\
-mtdons & 13.91 & 408.42 & 15.33 & 12.11 & 24.16\\
-ndons & 2.97 & 12.16 & 3.98 & 4.61 & 13.64\\
-recence & 64.62 & 60.55 & 29.02 & 172.41 & 27.72\\
-anciennete & 219.36 & 259.48 & 83.25 & 247.80 & 252.41\\
-vdonsmax & 22.39 & 991.30 & 22.55 & 19.23 & 58.90\\
-ddons & 7.50 & 1.91 & 1.60 & 1.87 & 1.65\\
-nrefusconsec & 1.82 & 0.56 & 0.62 & 3.16 & 0.47\\
-snrefus & 3.18 & 0.87 & 4.24 & 2.72 & 1.05\\
-mpromesse & 15.32 & 554.82 & 17.67 & 7.63 & 44.24\\
+décompte & 993 & 64 & 3812 & 4496 & 4252\\
+mtdons & 13.92 & 445.49 & 24.98 & 15.32 & 12.11\\
+ndons & 2.98 & 11.38 & 13.71 & 4.00 & 4.63\\
+recence & 64.56 & 67.14 & 27.34 & 29.00 & 172.06\\
+anciennete & 219.46 & 255.45 & 252.77 & 83.59 & 247.85\\
+vdonsmax & 22.39 & 1069.30 & 61.19 & 22.53 & 19.23\\
+ddons & 7.49 & 1.92 & 1.65 & 1.60 & 1.87\\
+nrefusconsec & 1.82 & 0.52 & 0.47 & 0.62 & 3.15\\
+snrefus & 3.17 & 0.88 & 1.05 & 4.23 & 2.71\\
+mpromesse & 15.32 & 620.32 & 45.13 & 17.70 & 7.67\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1141,13 +1151,14 @@ Les regroupements obtenus sont interprétables:
   ont fait plusieurs dons, leur valeur maximale est élevée. N'ont pas
   donné récemment.
 \item
-  Groupe 3: Petits donateurs récidivistes. Dons plus élevés que la
-  moyenne mais beaucoup de dons de faible valeur et peu fréquents.
+  Groupe 3: Petits fidèles. Dons plus élevés que la moyenne, nombre de
+  dons élevés et récents.
 \item
-  Groupe 4: Petits nouveaux. Moins d'ancienneté, dons fréquents et refus
+  Groupe 4: Petits nouveaux. Moins d'ancienneté, dons récents et refus
   fréquents relativement à l'ancienneté.
 \item
-  Groupe 5: Petits donateurs inactifs. Plutôt anciens, plusieurs refus.
+  Groupe 5: Donateurs inactifs. Faible montant de dons, plutôt anciens,
+  plusieurs refus.
 \end{itemize}
 \end{frame}
 

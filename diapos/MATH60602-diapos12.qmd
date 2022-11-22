@@ -1,3 +1,648 @@
+---
+title: "Analyse de regroupements"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: lualatex
+code-line-numbers: true
+fig-align: 'center'
+mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+        \usepackage{mathtools}
+        \usepackage{mathrsfs}
+---
+
+# Algorithmes pour l'analyse de regroupements
+
+
+L'analyse de regroupements cherche à créer une division de $n$ observations de $p$ variables en regroupements.
+
+1. méthodes basées sur la connectivité (regroupements hiérarchiques, AGNES et DIANA)
+2. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides  PAM, CLARA)
+3. mélanges de modèles (mélanges Gaussiens, etc.)
+4. méthodes basées sur la densité (DBScan)
+5. méthodes spectrales
+
+
+```{r}
+#| label: setup
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+#| cache: false
+library(knitr)
+library(kableExtra)
+set.seed(1014)
+library(hecmulti)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  cache = TRUE,
+  out.width = "80%",
+  fig.align = 'center',
+  fig.width = 8.5,
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+options(knitr.table.format = function() {
+  if (knitr::is_latex_output()) 
+    "latex" else "html"
+})
+
+options(dplyr.print_min = 6, dplyr.print_max = 6)
+options(knitr.graphics.auto_pdf = TRUE)
+options(scipen = 1, digits = 3)
+library(viridis)
+library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
+library(poorman, quietly = TRUE, warn.conflicts = FALSE)
+library(patchwork)
+
+safe_colorblind_palette <- MetBrewer::met.brewer("Hiroshige",10)
+
+options(ggplot2.continuous.colour="viridis")
+options(ggplot2.continuous.fill = "viridis")
+scale_colour_discrete <- scale_color_manual(MetBrewer::met.brewer("Hiroshige",10))
+scale_fill_discrete <- scale_fill_manual(MetBrewer::met.brewer("Hiroshige",10))
+theme_set(theme_classic())
+```
+
+```{r}
+#| eval: true
+#| echo: false
+donsmult <- hecmulti::dons |>
+  filter(ndons > 1L) |>
+  mutate(mtdons = vdons/ndons,
+         snrefus = nrefus/anciennete*mean(anciennete),
+         mpromesse = case_when(
+           npromesse > 0 ~ vpromesse/npromesse,
+           TRUE ~ 0)) |>
+  select(!c(
+    vradiations, # valeurs manquantes
+    nindecis, vdons, ddonsmax,
+    ddonsmin, vdonsmin, npromesse,
+    vpromesse, nrefus, nradiations)) |>
+  relocate(mtdons)
+donsmult_std <- scale(donsmult)
+# Extraire moyenne et écart-type
+dm_moy <- attr(donsmult_std, "scaled:center")
+dm_std <- attr(donsmult_std, "scaled:scale")
+```
+
+# $K$-médianes
+
+Illustration de la répartition/interprétation avec $K=5$ groupes
+
+```{r}
+#| eval: false
+#| echo: true
+set.seed(60602)
+kmed5 <- flexclust::kcca(
+  x = donsmult_std,
+  k = 5,
+  family = flexclust::kccaFamily("kmedians"),
+  control = list(initcent = "kmeanspp"))
+```
+
+# Différences de segmentation
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-acpkmoy5
+#| fig-cap: "Nuage de points des deux premières composantes principales des observations de dons multiples avec les étiquettes des regroupements obtenus selon la méthodes des $K$-moyennes et $K$-médianes avec $K=5$ regroupements."
+#| cache: true
+set.seed(60602)
+acp <- princomp(donsmult_std)
+kmed5 <- flexclust::kcca(
+  x = donsmult_std,
+  k = 5,
+  family = flexclust::kccaFamily("kmedians"),
+  control = list(initcent = "kmeanspp"))
+set.seed(60602)
+kmean5 <- flexclust::kcca(
+  x = donsmult_std,
+  k = 5,
+  family = flexclust::kccaFamily("kmeans"),
+  control = list(initcent = "kmeanspp"))
+df <- data.frame(x = acp$scores[,1],
+           y = acp$scores[,2],
+           emoy = factor(kmean5@cluster),
+           emed = factor(kmed5@cluster))
+
+g1 <- ggplot(data = df,
+             aes(x = x, y = y, col = emoy)) +
+  geom_point(alpha = 0.5) +
+  labs(x = "composante principale 1",
+       y = "composante principale 2",
+       subtitle = "k-moyennes") +
+  theme(legend.position = "none")
+g2 <- ggplot(data = df,
+             aes(x = x, y = y, col = emed)) +
+  geom_point(alpha = 0.5) +
+  labs(x = "composante principale 1",
+       y = "composante principale 2",
+       subtitle = "k-médianes") +
+  theme(legend.position = "none")
+g1 + g2
+```
+
+# Commentaire sur $K$-médianes
+
+Avec les $K$-médianes, les personnes qui ont fait des dons plus élevés sont fusionnés avec d'autres personnes qui ont fait des dons moins élevés et les groupes sont davantage de taille comparable. 
+
+
+Selon l'objectif des regroupements, cela peut être avantageux, mais cibler les donateurs les plus généreux semble plus logique dans le contexte.
+
+
+# $K$-médoïdes.
+
+Dans les $K$-médoïdes, on choisit une observation comme prototype.
+
+Puisque qu'on considère chaque observation comme candidat à devenir un médoïde à chaque étape, le coût de calcul est prohibitif en grande dimension.
+
+# Algorithme de partition autour des médoïdes (PAM) 
+
+1. Initialisation: sélectionner $K$ des $n$ observations comme médoïdes initiaux.
+2. Assigner chaque observation au médoïde le plus près.
+3. Calculer la dissimilarité totale entre chaque médoïde et les observations de son groupe.
+4. Pour chaque médoïde $(k=1, \ldots, K$):  
+   - considérer tous les $n-K$ observations à tour de rôle et permuter le médoïde avec l'observation.  
+   - calculer la distance totale et sélectionner l'observation qui diminue le plus la distance totale.
+4. Répéter les étapes 2 à 4 jusqu'à ce que les médoïdes ne changent plus.
+
+
+
+# Algorithme CLARA (1/2)
+
+L'algorithme CLARA, décrit dans Kaufman & Rousseeuw (1990), réduit le coût de calcul et de stockage en
+
+- divisant l'échantillon en $S$ sous-échantillons de taille approximativement égale de taille $n_S$ (typiquement $K \ll n_S < 1000$)
+- et en utilisant l'algorithme PAM sur chacun. 
+
+Une fois les médoïdes obtenus, le reste de toutes les observations de l'échantillon sont assignées au regroupement du médoïde le plus près.
+
+
+# Algorithme CLARA (2/2)
+
+
+La qualité de la segmentation pour chacune des $S$ segmentations est calculée en obtenant la distance moyenne entre les médoïdes et les observations.
+
+On retourne la meilleure segmentation parmi les $S$ (celle qui a la plus petite distance moyenne).
+
+# PAM et CLARA dans **R**
+
+Disponible depuis le paquet `cluster`.
+
+```{r}
+#| eval: true
+#| echo: true
+set.seed(60602)
+kmedoide5 <- cluster::clara(
+   x = donsmult_std,
+   k = 5L, # nombre de groupes
+   sampsize = 500, #taille échantillon pour PAM
+   metric = "euclidean", # distance l2
+   #cluster.only = TRUE, # ne conserver que étiquettes
+   rngR = TRUE, # germe aléatoire depuis R
+   pamLike = TRUE, # même algorithme que PAM
+   samples = 10) #nombre de répétitions aléatoires
+```
+
+
+# Avantages et inconvénients des $K$-médoïdes
+
+- (-) solution approximative pour grand échantillons
+- (+) les prototypes sont des observations de l'échantillon.
+- (+) la fonction objective est moins impactée par les extrêmes.
+- (-) le coût de calcul est prohibitif avec des mégadonnées (problème combinatoire) avec complexité $\mathrm{O}(n^2)$. PAM fonctionne avec maximum 1000 observations.
+
+# Valeurs initiales et paramètres
+
+Même hyperparamètres que $K$-moyennes (dissemblance, nombre de regroupements, initialisation et séparation).
+
+Comme les $K$-moyennes, on fera plusieurs essais pour trouver de bonnes valeurs de départ. On peut tracer le profil des silhouettes (@fig-clarasilhouette)
+
+```{r}
+#| label: fig-clarasilhouette
+#| eval: true
+#| echo: FALSE
+#| fig-cap: "Silhouettes pour les données de dons multiples avec l'algorithme CLARA pour $K=5$ regroupements."
+plot(factoextra::fviz_silhouette(kmedoide5,
+                                 print.summary = FALSE))
+```
+
+# Prototypes
+
+Puisque les prototypes (médoïdes) sont des observations, on peut simplement extraire leur identifiant
+
+```{r}
+#| eval: false
+#| echo: true
+medoides_orig <- donsmult[kmedoide[[4]]$i.med,]
+medoides_orig
+# Taille des regroupements
+kmedoide[[4]]$clusinfo
+```
+
+
+# Mélange de modèles
+
+On suppose qu'on a $K$ groupes, chacun caractérisé par une densité de dimension $p$, soit $f_k(\boldsymbol{X}_i;\boldsymbol{\theta}_k)$ si $\boldsymbol{X}_i$ provient du groupe $k$ pour $k=1, \ldots, K$.
+
+Généralement, on choisit une loi normale multidimensionnelle pour le $k$e groupe $G$,
+\begin{align*}
+\boldsymbol{X} \mid G=k \sim \mathsf{No}_p(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+\end{align*}
+
+
+# Vraisemblance
+
+La vraisemblance est une fonction des paraomètres $\boldsymbol{\mu}_k$, $\boldsymbol{\Sigma}_k$ et la probabilité $\pi_k$ qu'une observation $\mathbf{X}_i$ tombe dans le groupe $k$,
+\begin{align*}
+ L_i(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_K; \pi_1, \ldots, \pi_K, \mathbf{X}_i)= \sum_{k=1}^K\pi_k
+f_{k}(\boldsymbol{X}_i,
+\boldsymbol{\theta}_{k}).
+\end{align*}
+
+# Estimation du mélange de modèle
+
+Le modèle est estimé à l'aide de l'algorithme d'espérance-maximisation en augmentant les observations avec un indicateur de groupe.
+
+- Étape E: assignation aux groupes (multinomiale).
+- Étape $M$: estimation des probabilités, des moyennes et variances.
+
+Le mélange de modèle nous donne accès à la probabilité $\pi_k$ qu'une observation appartiennent au groupe $G_k$ (**assignation probabiliste**).
+
+# Fléau de la dimension
+
+Les vecteurs de moyennes servent de prototypes.
+
+Chacune des $K$ matrice de covariance contient $p(p+1)/2$ paramètres!
+
+En paramétrisant ces dernière, on peut réduire le nombre de paramètres à estimer.
+
+- compromis entre simplicité (d'estimation) et nombre de paramètres
+
+# Paramétrisation des matrices de covariance
+
+La matrice de covariance dans `mclust` est paramétrisée en fonction de 
+
+- $\lambda$, qui contrôle le volume, 
+- une matrice diagonale $\mathbf{A}$ qui contrôle les variances de chaque observation et 
+- $\mathbf{D}$ une matrice orthogonale qui permet de créer de la corrélation entre observations.
+
+Un index $k$ spécifie que cette composante varie d'un regroupement à l'autre.
+
+# Paramétrisation des variables
+
+Voir `mclust.options("emModelNames")` et la documentation dans le Tableau 3 de @mclust5.
+
+```{r}
+#| label: fig-modeles
+#| fig-cap: "Forme des ellipsoïdes pour le mélange de modèle selon la forme de la structure de covariance. Image extraite de @mclust5 (Figure 2) partagée sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)."
+#| eval: true
+#| echo: false
+knitr::include_graphics("figures/mclust5-parametrization.png")
+```
+
+# Paquet `mclust`
+
+```{r}
+#| cache: true
+#| eval: false
+#| echo: true
+## Mélanges de modèles gaussiens
+set.seed(60602)
+mmg <- mclust::Mclust(data = donsmult_std,
+       G = 1:10,
+       # Ajouter composante uniforme
+       #  pour bruit (aberrances)
+       initialization = list(noise = TRUE))
+# Résumé de la segmentation
+summary(mmg)
+```
+
+On peut obtenir les étiquettes (avec `0` pour le bruit) avec `mmg$classification`.
+
+#  Avantages et inconvénients des mélanges de modèles
+
+- (+) approche est plus flexible que les $K$-moyennes.
+- (+) l'ajout d'une composante uniforme permet de gérer les aberrances (supporté par `mclust`).
+- (+) l'algorithme EM garantie la convergence à un minimum local (comme pour les $K$-moyennes)
+- (+) on obtient une assignation probabiliste plutôt que rigide, également pour la classification
+- (-)le coût de calcul est plus élevé que les $K$-moyennes 
+- (-) le nombre de paramètre des matrices de covariance augmente rapidement avec la dimension $p$
+
+
+#### Hyperparamètres
+
+- le nombre de regroupements $K$
+- la forme des ellipsoïdes
+- les valeurs pour l'initialisation. 
+
+Les mêmes considérations pratiques qu'avec les $K$-moyennes s'appliquent.
+
+# Sélection des hyperparamètres
+
+```{r}
+#| eval: true
+#| echo: false
+set.seed(60602)
+mmg <- mclust::Mclust(data = donsmult_std,
+       G = 1:10,
+       # Ajouter composante uniforme
+       #  pour bruit (aberrances)
+       initialization = list(noise = TRUE))
+```
+
+```{r}
+#| eval: true
+#| cache: true
+#| echo: true
+#| label: fig-mclustbic
+#| fig-cap: "Valeur du négatif du critère d'information Bayésien pour les mélanges de modèles gaussiens selon le nombre de regroupements et la structure de covariance."
+# Fonction `mclustBIC` pour l'estimation
+plot(mmg, what = "BIC")
+```
+
+# Représentation graphique des regroupements
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: fig-classifreducmclust
+#| out-width: '90%'
+#| fig-width: 10
+#| fig-height: 5
+#| cache: true
+#| error: true
+#| message: false
+#| fig-cap: "Projection des observations, colorées par regroupement (gauche) et structure des regroupements avec ellipsoides de confiance (droite)."
+# Matrice des nuage de points (paires de variables)
+# plot(mmg, what = "classification")
+# Réduction de la dimension
+reduc_dim_mmg <- mclust::MclustDR(mmg)
+par(mfrow = c(1,2)) # graphiques côte-à-côte
+plot(reduc_dim_mmg, what = "contour")
+plot(reduc_dim_mmg, what = "scatterplot")
+```
+
+### Méthodes basées sur la densité
+
+L'algorithme DBSCAN (*density-based spatial clustering of applications with noise)*) est une méthode de partitionnement basée sur la densité des points. 
+
+
+L'idée de base de l'algorithme est de tracer une boule de rayon $\epsilon$ autour de chaque observation et de voir si elle inclut d'autres observations. 
+
+# Mécanisme d'assignation 
+L'algorithme classe les observations en trois catégories:
+- Un point central est une observation qui possède $M-1$ voisins à distance $\epsilon$.
+- Un point frontière est un point qui est distant de moins de $\epsilon$ d'un point central, sans en être un. 
+- Un point isolé est une observation qui n'est pas rattachée à aucun regroupement. 
+
+
+# Algorithme DBSCAN
+
+L'algorithme répète les étapes suivantes jusqu'à ce que chaque observation ait été visitée.
+
+1. Choisir un point aléatoirement parmi ceux qui n'ont pas été visités.
+2. Si le point n'est pas étiqueté, calculer le nombre de points voisins qui se trouvent dans un rayon $\epsilon$: s'il y a moins de $M$ observations, provisoirement étiqueter l'observation comme point isolé, sinon comme point central.
+3. Si l'observation est un point central avec $M-1$ voisins ou plus, créer un regroupement.
+4. Étiqueter chaque point à distance $\epsilon$ créé et l'ajouter au regroupement, ainsi que tout point à distance $\epsilon$ de ces voisins.
+
+[Ce site web] offre une visualisation interactive des différentes étapes de  l'algorithme et de comparer la performance de DBSCAN selon le type de regroupements.
+
+# Hyperparamètres
+
+- le rayon $\epsilon$ et 
+- le  nombre minimal de points pour former un regroupement, $M$
+
+
+
+<!--
+Avec une mesure de dissemblance, on peut créer une matrice qui pour chaque paire de points indique si l'observation est à distance au plus $\epsilon$: cela permet de créer un graphe où chaque observation est un noeud et où il y a une arête entre deux noeuds si la distance entre les deux observations est inférieure à $\epsilon$.
+-->
+
+Puisque chaque point est visité à tour de rôle et comparé aux autres pour trouver les plus proches voisins, la complexité brute est $\mathrm{O}(n^2)$ mais une implémentation efficace permet de réduire ce coût à $\mathrm{O}(n\ln n)$ avec un coût pour l'allocation de la mémoire linéaire de $\mathrm{O}(n)$.
+
+# Avantages et inconvénients de DBSCAN (1/2)
+
+- (-) le traitement des aberrances est automatique et l'algorithme est robuste.
+- (+) le nombre de regroupements n'a pas à être spécifié apriori. 
+- (+) la forme des regroupements est arbitraire, peut être non convexe et de taille différente.
+- (+/-) la complexité de l'algorithme est d'au mieux $\mathrm{O}(n\ln n)$.
+
+# Avantages et inconvénients de DBSCAN (2/2)
+
+
+- (-) les hyperparamètres ont une interprétation physique
+- (-) leur choix n'est pas aisé
+- (-) DBSCAN ne permet pas de traiter le cas où la densité des regroupements change et risque de fusionner des regroupements s'il y a une série d'observations qui permet de relier deux regroupements.
+- (-) comme la plupart des algorithmes, le voisinage des points devient épars quand $p$ augmente en raison du fléau de la dimension.
+
+# Classification avec DBSCAN
+
+```{r}
+#| label: fig-dbscan1
+#| fig-cap: "Illustration de la classification des points avec DBSCAN: toutes les observations sont assignées à un regroupement, moins une aberrance."
+#| echo: false
+#| eval: true
+#| fig-width: 6
+#| fig-height: 6
+set.seed(60602)
+fdat <- data.frame(x = rnorm(10), 
+                   y = rnorm(10)) + 10
+ddist <- as.matrix(dist(fdat))
+nneigh <- apply(ddist, 1, function(x){sum(x < 1.5)-1})
+fdat$type <- factor(dplyr::case_when(
+  nneigh == 0 ~ "aberrance",
+  nneigh < 5 ~ "frontière",
+  nneigh >= 5 ~ "central"
+))
+g1 <- ggplot(fdat,
+       aes(x = x, y = y)) +
+  geom_point() + 
+  #geom_point(size = 70,
+   #          shape = 1)
+ggforce::geom_circle(
+  aes(x0 = x, y0 = y, 
+      r = 1.5, color = type)) + 
+  scale_x_continuous(limits = c(5, 13),
+                     expand = c(0,0)) +
+  scale_y_continuous(limits = c(5, 13),
+                     expand = c(0,0)) +
+  labs(x = "", y = "") + 
+  theme_classic() +
+  theme(legend.position = "bottom")
+g1
+```
+
+# 
+
+```{r}
+#| eval: false
+#| echo: false
+plot(igraph::graph_from_adjacency_matrix(
+  adjmatrix = ddist < 1.5,
+  mode = 'undirected', 
+  diag = FALSE))
+```
+
+# Choix des hyperparamètres
+
+
+Hyperparamètres $M$ et $\epsilon$ corrélés: si on augmente le nombre minimal de point $M$ par regroupement, il faudra également augmenter le rayon $\epsilon$ pour éviter d'avoir un nombre trop élevé de points isolés et d'aberrances.
+
+Avec $p$ variables explicatives, on recommande $M > p+1$.
+
+# Choix du rayon
+
+Pour $\varepsilon$, considérer les $M$ plus proches voisins.
+
+La fonction `kNNdistplot` du paquet `dbscan` permet de tracer un graphique de la distance moyenne des $k$ plus proches voisins pour chaque observation: 
+
+- en prenant $k=M-1$, calculer la distance entre le $k$ plus proche voisin de chaque observation.
+- ordonner ces distances. 
+- choisir $\epsilon$ selon coude
+
+# Critère du coude
+
+```{r}
+#| label: fig-dbscan2
+#| fig-cap: "Graphique des distances entre chaque observation et son troisième plus proche voisin (gauche), en fonction du pourcentage d'observations à moins de cette distance et regroupements obtenus avec DBSCAN avec $M=10$ et $\\epsilon=1.1$ (droite)."
+#| echo: false
+#| eval: true
+knndist <- dbscan::kNNdist(
+  DF[,1:2],
+  k = 9)
+g1 <- ggplot(data.frame(
+   pourcentage = (1:length(knndist))/length(knndist),
+   dist = sort(knndist)),
+  aes(x = pourcentage, y = dist)) +
+    geom_line() +
+  geom_hline(yintercept = 1.1,
+             linetype = 2, 
+             alpha = 0.2) +
+  labs(subtitle = "Distance entre les trois plus proches voisins",
+       y = "",
+       x = "pourcentage des observations") +
+  scale_x_continuous(labels = scales::percent) +
+  theme_classic()
+clust <- dbscan::dbscan(DF[,1:2],
+                minPts = 10, 
+                eps = 1.1)
+g2 <- ggplot(
+  data = data.frame(
+    x = DF$X1,
+    y =  DF$X2,
+    groupe = factor(clust$cluster)),
+  mapping = aes(
+    x = x,
+    y = y, 
+    color = groupe)) +
+  geom_point() +
+  labs(x = "variable 1",
+       y = "variable 2") + 
+  theme_classic() +
+  theme(legend.position = "bottom")
+g1 + g2
+```
+
+
+#  Regroupements hiérarchiques
+
+Méthode déterministe de regroupement à partir d'une matrice de dissimilarité.
+
+L'algorithme pour la procédure agglomérative procède comme suit:
+
+1. Initialisation: chaque observation forme son propre groupe.
+2. les deux groupes les plus rapprochés sont fusionnés; la distance entre le nouveau groupe et les autres regroupements est recalculée.
+3. on répète l'étape 2 jusqu'à obtenir un seul regroupement.
+
+# Procédure divise
+
+La procédure divisive procède de la même façon, mais en partant d'un seul ensemble et en subdivisant ce dernier jusqu'à ce qu'il y ait autant d'observations que de groupes. Cette dernière est préférable si on veut isoler de grands regroupements, mais est rarement employée.
+
+
+Il y a plusieurs façons de calculer la distance entre deux groupes d'observations. Selon notre définition, nous obtiendrons des regroupements différents. Les méthodes les plus populaires incluent
+
+- liaison simple (plus proches voisins)
+- liaison complète (voisins les plus éloignés)
+- liaison moyenne: utilise la moyenne des distances entre toutes les paires de sujets (un pour chaque groupe) provenant des deux groupes.
+- méthode de Ward: calcul de l'homogénéité globale
+
+La méthode de Ward n'est pas définie en terme de distance entre représentants de groupes, mais plutôt en terme de mesure d'homogénéité au sein des groupes. Supposons qu’à une étape du processus hiérarchique, nous avons  $M$  groupes et que nous voulons passer à $M-1$. Pour chaque groupe $k$, nous pouvons calculer la somme des carrés des distances par rapport à la moyenne du groupe, disons $\mathsf{SCD}_k$: plus cette distance est petite, plus le groupe est compact et homogène. On calcule ensuite l'homogénéité globale en faisant la somme de l’homogénéité de tous les groupes, soit $\mathrm{H}^{(M)} = \mathsf{SCD}_1 + \cdots + \mathsf{SCD}_M$. La méthode de Ward va regrouper les deux groupes qui feront augmenter le moins possible l'homogénéité.
+
+En général, les algorithmes de regroupement hiérarchiques stockent une matrice de dissemblance $n \times n$, et donc un coût de stockage quadratique et un coût de calcul $\Omega(n^2)$ avec $\mathrm{O}(n^3)$. Il faut réaliser que ce coût de calcul est **prohibitif** en haute dimension. Certains algorithmique efficaces pour la méthode de liaison simple permettent un temps de calcul quadratique sans calcul de toutes les distances, à coût $\mathrm{O}(n)$. Si la méthode de liaison simple est la moins coûteuse du lot, elle n'est pas aussi populaire car elle fonctionne bien si l’écart entre deux regroupements est suffisamment grand. S’il y a du bruit entre deux regroupements, la qualité des regroupements en sera affectée. La méthode de liaison complète est moins sensible au bruit et aux faibles écarts entre regroupements, mais a tendance à casser les regroupements globulaires. Puisque le critère d'homogénéité de Ward ressemble à celui des $K$-moyennes, la sortie aura tendance à bien regrouper les amas globulaires.
+
+
+Généralement, le résultat de la procédure agglomérative avec la méthode de liaison simple inclura quelques valeurs isolées et un seul grand regroupement. Une alternative récente [@Gagolewski:2016], appelée Genie, modifie la fonction objective de la méthode de liaison simple en retenant son efficacité de calcul. Plutôt que de simplement trouver la paire de regroupements à distance minimale, cette fusion n'est appliquée que si une mesure d'inéquité est inférieur à un seuil spécifié par l'utilisateur. Si les regroupements sont fortement inéquitables, la fusion survient entre les regroupements dont un de la taille minimale courante.  L'implémentation **R** [@Gagolewski:2021] dans le paquet `genieclust` est nettement plus rapide que les autres alternatives et ne nécessite pas de calculer la matrice de dissimilarité.
+
+On peut comparer les performances des regroupements hiérarchiques selon la méthode de groupement. La page web de [scikit-learn developers](https://scikit-learn.org/stable/auto_examples/cluster/plot_linkage_comparison.html) montre la performance sur des exemples jouets très artificiels, qui montre que selon la structure des données, l'impact de la fonction de liaison. Ici, aucun approche hiérarchique ne performe mieux que les autres dans tous les exemples.
+
+```{r}
+#| label: fig-animation-ward
+#| eval: true
+#| echo: false
+#| out-width: '70%'
+#| fig-cap: "Animation du regroupement hiérarchique (procédure agglomérative) avec la distance de Ward."
+knitr::include_graphics("figures/ward_animation.gif")
+```
+
+La @fig-animation-ward montre les différentes étapes de l'algorithme avec les regroupements étapes par étape, jusqu'à ce qu'on obtienne deux groupes. À l'étape 1, les observations (14, 19) sont regroupées, puis (2, 15), (10, 17). Ce n'est qu'à l'étape 7 qu'on ajoute une observation à un regroupement de deux existants.
+
+#### Sélection des hyperparamètres
+
+Outre le choix de la fonction de liaison qui déterminera la distance entre les regroupements à chaque étape, on devra choisir le nombre de regroupements.
+
+On peut représenter le modèle à l'aide d'un arbre, où les feuilles indiquent les regroupements à chaque étape jusqu'à la racine à la dernière étape. On appelle **dendrogramme**. La distance entre chaque embranchement est déterminée par notre critère: cela nous permet de sélectionner un nombre de regroupements $K$ après inspection du dendrogramme et d'extraire la solution en élaguer l'arbre à cette profondeur.
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-dendrogramme
+#| fig-cap: "Dendrogramme pour l'exemple de regroupement hiérarchique avec la méthode de Ward et 20 observations."
+library(ggdendro)
+model <- hclust(dist(hecmulti::regroupements1[1:20,]),
+                method = "ward.D2")
+dhc <- as.dendrogram(model)
+# Rectangular lines
+ddata <- dendro_data(dhc, type = "rectangle")
+p <- ggplot(segment(ddata)) + 
+  geom_segment(aes(x = x, y = y, xend = xend, yend = yend)) + 
+  coord_flip() + 
+  scale_y_reverse(expand = c(0.2, 0)) +
+  theme_minimal()
+p
+
+```
+
+La hauteur du dendrogramme donne la valeur du critère associé à la mesure de regroupement: on peut sélectionne le nombre de regroupements $K$ en sélectionnant une étape où la qualité de l'ajustement diminue drastiquement. Pour le critère de Ward qui utilise l'homogénéité, on peut créer le pourcentage de variance expliquée, $R^2$ en calculant $R^2_{(M)} = 1-\mathrm{H}_{(M)}/\mathrm{H}_{(1)}$, où $\mathrm{H}_{(1)}$ est simplement la somme du carré des distances distances par rapport à la moyenne lorsque toutes les observations sont dans un même groupe. Le R-carré semi-partiel, qui mesure la perte d'homogénéité d'une étape à l'autre, renormalisée par $\mathrm{H}_{(1)}$, permet également de mesurer  la perte d’homogénéité (relative) en combinant ces deux groupes. On peut faire un graphique de ces deux critères en fonction du nombre de regroupements et chercher un point d'inflection (un coude) à partir duquel la perte d'homogénéité est moindre ou encore le $R^2$ augmente plus lentement.
+
+La fonction `stat::hclust` permet de faire des regroupements agglomératifs (`agnes`), mais `fastcluster` propose une version avec une empreinte mémoire inférieure. Le paquet `cluster` offre de son côté l'algorithme divisif (`diana`).
+
+
+# Avantages et inconvénient des regroupements hiérarchiques
+
+- (+) la solution du regroupement hiérarchique est toujours la même (déterministe)
+- (-) l'assignation d'une observation à un regroupement est finale
+- (-) les aberrances ne sont pas traitées et sont souvent assignées dans des regroupements à part
+- (+) les méthodes d'arborescence sont faciles à expliquer
+- (-) le nombre de groupes n'a pas à être spécifié apriori (une seule estimation)
+- (-) le coût de calcul est prohibitif, avec une complexité quadratique de $\mathrm{O}(n^2)$ pour la méthode de liaison simple et autrement $\mathrm{O}(n^3)$ pour la plupart des autres fonctions de liaison.
 
 
 # Mesures de similarité

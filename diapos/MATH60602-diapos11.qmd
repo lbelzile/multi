@@ -79,6 +79,16 @@ Chaque observation se voit assigner une étiquette de groupe.
 
 On procède ensuite à une analyse **descriptive**, segment par segment.
 
+
+# Exemples
+
+- Programmes de fidélisation et résolution d'entités
+- Segmentation de la clientèle de transport en commun et élaboration de forfaits 
+- Démarchage d'organismes de charité
+- Segmentation de [quartiers de Los Angeles](https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/) et de [New York](https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/) selon leur vote
+- [Profils des électeurs albertains](https://www.cbc.ca/news/canada/calgary/danielle-smith-alberta-moderate-middle-ucp-ndp-poll-1.6651460)
+
+
 # Illustration
 
 
@@ -120,14 +130,6 @@ include_graphics(path = "figures/tidy-data-sub.png")
 
 Ce sont des méthodes dites d'**apprentissage non-supervisé**: l'objectif est de déduire la structure présente dans un ensemble de points $\mathbf{X}$ sans étiquette préalable (contrairement à la classification).
 
-# Exemples
-
-- Programmes de fidélisation et résolution d'entités
-- Segmentation de la clientèle de transport en commun et élaboration de forfaits 
-- Démarchage d'organismes de charité
-- Segmentation de [quartiers de Los Angeles](https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/) et de [New York](https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/) selon leur vote
-- [Profils des électeurs albertains](https://www.cbc.ca/news/canada/calgary/danielle-smith-alberta-moderate-middle-ucp-ndp-poll-1.6651460)
-
 # Structure de la base de données
 
 Quelles variables $\mathrm{X}_1, \ldots, \mathrm{X}_p$ sont d'intérêt?
@@ -157,14 +159,6 @@ La carte Opus enregistre
 - Variabilité de la fréquentation
 
 
-# Diviser pour régner
-
-Souvent, il existe une division naturelle des données.
-
-Les jeunes avec des abonnements de transport publics l'utilisent principalement pour aller à l'école.
-
-On peut faire la segmentation **séparément** pour ces sous-groupes.
-
 #  À votre tour
 
 Vous avez toutes les données transactionnelles associées à des comptes d'épicerie avec un compte de fidélisation. 
@@ -172,6 +166,14 @@ Vous avez toutes les données transactionnelles associées à des comptes d'épi
 
 Quelles variables pourriez-vous créer à partir des données aggrégées pour créer des segments?
 
+
+# Diviser pour régner
+
+Souvent, il existe une division naturelle des données.
+
+Les jeunes avec des abonnements de transport publics l'utilisent principalement pour aller à l'école.
+
+On peut faire la segmentation **séparément** pour ces sous-groupes.
 
 # Choix des variables 
 
@@ -183,12 +185,6 @@ Recommandations: choisir les variables pertinentes qui font ressortir les effets
 Typiquement, ne pas utiliser les variables sociodémographiques (âge, revenu, sexe, etc.)
 
 - on compare plutôt leur répartition au sein des regroupements.
-
-# Exemple: typologie des votants en France
-
-```{r}
-knitr::include_graphics("figures/typologie-vote-france.jpg")
-```
 
 
 # Exemple - dons à un organisme de charité
@@ -202,15 +198,6 @@ Une rapide exploration des données révèle que près de 61% des employé(e)s n
 
 Une poignée de dons sont très élevés, mais la plupart des montants tourne autour de 5\$, 10\$, 20\$, etc.
 
-
-# Étapes d'une analyse de regroupements
-
-1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
-2. Décider quel méthode sea utilisée pour la segmentation.
-3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissemblance
-5. Calculer une mesure de qualité de la segmentation.
-6. Assigner les étiquettes aux observations et calculer un prototype de groupe. 
-7. Interpréter les regroupements obtenus à partir des prototypes.
 
 # Modification des données
 
@@ -244,6 +231,23 @@ donsmult <- hecmulti::dons |>
 corrplot::corrplot(cor(donsmult))
 ```
 
+# Étapes d'une analyse de regroupements
+
+1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
+2. Décider quel méthode sera utilisée pour la segmentation.
+3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissemblance.
+4. Assigner les étiquettes aux observations et calculer un prototype de groupe. 
+5. Valider la qualité de la segmentation.
+6. Interpréter les regroupements obtenus à partir des prototypes.
+
+
+# Exemple: typologie des votants en France
+
+```{r}
+knitr::include_graphics("figures/typologie-vote-france.jpg")
+```
+
+
 # Mesures de dissemblance et de similarité
 
 Comment mesurer si deux observations appartiennent à un même regroupement et sont similaires?
@@ -251,8 +255,6 @@ Comment mesurer si deux observations appartiennent à un même regroupement et s
 Une mesure de dissemblance sert à quantifier la proximité de deux objets à partir de leurs coordoonnées. 
 
 Plus la dissemblance est élevée, moins les observations sont semblables (plus éloignées).
-
-Elle mesure la distance entre deux vecteurs d'observations (deux lignes de la base de données) en se basant sur les variables explicatives.
 
 
 
@@ -267,9 +269,10 @@ Toute distance est une mesure de dissemblance.
 
 # Distance euclidienne
 
-La mesure de dissemblance la plus utilisée en pratique est la distance euclidienne entre sujets.
+La mesure de dissemblance la plus utilisée en pratique est la distance euclidienne.
 
-La distance entre les vecteurs ligne $\mathbf{X}_i$ et $\mathbf{X}_j$ est
+
+La distance entre les vecteurs ligne $\mathbf{X}_i$ et $\mathbf{X}_j$ (deux lignes de la base de données) est
 \begin{align*}
 d(\mathbf{X}_i, \mathbf{X}_j; l_2) = \left\{(X_{i1}-X_{j1})^2 + \cdots + (X_{ip}-X_{jp})^2\right\}^{1/2}.
 \end{align*}
@@ -296,7 +299,7 @@ les valeurs manquantes et standardise automatiquement.
 
 # Dissemblances dans **R**
 
-Avec notre base de données `donsmult`, le stockage des distances prend environ 1.5GB!
+Avec notre base de données `donsmult`, le stockage des distances prend environ 750MB!
 
 ```{r}
 #| eval: false
@@ -312,16 +315,6 @@ d3 <- cluster::daisy(donsmult, metric = "gower")
 
 Les objets de class `dist` ne stockent que la matrice triangulaire inférieure (symmétrie).
 
-# Être aux abonnés absents
-
-Attention aux valeurs manquantes, rarement supportées par les algorithmes d'analyse de regroupements.
-
-Quelques solutions
-
-- ignorer la variable explicative
-- faire une segmentation manuelle si les valeurs manquantes déterminent des regroupements (ex: temps entre dons valide uniquement pour dons multiples).
-- imputer les données manquantes (voir chapitre sur les données manquantes)
- 
 # Au plus fort la poche
 
 Le poids accordé à une variable explicative dépend de son étendu et de sa variabilité.
@@ -357,9 +350,21 @@ donsmult_std_rob <- apply(
   FUN = function(x){(x - median(x))/mad(x)})
 ```
 
+
+# Être aux abonnés absents
+
+Attention aux valeurs manquantes, rarement supportées par les algorithmes d'analyse de regroupements.
+
+Quelques solutions
+
+- ignorer les variables explicatives avec beaucoup de valeurs manquantes.
+- faire une segmentation manuelle si les valeurs manquantes déterminent des regroupements (ex: temps entre dons valide uniquement pour dons multiples).
+- imputer les données manquantes (voir chapitre sur les données manquantes)
+ 
+
 # Algorithmes pour la segmentation
 
-L'analyse de regroupements cherche à créer une division de $n$ observations de $p$ variables en $k$ regroupements.
+L'analyse de regroupements cherche à créer une division de $n$ observations de $p$ variables en regroupements.
 
 1. méthodes basées sur la connectivité (regroupements hiérarchiques, AGNES et DIANA)
 2. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides  PAM, CLARA)
@@ -386,11 +391,11 @@ Probablement la méthode de regroupement la plus populaire en raison de son faib
 
 La fonction objective considère la distance totale entre observations et prototypes
 $$
-\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
+\mathsf{SCD}_K = \min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
 $$ {#eq-fobjKmoy}
 
 
-L'allocation optimale de $n$ observations à $K$ groupes est un problème NP complet.
+L'allocation optimale de $n$ observations à $K$ groupes est un problème NP complet: on cherchera plutôt une solution approximative au problème d'optimisation.
 
 # Initialisation des $K$-moyennes
 
@@ -421,20 +426,6 @@ Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroup
 # knitr::include_graphics("figures/fig-kmoy-animation.gif")
 ```
 
-# Séparation linéaire de l'espace
-
-Avec la distance euclidienne, la partition de l'espace est linéaire.
-
-```{r}
-#| eval: true
-#| echo: false
-#| label: fig-voronoy
-#| fig-cap: "Partitions de Voronoï pour les regroupements avec séparateur linéaire."
-knitr::include_graphics("figures/fig-voronoikmoy.png")
-```
-
-
-
 
 # Forces et faiblesses
 
@@ -442,9 +433,11 @@ knitr::include_graphics("figures/fig-voronoikmoy.png")
 - ($+$) L'algorithme converge rapidement vers une solution locale (garantie théorique).
 - ($-$) Regroupements globulaires d'apparence sphérique (distance euclidienne). 
 - ($+$) Pour les prédictions, on peut assigner les nouvelles observations au barycentre le plus près.
+
 # Performance
 
-- ($-$) Chaque observation est assignée à un seul des $K$ regroupements (partition rigide). - ($-$) Valeurs aberrantes pas étiquetées à part (manque de robustesse pour moyenne).
+- ($-$) Chaque observation est assignée à un seul des $K$ regroupements (partition rigide). 
+- ($-$) Valeurs aberrantes pas étiquetées à part (manque de robustesse pour moyenne).
 - ($-$) Sensible aux valeurs initiales des prototypes.
 - ($-$) Les prototypes ne correspondent pas à des observations du groupe.
 
@@ -548,6 +541,20 @@ library(patchwork)
 ```
 
 
+# Séparation linéaire de l'espace
+
+Avec la distance euclidienne, la partition de l'espace est linéaire.
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-voronoy
+#| fig-cap: "Partitions de Voronoï pour les regroupements avec séparateur linéaire."
+knitr::include_graphics("figures/fig-voronoikmoy.png")
+```
+
+
+
 
 # Hyperparamètres avec $K$-moyennes
 
@@ -622,7 +629,7 @@ g2 + g1
 #| eval: false
 #| echo: true
 set.seed(60602)
-kmoy5 <- kmeans(
+kmoy5 <- kmeans( # distance euclidienne 
    x = donsmult_std, # données
    centers = 5L, # nb groupes
    nstart = 10, # nb initialisation aléatoire
@@ -828,7 +835,7 @@ set.seed(60602)
 kmoy5 <- kmeans(
    x = donsmult_std, # données
    centers = 5L, # nb groupes
-   nstart = 10, # nb initialisation aléatoire
+   nstart = 25, # nb initialisation aléatoire
    iter.max = 25)
 sub <- sample.int(
   n = nrow(donsmult),
@@ -873,7 +880,7 @@ set.seed(60602)
 kmoy5 <- kmeans(
    x = donsmult_std, # données
    centers = 5L, # nb groupes
-   nstart = 20, # nb initialisation aléatoire
+   nstart = 50, # nb initialisation aléatoire
    iter.max = 25)
 kmoy5_tab <- donsmult |>
   dplyr::group_by(groupe = kmoy5$cluster) |>
@@ -899,9 +906,9 @@ Les regroupements obtenus sont interprétables:
 
 - Groupe 1: Petits donateurs, faible nombre de dons. N'ont pas donné depuis longtemps. Refus fréquents et délai entre dons élevés
 - Groupe 2: Grands donateurs fidèles: plus petit groupe. Ces personnes ont fait plusieurs dons, leur valeur maximale est élevée. N'ont pas donné récemment.
-- Groupe 3: Petits donateurs récidivistes. Dons plus élevés que la moyenne mais beaucoup de dons de faible valeur et peu fréquents.
-- Groupe 4: Petits nouveaux. Moins d'ancienneté, dons fréquents et refus fréquents relativement à l'ancienneté.
-- Groupe 5: Petits donateurs inactifs. Plutôt anciens, plusieurs refus.
+- Groupe 3: Petits fidèles. Dons plus élevés que la moyenne, nombre de dons élevés et récents.
+- Groupe 4: Petits nouveaux. Moins d'ancienneté, dons récents et refus fréquents relativement à l'ancienneté.
+- Groupe 5: Donateurs inactifs. Faible montant de dons, plutôt anciens, plusieurs refus.
 
 
 # Récapitulatif

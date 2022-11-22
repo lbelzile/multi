@@ -38,7 +38,7 @@ Supposons que l'on veuille comparer les courbes de survie selon le sexe et la fo
 2. En utilisant l'estimateur de Kaplan--Meier:
    a) Produisez un graphique illustrant les courbes de survie des 10 sous-groupes.
    b) Rapportez l'estimé de la survie à 30 semaines pour une femme de 62 ans qui dispose d'une formation technique (collégial) à l'aide de votre modèle.
-3. La fonction `survdiff` ne permet pas de faire le test d'hypothèse d'égalité des courbes de survie en raison de la troncature à gauche, mais un modèle de régression à risques proportionnels de Cox permettrait également de tester cette hypothèse. 
+3. La fonction `survdiff` ne permet pas de faire le test d'hypothèse d'égalité des courbes de survie en raison de la troncature à gauche, mais un modèle de régression à risques proportionnels de Cox permettrait de tester cette hypothèse. 
    - Quelles variables explicatives devriez-vous inclure pour ce faire dans le modèle et sous quelle forme?    
    - Testez l'égalité des courbes de survie à l'aide du test du log-rang (voir `summary`).
    - Écrivez les hypothèses nulle et alternative, la valeur de la statistique, la valeur-$p$ et la conclusion du test.
