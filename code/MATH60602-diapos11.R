@@ -1,20 +1,11 @@
 library(cluster)
-library(factoextra)
-library(mclust)
 library(flexclust)
+library(factoextra)
 library(ggplot2)
 library(patchwork)
 library(hecmulti)
 ## Regroupements basés sur centroïdes, etc.
 # "cluster", "flexclust"
-## Regroupements hiérarchiques
-# "fastClust", "genieclust"
-## Regroupements spectraux
-# "kernlab", "Spectrum", "HyperG"
-## Mélanges de modèles
-# "mclust", "mixture"
-## Regroupements basés sur la densité (DBScan, Optics)
-# "dbscan"
 
 #-------------------------------------------------
 # PRÉTRAITEMENT DES DONNÉES
@@ -84,25 +75,6 @@ d2 <- dist(regroupements1, method = "minkowski", p = 1)
 d3 <- cluster::daisy(regroupements1, metric = "gower")
 # Voir aussi ?flexclust::dist2
 
-# Matrices de similarité
-graphe <- HyperG::epsilon_hypergraph(
-  x = regroupements1,
-  epsilon = 1.2,
-  as.graph = TRUE)
-
-graphe2 <- HyperG::knn_hypergraph(
-  x = regroupements1,
-  k = 5, # nb de voisins
-  method = "Euclidean",
-  reduce = FALSE,
-  as.graph = TRUE)
-
-
-# Similarité vers distance exp(-S) = D
-# Pour Gower ou toute similarité telle que
-#  0 <= S_{ij} <= 1,
-# on peut aussi utiliser D = 1-S^(1/2)
-
 #-------------------------------------------------
 # ALGORITHMES POUR LA SEGMENTATION
 ### Algorithme 1: K-moyennes
@@ -115,8 +87,10 @@ kmoy <- list()
 ngmax <- 10L
 for(i in seq_len(ngmax)){
  kmoy[[i]] <- kmeans(donsmult_std,
-                     centers = i,
+                     centers = i, 
+                     #centers: nb de regroupements ou valeurs initiales
                      nstart = 10)
+                      #nstart: nb de répétitions aléatoires (seule la meilleure solution est retournée)
 }
 
 kmoy5 <- kmoy[[5]]
@@ -199,7 +173,8 @@ kmoy5$size
 # Visualiser les regroupements en projetant
 # sur les composantes principales
 acp <- princomp(donsmult_std)
-pairs(acp$scores[,1:3],
+pairs(x = acp$scores[,1:3],	
+      lower.panel = NULL,
       col = kmoy5$cluster)
 # Les coordonnées des prototypes
 # (mais données standardisées = pas interprétable...)
@@ -240,48 +215,3 @@ t(t(kmed5@centers)*dm_std + dm_moy)
 # Indice Rand
 randIndex(kmoy5$cluster, kmed5@cluster)
 
-# Algorithme 2: PAM et clara
-
-kmedoide <- list()
-set.seed(60602)
-for(k in seq_len(ngmax)){
-  # Algorithme quadratique en sampsize
-kmedoide[[k]] <- cluster::clara(x = donsmult_std,
-               k = k,
-               sampsize = 500,
-               metric = "euclidean", # distance,
-               #cluster.only = TRUE, # ne conserver que étiquettes
-               rngR = TRUE, # germe aléatoire depuis R
-               pamLike = TRUE, # même algorithme que PAM
-               samples = 10) #nombre de répétitions
-}
-# Regarder utilitaires pour une méthode
-# Graphique des silhouettes
-plot(factoextra::fviz_silhouette(kmedoide[[4]]))
-# Obtenir les prototypes (les médoïdes sont des observations), mais remettre à l'échelle originale
-medoides_orig <- donsmult[kmedoide[[4]]$i.med,]
-medoides_orig
-# Taille des regroupements
-kmedoide[[4]]$clusinfo
-
-## Algorithme 3:  Mélanges de modèles gaussiens
-# Illustration avec données de regroupement1
-set.seed(60602)
-library(mclust)
-mmg <- Mclust(data = donsmult_std,
-       G = 1:10,
-       # Ajouter composante uniforme
-       #  pour bruit (aberrances)
-       initialization = list(noise = TRUE))
-# Résumé de la segmentation
-summary(mmg)
-# Étiquettes (avec 0 pour bruit)
-# mmg$classification
-# Graphique de -BIC
-plot(mmg, what = "BIC")
-# Matrice des nuage de points (paires de variables)
-# plot(mmg, what = "classification")
-reduc_dim_mmg <- MclustDR(mmg)
-par(mfrow = c(1,2))
-plot(reduc_dim_mmg, what = "contour")
-plot(reduc_dim_mmg, what = "scatterplot")
