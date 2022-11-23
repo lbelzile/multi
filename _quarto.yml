@@ -86,10 +86,11 @@ website:
             - text: "9: Analyse de survie"
               file: contenu/09-contenu.qmd
             - text: "10: Analyse de survie"
-              file: contenu/10-contenu.qmd  
+              file: contenu/10-contenu.qmd
             - text: "11: Analyse de regroupements"
-              file: contenu/11-contenu.qmd 
-
+              file: contenu/11-contenu.qmd
+            - text: "12: Analyse de regroupements"
+              file: contenu/12-contenu.qmd
     - title: "Devoirs"
       style: "docked"
       search: false
@@ -104,7 +105,7 @@ website:
             - evaluations/03-devoir.qmd
             - evaluations/04-devoir.qmd
             - evaluations/05-devoir.qmd
-        #    - evaluations/06-devoir.qmd
+            - evaluations/06-devoir.qmd
     - title: "Exercices"
       style: "docked"
       search: false

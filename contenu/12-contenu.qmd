@@ -1,0 +1,26 @@
+---
+title: "Analyse de regroupements"
+---
+
+## Contenu
+
+- Algorithmes de regroupements
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 7 (analyse de regroupements)](https://lbelzile.github.io/math60602/03-regroupements.html), Section 7.5
+
+## Diapositives 
+
+- {{< fa file >}} [Analyse de regroupements](/diapos/MATH60602-diapos12.pdf)
+- {{< fa code >}} [Code](/code/MATH60602-diapos12.R)
+
+
+## Objectifs d'apprentissage
+
+- Comprendre les avantages et inconvénients de différents algorithmes de regroupement
+- Choisir adéquatement les hyperparamètres associés aux algorithmes
+
+
+
