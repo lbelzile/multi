@@ -1,0 +1,321 @@
+---
+title: "Analyse de regroupements"
+---
+
+## Exercice 6.1
+
+*Les données fictives `regroupement1` sont inspirées de @Hsu.Lee:2002. Ces données contiennent des échelles pour certains éléments d'un questionnaire. Ce dernier a été élaboré afin d’évaluer l’importance de 55 caractéristiques des opérateurs de voyages organisés en autobus et des voyages eux-mêmes à l’aide d’une échelle de Likert à cinq points, allant de extrêmement important (5) à pas du tout important (1).*
+
+
+*Les variables représentent les activités sociales, les politiques de l’opérateur et références, la flexibilité des horaires, la santé et sécurité, le matériel publicitaire et la réputation.*
+
+1. *Doit-on standardiser les données avant d'effectuer l'analyse?*
+
+```{r}
+data(regroupements1, package = "hecmulti")
+str(regroupements1)
+summary(regroupements1)
+```
+
+Les données sont toutes sur la même échelle de Likert donc la standardisation n'est pas nécessaire apriori.
+
+2. *Faites une analyse en composantes principales et projetez les observations sur un nuage de points avec les deux premières composantes principales.*
+
+```{r}
+acp <- princomp(regroupements1, cor = FALSE)
+hecmulti::eboulis(acp)
+# 2 à 3 composantes principales suffisantes
+library(ggplot2)
+ggplot(data = data.frame(acp$scores[,1:2]),
+       mapping = aes(x = Comp.1,
+                     y = Comp.2)) +
+  geom_point() +
+  labs(x = "composante principale 1",
+       y = "composante principale 2") +
+  theme_classic()
+# Chargements
+acp$loadings
+```
+
+On voit plus ou moins clairement trois regroupements. Les chargements révèlent que la première composante principale est grosso modo une moyenne globale des scores, mais que le score pour les activités sociales ressort davantage dans la deuxième composante, comparativement au matériel publicitaire et à la réputation.
+
+3. *Utilisez l'algorithme des $K$-moyennes en faisant varier le nombre de groupes de 1 à 10. Utilisez une dizaine d'initialisations aléatoires.*
+   a) *Sélectionnez un nombre de regroupement adéquat*
+   b) *Retournez le nombre d'observation par groupe pour la valeur de $K$ choisie.*
+   c) *Rapportez les statistiques descriptives (moyennes, etc.) de chaque segment*
+   d) *Interprétez les profils obtenus.*
+   
+```{r}
+set.seed(60602)
+Kmax <- 10L # nombre maximum de groupes
+kmoy <- list() # liste pour stocker les résultats des segmentations
+for(k in seq_len(Kmax)){
+ kmoy[[k]] <- kmeans(x = regroupements1, 
+                     centers = k,  # nombre de regroupements initiaux
+                     nstart = 10L) # nombre d'initialisation aléatoires
+}
+```
+
+On peut extraire le critère de la fonction objective (SCD): l'homogénéité est calculée comme la somme des carrés des distances intra-groupes. Cela nous permet d'utiliser les diagnostics pour la sélection avec le $R^2$ en cherchant le coude à partir duquel aucun changement n'est visible.
+
+```{r}
+scd_intra <- sapply(kmoy, function(x){x$tot.withinss})
+# Diagnostics pour sélection - clairement trois groupes
+hecmulti::homogeneite(scd = scd_intra)
+```
+
+Les graphiques de $R^2$ et le $R^2$ semi-partiel indiquent tous deux clairement que trois regroupements est le choix le plus logique. On peut étiqueter les observations et visualiser les regroupements obtenus en projetant sur les deux premières composantes principales. Les groupes sont bien démarqués et il semble que l'initialisation aléatoire ait été adéquate.
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: fig-cpkmoy3
+#| fig-cap: "Représentation des regroupements des $K$-moyennes projetés sur les deux premières composantes principales des données."
+# Extraire les identifiants des regroupements
+etiquettes_kmoy3 <- kmoy[[3]]$cluster
+# Faire un graphique avec les composantes principales
+ggplot(data = data.frame(acp$scores[,1:2]),
+       mapping = aes(x = Comp.1,
+                     y = Comp.2, 
+                     col = factor(etiquettes_kmoy3))) +
+  geom_point() +
+  labs(x = "composante principale 1",
+       y = "composante principale 2",
+       col = "regroupement") +
+  theme_classic() +
+  theme(legend.position = "bottom")
+```
+
+Le nombre peut être extrait de la liste avec `$size`. On a `r kmoy[[3]]$size[1]` observations dans le groupe 1, `r kmoy[[3]]$size[2]` dans le groupe 2 et `r kmoy[[3]]$size[3]` dans le groupe 3. Au vu de la taille de la base de donnée, ces nombres sont relativement équilibrés.
+
+On peut maintenant extraire les moyennes des trois regroupements. Le @tbl-statdescriptkmo3 montre le résultat arrondi à un chiffre après la virgule.
+
+```{r}
+#| label: tbl-statdescriptkmo3
+#| tbl-cap: "Moyennes des trois regroupements obtenus avec les $K$-moyennes."
+#| eval: true
+#| echo: true
+knitr::kable(kmoy[[3]]$centers, digits = 1)
+```
+
+Le groupe 1 est le groupe où les sujets ont les valeurs, en moyenne, les plus faibles pour les six variables. Le groupe 2 est celui où les sujets ont les valeurs, en moyenne, les plus élevées pour les 6 variables sauf pour la variable X1 (activité sociale). Le groupe 3 est celui où les sujets ont, en moyenne, la valeur la plus élevée de la variable X1 et des valeurs moyennes inférieures au groupe 3 mais supérieures au groupe 2 pour les cinq autres variables.
+
+Dans l’article, les auteurs ont baptisé les sujets du groupe 1, les « indépendants », ceux du groupe 2, les « dépendants » et ceux du groupe 3, les « sociables ». 
+
+4. *Faites une segmentation avec d'autres méthodes. Est-ce que la segmentation est plus satisfaisante? Justifiez votre raisonnement.*
+
+La segmentation obtenue est très satisfaisante et interprétable, mais nous essayerons d'autres méthodes pour démontrer leur utilisation.
+
+Les méthodes basées sur la densité ne fonctionnent pas bien parce que les scores sont relativement rapprochés.
+
+```{r}
+# Regarder les plus proches voisins
+dbscan::kNNdistplot(regroupements1, 
+                    minPts = 5)
+abline(h = 1.7, col = "red")
+dbscan_regroup <- dbscan::dbscan(
+  x = regroupements1,
+  minPts = 5,
+  eps = 1.7)
+dbscan_regroup
+```
+
+La solution retournée fusionne deux regroupements et plusieurs valeurs sont traitées comme des points isolés.
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: fig-cpdbscan
+#| fig-cap: "Représentation des regroupements DBSCAN projetés sur les deux premières composantes principales des données."
+ggplot(data = data.frame(acp$scores[,1:2]),
+       mapping = aes(x = Comp.1,
+                     y = Comp.2, 
+                     col = factor(dbscan_regroup$cluster + 1))) +
+  geom_point() +
+  labs(x = "composante principale 1",
+       y = "composante principale 2",
+       col = "regroupement") +
+  theme_classic() +
+  theme(legend.position = "bottom")
+```
+
+
+Avec une petite taille d'échantillons, les méthodes de regroupements hiérarchiques sont compétitives et on a le luxe de pouvoir en essayer plusieurs.
+
+```{r}
+dist_euc <- dist(regroupements1, method = "euclidean")
+rh_simple <- fastcluster::hclust(dist_euc, method = "single")
+rh_complet <- fastcluster::hclust(dist_euc, method = "complete")
+rh_ward <- fastcluster::hclust(dist_euc, method = "ward.D2")
+rh_bary <- fastcluster::hclust(dist_euc, method = "centroid")
+rh_moy <- fastcluster::hclust(dist_euc, method = "average")
+rh_med <- fastcluster::hclust(dist_euc, method = "median")
+rh_genie <- genieclust::gclust(d = regroupements1)
+rh_energie <- energy::energy.hclust(d = dist_euc)
+
+```
+
+Pour visualiser le dendrogramme, la méthode `plot` permet de tracer l'arborescence. Il suffit ensuite d'encadrer avec `rect.hclust()` en spécifiant le nombre de groupes. Par exemple,
+
+```{r}
+#| eval: false
+#| echo: true
+plot(rh_ward, labels = FALSE)
+rect.hclust(rh_ward, k = 3)
+```
+
+On peut tracer les dendrogrammes (@fig-dendro) pour essayer de voir combien de groupes sont raisonnables. Les plus proches voisins (liaison simple) et le barycentre retournent deux groupes, les autres critères trois et en l'apparence tous de taille similaire (à l'exclusion de la distance médiane qui donne une segmentation inacceptable avec plusieurs observations isolées).
+
+
+```{r}
+#| label: fig-dendro
+#| eval: true
+#| echo: false
+#| fig-cap: "Dendrogrammes des regroupements hiérarchiques selon les mesures de distance et de liaison entre groupes (plus proches voisins, voisins les plus éloignées, distances moyenne et médiane, distance entre barycentres, critère de Ward, distance d'énergie et GENIE)."
+#| fig-width: 8
+#| fig-height: 15
+par(mfrow = c(4,2))
+plot(rh_simple, labels = FALSE, 
+     main = "", sub = "simple", ylab = "", xlab = "")
+rect.hclust(rh_simple, k = 2)
+plot(rh_complet, labels = FALSE, 
+     main = "", sub = "complète", ylab = "", xlab = "")
+rect.hclust(rh_complet, k = 3)
+plot(rh_moy, labels = FALSE, 
+     main = "", sub = "moyenne", ylab = "", xlab = "")
+rect.hclust(rh_moy, k = 3)
+plot(rh_med, labels = FALSE, 
+     main = "", sub = "médiane", ylab = "", xlab = "")
+rect.hclust(rh_med, k = 5)
+plot(rh_bary, labels = FALSE, 
+     main = "", sub = "barycentre", ylab = "", xlab = "")
+rect.hclust(rh_bary, k = 2)
+plot(rh_ward, labels = FALSE, 
+     main = "", sub = "Ward", ylab = "", xlab = "")
+rect.hclust(rh_ward, k = 3)
+plot(rh_genie, labels = FALSE, 
+     main = "", sub = "GENIE", ylab = "", xlab = "")
+rect.hclust(rh_genie, k = 3)
+plot(rh_energie, labels = FALSE, 
+     main = "", sub = "énergie", ylab = "", xlab = "")
+rect.hclust(rh_energie, k = 3)
+```
+
+Une fois qu'on a sélectionné le nombre de groupes, on utilise `cutree` pour élaguer l'arbre et obtenir la segmentation. La procédure retourne le vecteur avec les étiquettes.
+
+
+Puisque les étiquettes peuvent être permutées, on peut calculer l'indice de Rand pour voir la concordance entre les regroupements en fournissant à la fonction `flexclust::randIndex()` les deux vecteurs d'étiquettes.
+
+
+Les regroupements obtenus avec les $K$-moyennes coïncident à `r as.integer(100*flexclust::randIndex(kmoy[[3]]$cluster, cutree(rh_energie, k = 3)))`% pour la distance énergie, `r as.integer(100*flexclust::randIndex(kmoy[[3]]$cluster, cutree(rh_ward, k = 3)))`% pour la méthode de Ward et `r as.integer(100*flexclust::randIndex(kmoy[[3]]$cluster, cutree(rh_genie, k = 3)))`% pour GENIE. Le résultat est cohérent.
+
+```{r}
+moy_ward <- cbind(regroupements1, 
+                  etiquette = cutree(rh_ward, k = 3)) |>
+  dplyr::group_by(etiquette) |>
+  dplyr::summarize_all(.funs = mean)
+# Initialisation avec regroupements pour K-moyennes
+# kmeans(x = regroupements1, centers = moy_ward[,-1])
+```
+
+Avec la méthode de Ward, les fonctions objectives sont similaires et il serait envisageable, **seulement si la taille de l'échantillon est petite**, d'utiliser la solution de Ward pour initialiser les $K$-moyennes. Ces dernières permettent une réassignation et ne peuvent qu'améliorer le critère objectif.
+
+
+On pourrait aussi envisager d'autres mesures de dissemblance, ici avec la distance de Manhattan, ce qui donne les $K$-médianes.
+
+```{r}
+#| message: false
+library(flexclust, quietly = TRUE)
+kmedianes <- kcca(x = regroupements1,
+                  family = kccaFamily("kmedians"),
+                  control = list(initcent = "kmeanspp"),
+                  k = 3)
+kmedianes@clusinfo # décompte par groupe
+kmedianes@centers  # médianes des groupes
+```
+
+Encore une fois, les regroupements sont à `r round(100*as.numeric(flexclust::randIndex(x = kmedianes@cluster, y = kmoy[[3]]$cluster)))`% les mêmes que pour les $K$-moyennes et l'interprétation est la même.
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: fig-cpkmed3
+#| fig-cap: "Représentation des regroupements des $K$-médianes projetés sur les deux premières composantes principales des données."
+ggplot(data = data.frame(acp$scores[,1:2]),
+       mapping = aes(x = Comp.1,
+                     y = Comp.2, 
+                     col = factor(kmedianes@cluster))) +
+  geom_point() +
+  labs(x = "composante principale 1",
+       y = "composante principale 2",
+       col = "regroupement") +
+  theme_classic() +
+  theme(legend.position = "bottom")
+```
+
+
+On pourrait aussi utiliser la méthode des $K$-médoïdes.
+
+```{r}
+library(cluster)
+kmedoides <- pam(regroupements1, k = 3)
+# plot(kmedoides)
+silhouette <- silhouette(x = kmedoides, dist = dist_euc)
+plot(silhouette)
+kmedoides$medoids
+```
+
+L'algorithme de partition autour des médoïdes (PAM) retourne un résultat similaire aux $K$-moyennes si on fixe le nombre de rgroupements à trois. La méthode `plot` par défaut retourne une projection sur les deux composantes principales. Les silhouettes montrent des profils globalement homogènes, sauf pour deux observations du groupe 2.
+
+
+La plupart des méthodes employées retournent, peu ou prou, le même résultat que les $K$-moyennes. Ces données simulées sont un cas d'école; en pratique, il faudra davantage se fier à son jugement pratique pour voir si certains regroupements sont fortement débalancés avec plusieurs données isolées, difficilement interprétables ou voire trop similaires.
+
+
+```{r}
+#| eval: false
+#| echo: false
+gap <- cluster::clusGap(x = regroupements1, pam, K.max = 10)
+plot(gap)
+gap <- cluster::clusGap(x = regroupements1, kmeans, K.max = 10)
+plot(gap)
+```
+
+
+Si la solutions des $K$-moyennes et cie est satisfaisante, l'assignation probabiliste plutôt que rigide pourrait être souhaitable. Les mélanges de modèles Gaussiens offrent cette option. Ici, on ajuste tous les modèles avec $K=1, \ldots, 10$ regroupements pour toutes les structures de covariance et on choisit le modèle avec le plus petit BIC.
+
+```{r}
+library(mclust)
+mmg <- Mclust(regroupements1, G = 1:10)
+summary(mmg)
+# Critère BIC selon le nombre de groupes 
+# et la structure de covariance
+plot(mmg, what = "BIC")
+```
+
+On peut clairement voir que trois regroupements est le nombre idéal. Les modèles plus complexes à coefficients variables sont pénalisés davantage et difficilement estimables vu la taille du jeu de données.
+
+On voit clairement les points en bordure de l'espace qui pourraient réalistement être assignés à l'un ou l'autre des regroupements.
+
+```{r}
+## Nuages de points 2x2
+plot(mmg, what = "uncertainty")
+```
+
+Les points plus larges sont ceux qui sont plus incertains. Ce degré d'incertitude vaut un moins la probabilité d'appartenir à la classe assignée. On peut extraire de la sortie les probabilités de chaque classe en bonus.
+
+```{r}
+#| eval: false
+mmg$uncertainty # très faible ici, regroupements bien déterminés
+# Probabilité de chaque observation par classe
+mmg$z
+```
+
+Les regroupements sont exactement les mêmes que ceux obtenus avec les $K$-moyennes.
+
+
+```{r}
+# Indice de Rand - adéquation entre partitions
+flexclust::randIndex(x = mmg$classification, #nos regroupements
+                     y = kmoy[[3]]$cluster)
+```
+

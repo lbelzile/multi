@@ -147,6 +147,8 @@ website:
           contents:
            - text: "Exercice 6"
              file: exercices/06-exercice.qmd
+           - text: "Solutions 6"
+             file: exercices/06-solution.qmd
 
   page-footer:
     left: |

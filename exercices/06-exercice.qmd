@@ -9,13 +9,11 @@ Les données fictives `regroupement1` sont inspirées de @Hsu.Lee:2002. Ces donn
 
 Les variables représentent les activités sociales, les politiques de l’opérateur et références, la flexibilité des horaires, la santé et sécurité, le matériel publicitaire et la réputation.
 
-1. Faites une analyse en composantes principales et projetez les observations sur un nuage de points avec les deux premières composantes principales.
-2. Doit-on standardiser les données avant d'effectuer l'analyse?
+1. Doit-on standardiser les données avant d'effectuer l'analyse?
+2. Faites une analyse en composantes principales et projetez les observations sur un nuage de points avec les deux premières composantes principales.
 3. Utilisez l'algorithme des $K$-moyennes en faisant varier le nombre de groupes de 1 à 10. Utilisez une dizaine d'initialisations aléatoires.
-  a) Sélectionnez un nombre de regroupement adéquat en vous basant sur les critères suivants
-      i) le coefficient de détermination
-      ii) la statistique d'écart de @Tibshirani.Walther.Hastie:2001
-      iii) le critère BIC
-  b) Retournez le nombre d'observation par groupe pour la valeur de $K$ choisie.
-  c) Rapportez les statistiques descriptives (moyennes, etc.) de chaque segment
-  d) Interprétez les profils obtenus.
+   a) Sélectionnez un nombre de regroupement adéquat
+   b) Retournez le nombre d'observation par groupe pour la valeur de $K$ choisie.
+   c) Rapportez les statistiques descriptives (moyennes, etc.) de chaque segment
+   d) Interprétez les profils obtenus.
+4. Faites une segmentation avec d'autres méthodes. Est-ce que la segmentation est plus satisfaisante? Justifiez votre raisonnement.
