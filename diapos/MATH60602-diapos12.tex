@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, breakable, enhanced, frame hidden, interior hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden, breakable, boxrule=0pt, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Algorithmes pour l'analyse de regroupements}
 \protect\hypertarget{algorithmes-pour-lanalyse-de-regroupements}{}
@@ -497,8 +497,10 @@ licence \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 \FunctionTok{library}\NormalTok{(mclust)}
 \NormalTok{mmg }\OtherTok{\textless{}{-}} \FunctionTok{Mclust}\NormalTok{(}\AttributeTok{data =}\NormalTok{ donsmult\_std,}
        \AttributeTok{G =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{,}
-       \CommentTok{\# Ajouter composante uniforme}
-       \CommentTok{\#  pour bruit (aberrances)}
+       \CommentTok{\# Matrice de covariance (par défaut, tous choix)}
+       \CommentTok{\# modelNames = mclust.options("emModelNames"), }
+       \DocumentationTok{\#\# Ajouter composante uniforme}
+       \DocumentationTok{\#\#  pour bruit (aberrances)}
        \AttributeTok{initialization =} \FunctionTok{list}\NormalTok{(}\AttributeTok{noise =} \ConstantTok{TRUE}\NormalTok{))}
 \CommentTok{\# Résumé de la segmentation}
 \FunctionTok{summary}\NormalTok{(mmg)}
@@ -581,7 +583,7 @@ modèles}
   (\(+\)) l'ajout d'une composante uniforme permet de gérer les
   aberrances (supporté par \texttt{mclust}).
 \item
-  (\(+\)) l'algorithme EM garantie la convergence à un minimum local
+  (\(+\)) l'algorithme EM garantie la convergence à un optimum local
   (comme pour les \(K\)-moyennes)
 \item
   (\(+\)) on obtient une assignation probabiliste plutôt que rigide
@@ -651,49 +653,14 @@ liaison (simple, complète, barycentre, homogenéité de Ward).}
 La méthode de Ward utilise l'homogénéité comme critère.
 
 Pour chaque groupe, on calcule la somme des carrés des distances par
-rapport à la moyenne du groupe, disons \(\mathsf{SCD}_k\)
+rapport à la moyenne du groupe, disons \(\mathsf{SCD}_{k,M}\)
 (\(k=1, \ldots, M\)).
 
-On calcule ensuite l'homogénéité globale en faisant la somme,
-\(\mathrm{H}^{(M)} = \mathsf{SCD}_1 + \cdots + \mathsf{SCD}_M\).
+On calcule ensuite la somme des distances,
+\[\mathrm{SCD}_{(M)} = \mathsf{SCD}_{1,M} + \cdots + \mathsf{SCD}_{M,M}.\]
 
 La méthode de Ward va fusionner les deux groupes qui feront augmenter le
 moins possible l'homogénéité.
-\end{frame}
-
-\begin{frame}[fragile]{Méthodes hiérarchiques et coût de calcul}
-\protect\hypertarget{muxe9thodes-hiuxe9rarchiques-et-couxfbt-de-calcul}{}
-Les algorithmes de regroupement hiérarchiques stockent une matrice de
-dissemblance \(n \times n\): coût de stockage quadratique
-\(\mathrm{O}(n^2)\).
-
-Généralement, le coût de calcul est au mieux \(\Omega(n^2)\) et au pire
-\(\mathrm{O}(n^3)\).
-
-Pour la méthode de liaison simple, un algorithme permet d'obtenir un
-coût de calcul quadratique de \(\mathrm{O}(n^2)\) sans stocker la
-matrice de dissemblance, d'où un coût de stockage linéaire de
-\(\mathrm{O}(n)\).
-
-\texttt{stat::hclust} permet de faire des regroupements agglomératifs,
-mais le paquet \texttt{fastcluster} propose une version avec une
-empreinte mémoire inférieure (*plus rapide!)
-\end{frame}
-
-\begin{frame}[fragile]{Genie}
-\protect\hypertarget{genie}{}
-Alternative de Gagolewski (2016) qui modifie la fonction de liaison
-simple en retenant son efficacité de calcul.
-
-Plutôt que de simplement trouver la paire de regroupements à distance
-minimale, cette fusion n'est appliquée que si une mesure d'inéquité est
-inférieur à un seuil spécifié par l'utilisateur.
-
-Si les regroupements sont fortement inéquitables, la fusion survient
-entre les regroupements dont un de la taille minimale courante.
-
-L'implémentation \textbf{R} dans le paquet \texttt{genieclust} est
-nettement plus rapide que les autres alternative.
 \end{frame}
 
 \begin{frame}{Performance relative}
@@ -716,6 +683,41 @@ nettement plus rapide que les autres alternative.
 Voir la page
 \href{https://scikit-learn.org/stable/auto_examples/cluster/plot_linkage_comparison.html}{scikit-learn}
 pour une illustration.
+\end{frame}
+
+\begin{frame}[fragile]{Genie}
+\protect\hypertarget{genie}{}
+Alternative de Gagolewski (2016) qui modifie la fonction de liaison
+simple en retenant son efficacité de calcul.
+
+Plutôt que de simplement trouver la paire de regroupements à distance
+minimale, cette fusion n'est appliquée que si une mesure d'inéquité est
+inférieur à un seuil spécifié par l'utilisateur.
+
+Si les regroupements sont fortement inéquitables, la fusion survient
+entre les regroupements dont un de la taille minimale courante.
+
+L'implémentation \textbf{R} dans le paquet \texttt{genieclust} est
+nettement plus rapide que les autres alternative.
+\end{frame}
+
+\begin{frame}[fragile]{Méthodes hiérarchiques et coût de calcul}
+\protect\hypertarget{muxe9thodes-hiuxe9rarchiques-et-couxfbt-de-calcul}{}
+Les algorithmes de regroupement hiérarchiques stockent une matrice de
+dissemblance \(n \times n\): coût de stockage quadratique
+\(\mathrm{O}(n^2)\).
+
+Généralement, le coût de calcul est au mieux \(\Omega(n^2)\) et au pire
+\(\mathrm{O}(n^3)\).
+
+Pour la méthode de liaison simple, un algorithme permet d'obtenir un
+coût de calcul quadratique de \(\mathrm{O}(n^2)\) sans stocker la
+matrice de dissemblance, d'où un coût de stockage linéaire de
+\(\mathrm{O}(n)\).
+
+\texttt{stat::hclust} permet de faire des regroupements agglomératifs,
+mais le paquet \texttt{fastcluster} propose une version avec une
+empreinte mémoire inférieure (*plus rapide!)
 \end{frame}
 
 \begin{frame}{Hyperparamètres des méthodes hiérarchiques}
@@ -750,7 +752,8 @@ On élague l'arbre à la hauteur voulue.
 }
 
 \caption{\label{fig-dendrogramme}Dendrogramme pour l'exemple de
-regroupement hiérarchique avec la méthode de Ward et 20 observations.}
+regroupement hiérarchique avec la méthode de Ward et 100 premières
+observations.}
 
 \end{figure}
 \end{frame}
@@ -759,20 +762,39 @@ regroupement hiérarchique avec la méthode de Ward et 20 observations.}
 \protect\hypertarget{crituxe8res-pour-ward}{}
 On peut choisir \(K\) à partir du pourcentage de variance expliquée,
 \(R^2\) en calculant
-\[R^2_{(M)} = 1-\mathrm{H}_{(M)}/\mathrm{H}_{(1)},\] où
-\(\mathrm{H}_{(1)}\) est l'homogénéité globale avec un seul groupe.
+\[R^2_{(M)} = 1-\mathrm{SCD}_{(M)}/\mathrm{SCD}_{(1)},\] où
+\(\mathrm{SCD}_{(1)}\) est l'homogénéité globale avec un seul groupe.
 
 Le R-carré semi-partiel mesure la perte d'homogénéité d'une étape à
 l'autre, renormalisée par
-\[R^2_{\text{sp}(M)} =\frac{\mathrm{H}_{(M)} - \mathrm{H}_{(M-1)}}{\mathrm{H}_{(1)}},\]
-
-mesure la perte d'homogénéité (relative) en combinant ces deux groupes.
-
-On cherche un point d'inflection (un coude).
+\[R^2_{\text{sp}(M)} =\frac{\mathrm{SCD}_{(M)} - \mathrm{SCD}_{(M-1)}}{\mathrm{SCD}_{(1)}},\]
 \end{frame}
 
-\begin{frame}{Critères d'homogénéité (Ward)}
+\begin{frame}[fragile]{Critères d'homogénéité (Ward)}
 \protect\hypertarget{crituxe8res-dhomoguxe9nuxe9ituxe9-ward}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{ward }\OtherTok{\textless{}{-}}\NormalTok{ fastcluster}\SpecialCharTok{::}\FunctionTok{hclust}\NormalTok{(}
+  \AttributeTok{d =} \FunctionTok{dist}\NormalTok{(donsmult\_std),}
+  \AttributeTok{method =} \StringTok{"ward.D2"}\NormalTok{)}
+\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{homogeneite}\NormalTok{(}\AttributeTok{rhier =}\NormalTok{ ward, }
+                      \AttributeTok{ngroupes =} \DecValTok{10}\NormalTok{,}
+                      \AttributeTok{data =}\NormalTok{ donsmult\_std)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Graphiques du \(R^2\) et du \(R^2\) semi-partiel}
+\protect\hypertarget{graphiques-du-r2-et-du-r2-semi-partiel}{}
+On cherche un point d'inflection (un coude).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/unnamed-chunk-15-1.pdf}
+
+}
+
+\end{figure}
 \end{frame}
 
 \begin{frame}{Avantages et inconvénient, regroupements hiérarchiques}
@@ -797,6 +819,171 @@ On cherche un point d'inflection (un coude).
   quadratique de \(\mathrm{O}(n^2)\) pour la méthode de liaison simple
   et autrement \(\mathrm{O}(n^3)\) pour la plupart des autres fonctions
   de liaison.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Méthodes basées sur la densité}
+\protect\hypertarget{muxe9thodes-basuxe9es-sur-la-densituxe9}{}
+L'algorithme DBSCAN (\emph{density-based spatial clustering of
+applications with noise}) est une méthode de partitionnement basée sur
+la densité des points.
+
+L'idée de base de l'algorithme est de tracer une boule de rayon
+\(\epsilon\) autour de chaque observation et de voir si elle inclut
+d'autres observations.
+\end{frame}
+
+\begin{frame}{Mécanisme d'assignation}
+\protect\hypertarget{muxe9canisme-dassignation}{}
+L'algorithme classe les observations en trois catégories:
+
+\begin{itemize}
+\tightlist
+\item
+  Un point central est une observation qui possède \(M-1\) voisins à
+  distance \(\epsilon\).
+\item
+  Un point frontière est un point qui est distant de moins de
+  \(\epsilon\) d'un point central, sans en être un.
+\item
+  Un point isolé est une observation qui n'est pas rattachée à aucun
+  regroupement.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Algorithme DBSCAN}
+\protect\hypertarget{algorithme-dbscan}{}
+L'algorithme répète les étapes suivantes jusqu'à ce que chaque
+observation ait été visitée.
+
+\begin{enumerate}
+\tightlist
+\item
+  Choisir un point aléatoirement parmi ceux qui n'ont pas été visités.
+\item
+  Si le point n'est pas étiqueté, calculer le nombre de points voisins
+  qui se trouvent dans un rayon \(\epsilon\): s'il y a moins de \(M\)
+  observations, provisoirement étiqueter l'observation comme point
+  isolé, sinon comme point central.
+\item
+  Si l'observation est un point central avec \(M-1\) voisins ou plus,
+  créer un regroupement.
+\item
+  Étiqueter chaque point à distance \(\epsilon\) créé et l'ajouter au
+  regroupement, ainsi que tout point à distance \(\epsilon\) de ces
+  voisins.
+\end{enumerate}
+
+\href{https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/}{Ce
+site web} offre une visualisation interactive des différentes étapes de
+l'algorithme et de comparer la performance de DBSCAN selon le type de
+regroupements.
+\end{frame}
+
+\begin{frame}{Hyperparamètres}
+\protect\hypertarget{hyperparamuxe8tres-1}{}
+\begin{itemize}
+\tightlist
+\item
+  le rayon \(\epsilon\) et
+\item
+  le nombre minimal de points pour former un regroupement, \(M\)
+\end{itemize}
+
+Hyperparamètres \(M\) et \(\epsilon\) corrélés: si on augmente le nombre
+minimal de point \(M\) par regroupement, il faudra également augmenter
+le rayon \(\epsilon\) pour éviter d'avoir un nombre trop élevé de points
+isolés et d'aberrances.
+\end{frame}
+
+\begin{frame}{Classification avec DBSCAN}
+\protect\hypertarget{classification-avec-dbscan}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-dbscan1-1.pdf}
+
+}
+
+\caption{\label{fig-dbscan1}Illustration de la classification des points
+avec DBSCAN: toutes les observations sont assignées à un regroupement,
+moins une aberrance.}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Choix des hyperparamètres}
+\protect\hypertarget{choix-des-hyperparamuxe8tres}{}
+Avec \(p\) variables explicatives, on recommande \(M > p+1\).
+
+Pour \(\varepsilon\), considérer les \(M\) plus proches voisins.
+
+La fonction \texttt{kNNdistplot} du paquet \texttt{dbscan} permet de
+tracer un graphique de la distance moyenne des \(k\) plus proches
+voisins pour chaque observation:
+
+\begin{itemize}
+\tightlist
+\item
+  en prenant \(k=M-1\), calculer la distance entre le \(k\) plus proche
+  voisin de chaque observation.
+\item
+  ordonner ces distances.
+\item
+  choisir \(\epsilon\) selon coude
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Critère du coude}
+\protect\hypertarget{crituxe8re-du-coude}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos12_files/figure-beamer/fig-dbscan2-1.pdf}
+
+}
+
+\caption{\label{fig-dbscan2}Graphique des distances entre chaque
+observation et son troisième plus proche voisin (gauche), en fonction du
+pourcentage d'observations à moins de cette distance et regroupements
+obtenus avec DBSCAN avec \(M=10\) et \(\epsilon=1.1\) (droite).}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Avantages et inconvénients de DBSCAN (1/2)}
+\protect\hypertarget{avantages-et-inconvuxe9nients-de-dbscan-12}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(+\)) le traitement des aberrances est automatique et l'algorithme
+  est robuste.
+\item
+  (\(+\)) le nombre de regroupements n'a pas à être spécifié apriori.
+\item
+  (\(+\)) la forme des regroupements est arbitraire, peut être non
+  convexe et de taille différente.
+\item
+  (+/-) la complexité de l'algorithme est d'au mieux
+  \(\mathrm{O}(n\ln n)\) (calcul) et \(\mathrm{O}(n)\) pour le stockage
+  puisque chaque point est visité à tour de rôle et comparé aux autres
+  pour trouver les plus proches voisins.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Avantages et inconvénients de DBSCAN (2/2)}
+\protect\hypertarget{avantages-et-inconvuxe9nients-de-dbscan-22}{}
+\begin{itemize}
+\tightlist
+\item
+  (\(+\)) les hyperparamètres ont une interprétation physique
+\item
+  (\(-\)) mais leur choix n'est pas aisé
+\item
+  (\(-\)) DBSCAN ne permet pas de traiter le cas où la densité des
+  regroupements change et risque de fusionner des regroupements s'il y a
+  une série d'observations qui permet de relier deux regroupements.
+\item
+  (\(-\)) comme la plupart des algorithmes, le voisinage des points
+  devient épars quand \(p\) augmente en raison du fléau de la dimension.
 \end{itemize}
 \end{frame}
 

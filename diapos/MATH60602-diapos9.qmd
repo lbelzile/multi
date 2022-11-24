@@ -797,6 +797,14 @@ Si l'hypothèse tient la route, alors il ne devrait pas y avoir de tendance temp
 
 La commande `cox.zph` permet de tester le postulat de risques proportionnels à l'aide d'un test du score pour voir si la pente $\beta(t)$ associée à une covariable est nulle en fonction du temps $t$.
 
+```{r}
+#| echo: true
+#| eval: false
+test_score_rprop <- cox.zph(cox)
+test_score_rprop
+plot(test_score_rprop)
+```
+
 # Graphique des résidus
 
 

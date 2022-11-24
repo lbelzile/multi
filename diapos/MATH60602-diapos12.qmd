@@ -263,8 +263,10 @@ set.seed(60602)
 library(mclust)
 mmg <- Mclust(data = donsmult_std,
        G = 1:10,
-       # Ajouter composante uniforme
-       #  pour bruit (aberrances)
+       # Matrice de covariance (par défaut, tous choix)
+       # modelNames = mclust.options("emModelNames"), 
+       ## Ajouter composante uniforme
+       ##  pour bruit (aberrances)
        initialization = list(noise = TRUE))
 # Résumé de la segmentation
 summary(mmg)
@@ -355,7 +357,7 @@ plot(reduc_dim_mmg, what = "scatterplot")
 
 - ($+$) approche est plus flexible que les $K$-moyennes.
 - ($+$) l'ajout d'une composante uniforme permet de gérer les aberrances (supporté par `mclust`).
-- ($+$) l'algorithme EM garantie la convergence à un minimum local (comme pour les $K$-moyennes)
+- ($+$) l'algorithme EM garantie la convergence à un optimum local (comme pour les $K$-moyennes)
 - ($+$) on obtient une assignation probabiliste plutôt que rigide
 - ($-$) le coût de calcul est plus élevé que les $K$-moyennes 
 - ($-$) le nombre de paramètre des matrices de covariance augmente rapidement avec la dimension $p$.
@@ -453,21 +455,22 @@ text(x = -2, y = 6, "Ward")
 
 La méthode de Ward utilise l'homogénéité comme critère.
 
-Pour chaque groupe, on calcule la somme des carrés des distances par rapport à la moyenne du groupe, disons $\mathsf{SCD}_k$ ($k=1, \ldots, M$).
+Pour chaque groupe, on calcule la somme des carrés des distances par rapport à la moyenne du groupe, disons $\mathsf{SCD}_{k,M}$ ($k=1, \ldots, M$).
 
-On calcule ensuite l'homogénéité globale en faisant la somme,  $\mathrm{H}^{(M)} = \mathsf{SCD}_1 + \cdots + \mathsf{SCD}_M$. 
+On calcule ensuite la somme des distances, $$\mathrm{SCD}_{(M)} = \mathsf{SCD}_{1,M} + \cdots + \mathsf{SCD}_{M,M}.$$
 
 La méthode de Ward va fusionner les deux groupes qui feront augmenter le moins possible l'homogénéité.
 
-# Méthodes hiérarchiques et coût de calcul
+# Performance relative
 
-Les algorithmes de regroupement hiérarchiques stockent une matrice de dissemblance $n \times n$: coût de stockage quadratique $\mathrm{O}(n^2)$.
+- **Liaison simple**: fonctionne bien si l’écart entre deux regroupements est suffisamment grand. S’il y a du bruit entre deux regroupements, la qualité des regroupements en sera affectée. Souvent quelques valeurs isolées et un seul grand regroupement
 
-Généralement, le coût de calcul est au mieux $\Omega(n^2)$ et au pire $\mathrm{O}(n^3)$. 
+- **Liaison complète**: moins sensible au bruit et aux faibles écarts entre regroupements, mais a tendance à casser les regroupements globulaires.
 
-Pour la méthode de liaison simple, un algorithme permet d'obtenir un coût de calcul quadratique de $\mathrm{O}(n^2)$ sans stocker la matrice de dissemblance, d'où un coût de stockage linéaire de $\mathrm{O}(n)$. 
+- **Homogénéité de Ward**:  le critère ressemble à celui des $K$-moyennes.
 
-`stat::hclust` permet de faire des regroupements agglomératifs, mais le paquet `fastcluster` propose une version avec une empreinte mémoire inférieure (*plus rapide!)
+Voir la page [scikit-learn](https://scikit-learn.org/stable/auto_examples/cluster/plot_linkage_comparison.html) pour une illustration.
+
 
 # Genie 
 
@@ -479,15 +482,17 @@ Si les regroupements sont fortement inéquitables, la fusion survient entre les 
 
 L'implémentation **R** dans le paquet `genieclust` est nettement plus rapide que les autres alternative.
 
-# Performance relative
 
-- **Liaison simple**: fonctionne bien si l’écart entre deux regroupements est suffisamment grand. S’il y a du bruit entre deux regroupements, la qualité des regroupements en sera affectée. Souvent quelques valeurs isolées et un seul grand regroupement
+# Méthodes hiérarchiques et coût de calcul
 
-- **Liaison complète**: moins sensible au bruit et aux faibles écarts entre regroupements, mais a tendance à casser les regroupements globulaires.
+Les algorithmes de regroupement hiérarchiques stockent une matrice de dissemblance $n \times n$: coût de stockage quadratique $\mathrm{O}(n^2)$.
 
-- **Homogénéité de Ward**:  le critère ressemble à celui des $K$-moyennes.
+Généralement, le coût de calcul est au mieux $\Omega(n^2)$ et au pire $\mathrm{O}(n^3)$. 
 
-Voir la page [scikit-learn](https://scikit-learn.org/stable/auto_examples/cluster/plot_linkage_comparison.html) pour une illustration.
+Pour la méthode de liaison simple, un algorithme permet d'obtenir un coût de calcul quadratique de $\mathrm{O}(n^2)$ sans stocker la matrice de dissemblance, d'où un coût de stockage linéaire de $\mathrm{O}(n)$. 
+
+`stat::hclust` permet de faire des regroupements agglomératifs, mais le paquet `fastcluster` propose une version avec une empreinte mémoire inférieure (*plus rapide!)
+
 
 # Hyperparamètres des méthodes hiérarchiques
 
@@ -508,9 +513,9 @@ On élague l'arbre à la hauteur voulue.
 #| eval: true
 #| echo: false
 #| label: fig-dendrogramme
-#| fig-cap: "Dendrogramme pour l'exemple de regroupement hiérarchique avec la méthode de Ward et 20 observations."
+#| fig-cap: "Dendrogramme pour l'exemple de regroupement hiérarchique avec la méthode de Ward et 100 premières observations."
 library(ggdendro)
-model <- hclust(dist(hecmulti::regroupements1[1:20,]),
+model <- hclust(dist(donsmult_std[1:1000,]),
                 method = "ward.D2")
 dhc <- as.dendrogram(model)
 # Rectangular lines
@@ -526,24 +531,39 @@ p
 
 # Critères pour Ward
 
-On peut choisir $K$ à partir du pourcentage de variance expliquée, $R^2$ en calculant $$R^2_{(M)} = 1-\mathrm{H}_{(M)}/\mathrm{H}_{(1)},$$ où $\mathrm{H}_{(1)}$ est l'homogénéité globale avec un seul groupe.
+On peut choisir $K$ à partir du pourcentage de variance expliquée, $R^2$ en calculant $$R^2_{(M)} = 1-\mathrm{SCD}_{(M)}/\mathrm{SCD}_{(1)},$$ où $\mathrm{SCD}_{(1)}$ est l'homogénéité globale avec un seul groupe.
 
 Le R-carré semi-partiel mesure la perte d'homogénéité d'une étape à l'autre, renormalisée par 
-$$R^2_{\text{sp}(M)} =\frac{\mathrm{H}_{(M)} - \mathrm{H}_{(M-1)}}{\mathrm{H}_{(1)}},$$
-
-mesure la perte d’homogénéité (relative) en combinant ces deux groupes. 
-
-
-On cherche un point d'inflection (un coude).
+$$R^2_{\text{sp}(M)} =\frac{\mathrm{SCD}_{(M)} - \mathrm{SCD}_{(M-1)}}{\mathrm{SCD}_{(1)}},$$
 
 # Critères d'homogénéité (Ward)
 
+
 ```{r}
 #| eval: false
+#| echo: true
+ward <- fastcluster::hclust(
+  d = dist(donsmult_std),
+  method = "ward.D2")
+hecmulti::homogeneite(rhier = ward, 
+                      ngroupes = 10,
+                      data = donsmult_std)
+```
+
+# Graphiques du $R^2$ et du $R^2$ semi-partiel
+
+On cherche un point d'inflection (un coude).
+
+```{r}
+#| eval: true
 #| echo: false
-hecmulti::homogeneite(rhier = hclust(dist(hecmulti::regroupements1),
-                method = "ward.D2"), 
-                      ngroupes = 10)
+#| cache: true
+ward <- fastcluster::hclust(
+  d = dist(donsmult_std),
+  method = "ward.D2")
+hecmulti::homogeneite(rhier = ward, 
+                      ngroupes = 10,
+                      data = donsmult_std)
 ```
 
 # Avantages et inconvénient, regroupements hiérarchiques
@@ -554,6 +574,167 @@ hecmulti::homogeneite(rhier = hclust(dist(hecmulti::regroupements1),
 - ($+$) les méthodes d'arborescence sont faciles à expliquer
 - ($-$) le nombre de groupes n'a pas à être spécifié apriori (une seule estimation)
 - ($-$) le coût de calcul est prohibitif, avec une complexité quadratique de $\mathrm{O}(n^2)$ pour la méthode de liaison simple et autrement $\mathrm{O}(n^3)$ pour la plupart des autres fonctions de liaison.
+
+# Méthodes basées sur la densité
+
+L'algorithme DBSCAN (*density-based spatial clustering of applications with noise*) est une méthode de partitionnement basée sur la densité des points. 
+
+L'idée de base de l'algorithme est de tracer une boule de rayon $\epsilon$ autour de chaque observation et de voir si elle inclut d'autres observations. 
+
+# Mécanisme d'assignation 
+
+L'algorithme classe les observations en trois catégories:
+
+- Un point central est une observation qui possède $M-1$ voisins à distance $\epsilon$.
+- Un point frontière est un point qui est distant de moins de $\epsilon$ d'un point central, sans en être un. 
+- Un point isolé est une observation qui n'est pas rattachée à aucun regroupement. 
+
+
+# Algorithme DBSCAN
+
+L'algorithme répète les étapes suivantes jusqu'à ce que chaque observation ait été visitée.
+
+1. Choisir un point aléatoirement parmi ceux qui n'ont pas été visités.
+2. Si le point n'est pas étiqueté, calculer le nombre de points voisins qui se trouvent dans un rayon $\epsilon$: s'il y a moins de $M$ observations, provisoirement étiqueter l'observation comme point isolé, sinon comme point central.
+3. Si l'observation est un point central avec $M-1$ voisins ou plus, créer un regroupement.
+4. Étiqueter chaque point à distance $\epsilon$ créé et l'ajouter au regroupement, ainsi que tout point à distance $\epsilon$ de ces voisins.
+
+[Ce site web](https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/) offre une visualisation interactive des différentes étapes de  l'algorithme et de comparer la performance de DBSCAN selon le type de regroupements.
+
+# Hyperparamètres
+
+- le rayon $\epsilon$ et 
+- le  nombre minimal de points pour former un regroupement, $M$
+
+
+
+<!--
+Avec une mesure de dissemblance, on peut créer une matrice qui pour chaque paire de points indique si l'observation est à distance au plus $\epsilon$: cela permet de créer un graphe où chaque observation est un noeud et où il y a une arête entre deux noeuds si la distance entre les deux observations est inférieure à $\epsilon$.
+-->
+
+
+Hyperparamètres $M$ et $\epsilon$ corrélés: si on augmente le nombre minimal de point $M$ par regroupement, il faudra également augmenter le rayon $\epsilon$ pour éviter d'avoir un nombre trop élevé de points isolés et d'aberrances.
+
+
+
+# Classification avec DBSCAN
+
+```{r}
+#| label: fig-dbscan1
+#| fig-cap: "Illustration de la classification des points avec DBSCAN: toutes les observations sont assignées à un regroupement, moins une aberrance."
+#| echo: false
+#| eval: true
+#| fig-width: 6
+#| fig-height: 6
+set.seed(60602)
+fdat <- data.frame(x = rnorm(10), 
+                   y = rnorm(10)) + 10
+ddist <- as.matrix(dist(fdat))
+clust <- dbscan::dbscan(fdat[,c("x","y")], eps = 1.5,minPts = 5)
+nneigh <- apply(ddist, 1, function(x){sum(x < 1.5)-1})
+fdat$type <- factor(dplyr::case_when(
+  nneigh == 0 ~ "aberrance",
+  nneigh < 5 ~ "frontière",
+  nneigh >= 5 ~ "central"
+))
+g1 <- ggplot(fdat,
+       aes(x = x, y = y)) +
+  geom_point(pch = clust$cluster) + 
+  #geom_point(size = 70,
+   #          shape = 1)
+ggforce::geom_circle(
+  aes(x0 = x, y0 = y, 
+      r = 1.5, color = type)) + 
+  scale_x_continuous(limits = c(5, 13),
+                     expand = c(0,0)) +
+  scale_y_continuous(limits = c(5, 13),
+                     expand = c(0,0)) +
+  labs(x = "", y = "") + 
+  theme_classic() +
+  theme(legend.position = c(5,5))
+g1
+```
+
+
+# Choix des hyperparamètres
+
+Avec $p$ variables explicatives, on recommande $M > p+1$.
+
+
+Pour $\varepsilon$, considérer les $M$ plus proches voisins.
+
+La fonction `kNNdistplot` du paquet `dbscan` permet de tracer un graphique de la distance moyenne des $k$ plus proches voisins pour chaque observation: 
+
+- en prenant $k=M-1$, calculer la distance entre le $k$ plus proche voisin de chaque observation.
+- ordonner ces distances. 
+- choisir $\epsilon$ selon coude
+
+# Critère du coude
+
+```{r}
+#| label: fig-dbscan2
+#| fig-cap: "Graphique des distances entre chaque observation et son troisième plus proche voisin (gauche), en fonction du pourcentage d'observations à moins de cette distance et regroupements obtenus avec DBSCAN avec $M=10$ et $\\epsilon=1.1$ (droite)."
+#| echo: false
+#| eval: true
+set.seed(1234)
+set1 <- mvtnorm::rmvnorm(n = 300, c(14,12), matrix(c(4,0.5,0.5,5),2))
+set2 <- mvtnorm::rmvnorm(n = 300, c(5.5,-1), matrix(c(1,0.5,0.5,6),2))
+set3 <- mvtnorm::rmvnorm(n = 300, c(0,0), matrix(c(2,0,0,2),2))
+db <- rbind(set1, set2, set3)
+colnames(db) <- c("X1", "X2")
+DF <- tibble::as_tibble(db)
+knndist <- dbscan::kNNdist(
+  DF[,1:2],
+  k = 9)
+g1 <- ggplot(data.frame(
+   pourcentage = (1:length(knndist))/length(knndist),
+   dist = sort(knndist)),
+  aes(x = pourcentage, y = dist)) +
+    geom_line() +
+  geom_hline(yintercept = 1.1,
+             linetype = 2, 
+             alpha = 0.2) +
+  labs(subtitle = "Distance entre les trois plus proches voisins",
+       y = "",
+       x = "pourcentage des observations") +
+  scale_x_continuous(labels = scales::percent) +
+  theme_classic()
+clust <- dbscan::dbscan(DF[,1:2],
+                minPts = 10, 
+                eps = 1.1)
+g2 <- ggplot(
+  data = data.frame(
+    x = DF$X1,
+    y =  DF$X2,
+    groupe = factor(clust$cluster)),
+  mapping = aes(
+    x = x,
+    y = y, 
+    color = groupe)) +
+  geom_point() +
+  labs(x = "variable 1",
+       y = "variable 2") + 
+  theme_classic() +
+  theme(legend.position = "bottom")
+g1 + g2
+```
+
+# Avantages et inconvénients de DBSCAN (1/2)
+
+- ($+$) le traitement des aberrances est automatique et l'algorithme est robuste.
+- ($+$) le nombre de regroupements n'a pas à être spécifié apriori. 
+- ($+$) la forme des regroupements est arbitraire, peut être non convexe et de taille différente.
+- (+/-) la complexité de l'algorithme est d'au mieux $\mathrm{O}(n\ln n)$ (calcul) et $\mathrm{O}(n)$ pour le stockage puisque chaque point est visité à tour de rôle et comparé aux autres pour trouver les plus proches voisins.
+
+# Avantages et inconvénients de DBSCAN (2/2)
+
+
+- ($+$) les hyperparamètres ont une interprétation physique
+- ($-$) mais leur choix n'est pas aisé
+- ($-$) DBSCAN ne permet pas de traiter le cas où la densité des regroupements change et risque de fusionner des regroupements s'il y a une série d'observations qui permet de relier deux regroupements.
+- ($-$) comme la plupart des algorithmes, le voisinage des points devient épars quand $p$ augmente en raison du fléau de la dimension.
+
+
 
 # Comparaison de segmentations
 
