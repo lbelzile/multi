@@ -137,9 +137,10 @@ plot(reduc_dim_mmg, what = "scatterplot")
 #-------------------------------------------------
 ##  REGROUPEMENTS HIÉRARCHIQUES
 # hclust() (paquet "stats") a une implémentation
-# avec une complexité typiquement cubique
+# avec une complexité typiquement cubique de O(n^3)
 # malgré un optimum de Omega(n^2)
-# flashclust::hclust est plus près de ce dernier
+# flashclust::hclust() est plus près de ce dernier
+# fastcluster::hclust() est réputé plus rapide
 
 # Regroupements hiérarchiques agglomératifs avec modèles gaussiens
 # mclust::hc()
@@ -153,21 +154,25 @@ dist_euc <- dist(donsmult_std, method = "euclidean")
 # Stockage de la matrice de distance
 reghier_ward <- fastcluster::hclust(
   d = dist_euc,
-  method = "ward")
+  method = "ward.D2")
+# L'algorithme stocke les différentes étapes des regroupements
+# De fusion (- pour no d'observation, + pour regroupements de l'étape)
+
 # Dendrogramme
 plot(reghier_ward)
 rect.hclust(reghier_ward, k = 8)
-# R-carré et R-carré semi-partiel
+# R-carré et R-carré semi-partiel - pour Ward
 hecmulti::homogeneite(
     rhier = reghier_ward,
     data = donsmult_std,
     ngroupes = 15L)
-# also fastcluster
-reghier_simple <- flashClust::hclust(
+# flashClust permet aussi de faire les calculs rapidements
+reghier_simple <- fastcluster::hclust(
   d = dist_euc,
   method = "single")
+head(reghier_simple$merge)
 
-reghier_complet <- flashClust::hclust(
+reghier_complet <- fastcluster::hclust(
   d = dist_euc,
   method = "complete")
 
@@ -222,3 +227,10 @@ ggplot(
                 col = etiquettes,
                 pointype = etiquettes)) +
   geom_point(alpha = 0.1)
+
+# Indice de Rand ajusté
+# Comparer deux partitions des données
+hecmulti::rand(x = genieh_etiquettes,
+                     y = mmg$classification)
+# Version généralisée avec pénalité
+# flexclust::randIndex
