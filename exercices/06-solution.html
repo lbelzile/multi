@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.11">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Analyse multidimensionnelle appliquée - Analyse de regroupements</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Analyse multidimensionnelle appliquée</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html">Syllabus</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../horaire.html">Horaire</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contenu/index.html">Contenu</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../evaluations/index.html">Évaluations</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../exercices/index.html" aria-current="page">Exercices</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://lbelzile.github.io/math60602">Notes</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://lbelzile.github.io/hecmulti"><i class="bi bi-inbox-fill" role="img" aria-label="Données">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Analyse de regroupements</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/index.html" class="sidebar-item-text sidebar-link">Exercices</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Analyse exploratoire</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/01-exercice.html" class="sidebar-item-text sidebar-link">Exercice 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/01-solution.html" class="sidebar-item-text sidebar-link">Solution 1</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Analyse factorielle</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/02-exercice.html" class="sidebar-item-text sidebar-link">Exercice 2</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/02-solution.html" class="sidebar-item-text sidebar-link">Solutions 2</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Sélection de variables</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/03-exercice.html" class="sidebar-item-text sidebar-link">Exercice 3</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/03-solution.html" class="sidebar-item-text sidebar-link">Solutions 3</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Régression logistique</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/04-exercice.html" class="sidebar-item-text sidebar-link">Exercice 4</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/04-solution.html" class="sidebar-item-text sidebar-link">Solutions 4</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse de survie</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/05-exercice.html" class="sidebar-item-text sidebar-link">Exercice 5</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/05-solution.html" class="sidebar-item-text sidebar-link">Solutions 5</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Analyse de regroupements</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/06-exercice.html" class="sidebar-item-text sidebar-link">Exercice 6</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/06-solution.html" class="sidebar-item-text sidebar-link active">Solutions 6</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table des matières</h2>
+   
+  <ul>
+  <li><a href="#exercice-6.1" id="toc-exercice-6.1" class="nav-link active" data-scroll-target="#exercice-6.1">Exercice 6.1</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Analyse de regroupements</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="exercice-6.1" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-6.1">Exercice 6.1</h2>
+<p><em>Les données fictives <code>regroupement1</code> sont inspirées de <span class="citation" data-cites="Hsu.Lee:2002">Hsu &amp; Lee (<a href="#ref-Hsu.Lee:2002" role="doc-biblioref">2002</a>)</span>. Ces données contiennent des échelles pour certains éléments d’un questionnaire. Ce dernier a été élaboré afin d’évaluer l’importance de 55 caractéristiques des opérateurs de voyages organisés en autobus et des voyages eux-mêmes à l’aide d’une échelle de Likert à cinq points, allant de extrêmement important (5) à pas du tout important (1).</em></p>
+<p><em>Les variables représentent les activités sociales, les politiques de l’opérateur et références, la flexibilité des horaires, la santé et sécurité, le matériel publicitaire et la réputation.</em></p>
+<ol type="1">
+<li><em>Doit-on standardiser les données avant d’effectuer l’analyse?</em></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(regroupements1, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(regroupements1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classes 'tbl_df', 'tbl' and 'data.frame':   150 obs. of  6 variables:
+ $ x1: num  3.9 2.8 3.6 2.8 2.5 2.5 2.5 2.2 3.1 3.1 ...
+ $ x2: num  4.1 4.6 5 5 3.9 3.3 4.3 5 3.6 5 ...
+ $ x3: num  3.6 5 4.3 4.4 3.6 3.6 2.6 2.5 4.5 3.7 ...
+ $ x4: num  4.4 4.6 3.6 3.7 4.2 2.6 3.9 3.9 3.9 2.6 ...
+ $ x5: num  4 4.5 3.5 3.2 3.2 3.9 4.2 5 4.9 5 ...
+ $ x6: num  5 4 4.4 3.5 4 4.5 5 4.9 5 3.9 ...</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regroupements1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x1              x2              x3              x4       
+ Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+ 1st Qu.:2.100   1st Qu.:2.400   1st Qu.:1.925   1st Qu.:2.525  
+ Median :2.800   Median :3.200   Median :3.000   Median :3.150  
+ Mean   :2.933   Mean   :3.218   Mean   :2.957   Mean   :3.197  
+ 3rd Qu.:3.775   3rd Qu.:4.100   3rd Qu.:3.900   3rd Qu.:3.900  
+ Max.   :5.000   Max.   :5.000   Max.   :5.000   Max.   :5.000  
+       x5              x6       
+ Min.   :1.000   Min.   :1.000  
+ 1st Qu.:2.400   1st Qu.:1.925  
+ Median :3.450   Median :3.400  
+ Mean   :3.321   Mean   :3.170  
+ 3rd Qu.:4.200   3rd Qu.:4.400  
+ Max.   :5.000   Max.   :5.000  </code></pre>
+</div>
+</div>
+<p>Les données sont toutes sur la même échelle de Likert donc la standardisation n’est pas nécessaire apriori.</p>
+<ol start="2" type="1">
+<li><em>Faites une analyse en composantes principales et projetez les observations sur un nuage de points avec les deux premières composantes principales.</em></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>acp <span class="ot">&lt;-</span> <span class="fu">princomp</span>(regroupements1, <span class="at">cor =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">eboulis</span>(acp)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2 à 3 composantes principales suffisantes</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Comp<span class="fl">.1</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> Comp<span class="fl">.2</span>)) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"composante principale 1"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"composante principale 2"</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chargements</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>acp<span class="sc">$</span>loadings</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+   Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6
+x1  0.247  0.918  0.202                0.229
+x2  0.410        -0.498  0.758              
+x3  0.459         0.187         0.616 -0.609
+x4  0.343  0.140 -0.505 -0.568 -0.440 -0.304
+x5  0.410 -0.213  0.648  0.119 -0.588       
+x6  0.525 -0.300        -0.292  0.266  0.690
+
+               Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6
+SS loadings     1.000  1.000  1.000  1.000  1.000  1.000
+Proportion Var  0.167  0.167  0.167  0.167  0.167  0.167
+Cumulative Var  0.167  0.333  0.500  0.667  0.833  1.000</code></pre>
+</div>
+</div>
+<p>On voit plus ou moins clairement trois regroupements. Les chargements révèlent que la première composante principale est grosso modo une moyenne globale des scores, mais que le score pour les activités sociales ressort davantage dans la deuxième composante, comparativement au matériel publicitaire et à la réputation.</p>
+<ol start="3" type="1">
+<li><em>Utilisez l’algorithme des <span class="math inline">\(K\)</span>-moyennes en faisant varier le nombre de groupes de 1 à 10. Utilisez une dizaine d’initialisations aléatoires.</em>
+<ol type="a">
+<li><em>Sélectionnez un nombre de regroupement adéquat</em></li>
+<li><em>Retournez le nombre d’observation par groupe pour la valeur de <span class="math inline">\(K\)</span> choisie.</em></li>
+<li><em>Rapportez les statistiques descriptives (moyennes, etc.) de chaque segment</em></li>
+<li><em>Interprétez les profils obtenus.</em></li>
+</ol></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60602</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Kmax <span class="ot">&lt;-</span> 10L <span class="co"># nombre maximum de groupes</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>kmoy <span class="ot">&lt;-</span> <span class="fu">list</span>() <span class="co"># liste pour stocker les résultats des segmentations</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq_len</span>(Kmax)){</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a> kmoy[[k]] <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(<span class="at">x =</span> regroupements1, </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">centers =</span> k,  <span class="co"># nombre de regroupements initiaux</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">nstart =</span> 10L) <span class="co"># nombre d'initialisation aléatoires</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>On peut extraire le critère de la fonction objective (SCD): l’homogénéité est calculée comme la somme des carrés des distances intra-groupes. Cela nous permet d’utiliser les diagnostics pour la sélection avec le <span class="math inline">\(R^2\)</span> en cherchant le coude à partir duquel aucun changement n’est visible.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>scd_intra <span class="ot">&lt;-</span> <span class="fu">sapply</span>(kmoy, <span class="cf">function</span>(x){x<span class="sc">$</span>tot.withinss})</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Diagnostics pour sélection - clairement trois groupes</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">homogeneite</span>(<span class="at">scd =</span> scd_intra)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Les graphiques de <span class="math inline">\(R^2\)</span> et le <span class="math inline">\(R^2\)</span> semi-partiel indiquent tous deux clairement que trois regroupements est le choix le plus logique. On peut étiqueter les observations et visualiser les regroupements obtenus en projetant sur les deux premières composantes principales. Les groupes sont bien démarqués et il semble que l’initialisation aléatoire ait été adéquate.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraire les identifiants des regroupements</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>etiquettes_kmoy3 <span class="ot">&lt;-</span> kmoy[[<span class="dv">3</span>]]<span class="sc">$</span>cluster</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Faire un graphique avec les composantes principales</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Comp<span class="fl">.1</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> Comp<span class="fl">.2</span>, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col =</span> <span class="fu">factor</span>(etiquettes_kmoy3))) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"composante principale 1"</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"composante principale 2"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"regroupement"</span>) <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-cpkmoy3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="06-solution_files/figure-html/fig-cpkmoy3-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Représentation des regroupements des <span class="math inline">\(K\)</span>-moyennes projetés sur les deux premières composantes principales des données.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Le nombre peut être extrait de la liste avec <code>$size</code>. On a 45 observations dans le groupe 1, 28 dans le groupe 2 et 77 dans le groupe 3. Au vu de la taille de la base de donnée, ces nombres sont relativement équilibrés.</p>
+<p>On peut maintenant extraire les moyennes des trois regroupements. Le <a href="#tbl-statdescriptkmo3">Tableau&nbsp;1</a> montre le résultat arrondi à un chiffre après la virgule.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(kmoy[[<span class="dv">3</span>]]<span class="sc">$</span>centers, <span class="at">digits =</span> <span class="dv">1</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-statdescriptkmo3" class="anchored">
+<table class="table table-sm table-striped">
+<caption>Tableau&nbsp;1: Moyennes des trois regroupements obtenus avec les <span class="math inline">\(K\)</span>-moyennes.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">x1</th>
+<th style="text-align: right;">x2</th>
+<th style="text-align: right;">x3</th>
+<th style="text-align: right;">x4</th>
+<th style="text-align: right;">x5</th>
+<th style="text-align: right;">x6</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">1.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">2.6</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">2.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">4.0</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">4.2</td>
+<td style="text-align: right;">4.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Le groupe 1 est le groupe où les sujets ont les valeurs, en moyenne, les plus faibles pour les six variables. Le groupe 2 est celui où les sujets ont les valeurs, en moyenne, les plus élevées pour les 6 variables sauf pour la variable X1 (activité sociale). Le groupe 3 est celui où les sujets ont, en moyenne, la valeur la plus élevée de la variable X1 et des valeurs moyennes inférieures au groupe 3 mais supérieures au groupe 2 pour les cinq autres variables.</p>
+<p>Dans l’article, les auteurs ont baptisé les sujets du groupe 1, les « indépendants », ceux du groupe 2, les « dépendants » et ceux du groupe 3, les « sociables ».</p>
+<ol start="4" type="1">
+<li><em>Faites une segmentation avec d’autres méthodes. Est-ce que la segmentation est plus satisfaisante? Justifiez votre raisonnement.</em></li>
+</ol>
+<p>La segmentation obtenue est très satisfaisante et interprétable, mais nous essayerons d’autres méthodes pour démontrer leur utilisation.</p>
+<p>Les méthodes basées sur la densité ne fonctionnent pas bien parce que les scores sont relativement rapprochés.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regarder les plus proches voisins</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dbscan<span class="sc">::</span><span class="fu">kNNdistplot</span>(regroupements1, </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">minPts =</span> <span class="dv">5</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">1.7</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dbscan_regroup <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">dbscan</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> regroupements1,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">minPts =</span> <span class="dv">5</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">eps =</span> <span class="fl">1.7</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>dbscan_regroup</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>DBSCAN clustering for 150 objects.
+Parameters: eps = 1.7, minPts = 5
+Using euclidean distances and borderpoints = TRUE
+The clustering contains 2 cluster(s) and 6 noise points.
+
+ 0  1  2 
+ 6 99 45 
+
+Available fields: cluster, eps, minPts, dist, borderPoints</code></pre>
+</div>
+</div>
+<p>La solution retournée fusionne deux regroupements et plusieurs valeurs sont traitées comme des points isolés.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Comp<span class="fl">.1</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> Comp<span class="fl">.2</span>, </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col =</span> <span class="fu">factor</span>(dbscan_regroup<span class="sc">$</span>cluster <span class="sc">+</span> <span class="dv">1</span>))) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"composante principale 1"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"composante principale 2"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"regroupement"</span>) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-cpdbscan" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="06-solution_files/figure-html/fig-cpdbscan-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Représentation des regroupements DBSCAN projetés sur les deux premières composantes principales des données.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Avec une petite taille d’échantillons, les méthodes de regroupements hiérarchiques sont compétitives et on a le luxe de pouvoir en essayer plusieurs.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dist_euc <span class="ot">&lt;-</span> <span class="fu">dist</span>(regroupements1, <span class="at">method =</span> <span class="st">"euclidean"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>rh_simple <span class="ot">&lt;-</span> fastcluster<span class="sc">::</span><span class="fu">hclust</span>(dist_euc, <span class="at">method =</span> <span class="st">"single"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>rh_complet <span class="ot">&lt;-</span> fastcluster<span class="sc">::</span><span class="fu">hclust</span>(dist_euc, <span class="at">method =</span> <span class="st">"complete"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>rh_ward <span class="ot">&lt;-</span> fastcluster<span class="sc">::</span><span class="fu">hclust</span>(dist_euc, <span class="at">method =</span> <span class="st">"ward.D2"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>rh_bary <span class="ot">&lt;-</span> fastcluster<span class="sc">::</span><span class="fu">hclust</span>(dist_euc, <span class="at">method =</span> <span class="st">"centroid"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>rh_moy <span class="ot">&lt;-</span> fastcluster<span class="sc">::</span><span class="fu">hclust</span>(dist_euc, <span class="at">method =</span> <span class="st">"average"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>rh_med <span class="ot">&lt;-</span> fastcluster<span class="sc">::</span><span class="fu">hclust</span>(dist_euc, <span class="at">method =</span> <span class="st">"median"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>rh_genie <span class="ot">&lt;-</span> genieclust<span class="sc">::</span><span class="fu">gclust</span>(<span class="at">d =</span> regroupements1)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>rh_energie <span class="ot">&lt;-</span> energy<span class="sc">::</span><span class="fu">energy.hclust</span>(<span class="at">d =</span> dist_euc)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Pour visualiser le dendrogramme, la méthode <code>plot</code> permet de tracer l’arborescence. Il suffit ensuite d’encadrer avec <code>rect.hclust()</code> en spécifiant le nombre de groupes. Par exemple,</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rh_ward, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(rh_ward, <span class="at">k =</span> <span class="dv">3</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>On peut tracer les dendrogrammes (<a href="#fig-dendro">Figure&nbsp;3</a>) pour essayer de voir combien de groupes sont raisonnables. Les plus proches voisins (liaison simple) et le barycentre retournent deux groupes, les autres critères trois et en l’apparence tous de taille similaire (à l’exclusion de la distance médiane qui donne une segmentation inacceptable avec plusieurs observations isolées).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-dendro" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="06-solution_files/figure-html/fig-dendro-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Dendrogrammes des regroupements hiérarchiques selon les mesures de distance et de liaison entre groupes (plus proches voisins, voisins les plus éloignées, distances moyenne et médiane, distance entre barycentres, critère de Ward, distance d’énergie et GENIE).</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Une fois qu’on a sélectionné le nombre de groupes, on utilise <code>cutree</code> pour élaguer l’arbre et obtenir la segmentation. La procédure retourne le vecteur avec les étiquettes.</p>
+<p>Puisque les étiquettes peuvent être permutées, on peut calculer l’indice de Rand pour voir la concordance entre les regroupements en fournissant à la fonction <code>flexclust::randIndex()</code> les deux vecteurs d’étiquettes.</p>
+<p>Les regroupements obtenus avec les <span class="math inline">\(K\)</span>-moyennes coïncident à 95% pour la distance énergie, 93% pour la méthode de Ward et 93% pour GENIE. Le résultat est cohérent.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>moy_ward <span class="ot">&lt;-</span> <span class="fu">cbind</span>(regroupements1, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">etiquette =</span> <span class="fu">cutree</span>(rh_ward, <span class="at">k =</span> <span class="dv">3</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(etiquette) <span class="sc">|&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarize_all</span>(<span class="at">.funs =</span> mean)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialisation avec regroupements pour K-moyennes</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># kmeans(x = regroupements1, centers = moy_ward[,-1])</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Avec la méthode de Ward, les fonctions objectives sont similaires et il serait envisageable, <strong>seulement si la taille de l’échantillon est petite</strong>, d’utiliser la solution de Ward pour initialiser les <span class="math inline">\(K\)</span>-moyennes. Ces dernières permettent une réassignation et ne peuvent qu’améliorer le critère objectif.</p>
+<p>On pourrait aussi envisager d’autres mesures de dissemblance, ici avec la distance de Manhattan, ce qui donne les <span class="math inline">\(K\)</span>-médianes.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flexclust, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>kmedianes <span class="ot">&lt;-</span> <span class="fu">kcca</span>(<span class="at">x =</span> regroupements1,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">family =</span> <span class="fu">kccaFamily</span>(<span class="st">"kmedians"</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">initcent =</span> <span class="st">"kmeanspp"</span>),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>kmedianes<span class="sc">@</span>clusinfo <span class="co"># décompte par groupe</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  size  av_dist max_dist separation
+1   31 3.416129     5.60        4.5
+2   73 3.293151     5.10        4.8
+3   46 3.223913     5.95        4.4</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>kmedianes<span class="sc">@</span>centers  <span class="co"># médianes des groupes</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      x1  x2  x3  x4   x5  x6
+[1,] 4.6 3.0 2.9 3.1 3.20 2.6
+[2,] 3.1 4.1 3.9 3.9 4.20 4.4
+[3,] 1.7 2.0 1.5 2.2 1.95 1.4</code></pre>
+</div>
+</div>
+<p>Encore une fois, les regroupements sont à 91% les mêmes que pour les <span class="math inline">\(K\)</span>-moyennes et l’interprétation est la même.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]),</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Comp<span class="fl">.1</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> Comp<span class="fl">.2</span>, </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col =</span> <span class="fu">factor</span>(kmedianes<span class="sc">@</span>cluster))) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"composante principale 1"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"composante principale 2"</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"regroupement"</span>) <span class="sc">+</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-cpkmed3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="06-solution_files/figure-html/fig-cpkmed3-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Représentation des regroupements des <span class="math inline">\(K\)</span>-médianes projetés sur les deux premières composantes principales des données.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>On pourrait aussi utiliser la méthode des <span class="math inline">\(K\)</span>-médoïdes.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>kmedoides <span class="ot">&lt;-</span> <span class="fu">pam</span>(regroupements1, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(kmedoides)</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>silhouette <span class="ot">&lt;-</span> <span class="fu">silhouette</span>(<span class="at">x =</span> kmedoides, <span class="at">dist =</span> dist_euc)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(silhouette)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>kmedoides<span class="sc">$</span>medoids</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     x1  x2  x3  x4  x5  x6
+36  2.9 3.7 3.9 3.6 4.0 4.5
+87  4.2 2.9 3.0 3.1 2.5 2.4
+142 1.7 1.9 1.6 2.3 1.3 1.1</code></pre>
+</div>
+</div>
+<p>L’algorithme de partition autour des médoïdes (PAM) retourne un résultat similaire aux <span class="math inline">\(K\)</span>-moyennes si on fixe le nombre de rgroupements à trois. La méthode <code>plot</code> par défaut retourne une projection sur les deux composantes principales. Les silhouettes montrent des profils globalement homogènes, sauf pour deux observations du groupe 2.</p>
+<p>La plupart des méthodes employées retournent, peu ou prou, le même résultat que les <span class="math inline">\(K\)</span>-moyennes. Ces données simulées sont un cas d’école; en pratique, il faudra davantage se fier à son jugement pratique pour voir si certains regroupements sont fortement débalancés avec plusieurs données isolées, difficilement interprétables ou voire trop similaires.</p>
+<div class="cell">
+
+</div>
+<p>Si la solutions des <span class="math inline">\(K\)</span>-moyennes et cie est satisfaisante, l’assignation probabiliste plutôt que rigide pourrait être souhaitable. Les mélanges de modèles Gaussiens offrent cette option. Ici, on ajuste tous les modèles avec <span class="math inline">\(K=1, \ldots, 10\)</span> regroupements pour toutes les structures de covariance et on choisit le modèle avec le plus petit BIC.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mclust)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Package 'mclust' version 6.0.0
+Type 'citation("mclust")' for citing this R package in publications.</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mmg <span class="ot">&lt;-</span> <span class="fu">Mclust</span>(regroupements1, <span class="at">G =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mmg)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>---------------------------------------------------- 
+Gaussian finite mixture model fitted by EM algorithm 
+---------------------------------------------------- 
+
+Mclust EII (spherical, equal volume) model with 3 components: 
+
+ log-likelihood   n df       BIC       ICL
+      -1092.714 150 21 -2290.651 -2293.147
+
+Clustering table:
+ 1  2  3 
+77 28 45 </code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Critère BIC selon le nombre de groupes </span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># et la structure de covariance</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mmg, <span class="at">what =</span> <span class="st">"BIC"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>On peut clairement voir que trois regroupements est le nombre idéal. Les modèles plus complexes à coefficients variables sont pénalisés davantage et difficilement estimables vu la taille du jeu de données.</p>
+<p>On voit clairement les points en bordure de l’espace qui pourraient réalistement être assignés à l’un ou l’autre des regroupements.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Nuages de points 2x2</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mmg, <span class="at">what =</span> <span class="st">"uncertainty"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Les points plus larges sont ceux qui sont plus incertains. Ce degré d’incertitude vaut un moins la probabilité d’appartenir à la classe assignée. On peut extraire de la sortie les probabilités de chaque classe en bonus.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mmg<span class="sc">$</span>uncertainty <span class="co"># très faible ici, regroupements bien déterminés</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité de chaque observation par classe</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>mmg<span class="sc">$</span>z</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Les regroupements sont exactement les mêmes que ceux obtenus avec les <span class="math inline">\(K\)</span>-moyennes.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Indice de Rand - adéquation entre partitions</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>flexclust<span class="sc">::</span><span class="fu">randIndex</span>(<span class="at">x =</span> mmg<span class="sc">$</span>classification, <span class="co">#nos regroupements</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> kmoy[[<span class="dv">3</span>]]<span class="sc">$</span>cluster)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>ARI 
+  1 </code></pre>
+</div>
+</div>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-Hsu.Lee:2002" class="csl-entry" role="doc-biblioentry">
+Hsu, C. H. C., &amp; Lee, E.-J. (2002). Segmentation of senior motorcoach travelers. <em>Journal of Travel Research</em>, <em>40</em>(4), 364–373. <a href="https://doi.org/10.1177/004728750204000403">https://doi.org/10.1177/004728750204000403</a>
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
+  </div>
+</footer>
+
+
+
+</body></html>

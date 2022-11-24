@@ -151,7 +151,7 @@ plot(reduc_dim_mmg, what = "scatterplot")
 dist_euc <- dist(donsmult_std, method = "euclidean")
 
 # Stockage de la matrice de distance
-reghier_ward <- flashClust::hclust(
+reghier_ward <- fastcluster::hclust(
   d = dist_euc,
   method = "ward")
 # Dendrogramme
@@ -162,7 +162,7 @@ hecmulti::homogeneite(
     rhier = reghier_ward,
     data = donsmult_std,
     ngroupes = 15L)
-
+# also fastcluster
 reghier_simple <- flashClust::hclust(
   d = dist_euc,
   method = "single")

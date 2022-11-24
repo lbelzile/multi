@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.163">
+<meta name="generator" content="quarto-1.2.11">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -265,6 +265,11 @@ div.csl-indent {
   <a href="../exercices/06-exercice.html" class="sidebar-item-text sidebar-link active">Exercice 6</a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/06-solution.html" class="sidebar-item-text sidebar-link">Solutions 6</a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -304,20 +309,16 @@ div.csl-indent {
 <p>Les données fictives <code>regroupement1</code> sont inspirées de <span class="citation" data-cites="Hsu.Lee:2002">Hsu &amp; Lee (<a href="#ref-Hsu.Lee:2002" role="doc-biblioref">2002</a>)</span>. Ces données contiennent des échelles pour certains éléments d’un questionnaire. Ce dernier a été élaboré afin d’évaluer l’importance de 55 caractéristiques des opérateurs de voyages organisés en autobus et des voyages eux-mêmes à l’aide d’une échelle de Likert à cinq points, allant de extrêmement important (5) à pas du tout important (1).</p>
 <p>Les variables représentent les activités sociales, les politiques de l’opérateur et références, la flexibilité des horaires, la santé et sécurité, le matériel publicitaire et la réputation.</p>
 <ol type="1">
-<li>Faites une analyse en composantes principales et projetez les observations sur un nuage de points avec les deux premières composantes principales.</li>
 <li>Doit-on standardiser les données avant d’effectuer l’analyse?</li>
-<li>Utilisez l’algorithme des <span class="math inline">\(K\)</span>-moyennes en faisant varier le nombre de groupes de 1 à 10. Utilisez une dizaine d’initialisations aléatoires.</li>
-</ol>
+<li>Faites une analyse en composantes principales et projetez les observations sur un nuage de points avec les deux premières composantes principales.</li>
+<li>Utilisez l’algorithme des <span class="math inline">\(K\)</span>-moyennes en faisant varier le nombre de groupes de 1 à 10. Utilisez une dizaine d’initialisations aléatoires.
 <ol type="a">
-<li>Sélectionnez un nombre de regroupement adéquat en vous basant sur les critères suivants
-<ol type="i">
-<li>le coefficient de détermination</li>
-<li>la statistique d’écart de <span class="citation" data-cites="Tibshirani.Walther.Hastie:2001">Tibshirani et al. (<a href="#ref-Tibshirani.Walther.Hastie:2001" role="doc-biblioref">2001</a>)</span></li>
-<li>le critère BIC</li>
-</ol></li>
+<li>Sélectionnez un nombre de regroupement adéquat</li>
 <li>Retournez le nombre d’observation par groupe pour la valeur de <span class="math inline">\(K\)</span> choisie.</li>
 <li>Rapportez les statistiques descriptives (moyennes, etc.) de chaque segment</li>
 <li>Interprétez les profils obtenus.</li>
+</ol></li>
+<li>Faites une segmentation avec d’autres méthodes. Est-ce que la segmentation est plus satisfaisante? Justifiez votre raisonnement.</li>
 </ol>
 
 
@@ -327,9 +328,6 @@ div.csl-indent {
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
 <div id="ref-Hsu.Lee:2002" class="csl-entry" role="doc-biblioentry">
 Hsu, C. H. C., &amp; Lee, E.-J. (2002). Segmentation of senior motorcoach travelers. <em>Journal of Travel Research</em>, <em>40</em>(4), 364–373. <a href="https://doi.org/10.1177/004728750204000403">https://doi.org/10.1177/004728750204000403</a>
-</div>
-<div id="ref-Tibshirani.Walther.Hastie:2001" class="csl-entry" role="doc-biblioentry">
-Tibshirani, R., Walther, G., &amp; Hastie, T. (2001). Estimating the number of clusters in a data set via the gap statistic. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>63</em>(2), 411–423. <a href="https://doi.org/10.1111/1467-9868.00293">https://doi.org/10.1111/1467-9868.00293</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
