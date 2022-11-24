@@ -555,4 +555,68 @@ hecmulti::homogeneite(rhier = hclust(dist(hecmulti::regroupements1),
 - ($-$) le nombre de groupes n'a pas à être spécifié apriori (une seule estimation)
 - ($-$) le coût de calcul est prohibitif, avec une complexité quadratique de $\mathrm{O}(n^2)$ pour la méthode de liaison simple et autrement $\mathrm{O}(n^3)$ pour la plupart des autres fonctions de liaison.
 
+# Comparaison de segmentations
 
+On veut parfois comparer les regroupements de différentes méthodes.
+
+Les étiquettes ne sont pas nécessairement identiques même si les regroupements le sont (permutation des étiquettes).
+
+Une mesure de similarité, l'indice de Rand, permet de comparer deux vecteurs d'observations catégorielles (étiquettes des regroupements).
+
+- même longueur (même nombre d'observations)
+- mais pas nécessairement le même nombre de modalités (nombre de regroupements potentiellement différents d'une partition à l'autre).
+
+
+Idée: comparer à tour de rôle chacune des $n(n-1)/2$ paires d'observation. 
+
+
+# Indice de Rand
+
+On indique si les paires d'observations sont dans le même groupe (1) ou un groupe différent (0).
+
+Exemple: deux partitions de 4 observations
+
+- Étiquettes $A$: (2, 2, 2, 1)
+- Étiquettes $B$: (3, 1, 3, 2)
+
+
+
+| \{1,2\} | \{1,3\} | \{1,4\} | \{2,3\} | \{2,4\} | \{3,4\} |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| 10 | 11 | 00 | 10 | 00 | 00 |
+
+Parmi les six paires, trois sont concordantes (00 ou 11).
+
+L'indice de Rand est le taux de bonne classification du tableau de contingence résultant.
+
+
+# Récapitulatif
+
+Les étapes d'une analyse de regroupements
+
+1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
+2. Décider quel méthode sera utilisée pour la segmentation.
+3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissemblance.
+4. Valider la qualité de la segmentation (interprétabilité, taille des groupes, homogénéité des regroupements).
+5. Avec les étiquettes, calculer un prototype de groupe. 
+6. Interpréter les regroupements obtenus à partir des prototypes.
+
+# Récapitulatif
+
+- L'analyste a une grande marge de manoeuvre.
+- Il n'y a pas de vérité: la segmentation n'est utile que si elle a une valeur ajoutée.
+- Aucun algorithme ne performe uniformément mieux, mais certains sont plus faciles à employer que d'autres.
+   - avec des mégadonnées, la complexité est un facteur important pour choisir la méthode.
+   - la plupart du temps, il faut faire plusieurs itérations pour le choix des hyperparamètres pour avoir une bonne segmentation.
+
+
+# Récapitulatif
+
+Le Diable est dans les détails:
+
+- variables catégorielles et binaires vs standardisation
+- valeurs manquantes
+- inclusion de variables sociodémographiques
+- aberrances
+
+Le nombre de groupes peut être guidé par le contexte: les formules et indicateurs de qualité servent de balises.
