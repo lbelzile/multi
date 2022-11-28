@@ -34,11 +34,20 @@ Plusieurs champs d'une base de donnée peuvent être manquants
 - perte de suivi et censure
 - plusieurs versions de formulaires (question optionnelles)
 
-# Pourquoi s'en préoccuper
+# Pourquoi s'en préoccuper?
 
 La plupart des procédures ne gèrent que les cas complets (toute observation avec des valeurs manquantes est éliminée).
 
 Les données manquantes réduisent l'information disponible.
+
+Sans traitement adéquat, les estimations sont **biaisées**
+
+# Références
+
+- van Buuren, S. (2018). [*Flexible imputation of missing data*](https://stefvanbuuren.name/fimd/), CRC Press, 2e édition.
+- Little, R. et D. Rubin (2019). *Statistical Analysis with Missing Data*, Wiley, 3e édition
+- Schafer, J. L. (1997). *Analysis of Incomplete Multivariate Data*. Chapman & Hall / CRC.
+
 
 # Classification des données manquantes (MCAR)
 
@@ -68,31 +77,139 @@ Une personne ne divulgue pas son salaire? Données manquante de manière aléato
 
 Hypothèse pas testable, dépend du contexte et des variables auxiliaires disponibles.
 
+Il y a souvent une structure aux données manquantes.
+
+# Types de schémas pour données manquantes
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '100%'
+#| fig-height: 5
+#| fig-width : 10
+#| cache: true
+library(patchwork)
+library(ggplot2)
+tile <- expand.grid(1:8, 1:3)
+colnames(tile) <- c("x", "y")
+g1 <- ggplot(data = data.frame(tile, 
+                               count = c(rep(0, 16), 
+                                         rep(1, 3), 
+                                         rep(0,5))),
+             mapping = aes(y = factor(x), 
+                           x = factor(y), 
+                           fill = factor(count))) +
+  geom_tile(colour = "white", linewidth = 2) +
+  labs(x = "",
+       y = "",
+       fill = "",
+       subtitle = "unidimensionnel") +
+  scale_fill_discrete(palette = mice::mdc) + 
+  scale_x_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  scale_y_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.line = element_blank())
+
+g2 <- ggplot(data = data.frame(tile, 
+                               count = c(rep(0, 8), 
+                                         rep(1, 2), 
+                                         rep(0, 6), 
+                                         rep(1, 4),
+                                         rep(0, 4))),
+             mapping = aes(y = factor(x), 
+                           x = factor(y), 
+                           fill = factor(count))) +
+  geom_tile(colour = "white", linewidth = 2) +
+  labs(x = "",
+       y = "",
+       fill = "",
+       subtitle = "monotone") +
+  scale_fill_discrete(palette = mice::mdc) + 
+  scale_x_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  scale_y_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  theme_classic() +
+    theme(legend.position = "none",
+        axis.line = element_blank())
+g3 <- ggplot(data = data.frame(tile, 
+                               count = c(rep(0, 8), 
+                                         rep(1, 5), 
+                                         rep(0, 3), 
+                                         rep(1, 3),
+                                         rep(0, 5))),
+             mapping = aes(y = factor(x), 
+                           x = factor(y), 
+                           fill = factor(count))) +
+  geom_tile(colour = "white", linewidth = 2) +
+  labs(x = "",
+       y = "",
+       fill = "",
+       subtitle = "appariement") +
+  scale_fill_discrete(palette = mice::mdc) + 
+  scale_x_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  scale_y_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  theme_classic() +
+    theme(legend.position = "none",
+        axis.line = element_blank())
+g4 <- ggplot(data = data.frame(tile, 
+                               count = sample(c(0,1), 
+                                              size = 24, 
+                                              replace = TRUE, 
+                                              prob = c(0.8, 0.2))),
+             mapping = aes(y = factor(x), 
+                           x = factor(y), 
+                           fill = factor(count))) +
+  geom_tile(colour = "white", linewidth = 2) +
+  labs(x = "",
+       y = "",
+       fill = "",
+       subtitle = "général") +
+  scale_fill_discrete(palette = mice::mdc) + 
+  scale_x_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  scale_y_discrete(breaks = NULL, expand = c(0,0), labels = NULL) +
+  theme_classic() +
+    theme(legend.position = "none",
+        axis.line = element_blank())
+
+g1 + g2 + g3 + g4 + plot_layout(nrow = 1, byrow = FALSE)
+```
+
+
+
 # Valeur logique
 
-Souvent, les données manquantes ont une valeur logique:
+Les données manquantes ont souvent une valeur logique:
 
 - un client qui n'a pas de carte de crédit a un solde de 0!
 
 D'où l'importance des validations d'usage et du nettoyage préliminaire de la base de données.
 
 
-# Méthodes d'imputation: cas complet
+# naltyse des cas complet
 
 Retirer les observations avec données manquantes pour conserver les cas complets.
 
 - Valide uniquement pour MCAR, sinon estimations biaisées.
 - On perd de la précision en utilisant moins d'observations.
 
+Méthode par défaut dans les logiciels.
+
 # Méthodes d'imputation: imputation simple
 
-Remplacer les valeurs manquantes par un seul nombre. Par exemple, la moyenne (variables continues) ou le mode (variables catégorielles).
+
+
+> Le concept d'imputation est à la fois séduisant et dangereux (Dempster et Rubin, 1983)
+
+
+Imputation: emplacer les valeurs manquantes par un seul nombre. Par exemple, la moyenne (variables continues) ou le mode (variables catégorielles).
 
 Approche pas recommandée (pourquoi?)
 
+
+
 # Imputation par la moyenne
 
-Dilution de la relation (corrélation) entre variables explicatives. Réduction de la variabilité
+Dilution de la relation (corrélation) entre variables explicatives. Réduction de la variabilité.
 
 ```{r}
 #| echo: false
@@ -103,21 +220,23 @@ Dilution de la relation (corrélation) entre variables explicatives. Réduction 
 #| fig-height: 4
 library(ggplot2)
 set.seed(1234)
-nobs <- 100L
-ventes <- runif(n = nobs, min = 100, max = 200) + 
-  rlnorm(n = nobs, meanlog = 4, sdlog = 1) -100 + TruncatedNormal::rtnorm(n = 1, 
+nobs <- 400L
+ventes <- runif(n = nobs, min = 400, max = 800) + 
+  rlnorm(n = nobs, meanlog = 4, sdlog = 1) -100 + 
+  TruncatedNormal::rtnorm(n = 1, 
               mu = seq(100, to = 300, length.out = nobs), 
               sd = seq(0, 100, length.out = nobs),
               lb = 0, ub = 1000)
-nbvisiteurs <- sort(rpois(n = nobs, lambda = 20))
+nbvisiteurs <- sort(rpois(n = nobs, lambda = 40))
 full <- data.frame(ventes = ventes, 
                    nbclients = nbvisiteurs)
 manquants <- as.matrix(full)
-manquants[sample(x = c(TRUE, FALSE),
-                         size = 2*nobs, 
-                         replace = TRUE,
-                         prob = c(0.15,0.85))] <- NA
-manquants <- manquants |> 
+amputer <- mice::ampute(data = manquants, prop = 0.25)
+# manquants[sample(x = c(TRUE, FALSE),
+#                          size = 2*nobs, 
+#                          replace = TRUE,
+#                          prob = c(0.15,0.85))] <- NA
+manquants1 <- amputer$amp |> 
   tibble::as_tibble() |>
   dplyr::mutate(
     manquant = dplyr::case_when(
@@ -135,25 +254,27 @@ manquants <- manquants |>
     nbclients = dplyr::case_when(
       is.na(nbclients) ~ mean(nbclients, na.rm = TRUE),
       TRUE ~ nbclients))
-g1 <- ggplot(data = manquants,
+g1 <- ggplot(data = manquants1,
        aes(x = nbclients, 
            y = ventes, 
-           color = factor(manquant),
+           color = factor(1-manquant),
            shape = factor(manquant))) + 
   geom_point(size = 2) + 
     scale_shape_manual(values = c(1,20)) +
+  scale_colour_discrete(palette = mice::mdc) +
   labs(y = "ventes",
        x = "nombre de clients") +
   theme_classic() +
   theme(legend.position = "none")
 
-g2 <- ggplot(data = manquants,
+g2 <- ggplot(data = manquants1,
        aes(x = ventes,
            #y = after_stat(density),
-           fill = factor(manqventes),
-           group = factor(manqventes))) + 
-  geom_histogram(alpha = 0.5) +
+           fill = factor(1-manqventes),
+           group = factor(1-manqventes))) + 
+  geom_histogram(alpha = 0.8) +
   scale_y_continuous(expand = c(0,0)) + 
+  scale_fill_discrete(palette = mice::mdc) +
   labs(y = "") +
   theme_classic() +
   theme(legend.position = "none")
@@ -163,7 +284,7 @@ g2 + g1
 
 # Modèles prédictifs
 
-Sous-estimation de l'incertitude.
+L'imputation par régression (gauche) mène à une sous-estimation de l'incertitude en raison de l'augmentation de la corrélation.
 
 
 ```{r}
@@ -173,19 +294,20 @@ Sous-estimation de l'incertitude.
 #| fig-width: 8
 #| fig-align: 'center'
 #| fig-height: 4
-manquants2 <- manquants |>
+#| cache: true
+manquants2 <- manquants1 |>
   dplyr::mutate(
    ventes = dplyr::case_when(
       manqventes == 1 & manqnbclients == 2 ~
         predict(lm(ventes ~ nbclients, 
-                   data = manquants)),
+                   data = manquants1)),
       manqventes == 1 & manqnbclients == 1 ~ mean(ventes, na.rm = TRUE),
       TRUE ~ ventes
     ),
    nbclients = dplyr::case_when(
       manqventes == 2 & manqnbclients == 1 ~
         predict(lm(nbclients ~ ventes,
-                   data = manquants)),
+                   data = manquants1)),
       manqventes == 1 & manqnbclients == 1 ~ mean(nbclients, na.rm = TRUE),
       TRUE ~ nbclients
     )
@@ -193,95 +315,55 @@ manquants2 <- manquants |>
 g1 <- ggplot(data = manquants2,
        aes(x = nbclients, 
            y = ventes, 
-           color = factor(manquant),
+           color = factor(1-manquant),
            shape = factor(manquant))) + 
   geom_point(size = 2) + 
+    scale_shape_manual(values = c(1,20)) +
+  scale_colour_discrete(palette = mice::mdc) +
+  labs(y = "ventes",
+       x = "nombre de clients") +
+  theme_classic() +
+  theme(legend.position = "none")
+# 
+# g2 <- ggplot(data = manquants2,
+#        aes(x = ventes,
+#            #y = after_stat(density),
+#            fill = factor(manqventes),
+#            group = factor(manqventes))) + 
+#   geom_histogram(alpha = 0.5,) +
+#   scale_y_continuous(expand = c(0,0)) + 
+#   labs(y = "") +
+#   theme_classic() +
+#   theme(legend.position = "none")
+g3 <- ggplot(data = data.frame(cbind(
+  mice::complete(
+    mice::mice(manquants[,1:2], 
+               m = 1, 
+               printFlag = FALSE), 1),
+  manquant = manquants1$manquant)),
+      mapping = aes(x = nbclients, 
+           y = ventes, 
+           color = factor(1-manquant),
+           shape = factor(manquant))) + 
+  geom_point(size = 2) + 
+  scale_colour_discrete(palette = mice::mdc) +
     scale_shape_manual(values = c(1,20)) +
   labs(y = "ventes",
        x = "nombre de clients") +
   theme_classic() +
   theme(legend.position = "none")
 
-g2 <- ggplot(data = manquants2,
-       aes(x = ventes,
-           #y = after_stat(density),
-           fill = factor(manqventes),
-           group = factor(manqventes))) + 
-  geom_histogram(alpha = 0.5) +
-  scale_y_continuous(expand = c(0,0)) + 
-  labs(y = "") +
-  theme_classic() +
-  theme(legend.position = "none")
-library(patchwork)
-g2 + g1 
+g1 + g3
 ```
-
-# Modèles prédictifs
-
-Si le modèle est mal spécifié, les imputations seront erronées.
-
-```{r}
-#| echo: false
-#| eval: false
-#| out-width: '90%'
-#| fig-width: 8
-#| fig-align: 'center'
-#| fig-height: 4
-mixdat <- rbind(
-  mvtnorm::rmvnorm(
-    n = 50, 
-    mean = c(-2,-2), 
-    sigma = diag(rep(0.25,2))),
-  mvtnorm::rmvnorm(
-    n = 50, 
-    mean = c(2,-2), 
-    sigma = diag(rep(0.25,2))),
-  mvtnorm::rmvnorm(
-    n = 50, 
-    mean = c(-2,2), 
-    sigma = diag(rep(0.25,2))),
-  mvtnorm::rmvnorm(
-    n = 50, 
-    mean = c(2,2), 
-    sigma = diag(rep(0.25,2))))
-mixdat_df <- data.frame(
-  x = mixdat[,1],
-  y = mixdat[,2],
-  label = factor(rep(1:4, each = 50L))
-
-missx <- ifelse(rbinom(n = 20, size = 1, prob = 0.5),
-       rnorm(n = 20, -2, 0.25),
-       rnorm(n = 20, 2, 0.25))
-ggplot(mixdat_df,
-       aes(x = x, y = y, label = label)) +
-  geom_point() +
-  geom_point(data = data.frame(missx),
-             mapping = aes())
-
-```
-
 
 # Problèmes de l'imputation simple
 
 On ne tient pas compte du fait que des valeurs ont été remplacées (on fait comme si c'était de vraies observations). 
 
-On sous-évalue la variabilité dans les données
+On sous-évalue la **variabilité** des données
 
 - les écarts-type des estimations sont trop petits.
 
-
-# Imputation multiple
-
-Valide pour données MAR et MCAR.
-
-1. procéder à une imputation aléatoire pour obtenir un échantillon complet
-2. ajuster le modèle d'intérêt avec cet échantillon
-3. répéter ce processus plusieurs fois
-4. combiner les résultats obtenus. 
-
-# Algorithme MICE
-
-Algorithme d'imputation multiple par équation de chaine (MICE).
 
 # Faut-il toujours imputer?
 
@@ -332,7 +414,143 @@ knitr::kable(manq,
 #| echo: false
 #| eval: true
 #| out-width: '50%'
-#| fig-cap: "Configurations des valeurs manquantes pour la base de données `manquantes`."
+#| fig-cap: "Configurations des valeurs manquantes pour  `manquantes`."
 puzle <- mice::md.pattern(hecmulti::manquantes[,1:6], 
                           plot = TRUE)
+```
+
+# Imputation multiple
+
+Valides pour les données manquantes de manière (complètement) aléatoires.
+
+1. Procéder à plusieurs imputations **aléatoires** pour obtenir un échantillon complet (`mice`)
+2. Ajuster le modèle d'intérêt avec chaque échantillon (`with`). 
+3. Combiner les résultats obtenus (`pool` et `summary`)
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '70%'
+#| fig-align: 'center'
+knitr::include_graphics("figures/donnees_manquantes_workflow.pdf")
+```
+
+# Combinaison des résultats
+
+Considérons un seul paramètre $\theta$ (ex: coefficient d'une régression) et supposons qu'on procède à $K$ imputations.
+
+On estime les paramètres du modèle séparément pour chacun des $K$ ensembles de données imputés, disons 
+
+- $\widehat{\theta}_k$ pour l'estimation du paramètre $\theta$ dans l'échantillon $k$ et
+- $\widehat{\sigma}_k^2=\mathsf{Va}(\widehat{\theta}_k)$ pour l'estimation de la variance de $\widehat{\theta}_k$. 
+
+# Estimation du paramètre moyen
+
+L'estimation finale de $\theta$, dénotée $\widehat{\theta}$, est obtenue tout simplement en faisant la moyenne des estimations de tous les modèles, c'est-à-dire,
+\begin{align*}
+\widehat{\theta} = \frac{\widehat{\theta}_1 + \cdots + \widehat{\theta}_K}{K}.
+\end{align*}
+
+# Estimation des erreurs-types
+
+Une estimation ajustée de la variance de $\widehat{\theta}$ est 
+\begin{align*}
+\mathsf{Va}(\hat{\theta}) &= W+ \frac{K+1}{K}B, 
+\intertext{où}
+W &= \frac{1}{K} \sum_{k=1}^K \widehat{\sigma}^2_k = \frac{\widehat{\sigma}_1^2 + \cdots + \widehat{\sigma}_K^2}{K},\\
+B &= \frac{1}{K-1} \sum_{k=1}^K (\widehat{\theta}_k - \widehat{\theta})^2.
+\end{align*}
+
+- $W$ est la moyenne des variances (variance intra-groupe) et
+- $B$ la variance des moyennes (variance inter-groupe).
+
+# Imputation multiple
+
+Des formules analogues existent pour les degrés de liberté, les valeurs-$p$, etc. ainsi que pour la cas multidimensionnel (plusieurs paramètres).
+
+Si on procédait à une seule imputation (même en ajoutant une part d'aléatoire pour essayer de reproduire la variabilité des données), on ne serait pas en mesure d'estimer la variance inter-groupe de l'estimateur.
+
+
+On peut estimer la fraction de l'information manquante sur $\theta$ avec $(1+1/K)B/\mathsf{Va}(\hat{\theta})$.
+
+
+# Imputation multiple par équations chaînées (MICE)
+
+Avec $p$ variables $X_1, \ldots, X_p$, spécifier un ensemble de modèles **conditionnels** pour chaque variable $X_j$ en fonction de
+
+- toutes les autres variables, $\boldsymbol{X}_{-j}$
+- les valeurs observées pour cette variable, $X_{j, \text{obs}}$
+
+1. Initialisation: remplir les trous avec des données au hasard parmi $X_{j, \text{obs}}$ pour $X_{j, \text{man}}$
+2. À l'itération $t$, pour chaque variable $j=1, \ldots, p$, à tour de rôle:
+   a) tirage aléatoire des paramètres $\phi_j^{(t)}$ du modèle pour $X_{j,\text{man}}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
+   b) échantillonnage de nouvelles observations $X^{(t)}_{j,\text{man}}$ du modèle avec paramètres $\phi_j^{(t)}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
+3. Répéter le cycle
+
+
+
+# Imputation multiple avec `mice`
+
+
+
+```{r}
+#| label: manquante2
+#| eval: false
+#| echo: true
+library(mice)
+# Intensif en calcul, réduire "m" si nécessaire
+impdata <- mice(data = manquantes,
+                # argument method pour le type de modèles
+                # selon les variables
+                m = 50, # nombre d'imputations
+                seed = 60602, # germe aléatoire
+                printFlag = FALSE)
+# Chaque copie est disponible (1, ..., 50)
+complete(impdata, action = 1)
+```
+
+# Estimation et combinaison avec `mice`
+
+```{r}
+#| eval: false
+#| echo: true
+# ajuste le modèle avec les données imputées
+adj_im <- with(
+  data = impdata,
+  expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
+             family = binomial))
+# combinaison des résultats 
+fit <- pool(adj_im)
+summary(fit)
+```
+
+
+# Résultats
+
+```{r}
+#| label: manquantsres
+#| eval: true
+#| echo: false
+#| cache: true
+library(mice)
+# Intensif en calcul, réduire "m" si nécessaire
+impdata <- mice(data = manquantes,
+                # argument method pour le type de modèles
+                # selon les variables
+                m = 50, # nombre d'imputations
+                seed = 60602, # germe aléatoire
+                printFlag = FALSE)
+
+# ajuste le modèle avec les données imputées
+adj_im <- with(
+  data = impdata,
+  expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
+             family = binomial))
+# combinaison des résultats 
+fit <- pool(adj_im)
+knitr::kable(summary(fit), 
+             digits = 2, 
+             booktabs = TRUE, 
+             col.names = c("terme","estimation", "erreur-type", "stat", "ddl", "valeur-*p*")) |>
+  kableExtra::kable_styling()
 ```
