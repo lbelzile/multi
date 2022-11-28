@@ -1,0 +1,338 @@
+---
+title: "Données manquantes"
+subtitle: "Analyse multidimensionnelle appliquée"
+date: "automne 2022"
+author: "Léo Belzile"
+institute: "HEC Montréal"
+format: beamer
+navigation: empty
+colortheme: Flip
+innertheme: Flip
+outertheme: Flip
+themeoptions: "bullet=circle, topline=true, shadow=false"
+beamerarticle: false
+pdf-engine: lualatex
+code-line-numbers: true
+fig-align: 'center'
+mainfont: "D-DIN"
+mathfont: 'Latin Modern Math'
+sansfont: 'Latin Modern Sans'
+keep-tex: true
+include-in-header: 
+      text: |
+        \usepackage{tabu}
+        \usepackage{mathtools}
+        \usepackage{mathrsfs}
+---
+
+# Données manquantes
+
+Plusieurs champs d'une base de donnée peuvent être manquants 
+
+- non-réponse
+- valeurs erronées (erreur d'encodage)
+- perte de suivi et censure
+- plusieurs versions de formulaires (question optionnelles)
+
+# Pourquoi s'en préoccuper
+
+La plupart des procédures ne gèrent que les cas complets (toute observation avec des valeurs manquantes est éliminée).
+
+Les données manquantes réduisent l'information disponible.
+
+# Classification des données manquantes (MCAR)
+
+Cas 1: Données manquantes de façon complètement aléatoire (*missing completely at random*)
+
+La probabilité que la valeur soit manquante ne dépend ni de la valeur, ni de celles des autres variables.
+
+Exemple: questionnaire trop long, la personne ne répond pas à tout (sans lien avec les questions posées).
+
+Hypothèse souvent irréaliste en pratique.
+
+# Classification des données manquantes (MAR)
+
+Cas 2: données manquantes de façon aléatoire (*missing at random*): la probabilité que la valeur soit manquante ne dépend pas de la valeur *une fois qu'on a contrôlé pour les autres variables*.
+
+Exemple: les hommes sont plus susceptibles dans l'ensemble de divulguer leur âge que les femmes.
+
+# Classification des données manquantes (MNAR)
+
+Cas 3: données manquantes de façon non-aléatoire (*missing not at random*): la probabilité que la mesure soit manquante dépend de la valeur elle-même, pas déterminable avec d'autres variables
+
+Exemple: une personne transgenre ne répond pas à la question genre (si seulement deux choix, homme/femme) et aucune autre question ne se rattache au genre ou à l'identité sexuelle. 
+
+# Comment déterminer le type de données manquantes
+
+Une personne ne divulgue pas son salaire? Données manquante de manière aléatoire ou non aléatoire?
+
+Hypothèse pas testable, dépend du contexte et des variables auxiliaires disponibles.
+
+# Valeur logique
+
+Souvent, les données manquantes ont une valeur logique:
+
+- un client qui n'a pas de carte de crédit a un solde de 0!
+
+D'où l'importance des validations d'usage et du nettoyage préliminaire de la base de données.
+
+
+# Méthodes d'imputation: cas complet
+
+Retirer les observations avec données manquantes pour conserver les cas complets.
+
+- Valide uniquement pour MCAR, sinon estimations biaisées.
+- On perd de la précision en utilisant moins d'observations.
+
+# Méthodes d'imputation: imputation simple
+
+Remplacer les valeurs manquantes par un seul nombre. Par exemple, la moyenne (variables continues) ou le mode (variables catégorielles).
+
+Approche pas recommandée (pourquoi?)
+
+# Imputation par la moyenne
+
+Dilution de la relation (corrélation) entre variables explicatives. Réduction de la variabilité
+
+```{r}
+#| echo: false
+#| eval: true
+#| out-width: '90%'
+#| fig-width: 8
+#| fig-align: 'center'
+#| fig-height: 4
+library(ggplot2)
+set.seed(1234)
+nobs <- 100L
+ventes <- runif(n = nobs, min = 100, max = 200) + 
+  rlnorm(n = nobs, meanlog = 4, sdlog = 1) -100 + TruncatedNormal::rtnorm(n = 1, 
+              mu = seq(100, to = 300, length.out = nobs), 
+              sd = seq(0, 100, length.out = nobs),
+              lb = 0, ub = 1000)
+nbvisiteurs <- sort(rpois(n = nobs, lambda = 20))
+full <- data.frame(ventes = ventes, 
+                   nbclients = nbvisiteurs)
+manquants <- as.matrix(full)
+manquants[sample(x = c(TRUE, FALSE),
+                         size = 2*nobs, 
+                         replace = TRUE,
+                         prob = c(0.15,0.85))] <- NA
+manquants <- manquants |> 
+  tibble::as_tibble() |>
+  dplyr::mutate(
+    manquant = dplyr::case_when(
+      is.na(nbclients) | is.na(ventes) ~ 1,
+      TRUE ~ 2),
+    manqventes = dplyr::case_when(
+      is.na(ventes) ~ 1,
+      TRUE ~ 2), 
+    manqnbclients = dplyr::case_when(
+      is.na(nbclients) ~ 1,
+      TRUE ~ 2),
+    ventes = dplyr::case_when(
+      is.na(ventes) ~ mean(ventes, na.rm = TRUE),
+      TRUE ~ ventes),
+    nbclients = dplyr::case_when(
+      is.na(nbclients) ~ mean(nbclients, na.rm = TRUE),
+      TRUE ~ nbclients))
+g1 <- ggplot(data = manquants,
+       aes(x = nbclients, 
+           y = ventes, 
+           color = factor(manquant),
+           shape = factor(manquant))) + 
+  geom_point(size = 2) + 
+    scale_shape_manual(values = c(1,20)) +
+  labs(y = "ventes",
+       x = "nombre de clients") +
+  theme_classic() +
+  theme(legend.position = "none")
+
+g2 <- ggplot(data = manquants,
+       aes(x = ventes,
+           #y = after_stat(density),
+           fill = factor(manqventes),
+           group = factor(manqventes))) + 
+  geom_histogram(alpha = 0.5) +
+  scale_y_continuous(expand = c(0,0)) + 
+  labs(y = "") +
+  theme_classic() +
+  theme(legend.position = "none")
+library(patchwork)
+g2 + g1 
+```
+
+# Modèles prédictifs
+
+Sous-estimation de l'incertitude.
+
+
+```{r}
+#| echo: false
+#| eval: true
+#| out-width: '90%'
+#| fig-width: 8
+#| fig-align: 'center'
+#| fig-height: 4
+manquants2 <- manquants |>
+  dplyr::mutate(
+   ventes = dplyr::case_when(
+      manqventes == 1 & manqnbclients == 2 ~
+        predict(lm(ventes ~ nbclients, 
+                   data = manquants)),
+      manqventes == 1 & manqnbclients == 1 ~ mean(ventes, na.rm = TRUE),
+      TRUE ~ ventes
+    ),
+   nbclients = dplyr::case_when(
+      manqventes == 2 & manqnbclients == 1 ~
+        predict(lm(nbclients ~ ventes,
+                   data = manquants)),
+      manqventes == 1 & manqnbclients == 1 ~ mean(nbclients, na.rm = TRUE),
+      TRUE ~ nbclients
+    )
+  )
+g1 <- ggplot(data = manquants2,
+       aes(x = nbclients, 
+           y = ventes, 
+           color = factor(manquant),
+           shape = factor(manquant))) + 
+  geom_point(size = 2) + 
+    scale_shape_manual(values = c(1,20)) +
+  labs(y = "ventes",
+       x = "nombre de clients") +
+  theme_classic() +
+  theme(legend.position = "none")
+
+g2 <- ggplot(data = manquants2,
+       aes(x = ventes,
+           #y = after_stat(density),
+           fill = factor(manqventes),
+           group = factor(manqventes))) + 
+  geom_histogram(alpha = 0.5) +
+  scale_y_continuous(expand = c(0,0)) + 
+  labs(y = "") +
+  theme_classic() +
+  theme(legend.position = "none")
+library(patchwork)
+g2 + g1 
+```
+
+# Modèles prédictifs
+
+Si le modèle est mal spécifié, les imputations seront erronées.
+
+```{r}
+#| echo: false
+#| eval: false
+#| out-width: '90%'
+#| fig-width: 8
+#| fig-align: 'center'
+#| fig-height: 4
+mixdat <- rbind(
+  mvtnorm::rmvnorm(
+    n = 50, 
+    mean = c(-2,-2), 
+    sigma = diag(rep(0.25,2))),
+  mvtnorm::rmvnorm(
+    n = 50, 
+    mean = c(2,-2), 
+    sigma = diag(rep(0.25,2))),
+  mvtnorm::rmvnorm(
+    n = 50, 
+    mean = c(-2,2), 
+    sigma = diag(rep(0.25,2))),
+  mvtnorm::rmvnorm(
+    n = 50, 
+    mean = c(2,2), 
+    sigma = diag(rep(0.25,2))))
+mixdat_df <- data.frame(
+  x = mixdat[,1],
+  y = mixdat[,2],
+  label = factor(rep(1:4, each = 50L))
+
+missx <- ifelse(rbinom(n = 20, size = 1, prob = 0.5),
+       rnorm(n = 20, -2, 0.25),
+       rnorm(n = 20, 2, 0.25))
+ggplot(mixdat_df,
+       aes(x = x, y = y, label = label)) +
+  geom_point() +
+  geom_point(data = data.frame(missx),
+             mapping = aes())
+
+```
+
+
+# Problèmes de l'imputation simple
+
+On ne tient pas compte du fait que des valeurs ont été remplacées (on fait comme si c'était de vraies observations). 
+
+On sous-évalue la variabilité dans les données
+
+- les écarts-type des estimations sont trop petits.
+
+
+# Imputation multiple
+
+Valide pour données MAR et MCAR.
+
+1. procéder à une imputation aléatoire pour obtenir un échantillon complet
+2. ajuster le modèle d'intérêt avec cet échantillon
+3. répéter ce processus plusieurs fois
+4. combiner les résultats obtenus. 
+
+# Algorithme MICE
+
+Algorithme d'imputation multiple par équation de chaine (MICE).
+
+# Faut-il toujours imputer?
+
+Il faut utiliser son jugement. 
+
+
+Une observation imputée ne remplacera jamais une vraie observation.
+
+- Si la proportion d'observations manquantes est petite (moins de 5\%), on pourrait faire une analyse avec les cas complets (et valider au besoin en utilisant l'imputation multiple).
+- Si la proportion de  valeurs manquantes est 30\%  et que cette proportion baisse à 3\% lorsque vous éliminez quelques variables peu importantes pour votre étude, alors procédez à leur élimination.
+
+
+# Inspection des valeurs manquantes
+
+Il est donc nécessaire d'examiner la configuration des valeurs manquantes avant de faire quoi que ce soit. 
+
+```{r}
+#| label: manquantes-summary-uni
+#| echo: true
+#| eval: false
+data(manquantes, package = 'hecmulti')
+summary(manquantes)
+# Pourcentage de valeurs manquantes
+apply(manquantes, 2, function(x){mean(is.na(x))})
+# Voir les configurations de valeurs manquantes
+md.pattern(missing1) # graphique diapo suivante
+```
+
+```{r}
+#| label: tbl-manquantes-univ
+#| cache: true
+#| eval: true
+#| echo: false
+#| tbl-cap: "Nombre et pourcentage de valeurs manquantes par variable."
+data(manquantes, package = 'hecmulti')
+manq <- formatC(apply(manquantes, 2, 
+                      function(x){c(sum(is.na(x)), 100*mean(is.na(x)))}))
+rownames(manq) <- c("nombre", "pourcentage")
+knitr::kable(manq,
+             booktabs = TRUE) |>
+  kableExtra::kable_styling()
+```
+
+# Configuration des valeurs manquantes
+
+```{r}
+#| label: fig-manquantes2
+#| echo: false
+#| eval: true
+#| out-width: '50%'
+#| fig-cap: "Configurations des valeurs manquantes pour la base de données `manquantes`."
+puzle <- mice::md.pattern(hecmulti::manquantes[,1:6], 
+                          plot = TRUE)
+```

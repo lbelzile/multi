@@ -1,0 +1,28 @@
+---
+title: "Données manquantes"
+---
+
+## Contenu
+
+- Données manquantes
+- Révision et examen de pratique
+
+## Lecture
+
+
+- {{< fa book >}} [Chapitre 8 (analyse de regroupements)](https://lbelzile.github.io/math60602/07-donneesmanquantes.html)
+
+## Diapositives 
+
+- {{< fa file >}} [Données manquantes](/diapos/MATH60602-diapos13.pdf)
+- {{< fa code >}} [Code](/code/MATH60602-diapos13.R)
+
+
+## Objectifs d'apprentissage
+
+- Déterminer les méthode appropriées selon le type de données manquantes
+- Pouvoir calculer le taux de cas manquants
+- Pouvoir utiliser l'imputation multiple avec les modèles de régression
+
+
+
