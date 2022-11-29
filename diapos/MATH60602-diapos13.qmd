@@ -500,14 +500,17 @@ Avec $p$ variables $X_1, \ldots, X_p$, spécifier un ensemble de modèles **cond
 #| echo: true
 library(mice)
 # Intensif en calcul, réduire "m" si nécessaire
-impdata <- mice(data = manquantes,
-                # argument method pour le type de modèles
-                # selon les variables
-                m = 50, # nombre d'imputations
-                seed = 60602, # germe aléatoire
-                printFlag = FALSE)
-# Chaque copie est disponible (1, ..., 50)
-complete(impdata, action = 1)
+impdata <- mice(
+   data = manquantes,
+   # argument "method" pour le modèle
+   # dépend du type des variables, par ex.
+   # régression logistique pour données binaires
+   m = 50, # nombre d'imputations
+   seed = 60602, # germe aléatoire
+   printFlag = FALSE)
+# Extraite une copie (m=1,..., 50) imputée 
+complete(data = impdata, 
+         action = 1) #no de la copie
 ```
 
 # Estimation et combinaison avec `mice`
