@@ -378,6 +378,34 @@
     "text": "Objectifs d’apprentissage\n\nComprendre les avantages et inconvénients de différents algorithmes de regroupement\nChoisir adéquatement les hyperparamètres associés aux algorithmes"
   },
   {
+    "objectID": "contenu/13-contenu.html",
+    "href": "contenu/13-contenu.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Données manquantes\nRévision et examen de pratique"
+  },
+  {
+    "objectID": "contenu/13-contenu.html#lecture",
+    "href": "contenu/13-contenu.html#lecture",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Lecture",
+    "text": "Lecture\n\n Chapitre 8 (données manquantes)"
+  },
+  {
+    "objectID": "contenu/13-contenu.html#diapositives",
+    "href": "contenu/13-contenu.html#diapositives",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Diapositives",
+    "text": "Diapositives\n\n Données manquantes\n Code"
+  },
+  {
+    "objectID": "contenu/13-contenu.html#objectifs-dapprentissage",
+    "href": "contenu/13-contenu.html#objectifs-dapprentissage",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Objectifs d’apprentissage",
+    "text": "Objectifs d’apprentissage\n\nDéterminer les méthode appropriées selon le type de données manquantes\nPouvoir calculer le taux de cas manquants\nPouvoir utiliser l’imputation multiple avec les modèles de régression"
+  },
+  {
     "objectID": "contenu/index.html",
     "href": "contenu/index.html",
     "title": "Analyse multidimensionnelle appliquée",
