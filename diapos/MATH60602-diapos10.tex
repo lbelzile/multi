@@ -147,6 +147,20 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
@@ -221,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, sharp corners, enhanced, breakable, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, breakable, sharp corners, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Modèle à risques proportionnels de Cox}
 \protect\hypertarget{moduxe8le-uxe0-risques-proportionnels-de-cox}{}
@@ -313,7 +327,7 @@ de contrôles.
   \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+} \FunctionTok{strata}\NormalTok{(service), }
   \AttributeTok{data =}\NormalTok{ survie1)}
 \CommentTok{\# Décompte par service}
-\FunctionTok{with}\NormalTok{(survie1, }\FunctionTok{table}\NormalTok{(service))}
+\FunctionTok{with}\NormalTok{(survie1, }\FunctionTok{table}\NormalTok{(censure, service))}
 \CommentTok{\# Coefficients}
 \FunctionTok{summary}\NormalTok{(cox\_strat)}
 \end{Highlighting}
@@ -324,14 +338,15 @@ de contrôles.
 \protect\hypertarget{sorties}{}
 \hypertarget{tbl-nserv}{}
 \begin{table}
-\caption{\label{tbl-nserv}Décompte du nombre d'observations par service. }\tabularnewline
+\caption{\label{tbl-nserv}Décompte du nombre d'observations par service et status. }\tabularnewline
 
 \centering
 \begin{tabular}{lrrrr}
 \toprule
   & 0 & 1 & 2 & 3\\
 \midrule
-0 & 197 & 179 & 78 & 46\\
+0 & 37 & 66 & 37 & 26\\
+1 & 160 & 113 & 41 & 20\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -345,8 +360,8 @@ de contrôles.
 \toprule
 terme & exp(coef) & borne inf. & borne sup.\\
 \midrule
-age & 0.96 & 0.94 & 0.97\\
-sexe & 0.61 & 0.44 & 0.85\\
+age & 0.95 & 0.94 & 0.96\\
+sexe & 0.54 & 0.43 & 0.68\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -370,15 +385,17 @@ moins une des variables explicatives dépend du temps.
 
 On peut considérer une modification du modèle de Cox qui inclut une
 interaction avec le temps, par exemple \begin{align*}
-h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
-\end{align*} si l'effet de la variable explicative \(Z(t)\) --- ou la
-variable elle même -- varie en fonction du temps.
+h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z(t) Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
+\end{align*} si l'effet de la variable explicative \(Z(t)\),
+\(\beta_Z(t)\) --- ou la variable elle même -- varie en fonction du
+temps.
 \end{frame}
 
 \begin{frame}[fragile]{Exemple 1 - augmentation de l'âge}
 \protect\hypertarget{exemple-1---augmentation-de-luxe2ge}{}
-L'âge (en années) augmente à mesure que le temps d'abonnement (en
-semaines) passe, d'où \(\texttt{age}(t) = \texttt{age} + t/52\).
+Ici, le coefficient est supposé constante mais l'âge (en années)
+augmente à mesure que le temps d'abonnement (en semaines) passe, d'où
+\(\texttt{age}(t) = \texttt{age} + t/52\).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -552,7 +569,7 @@ la censure à droite.
 \NormalTok{cox4 }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ debut, }
                    \AttributeTok{time2 =}\NormalTok{ fin, }
                    \AttributeTok{event =}\NormalTok{ evenement) }\SpecialCharTok{\textasciitilde{}} 
-\NormalTok{                age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ region }\SpecialCharTok{+}\NormalTok{ service, }
+\NormalTok{                age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service, }
               \AttributeTok{data =}\NormalTok{ survie3)}
 \end{Highlighting}
 \end{Shaded}
@@ -618,8 +635,8 @@ abandon du cellulaire).
 \end{columns}
 \end{frame}
 
-\begin{frame}{Modèle à risques compétitifs}
-\protect\hypertarget{moduxe8le-uxe0-risques-compuxe9titifs-1}{}
+\begin{frame}{Modèle à risques compétitifs avec modèle de Cox}
+\protect\hypertarget{moduxe8le-uxe0-risques-compuxe9titifs-avec-moduxe8le-de-cox}{}
 Pour estimer la probabilité d'un événement au fil du temps, on peut
 ajuster plusieurs modèles de Cox.
 
@@ -749,6 +766,62 @@ explicative (Kaplan-Meier, gauche) et avec âge, service et sexe (modèle
 de Cox, droite).}
 
 \end{figure}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif}{}
+Si le postulat de risques proportionnels ne tient pas, on peut
+considérer des modifications du modèle de Cox.
+
+\begin{itemize}
+\tightlist
+\item
+  stratification (uniquement pour variables catégorielles) pour estimer
+  le risque de base séparément sur chaque sous-groupe).
+\item
+  modèle à risques non-proportionnels avec variable ou coefficient qui
+  varient selon le temps
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-1}{}
+Si les variables explicatives changent au fil du temps, on peut traiter
+le cas de figure en décomposant la contribution de l'observation en
+plusieurs segments
+
+\begin{itemize}
+\tightlist
+\item
+  chaque segment autre que terminal est traité comme de la censure à
+  droite
+\item
+  les segments sont sujets à troncature à gauche.
+\end{itemize}
+
+La base de données doit contenir le temps initial et le temps final de
+l'intervalle, en plus de l'indicateur.
+
+Il y a un lien possible avec le modèle à risque proportionnels si
+l'effet est le même pour tous (comme l'âge).
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-2}{}
+Le modèle multi-état (modèle à risques compétitifs) permet d'estimer la
+probabilité de chaque transition.
+
+\begin{itemize}
+\tightlist
+\item
+  la survie pour l'événement de base reste le même (désabonnement)
+\item
+  à chaque temps donné, la probabilité conjointe de chaque \(K+1\)
+  possibilités est 1.
+\end{itemize}
+
+Dans \textbf{R}, s'assurer que la catégorie de référence est l'état de
+départ.
 \end{frame}
 
 

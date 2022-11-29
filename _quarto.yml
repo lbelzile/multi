@@ -91,6 +91,8 @@ website:
               file: contenu/11-contenu.qmd
             - text: "12: Analyse de regroupements"
               file: contenu/12-contenu.qmd
+            - text: "13: Données manquantes"
+              file: contenu/13-contenu.qmd
     - title: "Devoirs"
       style: "docked"
       search: false

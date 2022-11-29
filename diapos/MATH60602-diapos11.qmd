@@ -366,15 +366,15 @@ Quelques solutions
 
 L'analyse de regroupements cherche à créer une division de $n$ observations de $p$ variables en regroupements.
 
-1. méthodes basées sur la connectivité (regroupements hiérarchiques agglomératifs et divisifs)
-2. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides)
-3. mélanges de modèles
+1. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides)
+2. mélanges de modèles
+3. méthodes basées sur la connectivité (regroupements hiérarchiques agglomératifs et divisifs)
 4. méthodes basées sur la densité
-5. méthodes spectrales
+
 
 # Critères pour sélection
 
-- Complexité: plus un algorithme a une complexité élevée (temps de calcul et de stockage), moins il sera susceptible d'être applicable à des mégadonnées.
+- Complexité: plus un algorithme a une complexité élevée (coût de calcul et quantité de stockage), moins il sera susceptible d'être applicable à des mégadonnées.
 - Choix des hyperparamètres: plusieurs paramètres (nombre de groupes, rayon, choix de la dissemblance, etc.) à spécifier selon les méthodes.
 
 

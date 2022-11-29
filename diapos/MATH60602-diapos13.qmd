@@ -40,7 +40,7 @@ La plupart des procédures ne gèrent que les cas complets (toute observation av
 
 Les données manquantes réduisent l'information disponible.
 
-Sans traitement adéquat, les estimations sont **biaisées**
+Sans traitement adéquat, les estimations sont **biaisées**.
 
 # Références
 
@@ -48,6 +48,7 @@ Sans traitement adéquat, les estimations sont **biaisées**
 - Little, R. et D. Rubin (2019). *Statistical Analysis with Missing Data*, Wiley, 3e édition
 - Schafer, J. L. (1997). *Analysis of Incomplete Multivariate Data*. Chapman & Hall / CRC.
 
+Les valeurs manquantes dans un contexte de prédictions sont couvertes dans le cours MATH 60600
 
 # Classification des données manquantes (MCAR)
 
@@ -389,7 +390,7 @@ summary(manquantes)
 # Pourcentage de valeurs manquantes
 apply(manquantes, 2, function(x){mean(is.na(x))})
 # Voir les configurations de valeurs manquantes
-md.pattern(missing1) # graphique diapo suivante
+md.pattern(manquantes) # graphique diapo suivante
 ```
 
 ```{r}
@@ -534,7 +535,7 @@ summary(fit)
 #| cache: true
 library(mice)
 # Intensif en calcul, réduire "m" si nécessaire
-impdata <- mice(data = manquantes,
+impdata <- mice(data = hecmulti::manquantes,
                 # argument method pour le type de modèles
                 # selon les variables
                 m = 50, # nombre d'imputations
@@ -548,9 +549,32 @@ adj_im <- with(
              family = binomial))
 # combinaison des résultats 
 fit <- pool(adj_im)
-knitr::kable(summary(fit), 
+fit_df <- tibble::as_tibble(summary(fit))
+fit_df$p.value <- format.pval(fit_df$p.value,
+                              digits = 1, 
+                              eps = 1e-4)
+knitr::kable(fit_df, 
              digits = 2, 
-             booktabs = TRUE, 
-             col.names = c("terme","estimation", "erreur-type", "stat", "ddl", "valeur-*p*")) |>
+             booktabs = TRUE,
+             linesep = "",
+             col.names = c("terme","estimation", "erreur-type", "stat", "ddl", "valeur-p")) |>
   kableExtra::kable_styling()
 ```
+
+# Récapitulatif
+
+- Les données manquantes réduisent la quantité d'information disponible et augmentent l'incertitude.
+- On ne peut les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
+- Pour bien capturer l'**incertitude** et ne pas modifier les relations entre variables, il faut utiliser une méthode **stochastique**.
+- Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque variable à tour de rôle
+
+# Récapitulatif
+
+L'imputation multiple est préférée à l'imputation simple car elle permetd'estimer l'incertitude sous-jacente en raison des données manquantes.
+
+- On procède à l'imputation plusieurs fois (avec un modèle conditionel, prédictions différentes chaque fois)
+- on crée plusieurs copies
+- ajuste le modèle sur chacune et 
+- combine les résultats
+
+Traitement spécial pour erreurs-type, degrés de liberté, valeurs-$p$ et intervalles de confiance.

@@ -221,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, frame hidden, enhanced, interior hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, interior hidden, breakable, sharp corners, enhanced, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Données manquantes}
 \protect\hypertarget{donnuxe9es-manquantes}{}
@@ -247,7 +247,7 @@ observation avec des valeurs manquantes est éliminée).
 
 Les données manquantes réduisent l'information disponible.
 
-Sans traitement adéquat, les estimations sont \textbf{biaisées}
+Sans traitement adéquat, les estimations sont \textbf{biaisées}.
 \end{frame}
 
 \begin{frame}{Références}
@@ -265,6 +265,9 @@ Sans traitement adéquat, les estimations sont \textbf{biaisées}
   Schafer, J. L. (1997). \emph{Analysis of Incomplete Multivariate
   Data}. Chapman \& Hall / CRC.
 \end{itemize}
+
+Les valeurs manquantes dans un contexte de prédictions sont couvertes
+dans le cours MATH 60600
 \end{frame}
 
 \begin{frame}{Classification des données manquantes (MCAR)}
@@ -435,7 +438,7 @@ manquantes avant de faire quoi que ce soit.
 \CommentTok{\# Pourcentage de valeurs manquantes}
 \FunctionTok{apply}\NormalTok{(manquantes, }\DecValTok{2}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{mean}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))\})}
 \CommentTok{\# Voir les configurations de valeurs manquantes}
-\FunctionTok{md.pattern}\NormalTok{(missing1) }\CommentTok{\# graphique diapo suivante}
+\FunctionTok{md.pattern}\NormalTok{(manquantes) }\CommentTok{\# graphique diapo suivante}
 \end{Highlighting}
 \end{Shaded}
 
@@ -634,29 +637,70 @@ de
 \protect\hypertarget{ruxe9sultats}{}
 \begin{table}
 \centering
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrrl}
 \toprule
-terme & estimation & erreur-type & stat & ddl & valeur-*p*\\
+terme & estimation & erreur-type & stat & ddl & valeur-p\\
 \midrule
-(Intercept) & -2.86 & 1.08 & -2.65 & 327.28 & 0.01\\
-x12 & -0.90 & 0.58 & -1.55 & 172.63 & 0.12\\
-x13 & -0.53 & 0.59 & -0.90 & 164.98 & 0.37\\
-x14 & -0.76 & 0.55 & -1.39 & 241.12 & 0.17\\
-x15 & -0.58 & 0.64 & -0.91 & 176.76 & 0.36\\
-\addlinespace
-x22 & -0.03 & 0.44 & -0.07 & 403.25 & 0.94\\
-x23 & -0.65 & 0.49 & -1.34 & 353.29 & 0.18\\
-x24 & -2.60 & 0.65 & -4.00 & 271.66 & 0.00\\
-x25 & -1.32 & 0.72 & -1.84 & 283.49 & 0.07\\
-x3 & 1.61 & 0.31 & 5.19 & 300.31 & 0.00\\
-\addlinespace
-x4 & 2.56 & 0.42 & 6.14 & 185.05 & 0.00\\
-x5 & 0.11 & 0.02 & 5.27 & 436.59 & 0.00\\
-x62 & -1.41 & 0.37 & -3.83 & 408.17 & 0.00\\
-x63 & -2.58 & 0.41 & -6.24 & 399.50 & 0.00\\
+(Intercept) & -2.86 & 1.08 & -2.65 & 327.28 & 0.009\\
+x12 & -0.90 & 0.58 & -1.55 & 172.63 & 0.124\\
+x13 & -0.53 & 0.59 & -0.90 & 164.98 & 0.372\\
+x14 & -0.76 & 0.55 & -1.39 & 241.12 & 0.166\\
+x15 & -0.58 & 0.64 & -0.91 & 176.76 & 0.365\\
+x22 & -0.03 & 0.44 & -0.07 & 403.25 & 0.944\\
+x23 & -0.65 & 0.49 & -1.34 & 353.29 & 0.181\\
+x24 & -2.60 & 0.65 & -4.00 & 271.66 & <1e-04\\
+x25 & -1.32 & 0.72 & -1.84 & 283.49 & 0.066\\
+x3 & 1.61 & 0.31 & 5.19 & 300.31 & <1e-04\\
+x4 & 2.56 & 0.42 & 6.14 & 185.05 & <1e-04\\
+x5 & 0.11 & 0.02 & 5.27 & 436.59 & <1e-04\\
+x62 & -1.41 & 0.37 & -3.83 & 408.17 & 1e-04\\
+x63 & -2.58 & 0.41 & -6.24 & 399.50 & <1e-04\\
 \bottomrule
 \end{tabular}
 \end{table}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif}{}
+\begin{itemize}
+\tightlist
+\item
+  Les données manquantes réduisent la quantité d'information disponible
+  et augmentent l'incertitude.
+\item
+  On ne peut les ignorer (étude des cas complets) sans biaiser les
+  interprétations et réduire la quantité d'information disponible.
+\item
+  Pour bien capturer l'\textbf{incertitude} et ne pas modifier les
+  relations entre variables, il faut utiliser une méthode
+  \textbf{stochastique}.
+\item
+  Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque
+  variable à tour de rôle
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-1}{}
+L'imputation multiple est préférée à l'imputation simple car elle
+permetd'estimer l'incertitude sous-jacente en raison des données
+manquantes.
+
+\begin{itemize}
+\tightlist
+\item
+  On procède à l'imputation plusieurs fois (avec un modèle conditionel,
+  prédictions différentes chaque fois)
+\item
+  on crée plusieurs copies
+\item
+  ajuste le modèle sur chacune et
+\item
+  combine les résultats
+\end{itemize}
+
+Traitement spécial pour erreurs-type, degrés de liberté, valeurs-\(p\)
+et intervalles de confiance.
 \end{frame}
 
 

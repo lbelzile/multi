@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden, breakable, boxrule=0pt, enhanced, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, interior hidden, boxrule=0pt, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Algorithmes pour l'analyse de regroupements}
 \protect\hypertarget{algorithmes-pour-lanalyse-de-regroupements}{}
@@ -245,17 +245,15 @@ observations de \(p\) variables en regroupements.
 \begin{enumerate}
 \tightlist
 \item
-  méthodes basées sur la connectivité (regroupements hiérarchiques
-  agglomératifs et divisifs)
-\item
   méthodes basées sur les centroïdes et les médoïdes (\(k\)-moyennes,
   \(k\)-médoides)
 \item
   mélanges de modèles
 \item
-  méthodes basées sur la densité
+  méthodes basées sur la connectivité (regroupements hiérarchiques
+  agglomératifs et divisifs)
 \item
-  méthodes spectrales
+  méthodes basées sur la densité
 \end{enumerate}
 \end{frame}
 
@@ -297,24 +295,25 @@ coût de calcul et de stockage.
 \tightlist
 \item
   Diviser l'échantillon en \(S\) sous-échantillons de taille
-  approximativement égale de taille \(n_S\) (typiquement
-  \(K \ll n_S < 1000\))
+  approximativement égale de taille \(n_S\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    typiquement \(K \ll n_S < 1000\)
+  \end{itemize}
 \item
   Utiliser l'algorithme PAM sur chaque sous-échantillon.
 \end{itemize}
 
 Une fois les médoïdes obtenus, le reste de toutes les observations de
 l'échantillon sont assignées au regroupement du médoïde le plus près.
-\end{frame}
 
-\begin{frame}{Algorithme CLARA (2/2)}
-\protect\hypertarget{algorithme-clara-22}{}
-La qualité de la segmentation pour chacune des \(S\) segmentations est
-calculée en obtenant la distance moyenne entre les médoïdes et les
-observations.
+Pour chacune des \(S\) segmentations, on calcule la distance moyenne
+entre les médoïdes et les observations.
 
-On retourne la meilleure segmentation parmi les \(S\) (celle qui a la
-plus petite distance moyenne).
+La meilleure segmentation est retournée: c'est celle qui a la plus
+petite distance moyenne parmi les \(S\).
 \end{frame}
 
 \begin{frame}[fragile]{PAM et CLARA dans \textbf{R}}
@@ -378,15 +377,15 @@ simplement extraire leur identifiant.
 \begin{itemize}
 \tightlist
 \item
-  (\(-\)) solution approximative pour grand échantillons
-\item
   (\(+\)) les prototypes sont des observations de l'échantillon.
 \item
   (\(+\)) la fonction objective est moins impactée par les extrêmes.
 \item
   (\(-\)) le coût de calcul est prohibitif avec des mégadonnées
-  (problème combinatoire) avec complexité \(\mathrm{O}(n^2)\). PAM
-  fonctionne avec maximum 1000 observations.
+  (problème combinatoire). PAM fonctionne avec maximum 1000
+  observations.
+\item
+  (\(-\)) solution approximative pour grand échantillons avec CLARA
 \end{itemize}
 \end{frame}
 
@@ -423,7 +422,7 @@ indicateur de groupe.
 \item
   Étape E: assignation aux groupes (multinomiale).
 \item
-  Étape \(M\): estimation des probabilités, des moyennes et variances.
+  Étape M: estimation des probabilités, des moyennes et variances.
 \end{itemize}
 
 Le mélange de modèle nous donne accès à la probabilité \(\pi_k\) qu'une
@@ -685,22 +684,6 @@ Voir la page
 pour une illustration.
 \end{frame}
 
-\begin{frame}[fragile]{Genie}
-\protect\hypertarget{genie}{}
-Alternative de Gagolewski (2016) qui modifie la fonction de liaison
-simple en retenant son efficacité de calcul.
-
-Plutôt que de simplement trouver la paire de regroupements à distance
-minimale, cette fusion n'est appliquée que si une mesure d'inéquité est
-inférieur à un seuil spécifié par l'utilisateur.
-
-Si les regroupements sont fortement inéquitables, la fusion survient
-entre les regroupements dont un de la taille minimale courante.
-
-L'implémentation \textbf{R} dans le paquet \texttt{genieclust} est
-nettement plus rapide que les autres alternative.
-\end{frame}
-
 \begin{frame}[fragile]{Méthodes hiérarchiques et coût de calcul}
 \protect\hypertarget{muxe9thodes-hiuxe9rarchiques-et-couxfbt-de-calcul}{}
 Les algorithmes de regroupement hiérarchiques stockent une matrice de
@@ -717,7 +700,25 @@ matrice de dissemblance, d'où un coût de stockage linéaire de
 
 \texttt{stat::hclust} permet de faire des regroupements agglomératifs,
 mais le paquet \texttt{fastcluster} propose une version avec une
-empreinte mémoire inférieure (*plus rapide!)
+empreinte mémoire inférieure (\emph{plus rapide}!)
+\end{frame}
+
+\begin{frame}[fragile]{Genie}
+\protect\hypertarget{genie}{}
+La fonction de liaison simple permet des calculs rapides, mais le
+résultat est rarement satisfaisant.
+
+Une proposition de Gagolewski (2016), implémentée dans le paquet
+\textbf{R} \texttt{genieclust}, modifie la fonction de liaison simple en
+retenant son efficacité de calcul.
+
+Plutôt que de simplement trouver la paire de regroupements à distance
+minimale, cette fusion n'est appliquée que si une mesure d'inéquité, le
+coefficient de Gini, est inférieur à un seuil spécifié par
+l'utilisateur.
+
+Si les regroupements sont fortement inéquitables, la fusion survient
+entre les regroupements dont un de la taille minimale courante.
 \end{frame}
 
 \begin{frame}{Hyperparamètres des méthodes hiérarchiques}
@@ -805,12 +806,12 @@ On cherche un point d'inflection (un coude).
   (\(+\)) la solution du regroupement hiérarchique est toujours la même
   (déterministe)
 \item
+  (\(+\)) les méthodes d'arborescence sont faciles à expliquer
+\item
   (\(-\)) l'assignation d'une observation à un regroupement est finale
 \item
   (\(-\)) les aberrances ne sont pas traitées et sont souvent assignées
   dans des regroupements à part
-\item
-  (\(+\)) les méthodes d'arborescence sont faciles à expliquer
 \item
   (\(-\)) le nombre de groupes n'a pas à être spécifié apriori (une
   seule estimation)
@@ -1020,9 +1021,9 @@ Exemple: deux partitions de 4 observations
 \begin{itemize}
 \tightlist
 \item
-  Étiquettes \(A\): (2, 2, 2, 1)
+  Étiquettes de la méthode \(A\) avec deux regroupements: (2, 2, 2, 1)
 \item
-  Étiquettes \(B\): (3, 1, 3, 2)
+  Étiquettes de la méthode \(B\) avec trois regroupements: (3, 1, 3, 2)
 \end{itemize}
 
 \begin{longtable}[]{@{}cccccc@{}}
@@ -1034,10 +1035,11 @@ Exemple: deux partitions de 4 observations
 \bottomrule()
 \end{longtable}
 
-Parmi les six paires, trois sont concordantes (00 ou 11).
-
 L'indice de Rand est le taux de bonne classification du tableau de
-contingence résultant.
+contingence résultant. Parmi les six paires, quatre sont concordantes
+(00 ou 11), d'où un indice de \(\textsf{Rand} = 0.66\)
+
+Une valeur de 1 indique que les deux partitions sont identiques.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
@@ -1084,8 +1086,11 @@ Les étapes d'une analyse de regroupements
     avec des mégadonnées, la complexité est un facteur important pour
     choisir la méthode.
   \item
-    la plupart du temps, il faut faire plusieurs itérations pour le
-    choix des hyperparamètres pour avoir une bonne segmentation.
+    la plupart du temps, le choix des hyperparamètres nécessite un peu
+    d'essai-erreur.
+  \item
+    la segmentation peut être médiocre parce que les hyperparamètres
+    sont mal choisis.
   \end{itemize}
 \end{itemize}
 \end{frame}
@@ -1100,8 +1105,6 @@ Le Diable est dans les détails:
   variables catégorielles et binaires vs standardisation
 \item
   valeurs manquantes
-\item
-  inclusion de variables sociodémographiques
 \item
   aberrances
 \end{itemize}

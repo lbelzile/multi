@@ -30,11 +30,11 @@ include-in-header:
 
 L'analyse de regroupements cherche à créer une division de $n$ observations de $p$ variables en regroupements.
 
-1. méthodes basées sur la connectivité (regroupements hiérarchiques agglomératifs et divisifs)
-2. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides)
-3. mélanges de modèles
+1. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides)
+2. mélanges de modèles
+3. méthodes basées sur la connectivité (regroupements hiérarchiques agglomératifs et divisifs)
 4. méthodes basées sur la densité
-5. méthodes spectrales
+
 
 
 ```{r}
@@ -117,18 +117,15 @@ dm_std <- attr(donsmult_std, "scaled:scale")
 
 L'algorithme CLARA, décrit dans Kaufman & Rousseeuw (1990), réduit le coût de calcul et de stockage.
 
-- Diviser l'échantillon en $S$ sous-échantillons de taille approximativement égale de taille $n_S$ (typiquement $K \ll n_S < 1000$)
+- Diviser l'échantillon en $S$ sous-échantillons de taille approximativement égale de taille $n_S$    
+    - typiquement $K \ll n_S < 1000$
 - Utiliser l'algorithme PAM sur chaque sous-échantillon. 
 
 Une fois les médoïdes obtenus, le reste de toutes les observations de l'échantillon sont assignées au regroupement du médoïde le plus près.
 
+Pour chacune des $S$ segmentations, on calcule la distance moyenne entre les médoïdes et les observations.
 
-# Algorithme CLARA (2/2)
-
-
-La qualité de la segmentation pour chacune des $S$ segmentations est calculée en obtenant la distance moyenne entre les médoïdes et les observations.
-
-On retourne la meilleure segmentation parmi les $S$ (celle qui a la plus petite distance moyenne).
+La meilleure segmentation est retournée: c'est celle qui a la plus petite distance moyenne parmi les $S$.
 
 # PAM et CLARA dans **R**
 
@@ -188,11 +185,10 @@ kmedoide5$clusinfo
 
 # Avantages et inconvénients des $K$-médoïdes
 
-- ($-$) solution approximative pour grand échantillons
 - ($+$) les prototypes sont des observations de l'échantillon.
 - ($+$) la fonction objective est moins impactée par les extrêmes.
-- ($-$) le coût de calcul est prohibitif avec des mégadonnées (problème combinatoire) avec complexité $\mathrm{O}(n^2)$. PAM fonctionne avec maximum 1000 observations.
-
+- ($-$) le coût de calcul est prohibitif avec des mégadonnées (problème combinatoire). PAM fonctionne avec maximum 1000 observations.
+- ($-$) solution approximative pour grand échantillons avec CLARA
 
 # Mélange de modèles
 
@@ -218,7 +214,7 @@ f_{k}(\boldsymbol{X}_i \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k).
 Le maximum de vraisemblance est obtenu à l'aide de l'algorithme d'espérance-maximisation en augmentant les observations avec un indicateur de groupe.
 
 - Étape E: assignation aux groupes (multinomiale).
-- Étape $M$: estimation des probabilités, des moyennes et variances.
+- Étape M: estimation des probabilités, des moyennes et variances.
 
 Le mélange de modèle nous donne accès à la probabilité $\pi_k$ qu'une observation appartiennent au groupe $G_k$ (**assignation probabiliste**).
 
@@ -295,8 +291,8 @@ En pratique, on ajuste le modèle avec différent nombre de regroupements et dif
 #| warning: false
 #| error: false
 #| cache: true
-set.seed(60602)
 suppressMessages(library(mclust))
+set.seed(60602)
 mmg <- mclust::Mclust(data = donsmult_std,
        G = 1:10,
        # Ajouter composante uniforme
@@ -472,17 +468,6 @@ La méthode de Ward va fusionner les deux groupes qui feront augmenter le moins 
 Voir la page [scikit-learn](https://scikit-learn.org/stable/auto_examples/cluster/plot_linkage_comparison.html) pour une illustration.
 
 
-# Genie 
-
-Alternative de Gagolewski (2016) qui modifie la fonction de liaison simple en retenant son efficacité de calcul. 
-
-Plutôt que de simplement trouver la paire de regroupements à distance minimale, cette fusion n'est appliquée que si une mesure d'inéquité est inférieur à un seuil spécifié par l'utilisateur.
-
-Si les regroupements sont fortement inéquitables, la fusion survient entre les regroupements dont un de la taille minimale courante. 
-
-L'implémentation **R** dans le paquet `genieclust` est nettement plus rapide que les autres alternative.
-
-
 # Méthodes hiérarchiques et coût de calcul
 
 Les algorithmes de regroupement hiérarchiques stockent une matrice de dissemblance $n \times n$: coût de stockage quadratique $\mathrm{O}(n^2)$.
@@ -491,7 +476,17 @@ Généralement, le coût de calcul est au mieux $\Omega(n^2)$ et au pire $\mathr
 
 Pour la méthode de liaison simple, un algorithme permet d'obtenir un coût de calcul quadratique de $\mathrm{O}(n^2)$ sans stocker la matrice de dissemblance, d'où un coût de stockage linéaire de $\mathrm{O}(n)$. 
 
-`stat::hclust` permet de faire des regroupements agglomératifs, mais le paquet `fastcluster` propose une version avec une empreinte mémoire inférieure (*plus rapide!)
+`stat::hclust` permet de faire des regroupements agglomératifs, mais le paquet `fastcluster` propose une version avec une empreinte mémoire inférieure (*plus rapide*!)
+
+# Genie 
+
+La fonction de liaison simple permet des calculs rapides, mais le résultat est rarement satisfaisant.
+
+Une proposition de Gagolewski (2016), implémentée dans le paquet **R** `genieclust`, modifie la fonction de liaison simple en retenant son efficacité de calcul. 
+
+Plutôt que de simplement trouver la paire de regroupements à distance minimale, cette fusion n'est appliquée que si une mesure d'inéquité, le coefficient de Gini, est inférieur à un seuil spécifié par l'utilisateur.
+
+Si les regroupements sont fortement inéquitables, la fusion survient entre les regroupements dont un de la taille minimale courante. 
 
 
 # Hyperparamètres des méthodes hiérarchiques
@@ -569,9 +564,9 @@ hecmulti::homogeneite(rhier = ward,
 # Avantages et inconvénient, regroupements hiérarchiques
 
 - ($+$) la solution du regroupement hiérarchique est toujours la même (déterministe)
+- ($+$) les méthodes d'arborescence sont faciles à expliquer
 - ($-$) l'assignation d'une observation à un regroupement est finale
 - ($-$) les aberrances ne sont pas traitées et sont souvent assignées dans des regroupements à part
-- ($+$) les méthodes d'arborescence sont faciles à expliquer
 - ($-$) le nombre de groupes n'a pas à être spécifié apriori (une seule estimation)
 - ($-$) le coût de calcul est prohibitif, avec une complexité quadratique de $\mathrm{O}(n^2)$ pour la méthode de liaison simple et autrement $\mathrm{O}(n^3)$ pour la plupart des autres fonctions de liaison.
 
@@ -757,8 +752,8 @@ On indique si les paires d'observations sont dans le même groupe (1) ou un grou
 
 Exemple: deux partitions de 4 observations
 
-- Étiquettes $A$: (2, 2, 2, 1)
-- Étiquettes $B$: (3, 1, 3, 2)
+- Étiquettes de la méthode $A$ avec deux regroupements: (2, 2, 2, 1) 
+- Étiquettes de la méthode $B$ avec trois regroupements: (3, 1, 3, 2)
 
 
 
@@ -766,9 +761,9 @@ Exemple: deux partitions de 4 observations
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | 10 | 11 | 00 | 10 | 00 | 00 |
 
-Parmi les six paires, trois sont concordantes (00 ou 11).
+L'indice de Rand est le taux de bonne classification du tableau de contingence résultant. Parmi les six paires, quatre sont concordantes (00 ou 11), d'où un indice de $\textsf{Rand} = 0.66$
 
-L'indice de Rand est le taux de bonne classification du tableau de contingence résultant.
+Une valeur de 1 indique que les deux partitions sont identiques.
 
 
 # Récapitulatif
@@ -788,7 +783,8 @@ Les étapes d'une analyse de regroupements
 - Il n'y a pas de vérité: la segmentation n'est utile que si elle a une valeur ajoutée.
 - Aucun algorithme ne performe uniformément mieux, mais certains sont plus faciles à employer que d'autres.
    - avec des mégadonnées, la complexité est un facteur important pour choisir la méthode.
-   - la plupart du temps, il faut faire plusieurs itérations pour le choix des hyperparamètres pour avoir une bonne segmentation.
+   - la plupart du temps, le choix des hyperparamètres nécessite un peu d'essai-erreur.
+   - la segmentation peut être médiocre parce que les hyperparamètres sont mal choisis.
 
 
 # Récapitulatif
@@ -797,7 +793,6 @@ Le Diable est dans les détails:
 
 - variables catégorielles et binaires vs standardisation
 - valeurs manquantes
-- inclusion de variables sociodémographiques
 - aberrances
 
 Le nombre de groupes peut être guidé par le contexte: les formules et indicateurs de qualité servent de balises.

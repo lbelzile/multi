@@ -10,7 +10,7 @@ title: "Données manquantes"
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 8 (analyse de regroupements)](https://lbelzile.github.io/math60602/07-donneesmanquantes.html)
+- {{< fa book >}} [Chapitre 8 (données manquantes)](https://lbelzile.github.io/math60602/07-donneesmanquantes.html)
 
 ## Diapositives 
 

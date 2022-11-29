@@ -37,7 +37,11 @@ knitr::opts_chunk$set(
 
 # Organisation du travail
 
-```{r echo=FALSE, eval = TRUE, fig.cap="Adapté de *R for Data Science*, H. Wickham et G. Grolemund", out.width='90%'}
+```{r}
+#| echo: false
+#| eval: true
+#| fig-cap: "Adapté de *R for Data Science*, H. Wickham et G. Grolemund"
+#| out-width: '90%'
 knitr::include_graphics("figures/r4ds_data-science_fr.png")
 ```
 

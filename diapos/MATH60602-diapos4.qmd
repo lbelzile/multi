@@ -11,8 +11,7 @@ innertheme: Flip
 outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
-pdf-engine: xelatex
-cache: true
+pdf-engine: lualatex
 code-line-numbers: true
 fig-align: 'center'
 mainfont: "D-DIN"
@@ -23,6 +22,7 @@ include-in-header:
       text: |
         \usepackage{tabu}
         \usepackage{mathtools}
+        \usepackage{mathrsfs}
 ---
 
 # Modèles prédictifs
