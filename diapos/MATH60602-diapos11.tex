@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, interior hidden, breakable, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -1171,7 +1171,8 @@ Les regroupements obtenus sont interprétables:
   d'apprentissage non-supervisée
 \item
   Plusieurs choix de l'analyste (mesure de dissemblance, algorithme,
-  choix des hyperparamètres) peut donner une segmentation différente
+  choix des hyperparamètres) impactent la segmentation et peuvent mener
+  à des résultats très différents avec les mêmes données.
 \item
   L'algorithme des \(K\)-moyennes est le plus employé et son faible coût
   permet son utilisation avec des mégadonnées.

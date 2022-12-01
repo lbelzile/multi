@@ -17,6 +17,9 @@ title: "Données manquantes"
 - {{< fa file >}} [Données manquantes](/diapos/MATH60602-diapos13.pdf)
 - {{< fa code >}} [Code](/code/MATH60602-diapos13.R)
 
+## Révision et examen de pratique
+
+- {{< fa file >}} [Examen de pratique](/evaluations/MATH60602-final-pratique.pdf)
 
 ## Objectifs d'apprentissage
 
