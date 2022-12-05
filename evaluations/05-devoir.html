@@ -196,7 +196,6 @@ ul.task-list li input[type="checkbox"] {
 <li>votre code <strong>R</strong> ou un fichier Rmarkdown</li>
 </ul>
 <p>Utilisez la convention de nomenclature <code>d5_matricule.extension</code>, où <code>matricule</code> est le matricule de l’étudiant(e) qui soumet le rapport et <code>extension</code> est un de <code>pdf</code>, <code>R</code> ou <code>Rmd</code>.</p>
-<p><strong>Note</strong> Retéléchargez le paquet <code>hecmulti</code> via <code>remotes::install_github("lbelzile/hecmulti")</code> (version &gt; 2022.11.12) et redémarrez <strong>R</strong> avant de commencer le devoir.</p>
 <p>Dans le cadre d’un programme gouvernemental, on s’intéresse au nombre de semaines de paiements écoulé entre une perte d’emploi et un nouvel emploi pour des chômeurs et chômeuses âgé(e)s entre 18 et 65 ans, dans le but d’élaborer un programme de formation destiné au chômage de longue durée. La base de données <code>chomage</code> contient un échantillon de <span class="math inline">\(n=2\ 500\)</span> personnes inscrites à l’Assurance emploi entre mars 2020 et décembre 2021.</p>
 <ul>
 <li><code>duree</code>: nombre de semaines de prestations payées par le programme d’assurance emploi.</li>
@@ -215,10 +214,7 @@ ul.task-list li input[type="checkbox"] {
 <li>À quoi correspond la censure à droite dans l’étude?</li>
 <li>Rapportez le nombre d’observations censurées.</li>
 </ol></li>
-</ol>
-<p>Supposons que l’on veuille comparer les courbes de survie selon le sexe et la formation (conjointement)</p>
-<ol start="2" type="1">
-<li>En utilisant l’estimateur de Kaplan–Meier:
+<li>Supposons que l’on veuille comparer les courbes de survie selon le sexe et la formation (conjointement) en utilisant l’estimateur de Kaplan–Meier. Utilisez ce modèle pour répondre aux sous-questions suivantes:
 <ol type="a">
 <li>Produisez un graphique illustrant les courbes de survie des 10 sous-groupes.</li>
 <li>Rapportez l’estimé de la survie à 30 semaines pour une femme de 62 ans qui dispose d’une formation technique (collégial) à l’aide de votre modèle.</li>
@@ -231,9 +227,9 @@ ul.task-list li input[type="checkbox"] {
 <li>Écrivez les hypothèses nulle et alternative, la valeur de la statistique, la valeur-<span class="math inline">\(p\)</span> et la conclusion du test.</li>
 </ul></li>
 <li><a href="https://lactualite.com/lactualite-affaires/plus-simple-et-moins-chiche/">Quels sont les critères pour l’éligibilité aux paiements de l’assurance emploi</a>? Expliquez en quoi l’estimation précédente est faussée à cause de ces omissions.</li>
-<li>Dans le cadre de l’étude, il serait aussi opportun de considérer le temps avant que la personne ne <strong>retrouve un emploi</strong>. Construisez un modèle de Cox à risques proportionnels avec <code>sexe</code>, <code>age</code>, <code>formation</code>, <code>montant</code> et <code>montantmax</code>, une variable binaire indiquant si le revenu éligible égale ou excède 547$ par semaine.
+<li>Dans le cadre de l’étude, il serait aussi opportun de considérer le temps avant que la personne ne <strong>retrouve un emploi</strong>. Construisez un modèle de Cox à risques proportionnels avec <code>sexe</code>, <code>age</code>, <code>formation</code>, <code>montant</code>. Utilisez ce dernier pour répondre aux questions suivantes.
 <ol type="a">
-<li>Interprétez l’effet de la rénumération hebdomadaire sur le risque de retrouver un emploi, incluant le cas où le ou la bénéficiaire reçoit le montant maximum.</li>
+<li>Interprétez l’effet de la rénumération hebdomadaire sur le risque de retrouver un emploi.</li>
 <li>Toute chose étant égale par ailleurs, classez le temps médian avant le retour à l’emploi selon la formation, du plus long au plus court.</li>
 <li>À l’aide du test de score, vérifiez le postulat de risque proportionnels. Rapportez la valeur-<span class="math inline">\(p\)</span> et les conclusions des tests.</li>
 </ol></li>
