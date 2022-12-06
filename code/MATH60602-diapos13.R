@@ -3,11 +3,14 @@ library(mice)
 data(manquantes, package = 'hecmulti')
 summary(manquantes)
 # Pourcentage de valeurs manquantes
+# Fonction apply: appliquer une fonction
+# 2 signifie qu'on veut conserver les colonnes
+# Ici, on calcule la proportion de valeurs manquantes
+# variables par variables
 apply(manquantes, 2, function(x){mean(is.na(x))})
 # Voir les configurations de valeurs manquantes
 md.pattern(manquantes) 
 
-library(mice)
 # Intensif en calcul, réduire "m" si nécessaire
 impdata <- mice(data = manquantes,
 # argument method pour le type de modèles

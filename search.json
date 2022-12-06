@@ -410,7 +410,7 @@
     "href": "contenu/13-contenu.html#objectifs-dapprentissage",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Objectifs d’apprentissage",
-    "text": "Objectifs d’apprentissage\n\nDéterminer les méthode appropriées selon le type de données manquantes\nPouvoir calculer le taux de cas manquants\nPouvoir utiliser l’imputation multiple avec les modèles de régression"
+    "text": "Objectifs d’apprentissage\n\nDéterminer les méthodes appropriées selon le type de données manquantes\nPouvoir calculer le taux de cas manquants\nPouvoir utiliser l’imputation multiple avec les modèles de régression"
   },
   {
     "objectID": "contenu/index.html",
@@ -474,6 +474,13 @@
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
     "text": "Ce travail est à réaliser individuellement.\nVous devez remettre les documents suivants:\n\nvotre rapport au format PDF\nvotre code R ou un fichier Rmarkdown\nun fichier CSV avec vos regroupements (voir instructions en bas de page)\n\nUtilisez la convention de nomenclature d6_matricule.extension, où matricule est votre matricule et extension est un de pdf, R ou Rmd.\nNote Retéléchargez le paquet hecmulti via remotes::install_github(\"lbelzile/hecmulti\") (version \\(\\ge\\) 2022.11.22) et redémarrez R avant de commencer le devoir.\nLes données electionsqc du paquet hecmulti contiennent les résultats électoraux (en pourcentage) pour les cinq principaux partis (CAQ, QS, PQ, PLQ, PCQ) ainsi que le taux de participation pour chacune des 125 circonscriptions aux élections générales de 2018 et 2022. La base de données contient aussi plusieurs variables sociodémographiques.\nVous devez réaliser une analyse de regroupement avec les résultats électoraux pour faire ressortir des informations pertinentes.\nVoici quelques balises:\n\nEffectuez si besoin des transformations préalables des variables explicatives (manipulations, créations de nouvelles variables, traitement des valeurs manquantes.\nDéterminez si vous devez standardiser les données et comment.\nChoisissez au moins trois méthodes (différentes dissemblances, algorithmes, etc.) et faites l’analyse de regroupement. Choisissez adéquatement vos hyperparamètres en vous basant sur les critères couverts en classe.\nChoisissez la solution qui vous semble la plus satisfaisante parmi celles obtenus en justifiant adéquatement votre choix.\nProcédez à l’interprétation des prototypes à une échelle interprétable et calculez les statistiques descriptives des variables sociodémographiques. Commentez sur le résultat de votre segmentation au vu de votre connaissance du système politique.\n\nVous devez retourner en plus de votre rapport et de votre code un fichier CSV avec deux colonnes:\n\nla première colonne pour les noms de circonscriptions (circonscription),\nla deuxième colonne pour les étiquettes de groupe (regroupements)."
+  },
+  {
+    "objectID": "evaluations/final.html",
+    "href": "evaluations/final.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "L’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non programmable est autorisée.\nTéléchargez le PDF de l’examen de pratique\nL’examen compte pour 50% de la note finale du cours."
   },
   {
     "objectID": "evaluations/index.html",
