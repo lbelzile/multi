@@ -40,7 +40,7 @@ La plupart des procédures ne gèrent que les cas complets (toute observation av
 
 Les données manquantes réduisent l'information disponible.
 
-Sans traitement adéquat, les estimations sont **biaisées**.
+Sans traitement adéquat, les estimations seront **biaisées**.
 
 # Références
 
@@ -48,7 +48,7 @@ Sans traitement adéquat, les estimations sont **biaisées**.
 - Little, R. et D. Rubin (2019). *Statistical Analysis with Missing Data*, Wiley, 3e édition
 - Schafer, J. L. (1997). *Analysis of Incomplete Multivariate Data*. Chapman & Hall / CRC.
 
-Les valeurs manquantes dans un contexte de prédictions sont couvertes dans le cours MATH 60600
+Les valeurs manquantes dans un contexte de prédictions sont couvertes dans le cours MATH 60600.
 
 # Classification des données manquantes (MCAR)
 
@@ -78,9 +78,18 @@ Une personne ne divulgue pas son salaire? Données manquante de manière aléato
 
 Hypothèse pas testable, dépend du contexte et des variables auxiliaires disponibles.
 
-Il y a souvent une structure aux données manquantes.
+# Valeur logique
 
-# Types de schémas pour données manquantes
+Les données manquantes ont souvent une valeur logique:
+
+- un client qui n'a pas de carte de crédit a un solde de 0!
+
+D'où l'importance des validations d'usage et du nettoyage préliminaire de la base de données.
+
+
+# Types de schémas de données manquantes
+
+Matrice $n \times p$  (observations en lignes, variables en colonnes).
 
 ```{r}
 #| eval: true
@@ -91,6 +100,7 @@ Il y a souvent une structure aux données manquantes.
 #| cache: true
 library(patchwork)
 library(ggplot2)
+set.seed(1234)
 tile <- expand.grid(1:8, 1:3)
 colnames(tile) <- c("x", "y")
 g1 <- ggplot(data = data.frame(tile, 
@@ -136,8 +146,8 @@ g3 <- ggplot(data = data.frame(tile,
                                count = c(rep(0, 8), 
                                          rep(1, 5), 
                                          rep(0, 3), 
-                                         rep(1, 3),
-                                         rep(0, 5))),
+                                         rep(0, 5),
+                                         rep(1, 3))),
              mapping = aes(y = factor(x), 
                            x = factor(y), 
                            fill = factor(count))) +
@@ -175,22 +185,19 @@ g4 <- ggplot(data = data.frame(tile,
 g1 + g2 + g3 + g4 + plot_layout(nrow = 1, byrow = FALSE)
 ```
 
+\footnotesize
 
+Les cases grises représentent des valeurs manquantes. 
 
-# Valeur logique
+???
 
-Les données manquantes ont souvent une valeur logique:
+Figure adaptée de Figure 4.1 de van Buuren (2022)
 
-- un client qui n'a pas de carte de crédit a un solde de 0!
-
-D'où l'importance des validations d'usage et du nettoyage préliminaire de la base de données.
-
-
-# naltyse des cas complet
+# Analyse des cas complet
 
 Retirer les observations avec données manquantes pour conserver les cas complets.
 
-- Valide uniquement pour MCAR, sinon estimations biaisées.
+- Valide uniquement pour complètement aléatoire.
 - On perd de la précision en utilisant moins d'observations.
 
 Méthode par défaut dans les logiciels.
@@ -198,13 +205,24 @@ Méthode par défaut dans les logiciels.
 # Méthodes d'imputation: imputation simple
 
 
+Imputation: emplacer les valeurs manquantes par une valeur judicieuse pour *combler les trous*.
 
 > Le concept d'imputation est à la fois séduisant et dangereux (Dempster et Rubin, 1983)
 
-
-Imputation: emplacer les valeurs manquantes par un seul nombre. Par exemple, la moyenne (variables continues) ou le mode (variables catégorielles).
+ Par exemple, on remplacer la valeur manquante par la moyenne (variables continues) ou le mode (variables catégorielles).
 
 Approche pas recommandée (pourquoi?)
+
+
+# Faut-il toujours imputer?
+
+Il faut utiliser son jugement. 
+
+
+Une observation imputée ne remplacera jamais une vraie observation.
+
+- Si la proportion d'observations manquantes est petite (moins de 5\%), on pourrait faire une analyse avec les cas complets (et valider au besoin en utilisant l'imputation multiple).
+- Si la proportion de  valeurs manquantes est 30\%  et que cette proportion baisse à 3\% lorsque vous éliminez quelques variables peu importantes pour votre étude, alors procédez à leur élimination.
 
 
 
@@ -285,7 +303,7 @@ g2 + g1
 
 # Modèles prédictifs
 
-L'imputation par régression (gauche) mène à une sous-estimation de l'incertitude en raison de l'augmentation de la corrélation.
+L'imputation par régression (gauche) mène à une sous-estimation de l'incertitude en raison de l'augmentation de la corrélation, contrairement à l'imputation aléatoire (droite).
 
 
 ```{r}
@@ -357,25 +375,27 @@ g3 <- ggplot(data = data.frame(cbind(
 g1 + g3
 ```
 
+
+# Imputation aléatoire
+
+Considérons le cas d'une régression logistique pour une variable explicative binaire.
+
+Plutôt que d'assigner à la classe la plus probable, une prédiction aléatoire simule une variable 0/1 avec probabilité $(1-\widehat{p}_i, \widehat{p}_i)$.
+
+```{r}
+#| eval: true
+#| echo: true
+pred <- 0.3 #probabilité de succès
+rbinom(n = 15, size = 1, prob = pred)
+```
+
 # Problèmes de l'imputation simple
 
 On ne tient pas compte du fait que des valeurs ont été remplacées (on fait comme si c'était de vraies observations). 
 
-On sous-évalue la **variabilité** des données
+On sous-évalue encore une fois la **variabilité** des données
 
 - les écarts-type des estimations sont trop petits.
-
-
-# Faut-il toujours imputer?
-
-Il faut utiliser son jugement. 
-
-
-Une observation imputée ne remplacera jamais une vraie observation.
-
-- Si la proportion d'observations manquantes est petite (moins de 5\%), on pourrait faire une analyse avec les cas complets (et valider au besoin en utilisant l'imputation multiple).
-- Si la proportion de  valeurs manquantes est 30\%  et que cette proportion baisse à 3\% lorsque vous éliminez quelques variables peu importantes pour votre étude, alors procédez à leur élimination.
-
 
 # Inspection des valeurs manquantes
 
@@ -420,13 +440,16 @@ puzle <- mice::md.pattern(hecmulti::manquantes[,1:6],
                           plot = TRUE)
 ```
 
+
+
+
+
 # Imputation multiple
 
 Valides pour les données manquantes de manière (complètement) aléatoires.
 
 1. Procéder à plusieurs imputations **aléatoires** pour obtenir un échantillon complet (`mice`)
-2. Ajuster le modèle d'intérêt avec chaque échantillon (`with`). 
-3. Combiner les résultats obtenus (`pool` et `summary`)
+2. Ajuster le modèle d'intérêt avec chaque échantillon (`with`). 3. Combiner les résultats obtenus (`pool` et `summary`)
 
 ```{r}
 #| eval: true
@@ -567,8 +590,8 @@ knitr::kable(fit_df,
 # Récapitulatif
 
 - Les données manquantes réduisent la quantité d'information disponible et augmentent l'incertitude.
-- On ne peut les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
-- Pour bien capturer l'**incertitude** et ne pas modifier les relations entre variables, il faut utiliser une méthode **stochastique**.
+- On ne peut **pas** les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
+- Pour bien capturer l'**incertitude** et ne pas modifier les relations entre variables, il faut utiliser une méthode **aléatoire**.
 - Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque variable à tour de rôle
 
 # Récapitulatif

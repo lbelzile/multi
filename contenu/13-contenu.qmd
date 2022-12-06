@@ -23,7 +23,7 @@ title: "Données manquantes"
 
 ## Objectifs d'apprentissage
 
-- Déterminer les méthode appropriées selon le type de données manquantes
+- Déterminer les méthodes appropriées selon le type de données manquantes
 - Pouvoir calculer le taux de cas manquants
 - Pouvoir utiliser l'imputation multiple avec les modèles de régression
 
