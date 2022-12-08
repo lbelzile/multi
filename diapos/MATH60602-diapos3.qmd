@@ -97,7 +97,7 @@ Pour vous, à quel point est-ce important
 Typiquement utilisé à des fins
 
 - d'analyse exploratoire (visualisation) ou 
-- pour créer une variable réponse (par ex., le QI)
+- pour créer une variable réponse (par ex., le quotient intellectuel)
 
 Réduire la dimension en préservant le plus de variabilité possible.
 
@@ -228,6 +228,24 @@ loadings(acp) # chargements
 biplot(acp) # bigramme
 ```
 
+# Matrice de chargements 
+
+\footnotesize
+
+```{r}
+#| label: acploadings
+#| eval: true
+#| echo: false
+acp <- princomp(factor, cor = TRUE)
+loadings <- round(loadings(acp)[,1:8], 2)
+loadings[loadings < 0.2] <- ""
+knitr::kable(loadings, booktabs = TRUE, col.names = paste0("C", 1:8)) |>
+  kableExtra::kable_styling()
+```
+
+\footnotesize 
+
+Les poids inférieurs à 0.2 en valeur absolue sont omis.
 
 # Bigramme
 

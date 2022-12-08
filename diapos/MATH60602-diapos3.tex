@@ -145,6 +145,20 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage{tabu}
 \makeatletter
 \makeatother
@@ -217,7 +231,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, interior hidden, breakable, enhanced, frame hidden, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden, breakable, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Réduction de la dimension}
 \protect\hypertarget{ruxe9duction-de-la-dimension}{}
@@ -348,7 +362,7 @@ Typiquement utilisé à des fins
 \item
   d'analyse exploratoire (visualisation) ou
 \item
-  pour créer une variable réponse (par ex., le QI)
+  pour créer une variable réponse (par ex., le quotient intellectuel)
 \end{itemize}
 
 Réduire la dimension en préservant le plus de variabilité possible.
@@ -465,6 +479,39 @@ C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8\\
 \FunctionTok{biplot}\NormalTok{(acp) }\CommentTok{\# bigramme}
 \end{Highlighting}
 \end{Shaded}
+\end{frame}
+
+\begin{frame}{Matrice de chargements}
+\protect\hypertarget{matrice-de-chargements}{}
+\footnotesize
+
+\begin{table}
+\centering
+\begin{tabular}{lllllllll}
+\toprule
+  & C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8\\
+\midrule
+x1 & 0.21 &  &  & 0.65 & 0.27 & 0.41 & 0.45 & \\
+x2 &  &  &  &  &  & 0.24 &  & 0.41\\
+x3 &  & 0.36 &  &  &  &  &  & \\
+x4 &  &  & 0.25 &  &  &  &  & 0.25\\
+x5 &  &  &  & 0.69 &  &  &  & \\
+\addlinespace
+x6 &  & 0.34 &  &  & 0.74 &  &  & \\
+x7 &  &  &  &  &  &  &  & \\
+x8 &  &  & 0.21 &  &  &  &  & \\
+x9 &  & 0.42 &  &  &  &  & 0.42 & 0.51\\
+x10 &  &  &  &  &  &  & 0.44 & \\
+\addlinespace
+x11 &  &  & 0.35 &  &  &  &  & \\
+x12 &  & 0.36 &  &  &  & 0.63 &  & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\footnotesize
+
+Les poids inférieurs à 0.2 en valeur absolue sont omis.
 \end{frame}
 
 \begin{frame}{Bigramme}
@@ -649,31 +696,31 @@ La proportion de la variance de \(X_i\) expliquée par les facteurs est
 \begin{frame}{Exemple d'estimation des chargements}
 \protect\hypertarget{exemple-destimation-des-chargements}{}
 \hypertarget{tbl-factocp}{}
-\begin{longtable}[]{@{}lrrrr@{}}
-\caption{\label{tbl-factocp}Estimés des chargements
-(pourcentage).}\tabularnewline
-\toprule()
-& F1 & F2 & F3 & F4 \\
-\midrule()
-\endfirsthead
-\toprule()
-& F1 & F2 & F3 & F4 \\
-\midrule()
-\endhead
-x1 & & & & 81 \\
-x2 & & & -79 & \\
-x3 & & 79 & & \\
-x4 & 82 & & & \\
-x5 & & & & 83 \\
-x6 & & 66 & & \\
-x7 & & & -83 & \\
-x8 & 85 & & & \\
-x9 & & 75 & & \\
-x10 & & & -79 & \\
-x11 & 82 & & & \\
-x12 & & 73 & & \\
-\bottomrule()
-\end{longtable}
+\begin{table}
+\caption{\label{tbl-factocp}Estimés des chargements (pourcentage). }\tabularnewline
+
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+  & F1 & F2 & F3 & F4\\
+\midrule
+x1 &  &  &  & 81\\
+x2 &  &  & -79 & \\
+x3 &  & 79 &  & \\
+x4 & 82 &  &  & \\
+x5 &  &  &  & 83\\
+\addlinespace
+x6 &  & 66 &  & \\
+x7 &  &  & -83 & \\
+x8 & 85 &  &  & \\
+x9 &  & 75 &  & \\
+x10 &  &  & -79 & \\
+\addlinespace
+x11 & 82 &  &  & \\
+x12 &  & 73 &  & \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 :::
 \end{frame}

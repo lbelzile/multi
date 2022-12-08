@@ -87,6 +87,7 @@ On procède ensuite à une analyse **descriptive**, segment par segment.
 - Démarchage d'organismes de charité
 - Segmentation de [quartiers de Los Angeles](https://fivethirtyeight.com/features/the-6-political-neighborhoods-of-los-angeles/) et de [New York](https://fivethirtyeight.com/features/the-5-political-boroughs-of-new-york-city/) selon leur vote
 - [Profils des électeurs albertains](https://www.cbc.ca/news/canada/calgary/danielle-smith-alberta-moderate-middle-ucp-ndp-poll-1.6651460)
+- [Positionnement de joueurs lors de match de la NBA](https://github.com/nedwardsthro/Thesis_Work)
 
 
 # Illustration
