@@ -17,13 +17,11 @@ Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés d
 
 ```{r, eval=FALSE, echo=TRUE}
 lib <- c("remotes", "psych", "glmnet", "caret", 
-         "leaps", "car", "MASS", "glmbb", "AER",
+         "leaps", "car", "glmbb", "AER",
          "tidyverse", "nnet", "mice", "survminer", 
-         "coin","survival", "patchwork", "sampleSelection",
-         "Hmisc", "aod", "cluster", "NbClust",
-         "emmeans", "ROCR", "factoextra", "muhaz",
-         "summarytools", "flexclust", "dummies", "gridExtra"
-         )
+	 "survival", "patchwork", "Hmisc", 
+         "factoextra", "energy", "dbscan", "kcca",
+         "fastClust", "genieclust", "mclust")
 for(pack in lib){
   if(!require(pack, quietly = TRUE)){
     install.packages(pack)
