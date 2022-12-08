@@ -709,7 +709,12 @@ ifelse(TEST,
 - <b><span style="background: #CBB5FF">`VALUE_IF_FALSE`</span></b> = valeur si faux
 ]
 
+.box-inv-1[
+Vecteur en sortie de la longueur de <b>`TEST`</b>
+]
+
 ---
+
 
 ```{r echo=FALSE, tidy=FALSE}
 decorate('
@@ -731,6 +736,73 @@ mutate(gapminder,
   flair('"After 1960"', background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('"Before 1960"', background = "#CBB5FF", before = "<b>", after = "</b>") |>
   flair::knit_print.with_flair()
+```
+
+---
+
+```{r echo=FALSE, tidy=FALSE}
+decorate('
+mutate(gapminder, 
+       after_1960 = year > 1960)
+', eval = FALSE) |> 
+  flair("year > 1960", background = "#FFC0DC", before = "<b>", after = "</b>") |>
+  flair::knit_print.with_flair()
+```
+
+
+```{r echo=FALSE, tidy=FALSE}
+mutate(gapminder, 
+       after_1960 = year > 1960)
+```
+
+---
+class: title title-1
+
+# `case_when()`
+
+.box-inv-1[Tests conditionnels vectorisés]
+
+```{r echo=TRUE, eval=FALSE, tidy=FALSE}
+case_when(CAS1_EST_VRAI ~ VALEUR1, 
+          CAS2_EST_VRAI ~ VALEUR2,
+          TRUE ~ VALEUR_AUTRE)
+```
+
+
+.box-inv-1[Énoncés évalués si les précédents ne sont pas vrais.]
+
+
+.box-inv-1[Retourne `NA` pour toute valeur restante si on omet le dernier énoncé]
+
+---
+
+
+
+```{r echo=TRUE, eval = FALSE, tidy=FALSE}
+mutate(gapminder, 
+       decennie = case_when(
+         year < 1960 ~ "années 50",
+         year >= 1960 & year < 1970 ~ "années 60",
+         year >= 1970 & year < 1980 ~ "années 70",
+         year >= 1980 & year < 1990 ~ "années 80",
+         year >= 1990 & year < 2000 ~ "années 90",
+         TRUE ~ "millénaire")
+)
+```
+
+---
+
+
+```{r echo=FALSE, eval = TRUE, tidy=FALSE}
+mutate(gapminder, 
+       decennie = case_when(
+         year < 1960 ~ "années 50",
+         year >= 1960 & year < 1970 ~ "années 60",
+         year >= 1970 & year < 1980 ~ "années 70",
+         year >= 1980 & year < 1990 ~ "années 80",
+         year >= 1990 & year < 2000 ~ "années 90",
+         TRUE ~ "millénaire")
+)
 ```
 
 ---
@@ -767,10 +839,9 @@ mutate(gapminder,
 
 ```{r eval=FALSE}
 mutate(gapminder, 
-       africa_asia = 
-         ifelse(continent %in% c("Africa", "Asia"), 
-                "Afrique ou Asie", 
-                "Autre continent"))
+       africa_asia = ifelse(continent %in% c("Africa", "Asia"),
+                            "Afrique ou Asie",
+                            "Autre continent"))
 ```
 
 ---

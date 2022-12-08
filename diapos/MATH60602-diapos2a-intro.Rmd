@@ -702,7 +702,7 @@ class: title title-1
 # Valeurs manquantes
 
 .box-inv-1.sp-after-half[
-`NA`, `NaN`, `NA_integer_`, etc.
+`NA`, `NaN`, `NA\_integer_`, etc.
 ]
 .box-inv-1.sp-after-half[`is.na()` pour détecter]
 .box-inv-1.sp-after-half[`summary()` sur `data.frame`<br> pour décompte par variable]
