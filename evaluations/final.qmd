@@ -7,6 +7,6 @@ L’examen final est récapitulatif et d'une durée de 180 minutes. Aucune docum
 L’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non
 programmable est autorisée.
 
-[Téléchargez le PDF de l'examen de pratique](MATH60602-final-pratique.pdf)
+[Téléchargez le PDF de l'examen de pratique](MATH60602-final-pratique.pdf) et le [solutionnaire](MATH60602-final-pratique-solution.pdf)
 
 L'examen compte pour 50% de la note finale du cours.

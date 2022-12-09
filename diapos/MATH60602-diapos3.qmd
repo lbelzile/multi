@@ -236,7 +236,7 @@ biplot(acp) # bigramme
 #| label: acploadings
 #| eval: true
 #| echo: false
-acp <- princomp(factor, cor = TRUE)
+acp <- princomp(hecmulti::factor, cor = TRUE)
 loadings <- round(loadings(acp)[,1:8], 2)
 loadings[loadings < 0.2] <- ""
 knitr::kable(loadings, booktabs = TRUE, col.names = paste0("C", 1:8)) |>

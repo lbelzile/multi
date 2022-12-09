@@ -231,7 +231,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners, boxrule=0pt, breakable, frame hidden, interior hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Réduction de la dimension}
 \protect\hypertarget{ruxe9duction-de-la-dimension}{}
@@ -696,31 +696,31 @@ La proportion de la variance de \(X_i\) expliquée par les facteurs est
 \begin{frame}{Exemple d'estimation des chargements}
 \protect\hypertarget{exemple-destimation-des-chargements}{}
 \hypertarget{tbl-factocp}{}
-\begin{table}
-\caption{\label{tbl-factocp}Estimés des chargements (pourcentage). }\tabularnewline
-
-\centering
-\begin{tabular}{lrrrr}
-\toprule
-  & F1 & F2 & F3 & F4\\
-\midrule
-x1 &  &  &  & 81\\
-x2 &  &  & -79 & \\
-x3 &  & 79 &  & \\
-x4 & 82 &  &  & \\
-x5 &  &  &  & 83\\
-\addlinespace
-x6 &  & 66 &  & \\
-x7 &  &  & -83 & \\
-x8 & 85 &  &  & \\
-x9 &  & 75 &  & \\
-x10 &  &  & -79 & \\
-\addlinespace
-x11 & 82 &  &  & \\
-x12 &  & 73 &  & \\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{\label{tbl-factocp}Estimés des chargements
+(pourcentage).}\tabularnewline
+\toprule()
+& F1 & F2 & F3 & F4 \\
+\midrule()
+\endfirsthead
+\toprule()
+& F1 & F2 & F3 & F4 \\
+\midrule()
+\endhead
+x1 & & & & 81 \\
+x2 & & & -79 & \\
+x3 & & 79 & & \\
+x4 & 82 & & & \\
+x5 & & & & 83 \\
+x6 & & 66 & & \\
+x7 & & & -83 & \\
+x8 & 85 & & & \\
+x9 & & 75 & & \\
+x10 & & & -79 & \\
+x11 & 82 & & & \\
+x12 & & 73 & & \\
+\bottomrule()
+\end{longtable}
 
 :::
 \end{frame}

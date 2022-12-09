@@ -16,10 +16,6 @@ On cherche à estimer le total du solde de la carte de crédit Visa Première (`
 - qu'il n'y a pas de variable explicative dérivée de la variable réponse.
 - que le sous-ensemble des observations employé est adéquat.
 - qu'il n'y a pas d'anomalies ou de valeurs aberrantes (par ex., `999` pour valeurs manquantes) qui viendraient fausser les résultats.
-- (*facultatif*) si vous ne devriez pas inclure de nouvelles variables qui sont des transformations, notamment
-    - ajouter une variable binaire (0/1) pour une variable strictement positive avec excès de zéros
-    - transformation monotone, par exemple $x \mapsto \ln(x + 1)$, si la variable est non-négative et la relation avec la réponse est nonlinéaire.
-
 
 
 Résumez votre analyse en une page maximum (texte et graphiques): ne soulevez que les points importants.

@@ -14,8 +14,6 @@ Vous devez remettre les documents suivants:
 
 Utilisez la convention de nomenclature `d6_matricule.extension`, où `matricule` est votre matricule et `extension` est un de `pdf`, `R` ou `Rmd`.  
 
-**Note** Retéléchargez le paquet `hecmulti` via `remotes::install_github("lbelzile/hecmulti")` (version $\ge$ 2022.11.22) et redémarrez **R** avant de commencer le devoir.
-
 
 Les données `electionsqc` du paquet `hecmulti` contiennent les résultats électoraux (en pourcentage) pour les cinq principaux partis (CAQ, QS, PQ, PLQ, PCQ) ainsi que le taux de participation pour chacune des 125 circonscriptions aux élections générales de 2018 et 2022. La base de données contient aussi plusieurs variables sociodémographiques.
 
