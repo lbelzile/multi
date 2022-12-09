@@ -187,11 +187,7 @@ g1 + g2 + g3 + g4 + plot_layout(nrow = 1, byrow = FALSE)
 
 \footnotesize
 
-Les cases grises représentent des valeurs manquantes. 
-
-???
-
-Figure adaptée de Figure 4.1 de van Buuren (2022)
+Les cases grises représentent des valeurs manquantes. Illustration adapté de la Figure 4.1 de van Buuren (2022)
 
 # Analyse des cas complet
 
@@ -596,7 +592,7 @@ knitr::kable(fit_df,
 
 # Récapitulatif
 
-L'imputation multiple est préférée à l'imputation simple car elle permetd'estimer l'incertitude sous-jacente en raison des données manquantes.
+L'imputation multiple est préférée à l'imputation simple car elle permet d'estimer l'incertitude sous-jacente en raison des données manquantes.
 
 - On procède à l'imputation plusieurs fois (avec un modèle conditionel, prédictions différentes chaque fois)
 - on crée plusieurs copies

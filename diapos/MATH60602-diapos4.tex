@@ -221,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners, breakable, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Modèles prédictifs}
 \protect\hypertarget{moduxe8les-pruxe9dictifs}{}
@@ -590,7 +590,7 @@ linéaires.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(polynome, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\NormalTok{k }\OtherTok{\textless{}{-}}\NormalTok{ 4L}
+\NormalTok{k }\OtherTok{\textless{}{-}}\NormalTok{ 4L }\CommentTok{\# degré du polynôme}
 \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =}\NormalTok{ k), }
    \AttributeTok{data =}\NormalTok{ polynome)}
 \end{Highlighting}
@@ -942,7 +942,7 @@ plutôt
 \begin{itemize}
 \tightlist
 \item
-  calculer l'erreur moyenne quadratique de chaque pli, disons
+  calculer l'erreur quadratique moyenne de chaque pli, disons
   \(\widehat{\mathsf{EQM}}_{\text{VC}, k}\)
 \item
   si \(K\) est suffisamment grand (disons \(K>10\)), on peut estimer

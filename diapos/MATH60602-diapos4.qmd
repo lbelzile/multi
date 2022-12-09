@@ -273,7 +273,7 @@ On vise à estimer l'ordre du polynôme en effectuant des régressions linéaire
 
 ```{r, eval = FALSE, echo = TRUE}
 data(polynome, package = "hecmulti")
-k <- 4L
+k <- 4L # degré du polynôme
 lm(y ~ poly(x, degree = k), 
    data = polynome)
 ```
@@ -667,7 +667,7 @@ Soit $\widehat{\mathsf{EQM}}_{\text{VC}}$ l'estimation de l'erreur quadratique m
 
 Si on a un nombre similaire d'observations dans chaque groupe, on peut plutôt
 
-- calculer l'erreur moyenne quadratique de chaque pli, disons $\widehat{\mathsf{EQM}}_{\text{VC}, k}$
+- calculer l'erreur quadratique moyenne de chaque pli, disons $\widehat{\mathsf{EQM}}_{\text{VC}, k}$
 - si $K$ est suffisamment grand (disons $K>10$), on peut estimer l'écart-type empirique de cette moyenne via
 $$ \mathsf{sd}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \frac{1}{K-1} \sum_{k=1}^{K} (\widehat{\mathsf{EQM}}_{\text{VC}, k}-\widehat{\mathsf{EQM}}_{\text{VC}})^2$$
 
