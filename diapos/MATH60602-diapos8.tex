@@ -221,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, interior hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, frame hidden, boxrule=0pt, sharp corners, interior hidden, breakable, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Sélection de variables en régression logistique}
 \protect\hypertarget{suxe9lection-de-variables-en-ruxe9gression-logistique}{}
@@ -483,7 +483,8 @@ multinomial logistique.
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Modèle multinomial}
 \NormalTok{multi1 }\OtherTok{\textless{}{-}}\NormalTok{ nnet}\SpecialCharTok{::}\FunctionTok{multinom}\NormalTok{(}
-\NormalTok{  catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ revenu }\SpecialCharTok{+}\NormalTok{ educ }\SpecialCharTok{+}\NormalTok{ affiliation, }
+\NormalTok{  catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ revenu }\SpecialCharTok{+} 
+\NormalTok{    educ }\SpecialCharTok{+}\NormalTok{ affiliation, }
   \AttributeTok{data =}\NormalTok{ vote,       }\CommentTok{\# base de données}
   \AttributeTok{subset =}\NormalTok{ age }\SpecialCharTok{\textgreater{}} \DecValTok{30}\NormalTok{, }\CommentTok{\# sous{-}ensemble des données}
   \AttributeTok{weights =}\NormalTok{ poids,   }\CommentTok{\# poids de sondage}
@@ -638,29 +639,19 @@ un facteur dont les niveaux sont ordonnés en ordre croissant.
 
 \begin{frame}{Notation du modèle}
 \protect\hypertarget{notation-du-moduxe8le}{}
-La survie \(S_{ij}\) est la probabilité que \(Y_i\) soit plus grand ou
-égal à \(j\), \begin{align*}
-S_{ij}=\sum_{k=j}^K p_{ik}= \Pr(Y_{i} \ge j \mid \mathbf{X}_{i}), \qquad j=2, \ldots, K.
-\end{align*}
-
-\begin{itemize}
-\tightlist
-\item
-  La survie est une fonction décroissante
-\item
-  \(S_{i1}=1\) et
-\item
-  \(S_{iK} = \Pr(Y_i=K \mid \mathbf{X}_{i})=p_{iK}\).
-\end{itemize}
+Soit \(p_1, \ldots, p_K\) les probabilités associées aux événements
+\(Y=1, \ldots, Y=K\). On définit les points de coupure pour les \(K\)
+classes, \[ -\infty = \zeta_0 < \zeta_1 < \cdots < \zeta_K = \infty.\]
+Il y a \(K-1\) paramètres \(\zeta\) à déduire pour identifier les
+probabilités puisque \(p_1 + \cdots + p_K=1\).
 \end{frame}
 
 \begin{frame}{Formulation du modèle}
 \protect\hypertarget{formulation-du-moduxe8le}{}
-Le modèle logistique cumulé spécifie que \begin{align*}
-\ln \left(\frac{S_{ij}}{1-S_{ij}}\right) = \beta_{0j} + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}, \quad \qquad  j=2, \ldots, K.
+Le modèle logistique à cote proportionnelle spécifie \(K-1\) équations
+logistiques; pour \(k=1, \ldots, K-1\), \begin{align*}
+\ln \left(\frac{\Pr(Y_i> k\mid \mathbf{X}_i)}{\Pr(Y_i \le k\mid \mathbf{X}_i)}\right) = -\zeta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}.
 \end{align*}
-
-Il y a donc \(K-1\) équations logistiques.
 
 \begin{itemize}
 \tightlist
@@ -669,22 +660,21 @@ Il y a donc \(K-1\) équations logistiques.
   \(\beta_1, \ldots, \beta_p\) sont les \textbf{mêmes} pour chacune des
   log-cotes
 \item
-  mais il y a une ordonnée à l'origine différente par rapport de cote.
+  mais il y a une ordonnée à l'origine différente par rapport de cote,
+  \(-\zeta_k\).
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Interprétation des paramètres}
 \protect\hypertarget{interpruxe9tation-des-paramuxe8tres}{}
-On considère la cote de \(S_{ij}\) (versus \(1-S_{ij}\)), qui mesure à
-quel point il est plus probable que \(Y_i\) prenne une valeur supérieure
-ou égale à \(j\) par rapport à une valeur inférieure à \(j\), avec
-\begin{align*}
-\frac{\Pr(Y_i \geq j \mid \mathbf{X}_i)}{\Pr(Y_i < j \mid \mathbf{X}_i)} = \frac{S_{ij}}{1-S_{ij}} = \exp( \beta_{0j} + \beta_1\mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}).
-\end{align*}
+On considère la cote de \(\Pr(Y_i> k\mid \mathbf{X}_i)\) versus
+\(\Pr(Y_i \le k\mid \mathbf{X}_i)\), qui mesure à quel point il est plus
+probable que \(Y_i\) prenne une valeur supérieure à \(k\) par rapport à
+une valeur inférieure ou égale à \(k\), avec
 
-Pour chaque augmentation d'une unité de \(\mathrm{X}_j\), la cote
-\(S_k\) versus \((1-S_k)\) est multipliée par \(\exp(\beta_j)\), peu
-importe la valeur de \(Y\).
+Pour chaque augmentation d'une unité de \(\mathrm{X}_j\), cette cote est
+multipliée par \(\exp(\beta_j)\), peu importe la valeur de \(Y\)
+(\textbf{cote proportionnelle}).
 \end{frame}
 
 \begin{frame}{Interprétation des coefficients}
@@ -707,8 +697,8 @@ cst [occasionnellement|toujours] & 0.865 & 0.041\\
 \end{tabular}
 \end{table}
 
-Les hommes de plus de 30 ans sont plus susceptibles de voter fréquemment
-que les femmes.
+Les hommes de plus de 30 ans sont moins susceptibles de voter
+fréquemment que les femmes.
 
 La cote catégorie plus fréquente de vote (vs moins fréquente) pour les
 hommes est \(\exp(-0.166)=0.847\) fois celle des femmes, soit une
@@ -749,14 +739,59 @@ explicative.
 \CommentTok{\# Tableau des coefficients }
 \CommentTok{\# Coefficients (variables explicatives)}
 \FunctionTok{coef}\NormalTok{(multi2a)}
-\CommentTok{\# Ordonnées à l\textquotesingle{}origine:}
+\CommentTok{\# Négatif de l\textquotesingle{}ordonnée à l\textquotesingle{}origine:}
 \NormalTok{multi2a}\SpecialCharTok{$}\NormalTok{zeta}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
 
-\begin{frame}{Postulat de rapport de cote constant}
-\protect\hypertarget{postulat-de-rapport-de-cote-constant}{}
+\begin{frame}{Coefficients pour l'ordonnée à l'origine}
+\protect\hypertarget{coefficients-pour-lordonnuxe9e-uxe0-lorigine}{}
+Si on écrit les équations pour la cote, on obtient \begin{align*}
+\frac{\Pr(Y = \texttt{rarement} \mid \texttt{sexe})}{\Pr(Y \geq \texttt{occasionnellement} \mid \texttt{sexe})} &= \exp(-0.166\texttt{sexe} + 1.297) \\ 
+\frac{\Pr(Y \leq \texttt{occasionnellement} \mid \texttt{sexe})}{\Pr(Y = \texttt{toujours} \mid \texttt{sexe})} &= \exp(-0.166\texttt{sexe} - 0.865).
+\end{align*}
+\end{frame}
+
+\begin{frame}{Probabilités prédites}
+\protect\hypertarget{probabilituxe9s-pruxe9dites}{}
+En terme de probabilité cumulée d'excéder \(k\), \begin{align*}
+\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \qquad k=1, \ldots, K-1.
+\end{align*} En utilisant ces expressions, on peut obtenir la
+probabilité de chaque catégorie, \begin{align*}
+&\Pr(Y_i = k \mid \mathbf{X}_{i}) =\Pr(Y_i > k \mid \mathbf{X}_{i}) - \Pr(Y_i > k-1 \mid \mathbf{X}_{i}).
+\end{align*}
+\end{frame}
+
+\begin{frame}[fragile]{Prédictions}
+\protect\hypertarget{pruxe9dictions-1}{}
+\begin{itemize}
+\tightlist
+\item
+  Soit \(p_1 = \Pr(Y = \texttt{rarement/jamais} \mid \texttt{femme})\),
+  etc.
+\item
+  On a \(\mathrm{expit}(\zeta_k)\) (\(k=0, \ldots, K\)) qui donne \(0\),
+  \(0.215\), \(0.704\) et \(1\).
+\item
+  Les différences donnent \(\widehat{p}_1 = 0.215\),
+  \(\widehat{p}_2 = 0.489\) et \(\widehat{p}_3 = 0.296\).
+\item
+  Un rapide calcul numérique montre que c'est bien ce que retourne les
+  prédictions.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{predict}\NormalTok{(multi2a, }
+        \AttributeTok{newdata =} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{sexe =} \FunctionTok{factor}\NormalTok{(}\StringTok{"femme"}\NormalTok{)), }
+        \AttributeTok{type =} \StringTok{"probs"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Postulat de rapport de cote proportionnel}
+\protect\hypertarget{postulat-de-rapport-de-cote-proportionnel}{}
 Une des hypothèses de ce modèle est que les effets des variables
 explicatives sont les mêmes pour chaque équation.
 

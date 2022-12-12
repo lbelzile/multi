@@ -287,7 +287,8 @@ data(vote, package = "hecmulti")
 levels(vote$catvote)
 # Modèle multinomial
 multi1 <- nnet::multinom(
-  catvote ~ age + sexe + race + revenu + educ + affiliation, 
+  catvote ~ age + sexe + race + revenu + 
+    educ + affiliation, 
   data = vote,       # base de données
   subset = age > 30, # sous-ensemble des données
   weights = poids,   # poids de sondage
@@ -395,36 +396,27 @@ class(hecmulti::vote$catvote)
 
 # Notation du modèle
 
-La survie $S_{ij}$ est la probabilité que $Y_i$ soit plus grand ou égal à $j$,
+Soit $p_1, \ldots, p_K$ les probabilités associées aux événements $Y=1, \ldots, Y=K$.
+On définit les points de coupure pour les $K$ classes,
+$$ -\infty = \zeta_0 < \zeta_1 < \cdots < \zeta_K = \infty.$$
+Il y a $K-1$ paramètres $\zeta$ à déduire pour identifier les probabilités puisque $p_1 + \cdots + p_K=1$.
+
+#  Formulation du modèle
+
+Le modèle logistique à cote proportionnelle spécifie $K-1$ équations logistiques; pour $k=1, \ldots, K-1$,
 \begin{align*}
-S_{ij}=\sum_{k=j}^K p_{ik}= \Pr(Y_{i} \ge j \mid \mathbf{X}_{i}), \qquad j=2, \ldots, K.
+\ln \left(\frac{\Pr(Y_i> k\mid \mathbf{X}_i)}{\Pr(Y_i \le k\mid \mathbf{X}_i)}\right) = -\zeta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}.
 \end{align*}
-
-- La survie est une fonction décroissante
-- $S_{i1}=1$ et
-- $S_{iK} = \Pr(Y_i=K \mid \mathbf{X}_{i})=p_{iK}$.
-
-# Formulation du modèle
-
-Le modèle logistique cumulé spécifie que 
-\begin{align*}
-\ln \left(\frac{S_{ij}}{1-S_{ij}}\right) = \beta_{0j} + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}, \quad \qquad  j=2, \ldots, K.
-\end{align*}
-
-Il y a donc $K-1$ équations logistiques. 
 
 - Les paramètres associés aux variables explicatives, $\beta_1, \ldots, \beta_p$ sont les **mêmes** pour chacune des log-cotes
-- mais il y a une ordonnée à l'origine différente par rapport de cote. 
+- mais il y a une ordonnée à l'origine différente par rapport de cote, $-\zeta_k$. 
 
 
 # Interprétation des paramètres
 
-On considère la cote de $S_{ij}$ (versus $1-S_{ij}$), qui mesure à quel point il est plus probable que $Y_i$ prenne une valeur supérieure ou égale à $j$ par rapport à une valeur inférieure à $j$, avec
-\begin{align*}
-\frac{\Pr(Y_i \geq j \mid \mathbf{X}_i)}{\Pr(Y_i < j \mid \mathbf{X}_i)} = \frac{S_{ij}}{1-S_{ij}} = \exp( \beta_{0j} + \beta_1\mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}).
-\end{align*}
+On considère la cote de $\Pr(Y_i> k\mid \mathbf{X}_i)$ versus $\Pr(Y_i \le k\mid \mathbf{X}_i)$, qui mesure à quel point il est plus probable que $Y_i$ prenne une valeur supérieure à $k$ par rapport à une valeur inférieure ou égale à $k$, avec
 
-Pour chaque augmentation d'une unité de $\mathrm{X}_j$, la cote $S_k$ versus $(1-S_k)$ est multipliée par $\exp(\beta_j)$, peu importe la valeur de $Y$. 
+Pour chaque augmentation d'une unité de $\mathrm{X}_j$, cette cote est multipliée par $\exp(\beta_j)$, peu importe la valeur de $Y$ (**cote proportionnelle**). 
 
 # Interprétation des coefficients
 
@@ -462,7 +454,7 @@ kableExtra::kbl(tabcoef,
 pval_lrt_multi2a_drop1 <- sprintf(round(drop1(multi2a, test = "Chisq")[2,4],3), fmt = "%.3f")
 ```
 
-Les hommes de plus de 30 ans sont plus susceptibles de voter fréquemment que les femmes. 
+Les hommes de plus de 30 ans sont moins susceptibles de voter fréquemment que les femmes. 
 
 La cote catégorie plus fréquente de vote (vs moins fréquente) pour les hommes est $\exp(`r sprintf(round(as.numeric(coef(multi2a)),3), fmt = "%.3f")`)=`r sprintf(round(exp(as.numeric(coef(multi2a))),3), fmt = "%.3f")`$ fois celle des femmes, soit une diminution de $`r round(100*(1-exp(as.numeric(coef(multi2a)))), 1)`\%$ de la cote.
 
@@ -501,6 +493,7 @@ multi2a <- MASS::polr(
   weights = poids,
   method = "logistic", 
   Hess = TRUE)
+expit <- function(x){ exp(x)/(1+exp(x))}
 ```
 
 
@@ -520,11 +513,47 @@ AIC(multi2a); BIC(multi2a)
 # Tableau des coefficients 
 # Coefficients (variables explicatives)
 coef(multi2a)
-# Ordonnées à l'origine:
+# Négatif de l'ordonnée à l'origine:
 multi2a$zeta
 ```
 
-# Postulat de rapport de cote constant
+# Coefficients pour l'ordonnée à l'origine
+
+
+Si on écrit les équations pour la cote, on obtient
+\begin{align*}
+\frac{\Pr(Y = \texttt{rarement} \mid \texttt{sexe})}{\Pr(Y \geq \texttt{occasionnellement} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[1] < 0, "+","-"), round(abs(multi2a$zeta[1]), 3))`) \\ 
+\frac{\Pr(Y \leq \texttt{occasionnellement} \mid \texttt{sexe})}{\Pr(Y = \texttt{toujours} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[2] < 0, "+","-"), round(abs(multi2a$zeta[2]), 3))`).
+\end{align*}
+
+# Probabilités prédites
+
+En terme de probabilité cumulée d'excéder $k$,
+\begin{align*}
+\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \qquad k=1, \ldots, K-1.
+\end{align*}
+En utilisant ces expressions, on peut obtenir la probabilité de chaque catégorie,
+\begin{align*}
+&\Pr(Y_i = k \mid \mathbf{X}_{i}) =\Pr(Y_i > k \mid \mathbf{X}_{i}) - \Pr(Y_i > k-1 \mid \mathbf{X}_{i}).
+\end{align*}
+
+# Prédictions
+
+- Soit $p_1 = \Pr(Y = \texttt{rarement/jamais} \mid \texttt{femme})$, etc. 
+- On a $\mathrm{expit}(\zeta_k)$ ($k=0, \ldots, K$) qui donne $0$, $`r round(expit(multi2a$zeta)[1], 3)`$, $`r round(expit(multi2a$zeta)[2], 3)`$ et $1$.
+- Les différences donnent $\widehat{p}_1 = `r round(expit(multi2a$zeta)[1], 3)`$, $\widehat{p}_2 = `r round(expit(multi2a$zeta)[2]-expit(multi2a$zeta)[1], 3)`$ et $\widehat{p}_3 = `r round(1-expit(multi2a$zeta)[2], 3)`$. 
+- Un rapide calcul numérique montre que c'est bien ce que retourne les prédictions.
+
+```{r}
+#| eval: false
+#| echo: true
+predict(multi2a, 
+        newdata = data.frame(sexe = factor("femme")), 
+        type = "probs")
+```
+
+
+# Postulat de rapport de cote proportionnel
 
 Une des hypothèses de ce modèle est que les effets des variables explicatives sont les mêmes pour chaque équation. 
 
