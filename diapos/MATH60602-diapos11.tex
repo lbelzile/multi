@@ -235,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, breakable, enhanced, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}, sharp corners, interior hidden, enhanced, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -480,8 +480,9 @@ On se concentre sur les personnes qui ont fait plusieurs dons.
   Choisir les hyperparamètres de l'algorithme (nombre de regroupements,
   rayon, etc.) et la mesure de dissemblance.
 \item
-  Assigner les étiquettes aux observations et calculer un prototype de
-  groupe.
+  Étiqueter les observations.
+\item
+  Obtenir le prototype de chaque groupe.
 \item
   Valider la qualité de la segmentation.
 \item
@@ -720,9 +721,11 @@ minimiser la distance avec les prototypes.
 Probablement la méthode de regroupement la plus populaire en raison de
 son faible coût (linéaire en \(n\) et \(p\)).
 
-La fonction objective considère la distance totale entre observations et
-prototypes \begin{equation}\protect\hypertarget{eq-fobjKmoy}{}{
-\mathsf{SCD}_K = \min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
+La fonction objective considère la distance totale entre les
+observations et les prototypes.
+
+\begin{equation}\protect\hypertarget{eq-fobjKmoy}{}{
+\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
 }\label{eq-fobjKmoy}\end{equation}
 
 L'allocation optimale de \(n\) observations à \(K\) groupes est un
@@ -754,8 +757,9 @@ L'algorithme de type EM itère entre deux étapes:
   observation et les prototypes; assigner chaque observation au
   prototype le plus près.
 \item
-  \textbf{Mise à jour} (étape M): calculer les nouveaux prototypes de
-  chaque groupe.
+  \textbf{Mise à jour} (étape M): calculer les coordonnées optimales des
+  prototypes de chaque groupe (avec la distance Euclidienne, c'est le
+  barycentre des observations du groupe).
 \end{enumerate}
 
 L'algorithme termine après un nombre prédéfini d'itérations ou lorsque
@@ -861,20 +865,28 @@ Autrement, optimisation nécessaire dans l'étape \(M\) de l'algorithme.
 
 \begin{frame}{Initialisation}
 \protect\hypertarget{initialisation}{}
-Choisir aléatoirement \(K\) observations dans la base de données.
+\footnotesize
 
-Répéter plusieurs fois et prendre la segmentation avec la valeur
-optimale de la fonction objective.
+\begin{itemize}
+\tightlist
+\item
+  Choisir aléatoirement \(K\) observations dans la base de données.
+\item
+  Répéter plusieurs fois
+\item
+  Prendre la meilleure segmentation du lot (celle avec la valeur
+  optimale de la fonction objective).
+\end{itemize}
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/fig-kmoyenne-mauvais-1.pdf}
+{\centering \includegraphics[width=0.65\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/fig-kmoyenne-mauvais-1.pdf}
 
 }
 
-\caption{\label{fig-kmoyenne-mauvais}Résultat d'une analyse de
-regroupement avec \(K=3\) groupes avec une mauvaise initialisation
-principale (gauche) et une bonne initialisation (droite).}
+\caption{\label{fig-kmoyenne-mauvais}Regroupements pour \(K=3\) groupes
+avec une mauvaise initialisation principale (gauche) et une bonne
+initialisation (droite).}
 
 \end{figure}
 \end{frame}
@@ -980,7 +992,7 @@ euclidienne représente la somme du carré des distances (SCD)
 \begin{align*}
 \mathsf{SCD}_K &= \mathsf{SCD}_{1,K} + \cdots + \mathsf{SCD}_{K,K};
 \intertext{où}
-\mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|_2,
+\mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|^2_2,
 \end{align*} est la somme des distance \(l_2\) entre les observation du
 groupe \(G_k\) et leur barycentre \(\boldsymbol{\mu}_k\).
 

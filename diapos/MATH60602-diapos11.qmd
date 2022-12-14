@@ -237,9 +237,10 @@ corrplot::corrplot(cor(donsmult))
 1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
 2. Décider quel méthode sera utilisée pour la segmentation.
 3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissemblance.
-4. Assigner les étiquettes aux observations et calculer un prototype de groupe. 
-5. Valider la qualité de la segmentation.
-6. Interpréter les regroupements obtenus à partir des prototypes.
+4. Étiqueter les observations.
+5. Obtenir le prototype de chaque groupe. 
+6. Valider la qualité de la segmentation.
+7. Interpréter les regroupements obtenus à partir des prototypes.
 
 
 # Exemple: typologie des votants en France
@@ -390,9 +391,10 @@ On cherche à assigner les observations aux groupes de manière à minimiser la 
 
 Probablement la méthode de regroupement la plus populaire en raison de son faible coût (linéaire en $n$ et $p$).
 
-La fonction objective considère la distance totale entre observations et prototypes
+La fonction objective considère la distance totale entre les observations et les prototypes. 
+
 $$
-\mathsf{SCD}_K = \min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
+\min_{\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_K}\underset{\text{distance entre obs. $i$ et son prototype} \mu_j}{\sum_{i=1}^n \min_{c_i \in \{1, \ldots, K\}} d(\mathbf{X}_i,  \boldsymbol{\mu}_{c_i})}
 $$ {#eq-fobjKmoy}
 
 
@@ -411,7 +413,8 @@ L'allocation optimale de $n$ observations à $K$ groupes est un problème NP com
 L'algorithme de type EM itère entre deux étapes:
 
 1. **Assignation** (étape E): calculer la distance entre chaque observation et les prototypes; assigner chaque observation au prototype le plus près.
-2. **Mise à jour** (étape M): calculer les nouveaux prototypes de chaque groupe.
+2. **Mise à jour** (étape M): calculer les coordonnées optimales des prototypes de chaque groupe
+  (avec la distance Euclidienne, c'est le barycentre des observations du groupe).
 
 
 
@@ -574,9 +577,11 @@ Autrement, optimisation nécessaire dans l'étape $M$ de l'algorithme.
 
 # Initialisation
 
-Choisir aléatoirement $K$ observations dans la base de données. 
+\footnotesize 
 
-Répéter plusieurs fois et prendre la segmentation avec la valeur optimale de la fonction objective.
+- Choisir aléatoirement $K$ observations dans la base de données. 
+- Répéter plusieurs fois
+- Prendre la meilleure segmentation du lot (celle avec la valeur optimale de la fonction objective).
 
 
 
@@ -584,7 +589,8 @@ Répéter plusieurs fois et prendre la segmentation avec la valeur optimale de l
 #| label: fig-kmoyenne-mauvais
 #| echo: false
 #| eval: true
-#| fig.cap: "Résultat d'une analyse de regroupement avec $K=3$ groupes avec une mauvaise initialisation principale (gauche) et une bonne initialisation (droite)."
+#| fig.cap: "Regroupements pour $K=3$ groupes avec une mauvaise initialisation principale (gauche) et une bonne initialisation (droite)."
+#| out-width: '65%'
 set.seed(1234)
 set1 <- mvtnorm::rmvnorm(n = 300, c(14,12), matrix(c(4,0.5,0.5,5),2))
 set2 <- mvtnorm::rmvnorm(n = 300, c(5.5,-1), matrix(c(1,0.5,0.5,6),2))
@@ -694,7 +700,7 @@ La fonction objective de l'@eq-fobjKmoy avec la distance euclidienne représente
 \begin{align*}
 \mathsf{SCD}_K &= \mathsf{SCD}_{1,K} + \cdots + \mathsf{SCD}_{K,K};
 \intertext{où}
-\mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|_2,
+\mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|^2_2,
 \end{align*}
 est la somme des distance $l_2$ entre les observation du groupe $G_k$ et leur barycentre $\boldsymbol{\mu}_k$.
 

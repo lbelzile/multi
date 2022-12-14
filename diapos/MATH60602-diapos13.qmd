@@ -442,7 +442,7 @@ puzle <- mice::md.pattern(hecmulti::manquantes[,1:6],
 
 # Imputation multiple
 
-Valides pour les données manquantes de manière (complètement) aléatoires.
+Valides pour les données manquantes de manière aléatoire et complètement aléatoires (MAR et MCAR).
 
 1. Procéder à plusieurs imputations **aléatoires** pour obtenir un échantillon complet (`mice`)
 2. Ajuster le modèle d'intérêt avec chaque échantillon (`with`). 3. Combiner les résultats obtenus (`pool` et `summary`)

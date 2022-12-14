@@ -396,10 +396,10 @@ class(hecmulti::vote$catvote)
 
 # Notation du modèle
 
-Soit $p_1, \ldots, p_K$ les probabilités associées aux événements $Y=1, \ldots, Y=K$.
-On définit les points de coupure pour les $K$ classes,
+- Soit $p_1, \ldots, p_K$ les probabilités associées aux événements $Y=1, \ldots$
+- On définit les points de coupure pour les $K$ classes,
 $$ -\infty = \zeta_0 < \zeta_1 < \cdots < \zeta_K = \infty.$$
-Il y a $K-1$ paramètres $\zeta$ à déduire pour identifier les probabilités puisque $p_1 + \cdots + p_K=1$.
+- Il y a $K-1$ paramètres $\zeta$ à déduire pour identifier les probabilités puisque $p_1 + \cdots + p_K=1$.
 
 #  Formulation du modèle
 
@@ -530,7 +530,7 @@ Si on écrit les équations pour la cote, on obtient
 
 En terme de probabilité cumulée d'excéder $k$,
 \begin{align*}
-\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \qquad k=1, \ldots, K-1.
+\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \quad k=1, \ldots, K-1.
 \end{align*}
 En utilisant ces expressions, on peut obtenir la probabilité de chaque catégorie,
 \begin{align*}

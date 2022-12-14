@@ -221,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, frame hidden, boxrule=0pt, sharp corners, interior hidden, breakable, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, breakable, borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Sélection de variables en régression logistique}
 \protect\hypertarget{suxe9lection-de-variables-en-ruxe9gression-logistique}{}
@@ -639,11 +639,18 @@ un facteur dont les niveaux sont ordonnés en ordre croissant.
 
 \begin{frame}{Notation du modèle}
 \protect\hypertarget{notation-du-moduxe8le}{}
-Soit \(p_1, \ldots, p_K\) les probabilités associées aux événements
-\(Y=1, \ldots, Y=K\). On définit les points de coupure pour les \(K\)
-classes, \[ -\infty = \zeta_0 < \zeta_1 < \cdots < \zeta_K = \infty.\]
-Il y a \(K-1\) paramètres \(\zeta\) à déduire pour identifier les
-probabilités puisque \(p_1 + \cdots + p_K=1\).
+\begin{itemize}
+\tightlist
+\item
+  Soit \(p_1, \ldots, p_K\) les probabilités associées aux événements
+  \(Y=1, \ldots\)
+\item
+  On définit les points de coupure pour les \(K\) classes,
+  \[ -\infty = \zeta_0 < \zeta_1 < \cdots < \zeta_K = \infty.\]
+\item
+  Il y a \(K-1\) paramètres \(\zeta\) à déduire pour identifier les
+  probabilités puisque \(p_1 + \cdots + p_K=1\).
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Formulation du modèle}
@@ -756,7 +763,7 @@ Si on écrit les équations pour la cote, on obtient \begin{align*}
 \begin{frame}{Probabilités prédites}
 \protect\hypertarget{probabilituxe9s-pruxe9dites}{}
 En terme de probabilité cumulée d'excéder \(k\), \begin{align*}
-\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \qquad k=1, \ldots, K-1.
+\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \quad k=1, \ldots, K-1.
 \end{align*} En utilisant ces expressions, on peut obtenir la
 probabilité de chaque catégorie, \begin{align*}
 &\Pr(Y_i = k \mid \mathbf{X}_{i}) =\Pr(Y_i > k \mid \mathbf{X}_{i}) - \Pr(Y_i > k-1 \mid \mathbf{X}_{i}).
