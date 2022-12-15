@@ -394,7 +394,7 @@ On peut ordonner les type d'emploi selon la probabilité de succès à l'aide de
 
 # Invariance
 
-Si on voulait le rapport de cote employé vs professionnel, inutile de réajuster le modèle.
+Si on voulait le rapport de cote professionnel vs employé, inutile de réajuster le modèle.
 
 On peut calculer 
 
@@ -402,7 +402,7 @@ $$
 \dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
 $$
 
-Plutôt que de changer la catégorie de référence via
+plutôt que de changer la catégorie de référence via
 
 ```{r}
 #| eval: false

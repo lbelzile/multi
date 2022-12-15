@@ -220,12 +220,12 @@
 \title{Régression logistique}
 \subtitle{Analyse multidimensionnelle appliquée}
 \author{Léo Belzile}
-\date{automne 2022}
+\date{1/1/22}
 \institute{HEC Montréal}
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, interior hidden, enhanced, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, interior hidden, frame hidden, boxrule=0pt, sharp corners, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{\emph{Professional Rodeo Cowboys Association}}
 \protect\hypertarget{cowboy}{}
@@ -698,7 +698,7 @@ l'aide des coefficients: \emph{ceteris paribus} on obtient le classement
 
 \begin{frame}[fragile]{Invariance}
 \protect\hypertarget{invariance}{}
-Si on voulait le rapport de cote employé vs professionnel, inutile de
+Si on voulait le rapport de cote professionnel vs employé, inutile de
 réajuster le modèle.
 
 On peut calculer
@@ -707,7 +707,7 @@ On peut calculer
 \dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
 \]
 
-Plutôt que de changer la catégorie de référence via
+plutôt que de changer la catégorie de référence via
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
