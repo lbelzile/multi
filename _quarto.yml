@@ -164,6 +164,12 @@ website:
       Fabriqué avec {{< fa brands r-project >}} et [Quarto](https://quarto.org/)<br>
       [Code source sur {{< fa brands github >}} GitHub]({{< var course.github >}})
 
+preview:
+  port: 6200
+  browser: true
+  watch-inputs: true
+  navigate: true
+
 format:
   html:
     theme:

@@ -1189,6 +1189,8 @@ gapminder |>
 ---
 
 ```{r echo=FALSE}
+# devtools::install_github("rstudio/EDAWR")
+# data(pollution, package = "EDAWR")
 pollution <- tribble(
   ~city, ~particle_size, ~amount,
   "New York", "Large", 23,
