@@ -1,30 +1,30 @@
 ---
-title: "Régression logistique"
+title: "Régression multinomiale"
 ---
 
 ## Contenu
 
-- Classification
-- Matrice de gain et point de coupure
-- Mesures de la qualité de la classification: gain, fonction d'efficacité du récepteur, courbe lift
+- Méthodes d'imputation pour données manquantes
+- Modèles de régression pour données multinomiales
 
 
 ## Lecture
 
-
-- {{< fa book >}} [Chapitre 5 (Régression logistique)](https://lbelzile.github.io/math60602/05-reglogistique.html), Section 5.3
+- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html), Sections 2 et 3
+- {{< fa book >}} [Chapitre sur la régression logistique](https://lbelzile.github.io/math60602/reglogistique.html), Section 4
 
 ## Diapositives 
 
 - {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos7.pdf)
 - {{< fa code >}} [Code](/code/MATH60602-diapos7.R)
 
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
-
 ## Objectifs d'apprentissage
 
-- Être capable de calculer la spécificité, la sensibilité, etc. d'une classification.
-- Déterminer la qualité d'un modèle de classification à l'aide de diagnostics graphiques.
+- Pouvoir utiliser l'imputation multiple avec les modèles de régression
+- À l'aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification
+- Être en mesure d'expliquer le ciblage et d'offrir des stratégies pour la prédiction.
+- Être capable d'interpréter les coefficients d'un modèle multinomial logistique ou d'un modèle cumulatif à cotes proportionnelles
+- Pouvoir effectuer un test du postulat de cotes proportionnelles
+- Être en mesure de calculer les prédictions d'un modèle multinomial logistique simple
+
 

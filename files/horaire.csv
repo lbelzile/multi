@@ -1,21 +1,17 @@
 group,subgroup,date,date_end,title,deadline,content,exercice,evaluations
-Contenu,Session 1,2022-08-29,2022-09-01,Introduction et analyse exploratoire,,contenu/01-contenu,,
-Contenu,Session 2,2022-09-08,2022-09-12,Programmation,,contenu/02-contenu,exercices/01-exercice,
-Contenu,Session 3,2022-09-15,2022-09-19,Réduction de la dimension,,contenu/03-contenu,exercices/02-exercice,
-Contenu,Session 3,2022-09-25,,Devoir 1,23:55,,,evaluations/01-devoir
-Contenu,Session 4,2022-09-22,2022-09-26,Sélection de variables,,contenu/04-contenu,exercices/03-exercice,
-Contenu,Session 5,2022-09-29,2022-10-05,Sélection de variables,,contenu/05-contenu,,
-Contenu,Session 5,2022-10-05,,Devoir 2,23:55,,,evaluations/02-devoir
-Contenu,Session 6,2022-10-06,2022-10-11,Régression logistique : bases,,contenu/06-contenu,,
-Contenu,Session 7,2022-10-13,2022-10-17,Régression logistique : prédiction,,contenu/07-contenu,exercices/04-exercice,
-Contenu,Session 7,2022-10-23,,Devoir 3,23:55,,,evaluations/03-devoir
-Contenu,Relâche,2022-10-20,2022-10-26,Relâche,,,,
-Contenu,Session 8,2022-10-27,2022-10-31,Régression logistique: données multinomiales,,contenu/08-contenu,exercices/04-exercice,
-Contenu,Session 9,2022-11-03,2022-11-07,Analyse de survie,,contenu/09-contenu,exercices/05-exercice,
-Contenu,Session 9,2022-11-13,,Devoir 4,23:55,,,evaluations/04-devoir
-Contenu,Session 10,2022-11-10,2022-11-14,Analyse de survie,,contenu/10-contenu,,
-Contenu,Session 11,2022-11-17,2022-11-21,Analyse de regroupements,,contenu/11-contenu,,
-Contenu,Session 11,2022-11-27,,Devoir 5,23:55,,,evaluations/05-devoir
-Contenu,Session 12,2022-11-24,2022-11-28,Analyse de regroupements,,contenu/12-contenu,,
-Contenu,Session 13,2022-12-01,2022-12-05,Données manquantes et révision,,contenu/13-contenu,,
-Contenu,Session 13,2022-12-07,,Devoir 6,23:55,,,evaluations/06-devoir
+Contenu,Séance 1,2023-08-30,2023-08-31,Introduction et analyse exploratoire,,contenu/01-contenu,,
+Contenu,Séance 2,2023-09-06,2023-09-07,Programmation,,contenu/02-contenu,exercices/01-exercice,
+Contenu,Séance 3,2023-09-13,2023-09-14,Sélection de variables,,contenu/03-contenu,,
+Contenu,Séance 4,2023-09-20,2023-09-21,Sélection de variables,,contenu/04-contenu,exercices/02-exercice,
+Contenu,Séance 5,2023-09-27,2023-09-28,Régression logistique : bases,,contenu/05-contenu,,
+Contenu,Séance 6,2023-10-04,2023-10-05,Régression logistique : prédiction et classification,,contenu/06-contenu,exercices/03-exercice,
+Contenu,Séance 7,2023-10-11,2023-10-12,Régression logistique: données multinomiales,,contenu/07-contenu,exercices/03-exercice,
+Contenu,Séance 7,2023-10-13,,Devoir 1,,,,evaluations/01-devoir
+Contenu,Relâche,2023-10-18,2023-10-24,Relâche,,,,
+Contenu,Examen,2023-10-25,2023-10-31,Examens intratrimestriels,,,,evaluations/intra
+Contenu,Séance 8,2023-11-01,2023-11-02,Analyse de survie,,contenu/08-contenu,exercices/04-exercice,
+Contenu,Séance 9,2023-11-08,2023-11-09,Analyse de survie,,contenu/09-contenu,exercices/04-exercice,
+Contenu,Séance 10,2023-11-15,2023-11-16,Réduction de la dimension,,contenu/10-contenu,exercices/05-exercice,
+Contenu,Séance 11,2023-11-22,2023-11-23,Analyse de regroupements,,contenu/11-contenu,,
+Contenu,Séance 12,2023-11-29,2023-11-30,Analyse de regroupements,,contenu/12-contenu,exercices/06-exercice,
+Contenu,Séance 12,2023-12-01,,Devoir 2,,,,evaluations/02-devoir

@@ -1,7 +1,7 @@
 ---
-title: "Analyse de survie"
+title: "Réduction de la dimension"
 subtitle: "Analyse multidimensionnelle appliquée"
-date: "automne 2022"
+date: ""
 author: "Léo Belzile"
 institute: "HEC Montréal"
 format: beamer
@@ -11,711 +11,690 @@ innertheme: Flip
 outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
-pdf-engine: lualatex
+pdf-engine: xelatex
 cache: true
-code-line-numbers: true
-fig-align: 'center'
-mainfont: "D-DIN"
-mathfont: 'Latin Modern Math'
-sansfont: 'Latin Modern Sans'
+mainfont: "VisbyCF-Medium"
 keep-tex: true
 include-in-header: 
       text: |
         \usepackage{tabu}
-        \usepackage{mathtools}
-        \usepackage{mathrsfs}
 ---
 
-# Modèle à risques proportionnels de Cox 
-```{r}
-#| label: setup06
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-# automatically create a bib database for R packages
-library(knitr)
-library(kableExtra)
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
-set.seed(1014)
-library(hecmulti)
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  cache = TRUE,
-  out.width = "80%",
-  fig.align = 'center',
-  fig.width = 8.5,
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-options(knitr.table.format = function() {
-  if (knitr::is_latex_output()) 
-    "latex" else "html"
-})
+# Réduction de la dimension
 
-options(dplyr.print_min = 6, dplyr.print_max = 6)
-options(knitr.graphics.auto_pdf = TRUE)
-options(scipen = 1, digits = 3)
-library(viridis)
-library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
-library(poorman, quietly = TRUE, warn.conflicts = FALSE)
-library(patchwork)
+On dispose de $p$ variables explicatives $X_1, \ldots, X_p$.
 
-safe_colorblind_palette <- MetBrewer::met.brewer("Hiroshige",10)
+Comment réduire ce nombre de variables en conservant le plus d'information possible?
 
-options(ggplot2.continuous.colour="viridis")
-options(ggplot2.continuous.fill = "viridis")
-scale_colour_discrete <- scale_color_manual(MetBrewer::met.brewer("Hiroshige",10))
-scale_fill_discrete <- scale_fill_manual(MetBrewer::met.brewer("Hiroshige",10))
-theme_set(theme_classic())
+---
+
+# Analyse en composantes principales
+
+-   maximiser la variabilité
+-   créer de nouvelles variables non corrélées les unes avec les autres.
+
+
+
+# Analyse factorielle exploratoire
+
+Utilisé principalement pour les questionnaires
+
+-   Trouver automatiquement des regroupements de variables
+-   Créer des variables résumées (moyenne de variables)
+
+---
+
+# Coefficient de corrélation linéaire
+
+-   Mesure la relation *linéaire* entre variables
+-   Valeur entre $-1 \leq r \leq 1$.
+-   Les points sont alignés (exactement) si $r=\pm 1$; le signe détermine l'orientation de la pente.
+
+---
+
+# Datasaurus
+
+![Datasaurus (13 jeux de données avec la même corrélation linéaire)](figures/DataSaurusDozen.pdf)
+
+# Exemple
+
+-   **Questions** sur une étude dans un magasin (200 répondants).
+-   Réponses: échelles de Likert allant de pas important (1) à très important (5)
+
+Pour vous, à quel point est-ce important
+
+```{=tex}
+\scalebox{0.8}{
+\begin{minipage}{\textwidth}
+```
+::: columns
+::: {.column width="45%"}
+1.  que le magasin offre de bons prix tous les jours?
+2.  que le magasin accepte les cartes de crédit majeures (Visa, Mastercard)?
+3.  que le magasin offre des produits de qualité?
+4.  que les vendeurs connaissent bien les produits?
+5.  qu'il y ait des ventes spéciales régulièrement?
+6.  que les marques connues soient disponibles?
+:::
+
+::: {.column width="45%"}
+7.  que le magasin ait sa propre carte de crédit?
+8.  que le service soit rapide?
+9.  qu'il y ait une vaste sélection de produits?
+10. que le magasin accepte le paiement par carte de débit?
+11. que le personnel soit courtois?
+12. que le magasin ait en stock les produits annoncés?
+:::
+:::
+
+```{=tex}
+\end{minipage}
+}
 ```
 
-Le **modèle à risques proportionnels de Cox** pour $\mathbf{X}$ au temps $t$ est
+# Objectif des composantes principales
+
+Typiquement utilisé à des fins
+
+- d'analyse exploratoire (visualisation) ou 
+- pour créer une variable réponse (par ex., le quotient intellectuel)
+
+Réduire la dimension en préservant le plus de variabilité possible.
+
+# Comment manger le plus de krill?
+
+::: {#fig-krill layout-ncol=2}
+
+![]("figures/whaleshark.png")
+
+![]("figures/krill.png")
+
+Illustrations d'Allison Horst (CC BY 4.0)
+
+:::
+
+
+
+# Composantes principales:
+
+-   Créer des nouvelles variables **non corrélées** appelées **composantes principales** et dénotées $C_1, \ldots, C_p$.
+-   Les composantes principales sont des combinaisons linéaires des variables originales. 
+
 \begin{align*}
-h(t; \mathbf{X}) = h_0(t)\exp(\beta_1\mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p),
+C_j &= \underset{\text{somme de poids fois variables explicatives}}{w_{j1} X_1 + w_{j2} X_2 + \cdots + w_{jp} X_p}, \qquad (j=1, \ldots, p),\\
+1 &= \underset{\text{poids standardisés}}{w_{j1}^2 + \cdots + w_{jp}^2}
 \end{align*}
-où $h_0(t)$ est la fonction de risque de base qui remplace l'ordonnée à l'origine.
 
-- Postulat de risques proportionnels: le rapport de risque pour deux observations ne varie pas en fonction du temps $t$.
 
-# Postulat de risques proportionnels
+# Maximiser la variabilité {.fragile}
+
+\begin{align*}
+\mathsf{Va}(C_1) \geq \cdots \geq \mathsf{Va}(C_p)
+\end{align*}
+et $\mathsf{Cor}(C_i, C_j)=0$ pour $i \neq j$.
+
+- L'ensemble de $k$ variables qui maximise la variance totale exprimée est $C_1, \ldots, C_k$.
+-   Par construction, la variance des composantes principales est décroissante.
 
 ```{r}
-#| eval: true
+#| label: tbl-eigenvalues
 #| echo: false
-#| label: fig-risquepropfig
+#| tbl-align: 'center'
+#| tbl-cap: "Variance des premières composantes principales"
+data(factor, package = "hecmulti")
+acp <- princomp(factor, cor = TRUE)
+# aussi fonction 'prcomp'
+
+acp_var <- t(formatC(round(acp$sdev^2,3), digits = 2,
+                          format = "f")
+                  )
+colnames(acp_var) <- paste0("C",1:12)
+kableExtra::kbl(t(acp_var[,1:8]), 
+                align = "c",
+                format = "latex",
+                row.names = FALSE,
+                booktabs = TRUE,
+                caption = NULL) #|>
+ # kableExtra::kable_styling(full_width = TRUE)
+
+```
+
+
+# Rotation et système de coordonnées
+
+```{r}
+#| label: fig-acprotation
+#| echo: false
 #| out-width: '90%'
-#| fig-width: 9
-#| fig-height: 6
-#| cache: true
-#| fig-cap: "Courbes de risques proportionnelles (panneau supérieur) et non proportionnelles (panneau inférieur)."
-hazard <- function(x){
-  1/53*(3*pexp(x, rate = 1/300) + 25*dnorm(x, 10, 5) +
-    3*pgamma(x, shape = 5, scale = 5) +
-    2*pgamma(x, shape = 6, scale = 5) + 
-    20*pexp(x, rate = 1/400))
-}
-
-hazard2 <- function(x){
-  (40*pexp(x, rate = 1/300) + 25*dnorm(x, 10, 5) -
-     20*pgamma(x, shape = 5, scale = 5) +
-     40*pgamma(x, shape = 1, scale = 5) - 
-     20*pexp(x, rate = 1/400))/20
-}
-
-temps <- seq(0, 60, length.out = 1001)
-survrisque <- data.frame(
-  temps = temps,
-  risque1 = hazard(temps),
-  risque2 = hazard2(temps)
-)
-survie1f <- function(temps,cst = 1){
-  sapply(temps, function(ti){
-    exp(-cst*integrate(hazard, lower = 0, upper = ti)$value)
-  })
-}
-
-survie2f <- function(temps,cst = 1){
-  sapply(temps, function(ti){
-    exp(-cst*integrate(hazard2, lower = 0, upper = ti)$value)
-  })
-}
-
-fsurvie1 <- data.frame(
-  temps = temps,
-  survie1a = survie1f(temps, cst = 1),
-  survie1b = survie1f(temps, cst = 2)
-)
-temps2 <- seq(0, 12, length.out = 1001)
-
-fsurvie2 <- data.frame(
-  temps = temps2,
-  survie2a = survie1f(temps2, cst = 12),
-  survie2b = survie2f(temps2)
-)
-g1 <- ggplot(data = survrisque,
-       aes(x = temps)) +
-  geom_line(aes(y = risque1),
-                color = safe_colorblind_palette[1]) +
-  geom_line(aes(y = 2*risque1),
-                color = safe_colorblind_palette[8]) +
-  scale_y_continuous(limits = c(0, 0.5),
-                     expand = c(0, 0)) +
-  labs(x = "temps",
-       y = "",
-       subtitle = "risque") +
-  theme_classic()
-
-g2 <- ggplot(data = survrisque,
-             aes(x = temps)) +
-  geom_hline(yintercept = .5) +
-  scale_y_continuous(limits = c(0, 2),
-                     expand = c(0, 0)) +
-  scale_x_continuous(limits = c(0, 60),
-                     expand = c(0, 0)) +
-  labs(x = "temps",
-       y = "",
-       subtitle = "rapport de risque") +
-  theme_classic()
-
-
-g3 <- ggplot(data = fsurvie1,
-             aes(x = temps)) +
-  geom_line(aes(y = survie1a), col = safe_colorblind_palette[1]) +
-  geom_line(aes(y = survie1b), col = safe_colorblind_palette[8])  +
-  scale_y_continuous(limits = c(0, 1),
-                     expand = c(0,0)) +
-  scale_x_continuous(expand = c(0,0),
-                     limits = c(0, 61)) + 
-  labs(x = "temps",
-       y = "",
-       subtitle = "survie") +
-  theme_classic()
-
-
-g4 <- ggplot(data = survrisque,
-             aes(x = temps)) +
-  geom_line(aes(y = risque2),
-            color = safe_colorblind_palette[1]) +
-  geom_line(aes(y = 12*risque1),
-            color = safe_colorblind_palette[8]) +
-  scale_y_continuous(limits = c(0, 2),
-                     expand = c(0, 0)) +
-  scale_x_continuous(limits = c(0, 60),
-                     expand = c(0, 0)) +
-  labs(x = "temps",
-       y = "",
-       subtitle = "risque") +
-  theme_classic()
-
-g5 <- ggplot(data = survrisque,
-             aes(x = temps)) +
-  geom_line(aes(y = risque2/risque1)) +
-  scale_y_continuous(limits = c(0, 60),
-                     expand = c(0, 0)) +
-  scale_x_continuous(limits = c(0, 60),
-                     expand = c(0, 0)) +
-  labs(x = "temps",
-       y = "",
-       subtitle = "rapport de risque") +
-  theme_classic()
-
-g6 <- ggplot(data = fsurvie2,
-             aes(x = temps)) +
-  geom_line(aes(y = survie2a), 
-            col = safe_colorblind_palette[8]) +
-  geom_line(aes(y = survie2b),
-            col = safe_colorblind_palette[1]) +
-  scale_y_continuous(limits = c(0, 1),
-                     expand = c(0,0)) +
-  scale_x_continuous(expand = c(0,0),
-                     limits = c(0, 12)) + 
-  labs(x = "temps",
-       y = "",
-       subtitle = "survie") +
-  theme_classic()
-(g1 + g2 + g3) / (g4 + g5 + g6)
-
-```
-
-# Absence de proportionnalité et stratification
-
-On peut modéliser la non proportionnalité des risques par la **stratification** pour une variable catégorielle $Z=1, \ldots, K$.
-
-Supposons que l'effet de $Z$ sur le risque varie dans le temps.
-
-On écrit alors 
-\begin{align*}
-h(t; \mathbf{X}, Z=k) = h_k(t)\exp(\beta_1\mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p),
-\end{align*}
-où $h_k(t)$ est la fonction de risque de base pour $Z=k$.
-
-Dans ce modèle
-
-- On suppose que l'effet des variables explicatives $\mathbf{X}$ est le même peut importe la valeur de $Z$.
-- L'effet de $Z=k$ vs $Z=j$ pour un même ensemble de variables explicatives $\mathbf{X}$ est $h_k(t)/h_j(t)$, qui dépend du temps.
-
-# Stratification
-
-- **Avantage**: on peut modéliser n'importe quel changement du risque en fonction de $Z$.
-- **Désavantage**: on perd la variable explicative $Z$, donc on ne peut tester son effet (pas de coefficient)... on peut résumer l'information pour la variable $Z$ en calculant par exemple les différences de survie à des temps donnés.
-- **Désavantage**: la fonction de risque est estimée pour chaque sous-groupe de $Z$ (plus faible taille d'échantillon).
-
-
-Idéalement, utiliser la stratification avec des variables secondaires ou de contrôles.
-
-# Modèle de Cox avec stratification dans **R**
-
-```{r}
-#| label: cox-stratification
-#| eval: false
-#| echo: true
-library(survival)
-data(survie1, package = "hecmulti")
-# Stratification par service
-cox_strat <- coxph(
-  Surv(temps, censure) ~ age + sexe + strata(service), 
-  data = survie1)
-# Décompte par service
-with(survie1, table(censure, service))
-# Coefficients
-summary(cox_strat)
-```
-
-# Sorties
-
-```{r}
-#| label: tbl-nserv
-#| tbl-cap: "Décompte du nombre d'observations par service et status."
-#| eval: true
-#| echo: false
-#| cache: true
-nserv <- with(hecmulti::survie1, table(service, censure))
-knitr::kable(data.frame(
-    "0" = nserv[1,], 
-    "1" = nserv[2,], 
-    "2" = nserv[3,], 
-    "3" = nserv[4,]),
-    booktabs = TRUE, 
-    col.names = paste0(0:3))
-```
-
-
-```{r}
-#| label: tbl-coxstratif
-#| tbl-cap: "Rapport de risques pour un modèle de Cox stratifié par service."
-#| eval: true
-#| echo: false
-library(survival)
-cox7 <- coxph(Surv(temps, censure) ~ 
-                age + sexe + strata(service), 
-              data = hecmulti::survie1,
-              ties = "exact")
-tab7 <- broom::tidy(cox7, 
-            exponentiate = TRUE, 
-            conf.int = TRUE)[,-(3:5)]
-colnames(tab7) <- c("terme",
-                    "exp(coef)",
-                    "borne inf.", 
-                    "borne sup.")
-knitr::kable(tab7,
-               digits = 2,
-               booktabs = TRUE) |>
-  kableExtra::kable_styling()
-```
-
-# Courbes de survie du modèle stratifié
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| fig-width: 7
-#| fig-height: 5
-#| out-width: '85%'
 #| fig-align: 'center'
-#| warning: false
-#| cache: true
-pred <- survfit(cox7, 
-        newdata = data.frame(service = factor(c(0,1,2,3)),
-                             sexe = rep(0,4),
-                             age = 40), 
-        type = "kaplan-meier")
-profil <- 0:3
-survcurves <- with(pred,
-  data.frame(
-    temps = time,
-    censure = n.censor > 0,
-    survie = c(surv),
-    groupe = factor(unlist(sapply(1:4, function(i){rep(profil[i], strata[i])}))))
-  )
+#| fig-cap: "Nuage de points avant (gauche) et après (droite) analyse en composantes principales."
+Sigma <- diag(c(4,1)) %*% cbind(c(1,0.9),c(0.9,1))
+set.seed(123456)
+data <- rbind(MASS::mvrnorm(n = 200, 
+                      mu = c(4,4), 
+                      Sigma = Sigma),
+                MASS::mvrnorm(n = 50, 
+                              mu = c(-4,-2), 
+                              Sigma = Sigma))
+pc <- princomp(data, cor = FALSE)
+data <- data.frame(x1 = data[,1],
+                   x2 = data[,2])
+pcdata <- data.frame(x1 = pc$scores[,1],
+                     x2 = pc$scores[,2])
+library(ggplot2)
+library(patchwork)
+g1 <- ggplot(data = data, aes(x = x1, y = x2)) +
+  geom_point(alpha = 0.8) + 
+  geom_abline(slope = pc$loadings[1,2], 
+              intercept = pc$loadings[1,1]) + 
+  geom_abline(slope = pc$loadings[2,2], 
+              intercept = pc$loadings[2,1],
+              linetype = 2) + 
+  ggpubr::stat_cor(aes(label = ..rr.label..),
+                   r.accuracy = 0.01,
+                   label.x = 3, 
+                   label.y = 0) +
+  ylim(-10,10) + 
+  xlim(-10,10) +
+  labs(x = "variable 1",
+       y = "variable 2") + 
+  coord_fixed() +
+  theme_classic()
+g2 <- ggplot(data = pcdata, aes(x = x1, y = x2)) +
+  geom_point(alpha = 0.8) +
+  ggpubr::stat_cor(aes(label = ..rr.label..),
+                   r.accuracy = 0.01,
+                   label.x = -10, 
+                   label.y = -2) +
+  labs(x = "composante principale 1",
+       y = "composante principale 2") +
+  theme_classic()
 
-ggplot(data = survcurves, 
-       aes(x = temps, 
-           y = survie,
-           color = groupe,
-           group = groupe)) +
-  geom_step() +
-  ggplot2::scale_y_continuous(
-    expand = c(0,0),
-    limits = c(0,1), 
-    breaks = seq(0, 1, by = 0.25),
-    labels = c("0","0.25","0.5","0.75","1")) + 
-  theme_classic() +
-  ggplot2::theme(legend.position = "bottom") + 
-  ggplot2::labs(x = "temps d'abonnement (en semaines)", 
-       subtitle = "Fonction de survie",
-       y = "",
-       color = 'service')
+g1 + g2
 ```
 
 
-# Risques non proportionnels
-
-Si le postulat de risques proportionnels n'est pas validé, l'effet d'au moins une des variables explicatives dépend du temps.
-
-On peut considérer une modification du modèle de Cox qui inclut une interaction avec le temps, par exemple
-\begin{align*}
-h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z(t) Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
-\end{align*}
-si l'effet de la variable explicative $Z(t)$, $\beta_Z(t)$ --- ou la variable elle même -- varie en fonction du temps.
-
-# Exemple 1 - augmentation de l'âge
-
-Ici, le coefficient est supposé constante mais l'âge (en années) augmente à mesure que le temps d'abonnement (en semaines) passe, d'où $\texttt{age}(t) = \texttt{age} + t/52$.
+# Implémentation en **R**
 
 
 ```{r}
-#| label: interaction-temps-age
-#| echo: true
+#| label: acpfactor
 #| eval: false
-cox_np <- survival::coxph(
-    Surv(temps, censure) ~ 
-     tt(age) + sexe + service, 
-     data = survie1, 
-     tt = function(x, t, ...){x + t/52})
-summary(cox_np)
-```
-\footnotesize 
-
-On spécifie avec l'option `tt()` dans la formule la variable qui change dans le temps et par la suite la nature de l'interaction temporelle avec l'argument `tt`.
-
-La variable qui dépend du temps doit être créée à l'intérieur de l'appel à `coxph`.
-
-
-
-# Exemple 2 - effet de service croissant
-
-Supposons que l'impact du nombre de services varie comme suit,
-\begin{align*}
-&h(t, \text{age}, \text{sexe}, \texttt{service = i}) \\ &\qquad = h_0(t)\exp(\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{age}} \texttt{age} + \beta_{\texttt{service}_i} + \beta_{\texttt{service}_i*t}t).
-\end{align*}
-
-Il faut transformer les variables catégorielles en indicateurs binaires pour que le logiciel puisse ajuster le modèle.
-
-# Code **R** pour service
-
-```{r}
-#| label: interaction-temps-service
 #| echo: true
-#| eval: true
-#| message: false
-#| warning: false
-# Créer variables binaires par service
-library(dplyr)
-survie1_modif <- survie1 |>
-  mutate(service1 = service == 1,
-         service2 = service == 2,
-         service3 = service == 3)
-cox_np <- survival::coxph(
-    Surv(temps, censure) ~ 
-     age + sexe + service + 
-      tt(service1) + tt(service2) + tt(service3), 
-     data = survie1_modif, 
-     tt = function(x, t, ...){t * x})
+# Analyse en composantes principales
+# de la matrice de corrélation
+acp <- princomp(factor, cor = TRUE)
+loadings(acp) # chargements
+biplot(acp) # bigramme
 ```
 
-# Coefficients et tests
+# Matrice de chargements 
+
+\footnotesize
 
 ```{r}
-#| label: tbl-cox-nph
-#| echo: false
+#| label: acploadings
 #| eval: true
-#| tbl-cap: "Rapport de risque et intervalles de confiance à niveau 95% pour le modèle à risques non proportionnels (interaction linéaire entre temps et service)."
-#| cache: true
-scnp <- summary(cox_np)$coefficients
-tab6 <- broom::tidy(cox_np,
-            exponentiate = TRUE, 
-            conf.int = TRUE)[,-c(3,6,7)]
-colnames(tab6) <- c("terme",
-                    "exp(coef)",
-                    "test de Wald",
-                    "valeur-p")
-tab6[,4] <- format.pval(tab6[,4], eps = 1e-3, digits = 3)
-knitr::kable(tab6,
-               digits = c(2,3,3),
-               booktabs = TRUE,
-             linesep = "") |>
+#| echo: false
+acp <- princomp(hecmulti::factor, cor = TRUE)
+loadings <- round(loadings(acp)[,1:8], 2)
+loadings[loadings < 0.2] <- ""
+knitr::kable(loadings, booktabs = TRUE, col.names = paste0("C", 1:8)) |>
   kableExtra::kable_styling()
 ```
 
-# Interprétation des résultats
-
-- Les coefficients pour l'interaction avec $t$ sont petits parce que la plage de $t$ (0 à 200 semaines) est énorme.
-- Les coefficients sont positifs: le risque augmente avec le temps. L'impact des rabais pour services multiples diminue avec le temps.
-- Deux des termes d'interaction sont significatifs à niveau 5% (statistiques de Wald $Z$ de `r round(summary(cox_np)$coefficients[6,4],3)`, `r round(summary(cox_np)$coefficients[7,4],3)` et `r round(summary(cox_np)$coefficients[8,4],3)` et valeurs-$p$ correspondantes de `r round(summary(cox_np)$coefficients[6,5],3)`, `r round(summary(cox_np)$coefficients[7,5],3)` et `r round(summary(cox_np)$coefficients[8,5],3)`).
-
-
-# Évolution temporelle de variables explicatives
-
-On considère une extension du modèle de Cox qui permet d'inclure des variables explicatives dont la valeur change dans le temps.
-
-
-Supposons que la variable $\mathrm{X}_1$ change au fil du temps et que les autres demeurent fixes, tel que
-\begin{align*}
-h(t; \boldsymbol{x}) = h_0(t) \exp\{\beta_1\mathrm{x}_1(t) + \cdots + \beta_p\mathrm{x}_p\},
-\end{align*}
-où $\mathrm{x}_1(t)$ indique que la valeur de $\mathrm{X}_1$ dépend du temps $t$.
-
-# Illustration 
-
-:::: {.columns}
-
-::: {.column width="40%"}
-```{r}
-knitr::include_graphics("figures/Lexis_censure_modif.pdf")
-```
-:::
-
-::: {.column width="60%"}
-Pour ajuster le modèle, on peut casser la contribution d'une observation en segments: considérons un seul changement survenant au temps $t_c$.
-
-- pour le premier segment, on enregistre $t_c$ comme valeur maximale (censure à droite)
-- pour la deuxième portion, l'observation est tronquée à gauche à partir de $t_c$.
-
-:::
-
-::::
-
-# Exemple
-
-Supposons qu'il y a eu au plus un changement dans la variable `service`.
-On doit formatter la base de données comme suit.
-
 \footnotesize 
 
+Les poids inférieurs à 0.2 en valeur absolue sont omis.
+
+# Bigramme
+
 ```{r}
-#| label: tbl-survie3-donnees
-#| tbl-cap: "Aperçu des cinq premières observations de la base de données `survie3`."
+#| label: fig-bigramme
 #| echo: false
 #| eval: true
-data(survie3, package = "hecmulti")
-knitr::kable(survie3 |> dplyr::filter(id <= 5),
-             digits = 0,
+#| out-width: '60%'
+#| fig-cap: "Bigramme (représentation sur les deux premières composantes principales)"
+# Analyse en composantes principales
+# de la matrice de corrélation
+data(factor, package = "hecmulti")
+acp <- princomp(factor, cor = TRUE)
+# loadings(acp)
+biplot(acp, 
+       xlab = "composante principale 1",
+       ylab = "composante principale 2",
+       cex = 0.5
+       )
+```
+
+# Choix du nombre de composantes
+
+- **critère des valeurs propres de Kaiser**: variances des composantes principales (valeurs propres) supérieures à 1. 
+- **critère du coude de Cattell**:  diagramme d'éboulis  (`screeplot`)
+
+```{r}
+#| label: eboulis-syntaxe
+#| eval: false
+#| echo: true
+hecmulti::eboulis(acp)
+```
+
+
+# Diagramme d'éboulis 
+
+```{r}
+#| label: fig-screeplot
+#| eval: true
+#| echo: false
+#| out-width: '70%'
+#| fig-cap: "Diagramme d'éboulis (gauche) et variance cumulative (droite)."
+hecmulti::eboulis(acp)
+```
+
+# Pourcentage de variance exprimée
+
+La variance totale  des composantes principales est identique à celle des variables originales:
+$$ \mathsf{Va}(C_1) + \cdots + \mathsf{Va}(C_p) = \mathsf{Va}(X_1) + \cdots + \mathsf{Va}(X_p)$$
+
+- Si on travaille avec la matrice de corrélation (variance unitaire), alors la variance totale est $p$.
+
+# Covariance ou corrélation?
+
+La matrice de corrélation est la matrice de covariance des données **standardisées** (variance unitaire)
+
+- la covariance accorde plus d'importante aux variables qui ont une variance élevée
+- si les variables sont sur la même échelle, covariance et corrélation sont utilisables
+- sinon, utiliser la matrice de corrélation *par défaut*.
+
+# Inconvénients des composantes principales
+
+- Toutes les variables sont nécessaires pour créer des composantes principales avec de nouvelles observations
+- Le critère d'optimisation ne prend pas en compte une potentielle variable réponse (voir analyse canonique et moindres carrés partiels).
+
+
+
+
+# Motivation pour l'analyse factorielle
+
+-   Y a-t-il des groupements de variables?
+-   Est-ce que les variables faisant partie d'un groupement semblent mesurer certains aspects d'un facteur commun (non observé)?
+
+De tels groupements peuvent être détectés (automatiquement) si plusieurs variables sont très corrélées entre elles.
+
+---
+
+```{r}
+#| label: fig-correlogram
+#| echo: false
+#| out-width: '80%'
+#| fig-align: 'center'
+#| fig-cap: "Corrélogramme des items du questionnaire"
+data(factor, package = "hecmulti")
+corrplot::corrplot(cor(factor), 
+                   type = "upper", 
+                   diag = FALSE,
+                   tl.col = "black")
+```
+
+# Analyse factorielle exploratoire
+
+On possède $n$ observations sur $p$ variables et on s'intéresse à la matrice de covariance (corrélation) qui décrit la relation linéaire.
+
+Avec $np$ données, on cherche à estimer $p$ paramètres de variances et $p(p-1)/2$ corrélations.
+
+On cherche un modèle plus **parcimonieux** pour expliquer la dépendances.
+
+
+# Facteurs
+
+On suppose qu'il existe $m < p$ **facteurs** latents $F_1, \ldots, F_m$ qui suffisent à expliquer les variables explicatives
+
+Les facteurs sont:
+
+- des variables aléatoires non observables
+- non corrélées entre elles
+- standardisées de moyenne zéro et variance unitaire.
+
+
+# Modèle d'analyse factorielle (corrélation)
+
+Soit  $X_1, \ldots, X_p$ des variables explicatives *standardisées* (moyenne nulle, variance unitaire).
+
+Cela revient à travailler avec la matrice de corrélation
+
+
+\begin{align*}
+X_j = \underset{\text{combinaison linéaire pondérée des facteurs}}{\gamma_{j1}F_1 + \cdots + \gamma_{jm}F_m} + \underset{\text{aléa}}{\varepsilon_j},\qquad j=1, \ldots, p.
+\end{align*}
+où $\varepsilon_j$ est un aléa de variance $\psi_j$ et de moyenne nulle.
+
+
+# Chargements
+
+\begin{align*}
+X_j = \underset{\text{combinaison linéaire pondérée des facteurs}}{\gamma_{j1}F_1 + \cdots + \gamma_{jm}F_m} + \underset{\text{aléa}}{\varepsilon_j}, \qquad j=1, \ldots, p.
+\end{align*}
+
+Le chargement $\gamma_{ij}$ mesure la corrélation entre $X_i$ et $F_j$,
+\begin{align*}
+\gamma_{ij} = \mathsf{Cor}(X_i, F_j).
+\end{align*}
+
+La proportion de la variance de $X_i$ expliquée par les facteurs est $\gamma_{i1}^2 + \cdots + \gamma_{im}^2$.
+
+---
+# Exemple d'estimation des chargements
+
+```{r}
+#| label: tbl-factocp
+#| echo: false
+#| eval: true
+#| tbl-cap: "Estimés des chargements (pourcentage)."
+data(factor, package = "hecmulti")
+facto_cp <- hecmulti::factocp(factor)
+chargements <- facto_cp$loadings
+class(chargements) <- "matrix"
+chargements[abs(chargements) < 0.3] <- NA
+colnames(chargements) <- paste0("F", 1:4)
+rownames(chargements) <- paste0("x",1:12)
+options(knitr.kable.NA = '')
+knitr::kable(100*chargements, 
+                digits = 0,
+                booktabs = TRUE,
+                row.names = TRUE)
+```
+
+:::
+
+# Analyse factorielle en pratique
+
+La corrélation entre les variables explicatives découlera de celle avec les facteurs
+
+Le modèle factorielle donne une approximation de la corrélation.
+
+# Combien d'observations pour l'estimation?
+
+Il faut un échantillon de taille conséquente.
+
+- entre 5 et 20 fois $p$, le nombre de variables
+- un nombre minimal de $n=100$ à $n=1000$ observations
+
+Essentiellement des règles du pouce.
+
+# Invariance aux rotations orthogonales
+ 
+On transforme la solution pour garantir une solution **interprétable** puisque cette dernière n'est pas unique.
+
+- La rotation *varimax* maximise la variance de la somme des carrés des chargements pour les facteurs.
+- Donne des chargements dispersés (valeurs élevées positives ou négatives, d’autres presque nuls).
+
+# Estimation avec composantes principales
+
+Garder $m$ vecteurs propres et valeurs propres, puis effectuer une rotation (varimax)
+
+
+- estimation toujours valide et rapide.
+- sélection moins objective que maximum de vraisemblance (critère du coude ou de Kaiser)
+
+
+```{r}
+#| label: facto-cpkaiser
+#| eval: false
+#| echo: true
+library(hecmulti)
+facto_cp <- factocp(factor, 
+                    nfact = "kaiser", 
+                    cor = TRUE)
+# nfact: nombre de facteurs ("kaiser" par défaut)
+# cor: matrice de corrélation? par défaut vrai
+```
+
+
+# Estimation par maximum de vraisemblance
+
+- Postulat de normalité des aléas et des facteurs.
+- Nécessite une optimisation numérique délicate: 
+    - les problèmes de convergence sont fréquents
+    - variances estimées parfois négatives!
+    - appelés cas de **(quasi)-Heywood**.
+- Méthodes de sélection plus informatives
+    - critères d'information
+    - tests d'hypothèse d'adéquation
+
+# Choix du nombre de facteurs
+
+Plus le nombre de facteurs $m$ est grand, plus la corrélation modélisée se rapproche de la corrélation empirique.
+
+Mais plus le nombre de paramètres est grand...
+
+
+# Critères d'information
+
+Valable uniquement pour les modèles ajustés par **maximum de vraisemblance**
+
+\begin{align*}
+\mathsf{AIC} &= -\text{ajustement} + 2\times\text{nb param} \\
+\mathsf{BIC}&= -\text{ajustement} + \ln(n)\times\text{nb param}
+\end{align*}
+
+- Plus le critère d'information est petit, meilleur c'est
+- Le $\mathsf{BIC}$ (critère Bayésien de Schwarz) pénalise davantage que le $\mathsf{AIC}$ (critère d'Akaike).
+
+# Choix du nombre de critères
+
+```{r}
+#| eval: false
+#| echo: true
+library(hecmulti)
+ajustement_factanal(
+    covmat = cor(factor), # matrice de corrélation
+    factors = 1:5, # candidats pour nb de facteurs
+    n.obs = nrow(factor)) # nombre d'observations
+```
+
+
+# Tableau résumé pour nombre de critères
+
+```{r}
+#| label: tbl-emvcrit
+#| eval: true
+#| echo: false
+#| tbl-cap: "Qualité de l'ajustement de modèles d'analyse factorielle (maximum de vraisemblance)."
+emv_crit <- hecmulti::ajustement_factanal(
+    covmat = cov(factor),
+    factors = 1:5,
+    n.obs = nrow(factor))
+colnames(emv_crit)[4] <- "valeur-p"
+knitr::kable(emv_crit, 
+                digits = c(2,2,2,0,0),
+                row.names = FALSE,
+                booktabs = TRUE)
+```
+
+
+# Résumé
+
+Le tableau inclut 
+
+- critères d’informations AIC et BIC
+- valeur-_p_ du test de rapport de vraisemblance comparant le modèle saturé (corrélation empirique) et le modèle factoriel
+
+- nombre de paramètres estimés 
+- indicateur pour les cas de (quasi)-Heywood
+
+# Ajustement
+
+Les critères d'information suggèrent $m=4$ facteurs ($\mathsf{AIC}$) ou $m=3$ ($\mathsf{BIC}$)
+
+- mais la solution à quatre facteurs n'est pas valide. 
+- le modèle à trois facteurs est préférable (simplification adéquate)
+
+```{r}
+#| label: factanal3
+#| eval: false
+#| echo: true
+# Ajuster le modèle factoriel
+# par maximum de vraisemblance
+fa3 <- factanal(x = factor, 
+                factors = 3L)
+# Imprimer les chargements en 
+# omettant les valeurs inférieures à 0.3
+print(fa3$loadings, 
+      cutoff = 0.3)
+```
+
+# Chargements
+
+
+```{r}
+#| label: tbl-factanal3
+#| echo: false
+#| eval: true
+#| tbl-cap: "Estimés des chargements (pourcentage)."
+data(factor, package = 'hecmulti')
+fa3 <- factanal(x = factor, 
+                factors = 3L)
+chargements <- fa3$loadings
+class(chargements) <- "matrix"
+chargements[chargements < 0.3] <- NA
+colnames(chargements) <- paste0("F", 1:3)
+options(knitr.kable.NA = '')
+knitr::kable(100*chargements, 
+                digits = 0,
+                booktabs = TRUE,
+                row.names = TRUE)
+```
+
+# Interprétation
+
+Chargements de même signe et plus grands que 30%:
+
+- Facteur 1: $X_4$, $X_8$ et $X_{11}$
+- Facteur 2: $X_3$, $X_6$, $X_9$ et $X_{12}$
+- Facteur 3: $X_2$, $X_7$ et $X_{10}$
+
+Ces facteurs sont interprétables:
+
+- $F_1$: importance accordée au service.
+- $F_2$: importance accordée aux produits.
+- $F_3$: importance accordée à la facilité de paiement.
+
+
+# Solution à quatre facteurs
+
+Si on ajuste le modèle à quatre facteurs, on obtient 
+$\mathsf{Cor}(X_1, F_4)=0.99$ et $\mathsf{Cor}(X_5, F_4)=0.37$.
+
+Cas de Heywood (trop de facteurs.)
+
+Le facteur 4 représenterait le prix. On pourrait directement inclure $X_1$.
+
+
+# Échelles
+
+- Créer de nouvelles variables selon les chargements
+- moyenne équipondérée des variables explicatives fortement corrélées avec les facteurs
+
+
+```{r}
+#| label: echelles
+#| echo: true
+#| eval: false
+# Création des échelles
+ech_service <- rowMeans(factor[,c("x4","x8","x11")])
+ech_produit <- rowMeans(factor[,c("x3","x6","x9","x12")])
+ech_paiement <- rowMeans(factor[,c("x2","x7","x10")])
+ech_prix <- rowMeans(factor[,c("x1","x5")])
+```
+
+# Cohérence interne et fiabilité
+
+- En pratique, le coefficient $\alpha$ de Cronbach est fréquemment employé.
+- Échelle fiable si $\alpha \ge 0.6$ (règle arbitraire)
+- Plus $\alpha$ est élevé, plus les variables sont corrélées entre elles.
+
+```{r}
+#| label: alphaCronbach
+#| echo: true
+#| eval: false
+alphaC(factor[,c("x4","x8","x11")])
+alphaC(factor[,c("x3","x6","x9","x12")])
+alphaC(factor[,c("x2","x7","x10")])
+alphaC(factor[,c("x1","x5")])
+```
+
+# Alpha de Cronbach
+
+```{r}
+#| label: tbl-alphaCronbach
+#| echo: false
+#| eval: true
+#| tbl-cap: "Coefficient alpha de Cronbach pour les quatre échelles formées."
+# Création des échelles
+# Cohérence interne (alpha de Cronbach)
+alph <- c(
+  hecmulti::alphaC(factor[,c("x4","x8","x11")]),
+  hecmulti::alphaC(factor[,c("x3","x6","x9","x12")]),
+  hecmulti::alphaC(factor[,c("x2","x7","x10")]),
+  hecmulti::alphaC(factor[,c("x1","x5")]))
+names(alph) <- c("service","produit","paiement","prix")
+knitr::kable(t(alph), 
+             digits = 3, 
              booktabs = TRUE,
-             linesep = "") |>
-  kableExtra::kable_styling()
+             row.names = FALSE) 
 ```
 
-Tout intervalle autre que terminal pour un individu est traité comme de la censure à droite.
+La quatrième échelle (prix) n'est pas cohérente. On pourrait conserver la question $X_1$ plutôt.
 
-\normalsize
+# Récapitulatif (corrélation linéaire)
 
-# Code pour variables explicatives variables
+- La corrélation mesure la force de la dépendance linéaire entre deux variables
+   - plus elle est élevée, plus les points s'alignent.
+- Si $p$ grand et $n$ petit, peu d'information disponible pour estimer de manière fiable les corrélations.
 
-```{r}
-#| eval: false
-#| echo: true
-data(survie3, package = "hecmulti")
-cox4 <- coxph(Surv(time = debut, 
-                   time2 = fin, 
-                   event = evenement) ~ 
-                age + sexe + service, 
-              data = survie3)
-```
+# Récapitulatif (ACP)
 
-\footnotesize 
+Une analyse en composante principales fait une décomposition en valeurs propres/vecteurs propres de la matrice de covariance ou de corrélation. 
 
-Puisque c’est la valeur d’une variable qui varie dans le temps et non pas son effet, on a l’interprétation usuelle. 
+   - Nouvelles variables sont orthogonales (corrélation nulle)
+   - Composantes principales en ordre décroissant de variance
+   - si on ne conserve que $k<p$ composantes principales, on maximise la variance expliquée.
+   
+# Récapitulatif 
 
-\normalsize 
-
-# Modèle à risques compétitifs
-
-Parfois, la raison pour laquelle un individu quitte l’état étudié peut avoir un intérêt en soi. 
-
-Pour le temps de service d'un employé, on veut faire la distinction entre 
-
-- une démission
-- un renvoi
-- la retraite
-
-# Exemple
-
-
-Supposons que nous avons trois causes possibles pour la perte d'un client. La variable `censure` dans le fichier `survie4` vaut:
-
-- `1` si l'individu est toujours abonné à notre service
-- `2` désabonnement pour aller chez le compétiteur A
-- `3` désabonnement pour aller chez le compétiteur B
-- `4` désabonnement parce qu'il n'a plus besoin de cellulaire.
-
-# Transition d'un état à l'autre
-
-
-:::: {.columns}
-
-::: {.column width="60%"}
-```{r}
-knitr::include_graphics("figures/transition_etats_modele_risque_competitifs.pdf")
-```
-:::
-
-::: {.column width="40%"}
-
-Modèle avec transition d'un état de base (abonné) vers un état absorbant (désabonnement, soit chez compétiteur $A$, compétiteur $B$ ou abandon du cellulaire).
-
-:::
-
-::::
-
-# Modèle à risques compétitifs avec modèle de Cox
-
-Pour estimer la probabilité d'un événement au fil du temps, on peut ajuster plusieurs modèles de Cox.
-
-On spécifie une fonction de risque pour chaque événement compétitif,
-\begin{align*}
-h_1(t; \mathbf{X})&= h_{01}(t) \exp(\beta_{11}\mathrm{X}_1 + \cdots + \beta_{p1} \mathrm{X}_p),\\
-&\vdots\\
-h_K(t; \mathbf{X})&= h_{0K}(t) \exp(\beta_{1K}\mathrm{X}_1 + \cdots + \beta_{pK} \mathrm{X}_p).\\
-\end{align*}
-Notez que les coefficients sont différents d'une équation à l'autre.
-
-On peut estimer les paramètres de chaque équation du modèle de Cox séparément sans perte de précision en modifiant la définition de l'événement. 
-
-
-# Code **R** pour risque compétitif (1)
-
-
-Deux options: ajuster chaque modèle séparément en traitant tout événement autre que celui d'intérêt comme de la censure à droite.
-
-```{r}
-#| eval: true
-#| echo: true
-# Rappel pour "event":
-#  - 1 (TRUE) pour observation, 
-#  - 0 (FALSE) pour censure à droite
-data(survie4, package = "hecmulti")
-rc_cox_A <- coxph(Surv(time = temps, 
-                   event = censure == 2) ~ 
-                age + sexe + service, 
-              data = survie4)
-```
-
-\footnotesize
-
-Les observations avec des valeurs pour `censure` de 1, 3 ou 4 sont traitées comme des cas de censure à droite (l'événement quitter pour compétiteur $A$ n'est pas survenu).
-
-\normalsize
-
-# Interprétation des coefficients
-
-Attention, l'interprétation dépend maintenant de l'événement étudié.
-
-```{r}
-#| eval: true
-#| echo: false
-tab_rcA <- broom::tidy(rc_cox_A, 
-            exponentiate = TRUE, 
-            conf.int = TRUE)[,-(3:5)]
-colnames(tab_rcA) <- c("terme",
-                    "exp(coef)",
-                    "borne inf.", 
-                    "borne sup.")
-knitr::kable(tab_rcA,
-               digits = c(3,2,2),
-               booktabs = TRUE) |>
-  kableExtra::kable_styling()
-```
-
-Selon le modèle, le risque *de quitter pour aller chez le compétiteur A* d'une femme est 0.48 fois celui d'un homme.
-
-# Code **R** pour risque compétitif (2)
-
-Créer une variable avec identifiant $1, \ldots, n$.
-
-Passer la variable état comme **facteur**, avec transition depuis catégorie de référence (ici `censure=1`, soit abonné)
-
-```{r}
-#| eval: true
-#| echo: true
-n <- nrow(survie4)
-surv4 <- survie4 |> 
-  dplyr::mutate(id = seq_len(n))
-rc_cox <- coxph(Surv(time = temps, 
-             event = factor(censure)) ~ 
-               sexe + age + service,
-             data = surv4,
-             id = id)
-```
-
-\footnotesize
-
-L'identifiant sert dans les cas où on peut transiter entre plusieurs états et il y a plusieurs observations pour un même individu.
-
-# Code **R** pour risques compétitifs (Kaplan--Meier)
-
-Ajuster le modèle multi-état avec un **facteur** pour l'événement, où la catégorie de référence est abonnement (`censure=1`).
-
-Surtout, ne pas estimer les courbes séparément!
-
-```{r}
-#| eval: true
-#| echo: true
-data(survie4, package = "hecmulti")
-rc_km <- survfit(Surv(time = temps, 
-             event = factor(censure)) ~ 1, #facteur
-             data = survie4)
-```
-
-# Graphiques
-
-Les représentations graphiques donnent la probabilité d'être dans une situation en fonction du temps (ici avec la catégorie de référence abonnement).
-
-\footnotesize 
-
-```{r}
-#| label: fig-competitif
-#| fig-cap: "Probabilité d'événement sans variable explicative (Kaplan-Meier, gauche) et avec âge, service et sexe (modèle de Cox, droite)."
-#| eval: true
-#| echo: false
-#| out-width: '100%'
-#| fig-width: 8
-#| fig-height: 4
-par(mfrow = c(1,2), bty = "l")
-plot(rc_km, noplot = NULL, 
-     col = 1:4,
-     ylab = "probabilité dans l'état",
-     ylim = c(0,1),
-     yaxs = "i")
-legend("topright",
-       legend = c("abonnement", 
-                  "A","B","fin"),
-       bty = "n", col = 1:4, lty = 1)
-plot(survfit(rc_cox, 
-             newdata = hecmulti::survie4[1,]),
-     noplot = NULL,
-     col = 1:4,
-     ylim = c(0,1),
-     yaxs = "i")
-```
+- Choix du nombre de variables (diagramme d'éboulis, critère de Kaiser).
+- Représentation graphique avec bigramme (directions des variables en fonction des deux premières composantes principales).
 
 # Récapitulatif
 
-Si le postulat de risques proportionnels ne tient pas, on peut considérer des modifications du modèle de Cox.
-
-- stratification (uniquement pour variables catégorielles) pour estimer le risque de base séparément sur chaque sous-groupe).
-- modèle à risques non-proportionnels avec variable ou coefficient qui varient selon le temps
-
-# Récapitulatif
-
-Si les variables explicatives changent au fil du temps, on peut traiter le cas de figure en décomposant la contribution de l'observation en plusieurs segments
-
-- chaque segment autre que terminal est traité comme de la censure à droite
-- les segments sont sujets à troncature à gauche.
-
-La base de données doit contenir le temps initial et le temps final de l'intervalle, en plus de l'indicateur.
-
-Il y a un lien possible avec le modèle à risque proportionnels si l'effet est le même pour tous (comme l'âge).
+- L'analyse factorielle exploratoire fournit un modèle pour la matrice de corrélation
+- Seules les variables numériques pour lesquelles on suspecte une dimension commune sont incluses dans l'analyse (questionnaires!)
+- On doit avoir beaucoup d'observations (au moins 100, 10 fois plus que de variables) pour estimer le modèle.
 
 # Récapitulatif
 
-Le modèle multi-état (modèle à risques compétitifs) permet d'estimer la probabilité de chaque transition.
+On estime le modèle à l'aide de 
 
-- la survie pour l'événement de base reste le même (désabonnement)
-- à chaque temps donné, la probabilité conjointe de chaque $K+1$ possibilités est 1.
+- composantes principales 
+   - modèle toujours valide
+   - moins coûteux en calcul
+   - critères pour la sélection du nombre de facteurs arbitraires
+- maximum de vraisemblance
+   - optimisation numérique 
+   - solutions fréquemment problématique
+   - critères d'information
+   
+   
+Le nombre de facteurs retenu doit donner des regroupements logiques (facteur *wow*).
 
-Dans **R**, s'assurer que la catégorie de référence est l'état de départ.
+# Récapitulatif
 
+- La solution du problème n'est pas unique
+    - on choisit celle qui permet de mieux séparer les variables.
+    - par défaut, rotation varimax pour faciliter l'interprétation.
+- L'interprétation se fait à partir des chargements (corrélation entre variables et facteurs).
+
+# Récapitulatif
+
+- On crée des échelles en prenant la moyenne des variables qui ont un chargement élevés en lien avec un facteur donné (de même signe).
+- Les échelles sont cohérentes si le $\alpha$ de Cronbach est supérieur à 0.6, faute de quoi elles sont rejetées.

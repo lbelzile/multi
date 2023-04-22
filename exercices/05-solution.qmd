@@ -1,210 +1,186 @@
 ---
-title: "Analyse de survie"
+title: "Analyse factorielle"
+execute:
+  echo: true
+  eval: true
+  message: false
+  warning: false
+  error: false
 ---
-
 
 ## Exercice 5.1
 
-*@Fotopoulos.Louri:2000 considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l'article pour pour répondre aux questions suivantes:*
+Les données `sondage_entreprise` contiennent les résultats d'un sondage effectué par une compagnie auprès de ses employés. 
 
-
-
-1. *Quel type de mécanisme de censure est présent dans ces données?*
-
-Censure par intervalle (nombre connu à une année près, seule l'année du début d'activités et le nombre de bilans sont connus des auteurs) et censure à droite (certaines firmes sont encore en activité en 1992 à la fin de la période de collecte de données).
-
-On pourrait ignorer la censure par intervalle en associant chaque intervalle de la forme $[t, t+1)$ à la valeur $t$.
-
-2. *Donnez une estimation de la probabilité qu’une entreprise survive trois ans et plus.*
-
-On veut la survie $\Pr(T \geq 3)$ L'estimation est donnée dans la colonne *Cumulative survival rate* du Tableau 1, soit 0.6393.
-
-3. *Donnez une estimation de la probabilité qu’une entreprise survive entre 4 et 5 ans, soit l'intervalle [4,5) ans.*
-
-Puisque la fonction de survie empirique est constante, cela revient à la probabilité de défaillance dans l'intervalle [4,5) ans, soit 
-\begin{align*}
-\Pr\{T \in [4,5)\} &= \Pr(T \ge 5) - \Pr(T \ge 4) \\&= 0.5525 - 0.5023 \\&= 0.0502.
-\end{align*}
-Si on traçait la courbe de Kaplan--Meier, cette probabilité correspond à la hauteur de la contre-marche entre 4 et 5 ans.
-
-
-4. *Quel pourcentage des observations sont censurées?*
-
-Il y a 219 observations au total et $38=13+25$ firmes sont toujours en activité et donc leur temps de survie est censuré; le pourcentage est 38/219 ou 17.35%.
-
-5. *Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.*
-
-Non, puisque les plus grandes temps observés sont censurées et l'estimation de la fonction de survie s'arrête à 0.2921; la fonction de survie ne traverse pas la valeur horizontale de 0.25
-
-*Le Tableau 3 de l'article fournit les estimations d'un modèle à risques proportionnels de Cox.*
-
-6. *Comparez les modèles (1) et (2). Est-ce que l'effet de cohorte impacte la survie?*
-
-Oui. On peut voir cela de plusieurs façons puisque (1) les deux coefficients associés sont significativement différents de zéro (tests de Wald) avec, pour `COHORT_82`, $Z = -0.5518/0.2081=-2.651$ et une valeur-$p$ basée sur l'approximation normale de 0.008 (idem pour `COHORT_83`).
-
-On peut aussi construire une statistique du rapport de vraisemblance avec $$-2\ell_{(1)} + 2 \ell_{(2)} =1503.442-1471.353 = 32.089.$$ Or, l'inclusion des cohortes ajoute deux paramètres, donc cette statistique est à comparer avec une loi $\chi^2_2$.
+**1. Produisez des statistiques descriptives pour les variables `q8` à `q17`.**
 
 ```{r}
-# Test de Wald: beta_cohort82 = 0
-2*pnorm(-0.5518/0.2081)
-# Test de Wald: beta_cohort83 = 0
-2*pnorm(-0.5464/0.2021)
-# Test de rapport de vraisemblance
-pchisq(1503.442 - 1471.353, 
-       df = 2, 
-       lower.tail = FALSE)
+data(sondage_entreprise, package = "hecmulti")
+str(sondage_entreprise) #aperçu de la base de données
 ```
 
-7. *Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (`FIXED_ASSET`) et le montant de la dette (`DEBT`) sur la durée de vie des entreprises.*
+On peut utiliser `summary` pour obtenir les statistiques descriptives, mais les échelles de Likert sont toutes de 1 à 5.
 
-Toute chose étant égale par ailleurs, une augmentation du ratio du passif total sur le total des actifs (`DEBT`) de 1 augmente le risque de 119.3%; le rapport de risque étant multiplié par $\exp(0.83)=2.293$.
+```{r}
+#| label: tbl-statdescriptfactor
+#| echo: false
+#| cache: true
+#| eval: true
+#| tbl-cap: "Statistiques descriptives des questions du sondage en entreprise."
+ tibble::tibble(moyenne = apply(sondage_entreprise, 2, mean),
+              "écart-type" = apply(sondage_entreprise, 2, sd),
+                 histogramme = apply(sondage_entreprise, 2, function(x){skimr::inline_hist(x = x, n_bins = 5)})) |>
+  knitr::kable(digits = 2,
+               booktabs = TRUE) |>
+  kableExtra::kable_styling(full_width = TRUE)
+```
 
-*Ceteris paribus*, une augmentation du ratio des immobilisations sur le total des actifs de 1 diminue le risque d'environ 59.8%, avec un rapport de risque de $\exp(-0.9091) =0.4028$.
+On peut voir sur le corrélogramme que toutes les variables sont très corrélées entre elles.
+
+```{r, eval = TRUE}
+corrplot::corrplot(corr = cor(sondage_entreprise),
+                   type = "upper", 
+                   diag = FALSE)
+```
+
+**2. Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.**
+
+```{r, eval = FALSE}
+nrow(sondage_entreprise)
+```
+
+Il y a `r nrow(sondage_entreprise)` observations et `r ncol(sondage_entreprise)` variables. C'est suffisant pour une analyse factorielle, mais le nombre de facteurs ne sera probablement pas très élevé. 
+
+**3. Utilisez la méthode d'estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d'analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?**
+
+```{r}
+library(hecmulti)
+# Composantes principales, critère de Kaiser
+afk <- factocp(sondage_entreprise, 
+               cor = TRUE)
+spectral <- eigen(cor(sondage_entreprise))
+hecmulti::eboulis(spectral)
+print(afk, cutoff = 0.5)
+```
+
+Le critère de Kaiser (valeurs propres supérieures à 1) avec la matrice de corrélation suggère deux facteurs. Le diagramme d'éboulis donne deux facteurs également avec la matrice de corrélation. 
+
+On peut constater en étudiant les chargements que le premier facteur est très corrélé avec plusieurs variables. En augmentant le point de coupure, on obtient un regroupement avec grosso-modo pour le facteur 1 (Q8-Q9 et Q14-Q17) les questions qui se réfèrent à la réputation sociale de l'entreprise et la balance pour le facteur 2 (Q10-Q13) pour la réputation sur le plan de la gestion. Seule la question Q15 semble un peu à part
+
+
+**4. Répétez l'exercice, cette fois avec la méthode du maximum de vraisemblance**
+
+    - **Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?**
+    - **Combien de facteurs les critères d'information recommendent-ils?**
+    - **Si vous ajoutez des facteurs, est-ce que votre interprétation change?**
+    
+```{r}
+res_tableau <- ajustement_factanal(
+  factors = 1:4, 
+  covmat = cor(sondage_entreprise),
+  n.obs = nrow(sondage_entreprise))
+knitr::kable(res_tableau)
+```
+
+On voit que le modèle AIC suggère un modèle à quatre facteurs (un cas de quasi-Heywood), tandis que le BIC suggère plutôt trois facteurs. Le test du rapport de vraisemblance comparant la corrélation empirique au modèle d'analyse factorielle indique que le modèle est raisonnable à partir de quatre. Le problème de convergence nous amène à interpréter les résultats pour le modèle à quatre facteurs avec un grin de sel.
+
+Puisque la corrélation est très élevée, il est difficile ici d'interpréter les facteurs résultants parce que plusieurs variables sont corrélées avec de multiples facteurs. On peut augmenter le point de coupure à 0.5 pour déterminer les amalgames suivants:
+
+- Le facteur 1 incluant Q8, Q9, Q16 et Q17 font référence à la réputation sociale et éthique de l'entreprise
+- le facteur 2 comprenant Q10-Q13 correspond à la perception financière (innovation, gestion, finances)
+- le facteur 3 regroupe Q9, Q11 et Q14 (éthique, confiance et innovation)
+ 
+L'interprétation change puisque ce qui était dans le premier facteur se retrouve dans le troisième, avec Q9 qui est présente dans les deux. En pratique, on pourrait décider de l'associer à l'une ou l'autre des échelles, selon la cohérence interne, et la logique.
+ 
+**5. Créez des échelles et vérifiez leur cohérence interne. **
+
+```{r}
+e1 <- sondage_entreprise |> 
+  dplyr::select(c(q8:q9, q14:q17))
+alphaC(e1)
+echelle1 <- rowMeans(e1)
+
+e2 <- sondage_entreprise |> 
+  dplyr::select(c(q10:q13))
+alphaC(e2)
+echelle2 <- rowMeans(e1)
+```
+
+On voit que les deux échelles créées ont un $\alpha$ de Cronbach de plus de 0.8, donc les échelles sont cohérentes. C'est en grande partie dû à la forte corrélation observée entre tous les items
 
 ## Exercice 5.2
+ 
+Effectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données `aerien`.  Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).
 
-*Un commerce de chaussures de Montréal veut optimiser son inventaire afin de maximiser ses profits et fait appel à votre société de conseil. La base de données `chaussures` contient des observations fictives et les variables suivantes:*
+**1. Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.** 
 
-- `statut`: *variable catégorielle, `0` s'il est vendu, `1` si l'article est toujours en stock, `2` s'il est déstocké (les modèles invendus après 40 mois en magasins sont passés aux pertes et profits).*
-- `temps`: *temps de stockage de l'article (en mois).*
-- `prix`: *prix de vente réelle de l'article (avec rabais si applicable), arrondi à l'unité près.*
-- `sexe`: *variable catégorielle, `0` pour modèle pour homme, `1` pour femme.*
-
-*Notre objectif premier est d'estimer le temps qu'un article passe en stock avant d'être vendu.*
-
-
-1. *Que représente la censure dans cet exemple?*
-
-Les données censurées à droites correspondent aux paires de chaussure qui sont toujours en stock à la fin de la période d’observation ou qui sont invendues après 40 mois.
-
-2. *Estimez le temps de stockage à l'aide d'un modèle de Kaplan--Meier et rapportez les estimés des quartiles.*
-
-On note d'abord que la colonne `temps` début à 1, ce qui indique que les chaussures sont vendues dans le premier mois. Un temps de $t$ mois correspond à la plage $[t-1, t)$ mois en stock.
-
-```{r}
-library(survival)
-data(chaussures, package = "hecmulti")
-# censure si 1 ou 2
-# statut == 0 => TRUE (1) si vendu, FALSE (0) sinon
-km <- survfit(
-  formula = Surv(time = temps, 
-                 event = statut == 0) ~ 1,
-  type = "kaplan-meier",
-  data = chaussures)
-
-plot(km)
-# Estimation des quartiles
-quantile(km)$quantile
-```
-
-Les quartiles sont 5 mois (25% des chaussures sont en inventaire moins de ce temps), 8 mois (temps médian en stock) et 12 mois (75% des chaussures sont vendues dans l'année de leur achat).
-
-3. *Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.*
-   - *Rapportez et interprétez les coefficients des variables.*
-   - *Est-ce que les effets estimés sont significatifs?*
+- **Combien de facteurs le critère des valeurs propres suggère-t-il?**
+- **Combien de facteurs le diagramme d'éboulis suggère-t-il?**
+- **Interprétez les chargements obtenus suite à la rotation. Commentez sur l'interprétabilité de ces derniers.**
+- **En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.**
    
+La base de données est la même que celle de l'Exercice 1.1, mais on ne sélectionne que les colonnes 7 à 20 qui correspondent aux réponses du questionnaire.
+
+Il faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir `?cor`); j'utilise ici `use = pairwise.complete.obs` qui utilise toutes les paires.^[Le défaut de cette option, qui extrait le maximum d'information à l'aide de toutes les paires complètes, est que l'on a pas de garantie que la matrice de covariance résultante est positive définie.]
+    
 ```{r}
-modcox <- coxph(
-  Surv(time = temps, 
-       event = statut == 0) ~ sexe + prix,
-  data = chaussures)
-summary(modcox)
-```
-   
-Chaque augmentation du prix d'un dollar mène à une diminution de risque de vente de 1.35%. De manière équivalente, une augmentation d'un dollar multiplie le risque par 0.9865, soit une diminution de 12.7% pour une différence de prix de 10\$. Cet effet est significativement différent de zéro (statistique de Wald de $z = -14.17$, valeur-$p$ négligeable).
-
-Pour une paire de chaussure du même prix, le risque de vendre la paire de chaussures pour femmes est de 15.13% inférieur à celui d'une paire pour hommes. Cette différence est significative à niveau 1% (statistique de Wald $z=-6.254$). Les souliers pour femmes restent plus longtemps en stock que ceux des hommes au même prix.
-
-
-4. *Tracez les estimés des courbes de survie d'une chaussure de l'année dont le prix de vente est 120\$ pour les modèles pour homme et pour femme.*
-
-
-```{r}
-#| label: fig-predcox
-#| fig-cap: "Estimé de la fonction de survie pour une paire de chaussure de 120$ pour hommes (traits pleins rouges) et femme (traitillé bleu)"
-#| eval: true
-#| echo: true
-# Nouvelle base de données avec profil des chaussures
-ndb <- data.frame(sexe = c(0, 1),
-                  prix = rep(120, 2))
-# Obtention des prédictions de la survie
-pred <- survfit(modcox, 
-                newdata = ndb, 
-                type = "kaplan-meier")
-# Graphique R de basedes prédictions
-plot(pred, 
-     col = c("red", "blue"), # couleur
-     lty = 1:2, # type de ligne
-     xlab = "temps (en mois)", #axe des abcisses
-     ylab = "survie") #axe des ordonnées
-```
-
-*On vous informe que, pour éliminer les invendus lors de l'arrivée de nouveaux modèles, l'entreprise offre une réduction de 20% après 15 mois.*
-
-5.  *Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?*
-
-Pour ce faire il faut modifier la base de données et casser la contribution en deux selon que le temps soit supérieur à 15 mois ou pas.
-
-On obtient donc une plage de $(0,t]$ pour les chaussures vendues en dessous de 15 mois (aucun changement). 
-
-Pour les chaussures mises au rabais on a une plage de $(0, 15]$ avec censure à droite (dans `chaussure1` ci dessous) et finalement $(15,t]$ avec l'événement pour les autres chaussures (`chaussures2`).
-
-```{r}
-#| message: false
-#| warning: false
+library(hecmulti)
 library(dplyr)
-chaussures1 <- chaussures |>
-  dplyr::mutate(
-    temps0 = 0, 
-    # censure si chaussures invendues après 15 semaines
-    statut = ifelse(temps > 15, 1, statut),
-    # enlever rabais pour obtenir prix initial
-    prix = ifelse(temps > 15, prix/0.8, prix),
-    temps = pmin(temps, 15))
-chaussures2 <- chaussures |>
-  dplyr::filter(temps > 15) |> 
-  dplyr::mutate(temps0 = 15) 
-modcox2 <- coxph(
-  Surv(time = temps0, 
-       time2 = temps,
-       event = statut == 0) ~ sexe + prix,
-  data = dplyr::full_join(chaussures1, 
-                          chaussures2))
-summary(modcox2)
+data(aerien, package = "hecmulti")
+bd <- aerien |> 
+  mutate_at(7:20,
+            ~na_if(., 0)) |>
+  select(7:20)
+corbd <- cor(bd, 
+             use = "pairwise.complete.obs")
+afk <- factocp(covmat = corbd)
+eboulis(eigen(corbd))
+# Copier noms de variables
+rownames(afk$loadings) <- colnames(bd)
+print(afk, 
+      cutoff = 0.4)
 ```
+    
+Le diagramme d'éboulis suggère quatre facteurs, idem pour le critère de Kaiser.
 
-La différence est à peine perceptible, une différence de quatres chiffres après la virgule pour $\exp(\widehat{\beta}_{\text{prix}})$. Les coefficients sont toujours significatifs.
+Si on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une corrélation suffisante pour être considérés lors de la création d'échelles, on obtient la division suivante:
 
-6. *On pourrait considérer un modèle à risque non-proportionnels contenant une interaction entre le prix et le temps de manière à ajuster le même modèle. Expliquez comment cela pourrait être fait de manière à obtenir les mêmes estimés des paramètres.*
+- Le facteur 1 inclut les items 5, 7, 8 et 14 (nourriture, confort du siège et divertissement en vol, proprete) qui sont tous en lien avec l'offre de service en vol
+- Le facteur 2 inclut items 1-4 (service internet en vol, temps d'arrivée et de départ convenable, facilité de réservation en ligne et localisation de la porte). Difficilement interprétable à cause d'internet, sinon rattachés à l'expérience client avant le vol.
+- Le facteur 3 inclut les items 9, 11, 13 (embarquement, gestion des bagages et service en vol). Les questions sont en lien avec les contacts avec le personnel de bord et la rapidité du service.
+- Le facteur 4 inclut l'item 6, peut-être 12, les deux en lien avec l'enregistrement
 
-
-
-On peut ajuster un modèle à risque non-proportionnel avec le terme  $$\texttt{tprix} = \texttt{prix} -0.2\texttt{prix}\mathrm{I}(t > 15),$$ avec le modèle de Cox
-\begin{align*}
-h(t; \texttt{sexe}, \texttt{prix}) = h_0(t) \exp \left\{\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{tprix}} \texttt{tprix}\right\}.
-\end{align*}
-Notez que, si on inclut $\texttt{prix}$ et un terme d'interaction, on se retrouverait avec deux coefficients pour le prix plutôt qu'un seul.
+Augmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.
 
 ```{r}
-# Calculer prix initial
-chaussures <- chaussures |>
-  dplyr::mutate(
-    prixinit = ifelse(temps > 15, 
-                      prix/0.8, 
-                      prix))
-modcox3 <- coxph(
-  Surv(time = temps,
-       event = statut == 0) ~ sexe + tt(prixinit),
-  data = chaussures,
-  tt = function(x, t, ...){ x-0.2*I(t>15)*x})
-summary(modcox3)
+print(
+  c(F1 = alphaC(bd |> select(c(5,7,8)), 
+       na.rm = TRUE),
+  F2 = alphaC(bd |> select(1:4),
+       na.rm = TRUE),
+  F3 = alphaC(bd |> select(c(9,11,13)),
+       na.rm = TRUE),
+  F4 = alphaC(bd |> select(c(6,12)),
+       na.rm = TRUE)), 
+  digits = 2)
 ```
 
-Une fois qu'on a obtenu les estimations, on peut vérifier que les coefficients sont les mêmes
+Si les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n'ont pas un $\alpha$ de Cronbach supérieur à 0.6.
+
+**2. Répétez l'exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.**
+
+- **Qu'arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.**
 
 ```{r}
-isTRUE(all.equal(
-  coef(modcox3), 
-  coef(modcox2), 
-  check.attributes = FALSE))
+hecmulti::ajustement_factanal(covmat = corbd,
+                              n.obs = nrow(na.omit(bd)), 
+                              factors = 1:7) |>
+  knitr::kable(digits = 2)
 ```
+
+En raison du nombre excessivement élevé d'observations, l'ajustement du modèle est médiocre et les critères d'information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n'est pas adéquate et on rejette à coup sûr le test d'hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l'analyse factorielle parce que notre puissance est élevée vu qu'on a `r  nrow(na.omit(bd))` réponses complètes. 
+
+
+À partir de 7 facteurs, l'optimisation ne converge pas et retourne un cas de Heywood.
+
+Ainsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu'une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible.

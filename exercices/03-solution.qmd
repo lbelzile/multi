@@ -1,234 +1,323 @@
 ---
-title: "Sélection de variables"
+title: "Régression logistique"
 execute:
   echo: true
   eval: true
   message: false
   warning: false
   error: false
-  cache: true
 ---
+
 
 ## Exercice 3.1
 
+*Les données `logistclient` contiennent des données simulées pour un cas fictif de promotion pour des clients.*
 
-1. *Faites une analyse exploratoire des variables explicatives*: 
-   - *Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse.*
-   - *Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l'ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?*
-   - *Vérifiez s'il y a des variables catégorielles encodées comme des variables numériques.*
-   
-On remarque en consultant la documentation de la base de données à l'aide de `?college` que le nombre de demandes d'admissions (`napplications`), le nombre d'admissions parmi ces applications `nadmission` et le nombre d'offres converties par les candidat.e.s, `ninscrits`, sont reliées et ne peuvent être employées.
-
-Plusieurs variables seront fortement corrélées parce qu'elles dépendent de la capacité d'accueil de l'établissement d'enseignement. Ainsi, on pourrait créer une variable qui représente le pourcentage de temps partiels pour les premiers cycles (plutôt que le décompte). Les variables `pourcentdoctorat` et `pourcentterminal`, sont fortement corrélées puisque la plupart des diplômes terminaux (incluant les titres professionnels, les doctorats de premier cycle en médecine, etc.) sont des PhD: le modèle choisira la variable la plus adéquate. Il n'y a pas de variables catégorielles hors variables binaires. Côté vérifications d'usage, on note que `tauxdiplom` et `pourcentdoctorat` sont supérieurs à 100%.
-   
-On devra retirer la variable catégorielle `nom`, qui a une modalité différente pour chaque observation.   
-   
-```{r}
-library(dplyr)
-library(hecmulti)
-data(college, package = "hecmulti")
-str(college)
-summary(college)
-# Est-ce que pourcentdoctorat < pourcenterminal?
-summary(with(college,
-             pourcentdoctorat/pourcentterminal))
-# Non
-db <- college |>
-  mutate(
-    tauxdiplom = pmin(tauxdiplom, 100),
-    pourcentdoctorat = pmin(pourcentdoctorat, 100),
-    pctpart1c = tempspart1c/(tempsplein1c+tempspart1c)) |>
-  select(! c(nom, 
-             tempsplein1c, 
-             tempspart1c, 
-             nadmission, 
-             ninscrits))
-```
-
-2. *Scindez la base de données en échantillon avec données d'entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire `60602` via `set.seed(60602)`.* 
-   - *Sélectionnez un modèle à l'aide d'une des méthodes couvertes, mais en basant votre choix sur l'erreur moyenne quadratique évaluée sur l'échantillon de validation.*
-
-On peut désormais considérer une séparation en tiers.
-Pour ce faire, je vais échantillonner des variables logiques vrais et faux avec une cote de 2 pour 1 et ensuite sélectionner les lignes qui correspondent.
+1. *Estimez le modèle logistique pour la probabilité que `promo=1` avec les variables explicatives `nachats`, `sexe` et `tclient`.*
 
 ```{r}
-set.seed(60602)
-test <- sample(x = c(FALSE, TRUE),
-               size = nrow(db),
-               replace = TRUE, 
-               prob = c(1/3, 2/3))
-db_a <- db[test,]
-db_v <- db[!test,]
-```
-
-Pour l'estimation, on pourrait simplement calculer l'erreur quadratique moyenne de validation pour tous les cinquante premiers modèles en considérant toutes les interactions d'ordre 2. 
-
-
-```{r}
-# Modèle avec interactions de toutes les variables
-formule <- formula(napplications ~ .^2)
-
-# Sélection séquentielle ascendante
-rec_seq <- leaps::regsubsets(
-  x = formule, 
-  data = db_a,
-  method = "seqrep",
-  nvmax = 50)
-```
-
-Si `regsubsets` permet de recouvrer les différents modèles, il n'y a pas d'utilitaire pour obtenir le résumé et les prédictions. Le paquet `hecmulti` inclut une fonction pour faire les prédictions d'un modèle donné. À des fins d'illustration, on considère celui qui a le plus petit critère BIC intra-échantillon d'apprentissage.
-
-```{r}
-#| eval: false
+#| eval: true
 #| echo: true
-# Calculer les BIC 
-bic_mod <- summary(rec_seq)$bic
-# Prédire du modèle avec id variables
-# Ici, celui avec le plus petit BIC du lot
-predict(rec_seq, id = which.min(bic_mod))
+library(hecmulti)
+data(logistclient, package = "hecmulti")
+# Modèle logistique
+mod <- glm(promo ~ nachats + sexe + tclient, 
+           family = binomial(link = "logit"),
+           data = logistclient)
+# Coefficients du modèle et statistique de Wald
+summary(mod)
 ```
 
-Ici, on s'intéresse uniquement au calcul de l'erreur quadratique moyenne pour les modèles choisis par la procédure de recherche séquentielle. La fonction `eval_EQM_regsubsets` fait le calcul et nous retourne un vecteur avec toutes les mesures. On choisit le modèle qui minimise l'erreur.
+
+
+2. *Interprétez les coefficients du modèle à l'échelle de la cote en terme de pourcentage d'augmentation ou de diminution.*
 
 ```{r}
-# Modèle avec la plus petite erreur 
-# moyenne quadratique de validation externe
-reqm_seq_ve_list <- 
-  hecmulti::eval_EQM_regsubsets(
-  model = rec_seq, 
-  select = 1:50,
-  formula = formule,
-  data = db_a,
-  newdata = db_v)
-# La fonction calcule la racine EQM sur 
-# les données de validation
-mod_seq_ve <- which.min(reqm_seq_ve_list)
-nvar_seq_ve <- mod_seq_ve + 1 
-# nombre variables + ordonnée à l'origine.
-reqm_seq_ve <- reqm_seq_ve_list[mod_seq_ve]
+exp(coef(mod)) # Rapport de cote
 ```
 
-Une logique similaire s'appliquerait avec le LASSO, même si c'est loin d'être la norme (on utilise d'ordinaire la validation croisée). Ici, on ajusterait le modèle avec plusieurs valeurs de $\lambda$, puis on calculerait l'erreur quadratique moyenne de validation.
-On prendra la valeur de la pénalisation $\lambda$ qui minimise cette dernière. Spécifier la séquence de valeurs de $\lambda$ à essayer nécessite un peu d'essai/erreur.
+- La cote pour l'offre promotionnelle (oui versus non) des hommes est 23.5% plus faible que celle des femmes, *ceteris paribus*
+- La cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, *ceteris paribus*. De manière équivalente, le rapport de cotes pour `tclient` fréquent sur occasionnel est de1/1.0711 = 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs. 
+- La cote de `nachats` augmente de 23.1% pour chaque augmentation du nombre d'achats dans le dernier mois,  *ceteris paribus*
+ 
+
+3. *Testez si l'effet de `nachats` est statistiquement significatif à niveau $\alpha = 0.05$.*
+
+- L'intervalle de confiance à 95% pour le rapport de cote de `nachats`, basé sur la vraisemblance profilée, est de $[1.15, 1.32]$; comme 1 est exclu, cette différence est statistiquement significative. 
+
+On obtiendrait la même conclusion avec la statistique du test de rapport de vraisemblance, ici $37.237$ pour 1 degré de liberté. La probabilité, si $\beta_{\text{nachats}}=0$, d'obtenir une telle différence d'ajustement est inférieure à $10^{-4}$, bien en deça du seuil de significativité. On rejette l'hypothèse nulle et on conclut que le nombre d'achat est important pour expliquer si une personne s'est prévalue de l'offre promotionnelle.
 
 ```{r}
-# Obtenir X et y
-Xmat_a <- model.matrix(formule, data = db_a)[,-1]
-y_a <- db_a$napplications
-lambda_seq <- exp(seq(from = log(0.1),
-                  to = log(50), 
-                  length.out = 100L))
-lasso <- glmnet::glmnet(
-    x = Xmat_a,
-    y = y_a,
-    alpha = 1, 
-    lambda = lambda_seq)
-# Prédictions et calcul de l'EQM
-# On pourrait remplacer `newx` par 
-# d'autres données (validation externe)
-eqm_lasso_externe <- rep(0, length(lambda_seq))
-for(i in seq_along(lambda_seq)){
-  pred <- predict(
-    object = lasso, 
-    s = lambda_seq[i], 
-    newx = model.matrix(formule, data = db_v)[,-1])
-  eqm_lasso_externe[i] <- 
-    mean((pred - db_v$napplications)^2)
-}
-minl <- which.min(eqm_lasso_externe)
-lambda_opt <- lambda_seq[minl]
-# Nombre de coefficients non nuls
-nvar_lasso_ve <- Matrix::nnzero(lasso$beta[,minl, drop = FALSE])
-reqm_lasso_ve <- sqrt(eqm_lasso_externe[minl])
+exp(confint(mod)) #IC pour rapport de cote
+car::Anova(mod, type = 3) # tests de rapport de vraisemblance
 ```
 
 
-3. *Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.*
+4. *Choisissez un point de coupure pour la classification pour maximiser le taux de bonne classification.* 
+   i. *Pour le point de coupure choisi, construisez une matrice de confusion.*
+   ii. *Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.*
+   
+```{r}
+#| eval: true
+#| echo: true
+#| cache: true
+#| message: false
+#| warning: false
+set.seed(60602)
+# Prédictions par validation croisée 
+# (moyenne de 10 réplications, K=10 plis)
+pred <- hecmulti::predvc(mod)
+# Extraire la variable réponse binaire 0/1
+resp <- logistclient$promo
+```
 
-On peut utiliser `boot::cv.glm` ou `caret::train` avec
-les différentes méthodes pour ajuster les modèles. Je fais varier le nombre maximal de variables pour retourner les différentes solutions. Comme le résultat de la validation croisée est aléatoire, on peut répéter cette étape pour réduire l'incertitude de prédiction et obtenir une meilleur valeur de l'écart-type.
+**Notez que les prédictions obtenues par validation croisée sont aléatoires, donc les résultats (aire sous la courbe, valeur-$p$ du test d'adéquation, etc.)  peuvent varier si vous n'utilisez pas le même germe aléatoire.**
+
+On prend le modèle ajusté avec `glm` et on calcule la prédiction à l'aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction `predvc` retourne la moyenne des prédictions (ici, des probabilités) pour chacune des 1000 observations.
+
+```{r}
+#| eval: true
+#| echo: true
+
+library(ggplot2)
+tableau <- perfo_logistique(prob = pred, 
+                             resp = resp)
+# Graphique du taux de bonne classification
+# selon le point de coupure
+ggplot(data = tableau, 
+       aes(x = coupe, y = pcorrect)) + 
+  geom_line() + 
+  theme_classic() + 
+  scale_y_continuous(limits = c(0, 100),
+                     expand = c(0,0)) + 
+  labs(x = "point de coupure",
+       y = "",
+       subtitle = "Taux de bonne classification")
+opt <- which.max(tableau$pcorrect)
+knitr::kable(tableau[opt,], digits = 2)
+```
+
+
+Ensuite, il suffit de passer les valeurs de la variable réponse et nos probabilités de succès prédites aux différentes fonctions.
+   
+Si on considère des points de coupure de 0.01 à 0.99 en incréments de 0.01, on obtient un point de coupure optimal à
+`r tableau[opt,"coupe"]`. On note que le taux de bonne classification change assez peu au final.
+
+```{r}
+#| label: tbl-confusion
+#| eval: true
+#| echo: false
+#| tbl-cap: "Matrice de confusion avec point de coupure optimal"
+confumat <- with(
+  tableau[opt,],
+  matrix(c(VP, FN, FP, VN), nrow = 2, ncol = 2))
+rownames(confumat) <- c("$\\widehat{Y}=1$","$\\widehat{Y}=0$")
+colnames(confumat) <- c("$Y=1$","$Y=0$")
+knitr::kable(x = confumat,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE)
+```
+Ainsi, si on fait les calculs à la main, on estime 
+
+- la sensibilité, $\mathsf{VP}/(\mathsf{VP} + \mathsf{FN})$, soit `r tableau[opt,"VP"]` / (`r tableau[opt,"VP"]` + `r tableau[opt,"FN"]`) ou `r round(tableau[opt,"VP"] / (tableau[opt,"VP"] + tableau[opt,"FN"]), 3)`.
+- la spécificité, $\mathsf{VN}/(\mathsf{VN} + \mathsf{FP})$, soit `r tableau[opt,"VN"]` / (`r tableau[opt,"VN"]` + `r tableau[opt,"FP"]`) ou `r round(tableau[opt,"VN"] / (tableau[opt,"VN"] + tableau[opt,"FP"]), 3)`.
+- le taux de bonne classification $\mathsf{VN} + \mathsf{VP}/(\mathsf{VN} + \mathsf{VP} + \mathsf{FN} + \mathsf{FP})$, soit (`r tableau[opt,"VP"]` + `r tableau[opt,"VN"]`) / 1000 ou `r (tableau[opt,"VP"] + tableau[opt,"VN"])/1000`.
+
+Ces valeurs coincident, à arrondi près, avec ce qui est reporté dans le tableau.
+
+
+5. *Produisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l'aire sous la
+courbe estimée à l’aide de la validation croisée.*
+
+```{r}
+roc <- courbe_roc(prob = pred, resp = resp)
+```
+
+On obtient une estimation de l'aire sous la courbe de `r round(roc$aire, 3)`.
+
+6. *Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?*
+
+```{r}
+hecmulti::calibration(prob = pred, resp = resp)
+```
+
+L'hypothèse nulle est que le modèle est calibré; ici, la valeur-$p$ est près de 0.5, donc on ne rejette pas l'hypothèse nulle et on conclut qu'il n'y a pas de preuve de surajustement.
+
+
+## Exercice 3.2
+
+
+*On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (`1`) à très satisfait (`5`). Les 1000 observations se trouvent dans la base de données `multinom` du paquet `hecmulti`.*
+
+
+*Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.*
+
+
+1. *Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Sinon, ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.*
+
+
+
+Les niveaux des facteurs non-ordonnés (catégories) dans **R** sont classés en ordre alphanumérique. Il faut donc modifier la catégorie de référence uniquement pour le niveau d'éducation avant d'ajuster le modèle.
+
+```{r}
+#| eval: true
+#| echo: true
+data(multinom, package = "hecmulti")
+db <- multinom |>
+  dplyr::mutate(educ = relevel(educ, ref = "sec"),
+                y = ordered(y))
+mod1 <- nnet::multinom(
+  y ~ sexe + educ + revenu + age,
+  data = db,
+  trace = FALSE)
+```
+
+Le modèle a `r length(coef(mod))` coefficients, dont deux pour éducation et revenu et un pour sexe et age, par niveau.
+
+Pour ajuster le modèle à cotes proportionnelles, il faut d'abord convertir la variable réponse en variable ordinale à l'aide de `ordered` si ce n'est pas déjà la classe de la variable. Cela permettra de spécifier l'ordre des modalités.
+
+```{r}
+#| eval: true
+#| echo: true
+# Ajuster modèle à cote proportionnelle
+mod0 <- MASS::polr(
+  ordered(y) ~ sexe + educ + revenu + age,
+  data = db)
+# Calculer statistique de test
+# (rapport de vraisemblance)
+stat <- deviance(mod0) - deviance(mod1)
+# À comparer à une loi khi-deux avec 
+# npar1-npar0 degrés de liberté
+npar0 <- length(coef(mod0)) + length(mod0$zeta)
+npar1 <- length(coef(mod1))
+# Calcul de la valeur-p
+# Probabilité que khi-deux (df) excède 'stat'
+pchisq(stat, 
+       df = npar1 - npar0, 
+       lower.tail = FALSE)
+```
+
+Le modèle ordinal a `r npar0` paramètres, contre `r npar1` pour le modèle multinomial logistique. On peut faire un test du rapport de vraisemblance en comparant la différence des log-vraisemblance des deux modèles emboîtés: la valeur de la statistique est `r round(stat, 3)`. La valeur-$p$ estimée est $8.8 \times 10^{-4}$$, donc on rejette l'hypothèse nulle et on conclut que le modèle à cote proportionnelle n'est pas adéquat.
+
+
+2. *Interprétez l’effet des variables éducation et sexe pour la catégorie 2 (par rapport à 1).*
+
+Il suffit de regarder les coefficients $\exp(\widehat{\beta}_{\text{sexe}}), \ldots$ associés et les interpréter en termes de rapport de cote, pour une régression logistique ordinaire.
+
+```{r}
+#| eval: true
+#| echo: true
+# Coefficient correspondants à sexe et éducation
+exp(coef(mod1)["2", 2:4])
+```
+
+- La cote pour les femmes pour insatisfait par rapport à très insatisfait est 42.4% plus élevée que pour les hommes, toute chose étant égale par ailleurs.
+- La cote pour les individus qui ont un diplôme collégial  pour insatisfait par rapport à très insatisfait est 10.4% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.
+- La cote pour les individus qui ont un diplôme universitaire  pour insatisfait par rapport à très insatisfait est 31.6% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.
+
+
+3. *Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?*
+
+Pour répondre à cette question, on ajuste le modèle multinomial logistique avec uniquement une constante. Les probabilités prédites sont simplement la proportion empirique des observations de l'échantillon: on peut ainsi vérifier que le modèle a convergé en comparant les prédictions et ces proportions. Une petite différence numérique est possible puisque le modèle multinomial logistique est ajusté à l'aide d'une procédure d'optimisation numérique itérative.
+
+```{r}
+#| eval: true
+#| echo: true
+# Ajuster modèle avec proba constante
+mod0 <- nnet::multinom(
+  y ~ 1, 
+  # ordonnée à l'origine seulement
+  data = db,
+  trace = FALSE)
+# Vérifier convergence
+pred0 <- predict(
+  object = mod0,
+  # Entrer une bd avec une ligne
+  newdata = db[1,], 
+  type = "prob")
+# Calculer la proportion de chaque categ.
+proportions_y <- table(db$y)/nrow(db)
+# Calculer différences
+pred0 - proportions_y
+```
+
+On peut ensuite calculer la statistique de rapport de vraisemblance en comparant les déviances des deux modèles.
 
 
 ```{r}
-# Matrice du modèle complet, moins ordonnée à l'origine
-Xmat <- model.matrix(formule, data = db)[,-1]
-# Variable réponse
-y <- db$napplications
-seq_vc <- 
-  caret::train(form = formule,
-               data = db,
-               method = 'leapSeq',
-             tuneGrid = expand.grid(nvmax = 1:50),
-             trControl = caret::trainControl(
-               method = "repeatedcv",
-               number = 10,
-               repeats = 10))
-# Graphique de la racine de l'EQM en fonction de
-# nvmax
-plot(seq_vc)
-# Meilleur modèle
-mod_seq_vc <- which.min(seq_vc$results$RMSE)
-reqm_seq_vc <- min(seq_vc$results$RMSE)
-nvar_seq_vc <- seq_vc$results$nvmax[mod_seq_vc]
-## Calcul des prédictions
-# predict(seq_vc, newdata = db)
+#| eval: true
+#| echo: true
+# Calculer statistique de test
+# (rapport de vraisemblance)
+stat <- deviance(mod0) - deviance(mod1)
+# À comparer à une loi khi-deux avec 
+# npar1-npar0 degrés de liberté
+npar0 <- length(coef(mod0)) + length(mod0$zeta)
+npar1 <- length(coef(mod1))
+# Calcul de la valeur-p
+# Probabilité que khi-deux (df) excède 'stat'
+pchisq(stat, 
+       df = npar1 - npar0, 
+       lower.tail = FALSE)
 ```
 
-Les notes de cours donnent une approche pas à pas avec `glmnet` pour ajuster le LASSO en choisissant la valeur de $\lambda$ par validation croisée, mais on peut changer le type de model dans `caret` et utiliser les mêmes fonctionnalités.
+La statistique pour le test du rapport de vraisemblance que tous les coefficients associés aux covariables sont nuls (24 paramètres supplémentaires) est `r round(stat, 3)`, et si le modèle sans covariable était vrai, cette statistique serait approximativement $\chi^2_{24}$. La valeur-$p$ arrondie est 0.0003, on rejette l'hypothèse nulle que tous les coefficients associés aux variables explicatives sont nuls. On conclut qu'au moins une covariable est utile pour prédire une cote par rapport au modèle avec une probabilité constante.
+
+4. *Est-ce que l'effet de la variable âge est globalement significatif?*
+
+Puisqu'on modélise quatre rapport de cotes à l'aide d'un modèle logistique, d'où $\beta_{\texttt{age}_2}=\beta_{\texttt{age}_3}=\beta_{\texttt{age}_4}=\beta_{\texttt{age}_5}=0.$ On peut obtenir la valeur-$p$ avec le tableau d'analyse de déviance, qui rapporte la valeur du test de rapport de vraisemblance. On conclut que l'âge impacte la probabilité des différents items de satisfaction.
 
 ```{r}
-# Autre approche que glmnet
-lasso_vc <- 
-  caret::train(form = formule,
-               data = db,
-               method = 'glmnet',
-             tuneGrid = expand.grid(
-               alpha = 1,
-               lambda = lambda_seq),
-             trControl = caret::trainControl(
-               method = "repeatedcv",
-               number = 10,
-               repeats = 10))
-plot(lasso_vc)
-# Meilleur modèle
-coefs_lasso_cv <- coef(object = lasso_vc$finalModel, 
-              s = lasso_vc$bestTune$lambda)
-# Nombre de paramètres non-nuls pour la solution
-nvar_lasso_vc <- Matrix::nnzero(coefs_lasso_cv)
-# Estimation de la racine de l'erreur quadratique moyenne
-reqm_lasso_vc <- min(lasso_vc$results$RMSE)
-## Calcul des prédictions - comme avec n'importe quel modèle
-# predict(lasso_vc, newdata = db)
+#| eval: true
+#| echo: true
+car::Anova(mod1, type = 3)
 ```
 
-4. *Créez un tableau avec le nombre de coefficients non-nuls de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée.*
+5. *Fournissez un intervalle de confiance à niveau 95% pour l'effet multiplicatif d'une augmentation d'une unité de la variable âge pour chacune des cote par rapport à très insatisfait (`1`). Que concluez-vous sur l'effet de âge pour les réponses 2 à 5 par rapport à 1?*
 
-Il suffit de colliger notre estimation de l'erreur et le nombre de coefficients.
-
+Les intervalles de confiance sont obtenus en prenant l'exponentielle des intervalles de confiance profilée pour les coefficients associés à `age`:
 
 ```{r}
-resultats <-data.frame(
-  erreur = rep(c("validation croisée",
-                  "validation externe"),
-                  each = 2),
-  methode = rep(c("sequentielle","lasso"), 
-               length.out = 4),
-  reqm = c(reqm_seq_vc,
-           reqm_lasso_vc,
-           reqm_seq_ve,
-           reqm_lasso_ve),
-  npar = c(nvar_seq_vc,
-           nvar_lasso_vc,
-           nvar_seq_ve,
-           nvar_lasso_ve))
-knitr::kable(resultats)
+#| eval: true
+#| echo: true
+exp(confint(mod1)["age",,])
 ```
 
-5. *Commentez sur le meilleur modèle parmi les combinaisons.*
+- $[0.975;  1.011]$ pour $\beta_{\texttt{age}_{2|1}}$ (pas significatif),
+- $[0.871; 0.963]$ pour $\beta_{\texttt{age}_{3|1}}$ (significatif),
+- $[0.941; 0.989]$ pour $\beta_{\texttt{age}_{4|1}}$ (significatif) et 
+- $[0.988; 1.021]$ pour $\beta_{\texttt{age}_{5|1}}$ (pas significatif).
 
-Si la taille de la base de données est plus conséquente, la validation croisée reste préférable à la validation externe, surtout si on répète cette méthode plusieurs fois pour réduire l'incertitude.^[Rien ne nous empêche de faire de même avec la validation externe, soit dit en passant.]
-Le nombre de paramètres dans le modèle LASSO peut sembler élevé, mais il faut garder en tête que les autres paramètres sont rétrécis vers zéro même s'ils sont non-nuls.
+6. *Écrivez l'équation de la cote ajustée pour satisfait (`4`) par rapport à très insatisfait (`1`).*
 
-Impossible de savoir quel est le meilleur modèle: le modèle avec la plus petite erreur quadratique moyenne est notre meilleur choix ici à défaut d'autres observations. Rappelez-vous qu'un modèle peut donner une bonne performance, mais être choisi parce qu'il surajuste une valeur aberrante.
+Pour obtenir l'équation ajustée, on utilise uniquement les coefficients pour $Y=4$ dans le tableau des coefficients.
 
-Le but de l'exercice était davantage de démontrer le travail que de faire une prédiction convaincante. Puisqu'on essaie de prédire une variable de dénombrement, un modèle plus adapté (modèle de régression binomiale négative, ou un modèle pour le log du nombre d'admission) pourrait probablement être plus adéquat dans la mesure où la variance de la réponse dépend de la taille de l'école.
+```{r}
+round(coef(mod1)["4",], 3)
+```
+
+\begin{align*}
+\frac{\Pr(Y=4 \mid\boldsymbol{X})}{\Pr(Y=1 \mid \boldsymbol{X})} & =\exp(-0.502 - 0.035\texttt{age} + 0.676 \texttt{cegep} + 0.8\texttt{uni} \\&-0.038 \texttt{revenu}_2 +0.009 \texttt{revenu}_3 + 0.613 \texttt{sexe})
+\end{align*}
+
+7. *Prédisez la probabilité qu'un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?*
+
+```{r}
+# Profil du client
+profil <- data.frame(
+  sexe = 0, 
+  age = 30, 
+  educ = "cegep", 
+  revenu = "2")
+# Probabilité du score de satisfication
+predict(mod1, 
+        newdata = profil, 
+        type = "prob")
+# Modalité la plus susceptible
+predict(mod1, 
+        newdata = profil)
+```
+
+Les probabilités prédites sont (0.321; 0.222; 0.039; 0.127; 0.292). La modalité la plus susceptible est donc très insatisfait (`1`).
+

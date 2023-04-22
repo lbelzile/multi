@@ -1,31 +1,34 @@
 ---
-title: "Analyse de survie"
+title: "Réduction de la dimension"
 ---
 
 ## Contenu
 
-- Extensions du modèle de Cox
-- Risques non proportionnels
-- [Exercice 5.2](/exercices/05-exercice.html#exercice-5.2)
+- Analyse en composantes principales
+- Analyse factorielle exploratoire
 
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 6 (analyse de survie)](https://lbelzile.github.io/math60602/06-survie.html), Sections 6.6 et 6.7
+- {{< fa book >}} [Chapitre sur la réduction de la dimension](https://lbelzile.github.io/math60602/analysefactorielle.html)
+
 
 ## Diapositives 
 
-- {{< fa file >}} [Analyse de survie](/diapos/MATH60602-diapos10.pdf)
+- {{< fa file >}} [Réduction de la dimension](/diapos/MATH60602-diapos10.pdf)
 - {{< fa code >}} [Code](/code/MATH60602-diapos10.R)
 
 <!--
 <iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
 -->
 
+## Exercices
+
+- {{< fa file >}} [Exercices 5](/exercices/05-exercice.html)
+
 ## Objectifs d'apprentissage
 
-- Pouvoir manipuler une base de données pour des variables explicatives qui varient dans le temps
-- Comprendre les avantages et inconvénients des extensions du modèle de Cox (stratification, risques non proportionnels)
-- Pouvoir correctement spécifier et interpréter un modèle à risques non proportionnels.
-
-
+- Reconnaître les situations où la réduction de la dimension est utile
+- Pouvoir déterminer le nombre adéquats de composantes principales ou de facteurs
+- Pouvoir lister les avantages et inconvénients des méthodes d'estimation pour l'analyse factorielle
+- Pouvoir calculer des échelles et vérifier leur cohérence interne.

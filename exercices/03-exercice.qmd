@@ -1,18 +1,34 @@
 ---
-title: "Sélection de variables"
+title: "Régression logistique"
 ---
 
 ## Exercice 3.1
 
+Les données `logistclient` contiennent des données simulées pour un cas fictif de promotion pour des clients. 
 
-Le but de l'exercice est de bâtir un modèle prédictif pour le nombre annuel de demandes d'admission à partir de la base de données `college`.
+1. Estimez le modèle logistique pour la probabilité que `promo=1` avec les variables explicatives `nachats`, `sexe` et `tclient`.
+2. Interprétez les coefficients du modèle à l'échelle de la cote en terme de pourcentage d'augmentation ou de diminution.
+3. Testez si l'effet de `nachats` est statistiquement significatif à niveau $\alpha = 0.05$.
+4. Choisissez un point de coupure pour la classification pour maximiser le taux de bonne classification. 
+   i. Pour le point de coupure choisi, construisez une matrice de confusion.
+   ii. Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.
+5. Produisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l'aire sous la
+courbe estimée à l’aide de la validation croisée.
+6. Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?
 
-1. Faites une analyse exploratoire des variables explicatives: 
-   - Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse.
-   - Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l'ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?
-   - Vérifiez s'il y a des variables catégorielles encodées comme des variables numériques.
-2. Scindez la base de données en échantillon avec données d'entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire `60602` via `set.seed(60602)`. 
-   - Sélectionnez un modèle à l'aide d'une des méthodes couvertes, mais en basant votre choix sur l'erreur moyenne quadratique évaluée sur l'échantillon de validation.
-3. Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.
-4. Créez un tableau avec le nombre de coefficients de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée. 
 
+# Exercice 3.2
+
+
+On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (`1`) à très satisfait (`5`). Les 1000 observations se trouvent dans la base de données `multinom` du paquet `hecmulti`.
+
+
+Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu. 
+
+1. Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence pour la satisfaction, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.
+2.  Interprétez l’effet des variables éducation et sexe pour la catégorie 2 par rapport à 1.
+3. Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?
+4. Est-ce que l'effet de la variable âge est globalement significatif?
+5. Fournissez un intervalle de confiance à niveau 95% pour l'effet multiplicatif d'une augmentation d'une unité de la variable âge pour chacune des cote par rapport à très insatisfait (`1`). Que concluez-vous sur l'effet de âge pour les réponses 2 à 5 par rapport à 1?
+6. Écrivez l'équation de la cote ajustée pour satisfait (`4`) par rapport à très insatisfait (`1`).
+7. Prédisez la probabilité qu'un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?

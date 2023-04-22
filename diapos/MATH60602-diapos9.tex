@@ -55,7 +55,7 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{D-DIN}
+  \setmainfont[]{VisbyCF-Medium}
   \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
@@ -172,19 +172,19 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
-  \renewcommand*\contentsname{Table of contents}
+  \renewcommand*\contentsname{Table des matières}
 \else
-  \newcommand\contentsname{Table of contents}
+  \newcommand\contentsname{Table des matières}
 \fi
 \ifdefined\listfigurename
-  \renewcommand*\listfigurename{List of Figures}
+  \renewcommand*\listfigurename{Liste des figures}
 \else
-  \newcommand\listfigurename{List of Figures}
+  \newcommand\listfigurename{Liste des figures}
 \fi
 \ifdefined\listtablename
-  \renewcommand*\listtablename{List of Tables}
+  \renewcommand*\listtablename{Liste des tableaux}
 \else
-  \newcommand\listtablename{List of Tables}
+  \newcommand\listtablename{Liste des tableaux}
 \fi
 \ifdefined\figurename
   \renewcommand*\figurename{Figure}
@@ -192,16 +192,16 @@
   \newcommand\figurename{Figure}
 \fi
 \ifdefined\tablename
-  \renewcommand*\tablename{Table}
+  \renewcommand*\tablename{Tableau}
 \else
-  \newcommand\tablename{Table}
+  \newcommand\tablename{Tableau}
 \fi
 }
 \@ifpackageloaded{float}{}{\usepackage{float}}
 \floatstyle{ruled}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
-\floatname{codelisting}{Listing}
-\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\floatname{codelisting}{Énumération}
+\newcommand*\listoflistings{\listof{codelisting}{Liste des énumérations}}
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -214,6 +214,9 @@
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -230,761 +233,17 @@
 \title{Analyse de survie}
 \subtitle{Analyse multidimensionnelle appliquée}
 \author{Léo Belzile}
-\date{automne 2022}
+\date{}
 \institute{HEC Montréal}
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, frame hidden, breakable, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
-
-\begin{frame}{Analyse de survie}
-\protect\hypertarget{analyse-de-survie}{}
-Étude du temps avant qu'un événement survienne.
-
-\begin{itemize}
-\tightlist
-\item
-  temps qu'un client demeure abonné à un service offert par notre
-  compagnie.
-\item
-  ancienneté d'un travailleur au service d'une compagnie.
-\item
-  durée de vie d'une franchise ou avant la faillite d'une entreprise.
-\item
-  temps avant le prochain achat d'un(e) client(e).
-\item
-  temps durant lequel une personne est au chômage.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Mécanismes de survie}
-\protect\hypertarget{muxe9canismes-de-survie}{}
-La survie est caractérisée par la présence d'information
-\textbf{partielle}.
-
-Les données sont sujettes à \textbf{troncature} et à \textbf{censure}.
-\end{frame}
-
-\begin{frame}{Définition de la censure}
-\protect\hypertarget{duxe9finition-de-la-censure}{}
-Le temps réel de l'événement n'est pas observé (information partielle).
-
-\begin{itemize}
-\tightlist
-\item
-  Censure à droite: l'événement n'est pas encore survenu au temps \(t\):
-  on sait que \(T > t\).
-\item
-  Censure à gauche: l'événement survient avant le temps \(t\), donc la
-  vraie valeur est inférieure à la valeur observée (\(T < t\))
-\item
-  Censure par intervalle: l'événement est survenu dans la plage
-  \([t_1, t_2]\) (données arrondies)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Définitions de la troncature}
-\protect\hypertarget{duxe9finitions-de-la-troncature}{}
-La plage des valeurs possibles est tronquée.
-
-\begin{itemize}
-\tightlist
-\item
-  troncature à gauche: le temps minimum est supérieur à \(t_0\)
-\item
-  troncature à droite: le temps maximum est inférieur à \(t_1\)
-\item
-  troncature par intervalle: le temps de l'événement doit survenir entre
-  \(t_0\) et \(t_1\).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Exemple: étude sur le chômage}
-\protect\hypertarget{exemple-uxe9tude-sur-le-chuxf4mage}{}
-\begin{itemize}
-\tightlist
-\item
-  Certaines personnes seront déjà au chômage au début de l'étude
-  (troncature à gauche): le temps réel sera supérieur à la durée écoulée
-\item
-  Certaines personnes ont trouvé un emploi entre deux prises de contact,
-  mais la date exacte est inconnue (censure par intervalle).
-\item
-  D'autres personnes seront toujours au chômage à la fin de l'étude
-  (censure à droite).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Diagramme de Lexis}
-\protect\hypertarget{diagramme-de-lexis}{}
-\begin{columns}[T]
-\begin{column}{0.5\textwidth}
-\begin{figure}
-
-{\centering \includegraphics{figures/Lexis_censure.pdf}
-
-}
-
-\caption{Diagramme de Lexis pour données tronquées à gauche (\(A\) et
-\(C\)) et censurées à droite (\(C\) et \(D\)).}
-
-\end{figure}
-\end{column}
-
-\begin{column}{0.4\textwidth}
-\begin{itemize}
-\tightlist
-\item
-  On trace une droite de pente 1 représentant la durée en fonction du
-  temps (date au calendrier).
-\item
-  La fenêtre définit la période de collecte de donnée.
-\item
-  On peut lire le temps initial et le temps final sur l'axe des \(y\).
-\item
-  La censure est indiquée par des cercles, les événements par des croix.
-\end{itemize}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Troncature par intervalle}
-\protect\hypertarget{troncature-par-intervalle}{}
-\includegraphics{figures/lexis_troncationintervalle.pdf}
-
-\footnotesize
-
-On s'intéresse à la durée de la relation d'emploi: seules les personnes
-à l'emploi qui ont pris leur retraite entre 2009 et 2021 sont
-considérées pour l'étude.
-\end{frame}
-
-\begin{frame}{Exemple de données de survie}
-\protect\hypertarget{exemple-de-donnuxe9es-de-survie}{}
-Tableau extrait de \href{https://doi.org/10.1093/gerona/glv113}{Hanamaya
-et Sibuya (2016)}
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/Sibuya_tabular.png}
-
-}
-
-\caption{Âge au décès (cohortes éteintes) de centenaires Japonais.}
-
-\end{figure}
-
-\small
-
-Données censurées par intervalles et tronquées à droite (l'âge maximum
-des personnes en date de collecte des données en 2012).
-
-\normalsize
-\end{frame}
-
-\begin{frame}{Censure informative ou pas?}
-\protect\hypertarget{censure-informative-ou-pas}{}
-La censure peut être aléatoire ou non-informative:
-
-\begin{itemize}
-\tightlist
-\item
-  une étude finit en juin (censure administrative)
-\item
-  une personne déménage dans une autre province et n'est plus suivie
-\end{itemize}
-
-Si la censure est informative, les outils présentés ne sont pas
-adéquats!
-
-\begin{itemize}
-\tightlist
-\item
-  un patient d'une étude clinique est déchargé d'un protocole médical
-  car il est trop mal en point.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Exemple}
-\protect\hypertarget{exemple}{}
-Où est l'erreur de logique dans l'analyse suivante?
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/rightcensoring_illustration-age_death_music_genre.jpg}
-
-}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Contenu du cours}
-\protect\hypertarget{contenu-du-cours}{}
-La survie est un sujet très compliqué\ldots{}
-
-On s'intéressera uniquement à la censure à droite (non informative).
-
-Le cours ne couvrira que des méthodes nonparamétriques ou
-semiparamétriques.
-\end{frame}
-
-\begin{frame}{Données}
-\protect\hypertarget{donnuxe9es}{}
-La structure de données de base que l'on doit avoir pour travailler est
-la suivante:
-
-\begin{enumerate}
-\tightlist
-\item
-  une variable temps, \(T\).
-\item
-  une variable binaire \(C\) (censure).
-\item
-  des variables explicatives \(X_1, \ldots, X_p\)
-\end{enumerate}
-
-On considère l'exemple d'une entreprise de télécommunications qui veut
-connaître les facteurs influençant la durée d'abonnement à son service
-de téléphone cellulaire.
-\end{frame}
-
-\begin{frame}[fragile]{Temps d'abonnement à un forfait cellulaire}
-\protect\hypertarget{temps-dabonnement-uxe0-un-forfait-cellulaire}{}
-Les données \texttt{survie1} contiennent les variables suivantes.
-
-\begin{itemize}
-\tightlist
-\item
-  \(\texttt{temps}\): temps (en semaines) que le client est resté abonné
-  au service de téléphone cellulaire. Il s'agit du vrai temps si le
-  client n'est plus abonné et d'une borne inférieure si le client est
-  toujours abonné.
-\item
-  \texttt{censure}: variable binaire qui indique si la variable
-  \texttt{t} est censurée (\texttt{0} si le client est toujours abonné)
-  ou non (\texttt{1}, la variable \texttt{t} est la durée finale de
-  l'abonnement).
-\item
-  \texttt{age}: âge du client au début de l'abonnement.
-\item
-  \texttt{sexe}: sexe du client, soit femme (\texttt{1}), soit homme
-  (\texttt{0}).
-\item
-  \texttt{service}: nombre de services en plus du cellulaire auquel le
-  client est abonné parmi internet, téléphone fixe, télévision (câble ou
-  antenne parabolique).
-\item
-  \texttt{region}: région où habite le client en ce moment (valeurs
-  entre \texttt{1} et \texttt{5}).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Survie vs régression}
-\protect\hypertarget{survie-vs-ruxe9gression}{}
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1917}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.4167}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2250}}@{}}
-\toprule()
-\begin{minipage}[b]{\linewidth}\raggedright
-réponse \(Y\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-résumé descriptif
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-comparaison de deux groupes
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-modèle général
-\end{minipage} \\
-\midrule()
-\endhead
-continue & moyenne & test-\(t\) pour deux échantillons & régression
-linéaire \\
-binaire & proportion & test d'indépendance du khi-deux & régression
-logistique \\
-temps de survie censuré à droite & fonction de survie, temps de survie
-médian & test log-rang, test de Wilcoxon généralisé (Gehan) & modèle de
-Cox \\
-\bottomrule()
-\end{longtable}
-\end{frame}
-
-\begin{frame}{Fonction de survie}
-\protect\hypertarget{fonction-de-survie}{}
-Soit \(F(t)=\Pr(T \leq t)\) la fonction de répartition du temps de
-survie \(t\). La fonction de survie, \begin{align*}
-S(t)= \Pr(T > t) = 1-F(t),
-\end{align*} donne la probabilité que le temps de survie soit supérieur
-à \(t\).
-\end{frame}
-
-\begin{frame}{Fonction de risque}
-\protect\hypertarget{fonction-de-risque}{}
-La \textbf{fonction de risque} (en anglais, \emph{hazard}) est
-\begin{align*}
-h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
-\end{align*} où \(f(t)\) est la fonction de densité (pour \(T\) continu)
-ou de masse pour \(T\) discret.
-
-Plus le risque est élevé au temps \(t\), plus l'événement est
-susceptible d'arriver.
-\end{frame}
-
-\begin{frame}{Fonction de risque (bis)}
-\protect\hypertarget{fonction-de-risque-bis}{}
-Dans le cas discret où le temps peut seulement prendre les valeurs
-\(0, 1, 2, \ldots\), le risque est \begin{align*}
-h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
-\end{align*} la probabilité conditionnelle que l'événement survienne au
-temps \(t\), étant donné qu'il n'était pas survenu juste avant.
-\end{frame}
-
-\begin{frame}{Risque vs survie}
-\protect\hypertarget{risque-vs-survie}{}
-Les fonctions de survie et de risque sont intimement reliées, avec
-\begin{align*}
-h(t) = - \frac{\mathrm{d} \ln\{S(t)\}}{\mathrm{d} t}, \qquad \qquad S(t) = \exp \left\{ -\int_0^t h(u) \mathrm{d} u\right\}.
-\end{align*}
-
-Cette équation sert à illustrer qu'un modèle pour la fonction de survie
-spécifie une fonction de risque (et vice-versa).
-
-Un profil avec un risque plus élevé (pour tout temps \(t\)) aura une
-survie plus courte.
-\end{frame}
-
-\begin{frame}{Estimateur de Kaplan--Meier}
-\protect\hypertarget{estimateur-de-kaplanmeier}{}
-L'estimateur de Kaplan--Meier est un estimateur de la fonction de survie
-en présense de censure à droite.
-
-Cette méthode est nonparamétrique en ce sens qu'on ne suppose aucun
-modèle et qu'on suppose uniquement que la censure est non-informative.
-\end{frame}
-
-\begin{frame}[fragile]{Kaplan--Meier avec \textbf{R}}
-\protect\hypertarget{kaplanmeier-avec-r}{}
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{library}\NormalTok{(survival)}
-\FunctionTok{data}\NormalTok{(survie1, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\CommentTok{\# Estimateur de Kaplan{-}Meier}
-\CommentTok{\# La réponse "temps" est le temps de survie }
-\CommentTok{\# et l\textquotesingle{}indicateur de censure "censure" est}
-\CommentTok{\# "0" pour censuré à droite, "1" pour événement}
-\NormalTok{kapm }\OtherTok{\textless{}{-}} \FunctionTok{survfit}\NormalTok{(}
-  \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }
-  \CommentTok{\#\textasciitilde{}1 =\textgreater{} aucune variable explicative}
-  \AttributeTok{type =} \StringTok{"kaplan{-}meier"}\NormalTok{, }
-  \AttributeTok{conf.type =} \StringTok{"log"}\NormalTok{, }\CommentTok{\#type d\textquotesingle{}intervalle de conf.}
-  \AttributeTok{data =}\NormalTok{ survie1)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}[fragile]{Méthodes pour \texttt{survfit}}
-\protect\hypertarget{muxe9thodes-pour-survfit}{}
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{\# Tableau résumé de la survie}
-\FunctionTok{summary}\NormalTok{(kapm)  }
-\CommentTok{\# Graphique de la fonction de survie}
-\FunctionTok{plot}\NormalTok{(kapm) }\CommentTok{\# graphique de base}
-\CommentTok{\# Quantiles (par défaut, quartiles)}
-\FunctionTok{quantile}\NormalTok{(kapm)}
-\end{Highlighting}
-\end{Shaded}
-
-Parmi les 500 observations, il y a
-
-\begin{itemize}
-\tightlist
-\item
-  334 clients qui ont terminé leur abonnement et
-\item
-  166 qui sont censurées à droite.
-\end{itemize}
-
-La fonction résumé (\texttt{summary}) renvoit l'estimation de la
-fonction de survie pour chaque temps d'échec (événement).
-
-\begin{itemize}
-\tightlist
-\item
-  l'estimateur est \emph{indéfini} à ces valeurs.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Tableau résumé (sortie tronqué)}
-\protect\hypertarget{tableau-ruxe9sumuxe9-sortie-tronquuxe9}{}
-\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
-\toprule
-temps & nb à risque & nb échecs & nb cumul. & survie & erreur-type\\
-\midrule
-2 & 500 & 1 & 1 & 0.9980 & 0.002\\
-11 & 499 & 1 & 2 & 0.9960 & 0.003\\
-14 & 498 & 1 & 3 & 0.9940 & 0.003\\
-18 & 497 & 1 & 4 & 0.9920 & 0.004\\
-27 & 496 & 1 & 5 & 0.9900 & 0.004\\
-29 & 495 & 1 & 6 & 0.9880 & 0.005\\
-30 & 494 & 1 & 7 & 0.9860 & 0.005\\
-34 & 493 & 4 & 11 & 0.9780 & 0.007\\
- &  &  &  &  & \\
-189 & 13 & 1 & 331 & 0.2037 & 0.028\\
-202 & 6 & 1 & 332 & 0.1697 & 0.039\\
-216 & 2 & 2 & 334 & 0.0000 & \\
-\bottomrule
-\end{tabu}
-
-\footnotesize
-
-La probabilité estimée que le temps d'abonnement dépasse 30 semaines est
-0.986.
-
-\normalsize
-\end{frame}
-
-\begin{frame}{Graphique de la fonction de survie}
-\protect\hypertarget{graphique-de-la-fonction-de-survie}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.85\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/fig-km-survie1-1.pdf}
-
-}
-
-\caption{\label{fig-km-survie1}Estimation de Kaplan--Meier de la
-fonction de survie pour les données d'abonnement avec intervalles de
-confiance ponctuels à 95\%.}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Comprendre l'estimateur de Kaplan--Meier}
-\protect\hypertarget{comprendre-lestimateur-de-kaplanmeier}{}
-\begin{itemize}
-\tightlist
-\item
-  On parle d'\textbf{échec} au temps \(t_i\) si \(T = t_i\) et \(C=0\)
-  (événement observé au temps \(t_i\)).
-\item
-  Le nombre de \textbf{personnes à risque} au temps \(t_i\) est le total
-  des observations dont le temps mesuré excède \(t_i\) (censure et
-  événements postérieurs à \(t_i\))
-\end{itemize}
-
-\textbf{Construction}:
-
-\begin{itemize}
-\tightlist
-\item
-  Ordonner les temps (uniques) où il y a des échecs (temps où
-  \texttt{censure\ =\ 1}), disons \(t_{(1)} \leq \cdots \leq t_{(m)}\)
-\item
-  À chaque temps \(t_{(i)}\) \((i=1, \ldots m)\), on calcule le nombre
-  de personnes à risque, \(r_i\), et le nombre d'échecs, \(d_i\).
-\item
-  Le risque empirique est \(\widehat{h}_i = r_i/d_i\), la proportion
-  d'échecs parmi les personnes à risque.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Dérivation de Kaplan--Meier}
-\protect\hypertarget{duxe9rivation-de-kaplanmeier}{}
-L'estimateur de Kaplan--Meier définit une \textbf{fonction escalier}
-\footnotesize
-
-\begin{itemize}
-\tightlist
-\item
-  Entre \(t=0\) et \(t=t_{(1)}\), la survie est de 1.
-\item
-  Entre \(t=t_{(1)}\) et \(t=t_{(2)}\), la survie est
-  \(1-\widehat{h}_1\).
-\item
-  Entre \(t=t_{(2)}\) et \(t=t_{(3)}\), la survie est
-  \((1-\widehat{h}_1) \times (1-\widehat{h}_2)\).
-\end{itemize}
-
-\normalsize
-
-Pour un temps \(t\) donné, on multiplie tous les termes
-(\(1-\widehat{h}_i\)) des temps d'échecs passés, \begin{align*}
- \widehat{S}(t) = \prod_{i: t_{(i)} < t} \left( 1- \widehat{h}_i\right).
-\end{align*}
-
-\begin{itemize}
-\tightlist
-\item
-  la survie ne change qu'aux valeurs de \(t_{(i)}\) (\(i=1, \ldots, m\))
-\item
-  les contre-marches interviennent uniquement aux temps observés
-  d'\textbf{échecs}.
-\item
-  si la plus grande observation est censurée, la courbe de survie
-  n'atteindra jamais zéro.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Quantiles de la fonction de survie}
-\protect\hypertarget{quantiles-de-la-fonction-de-survie}{}
-On obtient le quantile à partir du tableau: c'est le premier temps
-d'échec où la survie est inférieure au quantile (la ligne horizontale au
-quantile traverse une contre-marche).
-
-\begin{table}
-\centering
-\begin{tabular}{rrrr}
-\toprule
-niveau (\%) & quantile & IC 95\% (borne inf.) & IC 95\% (borne sup.)\\
-\midrule
-25 & 84 & 80 & 90\\
-50 & 114 & 110 & 119\\
-75 & 171 & 143 & \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{itemize}
-\tightlist
-\item
-  L'estimé du temps de survie médian est de 114 semaines: on estime que
-  la moitié des clients vont avoir une durée d'abonnement supérieure (ou
-  inférieure) à 114 semaines.
-\item
-  Un intervalle de confiance (IC) de niveau 95\%, pour le temps médian
-  est {[}110, 119{]} semaines (IC de Wald, transformé).
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Estimateur déficient et moyenne restreinte}
-\protect\hypertarget{estimateur-duxe9ficient-et-moyenne-restreinte}{}
-\begin{itemize}
-\tightlist
-\item
-  Si la plus grande observation n'est pas censurée à droite, il est
-  possible d'estimer la moyenne.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    aire sous la courbe
-  \item
-    autrement, on obtient une borne inférieure (sous-estimation de la
-    moyenne), appelée \emph{moyenne restreinte}.
-  \end{itemize}
-\end{itemize}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{print}\NormalTok{(kapm, }\AttributeTok{print.rmean =} \ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{itemize}
-\tightlist
-\item
-  La moyenne estimée via Kaplan--Meier est 125 semaines
-  (\texttt{rmean}).\\
-\item
-  Les statistiques descriptives usuelles sont à proscrire! Elles ne
-  tiennent pas compte de la censure.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Par exemple, la moyenne empirique ici est de 107.788 semaines.
-  \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Comparaison de plusieurs courbes de survie}
-\protect\hypertarget{comparaison-de-plusieurs-courbes-de-survie}{}
-Si on sépare l'échantillon selon une variable catégorielle en \(K\)
-groupes, on peut estimer séparément les fonctions de survie des groupes,
-disons \(S_1(t), \ldots, S_K(t)\).
-
-On peut tester l'égalité des fonctions de survie, c'est-à-dire, les
-hypothèses
-
-\begin{itemize}
-\tightlist
-\item
-  \(\mathscr{H}_0: S_1(t) = \cdots = S_K(t)\) pour tout \(t\) et
-\item
-  \(\mathscr{H}_a\): les courbe de survies diffèrent pour au moins une
-  valeur de \(t\).
-\end{itemize}
-
-Les deux tests utilisés habituellement sont
-
-\begin{itemize}
-\tightlist
-\item
-  le test du log-rang et
-\item
-  le test de Wilcoxon généralisé (ou test de Gehan).
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Comparaison de la survie selon le sexe}
-\protect\hypertarget{comparaison-de-la-survie-selon-le-sexe}{}
-On stratifie l'échantillon selon le sexe.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{survdiff}\NormalTok{(}\AttributeTok{formula =} \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sexe, }
-         \AttributeTok{data =}\NormalTok{ survie1)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Call:
-survdiff(formula = Surv(temps, censure) ~ sexe, data = survie1)
-
-         N Observed Expected (O-E)^2/E (O-E)^2/V
-sexe=0 309      217      181      7.33      16.4
-sexe=1 191      117      153      8.63      16.4
-
- Chisq= 16.4  on 1 degrees of freedom, p= 5e-05 
-\end{verbatim}
-
-\footnotesize
-
-\begin{itemize}
-\tightlist
-\item
-  La fonction \texttt{survdiff} avec la formule retourne le résultat du
-  test asymptotique du log-rang pour l'hypothèse d'égalité des fonctions
-  de survie.
-\item
-  La valeur-\(p\) du test est inférieure à \(10^{-4}\): on rejette
-  \(\mathscr{H}_0\) pour conclure qu'il y a une différence significative
-  entre les deux courbes de survie.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Courbes de survie selon le sexe}
-\protect\hypertarget{courbes-de-survie-selon-le-sexe}{}
-On voit que la courbe des femmes est systématiquement au-dessus de celle
-des hommes. Les femmes ont donc tendance à rester abonnées plus
-longtemps que les hommes.
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/fig-survie-comparaison-courbes-1.pdf}
-
-}
-
-\caption{\label{fig-survie-comparaison-courbes}Courbes de survie pour
-les durées d'abonnement selon le sexe.}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Modélisation par groupe}
-\protect\hypertarget{moduxe9lisation-par-groupe}{}
-L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables
-explicatives à proprement parler.
-
-\begin{itemize}
-\tightlist
-\item
-  On peut diviser l'échantillon en sous-groupes (stratification).
-\item
-  On utilise ensuite l'estimateur de Kaplan--Meier pour chacune des
-  modalités.
-\item
-  Cela réduit la taille de l'échantillon disponible et rend l'estimation
-  plus incertaine.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
-\begin{itemize}
-\tightlist
-\item
-  L'analyse de survie est l'étude de temps d'attente (variable positive)
-  avant que survienne un événement.
-\item
-  L'étude des temps de défaillance nécessite l'utilisation d'outils
-  statistiques spécifiques en raison des mécanismes de censure et de
-  troncature.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
-\begin{itemize}
-\tightlist
-\item
-  La fonction de survie \(S(t)\) encode la probabilité que le temps de
-  défaillance excède le temps \(t\).
-\item
-  La fonction de risque encode la probabilité de mourir juste après le
-  temps \(t\) sachant qu'on a survécu jusque là.
-\item
-  La connaissance de la fonction de survie permet d'obtenir la fonction
-  de risque et vice-versa.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
-\begin{itemize}
-\tightlist
-\item
-  Le mécanisme d'information partielle le plus courant en analyse de
-  survie est la \textbf{censure à droite} (on ne connaît qu'une borne
-  inférieure pour le temps de défaillance, l'événement n'étant toujours
-  pas survenu au temps donné).
-\item
-  Si on traitait les temps de censure comme des temps de défaillance
-  observée, on \emph{sous-estimerait} la durée de survie.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-3}{}
-\begin{itemize}
-\tightlist
-\item
-  L'estimateur de Kaplan--Meier est l'estimateur du maximum de
-  vraisemblance nonparamétrique si on a de la censure à droite aléatoire
-  ou non-informative. Il ne fait aucun postulat sur la distribution de
-  la survie.
-\item
-  Pour que l'estimation soit de qualité, il faut un nombre
-  \emph{conséquent} d'observations.
-\item
-  La quantité d'observations censurées impacte la précision de
-  l'estimation.
-\item
-  L'estimateur est déficient si le plus grand temps observé est censuré
-  à droite (l'estimation de la fonction de survie ne décroît pas à zéro)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-4}{}
-\begin{itemize}
-\tightlist
-\item
-  Le test du log-rang permet de valider si plusieurs fonctions de survie
-  sont égales (en tout temps).
-\item
-  On peut estimer la fonction de survie indépendamment pour chaque
-  modalité d'une variable explicative catégorielle en stratifiant: cela
-  réduit la taille de l'échantillon dans chaque strate.
-\end{itemize}
-\end{frame}
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Modèle à risques proportionnels de Cox}
 \protect\hypertarget{moduxe8le-uxe0-risques-proportionnels-de-cox}{}
-Si on veut inclure l'effet de variable explicatives, on se tourne vers
-le \textbf{modèle à risques proportionnels de Cox}.
-
-Ce dernier spécifie que le risque au temps \(t\) est \begin{align*}
+Le \textbf{modèle à risques proportionnels de Cox} pour \(\mathbf{X}\)
+au temps \(t\) est \begin{align*}
 h(t; \mathbf{X}) = h_0(t)\exp(\beta_1\mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p),
 \end{align*} où \(h_0(t)\) est la fonction de risque de base qui
 remplace l'ordonnée à l'origine.
@@ -992,322 +251,592 @@ remplace l'ordonnée à l'origine.
 \begin{itemize}
 \tightlist
 \item
-  Le postulat de risques proportionnels implique que le terme
-  \(\exp(\mathbf{X}\boldsymbol{\beta})\) --- et donc les coefficients
-  \(\boldsymbol{\beta}\) --- ne varient pas selon le temps \(t\).
-\item
-  La fonction \(h_0(t)\) peut être interprétée comme la fonction de
-  risque lorsque toutes les variables explicatives \(\mathbf{X}\) valent
-  zéro.
+  Postulat de risques proportionnels: le rapport de risque pour deux
+  observations ne varie pas en fonction du temps \(t\).
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Composante paramétrique}
-\protect\hypertarget{composante-paramuxe9trique}{}
-Le terme \(\exp(\mathbf{X}\boldsymbol{\beta})\) modélise l'effet d'un
-changement des valeurs des variables explicatives sur la fonction de
-risque de base.
-
-Le modèle de Cox est un modèle multiplicatif:
-
-\begin{itemize}
-\tightlist
-\item
-  Si \(\mathrm{X}_i\) augmente d'une unité le rapport de risque est de
-  \(\exp(\beta_i)\).
-\item
-  Pour chaque augmentation d'une unité de \(\mathrm{X}_i\), le risque
-  que l'événement survienne est multiplié par \(\exp(\beta)\),
-  \emph{ceteris paribus}.
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Modèle de Cox dans \textbf{R}}
-\protect\hypertarget{moduxe8le-de-cox-dans-r}{}
-Le modèle de Cox, \texttt{coxph}, inclut un objet de classe
-\texttt{Surv()} avec le temps de défaillance et l'indicateur de censure
-comme variable réponse.
-
-Il y a trois options pour la gestion des doublons:
-\texttt{ties\ =\ "exact"} est meilleur, mais plus coûteux (parfois
-prohibitivement).
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{cox }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}
-  \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}} 
-\NormalTok{    age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ region }\SpecialCharTok{+}\NormalTok{ service, }
-  \AttributeTok{data =}\NormalTok{ survie1,}
-  \AttributeTok{ties =} \StringTok{"exact"}\NormalTok{) }\CommentTok{\# gestion des doublons}
-\CommentTok{\# Tableau résumé avec coefficients,}
-\CommentTok{\# intervalles de confiance de Wald}
-\CommentTok{\# et tests pour significativité globale}
-\FunctionTok{summary}\NormalTok{(cox)}
-\CommentTok{\# Test du rapport de vraisemblance}
-\NormalTok{car}\SpecialCharTok{::}\FunctionTok{Anova}\NormalTok{(cox, }\AttributeTok{type =} \DecValTok{3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}[fragile]{Coefficients du modèle}
-\protect\hypertarget{coefficients-du-moduxe8le}{}
-\hypertarget{tbl-survie5-coefs}{}
-\begin{table}
-\caption{\label{tbl-survie5-coefs}Rapport de risque et intervalles de confiance à niveau 95\% de Wald pour
-le modèle de Cox. }\tabularnewline
-
-\centering
-\begin{tabular}{lrrr}
-\toprule
-terme & exp(coef) & borne inf. & borne sup.\\
-\midrule
-age & 0.950 & 0.937 & 0.962\\
-sexe & 0.511 & 0.404 & 0.646\\
-region2 & 0.674 & 0.465 & 0.978\\
-region3 & 1.030 & 0.729 & 1.457\\
-region4 & 0.799 & 0.566 & 1.128\\
-region5 & 0.966 & 0.683 & 1.366\\
-service1 & 0.353 & 0.275 & 0.453\\
-service2 & 0.174 & 0.120 & 0.251\\
-service3 & 0.115 & 0.070 & 0.190\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\emph{Ceteris paribus}, le risque qu'une femme (\texttt{sexe\ =\ 1}) se
-désabonne est 0.511 fois plus petit que celui d'un homme
-(\texttt{sexe\ =\ 0}).
-\end{frame}
-
-\begin{frame}[fragile]{Tests du rapport de vraisemblance}
-\protect\hypertarget{tests-du-rapport-de-vraisemblance}{}
-Les statistiques de rapport de vraisemblance sont comparées à une loi
-khi-deux (\(\chi^2\)) avec \texttt{ddl} degrés de liberté.
-
-\hypertarget{tbl-survie5-deviance}{}
-\begin{table}
-\caption{\label{tbl-survie5-deviance}Tests du rapport de vraisemblance pour les effets de type 3. }\tabularnewline
-
-\centering
-\begin{tabular}{lrrl}
-\toprule
-terme & statistique & ddl & valeur-p\\
-\midrule
-age & 68.07 & 1 & <1e-04\\
-sexe & 32.82 & 1 & <1e-04\\
-region & 7.67 & 4 & 0.1\\
-service & 159.31 & 3 & <1e-04\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Par exemple, l'effet marginal (une fois que les autres variables sont
-incluses) de la variable sexe est significatif (valeur-\(p\) inférieure
-à \(10^{-4}\)).
-
-La variable \(\texttt{region}\) n'est pas globalement significative.
-\end{frame}
-
-\begin{frame}[fragile]{Prédiction de la survie}
-\protect\hypertarget{pruxe9diction-de-la-survie}{}
-On peut passer une base de données, ici \texttt{survie2} à un modèle de
-type \texttt{coxph} pour prédire la survie.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{\# Ajuster un modèle avec deux variables}
-\FunctionTok{data}\NormalTok{(survie2, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\NormalTok{cox }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}
-  \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}} 
-\NormalTok{    age }\SpecialCharTok{+}\NormalTok{ sexe, }
-  \AttributeTok{data =}\NormalTok{ survie1)}
-\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{survfit}\NormalTok{(}
-\NormalTok{  cox,       }\CommentTok{\# Modèle de Cox}
-  \AttributeTok{newdata =}\NormalTok{ survie2, }\CommentTok{\# nouvelle base de données}
-  \AttributeTok{type =} \StringTok{"kaplan{-}meier"}\NormalTok{) }\CommentTok{\# survie}
-\FunctionTok{plot}\NormalTok{(pred) }\CommentTok{\# graphe de base}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Profil des nouveaux clients}
-\protect\hypertarget{profil-des-nouveaux-clients}{}
-\hypertarget{tbl-survie-coefs}{}
-\begin{table}
-\caption{\label{tbl-survie-coefs}Information sur les coefficients et les profils clients. }\tabularnewline
-
-\centering
-\begin{tabular}{lrrr}
-\toprule
-terme & exp(coef) & borne inf. & borne sup.\\
-\midrule
-age & 0.958 & 0.945 & 0.970\\
-sexe & 0.614 & 0.489 & 0.773\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\hypertarget{tbl-profils}{}
-\begin{table}
-\caption{\label{tbl-profils}Profil de quatre clients pour la prédiction. }\tabularnewline
-
-\centering
-\begin{tabular}{rr}
-\toprule
-sexe & age\\
-\midrule
-0 & 25\\
-1 & 25\\
-0 & 60\\
-1 & 60\\
-\bottomrule
-\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{Graphique des fonctions de survie}
-\protect\hypertarget{graphique-des-fonctions-de-survie}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/unnamed-chunk-20-1.pdf}
-
-}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Postulat de risques proportionnels}
-\protect\hypertarget{postulat-de-risques-proportionnels}{}
-Il est possible de créer des résidus du modèles et de faire des
-graphiques diagnostics pour potentiellement infirmer le postulat de
-risques proportionnels.
-
-Si l'hypothèse tient la route, alors il ne devrait pas y avoir de
-tendance temporelle dans les résidus.
-
-La commande \texttt{cox.zph} permet de tester le postulat de risques
-proportionnels à l'aide d'un test du score pour voir si la pente
-\(\beta(t)\) associée à une covariable est nulle en fonction du temps
-\(t\).
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{test\_score\_rprop }\OtherTok{\textless{}{-}} \FunctionTok{cox.zph}\NormalTok{(cox)}
-\NormalTok{test\_score\_rprop}
-\FunctionTok{plot}\NormalTok{(test\_score\_rprop)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Graphique des résidus}
-\protect\hypertarget{graphique-des-ruxe9sidus}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/fig-coxph-hypothese-1.pdf}
-
-}
-
-\caption{\label{fig-coxph-hypothese}Estimations des coefficients en
-fonction du temps basés sur les moindres carrés pondérés (diagnostic
-graphique de Grampsch et Therneau).}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Test du score pour risques proportionnels}
-\protect\hypertarget{test-du-score-pour-risques-proportionnels}{}
-Test du score de Grampsch et Therneau (1994) pour les coefficients
-constants dans le temps avec
-
-\begin{itemize}
-\tightlist
-\item
-  \(\mathscr{H}_0\): \(\beta(t)=c\) est constant (risques
-  proportionnels)
-\item
-  \(\mathscr{H}_a\): \(\beta(t) \neq c\) (risques non proportionnels,
-  coefficient variable).
-\end{itemize}
-
-\hypertarget{tbl-coxph-hypothese}{}
-\begin{table}
-\caption{\label{tbl-coxph-hypothese}Tests du score avec valeur-p basée sur la loi nulle khi-deux. }\tabularnewline
-
-\centering
-\begin{tabular}{lrrl}
-\toprule
-effet & score & ddl & valeur-p\\
-\midrule
-age & 4.17 & 1 & 0.041\\
-sexe & 1.09 & 1 & 0.296\\
-service & 10.62 & 3 & 0.014\\
-region & 3.81 & 4 & 0.432\\
-global & 20.83 & 9 & 0.013\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\footnotesize
-
-Postulat pas respecté pour \texttt{service}: augmentation au fil du
-temps pour tous les groupes. Il faudrait ajouter une interaction ou
-stratifier par \texttt{service}.
 \end{frame}
 
 \begin{frame}{Postulat de risques proportionnels}
-\protect\hypertarget{postulat-de-risques-proportionnels-1}{}
-Si le postulat n'est pas validé, on peut interpréter l'effet comme un
-rapport de risque moyen pondéré sur la période de suivi, mais ce dernier
-change selon le moment (Stensrud et Hernan, 2020).
+\protect\hypertarget{postulat-de-risques-proportionnels}{}
+\begin{figure}
 
-Cela implique surtout que les erreurs-types associées aux estimations
-sont trompeuses.
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/fig-risquepropfig-1.pdf}
+
+}
+
+\caption{\label{fig-risquepropfig}Courbes de risques proportionnelles
+(panneau supérieur) et non proportionnelles (panneau inférieur).}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Absence de proportionnalité et stratification}
+\protect\hypertarget{absence-de-proportionnalituxe9-et-stratification}{}
+On peut modéliser la non proportionnalité des risques par la
+\textbf{stratification} pour une variable catégorielle
+\(Z=1, \ldots, K\).
+
+Supposons que l'effet de \(Z\) sur le risque varie dans le temps.
+
+On écrit alors \begin{align*}
+h(t; \mathbf{X}, Z=k) = h_k(t)\exp(\beta_1\mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p),
+\end{align*} où \(h_k(t)\) est la fonction de risque de base pour
+\(Z=k\).
+
+Dans ce modèle
+
+\begin{itemize}
+\tightlist
+\item
+  On suppose que l'effet des variables explicatives \(\mathbf{X}\) est
+  le même peut importe la valeur de \(Z\).
+\item
+  L'effet de \(Z=k\) vs \(Z=j\) pour un même ensemble de variables
+  explicatives \(\mathbf{X}\) est \(h_k(t)/h_j(t)\), qui dépend du
+  temps.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stratification}
+\protect\hypertarget{stratification}{}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Avantage}: on peut modéliser n'importe quel changement du
+  risque en fonction de \(Z\).
+\item
+  \textbf{Désavantage}: on perd la variable explicative \(Z\), donc on
+  ne peut tester son effet (pas de coefficient)\ldots{} on peut résumer
+  l'information pour la variable \(Z\) en calculant par exemple les
+  différences de survie à des temps donnés.
+\item
+  \textbf{Désavantage}: la fonction de risque est estimée pour chaque
+  sous-groupe de \(Z\) (plus faible taille d'échantillon).
+\end{itemize}
+
+Idéalement, utiliser la stratification avec des variables secondaires ou
+de contrôles.
+\end{frame}
+
+\begin{frame}[fragile]{Modèle de Cox avec stratification dans
+\textbf{R}}
+\protect\hypertarget{moduxe8le-de-cox-avec-stratification-dans-r}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{library}\NormalTok{(survival)}
+\FunctionTok{data}\NormalTok{(survie1, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\CommentTok{\# Stratification par service}
+\NormalTok{cox\_strat }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}
+  \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+} \FunctionTok{strata}\NormalTok{(service), }
+  \AttributeTok{data =}\NormalTok{ survie1)}
+\CommentTok{\# Décompte par service}
+\FunctionTok{with}\NormalTok{(survie1, }\FunctionTok{table}\NormalTok{(censure, service))}
+\CommentTok{\# Coefficients}
+\FunctionTok{summary}\NormalTok{(cox\_strat)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Sorties}
+\protect\hypertarget{sorties}{}
+\hypertarget{tbl-nserv}{}
+\begin{table}
+\caption{\label{tbl-nserv}Décompte du nombre d'observations par service et status. }\tabularnewline
+
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+  & 0 & 1 & 2 & 3\\
+\midrule
+0 & 37 & 66 & 37 & 26\\
+1 & 160 & 113 & 41 & 20\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hypertarget{tbl-coxstratif}{}
+\begin{table}
+\caption{\label{tbl-coxstratif}Rapport de risques pour un modèle de Cox stratifié par service. }\tabularnewline
+
+\centering
+\begin{tabular}{lrrr}
+\toprule
+terme & exp(coef) & borne inf. & borne sup.\\
+\midrule
+age & 0.95 & 0.94 & 0.96\\
+sexe & 0.54 & 0.43 & 0.68\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Courbes de survie du modèle stratifié}
+\protect\hypertarget{courbes-de-survie-du-moduxe8le-stratifiuxe9}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/unnamed-chunk-6-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Risques non proportionnels}
+\protect\hypertarget{risques-non-proportionnels}{}
+Si le postulat de risques proportionnels n'est pas validé, l'effet d'au
+moins une des variables explicatives dépend du temps.
+
+On peut considérer une modification du modèle de Cox qui inclut une
+interaction avec le temps, par exemple \begin{align*}
+h(t,\mathbf{X}, Z) = h_0(t)\exp\{\beta_Z(t) Z(t)\}\exp(\mathbf{X}\boldsymbol{\beta})
+\end{align*} si l'effet de la variable explicative \(Z(t)\),
+\(\beta_Z(t)\) --- ou la variable elle même -- varie en fonction du
+temps.
+\end{frame}
+
+\begin{frame}[fragile]{Exemple 1 - augmentation de l'âge}
+\protect\hypertarget{exemple-1---augmentation-de-luxe2ge}{}
+Ici, le coefficient est supposé constante mais l'âge (en années)
+augmente à mesure que le temps d'abonnement (en semaines) passe, d'où
+\(\texttt{age}(t) = \texttt{age} + t/52\).
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{cox\_np }\OtherTok{\textless{}{-}}\NormalTok{ survival}\SpecialCharTok{::}\FunctionTok{coxph}\NormalTok{(}
+    \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}} 
+     \FunctionTok{tt}\NormalTok{(age) }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service, }
+     \AttributeTok{data =}\NormalTok{ survie1, }
+     \AttributeTok{tt =} \ControlFlowTok{function}\NormalTok{(x, t, ...)\{x }\SpecialCharTok{+}\NormalTok{ t}\SpecialCharTok{/}\DecValTok{52}\NormalTok{\})}
+\FunctionTok{summary}\NormalTok{(cox\_np)}
+\end{Highlighting}
+\end{Shaded}
+
+\footnotesize
+
+On spécifie avec l'option \texttt{tt()} dans la formule la variable qui
+change dans le temps et par la suite la nature de l'interaction
+temporelle avec l'argument \texttt{tt}.
+
+La variable qui dépend du temps doit être créée à l'intérieur de l'appel
+à \texttt{coxph}.
+\end{frame}
+
+\begin{frame}{Exemple 2 - effet de service croissant}
+\protect\hypertarget{exemple-2---effet-de-service-croissant}{}
+Supposons que l'impact du nombre de services varie comme suit,
+\begin{align*}
+&h(t, \text{age}, \text{sexe}, \texttt{service = i}) \\ &\qquad = h_0(t)\exp(\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{age}} \texttt{age} + \beta_{\texttt{service}_i} + \beta_{\texttt{service}_i*t}t).
+\end{align*}
+
+Il faut transformer les variables catégorielles en indicateurs binaires
+pour que le logiciel puisse ajuster le modèle.
+\end{frame}
+
+\begin{frame}[fragile]{Code \textbf{R} pour service}
+\protect\hypertarget{code-r-pour-service}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Créer variables binaires par service}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\NormalTok{survie1\_modif }\OtherTok{\textless{}{-}}\NormalTok{ survie1 }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{service1 =}\NormalTok{ service }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+         \AttributeTok{service2 =}\NormalTok{ service }\SpecialCharTok{==} \DecValTok{2}\NormalTok{,}
+         \AttributeTok{service3 =}\NormalTok{ service }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)}
+\NormalTok{cox\_np }\OtherTok{\textless{}{-}}\NormalTok{ survival}\SpecialCharTok{::}\FunctionTok{coxph}\NormalTok{(}
+    \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{     age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service }\SpecialCharTok{+} 
+      \FunctionTok{tt}\NormalTok{(service1) }\SpecialCharTok{+} \FunctionTok{tt}\NormalTok{(service2) }\SpecialCharTok{+} \FunctionTok{tt}\NormalTok{(service3), }
+     \AttributeTok{data =}\NormalTok{ survie1\_modif, }
+     \AttributeTok{tt =} \ControlFlowTok{function}\NormalTok{(x, t, ...)\{t }\SpecialCharTok{*}\NormalTok{ x\})}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Coefficients et tests}
+\protect\hypertarget{coefficients-et-tests}{}
+\hypertarget{tbl-cox-nph}{}
+\begin{table}
+\caption{\label{tbl-cox-nph}Rapport de risque et intervalles de confiance à niveau 95\% pour le
+modèle à risques non proportionnels (interaction linéaire entre temps et
+service). }\tabularnewline
+
+\centering
+\begin{tabular}{lrrl}
+\toprule
+terme & exp(coef) & test de Wald & valeur-p\\
+\midrule
+age & 0.953 & -7.37 & <0.001\\
+sexe & 0.543 & -5.24 & <0.001\\
+service1 & 0.144 & -4.29 & <0.001\\
+service2 & 0.072 & -3.76 & <0.001\\
+service3 & 0.010 & -4.14 & <0.001\\
+tt(service1) & 1.010 & 2.17 & 0.0298\\
+tt(service2) & 1.010 & 1.58 & 0.1132\\
+tt(service3) & 1.023 & 2.48 & 0.0133\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Interprétation des résultats}
+\protect\hypertarget{interpruxe9tation-des-ruxe9sultats}{}
+\begin{itemize}
+\tightlist
+\item
+  Les coefficients pour l'interaction avec \(t\) sont petits parce que
+  la plage de \(t\) (0 à 200 semaines) est énorme.
+\item
+  Les coefficients sont positifs: le risque augmente avec le temps.
+  L'impact des rabais pour services multiples diminue avec le temps.
+\item
+  Deux des termes d'interaction sont significatifs à niveau 5\%
+  (statistiques de Wald \(Z\) de 2.173, 1.584 et 2.476 et valeurs-\(p\)
+  correspondantes de 0.03, 0.113 et 0.013).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Évolution temporelle de variables explicatives}
+\protect\hypertarget{uxe9volution-temporelle-de-variables-explicatives}{}
+On considère une extension du modèle de Cox qui permet d'inclure des
+variables explicatives dont la valeur change dans le temps.
+
+Supposons que la variable \(\mathrm{X}_1\) change au fil du temps et que
+les autres demeurent fixes, tel que \begin{align*}
+h(t; \boldsymbol{x}) = h_0(t) \exp\{\beta_1\mathrm{x}_1(t) + \cdots + \beta_p\mathrm{x}_p\},
+\end{align*} où \(\mathrm{x}_1(t)\) indique que la valeur de
+\(\mathrm{X}_1\) dépend du temps \(t\).
+\end{frame}
+
+\begin{frame}{Illustration}
+\protect\hypertarget{illustration}{}
+\begin{columns}[T]
+\begin{column}{0.4\textwidth}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/Lexis_censure_modif.pdf}
+
+}
+
+\end{figure}
+\end{column}
+
+\begin{column}{0.6\textwidth}
+Pour ajuster le modèle, on peut casser la contribution d'une observation
+en segments: considérons un seul changement survenant au temps \(t_c\).
+
+\begin{itemize}
+\tightlist
+\item
+  pour le premier segment, on enregistre \(t_c\) comme valeur maximale
+  (censure à droite)
+\item
+  pour la deuxième portion, l'observation est tronquée à gauche à partir
+  de \(t_c\).
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Exemple}
+\protect\hypertarget{exemple}{}
+Supposons qu'il y a eu au plus un changement dans la variable
+\texttt{service}. On doit formatter la base de données comme suit.
+
+\footnotesize
+
+\hypertarget{tbl-survie3-donnees}{}
+\begin{table}
+\caption{\label{tbl-survie3-donnees}Aperçu des cinq premières observations de la base de données survie3. }\tabularnewline
+
+\centering
+\begin{tabular}{rrrrrrll}
+\toprule
+id & debut & fin & evenement & age & sexe & region & service\\
+\midrule
+1 & 0 & 130 & 0 & 48 & 1 & 3 & 2\\
+1 & 130 & 178 & 0 & 48 & 1 & 3 & 1\\
+2 & 0 & 159 & 0 & 31 & 1 & 3 & 2\\
+3 & 0 & 110 & 1 & 36 & 1 & 4 & 0\\
+4 & 0 & 109 & 1 & 30 & 0 & 2 & 0\\
+5 & 0 & 78 & 0 & 22 & 0 & 5 & 1\\
+5 & 78 & 108 & 1 & 22 & 0 & 5 & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Tout intervalle autre que terminal pour un individu est traité comme de
+la censure à droite.
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Code pour variables explicatives variables}
+\protect\hypertarget{code-pour-variables-explicatives-variables}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(survie3, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\NormalTok{cox4 }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ debut, }
+                   \AttributeTok{time2 =}\NormalTok{ fin, }
+                   \AttributeTok{event =}\NormalTok{ evenement) }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{                age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service, }
+              \AttributeTok{data =}\NormalTok{ survie3)}
+\end{Highlighting}
+\end{Shaded}
+
+\footnotesize
+
+Puisque c'est la valeur d'une variable qui varie dans le temps et non
+pas son effet, on a l'interprétation usuelle.
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Modèle à risques compétitifs}
+\protect\hypertarget{moduxe8le-uxe0-risques-compuxe9titifs}{}
+Parfois, la raison pour laquelle un individu quitte l'état étudié peut
+avoir un intérêt en soi.
+
+Pour le temps de service d'un employé, on veut faire la distinction
+entre
+
+\begin{itemize}
+\tightlist
+\item
+  une démission
+\item
+  un renvoi
+\item
+  la retraite
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Exemple}
+\protect\hypertarget{exemple-1}{}
+Supposons que nous avons trois causes possibles pour la perte d'un
+client. La variable \texttt{censure} dans le fichier \texttt{survie4}
+vaut:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{1} si l'individu est toujours abonné à notre service
+\item
+  \texttt{2} désabonnement pour aller chez le compétiteur A
+\item
+  \texttt{3} désabonnement pour aller chez le compétiteur B
+\item
+  \texttt{4} désabonnement parce qu'il n'a plus besoin de cellulaire.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Transition d'un état à l'autre}
+\protect\hypertarget{transition-dun-uxe9tat-uxe0-lautre}{}
+\begin{columns}[T]
+\begin{column}{0.6\textwidth}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/transition_etats_modele_risque_competitifs.pdf}
+
+}
+
+\end{figure}
+\end{column}
+
+\begin{column}{0.4\textwidth}
+Modèle avec transition d'un état de base (abonné) vers un état absorbant
+(désabonnement, soit chez compétiteur \(A\), compétiteur \(B\) ou
+abandon du cellulaire).
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Modèle à risques compétitifs avec modèle de Cox}
+\protect\hypertarget{moduxe8le-uxe0-risques-compuxe9titifs-avec-moduxe8le-de-cox}{}
+Pour estimer la probabilité d'un événement au fil du temps, on peut
+ajuster plusieurs modèles de Cox.
+
+On spécifie une fonction de risque pour chaque événement compétitif,
+\begin{align*}
+h_1(t; \mathbf{X})&= h_{01}(t) \exp(\beta_{11}\mathrm{X}_1 + \cdots + \beta_{p1} \mathrm{X}_p),\\
+&\vdots\\
+h_K(t; \mathbf{X})&= h_{0K}(t) \exp(\beta_{1K}\mathrm{X}_1 + \cdots + \beta_{pK} \mathrm{X}_p).\\
+\end{align*} Notez que les coefficients sont différents d'une équation à
+l'autre.
+
+On peut estimer les paramètres de chaque équation du modèle de Cox
+séparément sans perte de précision en modifiant la définition de
+l'événement.
+\end{frame}
+
+\begin{frame}[fragile]{Code \textbf{R} pour risque compétitif (1)}
+\protect\hypertarget{code-r-pour-risque-compuxe9titif-1}{}
+Deux options: ajuster chaque modèle séparément en traitant tout
+événement autre que celui d'intérêt comme de la censure à droite.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Rappel pour "event":}
+\CommentTok{\#  {-} 1 (TRUE) pour observation, }
+\CommentTok{\#  {-} 0 (FALSE) pour censure à droite}
+\FunctionTok{data}\NormalTok{(survie4, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\NormalTok{rc\_cox\_A }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
+                   \AttributeTok{event =}\NormalTok{ censure }\SpecialCharTok{==} \DecValTok{2}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{                age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service, }
+              \AttributeTok{data =}\NormalTok{ survie4)}
+\end{Highlighting}
+\end{Shaded}
+
+\footnotesize
+
+Les observations avec des valeurs pour \texttt{censure} de 1, 3 ou 4
+sont traitées comme des cas de censure à droite (l'événement quitter
+pour compétiteur \(A\) n'est pas survenu).
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Interprétation des coefficients}
+\protect\hypertarget{interpruxe9tation-des-coefficients}{}
+Attention, l'interprétation dépend maintenant de l'événement étudié.
+
+\begin{table}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+terme & exp(coef) & borne inf. & borne sup.\\
+\midrule
+age & 0.96 & 0.94 & 0.974\\
+sexe & 0.48 & 0.35 & 0.673\\
+service1 & 0.38 & 0.27 & 0.535\\
+service2 & 0.19 & 0.11 & 0.308\\
+service3 & 0.11 & 0.05 & 0.220\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Selon le modèle, le risque \emph{de quitter pour aller chez le
+compétiteur A} d'une femme est 0.48 fois celui d'un homme.
+\end{frame}
+
+\begin{frame}[fragile]{Code \textbf{R} pour risque compétitif (2)}
+\protect\hypertarget{code-r-pour-risque-compuxe9titif-2}{}
+Créer une variable avec identifiant \(1, \ldots, n\).
+
+Passer la variable état comme \textbf{facteur}, avec transition depuis
+catégorie de référence (ici \texttt{censure=1}, soit abonné)
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(survie4)}
+\NormalTok{surv4 }\OtherTok{\textless{}{-}}\NormalTok{ survie4 }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{id =} \FunctionTok{seq\_len}\NormalTok{(n))}
+\NormalTok{rc\_cox }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
+             \AttributeTok{event =} \FunctionTok{factor}\NormalTok{(censure)) }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{               sexe }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ service,}
+             \AttributeTok{data =}\NormalTok{ surv4,}
+             \AttributeTok{id =}\NormalTok{ id)}
+\end{Highlighting}
+\end{Shaded}
+
+\footnotesize
+
+L'identifiant sert dans les cas où on peut transiter entre plusieurs
+états et il y a plusieurs observations pour un même individu.
+\end{frame}
+
+\begin{frame}[fragile]{Code \textbf{R} pour risques compétitifs
+(Kaplan--Meier)}
+\protect\hypertarget{code-r-pour-risques-compuxe9titifs-kaplanmeier}{}
+Ajuster le modèle multi-état avec un \textbf{facteur} pour l'événement,
+où la catégorie de référence est abonnement (\texttt{censure=1}).
+
+Surtout, ne pas estimer les courbes séparément!
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(survie4, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\NormalTok{rc\_km }\OtherTok{\textless{}{-}} \FunctionTok{survfit}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
+             \AttributeTok{event =} \FunctionTok{factor}\NormalTok{(censure)) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\CommentTok{\#facteur}
+             \AttributeTok{data =}\NormalTok{ survie4)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Graphiques}
+\protect\hypertarget{graphiques}{}
+Les représentations graphiques donnent la probabilité d'être dans une
+situation en fonction du temps (ici avec la catégorie de référence
+abonnement).
+
+\footnotesize
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/fig-competitif-1.pdf}
+
+}
+
+\caption{\label{fig-competitif}Probabilité d'événement sans variable
+explicative (Kaplan-Meier, gauche) et avec âge, service et sexe (modèle
+de Cox, droite).}
+
+\end{figure}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-5}{}
-Le modèle de Kaplan--Meier ne permet pas d'estimer l'impact de variables
-explicatives sur la survie.
-
-On peut utiliser pour ce faire le modèle de Cox.
-
-Ce dernier suppose qu'on peut diviser le risque en deux parties
+\protect\hypertarget{ruxe9capitulatif}{}
+Si le postulat de risques proportionnels ne tient pas, on peut
+considérer des modifications du modèle de Cox.
 
 \begin{itemize}
 \tightlist
 \item
-  risque de base \(h_0(t)\) commun à tou(te)s (composante
-  nonparamétrique)
+  stratification (uniquement pour variables catégorielles) pour estimer
+  le risque de base séparément sur chaque sous-groupe).
 \item
-  effet multiplicatif \(\exp(\mathbf{X}\boldsymbol{\beta})\) (composante
-  paramétrique)
+  modèle à risques non-proportionnels avec variable ou coefficient qui
+  varient selon le temps
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-6}{}
-Puisque \(h_0(t)\) est commune à toutes les observations, moins
-d'incertitude sur l'estimation de la survie.
+\protect\hypertarget{ruxe9capitulatif-1}{}
+Si les variables explicatives changent au fil du temps, on peut traiter
+le cas de figure en décomposant la contribution de l'observation en
+plusieurs segments
 
 \begin{itemize}
 \tightlist
 \item
-  L'impact sur la survie de changement dans les variables explicatives
-  n'est pas multiplicatif!
+  chaque segment autre que terminal est traité comme de la censure à
+  droite
 \item
-  voir les prédictions pour les quatre profils clients.
+  les segments sont sujets à troncature à gauche.
 \end{itemize}
 
-Le modèle de Cox suppose que le rapport de cote ne dépend pas du temps
-(postulat de risques proportionnels).
+La base de données doit contenir le temps initial et le temps final de
+l'intervalle, en plus de l'indicateur.
+
+Il y a un lien possible avec le modèle à risque proportionnels si
+l'effet est le même pour tous (comme l'âge).
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-2}{}
+Le modèle multi-état (modèle à risques compétitifs) permet d'estimer la
+probabilité de chaque transition.
 
 \begin{itemize}
 \tightlist
 \item
-  On peut vérifier ce postulat
+  la survie pour l'événement de base reste le même (désabonnement)
 \item
-  et généraliser le modèle au besoin.
+  à chaque temps donné, la probabilité conjointe de chaque \(K+1\)
+  possibilités est 1.
 \end{itemize}
+
+Dans \textbf{R}, s'assurer que la catégorie de référence est l'état de
+départ.
 \end{frame}
 
 

@@ -55,7 +55,7 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{D-DIN}
+  \setmainfont[]{VisbyCF-Medium}
   \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
@@ -149,7 +149,6 @@
 
 \usepackage{tabu}
 \usepackage{mathtools}
-\usepackage{mathrsfs}
 \makeatletter
 \makeatother
 \makeatletter
@@ -158,19 +157,19 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
-  \renewcommand*\contentsname{Table of contents}
+  \renewcommand*\contentsname{Table des matières}
 \else
-  \newcommand\contentsname{Table of contents}
+  \newcommand\contentsname{Table des matières}
 \fi
 \ifdefined\listfigurename
-  \renewcommand*\listfigurename{List of Figures}
+  \renewcommand*\listfigurename{Liste des figures}
 \else
-  \newcommand\listfigurename{List of Figures}
+  \newcommand\listfigurename{Liste des figures}
 \fi
 \ifdefined\listtablename
-  \renewcommand*\listtablename{List of Tables}
+  \renewcommand*\listtablename{Liste des tableaux}
 \else
-  \newcommand\listtablename{List of Tables}
+  \newcommand\listtablename{Liste des tableaux}
 \fi
 \ifdefined\figurename
   \renewcommand*\figurename{Figure}
@@ -178,16 +177,16 @@
   \newcommand\figurename{Figure}
 \fi
 \ifdefined\tablename
-  \renewcommand*\tablename{Table}
+  \renewcommand*\tablename{Tableau}
 \else
-  \newcommand\tablename{Table}
+  \newcommand\tablename{Tableau}
 \fi
 }
 \@ifpackageloaded{float}{}{\usepackage{float}}
 \floatstyle{ruled}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
-\floatname{codelisting}{Listing}
-\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\floatname{codelisting}{Énumération}
+\newcommand*\listoflistings{\listof{codelisting}{Liste des énumérations}}
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -200,6 +199,9 @@
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -216,787 +218,796 @@
 \title{Sélection de variables}
 \subtitle{Analyse multidimensionnelle appliquée}
 \author{Léo Belzile}
-\date{automne 2022}
+\date{}
 \institute{HEC Montréal}
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners, breakable, enhanced, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, breakable, interior hidden, borderline west={3pt}{0pt}{shadecolor}, sharp corners, frame hidden]}{\end{tcolorbox}}\fi
 
-\begin{frame}{Modèles prédictifs}
-\protect\hypertarget{moduxe8les-pruxe9dictifs}{}
-\textbf{Objectif}: bâtir un modèle pour une variable réponse \(Y\) en
-fonction de variables explicatives
-\(\mathrm{X}_1, \ldots, \mathrm{X}_p\).
+\begin{frame}{Présentation des données}
+\protect\hypertarget{pruxe9sentation-des-donnuxe9es}{}
+Exemple de base de données marketing (par ex., organisme de charité).
+Cibler les clients pour l'envoi d'un catalogue.
 
-On s'intéresse à
-\[\underset{\text{vraie moyenne inconnue}}{f(\mathrm{X}_1, \ldots, \mathrm{X}_p)}.\]
+But: maximiser les levées de fonds
 
-L'analyste détermine
-\[\underset{\text{approximation}}{\widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)},\]
-une fonction des variables explicatives.
+\begin{enumerate}
+\tightlist
+\item
+  Envoyer un échantillon de produits au coût de 10\$ à un groupe
+  échantillon.
+\item
+  Construire un modèle de prédiction pour déterminer à qui envoyer le
+  produit parmi tous les clients.
+\end{enumerate}
 \end{frame}
 
-\begin{frame}{Rappels sur la régression linéaire}
-\protect\hypertarget{rappels-sur-la-ruxe9gression-linuxe9aire}{}
-On spécifie que la \textbf{moyenne} de la variable réponse \(Y\) est une
-fonction linéaire des variables explicatives
-\(\mathrm{X}_1, \ldots, \mathrm{X}_p\), soit
-
-\[\underset{\text{moyenne théorique}}{\mathsf{E}(Y \mid \mathbf{X})} = \underset{\text{
-somme pondérée des variables explicatives}}{\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}}.\]
-
-en supposant que l'écart entre les observations et cette moyenne est
-constant, \[\mathsf{Va}(Y \mid \mathbf{X}) = \sigma^2.\]
-\end{frame}
-
-\begin{frame}{Représentation alternative}
-\protect\hypertarget{repruxe9sentation-alternative}{}
-Pour la \(i\)e observation,
-
-\[\underset{\text{réponse}}{Y_i} = \underset{\text{prédicteur linéaire}}{\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}} + \underset{\text{aléa}}{\varepsilon_i}.\]
+\begin{frame}{Population cible}
+\protect\hypertarget{population-cible}{}
+Clients qui ont
 
 \begin{itemize}
 \tightlist
 \item
-  L'aléa \(\varepsilon_i\) représente la distance \textbf{verticale}
-  entre la vraie pente et l'observation
+  plus de 18 ans,
 \item
-  Autant d'aléas que d'observations (\(n\)), variable aléatoire
-  inconnue\ldots{}
+  au moins un an d'historique avec l'entreprise et
+\item
+  qui ont effectué au moins un achat au cours de la dernière année.
 \end{itemize}
-\end{frame}
 
-\begin{frame}{Postulats}
-\protect\hypertarget{postulats}{}
-\begin{itemize}
-\tightlist
-\item
-  L'aléa \(\varepsilon_i\) représente l'erreur, soit la différence entre
-  la valeur observée et la moyenne de la population pour les même
-  valeurs des variables explicatives.
-\item
-  On suppose que le modèle pour la moyenne est correctement spécifié:
-  l'aléa a une moyenne théorique nulle, \(\mathsf{E}(\varepsilon_i)=0\).
-\item
-  On suppose que les observations sont indépendantes les unes des
-  autres.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Régression linéaire en deux dimensions}
-\protect\hypertarget{ruxe9gression-linuxe9aire-en-deux-dimensions}{}
-Si \(\mathsf{E}(Y)=\beta_0 + \beta_1 \mathrm{X}\), alors
+Regroupements:
 
 \begin{itemize}
 \tightlist
 \item
-  \(\beta_0\) représente l'ordonnée à l'origine (valeur quand
-  \(\mathrm{X}=0\).)
+  1K personnes dans l'échantillon d'apprentissage,
 \item
-  \(\beta_1\) est la pente
+  100K personnes pour l'ensemble des autres clients.
 \end{itemize}
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-1-1.pdf}
-
-}
-
-\end{figure}
 \end{frame}
 
-\begin{frame}{Résidus ordinaires}
-\protect\hypertarget{ruxe9sidus-ordinaires}{}
-L'estimation des paramètres
-\(\widehat{\beta}_0, \cdots, \widehat{\beta}_p\) nous donne
-\[\underset{\text{prédiction}}{\widehat{Y}_i} = \widehat{\beta}_0 + \widehat{\beta}_1\mathrm{X}_{i1} \cdots + \widehat{\beta}_p\mathrm{X}_{ip}.\]
-
-On peut approximer l'aléa à l'aide du \textbf{résidu ordinaires}, soit
-\[\underset{\text{résidu ordinaire}}{e_i} = \underset{\text{observation}}{Y_i} - \underset{\text{prédiction}}{\widehat{Y}_i}.\]
+\begin{frame}[fragile]{Liste des variables}
+\protect\hypertarget{liste-des-variables}{}
+\footnotesize
 
 \begin{itemize}
 \tightlist
 \item
-  par construction, la moyenne des \(e_i\) est zéro.
+  \texttt{yachat}, une variable binaire qui indique si le client a
+  acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon;
 \item
-  le résidu ordinaire est la distance verticale entre l'observation et
-  la ``droite'' \textbf{ajustée}
+  \texttt{ymontant}, le montant de l'achat si le client a acheté quelque
+  chose;
+\item
+  \texttt{x1}: sexe de l'individu, soit homme (0) ou femme (1);
+\item
+  \texttt{x2}: l'âge (en année);
+\item
+  \texttt{x3}: variable catégorielle indiquant le revenu, soit moins de
+  35 000\$ (1), entre 35 000\$ et 75 000\$ (2) ou plus de 75 000\$ (3);
+\item
+  \texttt{x4}: variable catégorielle indiquant la région où habite le
+  client (de 1 à 5);
+\item
+  \texttt{x5}: couple : la personne est elle en couple (0=non, 1=oui);
+\item
+  \texttt{x6}: nombre d'année depuis que le client est avec la
+  compagnie;
+\item
+  \texttt{x7}: nombre de semaines depuis le dernier achat;
+\item
+  \texttt{x8}: montant (en dollars) du dernier achat;
+\item
+  \texttt{x9}: montant total (en dollars) dépensé depuis un an;
+\item
+  \texttt{x10}: nombre d'achats différents depuis un an.
 \end{itemize}
+
+\normalsize
 \end{frame}
 
-\begin{frame}{Illustration des résidus ordinaires}
-\protect\hypertarget{illustration-des-ruxe9sidus-ordinaires}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/distancevert-1.pdf}
-
-}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Erreur quadratique moyenne}
-\protect\hypertarget{erreur-quadratique-moyenne}{}
-L'erreur quadratique moyenne théorique est
-
-\[\mathsf{E} \left[\left\{Y - \widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)\right\}^2\right],\]
-la moyenne de la différence au carré entre la vraie valeur de \(Y\) et
-la valeur prédite par le modèle.
-
-En pratique, on remplace la moyenne théorique par une moyenne empirique
-obtenue à partir d'un échantillon aléatoire.
-\end{frame}
-
-\begin{frame}{Estimation des paramètres}
-\protect\hypertarget{estimation-des-paramuxe8tres}{}
-Comment estimer les paramètres \(\beta_0, \ldots, \beta_p\)?
-
-\textbf{Optimisation}: trouver les valeurs qui minimisent l'erreur
-quadratique moyenne \textbf{empirique} avec l'échantillon des \(n\)
-observations, soit
-
-\[\frac{e_1^2 + \cdots + e_n^2}{n}\]
-
-Il existe une solution explicite au problème d'optimisation!
-\end{frame}
-
-\begin{frame}[fragile]{Estimation dans \textbf{R}}
-\protect\hypertarget{estimation-dans-r}{}
-La fonction \texttt{lm} calcule l'ajustement du modèle linéaire.
-
-Arguments:
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{formula}: formule de type
-  \texttt{reponse\ \textasciitilde{}\ \ variables\ explicatives}, où les
-  variables explicatives sont séparées par un signe \texttt{+}
-\item
-  \texttt{data}: base de données
-\end{itemize}
+\begin{frame}[fragile]{Aperçu des données}
+\protect\hypertarget{aperuxe7u-des-donnuxe9es}{}
+\footnotesize
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{modlin }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ hp }\SpecialCharTok{+}\NormalTok{ wt, }
-             \AttributeTok{data =}\NormalTok{ mtcars)}
-\FunctionTok{summary}\NormalTok{(modlin)}
+\FunctionTok{data}\NormalTok{(dbm, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\FunctionTok{str}\NormalTok{(dbm)}
 \end{Highlighting}
 \end{Shaded}
-\end{frame}
-
-\begin{frame}[fragile]{Sortie de \texttt{summary}}
-\protect\hypertarget{sortie-de-summary}{}
-\footnotesize
 
 \begin{verbatim}
-
-Call:
-lm(formula = mpg ~ hp + wt, data = mtcars)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--3.941 -1.600 -0.182  1.050  5.854 
-
-Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 37.22727    1.59879  23.285  < 2e-16 ***
-hp          -0.03177    0.00903  -3.519  0.00145 ** 
-wt          -3.87783    0.63273  -6.129 1.12e-06 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 2.593 on 29 degrees of freedom
-Multiple R-squared:  0.8268,    Adjusted R-squared:  0.8148 
-F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
+tibble [101,000 x 13] (S3: tbl_df/tbl/data.frame)
+ $ x1      : int [1:101000] 1 1 0 0 1 1 0 0 0 1 ...
+ $ x2      : num [1:101000] 42 59 52 32 38 63 35 32 26 32 ...
+ $ x3      : Factor w/ 3 levels "1","2","3": 1 2 3 1 2 2 2 1 3 1 ...
+ $ x4      : Factor w/ 5 levels "1","2","3","4",..: 3 3 5 1 5 5 1 3 1 5 ...
+ $ x5      : int [1:101000] 1 1 1 0 0 1 1 0 0 0 ...
+ $ x6      : num [1:101000] 8.6 8.6 1.4 10.7 9.1 9.4 10.6 4.8 4 10.3 ...
+ $ x7      : num [1:101000] 8 9 9 42 5 1 6 5 48 9 ...
+ $ x8      : num [1:101000] 49 70 120 31 30 28 59 70 73 55 ...
+ $ x9      : num [1:101000] 159 123 434 110 55 102 593 298 83 90 ...
+ $ x10     : num [1:101000] 5 5 8 3 3 8 10 6 2 3 ...
+ $ yachat  : int [1:101000] 0 0 0 0 0 0 0 1 1 1 ...
+ $ ymontant: num [1:101000] NA NA NA NA NA NA NA 52 79 77 ...
+ $ test    : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 1 ...
 \end{verbatim}
 
 \normalsize
 \end{frame}
 
-\begin{frame}{Tableau de sortie}
-\protect\hypertarget{tableau-de-sortie}{}
-\begin{itemize}
-\tightlist
-\item
-  Formule de l'appel
-\item
-  Statistiques descriptives des résidus ordinaires \(e_1, \ldots, e_n\).
-\item
-  Tableau des estimations
+\begin{frame}
+\begin{table}
 
-  \begin{itemize}
-  \tightlist
-  \item
-    Coefficients \(\widehat{\beta}_j\)
-  \item
-    Erreurs-types, \(\mathsf{se}(\widehat{\beta}_j)\)
-  \item
-    Statistique du test-\emph{t} pour \(\mathscr{H}_0: \beta_j=0\), soit
-    \(t=\widehat{\beta}_j/\mathsf{se}(\widehat{\beta}_j)\)
-  \item
-    Valeur-\emph{p} selon loi nulle \(\mathsf{St}(n-p-1)\)
-  \end{itemize}
-\item
-  Estimation de l'écart-type \(\widehat{\sigma}\) et degrés de liberté
-  \(n-p-1\)
-\item
-  Estimations du coefficient de détermination, \(R^2\) et \(R^2\) ajusté
-\item
-  Statistique \(F\) d'ajustement global et valeur-\(p\) de
-  \(\mathsf{F}(p, n - p - 1)\)
+\begin{tabular}{lr}
+\toprule
+sexe & décompte\\
+\midrule
+0 & 534\\
+1 & 466\\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lr}
+\toprule
+couple & décompte\\
+\midrule
+0 & 575\\
+1 & 425\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\mathscr{H}_a\): modèle linéaire
-  \item
-    \(\mathscr{H}_0\): modèle avec uniquement ordonnée à l'origine
-    (chaque observation prédite par la moyenne des réponses,
-    \(\overline{Y}\))
-  \end{itemize}
-\end{itemize}
+\begin{table}
 
-\normalsize
+\begin{tabular}{lr}
+\toprule
+revenu & décompte\\
+\midrule
+1 & 397\\
+2 & 337\\
+3 & 266\\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lr}
+\toprule
+région & décompte\\
+\midrule
+1 & 216\\
+2 & 185\\
+3 & 216\\
+4 & 191\\
+5 & 192\\
+\bottomrule
+\end{tabular}
+\end{table}
 \end{frame}
 
-\begin{frame}[fragile]{Quelques méthodes pour \texttt{lm}}
-\protect\hypertarget{quelques-muxe9thodes-pour-lm}{}
-\begin{itemize}
-\tightlist
-\item
-  \texttt{resid} pour les résidus ordinaires \(e_i\)
-\item
-  \texttt{fitted} pour les valeurs ajustées \(\widehat{Y}_i\)
-\item
-  \texttt{coef} pour les estimations des paramètres
-  \(\widehat{\beta}_0, \ldots, \widehat{\beta}_p\)
-\item
-  \texttt{plot} pour des diagnostics graphiques d'ajustement
-\item
-  \texttt{anova} pour la comparaison de modèles emboîtés
-\item
-  \texttt{predict} pour les prédictions (avec nouvelles données)
-\item
-  \texttt{confint} pour intervalles de confiance pour les paramètres.
-\end{itemize}
+\begin{frame}
+\includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/histogrammes-eda-dbm-fig-1.pdf}
 \end{frame}
 
-\begin{frame}[fragile]{Variables catégorielles}
-\protect\hypertarget{variables-catuxe9gorielles}{}
-\begin{itemize}
-\tightlist
-\item
-  Les facteurs (\texttt{\textless{}factor\textgreater{}}) sont traités
-  adéquatement par \textbf{R}.
-\item
-  Si la variable a \(K\) valeurs possibles (niveaux), le modèle inclut
-  \(K-1\) indicatrices 0/1.
-\item
-  Par défaut dans \textbf{R}, la catégorie de référence est la plus
-  petite en ordre alphanumérique.
-\end{itemize}
+\begin{frame}
+\footnotesize
+
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\toprule
+variable & moyenne & écart-type & min & max\\
+\midrule
+x2 & 37.06 & 9.27 & 20 & 70\\
+x6 & 6.01 & 2.92 & 1 & 11\\
+x7 & 9.97 & 9.34 & 1 & 52\\
+x8 & 48.41 & 28.27 & 20 & 252\\
+x9 & 229.27 & 173.97 & 22 & 1407\\
+x10 & 5.64 & 2.31 & 1 & 14\\
+\bottomrule
+\end{tabu}
+
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X}
+\toprule
+variable & description\\
+\midrule
+x2 & âge\\
+x6 & nombre d’année comme client\\
+x7 & nombre de semaines depuis le dernier achat\\
+x8 & montant du dernier achat\\
+x9 & montant total dépensé sur un an\\
+x10 & nombre d'achats différents sur un an\\
+\bottomrule
+\end{tabu}
 \end{frame}
 
-\begin{frame}[fragile]{Encodage des variables catégorielles}
-\protect\hypertarget{encodage-des-variables-catuxe9gorielles}{}
-Considérons une variable catégorielle \texttt{cat} avec niveaux
-\texttt{1}, \texttt{2}, et \texttt{3}.
-
-\begin{longtable}[]{@{}ccc@{}}
-\toprule()
-\texttt{cat} & \texttt{cat2} & \texttt{cat3} \\
-\midrule()
-\endhead
-1 & 0 & 0 \\
-2 & 1 & 0 \\
-3 & 0 & 1 \\
-\bottomrule()
-\end{longtable}
-
-La catégorie de référence est associée à l'ordonnée à l'origine (quand
-\texttt{cat2=0} et \texttt{cat3=0}).
-\end{frame}
-
-\begin{frame}[fragile]{Sélection de variables et de modèles}
-\protect\hypertarget{suxe9lection-de-variables-et-de-moduxe8les}{}
-\begin{itemize}
-\tightlist
-\item
-  Comment choisir quelles variables inclure?
-\item
-  Quel est la spécification adéquate pour
-  \(f(\mathrm{X}_1, \ldots, \mathrm{X}_p)\)?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    régression, réseaux de neurone, forêts aléatoires, etc.
-  \item
-    transformations de variables, \texttt{age}\({}^2\),
-    \(\ln(\)\texttt{age}\()\), etc.
-  \end{itemize}
-\end{itemize}
-
-Notre but sera de sélectionner un \textbf{bon} modèle, selon les
-objectifs de l'étude
-\end{frame}
-
-\begin{frame}{Prédiction vs inférence}
-\protect\hypertarget{pruxe9diction-vs-infuxe9rence}{}
-\textbf{Prédiction}: obtenir une estimation de \(\widehat{Y}\): on veut
-un modèle performant
-
-\textbf{Inférence}: estimer l'effet de variables explicatives, effectuer
-des tests d'hypothèse
-
-Pour l'inférence, il est préférable de spécifier le modèle dès le départ
-(devis expérimental) selon des considérations scientifiques et de s'y
-tenir.
-\end{frame}
-
-\begin{frame}{Spécification adéquate d'un modèle}
-\protect\hypertarget{spuxe9cification-aduxe9quate-dun-moduxe8le}{}
-\begin{block}{Démonstration \textbf{R}}
-\protect\hypertarget{duxe9monstration-r}{}
-\begin{itemize}
-\tightlist
-\item
-  Omettre des termes importants mène à un \textbf{modèle biaisé}.
-\item
-  Ajouter des termes superflus augmente la \textbf{variabilité}.
-\end{itemize}
-\end{block}
-\end{frame}
-
-\begin{frame}{Évaluer la performance d'un modèle}
-\protect\hypertarget{uxe9valuer-la-performance-dun-moduxe8le}{}
-On peut calculer l'erreur quadratique moyenne (EQM) sur l'ensemble des
-données qui servent à ajuster le modèle.
-
-Q: Est-ce que c'est un marqueur fiable de la performance du modèle?
-\end{frame}
-
-\begin{frame}[fragile]{Exemple avec la régression polynomiale}
-\protect\hypertarget{exemple-avec-la-ruxe9gression-polynomiale}{}
-On a simulé des observations d'un modèle polynomiale d'ordre \(K\), de
-la forme
-\[\mathsf{E}(Y \mid \mathbf{X}) = \beta_0 + \beta_1 \mathrm{X} + \cdots + \beta_K \mathrm{X}^K.\]
-
-On vise à estimer l'ordre du polynôme en effectuant des régressions
-linéaires.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{data}\NormalTok{(polynome, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\NormalTok{k }\OtherTok{\textless{}{-}}\NormalTok{ 4L }\CommentTok{\# degré du polynôme}
-\FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =}\NormalTok{ k), }
-   \AttributeTok{data =}\NormalTok{ polynome)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Aperçu des données}
-\protect\hypertarget{aperuxe7u-des-donnuxe9es}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-5-1.pdf}
-
-}
-
-\end{figure}
-
-D'après vous, quelle est la vraie valeur de \(K\)?
-\end{frame}
-
-\begin{frame}{Ajustement de polynômes}
-\protect\hypertarget{ajustement-de-polynuxf4mes}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-6-1.pdf}
-
-}
-
-\end{figure}
-
-Ajustement pour des polynômes de degré \(K=1, 4, 10\).
-\end{frame}
-
-\begin{frame}[fragile]{Évaluation de la performance}
-\protect\hypertarget{uxe9valuation-de-la-performance}{}
-Pour \(K=1, \ldots, 10\):
-
-\begin{itemize}
-\tightlist
-\item
-  Ajuster le modèle linéaire
-\item
-  Obtenir les résidus ordinaires
-\item
-  Calculer l'erreur quadratique moyenne
-\end{itemize}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{data}\NormalTok{(polynome, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\NormalTok{eqm }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{length =}\NormalTok{ 10L, }\AttributeTok{mode =} \StringTok{"numeric"}\NormalTok{)}
-\ControlFlowTok{for}\NormalTok{(K }\ControlFlowTok{in} \FunctionTok{seq\_len}\NormalTok{(}\DecValTok{10}\NormalTok{))\{}
-\NormalTok{ mod }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =}\NormalTok{ K), }\AttributeTok{data =}\NormalTok{ polynome)}
-\NormalTok{ eqm[K] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{resid}\NormalTok{(mod)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Estimation de l'erreur quadratique moyenne}
-\protect\hypertarget{estimation-de-lerreur-quadratique-moyenne}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-8-1.pdf}
-
-}
-
-\end{figure}
-
-Plus le modèle est complexe, plus l'erreur quadratique moyenne de
-l'échantillon d'apprentissage est petite!
-\end{frame}
-
-\begin{frame}{Suroptimisme}
-\protect\hypertarget{suroptimisme}{}
-L'erreur quadratique moyenne décroît mécaniquement à chaque fois qu'on
-ajoute une variable au modèle de régression.
-
-C'est pourquoi on ne peut pas l'utiliser comme outil de sélection de
-variables, autrement on va surestimer la performance
-(\textbf{suroptimisme}).
-\end{frame}
-
-\begin{frame}{Surajustement}
-\protect\hypertarget{surajustement}{}
-Un modèle plus complexe va toujours mieux s'ajuster aux données de
-l'échantillon.
-
-En revanche, il se \textbf{généralise} moins bien (notre objectif en
-prédiction).
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/overfitting-1.pdf}
-
-}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Morale de l'histoire}
-\protect\hypertarget{morale-de-lhistoire}{}
-Nous nous sommes rendus coupables d'un péché capital en utilisant deux
-fois les données
-
-\begin{itemize}
-\tightlist
-\item
-  une fois pour l'ajustement,
-\item
-  une fois pour la validation.
-\end{itemize}
-
-C'est comme tremper deux fois un biscuit dans le verre de lait\ldots{}
-\end{frame}
-
-\begin{frame}{Estimation fiable de la performance}
-\protect\hypertarget{estimation-fiable-de-la-performance}{}
-\begin{itemize}
-\tightlist
-\item
-  Pénalisation de la complexité du modèle
-
-  \begin{itemize}
-  \tightlist
-  \item
-    critères d'information
-  \item
-    pénalité sur les coefficients (\emph{ridge}, LASSO)
-  \end{itemize}
-\item
-  Validation et entraînement avec des données différentes
-
-  \begin{itemize}
-  \tightlist
-  \item
-    validation externe
-  \item
-    validation croisée
-  \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Pénalisation}
-\protect\hypertarget{puxe9nalisation}{}
-Utiliser toutes les données (échantillon de validation), mais ajouter
-une pénalité.
-
-Si le modèle est ajusté avec la méthode du maximum de vraisemblance,
-alors on a accès aux critères d'information.
-\end{frame}
-
-\begin{frame}{Lien entre régression linéaire et vraisemblance}
-\protect\hypertarget{lien-entre-ruxe9gression-linuxe9aire-et-vraisemblance}{}
-Si on suppose que les aléas sont indépendants et suivent une loi normale
-de variance \(\sigma^2\) constante, alors la log-vraisemblance s'écrit
+\begin{frame}{Prédire le montant \texttt{ymontant}}
+\protect\hypertarget{pruxe9dire-le-montant-ymontant}{}
+Le montant moyen dépensé s'écrit
 
 \begin{align*}
-\ell(\boldsymbol{Y}; \mathbf{X}, \boldsymbol{\beta}, \sigma) & = -\frac{n}{2}\ln(2\pi) -n\ln(\sigma) \\&\quad - \frac{1}{2\sigma^2}\sum_{i=1}^n (Y_i - \beta_0 - \cdots - \mathrm{X}_{ip}\beta_p)^2.
+\mathsf{E}(\texttt{ymontant}) &= \mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1) \Pr(\texttt{yachat}=1).
 \end{align*}
 
-Ainsi, l'estimateur des moindres carrés,
-\(\widehat{\boldsymbol{\beta}}\), correspond au maximum de vraisemblance
-des coefficients.
+On bâtit un modèle de régression linéaire pour le montant moyen dépensé,
+\(\mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1)\).
+
+Le modèle utilise les données des 210 personnes de l'échantillon
+d'apprentissage qui ont acheté suite à l'envoi du catalogue.
 \end{frame}
 
-\begin{frame}{Critères d'information}
-\protect\hypertarget{crituxe8res-dinformation}{}
-Les critères d'information sont de la forme \begin{align*}
-\mathsf{IC} &=-2 \ell(\widehat{\boldsymbol{\beta}}, \widehat{\sigma}^2) +\text{pénalité}\times \text{nb param} \\&= n \ln (\widehat{\mathsf{EQM}}) +\text{pénalité}\cdot \text{nb param}+ \text{constante},
-\end{align*}
-
-Le critère d'Akaike (\(\text{AIC}\)) utilise une pénalité de 2, le
-critère bayésien (\(\text{BIC}\)) de \(\ln(n)\).
-\end{frame}
-
-\begin{frame}[fragile]{Utiliser les critères d'information}
-\protect\hypertarget{utiliser-les-crituxe8res-dinformation}{}
-\begin{itemize}
-\tightlist
-\item
-  Plus la valeur du critère d'information, meilleure est l'adéquation
-  (et donc la performance).
-\item
-  La pénalité assure que les modèles plus simples ne sont pas
-  systématiquement retournés.
-\item
-  Le \(\textsf{BIC}\) retourne toujours des modèles plus parcimonieux
-  (simples) que le \(\textsf{AIC}\).
-\item
-  Génériques \texttt{logLik}, \texttt{AIC} et \texttt{BIC} en \textbf{R}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Illustration}
-\protect\hypertarget{illustration}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/fig-polynome-ajustement-1.pdf}
-
-}
-
-\caption{\label{fig-polynome-ajustement}Critères d'information en
-fonction de l'ordre du polynôme.}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Séparation des données}
-\protect\hypertarget{suxe9paration-des-donnuxe9es}{}
-Ne pas utiliser les données employés pour ajuster un modèle pour
-\textbf{prédire la performance}.
+\begin{frame}[fragile]{Séparation de l'échantillon}
+\protect\hypertarget{suxe9paration-de-luxe9chantillon}{}
+On conserve 100 000 observations test pour vérifier la performance
 
 \begin{itemize}
 \tightlist
 \item
-  échantillons d'apprentissage/validation/test (fixes)
-\item
-  validation croisée
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Validation externe}
-\protect\hypertarget{validation-externe}{}
-Séparer l'ensemble d'observations en plusieurs groupes
-
-\begin{itemize}
-\tightlist
-\item
-  l'échantillon d'apprentissage pour l'ajustement du modèle
-\item
-  l'échantillon de validation pour l'estimation de la performance
-\item
-  l'échantillon test pour l'inférence (optionnel)
-\end{itemize}
-
-En pratique, il faut beaucoup d'observations!
-\end{frame}
-
-\begin{frame}{Avantages et inconvénients de la validation externe}
-\protect\hypertarget{avantages-et-inconvuxe9nients-de-la-validation-externe}{}
-Applicable en toute généralité peu importe le type de modèle.
-
-Cette approche, qui compartimente les échantillons, n'est pas sans
-faille.
-
-\begin{itemize}
-\tightlist
-\item
-  On obtient un résultat différent selon la division
-\item
-  Gaspillage potentiel
-\item
-  Choix d'ordinaire aléatoire, mais choix particuliers de fenêtre selon
-  données (par ex., séries chronologiques)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Validation croisée}
-\protect\hypertarget{validation-croisuxe9e}{}
-Une autre méthode de rééchantillonage
-
-Diviser l'échantillon en \(K\) groupes d'observations de taille moyenne
-égale
-
-\begin{itemize}
-\tightlist
-\item
-  utiliser \(K-1\) groupes pour l'ajustement
-\item
-  estimer la performance avec les données du dernier groupe
-\end{itemize}
-
-Les regroupements sont aléatoires, tout comme la mesure finale de
-performance!
-\end{frame}
-
-\begin{frame}{Étapes de la validation croisée à \(K\) groupes}
-\protect\hypertarget{uxe9tapes-de-la-validation-croisuxe9e-uxe0-k-groupes}{}
-\begin{enumerate}
-\tightlist
-\item
-  Diviser l'échantillon au hasard en \(K\) parties
-  \(P_1, P_2, \ldots, P_K\) contenant toutes à peu près le même nombre
-  d'observations.
-\item
-  Pour \(j = 1\) à \(K\),
-
-  \begin{enumerate}
-  [i.]
-  \tightlist
-  \item
-    Enlever la partie \(j\).
-  \item
-    Estimer les paramètres du modèle en utilisant les observations des
-    \(K-1\) autres parties combinées.
-  \item
-    Calculer la mesure de performance (par exemple la somme du carré des
-    erreurs \(\{Y_i - \widehat{Y}_i\}^2\)) de ce modèle pour le groupe
-    \(P_j\).
-  \end{enumerate}
-\item
-  Combiner les \(K\) estimations de performance pour obtenir une mesure
-  de performance finale.
-\end{enumerate}
-\end{frame}
-
-\begin{frame}{Illustration de la validation croisée}
-\protect\hypertarget{illustration-de-la-validation-croisuxe9e}{}
-\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/validationcroiseeillust-1.pdf}
-\end{frame}
-
-\begin{frame}{Combien de groupes \(K\) pour la validation croisée?}
-\protect\hypertarget{combien-de-groupes-k-pour-la-validation-croisuxe9e}{}
-La validation croisée est plus coûteuse parce qu'on doit ajuster \(K\)
-fois le modèles
-
-\begin{itemize}
-\tightlist
-\item
-  Pour la régression linéaire, choisir \(K=n\) (\emph{leave-one-out
-  cross-validation}) permet d'éviter de réajuster le modèle grâce à un
-  artifice de calcul.
-\item
-  On recommande habituellement de prendre \(K=\min\{n^{1/2}, 10\}\)
-  groupes.
-\item
-  les choix de \(K=5\) ou \(K=10\) sont ceux qui revient le plus souvent
-  en pratique.
+  (oracle) réponses inconnues à toutes fins pratiques
 \end{itemize}
 
 \footnotesize
 
-Voir Davison \& Hinkley (1997), \emph{Bootstrap methods and their
-applications}, Section 6.4 pour une discussion plus étoffée et
-l'algorithme 6.5 pour une meilleure implémentation.
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(dbm, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\NormalTok{dbm\_a }\OtherTok{\textless{}{-}}\NormalTok{ dbm }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}
+\NormalTok{    test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\CommentTok{\#données d\textquotesingle{}entraînement}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(ymontant)) }\CommentTok{\# personnes qui ont acheté}
+\end{Highlighting}
+\end{Shaded}
 
 \normalsize
 \end{frame}
 
-\begin{frame}{Validation croisée = résultat aléatoire!}
-\protect\hypertarget{validation-croisuxe9e-ruxe9sultat-aluxe9atoire}{}
-Soit \(\widehat{\mathsf{EQM}}_{\text{VC}}\) l'estimation de l'erreur
-quadratique moyenne obtenue par validation croisée à \(K\) plis pour un
-modèle \(\mathcal{M}\) donné.
-
-Si on a un nombre similaire d'observations dans chaque groupe, on peut
-plutôt
+\begin{frame}{Recherche d'un modèle}
+\protect\hypertarget{recherche-dun-moduxe8le}{}
+Idée initiale:
 
 \begin{itemize}
 \tightlist
 \item
-  calculer l'erreur quadratique moyenne de chaque pli, disons
-  \(\widehat{\mathsf{EQM}}_{\text{VC}, k}\)
+  essayer tous les modèles possibles,
 \item
-  si \(K\) est suffisamment grand (disons \(K>10\)), on peut estimer
-  l'écart-type empirique de cette moyenne via
-  \[ \mathsf{sd}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \frac{1}{K-1} \sum_{k=1}^{K} (\widehat{\mathsf{EQM}}_{\text{VC}, k}-\widehat{\mathsf{EQM}}_{\text{VC}})^2\]
+  estimer pour chacun la performance (erreur quadratique moyenne) avec
+  validation croisée ou critères d'information,
+\item
+  déterminer le meilleur modèle parmi l'ensemble de modèles.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Règle d'un écart-type}
-\protect\hypertarget{ruxe8gle-dun-uxe9cart-type}{}
-Suivant Breiman, on choisit le modèle le plus simple parmi un ensemble
-\(\mathcal{M}_0 \subset\cdots \subset \mathcal{M}_m\) qui satisfasse
+\begin{frame}{Approximation}
+\protect\hypertarget{approximation}{}
+Soit
+\(\mathsf{E}(Y \mid \mathbf{X}) = f(\mathrm{X}_1, \ldots, \mathrm{X}_p)\)
+pour \(f\) une fonction inconnue supposée lisse.
 
-\[\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_i) \leq \min_{m = i+1}^M \widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m) + \mathsf{sd}\{\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m)\}\]
+On peut approximer la fonction en faisant une expansion (série de
+Taylor) de degré 2 (tous les termes quadratiques, et les interactions
+d'ordre 2):
 
-Choisir le modèle le plus simple qui soit à au plus un écart-type de la
-performance des modèles plus compliqués.
+\begin{itemize}
+\tightlist
+\item
+  on n'inclut pas le carré de variables indicatrices binaires (car
+  \(0^2=0, 1^2=1\)).
+\item
+  idem pour les interactions entre indicateurs qui représentent des
+  niveaux d'une même variable catégorielle.
+\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Validation croisée en \textbf{R}}
-\protect\hypertarget{validation-croisuxe9e-en-r}{}
-Le paquet \texttt{caret} a une fonction pour faire la validation
-croisée.
-
+\begin{frame}[fragile]{Modèle complet et syntaxe \textbf{R}}
+\protect\hypertarget{moduxe8le-complet-et-syntaxe-r}{}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{cv\_caret }\OtherTok{\textless{}{-}} 
-\NormalTok{  caret}\SpecialCharTok{::}\FunctionTok{train}\NormalTok{(}\AttributeTok{form =} \FunctionTok{formula}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =} \DecValTok{3}\NormalTok{)), }
-             \AttributeTok{data =}\NormalTok{ polynome, }
-             \AttributeTok{method =} \StringTok{"lm"}\NormalTok{,}
-             \AttributeTok{trControl =}\NormalTok{ caret}\SpecialCharTok{::}\FunctionTok{trainControl}\NormalTok{(}
-               \AttributeTok{method =} \StringTok{"cv"}\NormalTok{,}
-               \AttributeTok{number =} \DecValTok{10}\NormalTok{)) }\CommentTok{\#nb plis}
-\NormalTok{reqm\_cv }\OtherTok{\textless{}{-}}\NormalTok{ cv\_caret}\SpecialCharTok{$}\NormalTok{results}\SpecialCharTok{$}\NormalTok{RMSE }\CommentTok{\# racine EQM}
-\NormalTok{reqm\_sd\_cv }\OtherTok{\textless{}{-}}\NormalTok{ cv\_caret}\SpecialCharTok{$}\NormalTok{results}\SpecialCharTok{$}\NormalTok{RMSESD}
+\CommentTok{\# (...)\^{}2 crée toutes les interactions d\textquotesingle{}ordre deux}
+\CommentTok{\# I(x\^{}2) permet de créer les termes quadratiques}
+\NormalTok{formule }\OtherTok{\textless{}{-}} 
+  \FunctionTok{formula}\NormalTok{(ymontant }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{          (x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+} 
+\NormalTok{             x6 }\SpecialCharTok{+}\NormalTok{ x7 }\SpecialCharTok{+}\NormalTok{ x8 }\SpecialCharTok{+}\NormalTok{ x9 }\SpecialCharTok{+}\NormalTok{ x10)}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{+} 
+            \FunctionTok{I}\NormalTok{(x2}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x6}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x7}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+            \FunctionTok{I}\NormalTok{(x8}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x9}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x10}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{mod\_complet }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(formule, }\AttributeTok{data =}\NormalTok{ dbm\_a)}
+\CommentTok{\# Matrice avec toutes les variables}
+\NormalTok{matmod }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(mod\_complet)}
 \end{Highlighting}
 \end{Shaded}
 
-Aussi \texttt{boot::cv.glm()} qui inclut une correction de biais pour
-les modèles linéaires généralisé.
+Le modèle est clairement \textbf{surajusté} avec 105 coefficients pour
+210 variables.
 \end{frame}
 
-\begin{frame}{Résultats de la validation croisée}
-\protect\hypertarget{ruxe9sultats-de-la-validation-croisuxe9e}{}
+\begin{frame}[fragile]{Fléau de la dimensionalité}
+\protect\hypertarget{fluxe9au-de-la-dimensionalituxe9}{}
+Combien de modèles incluant les combinaisons de \(p\) variables?
+
+Dans l'exemple, \(p=14\) variables de base en incluant les indicatrices
+pour les variables catégorielles multiniveaux (revenu \texttt{x3} et
+région \texttt{x4})
+
+Chaque variable est incluse (ou pas): il y a
+\(2^p=2\times 2 \times \cdots \times 2\) (\(p\) fois) modèles.
+
+\hypertarget{tbl-02-table3}{}
+\begin{table}
+\caption{\label{tbl-02-table3}Nombres de modèles en fonction du nombre de paramètres. }\tabularnewline
+
+\centering
+\begin{tabular}{rr}
+\toprule
+$p$ & nombre de paramètres\\
+\midrule
+5 & 32\\
+10 & 1024\\
+15 & 32768\\
+20 & 1048576\\
+25 & 33554432\\
+\addlinespace
+30 & 1073741824\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Recherche exhaustive}
+\protect\hypertarget{recherche-exhaustive}{}
+Essayer \textbf{tous} les modèles et choisir le meilleur (si \(p\) est
+petit).
+
+L'algorithme par séparation et évaluation (\emph{branch and bound})
+recherche de manière efficace sans essayer tous les modèles candidats et
+écarte d'office les modèles sous-optimaux.
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Recherche exhaustive avec variables de base}
+\NormalTok{rec\_ex }\OtherTok{\textless{}{-}}\NormalTok{ leaps}\SpecialCharTok{::}\FunctionTok{regsubsets}\NormalTok{(}
+  \AttributeTok{x =}\NormalTok{ ymontant }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1}\SpecialCharTok{+}\NormalTok{x2}\SpecialCharTok{+}\NormalTok{x3}\SpecialCharTok{+}\NormalTok{x4}\SpecialCharTok{+}\NormalTok{x5}\SpecialCharTok{+}\NormalTok{x6}\SpecialCharTok{+}\NormalTok{x7}\SpecialCharTok{+}\NormalTok{x8}\SpecialCharTok{+}\NormalTok{x9}\SpecialCharTok{+}\NormalTok{x10, }
+  \AttributeTok{nvmax =}\NormalTok{ 13L,}
+  \AttributeTok{method =} \StringTok{"exhaustive"}\NormalTok{,}
+  \AttributeTok{data =}\NormalTok{ dbm\_a)}
+\NormalTok{resume\_rec\_ex }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(rec\_ex,}
+                         \AttributeTok{matrix.logical =} \ConstantTok{TRUE}\NormalTok{)}
+\CommentTok{\# Trouver le modèle avec le plus petit BIC}
+\NormalTok{min\_BIC }\OtherTok{\textless{}{-}} \FunctionTok{which.min}\NormalTok{(resume\_rec\_ex}\SpecialCharTok{$}\NormalTok{bic)}
+\CommentTok{\# Nom des variables dans le modèle retenu}
+\NormalTok{rec\_ex}\SpecialCharTok{$}\NormalTok{xnames[resume\_rec\_ex}\SpecialCharTok{$}\NormalTok{which[min\_BIC,]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "(Intercept)" "x1"          "x32"         "x33"         "x45"        
+ [6] "x5"          "x6"          "x7"          "x8"          "x10"        
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Mot d'ordre}
+\protect\hypertarget{mot-dordre}{}
+Quelques mantras pour la suite:
+
+\begin{itemize}
+\tightlist
+\item
+  préférer la flexibilité (réduire biais potentiel)
+\item
+  être conscient de notre budget (surajustement)
+\item
+  porter une attention particulière aux interactions entre variables
+  catégorielles
+
+  \begin{itemize}
+  \tightlist
+  \item
+    estimations correspondent à des `moyennes de groupe'
+  \item
+    impact élevé potentiel des valeurs aberrantes et des extrêmes
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Méthodes de sélection séquentielles}
+\protect\hypertarget{muxe9thodes-de-suxe9lection-suxe9quentielles}{}
+Recherche exhaustive typiquement trop coûteuse.
+
+On peut plutôt opter pour un algorithme glouton:
+
+\begin{itemize}
+\tightlist
+\item
+  à chaque étape, on maximise l'utilité (horizon d'optimisation limité)
+  en retirant ou en ajoutant une seule variable.
+\item
+  au début, \(p\) variables à regarder, puis il y a \(p-1\) choix
+  l'étape suivante, etc.
+\item
+  moins de modèles explorés, mais utile pour faire une recherche rapide.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Digression}
+\protect\hypertarget{digression}{}
+Le modèle à \(K\) variables qui a la plus petite erreur moyenne
+quadratique a aussi
+
+\begin{itemize}
+\tightlist
+\item
+  est aussi le meilleur (pour \(K\) variables) selon les critères
+  d'information
+\item
+  et selon le coefficient de régression \(R^2\)
+\end{itemize}
+
+Si on enlève ou on ajoute séquentiellement des variables, on peut
+traquer l'un ou l'autre avant de comparer avec le modèle précédent.
+\end{frame}
+
+\begin{frame}{Sélections ascendante et descendante}
+\protect\hypertarget{suxe9lections-ascendante-et-descendante}{}
+\textbf{Sélection ascendante}: à partir du modèle de base (ordonnée à
+l'origine), ajouter à chaque étape au modèle précédent la variable qui
+améliore le plus l'ajustement.
+
+\textbf{Sélection descendante}: éliminer du modèle complet la variable
+qui contribue le moins à l'ajustement.
+
+Dans les deux cas, la procédure se termine quand on ne peut satisfaire
+le critère d'arrêt (par exemple, critère d'information)
+\end{frame}
+
+\begin{frame}{Sélection séquentielle}
+\protect\hypertarget{suxe9lection-suxe9quentielle}{}
+À partir du modèle de base (d'ordinaire),
+
+\begin{itemize}
+\tightlist
+\item
+  alterner sélection séquentielle ascendante et descendante.
+\item
+  on continue ainsi tant que le modèle retourné par l'algorithme n'est
+  pas identique à celui de l'étape précédente.
+\item
+  une variable peut entrer dans le modèle et sortir plus tard dans le
+  processus.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    préférable aux procédures ascendantes et descendantes (car plus de
+    modèles).
+  \item
+    lui préférer la recherche exhaustive quand c'est possible
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Code \textbf{R} avec \texttt{leaps}}
+\protect\hypertarget{code-r-avec-leaps}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Cette procédure séquentielle retourne}
+\CommentTok{\# la liste de modèles de 1 variables à}
+\CommentTok{\# nvmax variables.}
+\NormalTok{rec\_seq }\OtherTok{\textless{}{-}} 
+\NormalTok{  leaps}\SpecialCharTok{::}\FunctionTok{regsubsets}\NormalTok{(}
+    \AttributeTok{x =}\NormalTok{ formule, }
+    \AttributeTok{data =}\NormalTok{ dbm\_a,}
+    \AttributeTok{method =} \StringTok{"seqrep"}\NormalTok{, }
+    \AttributeTok{nvmax =} \FunctionTok{length}\NormalTok{(}\FunctionTok{coef}\NormalTok{(mod\_complet)))}
+\FunctionTok{which.min}\NormalTok{(}\FunctionTok{summary}\NormalTok{(rec\_seq)}\SpecialCharTok{$}\NormalTok{bic)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Sélection séquentielle avec critères
+d'informations en \textbf{R}}
+\protect\hypertarget{suxe9lection-suxe9quentielle-avec-crituxe8res-dinformations-en-r}{}
+\footnotesize
+
+La procédure est plus longue à rouler (car les modèles linéaires sont
+ajustés).
+
+On ajoute ou retire la variable qui améliore le plus le critère de
+sélection à chaque étape (comportement différent de \textbf{SAS}).
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{seq\_AIC }\OtherTok{\textless{}{-}}\NormalTok{ MASS}\SpecialCharTok{::}\FunctionTok{stepAIC}\NormalTok{(}
+  \FunctionTok{lm}\NormalTok{(ymontant }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\AttributeTok{data =}\NormalTok{ dbm\_a), }
+  \CommentTok{\# modèle initial sans variables explicative}
+    \AttributeTok{scope =}\NormalTok{ formule, }\CommentTok{\# modèle maximal possible}
+    \AttributeTok{direction =} \StringTok{"both"}\NormalTok{, }\CommentTok{\#séquentielle}
+    \AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{, }\CommentTok{\# ne pas imprimer le suivi}
+    \AttributeTok{keep =} \ControlFlowTok{function}\NormalTok{(mod, AIC, ...)\{ }
+      \CommentTok{\# autres sorties des modèles à conserver}
+      \FunctionTok{list}\NormalTok{(}\AttributeTok{bic =} \FunctionTok{BIC}\NormalTok{(mod), }
+           \AttributeTok{coef =} \FunctionTok{coef}\NormalTok{(mod))\},}
+    \AttributeTok{k =} \DecValTok{2}\NormalTok{) }\CommentTok{\#}
+\CommentTok{\# Remplacer k=2 par k = log(nrow(dbm\_a)) pour BIC}
+\end{Highlighting}
+\end{Shaded}
+
+L'historique des étapes est disponible via \texttt{seq\_AIC\$anova}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Performance en fonction de la complexité}
+\protect\hypertarget{performance-en-fonction-de-la-complexituxe9}{}
 \begin{figure}
 
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/fig-plotcv-1.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-perfo-sequentiel.pdf}
 
 }
 
-\caption{\label{fig-plotcv}Boîtes à moustaches des 100 estimations de
-l'erreur quadratique moyenne obtenues par validation croisée à 10 plis.}
+\end{figure}
+
+\footnotesize
+
+40 premiers modèles de la procédure séquentielle en fonction du nombre
+de termes inclus. Oracle: 100K données de validation (libellé externe)
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Méthodes de régularisation}
+\protect\hypertarget{muxe9thodes-de-ruxe9gularisation}{}
+Objectif: prévenir le surajustement.
+
+L'erreur moyenne quadratique se décompose comme
+
+\[ \text{biais carré} + \text{variabilité}\]
+
+Les méthodes de régularisation introduisent du biais dans l'estimation
+des coefficients en pénalisant leur norme.
+\end{frame}
+
+\begin{frame}{Préalable à la régression avec régularisation}
+\protect\hypertarget{pruxe9alable-uxe0-la-ruxe9gression-avec-ruxe9gularisation}{}
+Pénalisation la norme de \(\beta_1, \ldots, \beta_p\)
+
+\begin{itemize}
+\tightlist
+\item
+  Modèles avec pénalités pas les mêmes selon l'échelle des données
+
+  \begin{itemize}
+  \tightlist
+  \item
+    pas invariant aux transformations affines (par ex., conversion de
+    Celcius en Farenheit)
+  \end{itemize}
+\end{itemize}
+
+\textbf{Solution}: standardiser variables explicatives
+\(\mathrm{X}_1, \ldots, \mathrm{X}_p\) \textbf{et} variable réponse
+\(\boldsymbol{y}\) (moyenne zéro, écart-type unitaire).
+
+\begin{itemize}
+\tightlist
+\item
+  vérifier selon le logiciel, cette étape peut-être effectuée
+  implicitement
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LASSO}
+\protect\hypertarget{lasso}{}
+Pénalité avec norme \(l_1\) pour la valeur absolue des coefficients,
+\[ \min_{\boldsymbol{\beta}} \left\{ n\mathsf{EQM}(\boldsymbol{\beta}) + \lambda(|\beta_1| + \cdots + |\beta_p|)\right\}.\]
+Hyperparamètre \(\lambda>0\) qui détermine la force de la pénalisation.
+
+Rétrécissement de certains coefficients \textbf{exactement} à zéro:
+sélection implicite de variable.
+\end{frame}
+
+\begin{frame}{Contrainte budgétaire et moindres carrés}
+\protect\hypertarget{contrainte-budguxe9taire-et-moindres-carruxe9s}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-lassopenalty.pdf}
+
+}
 
 \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Code \textbf{R} pour le LASSO}
+\protect\hypertarget{code-r-pour-le-lasso}{}
+Paramètre de pénalité déterminé par validation croisée à partir d'un
+vecteur de valeurs candidates.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{library}\NormalTok{(glmnet)}
+\NormalTok{lambda\_seq }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from =} \FloatTok{0.01}\NormalTok{, }\AttributeTok{to =} \DecValTok{2}\NormalTok{, }\AttributeTok{by =} \FloatTok{0.01}\NormalTok{)}
+\NormalTok{cv\_output }\OtherTok{\textless{}{-}} 
+\NormalTok{  glmnet}\SpecialCharTok{::}\FunctionTok{cv.glmnet}\NormalTok{(}\AttributeTok{x =} \FunctionTok{as.matrix}\NormalTok{(matmod), }
+            \AttributeTok{y =}\NormalTok{ dbm\_a}\SpecialCharTok{$}\NormalTok{ymontant, }
+            \AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }
+            \AttributeTok{lambda =}\NormalTok{ lambda\_seq)}
+\FunctionTok{plot}\NormalTok{(cv\_output)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Trajectoire LASSO}
+\protect\hypertarget{trajectoire-lasso}{}
+On choisit typiquement \(\lambda\) par validation croisée en appliquant
+la règle du un écart-type (le première modèle à un erreur-type de la
+valeur minimale).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-lassopath.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Paramètres}
+\protect\hypertarget{paramuxe8tres}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/fig-lassopath-1.pdf}
+
+}
+
+\caption{\label{fig-lassopath}Coefficients du modèle en fonction de la
+pénalité}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Évaluation et prédiction}
+\protect\hypertarget{uxe9valuation-et-pruxe9diction}{}
+Une fois la valeur de \(\lambda\) choisie, on réestime le modèle avec la
+pénalité.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{lambopt }\OtherTok{\textless{}{-}}\NormalTok{ cv\_output}\SpecialCharTok{$}\NormalTok{lambda.min }
+ \CommentTok{\#ou cv\_output$lambda.1se}
+\NormalTok{lasso\_best }\OtherTok{\textless{}{-}} 
+\NormalTok{  glmnet}\SpecialCharTok{::}\FunctionTok{glmnet}\NormalTok{(}
+    \AttributeTok{x =} \FunctionTok{as.matrix}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(matmod)),}
+    \AttributeTok{y =}\NormalTok{ dbm\_a}\SpecialCharTok{$}\NormalTok{ymontant,}
+    \AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }
+    \AttributeTok{lambda =}\NormalTok{ lambopt)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Prédictions}
+\protect\hypertarget{pruxe9dictions}{}
+On crée une matrice avec les données de validation et on calcule
+l'erreur quadratique moyenne.
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Prédictions et calcul de l\textquotesingle{}EQM}
+\CommentTok{\# Données externes}
+\NormalTok{dbm\_v }\OtherTok{\textless{}{-}}\NormalTok{ dbm }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}
+\NormalTok{    test }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(ymontant))}
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_best, }
+                \AttributeTok{s =}\NormalTok{ lambopt, }
+                \AttributeTok{newx =} \FunctionTok{as.matrix}\NormalTok{(}
+                  \FunctionTok{model.matrix}\NormalTok{(formule, }
+                               \AttributeTok{data =}\NormalTok{ dbm\_v)))}
+\NormalTok{eqm\_lasso }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{((pred }\SpecialCharTok{{-}}\NormalTok{ dbm\_v}\SpecialCharTok{$}\NormalTok{ymontant)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Motivation pour la moyenne de modèles}
+\protect\hypertarget{motivation-pour-la-moyenne-de-moduxe8les}{}
+Une seule base de données (un seul échantillon) à disposition!
+
+Peu d'hétérogénéité, hors cette dernière est présente
+
+\begin{itemize}
+\tightlist
+\item
+  (rappelez-vous l'incertitude de la validation croisée)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Moyenne de modèles}
+\protect\hypertarget{moyenne-de-moduxe8les}{}
+\textbf{Solution}: générer nous-mêmes \(B\) échantillons différents à
+partir de l`échantillon original.
+
+Autoamorçage nonparamétrique: échantillon choisi au hasard et avec
+remise dans l'échantillon original.
+
+\begin{itemize}
+\tightlist
+\item
+  Une même observation peut être sélectionnée plus d'une fois tandis
+  qu'une autre peut ne pas être sélectionnée du tout.
+\end{itemize}
+
+\textbf{Défaut}: très coûteux en calcul
+\end{frame}
+
+\begin{frame}{Moyennes de modèles en pseudocode}
+\protect\hypertarget{moyennes-de-moduxe8les-en-pseudocode}{}
+\begin{enumerate}
+\tightlist
+\item
+  Échantillonnage aléatoire simple avec remise de \(B\) jeux de données
+\end{enumerate}
+
+Pour chaque jeu de données étiqueté \(b=1, \ldots, B\):
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Effectuer la sélection de variables
+\item
+  Sauvegarder les coefficients (0 si la variable est absente)
+\end{enumerate}
+
+Mettre en commun les résultats:
+
+\begin{enumerate}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Calculer la moyenne des coefficients
+\item
+  Obtenir les prédictions
+\end{enumerate}
+
+\footnotesize
+
+Voir code en ligne
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Évaluation de la performance}
+\protect\hypertarget{uxe9valuation-de-la-performance}{}
+En incluant uniquement les variables de base
+
+\begin{longtable}[]{@{}ccl@{}}
+\toprule()
+nombre de variables & \(\mathsf{EQM}\) & méthode \\
+\midrule()
+\endhead
+15 & 25,69 & toutes les variables \\
+12 & 25,53 & exhaustive - \(\mathsf{AIC}\) \\
+10 & 25,04 & exhaustive - \(\mathsf{BIC}\) \\
+\bottomrule()
+\end{longtable}
+
+En incluant les termes de base, les carrés et les interactions d'ordre
+2.
+
+\begin{longtable}[]{@{}cll@{}}
+\toprule()
+nombre de variables & \(\mathsf{EQM}\) & méthode \\
+\midrule()
+\endhead
+104 & 19,63 & toutes les variables \\
+21 & 12 & séquentielle, choix selon \(\mathsf{AIC}\) \\
+15 & 12,31 & séquentielle, choix selon \(\mathsf{BIC}\) \\
+30 & 12 & LASSO, validation croisée avec 10 groupes \\
+\bottomrule()
+\end{longtable}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
@@ -1004,56 +1015,96 @@ l'erreur quadratique moyenne obtenues par validation croisée à 10 plis.}
 \begin{itemize}
 \tightlist
 \item
-  Le choix de la complexité d'un modèle est un compromis entre
-
-  \begin{itemize}
-  \tightlist
-  \item
-    le biais (modèle trop simple, mal spécifié) et
-  \item
-    la variance (même nombre d'observations/budget, plus de paramètres à
-    estimer, estimations moins fiables)
-  \end{itemize}
+  Le nombre de modèles possibles augmente rapidement avec le nombre de
+  prédicteurs.
 \item
-  L'erreur quadratique moyenne est la mesure usuelle de la performance
-  d'un modèle linéaire
+  Si un modèle est mal spécifié (variables importantes manquantes),
+  alors les estimations sont biaisées.
+\item
+  Si le modèle est surspécifié, les coefficients correspondants aux
+  variables superflues incluses sont en moyenne nuls, mais contribuent à
+  l'augmentation de la variance.
+\item
+  \textbf{Compromis biais/variance}.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
 \protect\hypertarget{ruxe9capitulatif-1}{}
-Si on estime la performance avec les mêmes données qui ont servi à
-l'ajustement, on surestime la performance
-
 \begin{itemize}
 \tightlist
 \item
-  l'erreur quadratique moyenne calculée sur les mêmes données qui ont
-  servi à l'entraînement est biaisée
+  La taille du modèle (le nombre de variables explicatives) est
+  restreinte par le nombre d'observations disponibles.
 \item
-  cela mène à du \textbf{surajustement}
+  En général, il faut s'assurer d'avoir suffisamment d'observations pour
+  estimer de manière fiable les coefficients
+\item
+  Porter une attention particulière aux variables binaires et aux
+  interactions avec ces dernières: si les effectifs de certaines
+  modalités sont faibles, il y a danger surajustement.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
 \protect\hypertarget{ruxe9capitulatif-2}{}
-Trois méthodes pour estimer de manière plus objective la performance
-d'un modèle
+\begin{itemize}
+\tightlist
+\item
+  En pratique, on cherche à essayer plusieurs modèle pour trouver un
+  choix optimal de variables.
+\item
+  Une recherche exhaustive garantie le survol du plus grand nombre de
+  modèles possibles, mais est coûteuse
+\item
+  On peut effectuer une recherche exhaustive à l'aide d'algorithmes
+  d'optimisation pour un nombre réduit de variables (max 50)
+\item
+  Sinon, on a l'option d'utiliser un algorithme glouton qui ne couvre
+  qu'un sous-ensemble de tous les modèles
+\item
+  Compromis coût de calcul vs nombre de modèles explorés
+\item
+  Possibilité de combiner des méthodes!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-3}{}
+Certaines méthodes de pénalisation directe changent la fonction
+objective:
 
 \begin{itemize}
 \tightlist
 \item
-  Critères d'information (pénalisation)
+  introduction de biais pour les coefficients.
 \item
-  Validation externe
-\item
-  Validation croisée
+  idée globale: échanger biais contre variabilité moindre.
 \end{itemize}
 
-\footnotesize
+Une pénalité particulière (LASSO) contraint certains paramètres à être
+exactement nuls,
 
-Vous devez être en mesure de nommer les forces et faiblesses et
-d'expliquer le fonctionnement (avec du pseudocode).
+\begin{itemize}
+\tightlist
+\item
+  correspond implicitement à une sélection de variables.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif-4}{}
+\begin{itemize}
+\tightlist
+\item
+  On applique le critère de sélection sur la liste de modèles candidats
+  pour retenir celui qui donne la meilleure performance.
+\item
+  Pour éviter une sélection rigide, on peut perturber les données et
+  répéter la procédure pour calculer une moyenne de modèles.
+\item
+  Cette approche est très coûteuse en calcul.
+\end{itemize}
 \end{frame}
 
 

@@ -9,7 +9,7 @@ title: "Analyse de regroupements"
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 7 (analyse de regroupements)](https://lbelzile.github.io/math60602/03-regroupements.html), Section 7.5
+- {{< fa book >}} [Chapitre sur l'analyse de regroupements](https://lbelzile.github.io/math60602/regroupements.html), Section 7.5
 
 ## Diapositives 
 

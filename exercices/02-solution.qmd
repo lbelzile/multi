@@ -1,186 +1,234 @@
 ---
-title: "Analyse factorielle"
+title: "Sélection de variables"
 execute:
   echo: true
   eval: true
   message: false
   warning: false
   error: false
+  cache: true
 ---
 
 ## Exercice 2.1
 
-Les données `sondage_entreprise` contiennent les résultats d'un sondage effectué par une compagnie auprès de ses employés. 
 
-**1. Produisez des statistiques descriptives pour les variables `q8` à `q17`.**
-
-```{r}
-data(sondage_entreprise, package = "hecmulti")
-str(sondage_entreprise) #aperçu de la base de données
-```
-
-On peut utiliser `summary` pour obtenir les statistiques descriptives, mais les échelles de Likert sont toutes de 1 à 5.
-
-```{r}
-#| label: tbl-statdescriptfactor
-#| echo: false
-#| cache: true
-#| eval: true
-#| tbl-cap: "Statistiques descriptives des questions du sondage en entreprise."
- tibble::tibble(moyenne = apply(sondage_entreprise, 2, mean),
-              "écart-type" = apply(sondage_entreprise, 2, sd),
-                 histogramme = apply(sondage_entreprise, 2, function(x){skimr::inline_hist(x = x, n_bins = 5)})) |>
-  knitr::kable(digits = 2,
-               booktabs = TRUE) |>
-  kableExtra::kable_styling(full_width = TRUE)
-```
-
-On peut voir sur le corrélogramme que toutes les variables sont très corrélées entre elles.
-
-```{r, eval = TRUE}
-corrplot::corrplot(corr = cor(sondage_entreprise),
-                   type = "upper", 
-                   diag = FALSE)
-```
-
-**2. Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.**
-
-```{r, eval = FALSE}
-nrow(sondage_entreprise)
-```
-
-Il y a `r nrow(sondage_entreprise)` observations et `r ncol(sondage_entreprise)` variables. C'est suffisant pour une analyse factorielle, mais le nombre de facteurs ne sera probablement pas très élevé. 
-
-**3. Utilisez la méthode d'estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d'analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?**
-
-```{r}
-library(hecmulti)
-# Composantes principales, critère de Kaiser
-afk <- factocp(sondage_entreprise, 
-               cor = TRUE)
-spectral <- eigen(cor(sondage_entreprise))
-hecmulti::eboulis(spectral)
-print(afk, cutoff = 0.5)
-```
-
-Le critère de Kaiser (valeurs propres supérieures à 1) avec la matrice de corrélation suggère deux facteurs. Le diagramme d'éboulis donne deux facteurs également avec la matrice de corrélation. 
-
-On peut constater en étudiant les chargements que le premier facteur est très corrélé avec plusieurs variables. En augmentant le point de coupure, on obtient un regroupement avec grosso-modo pour le facteur 1 (Q8-Q9 et Q14-Q17) les questions qui se réfèrent à la réputation sociale de l'entreprise et la balance pour le facteur 2 (Q10-Q13) pour la réputation sur le plan de la gestion. Seule la question Q15 semble un peu à part
-
-
-**4. Répétez l'exercice, cette fois avec la méthode du maximum de vraisemblance**
-
-    - **Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?**
-    - **Combien de facteurs les critères d'information recommendent-ils?**
-    - **Si vous ajoutez des facteurs, est-ce que votre interprétation change?**
-    
-```{r}
-res_tableau <- ajustement_factanal(
-  factors = 1:4, 
-  covmat = cor(sondage_entreprise),
-  n.obs = nrow(sondage_entreprise))
-knitr::kable(res_tableau)
-```
-
-On voit que le modèle AIC suggère un modèle à quatre facteurs (un cas de quasi-Heywood), tandis que le BIC suggère plutôt trois facteurs. Le test du rapport de vraisemblance comparant la corrélation empirique au modèle d'analyse factorielle indique que le modèle est raisonnable à partir de quatre. Le problème de convergence nous amène à interpréter les résultats pour le modèle à quatre facteurs avec un grin de sel.
-
-Puisque la corrélation est très élevée, il est difficile ici d'interpréter les facteurs résultants parce que plusieurs variables sont corrélées avec de multiples facteurs. On peut augmenter le point de coupure à 0.5 pour déterminer les amalgames suivants:
-
-- Le facteur 1 incluant Q8, Q9, Q16 et Q17 font référence à la réputation sociale et éthique de l'entreprise
-- le facteur 2 comprenant Q10-Q13 correspond à la perception financière (innovation, gestion, finances)
-- le facteur 3 regroupe Q9, Q11 et Q14 (éthique, confiance et innovation)
- 
-L'interprétation change puisque ce qui était dans le premier facteur se retrouve dans le troisième, avec Q9 qui est présente dans les deux. En pratique, on pourrait décider de l'associer à l'une ou l'autre des échelles, selon la cohérence interne, et la logique.
- 
-**5. Créez des échelles et vérifiez leur cohérence interne. **
-
-```{r}
-e1 <- sondage_entreprise |> 
-  dplyr::select(c(q8:q9, q14:q17))
-alphaC(e1)
-echelle1 <- rowMeans(e1)
-
-e2 <- sondage_entreprise |> 
-  dplyr::select(c(q10:q13))
-alphaC(e2)
-echelle2 <- rowMeans(e1)
-```
-
-On voit que les deux échelles créées ont un $\alpha$ de Cronbach de plus de 0.8, donc les échelles sont cohérentes. C'est en grande partie dû à la forte corrélation observée entre tous les items
-
-## Exercice 2.2
- 
-Effectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données `aerien`.  Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).
-
-**1. Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.** 
-
-- **Combien de facteurs le critère des valeurs propres suggère-t-il?**
-- **Combien de facteurs le diagramme d'éboulis suggère-t-il?**
-- **Interprétez les chargements obtenus suite à la rotation. Commentez sur l'interprétabilité de ces derniers.**
-- **En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.**
+1. *Faites une analyse exploratoire des variables explicatives*: 
+   - *Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse.*
+   - *Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l'ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?*
+   - *Vérifiez s'il y a des variables catégorielles encodées comme des variables numériques.*
    
-La base de données est la même que celle de l'Exercice 1.1, mais on ne sélectionne que les colonnes 7 à 20 qui correspondent aux réponses du questionnaire.
+On remarque en consultant la documentation de la base de données à l'aide de `?college` que le nombre de demandes d'admissions (`napplications`), le nombre d'admissions parmi ces applications `nadmission` et le nombre d'offres converties par les candidat.e.s, `ninscrits`, sont reliées et ne peuvent être employées.
 
-Il faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir `?cor`); j'utilise ici `use = pairwise.complete.obs` qui utilise toutes les paires.^[Le défaut de cette option, qui extrait le maximum d'information à l'aide de toutes les paires complètes, est que l'on a pas de garantie que la matrice de covariance résultante est positive définie.]
-    
+Plusieurs variables seront fortement corrélées parce qu'elles dépendent de la capacité d'accueil de l'établissement d'enseignement. Ainsi, on pourrait créer une variable qui représente le pourcentage de temps partiels pour les premiers cycles (plutôt que le décompte). Les variables `pourcentdoctorat` et `pourcentterminal`, sont fortement corrélées puisque la plupart des diplômes terminaux (incluant les titres professionnels, les doctorats de premier cycle en médecine, etc.) sont des PhD: le modèle choisira la variable la plus adéquate. Il n'y a pas de variables catégorielles hors variables binaires. Côté vérifications d'usage, on note que `tauxdiplom` et `pourcentdoctorat` sont supérieurs à 100%.
+   
+On devra retirer la variable catégorielle `nom`, qui a une modalité différente pour chaque observation.   
+   
 ```{r}
-library(hecmulti)
 library(dplyr)
-data(aerien, package = "hecmulti")
-bd <- aerien |> 
-  mutate_at(7:20,
-            ~na_if(., 0)) |>
-  select(7:20)
-corbd <- cor(bd, 
-             use = "pairwise.complete.obs")
-afk <- factocp(covmat = corbd)
-eboulis(eigen(corbd))
-# Copier noms de variables
-rownames(afk$loadings) <- colnames(bd)
-print(afk, 
-      cutoff = 0.4)
+library(hecmulti)
+data(college, package = "hecmulti")
+str(college)
+summary(college)
+# Est-ce que pourcentdoctorat < pourcenterminal?
+summary(with(college,
+             pourcentdoctorat/pourcentterminal))
+# Non
+db <- college |>
+  mutate(
+    tauxdiplom = pmin(tauxdiplom, 100),
+    pourcentdoctorat = pmin(pourcentdoctorat, 100),
+    pctpart1c = tempspart1c/(tempsplein1c+tempspart1c)) |>
+  select(! c(nom, 
+             tempsplein1c, 
+             tempspart1c, 
+             nadmission, 
+             ninscrits))
 ```
-    
-Le diagramme d'éboulis suggère quatre facteurs, idem pour le critère de Kaiser.
 
-Si on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une corrélation suffisante pour être considérés lors de la création d'échelles, on obtient la division suivante:
+2. *Scindez la base de données en échantillon avec données d'entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire `60602` via `set.seed(60602)`.* 
+   - *Sélectionnez un modèle à l'aide d'une des méthodes couvertes, mais en basant votre choix sur l'erreur moyenne quadratique évaluée sur l'échantillon de validation.*
 
-- Le facteur 1 inclut les items 5, 7, 8 et 14 (nourriture, confort du siège et divertissement en vol, proprete) qui sont tous en lien avec l'offre de service en vol
-- Le facteur 2 inclut items 1-4 (service internet en vol, temps d'arrivée et de départ convenable, facilité de réservation en ligne et localisation de la porte). Difficilement interprétable à cause d'internet, sinon rattachés à l'expérience client avant le vol.
-- Le facteur 3 inclut les items 9, 11, 13 (embarquement, gestion des bagages et service en vol). Les questions sont en lien avec les contacts avec le personnel de bord et la rapidité du service.
-- Le facteur 4 inclut l'item 6, peut-être 12, les deux en lien avec l'enregistrement
-
-Augmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.
+On peut désormais considérer une séparation en tiers.
+Pour ce faire, je vais échantillonner des variables logiques vrais et faux avec une cote de 2 pour 1 et ensuite sélectionner les lignes qui correspondent.
 
 ```{r}
-print(
-  c(F1 = alphaC(bd |> select(c(5,7,8)), 
-       na.rm = TRUE),
-  F2 = alphaC(bd |> select(1:4),
-       na.rm = TRUE),
-  F3 = alphaC(bd |> select(c(9,11,13)),
-       na.rm = TRUE),
-  F4 = alphaC(bd |> select(c(6,12)),
-       na.rm = TRUE)), 
-  digits = 2)
+set.seed(60602)
+test <- sample(x = c(FALSE, TRUE),
+               size = nrow(db),
+               replace = TRUE, 
+               prob = c(1/3, 2/3))
+db_a <- db[test,]
+db_v <- db[!test,]
 ```
 
-Si les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n'ont pas un $\alpha$ de Cronbach supérieur à 0.6.
+Pour l'estimation, on pourrait simplement calculer l'erreur quadratique moyenne de validation pour tous les cinquante premiers modèles en considérant toutes les interactions d'ordre 2. 
 
-**2. Répétez l'exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.**
-
-- **Qu'arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.**
 
 ```{r}
-hecmulti::ajustement_factanal(covmat = corbd,
-                              n.obs = nrow(na.omit(bd)), 
-                              factors = 1:7) |>
-  knitr::kable(digits = 2)
+# Modèle avec interactions de toutes les variables
+formule <- formula(napplications ~ .^2)
+
+# Sélection séquentielle ascendante
+rec_seq <- leaps::regsubsets(
+  x = formule, 
+  data = db_a,
+  method = "seqrep",
+  nvmax = 50)
 ```
 
-En raison du nombre excessivement élevé d'observations, l'ajustement du modèle est médiocre et les critères d'information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n'est pas adéquate et on rejette à coup sûr le test d'hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l'analyse factorielle parce que notre puissance est élevée vu qu'on a `r  nrow(na.omit(bd))` réponses complètes. 
+Si `regsubsets` permet de recouvrer les différents modèles, il n'y a pas d'utilitaire pour obtenir le résumé et les prédictions. Le paquet `hecmulti` inclut une fonction pour faire les prédictions d'un modèle donné. À des fins d'illustration, on considère celui qui a le plus petit critère BIC intra-échantillon d'apprentissage.
+
+```{r}
+#| eval: false
+#| echo: true
+# Calculer les BIC 
+bic_mod <- summary(rec_seq)$bic
+# Prédire du modèle avec id variables
+# Ici, celui avec le plus petit BIC du lot
+predict(rec_seq, id = which.min(bic_mod))
+```
+
+Ici, on s'intéresse uniquement au calcul de l'erreur quadratique moyenne pour les modèles choisis par la procédure de recherche séquentielle. La fonction `eval_EQM_regsubsets` fait le calcul et nous retourne un vecteur avec toutes les mesures. On choisit le modèle qui minimise l'erreur.
+
+```{r}
+# Modèle avec la plus petite erreur 
+# moyenne quadratique de validation externe
+reqm_seq_ve_list <- 
+  hecmulti::eval_EQM_regsubsets(
+  model = rec_seq, 
+  select = 1:50,
+  formula = formule,
+  data = db_a,
+  newdata = db_v)
+# La fonction calcule la racine EQM sur 
+# les données de validation
+mod_seq_ve <- which.min(reqm_seq_ve_list)
+nvar_seq_ve <- mod_seq_ve + 1 
+# nombre variables + ordonnée à l'origine.
+reqm_seq_ve <- reqm_seq_ve_list[mod_seq_ve]
+```
+
+Une logique similaire s'appliquerait avec le LASSO, même si c'est loin d'être la norme (on utilise d'ordinaire la validation croisée). Ici, on ajusterait le modèle avec plusieurs valeurs de $\lambda$, puis on calculerait l'erreur quadratique moyenne de validation.
+On prendra la valeur de la pénalisation $\lambda$ qui minimise cette dernière. Spécifier la séquence de valeurs de $\lambda$ à essayer nécessite un peu d'essai/erreur.
+
+```{r}
+# Obtenir X et y
+Xmat_a <- model.matrix(formule, data = db_a)[,-1]
+y_a <- db_a$napplications
+lambda_seq <- exp(seq(from = log(0.1),
+                  to = log(50), 
+                  length.out = 100L))
+lasso <- glmnet::glmnet(
+    x = Xmat_a,
+    y = y_a,
+    alpha = 1, 
+    lambda = lambda_seq)
+# Prédictions et calcul de l'EQM
+# On pourrait remplacer `newx` par 
+# d'autres données (validation externe)
+eqm_lasso_externe <- rep(0, length(lambda_seq))
+for(i in seq_along(lambda_seq)){
+  pred <- predict(
+    object = lasso, 
+    s = lambda_seq[i], 
+    newx = model.matrix(formule, data = db_v)[,-1])
+  eqm_lasso_externe[i] <- 
+    mean((pred - db_v$napplications)^2)
+}
+minl <- which.min(eqm_lasso_externe)
+lambda_opt <- lambda_seq[minl]
+# Nombre de coefficients non nuls
+nvar_lasso_ve <- Matrix::nnzero(lasso$beta[,minl, drop = FALSE])
+reqm_lasso_ve <- sqrt(eqm_lasso_externe[minl])
+```
 
 
-À partir de 7 facteurs, l'optimisation ne converge pas et retourne un cas de Heywood.
+3. *Répétez la sélection, cette fois en prenant comme critère pour l'erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.*
 
-Ainsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu'une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible.
+On peut utiliser `boot::cv.glm` ou `caret::train` avec
+les différentes méthodes pour ajuster les modèles. Je fais varier le nombre maximal de variables pour retourner les différentes solutions. Comme le résultat de la validation croisée est aléatoire, on peut répéter cette étape pour réduire l'incertitude de prédiction et obtenir une meilleur valeur de l'écart-type.
+
+
+```{r}
+# Matrice du modèle complet, moins ordonnée à l'origine
+Xmat <- model.matrix(formule, data = db)[,-1]
+# Variable réponse
+y <- db$napplications
+seq_vc <- 
+  caret::train(form = formule,
+               data = db,
+               method = 'leapSeq',
+             tuneGrid = expand.grid(nvmax = 1:50),
+             trControl = caret::trainControl(
+               method = "repeatedcv",
+               number = 10,
+               repeats = 10))
+# Graphique de la racine de l'EQM en fonction de
+# nvmax
+plot(seq_vc)
+# Meilleur modèle
+mod_seq_vc <- which.min(seq_vc$results$RMSE)
+reqm_seq_vc <- min(seq_vc$results$RMSE)
+nvar_seq_vc <- seq_vc$results$nvmax[mod_seq_vc]
+## Calcul des prédictions
+# predict(seq_vc, newdata = db)
+```
+
+Les notes de cours donnent une approche pas à pas avec `glmnet` pour ajuster le LASSO en choisissant la valeur de $\lambda$ par validation croisée, mais on peut changer le type de model dans `caret` et utiliser les mêmes fonctionnalités.
+
+```{r}
+# Autre approche que glmnet
+lasso_vc <- 
+  caret::train(form = formule,
+               data = db,
+               method = 'glmnet',
+             tuneGrid = expand.grid(
+               alpha = 1,
+               lambda = lambda_seq),
+             trControl = caret::trainControl(
+               method = "repeatedcv",
+               number = 10,
+               repeats = 10))
+plot(lasso_vc)
+# Meilleur modèle
+coefs_lasso_cv <- coef(object = lasso_vc$finalModel, 
+              s = lasso_vc$bestTune$lambda)
+# Nombre de paramètres non-nuls pour la solution
+nvar_lasso_vc <- Matrix::nnzero(coefs_lasso_cv)
+# Estimation de la racine de l'erreur quadratique moyenne
+reqm_lasso_vc <- min(lasso_vc$results$RMSE)
+## Calcul des prédictions - comme avec n'importe quel modèle
+# predict(lasso_vc, newdata = db)
+```
+
+4. *Créez un tableau avec le nombre de coefficients non-nuls de votre modèle final et un estimé de l'erreur moyenne quadratique obtenu par validation externe ou croisée.*
+
+Il suffit de colliger notre estimation de l'erreur et le nombre de coefficients.
+
+
+```{r}
+resultats <-data.frame(
+  erreur = rep(c("validation croisée",
+                  "validation externe"),
+                  each = 2),
+  methode = rep(c("sequentielle","lasso"), 
+               length.out = 4),
+  reqm = c(reqm_seq_vc,
+           reqm_lasso_vc,
+           reqm_seq_ve,
+           reqm_lasso_ve),
+  npar = c(nvar_seq_vc,
+           nvar_lasso_vc,
+           nvar_seq_ve,
+           nvar_lasso_ve))
+knitr::kable(resultats)
+```
+
+5. *Commentez sur le meilleur modèle parmi les combinaisons.*
+
+Si la taille de la base de données est plus conséquente, la validation croisée reste préférable à la validation externe, surtout si on répète cette méthode plusieurs fois pour réduire l'incertitude.^[Rien ne nous empêche de faire de même avec la validation externe, soit dit en passant.]
+Le nombre de paramètres dans le modèle LASSO peut sembler élevé, mais il faut garder en tête que les autres paramètres sont rétrécis vers zéro même s'ils sont non-nuls.
+
+Impossible de savoir quel est le meilleur modèle: le modèle avec la plus petite erreur quadratique moyenne est notre meilleur choix ici à défaut d'autres observations. Rappelez-vous qu'un modèle peut donner une bonne performance, mais être choisi parce qu'il surajuste une valeur aberrante.
+
+Le but de l'exercice était davantage de démontrer le travail que de faire une prédiction convaincante. Puisqu'on essaie de prédire une variable de dénombrement, un modèle plus adapté (modèle de régression binomiale négative, ou un modèle pour le log du nombre d'admission) pourrait probablement être plus adéquat dans la mesure où la variance de la réponse dépend de la taille de l'école.

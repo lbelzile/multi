@@ -1,323 +1,210 @@
 ---
-title: "Régression logistique"
-execute:
-  echo: true
-  eval: true
-  message: false
-  warning: false
-  error: false
+title: "Analyse de survie"
 ---
 
 
 ## Exercice 4.1
 
-*Les données `logistclient` contiennent des données simulées pour un cas fictif de promotion pour des clients.*
-
-1. *Estimez le modèle logistique pour la probabilité que `promo=1` avec les variables explicatives `nachats`, `sexe` et `tclient`.*
-
-```{r}
-#| eval: true
-#| echo: true
-library(hecmulti)
-data(logistclient, package = "hecmulti")
-# Modèle logistique
-mod <- glm(promo ~ nachats + sexe + tclient, 
-           family = binomial(link = "logit"),
-           data = logistclient)
-# Coefficients du modèle et statistique de Wald
-summary(mod)
-```
+*@Fotopoulos.Louri:2000 considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l'article pour pour répondre aux questions suivantes:*
 
 
 
-2. *Interprétez les coefficients du modèle à l'échelle de la cote en terme de pourcentage d'augmentation ou de diminution.*
+1. *Quel type de mécanisme de censure est présent dans ces données?*
 
-```{r}
-exp(coef(mod)) # Rapport de cote
-```
+Censure par intervalle (nombre connu à une année près, seule l'année du début d'activités et le nombre de bilans sont connus des auteurs) et censure à droite (certaines firmes sont encore en activité en 1992 à la fin de la période de collecte de données).
 
-- La cote pour l'offre promotionnelle (oui versus non) des hommes est 23.5% plus faible que celle des femmes, *ceteris paribus*
-- La cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, *ceteris paribus*. De manière équivalente, le rapport de cotes pour `tclient` fréquent sur occasionnel est de1/1.0711 = 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs. 
-- La cote de `nachats` augmente de 23.1% pour chaque augmentation du nombre d'achats dans le dernier mois,  *ceteris paribus*
- 
+On pourrait ignorer la censure par intervalle en associant chaque intervalle de la forme $[t, t+1)$ à la valeur $t$.
 
-3. *Testez si l'effet de `nachats` est statistiquement significatif à niveau $\alpha = 0.05$.*
+2. *Donnez une estimation de la probabilité qu’une entreprise survive trois ans et plus.*
 
-- L'intervalle de confiance à 95% pour le rapport de cote de `nachats`, basé sur la vraisemblance profilée, est de $[1.15, 1.32]$; comme 1 est exclu, cette différence est statistiquement significative. 
+On veut la survie $\Pr(T \geq 3)$ L'estimation est donnée dans la colonne *Cumulative survival rate* du Tableau 1, soit 0.6393.
 
-On obtiendrait la même conclusion avec la statistique du test de rapport de vraisemblance, ici $37.237$ pour 1 degré de liberté. La probabilité, si $\beta_{\text{nachats}}=0$, d'obtenir une telle différence d'ajustement est inférieure à $10^{-4}$, bien en deça du seuil de significativité. On rejette l'hypothèse nulle et on conclut que le nombre d'achat est important pour expliquer si une personne s'est prévalue de l'offre promotionnelle.
+3. *Donnez une estimation de la probabilité qu’une entreprise survive entre 4 et 5 ans, soit l'intervalle [4,5) ans.*
 
-```{r}
-exp(confint(mod)) #IC pour rapport de cote
-car::Anova(mod, type = 3) # tests de rapport de vraisemblance
-```
+Puisque la fonction de survie empirique est constante, cela revient à la probabilité de défaillance dans l'intervalle [4,5) ans, soit 
+\begin{align*}
+\Pr\{T \in [4,5)\} &= \Pr(T \ge 5) - \Pr(T \ge 4) \\&= 0.5525 - 0.5023 \\&= 0.0502.
+\end{align*}
+Si on traçait la courbe de Kaplan--Meier, cette probabilité correspond à la hauteur de la contre-marche entre 4 et 5 ans.
 
 
-4. *Choisissez un point de coupure pour la classification pour maximiser le taux de bonne classification.* 
-   i. *Pour le point de coupure choisi, construisez une matrice de confusion.*
-   ii. *Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.*
-   
-```{r}
-#| eval: true
-#| echo: true
-#| cache: true
-#| message: false
-#| warning: false
-set.seed(60602)
-# Prédictions par validation croisée 
-# (moyenne de 10 réplications, K=10 plis)
-pred <- hecmulti::predvc(mod)
-# Extraire la variable réponse binaire 0/1
-resp <- logistclient$promo
-```
+4. *Quel pourcentage des observations sont censurées?*
 
-**Notez que les prédictions obtenues par validation croisée sont aléatoires, donc les résultats (aire sous la courbe, valeur-$p$ du test d'adéquation, etc.)  peuvent varier si vous n'utilisez pas le même germe aléatoire.**
+Il y a 219 observations au total et $38=13+25$ firmes sont toujours en activité et donc leur temps de survie est censuré; le pourcentage est 38/219 ou 17.35%.
 
-On prend le modèle ajusté avec `glm` et on calcule la prédiction à l'aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction `predvc` retourne la moyenne des prédictions (ici, des probabilités) pour chacune des 1000 observations.
+5. *Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.*
+
+Non, puisque les plus grandes temps observés sont censurées et l'estimation de la fonction de survie s'arrête à 0.2921; la fonction de survie ne traverse pas la valeur horizontale de 0.25
+
+*Le Tableau 3 de l'article fournit les estimations d'un modèle à risques proportionnels de Cox.*
+
+6. *Comparez les modèles (1) et (2). Est-ce que l'effet de cohorte impacte la survie?*
+
+Oui. On peut voir cela de plusieurs façons puisque (1) les deux coefficients associés sont significativement différents de zéro (tests de Wald) avec, pour `COHORT_82`, $Z = -0.5518/0.2081=-2.651$ et une valeur-$p$ basée sur l'approximation normale de 0.008 (idem pour `COHORT_83`).
+
+On peut aussi construire une statistique du rapport de vraisemblance avec $$-2\ell_{(1)} + 2 \ell_{(2)} =1503.442-1471.353 = 32.089.$$ Or, l'inclusion des cohortes ajoute deux paramètres, donc cette statistique est à comparer avec une loi $\chi^2_2$.
 
 ```{r}
-#| eval: true
-#| echo: true
-
-library(ggplot2)
-tableau <- perfo_logistique(prob = pred, 
-                             resp = resp)
-# Graphique du taux de bonne classification
-# selon le point de coupure
-ggplot(data = tableau, 
-       aes(x = coupe, y = pcorrect)) + 
-  geom_line() + 
-  theme_classic() + 
-  scale_y_continuous(limits = c(0, 100),
-                     expand = c(0,0)) + 
-  labs(x = "point de coupure",
-       y = "",
-       subtitle = "Taux de bonne classification")
-opt <- which.max(tableau$pcorrect)
-knitr::kable(tableau[opt,], digits = 2)
+# Test de Wald: beta_cohort82 = 0
+2*pnorm(-0.5518/0.2081)
+# Test de Wald: beta_cohort83 = 0
+2*pnorm(-0.5464/0.2021)
+# Test de rapport de vraisemblance
+pchisq(1503.442 - 1471.353, 
+       df = 2, 
+       lower.tail = FALSE)
 ```
 
+7. *Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (`FIXED_ASSET`) et le montant de la dette (`DEBT`) sur la durée de vie des entreprises.*
 
-Ensuite, il suffit de passer les valeurs de la variable réponse et nos probabilités de succès prédites aux différentes fonctions.
-   
-Si on considère des points de coupure de 0.01 à 0.99 en incréments de 0.01, on obtient un point de coupure optimal à
-`r tableau[opt,"coupe"]`. On note que le taux de bonne classification change assez peu au final.
+Toute chose étant égale par ailleurs, une augmentation du ratio du passif total sur le total des actifs (`DEBT`) de 1 augmente le risque de 119.3%; le rapport de risque étant multiplié par $\exp(0.83)=2.293$.
 
-```{r}
-#| label: tbl-confusion
-#| eval: true
-#| echo: false
-#| tbl-cap: "Matrice de confusion avec point de coupure optimal"
-confumat <- with(
-  tableau[opt,],
-  matrix(c(VP, FN, FP, VN), nrow = 2, ncol = 2))
-rownames(confumat) <- c("$\\widehat{Y}=1$","$\\widehat{Y}=0$")
-colnames(confumat) <- c("$Y=1$","$Y=0$")
-knitr::kable(x = confumat,
-                align = "r",
-                escape = FALSE,
-                booktabs = TRUE)
-```
-Ainsi, si on fait les calculs à la main, on estime 
-
-- la sensibilité, $\mathsf{VP}/(\mathsf{VP} + \mathsf{FN})$, soit `r tableau[opt,"VP"]` / (`r tableau[opt,"VP"]` + `r tableau[opt,"FN"]`) ou `r round(tableau[opt,"VP"] / (tableau[opt,"VP"] + tableau[opt,"FN"]), 3)`.
-- la spécificité, $\mathsf{VN}/(\mathsf{VN} + \mathsf{FP})$, soit `r tableau[opt,"VN"]` / (`r tableau[opt,"VN"]` + `r tableau[opt,"FP"]`) ou `r round(tableau[opt,"VN"] / (tableau[opt,"VN"] + tableau[opt,"FP"]), 3)`.
-- le taux de bonne classification $\mathsf{VN} + \mathsf{VP}/(\mathsf{VN} + \mathsf{VP} + \mathsf{FN} + \mathsf{FP})$, soit (`r tableau[opt,"VP"]` + `r tableau[opt,"VN"]`) / 1000 ou `r (tableau[opt,"VP"] + tableau[opt,"VN"])/1000`.
-
-Ces valeurs coincident, à arrondi près, avec ce qui est reporté dans le tableau.
-
-
-5. *Produisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l'aire sous la
-courbe estimée à l’aide de la validation croisée.*
-
-```{r}
-roc <- courbe_roc(prob = pred, resp = resp)
-```
-
-On obtient une estimation de l'aire sous la courbe de `r round(roc$aire, 3)`.
-
-6. *Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?*
-
-```{r}
-hecmulti::calibration(prob = pred, resp = resp)
-```
-
-L'hypothèse nulle est que le modèle est calibré; ici, la valeur-$p$ est près de 0.5, donc on ne rejette pas l'hypothèse nulle et on conclut qu'il n'y a pas de preuve de surajustement.
-
+*Ceteris paribus*, une augmentation du ratio des immobilisations sur le total des actifs de 1 diminue le risque d'environ 59.8%, avec un rapport de risque de $\exp(-0.9091) =0.4028$.
 
 ## Exercice 4.2
 
+*Un commerce de chaussures de Montréal veut optimiser son inventaire afin de maximiser ses profits et fait appel à votre société de conseil. La base de données `chaussures` contient des observations fictives et les variables suivantes:*
 
-*On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (`1`) à très satisfait (`5`). Les 1000 observations se trouvent dans la base de données `multinom` du paquet `hecmulti`.*
+- `statut`: *variable catégorielle, `0` s'il est vendu, `1` si l'article est toujours en stock, `2` s'il est déstocké (les modèles invendus après 40 mois en magasins sont passés aux pertes et profits).*
+- `temps`: *temps de stockage de l'article (en mois).*
+- `prix`: *prix de vente réelle de l'article (avec rabais si applicable), arrondi à l'unité près.*
+- `sexe`: *variable catégorielle, `0` pour modèle pour homme, `1` pour femme.*
+
+*Notre objectif premier est d'estimer le temps qu'un article passe en stock avant d'être vendu.*
 
 
-*Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.*
+1. *Que représente la censure dans cet exemple?*
 
+Les données censurées à droites correspondent aux paires de chaussure qui sont toujours en stock à la fin de la période d’observation ou qui sont invendues après 40 mois.
 
-1. *Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Sinon, ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.*
+2. *Estimez le temps de stockage à l'aide d'un modèle de Kaplan--Meier et rapportez les estimés des quartiles.*
 
-
-
-Les niveaux des facteurs non-ordonnés (catégories) dans **R** sont classés en ordre alphanumérique. Il faut donc modifier la catégorie de référence uniquement pour le niveau d'éducation avant d'ajuster le modèle.
+On note d'abord que la colonne `temps` début à 1, ce qui indique que les chaussures sont vendues dans le premier mois. Un temps de $t$ mois correspond à la plage $[t-1, t)$ mois en stock.
 
 ```{r}
+library(survival)
+data(chaussures, package = "hecmulti")
+# censure si 1 ou 2
+# statut == 0 => TRUE (1) si vendu, FALSE (0) sinon
+km <- survfit(
+  formula = Surv(time = temps, 
+                 event = statut == 0) ~ 1,
+  type = "kaplan-meier",
+  data = chaussures)
+
+plot(km)
+# Estimation des quartiles
+quantile(km)$quantile
+```
+
+Les quartiles sont 5 mois (25% des chaussures sont en inventaire moins de ce temps), 8 mois (temps médian en stock) et 12 mois (75% des chaussures sont vendues dans l'année de leur achat).
+
+3. *Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.*
+   - *Rapportez et interprétez les coefficients des variables.*
+   - *Est-ce que les effets estimés sont significatifs?*
+   
+```{r}
+modcox <- coxph(
+  Surv(time = temps, 
+       event = statut == 0) ~ sexe + prix,
+  data = chaussures)
+summary(modcox)
+```
+   
+Chaque augmentation du prix d'un dollar mène à une diminution de risque de vente de 1.35%. De manière équivalente, une augmentation d'un dollar multiplie le risque par 0.9865, soit une diminution de 12.7% pour une différence de prix de 10\$. Cet effet est significativement différent de zéro (statistique de Wald de $z = -14.17$, valeur-$p$ négligeable).
+
+Pour une paire de chaussure du même prix, le risque de vendre la paire de chaussures pour femmes est de 15.13% inférieur à celui d'une paire pour hommes. Cette différence est significative à niveau 1% (statistique de Wald $z=-6.254$). Les souliers pour femmes restent plus longtemps en stock que ceux des hommes au même prix.
+
+
+4. *Tracez les estimés des courbes de survie d'une chaussure de l'année dont le prix de vente est 120\$ pour les modèles pour homme et pour femme.*
+
+
+```{r}
+#| label: fig-predcox
+#| fig-cap: "Estimé de la fonction de survie pour une paire de chaussure de 120$ pour hommes (traits pleins rouges) et femme (traitillé bleu)"
 #| eval: true
 #| echo: true
-data(multinom, package = "hecmulti")
-db <- multinom |>
-  dplyr::mutate(educ = relevel(educ, ref = "sec"),
-                y = ordered(y))
-mod1 <- nnet::multinom(
-  y ~ sexe + educ + revenu + age,
-  data = db,
-  trace = FALSE)
+# Nouvelle base de données avec profil des chaussures
+ndb <- data.frame(sexe = c(0, 1),
+                  prix = rep(120, 2))
+# Obtention des prédictions de la survie
+pred <- survfit(modcox, 
+                newdata = ndb, 
+                type = "kaplan-meier")
+# Graphique R de basedes prédictions
+plot(pred, 
+     col = c("red", "blue"), # couleur
+     lty = 1:2, # type de ligne
+     xlab = "temps (en mois)", #axe des abcisses
+     ylab = "survie") #axe des ordonnées
 ```
 
-Le modèle a `r length(coef(mod))` coefficients, dont deux pour éducation et revenu et un pour sexe et age, par niveau.
+*On vous informe que, pour éliminer les invendus lors de l'arrivée de nouveaux modèles, l'entreprise offre une réduction de 20% après 15 mois.*
 
-Pour ajuster le modèle à cotes proportionnelles, il faut d'abord convertir la variable réponse en variable ordinale à l'aide de `ordered` si ce n'est pas déjà la classe de la variable. Cela permettra de spécifier l'ordre des modalités.
+5.  *Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?*
+
+Pour ce faire il faut modifier la base de données et casser la contribution en deux selon que le temps soit supérieur à 15 mois ou pas.
+
+On obtient donc une plage de $(0,t]$ pour les chaussures vendues en dessous de 15 mois (aucun changement). 
+
+Pour les chaussures mises au rabais on a une plage de $(0, 15]$ avec censure à droite (dans `chaussure1` ci dessous) et finalement $(15,t]$ avec l'événement pour les autres chaussures (`chaussures2`).
 
 ```{r}
-#| eval: true
-#| echo: true
-# Ajuster modèle à cote proportionnelle
-mod0 <- MASS::polr(
-  ordered(y) ~ sexe + educ + revenu + age,
-  data = db)
-# Calculer statistique de test
-# (rapport de vraisemblance)
-stat <- deviance(mod0) - deviance(mod1)
-# À comparer à une loi khi-deux avec 
-# npar1-npar0 degrés de liberté
-npar0 <- length(coef(mod0)) + length(mod0$zeta)
-npar1 <- length(coef(mod1))
-# Calcul de la valeur-p
-# Probabilité que khi-deux (df) excède 'stat'
-pchisq(stat, 
-       df = npar1 - npar0, 
-       lower.tail = FALSE)
+#| message: false
+#| warning: false
+library(dplyr)
+chaussures1 <- chaussures |>
+  dplyr::mutate(
+    temps0 = 0, 
+    # censure si chaussures invendues après 15 semaines
+    statut = ifelse(temps > 15, 1, statut),
+    # enlever rabais pour obtenir prix initial
+    prix = ifelse(temps > 15, prix/0.8, prix),
+    temps = pmin(temps, 15))
+chaussures2 <- chaussures |>
+  dplyr::filter(temps > 15) |> 
+  dplyr::mutate(temps0 = 15) 
+modcox2 <- coxph(
+  Surv(time = temps0, 
+       time2 = temps,
+       event = statut == 0) ~ sexe + prix,
+  data = dplyr::full_join(chaussures1, 
+                          chaussures2))
+summary(modcox2)
 ```
 
-Le modèle ordinal a `r npar0` paramètres, contre `r npar1` pour le modèle multinomial logistique. On peut faire un test du rapport de vraisemblance en comparant la différence des log-vraisemblance des deux modèles emboîtés: la valeur de la statistique est `r round(stat, 3)`. La valeur-$p$ estimée est $8.8 \times 10^{-4}$$, donc on rejette l'hypothèse nulle et on conclut que le modèle à cote proportionnelle n'est pas adéquat.
+La différence est à peine perceptible, une différence de quatres chiffres après la virgule pour $\exp(\widehat{\beta}_{\text{prix}})$. Les coefficients sont toujours significatifs.
+
+6. *On pourrait considérer un modèle à risque non-proportionnels contenant une interaction entre le prix et le temps de manière à ajuster le même modèle. Expliquez comment cela pourrait être fait de manière à obtenir les mêmes estimés des paramètres.*
 
 
-2. *Interprétez l’effet des variables éducation et sexe pour la catégorie 2 (par rapport à 1).*
 
-Il suffit de regarder les coefficients $\exp(\widehat{\beta}_{\text{sexe}}), \ldots$ associés et les interpréter en termes de rapport de cote, pour une régression logistique ordinaire.
-
-```{r}
-#| eval: true
-#| echo: true
-# Coefficient correspondants à sexe et éducation
-exp(coef(mod1)["2", 2:4])
-```
-
-- La cote pour les femmes pour insatisfait par rapport à très insatisfait est 42.4% plus élevée que pour les hommes, toute chose étant égale par ailleurs.
-- La cote pour les individus qui ont un diplôme collégial  pour insatisfait par rapport à très insatisfait est 10.4% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.
-- La cote pour les individus qui ont un diplôme universitaire  pour insatisfait par rapport à très insatisfait est 31.6% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.
-
-
-3. *Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?*
-
-Pour répondre à cette question, on ajuste le modèle multinomial logistique avec uniquement une constante. Les probabilités prédites sont simplement la proportion empirique des observations de l'échantillon: on peut ainsi vérifier que le modèle a convergé en comparant les prédictions et ces proportions. Une petite différence numérique est possible puisque le modèle multinomial logistique est ajusté à l'aide d'une procédure d'optimisation numérique itérative.
-
-```{r}
-#| eval: true
-#| echo: true
-# Ajuster modèle avec proba constante
-mod0 <- nnet::multinom(
-  y ~ 1, 
-  # ordonnée à l'origine seulement
-  data = db,
-  trace = FALSE)
-# Vérifier convergence
-pred0 <- predict(
-  object = mod0,
-  # Entrer une bd avec une ligne
-  newdata = db[1,], 
-  type = "prob")
-# Calculer la proportion de chaque categ.
-proportions_y <- table(db$y)/nrow(db)
-# Calculer différences
-pred0 - proportions_y
-```
-
-On peut ensuite calculer la statistique de rapport de vraisemblance en comparant les déviances des deux modèles.
-
-
-```{r}
-#| eval: true
-#| echo: true
-# Calculer statistique de test
-# (rapport de vraisemblance)
-stat <- deviance(mod0) - deviance(mod1)
-# À comparer à une loi khi-deux avec 
-# npar1-npar0 degrés de liberté
-npar0 <- length(coef(mod0)) + length(mod0$zeta)
-npar1 <- length(coef(mod1))
-# Calcul de la valeur-p
-# Probabilité que khi-deux (df) excède 'stat'
-pchisq(stat, 
-       df = npar1 - npar0, 
-       lower.tail = FALSE)
-```
-
-La statistique pour le test du rapport de vraisemblance que tous les coefficients associés aux covariables sont nuls (24 paramètres supplémentaires) est `r round(stat, 3)`, et si le modèle sans covariable était vrai, cette statistique serait approximativement $\chi^2_{24}$. La valeur-$p$ arrondie est 0.0003, on rejette l'hypothèse nulle que tous les coefficients associés aux variables explicatives sont nuls. On conclut qu'au moins une covariable est utile pour prédire une cote par rapport au modèle avec une probabilité constante.
-
-4. *Est-ce que l'effet de la variable âge est globalement significatif?*
-
-Puisqu'on modélise quatre rapport de cotes à l'aide d'un modèle logistique, d'où $\beta_{\texttt{age}_2}=\beta_{\texttt{age}_3}=\beta_{\texttt{age}_4}=\beta_{\texttt{age}_5}=0.$ On peut obtenir la valeur-$p$ avec le tableau d'analyse de déviance, qui rapporte la valeur du test de rapport de vraisemblance. On conclut que l'âge impacte la probabilité des différents items de satisfaction.
-
-```{r}
-#| eval: true
-#| echo: true
-car::Anova(mod1, type = 3)
-```
-
-5. *Fournissez un intervalle de confiance à niveau 95% pour l'effet multiplicatif d'une augmentation d'une unité de la variable âge pour chacune des cote par rapport à très insatisfait (`1`). Que concluez-vous sur l'effet de âge pour les réponses 2 à 5 par rapport à 1?*
-
-Les intervalles de confiance sont obtenus en prenant l'exponentielle des intervalles de confiance profilée pour les coefficients associés à `age`:
-
-```{r}
-#| eval: true
-#| echo: true
-exp(confint(mod1)["age",,])
-```
-
-- $[0.975;  1.011]$ pour $\beta_{\texttt{age}_{2|1}}$ (pas significatif),
-- $[0.871; 0.963]$ pour $\beta_{\texttt{age}_{3|1}}$ (significatif),
-- $[0.941; 0.989]$ pour $\beta_{\texttt{age}_{4|1}}$ (significatif) et 
-- $[0.988; 1.021]$ pour $\beta_{\texttt{age}_{5|1}}$ (pas significatif).
-
-6. *Écrivez l'équation de la cote ajustée pour satisfait (`4`) par rapport à très insatisfait (`1`).*
-
-Pour obtenir l'équation ajustée, on utilise uniquement les coefficients pour $Y=4$ dans le tableau des coefficients.
-
-```{r}
-round(coef(mod1)["4",], 3)
-```
-
+On peut ajuster un modèle à risque non-proportionnel avec le terme  $$\texttt{tprix} = \texttt{prix} -0.2\texttt{prix}\mathrm{I}(t > 15),$$ avec le modèle de Cox
 \begin{align*}
-\frac{\Pr(Y=4 \mid\boldsymbol{X})}{\Pr(Y=1 \mid \boldsymbol{X})} & =\exp(-0.502 - 0.035\texttt{age} + 0.676 \texttt{cegep} + 0.8\texttt{uni} \\&-0.038 \texttt{revenu}_2 +0.009 \texttt{revenu}_3 + 0.613 \texttt{sexe})
+h(t; \texttt{sexe}, \texttt{prix}) = h_0(t) \exp \left\{\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{tprix}} \texttt{tprix}\right\}.
 \end{align*}
-
-7. *Prédisez la probabilité qu'un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?*
+Notez que, si on inclut $\texttt{prix}$ et un terme d'interaction, on se retrouverait avec deux coefficients pour le prix plutôt qu'un seul.
 
 ```{r}
-# Profil du client
-profil <- data.frame(
-  sexe = 0, 
-  age = 30, 
-  educ = "cegep", 
-  revenu = "2")
-# Probabilité du score de satisfication
-predict(mod1, 
-        newdata = profil, 
-        type = "prob")
-# Modalité la plus susceptible
-predict(mod1, 
-        newdata = profil)
+# Calculer prix initial
+chaussures <- chaussures |>
+  dplyr::mutate(
+    prixinit = ifelse(temps > 15, 
+                      prix/0.8, 
+                      prix))
+modcox3 <- coxph(
+  Surv(time = temps,
+       event = statut == 0) ~ sexe + tt(prixinit),
+  data = chaussures,
+  tt = function(x, t, ...){ x-0.2*I(t>15)*x})
+summary(modcox3)
 ```
 
-Les probabilités prédites sont (0.321; 0.222; 0.039; 0.127; 0.292). La modalité la plus susceptible est donc très insatisfait (`1`).
+Une fois qu'on a obtenu les estimations, on peut vérifier que les coefficients sont les mêmes
 
+```{r}
+isTRUE(all.equal(
+  coef(modcox3), 
+  coef(modcox2), 
+  check.attributes = FALSE))
+```

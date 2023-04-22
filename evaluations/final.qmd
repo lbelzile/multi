@@ -1,5 +1,5 @@
 ---
-title: "Devoir 6"
+title: "Examen final"
 ---
 
 L’examen final est récapitulatif et d'une durée de 180 minutes. Aucune documentation écrite n’est permise.
@@ -9,4 +9,4 @@ programmable est autorisée.
 
 [Téléchargez le PDF de l'examen de pratique](MATH60602-final-pratique.pdf) et le [solutionnaire](MATH60602-final-pratique-solution.pdf)
 
-L'examen compte pour 50% de la note finale du cours.
+L'examen compte pour 40% de la note finale du cours.

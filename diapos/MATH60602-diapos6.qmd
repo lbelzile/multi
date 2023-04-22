@@ -1,7 +1,7 @@
 ---
-title: "Régression logistique"
+title: "Classification"
 subtitle: "Analyse multidimensionnelle appliquée"
-date: "automne 2022"
+date: ""
 author: "Léo Belzile"
 institute: "HEC Montréal"
 format: beamer
@@ -15,7 +15,7 @@ pdf-engine: lualatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
-mainfont: "D-DIN"
+mainfont: "VisbyCF-Medium"
 mathfont: 'Latin Modern Math'
 sansfont: 'Latin Modern Sans'
 keep-tex: true
@@ -26,728 +26,643 @@ include-in-header:
         \usepackage{mathrsfs}
 ---
 
+# Rappel
 
-# _Professional Rodeo Cowboys Association_ {#cowboy}
+La régression logistique spécifie un modèle pour la probabilité de succès 
+$$p = \Pr(Y=1 \mid \mathbf{X}) = \frac{1}{1+\exp(-\eta)}$$
+où $\eta = \beta_0 + \cdots + \beta_p \mathrm{X}_p$.
 
-L'exemple suivant est inspiré de l'article
+# Prédiction
 
-> Daneshvary, R. et Schwer, R. K. (2000) The Association Endorsement and Consumers' Intention to Purchase. _Journal of Consumer Marketing_ **17**, 203-213.
+En substituant l'estimation $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$, on calcule 
 
-**Objectif**: Les auteurs cherchent à voir si le fait qu'un produit soit recommandé par le _Professional Rodeo Cowboys Association_ (PRCA) a un effet sur les intentions d'achats. 
+- le prédicteur linéaire $\widehat{\eta}_i$ et
+- la probabilité de succès $\widehat{p}_i$
+
+pour chaque ligne de la base de données.
 
 
+# Classification de base
 
-# Données du PRCA
+Choisir un point de coupure $c$:
 
-On dispose de 500 observations sur les variables suivantes dans la base de données `logit1`:
+- si $\widehat{p} < c$, on assigne $\widehat{Y}=0$.
+- si $\widehat{p} \geq c$, on assigne $\widehat{Y}=1$.
+
+Un point de coupure de $c=0.5$ revient à assigner l'observation à la classe (catégorie) la plus probable.
+
+Qu'arrive t'il si $c=0$ ou $c=1$? **Exemple au tableau**
+
+# Qualité de l'ajustement
+
+L'erreur quadratique pour un problème de classification est
+$$(Y-\widehat{Y})^2 = \begin{cases} 1, & Y \neq \widehat{Y}; \\0, & Y = \widehat{Y}.\end{cases}$$
+et donc on obtient le **taux de mauvaise classification** si on calcule la moyenne.
+
+Plus le taux de mauvaise classification est petit, meilleure est la capacité prédictive du modèle.
+
+# Base de données marketing
+
+On considère un modèle pour `yachat`, le fait qu'une personne achète suite à l'envoi d'un catalogue.
+
+```{r, echo = TRUE, eval = TRUE}
+data(dbm, package = "hecmulti")
+# Ne conserver que l'échantillon d'apprentissage
+appr <- dbm[(dbm$test == 0),]
+formule <- formula("yachat ~ x1 + x2 + x3 +
+                x4 + x5 + x6 + x7 + x8 + x9 + x10")
+modele <- glm(formule,
+              data = appr, 
+              family = binomial)
+```
+
+
+# Estimation de la performance du modèle
+
+Utiliser les mêmes données pour l'ajustement et l'estimation de la performance n'est (toujours) pas recommandé.
+
+Plutôt, considérer la validation croisée ou la division de l'échantillon.
+
+```{r}
+#| eval: true
+#| echo: true
+set.seed(202209)
+# Option par défaut: 
+# validation croisée à 10 plis, 10 répétitions
+predprob <- hecmulti::predvc(
+  modele = modele,
+  data = appr)
+```
+
+
+# Prédictions
+
+
+```{r}
+#| label: figclassification0
+#| echo: false
+#| eval: true
+#| cache: true
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: '80%'
+#| fig-align: 'center'
+data(dbm, package = 'hecmulti')
+# Transformer les variables catégorielles en facteurs
+# Formule pour la moyenne du modèle logistique
+form <- formula("yachat ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10")
+mod <- glm(data = appr,
+           formula = form, 
+           family = binomial)
+# Créer un conteneur pour les probabilités
+set.seed(60602)
+prob <- hecmulti::predvc(mod)
+# Histogramme des probabilités prédites par validation croisée avec n groupes
+library(ggplot2)
+ggplot(data = data.frame(x = prob),
+       aes(x = x)) +
+  geom_histogram() + 
+  labs(x = "probabilité d'achat prédite", 
+       y = "") +
+  theme_minimal()
+#  Modèle complet et valeurs prédites
+appr_prob <- fitted(glm(data = appr, 
+                         formula = form, 
+                         family=binomial), 
+                     type = "response") 
+
+perfo <- function(prob, resp, plot = FALSE){
+   # VRAI == 1, FAUX == 0
+   cuts <- seq(from = 0.005, to = 0.995, by = 0.005)
+   tab <- data.frame(coupe = cuts,
+      t(sapply(cuts, function(cut){
+   nsucces <- sum(resp == 1)
+   nechec <- length(resp) - nsucces
+   n <- length(resp)
+   predy <- ifelse(prob >= cut, 1, 0) 
+   c1 <- sum(predy & resp) # Y=1, Yhat=1
+   c0 <- sum(!predy & !resp) # Y=0, Yhat=0
+   i1 <- sum(!predy & resp) # Y=1, Yhat=0
+   i0 <- sum(predy & !resp) # Y=0, Yhat=1
+   c(c1 = c1, 
+     c0 = c0, 
+     i0 = i0,
+     i1 = i1,      
+     pcorrect = 100*(c0+c1)/n, 
+     sensi = 100*c1/(c1+i1), # Y=1 & Yhat=1 / # Y=1
+     speci = 100*c0/(c0+i0), # Y=0 & Yhat=0 / # Y=0
+     fpos = 100*i0/(c1+i0), # Y=0 & Yhat=1 / # Yhat=1
+     fneg = 100*i1/(c0+i1)) # Y=1 & Yhat=0 / # Yhat=0
+   })))
+   if(plot){
+     plot(c(1,1-tab$speci/100,0), c(1,tab$sensi/100,0), type = "l", pty = "s", bty = "l", 
+          xlab = "1-spécificité", 
+          ylab = "sensibilité", 
+          main ="Fonction d'efficacité du récepteur (ROC)",
+          panel.first = abline(a=0,b=1), 
+          ylim = c(0,1), xlim = c(0,1), yaxs = "i", xaxs = "i")
+   }
+   invisible(list(cut = tab[which.max(tab$pcorrect),"coupe"],
+        confusion = matrix(tab[which.max(tab$pcorrect), c(2,5,4,3)], nrow = 2, ncol = 2),
+        table = tab))
+   
+}
+# Performance du modèle avec données d'apprentissage
+perfo0 <- perfo(prob = appr_prob, resp = appr$yachat)
+perfo1 <- perfo(prob = prob, resp = appr$yachat)
+```
+
 \footnotesize 
 
-- $Y$: seriez-vous intéressé à acheter un produit recommandé par le PRCA
-    - $\texttt{0}$: non
-    - $\texttt{1}$: oui
-- $\mathrm{X}_1$: quel genre d'emploi occupez-vous?
-    - $\texttt{1}$: à la maison
-    - $\texttt{2}$: employé
-    - $\texttt{3}$: ventes/services
-    - $\texttt{4}$: professionnel
-    - $\texttt{5}$: agriculture/ferme
-- $\mathrm{X}_2$: revenu familial annuel
-    - $\texttt{1}$: moins de 25 000
-    - $\texttt{2}$: 25 000 à 39 999
-    - $\texttt{3}$: 40 000 à 59 999
-    - $\texttt{4}$: 60 000 à 79 999
-    - $\texttt{5}$: 80 000 et plus
+Répartition des probabilités de succès prédites par validation croisée.
 
-\normalsize
+\normalsize 
 
-# Données du PRCA    
-    
-\footnotesize
+# Choix d'un point de coupure.
 
-- $\mathrm{X}_3$: sexe
-    - $\texttt{0}$: homme
-    - $\texttt{1}$: femme
-- $\mathrm{X}_4$: avez-vous déjà fréquenté une université?
-    - $\texttt{0}$: non
-    - $\texttt{1}$: oui
-- $\mathrm{X}_5$: âge (en années)
-- $\mathrm{X}_6$: combien de fois avez-vous assisté à un rodéo au cours de la dernière année?
-    - $\texttt{1}$: 10 fois ou plus
-    - $\texttt{2}$: entre six et neuf fois
-    - $\texttt{3}$: cinq fois ou moins
+On peut faire varier le point de coupure et choisir celui qui maximise le taux de bonne classification, $\widehat{\Pr}(Y = \widehat{Y})$.
 
-\normalsize
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: '80%'
+#| fig-align: 'center'
+library(ggplot2)
+ggplot(data = perfo1$table,
+       aes(x = coupe, 
+           y = 100 - pcorrect)) +
+  geom_line() +
+  geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) + 
+  labs(x = "point de coupure",
+       y = "",
+       subtitle = "taux de mauvaise classification (pourcentage)") +
+  scale_x_continuous(expand = c(0.01,0.01),
+                     breaks = c(0,0.25,0.5,0.75,1),
+                     labels = c("0","0.25","0.5","0.75","1")) + 
+  theme_classic()
+```
 
+Avec $c=0.465$, on obtient un taux de mauvaise classification de 15.3\%.
 
-# Régression logistique
-
-Expliquer le comportement de la **moyenne** d'une variable binaire $Y\in\{0,1\}$ en utilisant un modèle de régression avec $p$ variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$.
-
-$$\underset{\text{moyenne théorique}}{\mathsf{E}(Y=1 \mid \mathbf{X})} = \underset{\text{probabilité de succès}}{\Pr(Y=1 \mid \mathbf{X})}=p$$
-
-# Objectif de la régression
-
-1) **Inférence** : comprendre comment et dans quelles mesures les variables $\mathbf{X}$ influencent la probabilité que $Y=1$.
-2) **Prédiction** : développer un modèle pour prévoir des valeurs de $Y$ ou la probabilité de succès à partir des $\mathbf{X}$.
-
-# Exemples
-
-- Est-ce qu'un client potentiel va répondre favorablement à une offre promotionnelle?
-- Est-ce qu'un client est satisfait du service après-vente?
-- Est-ce qu'un client va faire faillite ou non au cours des trois prochaines années.
-
-# Inférence et interprétation
-
-Ce cours est consacré à l'estimation et l'interprétation des paramètres du modèle dans le cas binaire.
-
-
-
-Par convention, on désigne le résultat « $1$ » par un succès et « $0$ » par un échec.
-
-# Modéliser une probabilité avec une régression linéaire?
-
-Mauvaise idée!
-
-- Sans contrainte, on peut obtenir des probabilités négatives ou supérieures à 1!
-- les données binaires ne respectent pas le postulat d'égalité des variances
-    - invalide les résultats des tests d'hypothèse pour les coefficients.
- 
-# Illustration: linéaire vs logistique
+# Performance et classification
 
 
 
 ```{r}
-#| label: fig-demandecredit
+#| eval: false
+#| echo: true
+classif <- with(dbm, yachat[test == 0])
+# Tableau de la performance
+hecmulti::perfo_logistique(
+  prob = predprob,
+  resp = classif)
+```
+
+# Matrice de confusion
+
+On peut classifier les observations dans un tableau pour un point de coupure donné.
+
+```{r}
+#| label: tbl-confumat
+#| eval: true
+#| echo: false
+#| tbl-cap: "Matrice de confusion avec point de coupure 0.465."
+confumat <- perfo1$confusion
+rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
+colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
+knitr::kable(x = confumat, 
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+```
+
+
+# Classification et mesures de performance
+
+\footnotesize 
+
+Les estimés empiriques sont simplement obtenus en calculant les rapports du nombre d'observations dans chaque classe.
+
+\normalsize 
+
+```{r}
+#| label: tableconfumat2
+#| eval: true
+#| echo: false
+confumat <- perfo1$confusion
+rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
+colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
+confumat_th <- confumat
+confumat_th[1:4] <- c("VP","FN","FP","VN")
+tab1 <- knitr::kable(x = confumat,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+tab2 <- knitr::kable(x = confumat_th,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+knitr::kables(list(tab1, tab2))
+
+```
+
+
+- La **sensibilité** est le taux de succès correctement classés, $\Pr(Y=1, \widehat{Y}=1 \mid Y=1)$, soit $\mathsf{VP}/(\mathsf{VP}+\mathsf{FN})$.
+- La **spécificité** est le taux d'échecs correctement classés, $\Pr(Y=0, \widehat{Y}=0 \mid Y=0)$, soit $\mathsf{VN}/(\mathsf{VN}+\mathsf{FP})$.
+- Le taux de **faux positifs** est $\Pr(Y=0, \widehat{Y}=1 \mid \widehat{Y}=1)$.
+- Le taux de **faux négatifs** est $\Pr(Y=1, \widehat{Y}=0 \mid \widehat{Y}=0)$.
+
+# Matrice de gain
+
+Il est également possible d'assigner un poids différent à chaque événement selon le scénario et chercher à maximiser le gain.
+
+
+```{r}
+#| label: tbl-tableconfumat4
+#| eval: true
+#| echo: false
+#| tbl-cap: "Matrice de gain (cas général)"
+confumat_tbclassif <- confumat
+confumat_tbclassif[1:4] <- c("$c_{11}$","$c_{01}$","$c_{10}$","$c_{00}$")
+tab1 <- knitr::kable(x = confumat_tbclassif,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+tab1
+
+```
+
+
+
+On calcule le gain en faisant la somme des entrées fois les poids, soit $$\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.$$
+
+# Gain pour taux de bonne classification
+
+Si on cherche à maximiser le taux de bonne classification, cela revient à assigner les poids suivants.
+
+
+```{r}
+#| label: tbl-tableconfumat3
+#| tbl-cap: "Matrice de gain pour le taux de bonne classification."
+#| eval: true
+#| echo: false
+#| fig-align: 'center'
+confumat_tbclassif <- confumat
+confumat_tbclassif[1:4] <- c("$1$","$0$","$0$","$1$")
+tab1 <- knitr::kable(x = confumat_tbclassif,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex",)
+tab1
+
+```
+
+# Coûts et bénéfices du ciblage marketing
+
+
+
+- Si on n'envoie pas de catalogue, notre gain est nul. 
+- Si on envoie le catalogue 
+   - à un client qui n'achète pas, on perd 10$ (le coût de l'envoi). 
+   - à un client qui achète, notre revenu net est de 57\$ (revenu moyen moins coût de l'envoi).
+
+
+
+```{r}
+#| label: tbl-dbm-ymontant-apprentissage
+#| echo: false
+#| eval: true
+#| tbl-cap: "Statistiques descriptives des montants d'achats pour la base de données marketing."
+data(dbm, package = "hecmulti")
+dbm |>
+  dplyr::filter(test == 0,
+                  !is.na(ymontant))  |>
+  dplyr::summarize("n" = length(ymontant), 
+            "moyenne" = round(mean(ymontant),2), 
+            "écart-type" =round(sd(ymontant),2), 
+            "minimum" = min(ymontant), 
+            "maximum" = max(ymontant)) |>
+knitr::kable(booktabs = TRUE) |>
+    kableExtra::kable_styling(full_width = TRUE)
+```
+\footnotesize 
+Statistiques descriptives des montants d'achats pour la base de données marketing.
+
+\normalsize
+
+
+```{r}
+#| label: tbl-tableconfumat5
+#| eval: true
+#| echo: false
+#| tbl-cap: "Matrice de gain pour ciblage marketing."
+confumat_tbclassif <- confumat
+confumat_tbclassif[1:4] <- c("$57$","$0$","$-10$","$0$")
+knitr::kable(x = confumat_tbclassif,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
+             format = "latex")
+```
+
+
+# Point de coupure avec gain
+
+```{r}
+#| label: fig-coupure-pondere-fake
+#| eval: false
+#| echo: true
+#| cache: true
+#| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
+formule = formula(yachat ~ x1 + x2 + x3 +
+                    x4 + x5 + x6 + x7 + 
+                    x8 + x9 + x10)
+modele <- glm(formule, 
+              family = binomial, 
+              data = hecmulti::dbm)
+coupe <- hecmulti::select_pcoupe(
+  modele = modele, 
+  c00 = 0, 
+  c01 = 0, 
+  c10 = -10, 
+  c11 = 57,
+  plot = TRUE)
+```
+
+\footnotesize
+
+
+La fonction `select_pcoupe` estime le gain pour différents points de coupures, avec probabilités estimées par validation croisée avec `ncv` groupes, répétée `nrep` fois.
+
+\normalsize
+
+# Calcul du gain
+
+
+```{r}
+#| label: fig-coupure-pondere
 #| eval: true
 #| echo: false
 #| cache: true
-#| fig-cap: "Données de la réserve de Boston sur l'approbation de prêts hypothécaires (1990); données tirées de Stock et Watson (2007)."
-#| message: false
-#| warning: false
-#| out.width: '80%'
-#| fig.width: 7
-#| fig.height: 4
-library(ggplot2)
-data(HMDA, package = "AER")
-ggplot(data = HMDA[which(HMDA$pirat < 1 & HMDA$afam == "yes"),],
-       aes(y = ifelse(deny == "yes", 1, 0), 
-           x = pirat)) +
-  geom_hline(yintercept = c(0,1), 
-             alpha = 0.1, 
-             linetype = 2) + 
-  geom_point() +
-  stat_smooth(method = "lm", 
-              se = FALSE, 
-              fullrange = TRUE,
-              col = 4) +
-  stat_smooth(method = "glm", 
-              se = FALSE,
-              fullrange = TRUE,
-              method.args = list(family = "binomial"), col = 2) +
-  labs(subtitle = "demande d'approbation pour crédit hypothécaire", 
-       y = "",
-       x = "ratio paiements sur revenus") +
-  scale_y_continuous(breaks=c(0L,1L), 
-                     limits = c(0,1)) + 
-  scale_x_continuous(breaks = seq(0,1, by = 0.25), 
-                     limits = c(0,1),
-                     expand = c(0,0),
-                     labels = c("0","0.25","0.5","0.75","1")) + 
-  geom_text(data = tibble::tibble(
-    x = c(1,0.05), 
-    y = c(0.1,0.9), 
-    label = c("refusée", "acceptée")), 
-   aes(x = x, y = y, label = label),
-   hjust = "inward") +
-    theme_classic()
+#| fig-align: 'center'
+#| out-width: '80%'
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
+formule = formula(yachat ~ x1 + x2 + x3 +
+                    x4 + x5 + x6 + x7 + 
+                    x8 + x9 + x10)
+modele <- glm(formule, 
+              family = binomial, 
+              data = hecmulti::dbm)
+coupe <- hecmulti::select_pcoupe(
+  modele = modele, 
+  c00 = 0, 
+  c01 = 0, 
+  c10 = -10, 
+  c11 = 57,
+  plot = TRUE)
 ```
 
-# Fonction de liaison
-
-Idée: appliquer une transformation au **prédicteur linéaire**
-$$\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p$$
-pour que la prédiction soit entre zéro et un.
-
-On considère
-\begin{align*}
- p &= \textrm{expit}(\eta) = \frac{\exp(\eta)}{1+\exp(\eta)}
-= \frac{1}{1+\exp(-\eta)}.
-\end{align*}
-
-# Courbe sigmoïde
 
 
+# Point de coupure optimal et explication
 
-```{r}
-#| label: fig-logitplot
-#| echo: false
-#| out-width: '90%'
-#| fig.height: 6
-#| fig.width: 10
-#| fig.cap: "Valeurs ajustées du modèle de régression logistique en fonction du prédicteur linéaire $\\eta$."
-#| eval: true
-#| fig.align: 'center'
-logit <- function(x){log(x/(1-x))}
-expit <- function(x){1/(1+exp(-x))}
-par(mar = c(4,4,1,0.1), bty = "l")
-curve(expit, 
-    ylim = c(0,1),
-    yaxs="i",
-    from = -3.5, 
-    to = 3.5, 
-    xlab = expression(eta), 
-    ylab = expression(p))
+Dans l'exemple, le point de coupure qui maximise le gain est `r coupe$optim`. Avec ce point de coupure, on estime que 
 
-```
+- le taux de bonne classification est de `r round(perfo1$table[24,"pcorrect"], 2)` 
+- la sensibilité est de `r round(perfo1$table[24,"sensi"], 2)`. 
 
-# Ajustement du modèle
+Ainsi, on va détecter environ `r round(perfo1$table[24,"sensi"],2)`\% des clients qui achètent. 
 
-La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien pour régression linéaire).
-
-- L'argument `family=binomial(link="logit")` permet de spécifier que l'on ajuste un modèle logistique.
+Il est coûteux de rater un client potentiel, donc la stratégie optimale est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs d'entre eux n'achètent rien. 
 
 
-```{r}
-#| label: logistique-init
-#| eval: false
-#| echo: true
-#| message: false
-data(logit1, package = "hecmulti")
-# Ajustement du modèle avec toutes
-# les variables explicatives
-modele1 <- glm(formula = y ~ .,
-            family = binomial(link = "logit"),
-            data = logit1)
-```
+# Fonction d'efficacité du récepteur
 
-# Sortie
+Graphique de la sensibilité en fonction de un moins la spécificité, en faisant varier le point de coupure, souvent appelé courbe ROC (de l'anglais *receiver operating characteristic*).
 
-Tableau résumé avec les coefficients (`summary`)
+La fonction `hecmulti::courbe_roc` permet de tracer la courbe et de calculer l’aire sous la courbe. 
 
 ```{r}
 #| eval: false
 #| echo: true
-summary(modele1)
+roc <- hecmulti::courbe_roc(
+  resp = classif,
+  prob = predprob,
+  plot = TRUE)
+print(roc)
+## Pour extraire l'aire sous la courbe, roc$aire
 ```
 
-# Interprétation
 
-Par défaut, pour des variables $0/1$, le modèle décrit la probabilité de succès.
-
+# Courbe ROC
 
 ```{r}
-#| label: logitplot2
-#| echo: false
 #| eval: true
-#| out.width: '70%'
-#| fig.align: 'center'
-#| fig.width: 7
-#| fig.height: 3 
-par(mar = c(4,4,1,0.1), bty = "l")
-curve(expit(-3.05 + 0.0749 * x), 
-    ylim = c(0,1),
-    yaxs = "i",
-    from = 18, 
-    to = 59, 
-    xlab = "âge (en années)", 
-    ylab = "p")
-
+#| echo: false
+#| out-width: '80%'
+#| fig-align: 'center'
+classif <- with(dbm, yachat[test == 0])
+roc <- hecmulti::courbe_roc(
+  resp = classif,
+  prob = predprob,
+  plot = TRUE)
+## Pour extraire l'aire sous la courbe, roc$aire
 ```
 
-Si le coefficient $\beta_j$ de la variable $\mathrm{X}_j$ est positif, alors plus la variable augmente, plus $\Pr(Y=1)$ augmente.
+# Aire sous la courbe
 
+- Plus la courbe se rapproche de (0, 1) (coin supérieur gauche), meilleure est la classification.
+- Autrement dit, plus l'aire sous la courbe est près de 1, mieux c’est.
+- Une aire sous la courbe de 0.5 (ligne diagonale) correspond à la performance d'une allocation aléatoire.
 
-# Rappel exponentiels et logarithme
+# Courbe lift
 
-Quelques propriétés de la fonction exponentielle:
+À quelle point notre modèle est meileur qu'une assignation aléatoire?
 
-- $\exp(0) = 1$
-- $\exp(a + b) = \exp(a)\exp(b)$
-- $\exp(ab)= \exp(a)^b$
+- Ordonner les probabilités de succès estimées par le modèle, $\widehat{p}$, en ordre croissant.
+- Regarder quelle pourcentage de ces derniers seraient bien classifiés (le nombre de vrais positifs sur le nombre de succès).
+La référence est la ligne diagonale, qui correspond à une détection aléatoire.
 
-Quelques propriétés de la fonction logarithmique
-
-- $\ln(1)=0$,
-- $\ln(\exp(x))=x$ (fonction inverse)
-- $\ln(ab) = \ln(a) + \ln(b)$
-
-
-# Cote
-
-Si on applique la transformation inverse, on obtient
-
-$$\ln\left(\frac{p}{1-p} \right) = \eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p.$$
-
-ou, en prenant l'exponentielle de chaque côté,
-
-$$ 
-\mathsf{cote} = \frac{p}{1-p} = \exp(\beta_0)\cdots\exp(\beta_p \mathrm{X}_p)
-$$
-
-**Modèle multiplicatif** pour la cote.
-
-# Cote et probabilité
-
-La cote est utilisée dans les paris sportifs
-\begin{align*}
- \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
-\end{align*}
-
+# Code pour produire la courbe lift 
 
 ```{r}
-#| label: tbl-cotes
-#| eval: true
+#| label: figcourbe-lift
+#| eval: false
+#| echo: true
+tab_lift <- hecmulti::courbe_lift(
+  prob = predprob,
+  resp = classif, 
+  plot = TRUE)
+tab_lift
+```
+
+
+# Tableau du lift
+
+```{r}
+#| label: tbl-lift
 #| echo: false
-#| tbl-cap: "Cote et probabilité de succès"
-datf <- matrix("", nrow = 2, ncol = 10)
-datf[1,] <- c("\\(p\\)", sprintf(seq(0.1,0.9, by = 0.1),fmt = "%.1f"))
-datf[2,] <- c("cote", paste0("\\(",c("\\frac{1}{9}","\\frac{1}{4}","\\frac{3}{7}","\\frac{2}{3}","1","\\frac{3}{2}","\\frac{7}{3}","4","9"),"\\)"))
-knitr::kable(datf[-1, , drop = FALSE], 
-             col.names = datf[1, , drop = FALSE],
-             row.names = FALSE,
+#| eval: true
+#| tbl-cap: "Tableau du lift (déciles)."
+tab_lift <- hecmulti::courbe_lift(
+  prob = predprob,
+  resp = classif, 
+  plot = FALSE)
+knitr::kable(tab_lift[,-1], 
              booktabs = TRUE,
-             longtable = FALSE,
-             align =  paste0(c("l",rep("c", 9)),collapse = ""),
-             escape = FALSE,
+             digits = 2,
+             col.names = c("hasard", 
+                           "modèle", 
+                           "lift"),
              format = "latex") 
 ```
 
+\footnotesize 
+Si on classifiait comme acheteurs les 10\% qui ont la plus forte probabilité estimée d'achat, on détecterait 81 des 210 clients.
 
-# Interprétation avec données du PRCA
-
-Le modèle ajusté en termes de cote est
-\begin{align*}
- \frac{\Pr(Y=1 \mid \mathrm{X}_5=x_5)}{\Pr(Y=0 \mid \mathrm{X}_5=x_5)} = \exp(-3.05)\exp(0.0749x_5).
-\end{align*}
-
-\small
-
-- Lorsque $\mathrm{X}_5$ augmente d'une année, la cote est multipliée par $\exp(0.0749) = 1.078$ peut importe la valeur de $x_5$. 
-- Pour deux personnes dont la différence d'âge
-    - est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
-    - est de 10 ans, la cote de la personne plus âgée est 112\% plus élevée (cote multipliée par $\exp(10 \times 0.0749)=1.078^{10} = 2.12$)
-
-\normalsize
-
-# Modèle complet
-
-On considère le modèle avec toutes les variables explicatives:
-
-```{r}
-#| eval: false
-#| echo: true
-modele2 <- glm(
-  formula = y ~ .,
-  data = logit1,
-  family = binomial)
-exp(coef(modele2))
-```
-
-```{r}
-#| eval: true
-#| echo: false
-modele2 <- glm(
-  formula = y ~ .,
-  data = hecmulti::logit1,
-  family = binomial)
-round(exp(coef(modele2)), 3)
-```
-# Interprétation des coefficients
-
-Si on a plusieurs variables explicatives, les coefficients sont interprétés en modifiant une variable à la fois.
-
-On compare deux profils identiques, sauf pour la variable en question 
-
-- toute chose étant égale par ailleurs
-- *ceteris paribus*
-
-# Interprétation des coefficients
-
-**Variable continue**:
-
-- La cote de la personne plus âgée d'un an est 1.116 fois celle de la personne plus jeune, *ceteris paribus*, une augmentation de 11,6%
-
-# Variable binaire
-
-Le rapport de cote pour les femmes (`x3=1`) versus les hommes (`x3=0`) est de $\exp(\widehat{\beta}_{\mathrm{X}_3}) = 3.854$:
-
-- les femmes sont plus susceptibles de suivre les recommendations d'achat toute chose étant égale par ailleurs, 
-- Inversement, le rapport de cote homme/femme est de 1/3.854=0.259, 
-
-On peut donc conclure que:
-
-- la cote des femmes est 285.4% plus élevée que celle des hommes. 
-- la cote des hommes est 74.1% inférieure à celle des femmes.
-
-# Variable catégorielle
-
-Toutes les comparaisons sont effectuées avec la catégorie de référence.
-
-Pour `x1`, c'est à la maison. Le rapport de cote est
-$$\frac{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=2 (\text{employé}), \ldots\}}{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=1 (\text{maison}), \ldots\}} = \exp(\widehat{\beta}_{\mathrm{X}_{1}=2}) = 0.438$$
-
-Le coefficient pour $\mathrm{X}_{1}=1$ est zéro, d'où $\exp(\widehat{\beta}_{\mathrm{X}_{1}=1})=1$ (absent du tableau).
-
-On peut ordonner les type d'emploi selon la probabilité de succès à l'aide des coefficients: *ceteris paribus* on obtient le classement
-
-- employé < professionnel < ventes/service < agriculture < maison.
-
-# Invariance
-
-Si on voulait le rapport de cote professionnel vs employé, inutile de réajuster le modèle.
-
-On peut calculer 
-
-$$ 
-\dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
-$$
-
-plutôt que de changer la catégorie de référence via
-
-```{r}
-#| eval: false
-#| echo: true
-logit2 <- logit1 |> 
-   mutate(x1 = relevel(x1, ref = 2))
-```
-
-# Vraisemblance et estimation du modèle
-
-Pour un modèle probabiliste donné, on peut calculer la « probabilité » d'avoir obtenu les données de l'échantillon.
-
-Si on traite cette « probabilité » comme une fonction des paramètres, on l'appelle **vraisemblance**.
-
-
-**Maximum de vraisemblance**: valeurs des paramètres qui maximisent la fonction de vraisemblance.
-
-- on cherche les valeurs des paramètres qui rendent les données les plus plausibles
-   
-
-# Vraisemblance d'une observation
-
-La vraisemblance d'une observation $Y_i \in \{0,1\}$ (loi Bernoulli/binomiale) est 
-
-\begin{align*}
-L(\boldsymbol{\beta}; y_i) = p_i^{y_i}(1-p_i)^{1-y_i} = \begin{cases} 
-p_i & y_i = 1 (\text{succès})\\
-1-p_i & y_i = 0 (\text{échec}) 
-\end{cases}
-\end{align*}
-et où $$p_i = \mathrm{expit}(\eta_i) = \frac{\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}{1+\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}.$$
-
-
-# Probabilité conjointe d'événements binaires
-
-- Si les observations sont indépendantes, la probabilité conjointe d'avoir un résultat donné est le produit des probabilités pour chaque observation. 
-- Il n'y a pas de solution explicite pour $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$ dans le cas de la régression logistique: il faut maximiser la vraisemblance.
-   
-# Log vraisemblance
-
-
-- Pour des raisons de stabilité numérique, on maximise le logarithme naturel $\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})$ de la log vraisemblance conjointe de l'échantillon (transformation monotone croissante).
-- La log vraisemblance est simplement la somme des contributions individuelles.
-- On utilise la log vraisemblance $\ell$ comme mesure d'ajustement et pour construire des tests d'hypothèse.
-
-# Prédiction des probabilités de succès
-
-Des estimations des coefficients $\widehat{\beta}$ découlent une estimation de $\Pr(Y=1)$ pour les valeurs $\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p$ d'un individu donné,
-\begin{align*}
- \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_px_p).
-\end{align*}
-
-
-
-# Modèle nul
-
-Un modèle avec uniquement l'ordonnée à l'origine retournera $\widehat{p}$, la proportion empirique de succès.
-
-Comme pour la régression linéaire, c'est la moyenne des observations.
-
-
-
-# Test du rapport de vraisemblance {.fragile}
-
-:::: {.columns}
-
-::: {.column width="60%"}
-
-Pour les modèles ajustés par maximum de vraisemblance.
-
-
-
-Comparaison de modèles **emboîtés**
-
-
-- Modèle complet (sous l'alternative) avec tous les paramètres
-- Modèle restreint (sous l'hypothèse nulle) sur lequel on impose $k\leq p$ restrictions (typiquement $\beta_j = 0, j \in \{1, \ldots, p\}$).
-
-
-:::
-
-::: {.column width="40%"}
-
-```{r}
-#| echo: false
-#| eval: true
-#| out.width: '100%'
-knitr::include_graphics("figures/poupeesrusses.jpg")
-```
-
-:::
-
-::::
-
-# Exemple
-
-Comparons un modèle avec et sans $X_6$.
-
-Variable catégorielle à trois niveaux (deux coefficients associés à $\mathrm{I}(\mathrm{X}_{6}=2)$ et $\mathrm{I}(\mathrm{X}_{6}=3)$.
-
-```{r}
-#| eval: true
-#| echo: true
-modele2 <-  glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
-                 data = hecmulti::logit1,
-                 family = binomial(link = "logit"))
-modele3 <-  glm(y ~ x1 + x2 + x3 + x4 + x5,
-                 data = hecmulti::logit1,
-                 family = binomial(link = "logit")) 
-```
-
-# Test d'hypothèse
-
-On test l'hypothèse nulle  $\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0$ (soit $k=2$ restrictions).
-
-L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
-
-Si la valeur $p$ est inférieure au seuil de signification, typiquement $\alpha = 0.05$, on rejette l'hypothèse nulle.
-
- - on conclut que la variable explicative $\mathrm{X}_6$ améliore significativement l'ajustement du modèle.
-
-
-
-# Rapport de vraisemblance
-
-Le test est basé sur la statistique
-\begin{align*}
- D = -2\{\ell(\widehat{\boldsymbol{\beta}}_0)-\ell(\widehat{\boldsymbol{\beta}})\}.
-\end{align*}
-
-Cette différence $D$, lorsque l'hypothèse $\mathscr{H}_0$ est vraie, suit approximativement une loi khi-deux $\chi^2_k$.
-
-# Exemple de test
-
-\footnotesize
-
-```{r}
-#| eval: true
-#| echo: true
-# modèle 2 (alternative), modèle 3 (nulle)
-anova(modele3, modele2, test = "LR")
-## Deviance = -2*log vraisemblance
-rvrais <- modele3$deviance - modele2$deviance
-pchisq(rvrais, df = 2, lower.tail = FALSE) # valeur-p
-```
-
-\normalsize
-
-# Tester la significativité des variables
-
-Si un paramètre n'est pas significativement différent de 0, cela veut dire qu'il n'y a pas de lien significatif entre la variable et la réponse *une fois que les autres variables* sont dans le modèle.
-
-\footnotesize
-
-```{r}
-#| eval: true
-#| echo: true
-car::Anova(modele2, type = "3")
-```
-
+Le lift est le nombre détecté par le modèle sur la proportion détectée par hasard.
 \normalsize
 
 
-# Intervalles de confiance pour coefficients
-
-On peut aussi considérer des intervalles de confiance pour les coefficients individuels.
-
-Ceux obtenus par défaut dans **R** sont appelés *intervalles de confiance de vraisemblance profilée*.
+# Courbe lift
 
 ```{r}
-#| eval: false
-#| echo: true
-confint(modele2)      # IC pour beta
-exp(confint(modele2)) # IC pour exp(beta)
-```
-
-Ces intervalles sont invariants aux reparamétrisation: si $[b_i, b_s]$ est l'intervalle de vraisemblance profilée pour $\beta$, l'intervalle pour $\exp(\beta)$ est simplement $[\exp(b_i), \exp(b_s)]$.
-
-# Intervalles de confiance
-
-```{r}
-#| label: fig-confint-modele2-logist
-#| echo: false
-#| eval: true
-#| out-width: '80%'
-#| fig-width: 10
-#| fit-height: 4
-#| fig-cap: "Intervalles de confiance profilés de niveau 95\\% pour les coefficients du modèle logistique (échelle exponentielle)."
-data(logit1, package = "hecmulti")
-modele2 <- glm(
-  y ~ x1 + x2 + x3 + x4 + x5 + x6,
-  data = logit1,
-  family = binomial(link = "logit")
-)
-modelsummary::modelplot(modele2, 
-                        exponentiate = TRUE,
-       coef_omit = 'Interc') + 
-  ggplot2::labs(x = paste0("exp(", expression(beta),")")) +
-  ggplot2::geom_vline(xintercept = 1)
-
-
-```
-
-
-# Tests et intervalles de confiances
-
-Comme $\exp(\cdot)$ est  une transformation monotone croissante, 
-$$\beta>0 \quad \iff \quad \exp(\beta)>1.$$
-
-Si la valeur postulée, par exemple $\mathscr{H}_0: \beta_j=0$ ou $\exp(\beta_j)=1$, est dans l'intervalle de confiance de niveau $1-\alpha$, on ne rejette pas l'hypothèse nulle.
-
-# Coefficients pour données complètes
-
-\footnotesize
-
-```{r}
-#| label: tbl-logit1-complet
+#| label: figcourbe-lift-pr
 #| eval: true
 #| echo: false
-#| cache: true
-#| tbl-cap-location: bottom
-#| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
-data(logit1, package = "hecmulti")
-logit1 <- logit1 |> 
-  dplyr::mutate(y = factor(y),
-               x3 = factor(x3),
-               x4 = factor(x4))
-m1 <- glm(y ~ x1 + x2 + x3 + x4 + x5 + x6, 
-          family = binomial(link = "logit"),
-          data = logit1)
-tbl <- m1 |>
-  gtsummary::tbl_regression(
-  exponentiate = TRUE,
-  intercept = FALSE) |>
-  gtsummary::add_global_p() |>
-  gtsummary::bold_labels()
-tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
-tbl$table_body <- tbl$table_body[1:15,]
-# tbl$table_body$label[1] <- "cst"
-tbl$table_styling$footnote_abbrev$footnote <- 
-  c("cote = rapport de cote",
-    "IC = intervalle de confiance",
-    "ET = erreur-type")
-tbl |> 
-   gtsummary::as_gt()  |>
-   gt::tab_options(table.width = gt::pct(100))
+tab_lift <- hecmulti::courbe_lift(
+  prob = predprob,
+  resp = classif, 
+  plot = TRUE)
 ```
 
-\normalsize
 
-# Coefficients pour données complètes
+# Calibration du modèle
 
-\footnotesize
-
-```{r}
-#| label: tbl-logit1-complet2
-#| eval: true
-#| echo: false
-#| cache: true
-#| tbl-cap-location: bottom
-#| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
-tbl <- m1 |>
-  gtsummary::tbl_regression(
-  exponentiate = TRUE,
-  intercept = FALSE) |>
-  gtsummary::add_global_p() |>
-  gtsummary::bold_labels()
-tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
-tbl$table_body <- tbl$table_body[-(1:15),]
-# tbl$table_body$label[1] <- "cst"
-tbl$table_styling$footnote_abbrev$footnote <- 
-  c("cote = rapport de cote",
-    "IC = intervalle de confiance",
-    "ET = erreur-type")
-tbl |> 
-   gtsummary::as_gt()  |>
-   gt::tab_options(table.width = gt::pct(100))
-```
-
-# Multicolinéarité
-
-Il est difficile de départager l'effet individuel d'une variable explicative lorsqu'elle est fortement corrélée avec d'autres.
+Certains modèles sont trop confiants dans leurs prédictions (surajustement).
 
 
-La multicollinéarité ne dépend pas de la variable réponse $Y$, mais de la matrice $\mathbf{X}$ du modèle.
-
-# Multicolinéarité pour PRCA
-
-Mêmes diagnostics qu'en régression linéaire: considérer les facteurs d'inflation de la variance (`car::vif`).
-
-```{r}
-#| eval: true
-#| echo: true
-car::vif(modele2)
-```
-
-Pas d'inquiétude ici, coefficients faibles (inférieurs à 5)
-
-# Dichotomiser des variables continues
-
-Si $Y$ est continue et qu'on cherche à estimer $\Pr(Y> c \mid \mathbf{X})$ pour une valeur $c$ donnée, il n'est **pas** recommandé de dichotomiser $Y$ via
-
+une statistique simple proposée par [Spiegelhalter (1986)]( https://doi.org/10.1002/sim.4780050506) peut être utile à cette fin. Pour une variable Bernoulli $Y \in \{0,1\}$, l'erreur quadratique moyenne s'écrit
 \begin{align*}
-Y^{*} = \begin{cases}
-1, & Y > c; \\
-0, & Y \leq c.
-\end{cases}
+\overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
+\\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
 \end{align*}
 
-et d'ajuster une régression logistique.
+Si notre modèle était parfaitement calibré, $\mathsf{E}_0(Y_i)=p_i$ et $\mathsf{Va}_0(Y_i) = p_i(1-p_i)$.
 
-Pourquoi? **On perd de l'information**.
+# Test de Spiegelhalter
 
-# Probabilité de dépassement
+On peut calculer la moyenne et la variance attendue sous l'hypothèse nulle et construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506). $$Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}$$ 
 
-On peut estimer plutôt une régression linéaire et prendre 
-$$\Pr(Y > c \mid \mathbf{X}) = \Phi\left(\frac{\widehat{\mu}-c}{\widehat{\sigma}}\right),$$
+Sous l'hypothèse nulle de calibration parfaite, $Z \sim \mathsf{No}(0,1)$ en grand échantillon. 
 
-où 
 
-- $\widehat{\mu}=\widehat{\beta}_0 +  \cdots + \beta_p\mathrm{X}_p$ est la moyenne prédite pour le profil donné, 
-- $\widehat{\sigma}$ est l'estimation de l'écart-type
-- $\Phi(\cdot)$ est la fonction de répartition d'une loi normale standard (`pnorm`)
+# Calibration du modèle 
+
+```{r}
+#| label: classification
+#| eval: true
+#| echo: true
+hecmulti::calibration(
+   prob = predprob, 
+   resp = classif)
+```
+
+Il n'y a pas de preuve ici que le modèle est mal calibré.
+
+# Récapitulatif
+
+- La classification est une forme d'apprentissage supervisée.
+- On peut assigner l'observation à la classe la plus plausible, ou déterminer un point de coupure.
+- Si on a un objectif particulier (fonction de gain), on peut optimiser les profits en assignant une importance différente à chaque scénario.
+- On peut catégoriser les observations dans une matrice de confusion.
+
+# Récapitulatif
+
+- On s'intéresse à
+   - la spécificité (proportion d'échecs correctement classifiés) 
+   - la sensibilité (proportion de succès correctement classifiés)
+   - le taux de bonne classification
+   - le taux de faux positifs ou faux négatifs
+- L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe ROC) et le lift donnent une mesure de la qualité des prédictions.
+
+
+
+# Sélection de variables en régression logistique
+
+- On applique les mêmes principes que précédemment.
+- Notre mesure d'ajustement (gain, taux de bonne classification, log-vraisemblance) peut différer selon l'objectif.
+- Les modèles de régression logistique sont plus coûteux à estimer.
+- Pour la classification, le point de coupure est à déterminer.
+
+# Fonctions **R** pour la sélection de modèles
+
+- `glmbb::glmbb` permet une recherche exhaustive de tous les sous-modèles à au plus une certaine distance (`cutoff`) du modèle avec le plus petit critère d'information (`criterion`).
+- `step` permet de faire une recherche séquentielle avec un critère d'information.
+- `glmulti::glmulti` permet une recherche exhaustive (`method = "h"`) ou par le biais d'un algorithme génétique (`method = "g"`).
+- `glmnet::glmnet` permet d'ajuster le modèle avec pénalité LASSO.
+
+Voir le [code en ligne](https://lbelzile.github.io/math60602/05-reglogistique.html#s%C3%A9lection-de-variables-en-r%C3%A9gression-logistique).
+
+# Objectif du ciblage marketing
+
+Déterminer si le revenu prévu justifie l'envoi du catalogue
+
+$$\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).$$
+
+On peut combiner un modèle de régression logistique avec la régression linéaire (ajustés simultanément avec un modèle Heckit).
+
+Ou simplement ignorer le montant d'achat et envoyer un catalogue si la probabilité d'achat excède notre point de coupure optimal.
+
+# Stratégie de référence
+
+- Parmi les 100K clients, 23 179 auraient acheté si on leur avait envoyé le catalogue
+- Ces clients auraient généré des revenus de 1 601 212\$.
+- Si on enlève le coût des envois (100 000 $\times$ 10\$), la stratégie de référence permet un revenu net de 601 212\$.
+
+
+# Stratégie d'ajustement
+
+
+En résumé, la procédure numérique à réaliser est la suivante:
+
+- Choisir les variables à essayer (termes quadratiques, interactions, etc.)
+- Choisir l'algorithme ou la méthode de sélection du modèle.
+- Construire un catalogue de modèles: pour chacun, calculer les prédictions par validation croisée.
+- Calculer le point de coupure optimal pour chaque modèle selon la fonction de gain moyen.
+- Sélectionner le modèle qui **maximise le gain**.
+
+# Prédiction et envoi
+
+- Prédire les 100 000 observations de l'échantillon test.
+- Envoyer un catalogue si la probabilité d'achat excède le point de coupure.
+- Calculer le revenu résultant:
+    - zéro si on n'envoie pas de catalogue
+    - $-10$ si la personne n'achète pas
+    - $-10$ plus l'achat si la personne achète.
+
+**En pratique**, on ne pourrait pas *a priori* connaître le revenu résultant de cette stratégie.
+
+# Conclusion
+
+
+Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus de 978 226\$.
+
+C’est une énorme amélioration, de plus de 56%, par rapport à la stratégie de référence.
 
 
 # Récapitulatif
 
-- Une régression logistique sert à modéliser la moyenne de **variables catégorielles**, typiquement binaires.
-- C'est un cas particulier d'un modèle de régression linéaire généralisée (GLM)
-
-# Récapitulatif
-
-Le modèle est interprétable à l'échelle de la cote
-
-- La cote donne le rapport probabilité de réussite (1) sur probabilité d'échec (0)
-- Interprétation en terme de 
-   - pourcentage d'augmentation si $\exp(\widehat{\beta}) > 1$, avec $\exp(\widehat{\beta})-1$.
-   - pourcentage de diminution si $\exp(\widehat{\beta}) < 1$, avec $1-\exp(\widehat{\beta})$
-
-# Récapitulatif
-
-- Estimation par maximum de vraisemblance
-- Tests d'hypothèse comparent modèles emboîtés 
-   - loi nulle asymptotique $\chi^2$
-   - degrés de liberté égal au nombre de restrictions
-- Intervalles de confiance de vraisemblance profilée
-   - invariants aux reparamétrisations
+- Les principes de sélection de variable couverts précédemment s'appliquent toujours (recherche exhaustive, séquentielle et LASSO).
+- On peut aussi calculer les critères d'information puisque le modèle est ajusté par maximum de vraisemblance.
+- Attention au surajustement! Suspect si les probabilités estimées sont près de 0/1 (vérifier la calibration).
+- Deux étapes: sélectionner le modèle (variables) et le point de coupure.
+- D'autres modèles que la régression logistique (arbres de classification, etc.) sont envisageables pour la classification.
 

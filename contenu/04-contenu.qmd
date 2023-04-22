@@ -4,30 +4,28 @@ title: "Sélection de variables"
 
 ## Contenu
 
-- Rappels sur la régression
-- Surajustement
-- Méthodes d'estimation de l'erreur: 
-    - pénalisation, 
-    - validation croisée et 
-    - validation externe
+- Méthodes de sélection de variables: recherches exhaustives et procédures séquentielles
+- Modèle LASSO
+- Moyenne de modèles
 
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 4 (Sélection de variables et de modèles)](https://lbelzile.github.io/math60602/04-selectionmodeles.html), Sections 4.1-4.3
+- {{< fa book >}} [Chapitre sur la sélection de variables et de modèles](https://lbelzile.github.io/math60602/selectionmodeles.html), Sections 4 à 6
 
 
 ## Diapositives 
 
 - {{< fa file >}} [Sélection de variables](/diapos/MATH60602-diapos4.pdf)
 - {{< fa code >}} [Code](/code/MATH60602-diapos4.R)
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
 
+
+## Exercices
+
+- {{< fa file >}} [Exercices 2](/exercices/02-exercice.html)
 
 ## Objectifs d'apprentissage
 
-- Être capable d'ajuster un modèle linéaire avec **R**
-- Être en mesure de décrire le suroptimisme et son impact sur l'évaluation de modèles
-- Pouvoir expliquer les avantages et inconvénients des méthodes d'estimation de l'erreur
+- Être capable d'ajuster les procédures de sélections couvertes dans **R**
+- Pouvoir calculer la performance manuellement d'un modèle
+- Être en mesure de diagnostiquer le surajustement et d'appliquer une procédure de sélection de variables

@@ -1,7 +1,7 @@
 ---
 title: "Analyse de regroupements"
 subtitle: "Analyse multidimensionnelle appliquée"
-date: "automne 2022"
+date: ""
 author: "Léo Belzile"
 institute: "HEC Montréal"
 format: beamer
@@ -14,7 +14,7 @@ beamerarticle: false
 pdf-engine: lualatex
 code-line-numbers: true
 fig-align: 'center'
-mainfont: "D-DIN"
+mainfont: "VisbyCF-Medium"
 mathfont: 'Latin Modern Math'
 sansfont: 'Latin Modern Sans'
 keep-tex: true

@@ -1,7 +1,7 @@
 ---
-title: "Sélection de variables"
+title: "Régression logistique"
 subtitle: "Analyse multidimensionnelle appliquée"
-date: "automne 2022"
+date: ""
 author: "Léo Belzile"
 institute: "HEC Montréal"
 format: beamer
@@ -15,7 +15,7 @@ pdf-engine: lualatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
-mainfont: "D-DIN"
+mainfont: "VisbyCF-Medium"
 mathfont: 'Latin Modern Math'
 sansfont: 'Latin Modern Sans'
 keep-tex: true
@@ -23,660 +23,731 @@ include-in-header:
       text: |
         \usepackage{tabu}
         \usepackage{mathtools}
+        \usepackage{mathrsfs}
 ---
 
-# Présentation des données
+
+# _Professional Rodeo Cowboys Association_ {#cowboy}
+
+L'exemple suivant est inspiré de l'article
+
+> Daneshvary, R. et Schwer, R. K. (2000) The Association Endorsement and Consumers' Intention to Purchase. _Journal of Consumer Marketing_ **17**, 203-213.
+
+**Objectif**: Les auteurs cherchent à voir si le fait qu'un produit soit recommandé par le _Professional Rodeo Cowboys Association_ (PRCA) a un effet sur les intentions d'achats. 
 
 
-Exemple de base de données marketing (par ex., organisme de charité). Cibler les clients pour l’envoi d’un catalogue.
 
-But: maximiser les levées de fonds
+# Données du PRCA
 
-1. Envoyer un échantillon de produits au coût de 10$ à un groupe échantillon.
-2. Construire un modèle de prédiction pour déterminer à qui envoyer le produit parmi tous les clients.
-
-
-
-# Population cible
-
-
-Clients qui ont 
-
-- plus de 18 ans,
-- au moins un an d'historique avec l'entreprise et 
-- qui ont effectué au moins un achat au cours de la dernière année.
-
-Regroupements:
-
-- 1K personnes dans l'échantillon d'apprentissage,
-- 100K personnes pour l'ensemble des autres clients.
-
-# Liste des variables
-
-
+On dispose de 500 observations sur les variables suivantes dans la base de données `logit1`:
 \footnotesize 
 
-
-- `yachat`, une variable binaire qui indique si le client a acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon;
-- `ymontant`, le montant de l'achat si le client a acheté quelque chose;
-- `x1`: sexe de l'individu, soit homme (0) ou femme (1);
-- `x2`: l'âge (en année);
-- `x3`: variable catégorielle indiquant le revenu, soit moins de 35 000\$ (1), entre 35 000\$ et 75 000\$ (2) ou plus de 75 000$ (3);
-- `x4`: variable catégorielle indiquant la région où habite le client (de 1 à 5);
-- `x5`: couple : la personne est elle en couple (0=non, 1=oui);
-- `x6`: nombre d'année depuis que le client est avec la compagnie;
-- `x7`: nombre de semaines depuis le dernier achat;
-- `x8`: montant (en dollars) du dernier achat;
-- `x9`: montant total (en dollars) dépensé depuis un an;
-- `x10`: nombre d'achats différents depuis un an.
-
-
-\normalsize 
-
-#  Aperçu des données
-
-\footnotesize 
-```{r}
-#| label: loaddbm
-#| eval: true
-#| echo: true
-data(dbm, package = "hecmulti")
-str(dbm)
-```
-\normalsize 
-
----
-
-```{r}
-#| label: contingence-dbm-tbl
-#| eval: true
-#| echo: false
-#| warning: false
-dbm_sub <- dbm |>
-  dplyr::filter(test == 0) |>
-  dplyr::select(!test)
-knitr::kables(list(
-knitr::kable(table(dbm_sub$x1), 
-             booktabs = TRUE, 
-             col.names = c("sexe", "décompte")),
-knitr::kable(table(dbm_sub$x5), booktabs = TRUE, 
-             col.names = c("couple", "décompte"))
-))
-
-
-knitr::kables(list(
-knitr::kable(table(dbm_sub$x3), booktabs = TRUE, 
-             col.names = c("revenu", "décompte")),
-knitr::kable(table(dbm_sub$x4), booktabs = TRUE, 
-             col.names = c("région", "décompte"))))
-
-```
-
----
-
-```{r}
-#| label: histogrammes-eda-dbm-fig
-#| echo: false
-#| eval: true
-#| warning: false
-#| out-width: '100%'
-library(ggplot2)
-library(patchwork)
-g1 <- ggplot(data = dbm_sub,
-             aes(x = x2)) +
-      geom_histogram(alpha = 0.5, 
-                     aes(y = ..density..),
-                     bins = 30) + 
-  labs(#fill = "achat",
-       y = "densité",
-       x = "âge")
-g2 <- ggplot(data = dbm_sub,
-             aes(#fill = factor(yachat),
-                 x = x8 
-                 )) +
-      geom_histogram(alpha = 0.5, 
-                     aes(y = ..density..),
-                     bins = 30) + 
-  labs(#fill = "achat",
-       y = "densité",
-       x = "montant du dernier achat (en dollar)")
-g3 <- ggplot(data = dbm_sub,
-             aes(#fill = factor(yachat),
-                 x = x9)) +
-      geom_histogram(alpha = 0.5, 
-                     aes(y = ..density..),
-                     bins = 30) + 
-  labs(#fill = "achat",
-       y = "densité",
-       x = "montant total dépensé depuis un an (en dollars)")
-g4 <- ggplot(data = dbm_sub,
-             aes(#fill = factor(yachat),
-                 x = x7 )) +
-      geom_histogram(alpha = 0.5, 
-                     aes(y = ..density..),
-                     bins = 30) + 
-  labs(#fill = "achat",
-       y = "densité",
-       x = "nombre de semaines depuis le dernier achat")
-g5 <- ggplot(data = dbm_sub,
-             aes(#fill = factor(yachat),
-                 x = x6)) +
-      geom_histogram(alpha = 0.5, 
-                     aes(y = ..density..),
-                     bins = 30) + 
-  labs(#fill = "achat",
-       y = "densité",
-       x = "ancienneté comme client")  
-g6 <- ggplot(data = dbm_sub,
-             aes(#fill = factor(yachat),
-                 x = x10 
-                 )) +
-      geom_histogram(alpha = 0.5, 
-                     aes(y = ..density..),
-                     bins = 30) + 
-  labs(#fill = "achat",
-       y = "densité",
-       x = "nombre d'achats différents depuis un an")  
-library(patchwork)
-(g1 + g2)/(g3 + g4) / (g5 + g6) +
-  patchwork::plot_layout(guides = 'collect') & theme_classic() & theme(legend.position = "bottom")
-
-```             
-
----
-
-
-\footnotesize
-```{r}
-#| label: statdescript-dbm-tbl
-#| echo: false
-#| eval: true
-#| warning: false
-dbm_sub_c <- dbm_sub |>
-    dplyr::select(x2, x6, x7, x8, x9, x10)
-tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
-                               moyenne = apply(dbm_sub_c, 2, mean),
-               "écart-type" = apply(dbm_sub_c, 2, sd),
-               min = apply(dbm_sub_c, 2, min),
-               max = apply(dbm_sub_c, 2, max)) |>
-  knitr::kable(digits = 2, booktabs = TRUE, linesep = "") |>
-  kableExtra::kable_styling(full_width = TRUE)
-
-tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
-               description = c("âge", "nombre d’année comme client","nombre de semaines depuis le dernier achat","montant du dernier achat","montant total dépensé sur un an","nombre d'achats différents sur un an")) |>
-  knitr::kable(booktabs = TRUE, linesep = "") |>
-  kableExtra::kable_styling(full_width = TRUE)
-
-```
-
-# Prédire le montant `ymontant`
-
-Le montant moyen dépensé s'écrit
-
-\begin{align*}
-\mathsf{E}(\texttt{ymontant}) &= \mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1) \Pr(\texttt{yachat}=1).
-\end{align*}
-
-On bâtit un modèle de régression linéaire pour le montant moyen dépensé, $\mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1)$.
-
-Le modèle utilise les données des 210 personnes de l'échantillon d'apprentissage qui ont acheté suite à l'envoi du catalogue.
-
-
-# Séparation de l'échantillon
-
-On conserve 100 000 observations test pour vérifier la performance
-
-- (oracle) réponses inconnues à toutes fins pratiques
-
-
-
-\footnotesize
-
-```{r}
-#| echo: true
-#| eval: true
-#| cache: true
-data(dbm, package = "hecmulti")
-dbm_a <- dbm |>
-  dplyr::filter(
-    test == 0, #données d'entraînement
-    !is.na(ymontant)) # personnes qui ont acheté
-```
+- $Y$: seriez-vous intéressé à acheter un produit recommandé par le PRCA
+    - $\texttt{0}$: non
+    - $\texttt{1}$: oui
+- $\mathrm{X}_1$: quel genre d'emploi occupez-vous?
+    - $\texttt{1}$: à la maison
+    - $\texttt{2}$: employé
+    - $\texttt{3}$: ventes/services
+    - $\texttt{4}$: professionnel
+    - $\texttt{5}$: agriculture/ferme
+- $\mathrm{X}_2$: revenu familial annuel
+    - $\texttt{1}$: moins de 25 000
+    - $\texttt{2}$: 25 000 à 39 999
+    - $\texttt{3}$: 40 000 à 59 999
+    - $\texttt{4}$: 60 000 à 79 999
+    - $\texttt{5}$: 80 000 et plus
 
 \normalsize
 
-# Recherche d'un modèle
+# Données du PRCA    
+    
+\footnotesize
 
-Idée initiale: 
+- $\mathrm{X}_3$: sexe
+    - $\texttt{0}$: homme
+    - $\texttt{1}$: femme
+- $\mathrm{X}_4$: avez-vous déjà fréquenté une université?
+    - $\texttt{0}$: non
+    - $\texttt{1}$: oui
+- $\mathrm{X}_5$: âge (en années)
+- $\mathrm{X}_6$: combien de fois avez-vous assisté à un rodéo au cours de la dernière année?
+    - $\texttt{1}$: 10 fois ou plus
+    - $\texttt{2}$: entre six et neuf fois
+    - $\texttt{3}$: cinq fois ou moins
 
-- essayer tous les modèles possibles,
-- estimer pour chacun la performance (erreur quadratique moyenne) avec validation croisée ou critères d'information,
-- déterminer le meilleur modèle parmi l'ensemble de modèles.
+\normalsize
+
+
+# Régression logistique
+
+Expliquer le comportement de la **moyenne** d'une variable binaire $Y\in\{0,1\}$ en utilisant un modèle de régression avec $p$ variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$.
+
+$$\underset{\text{moyenne théorique}}{\mathsf{E}(Y=1 \mid \mathbf{X})} = \underset{\text{probabilité de succès}}{\Pr(Y=1 \mid \mathbf{X})}=p$$
+
+# Objectif de la régression
+
+1) **Inférence** : comprendre comment et dans quelles mesures les variables $\mathbf{X}$ influencent la probabilité que $Y=1$.
+2) **Prédiction** : développer un modèle pour prévoir des valeurs de $Y$ ou la probabilité de succès à partir des $\mathbf{X}$.
+
+# Exemples
+
+- Est-ce qu'un client potentiel va répondre favorablement à une offre promotionnelle?
+- Est-ce qu'un client est satisfait du service après-vente?
+- Est-ce qu'un client va faire faillite ou non au cours des trois prochaines années.
+
+# Inférence et interprétation
+
+Ce cours est consacré à l'estimation et l'interprétation des paramètres du modèle dans le cas binaire.
 
 
 
-# Approximation
+Par convention, on désigne le résultat « $1$ » par un succès et « $0$ » par un échec.
 
-Soit $\mathsf{E}(Y \mid \mathbf{X}) = f(\mathrm{X}_1, \ldots, \mathrm{X}_p)$ pour $f$ une fonction inconnue supposée lisse.
+# Modéliser une probabilité avec une régression linéaire?
 
-On peut approximer la fonction en faisant une expansion (série de Taylor) de degré 2 (tous les termes quadratiques, et les interactions d'ordre 2):
+Mauvaise idée!
 
-- on n'inclut pas le carré de variables indicatrices binaires (car $0^2=0, 1^2=1$).
-- idem pour les interactions entre indicateurs qui représentent des niveaux d'une même variable catégorielle.
+- Sans contrainte, on peut obtenir des probabilités négatives ou supérieures à 1!
+- les données binaires ne respectent pas le postulat d'égalité des variances
+    - invalide les résultats des tests d'hypothèse pour les coefficients.
+ 
+# Illustration: linéaire vs logistique
 
-# Modèle complet et syntaxe **R**
 
 
 ```{r}
-#| label: modele-complet
+#| label: fig-demandecredit
 #| eval: true
-#| echo: true
-#| cache: true
-# (...)^2 crée toutes les interactions d'ordre deux
-# I(x^2) permet de créer les termes quadratiques
-formule <- 
-  formula(ymontant ~ 
-          (x1 + x2 + x3 + x4 + x5 + 
-             x6 + x7 + x8 + x9 + x10)^2 + 
-            I(x2^2) + I(x6^2) + I(x7^2) +
-            I(x8^2) + I(x9^2) + I(x10^2))
-mod_complet <- lm(formule, data = dbm_a)
-# Matrice avec toutes les variables
-matmod <- model.matrix(mod_complet)
-```
-
-Le modèle est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` variables.
-
-# Fléau de la dimensionalité
-
-Combien de modèles incluant les combinaisons de $p$ variables?
-
-Dans l'exemple, $p=14$ variables de base en incluant les indicatrices pour les variables catégorielles multiniveaux (revenu `x3` et région `x4`)
-
-
-Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles.
-
-```{r}
-#| label: tbl-02-table3
 #| echo: false
-#| eval: true
-#| tbl-cap: "Nombres de modèles en fonction du nombre de paramètres."
+#| cache: true
+#| fig-cap: "Données de la réserve de Boston sur l'approbation de prêts hypothécaires (1990); données tirées de Stock et Watson (2007)."
+#| message: false
 #| warning: false
-p <- c(5,10,15,20,25,30)
-npar <- 2^p
-options(scipen=100)
-knitr::kable(x = data.frame(p = p, npar = npar),
-             digits = 0,
-             col.names = c("$p$",
-                          "nombre de paramètres"),
-            escape = FALSE,
-             booktabs = TRUE)
-```
-
-# Recherche exhaustive
-
-Essayer **tous** les modèles et choisir le meilleur (si $p$ est petit).
-
-
-L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux.
-
-
-\footnotesize
-
-```{r}
-#| echo: true
-#| eval: true
-#| cache: true
-# Recherche exhaustive avec variables de base
-rec_ex <- leaps::regsubsets(
-  x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10, 
-  nvmax = 13L,
-  method = "exhaustive",
-  data = dbm_a)
-resume_rec_ex <- summary(rec_ex,
-                         matrix.logical = TRUE)
-# Trouver le modèle avec le plus petit BIC
-min_BIC <- which.min(resume_rec_ex$bic)
-# Nom des variables dans le modèle retenu
-rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
-```
-
-
-\normalsize
-
-# Mot d'ordre
-
-Quelques mantras pour la suite:
-
-- préférer la flexibilité (réduire biais potentiel)
-- être conscient de notre budget (surajustement)
-- porter une attention particulière aux interactions entre variables catégorielles
-    - estimations correspondent à des `moyennes de groupe'
-    - impact élevé potentiel des valeurs aberrantes et des extrêmes
-
-# Méthodes de sélection séquentielles
-
-Recherche exhaustive typiquement trop coûteuse.
-
-On peut plutôt opter pour un algorithme glouton: 
-
-- à chaque étape, on maximise l'utilité (horizon d'optimisation limité) en retirant ou en ajoutant une seule variable.
-- au début, $p$ variables à regarder, puis il y a $p-1$ choix l'étape suivante, etc.
-- moins de modèles explorés, mais utile pour faire une recherche rapide.
-
-
-
-# Digression
-
-Le modèle à $K$ variables qui a la plus petite erreur moyenne quadratique a aussi
-
-- est aussi le meilleur (pour $K$ variables) selon les critères d'information
-- et selon le coefficient de régression $R^2$
-
-Si on enlève ou on ajoute séquentiellement des variables, on peut traquer l'un ou l'autre avant de comparer avec le modèle précédent.
-
-# Sélections ascendante et descendante
-
-**Sélection ascendante**: à partir du modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle précédent la variable qui améliore le plus l’ajustement.
-
-
-**Sélection descendante**: éliminer du modèle complet la variable qui contribue le moins à l’ajustement.
-
-Dans les deux cas, la procédure se termine quand on ne peut satisfaire le critère d'arrêt (par exemple, critère d'information)
-
-# Sélection séquentielle
-
-À partir du modèle de base (d'ordinaire), 
-
-- alterner sélection séquentielle ascendante et descendante.
-- on continue ainsi tant que le modèle retourné par l’algorithme n’est pas identique à celui de l’étape précédente.
-- une variable peut entrer dans le modèle et sortir plus tard dans le processus.
-   - préférable aux procédures ascendantes et descendantes (car plus de modèles).
-   - lui préférer la recherche exhaustive quand c'est possible
-
-
-# Code **R** avec `leaps`
-
-
-```{r}
-#| label: modele-sequentiel1
-#| eval: false
-#| echo: true
-# Cette procédure séquentielle retourne
-# la liste de modèles de 1 variables à
-# nvmax variables.
-rec_seq <- 
-  leaps::regsubsets(
-    x = formule, 
-    data = dbm_a,
-    method = "seqrep", 
-    nvmax = length(coef(mod_complet)))
-which.min(summary(rec_seq)$bic)
-```
-
-# Sélection séquentielle avec critères d'informations en **R** 
-\footnotesize
-
-La procédure est plus longue à rouler (car les modèles linéaires sont ajustés).
-
-On ajoute ou retire la variable qui améliore le plus le critère de sélection  à chaque étape (comportement différent de **SAS**).
-
-```{r}
-#| label: modele-sequentiel2
-#| eval: false
-#| echo: true
-#| cache: true
-seq_AIC <- MASS::stepAIC(
-  lm(ymontant ~ 1, data = dbm_a), 
-  # modèle initial sans variables explicative
-    scope = formule, # modèle maximal possible
-    direction = "both", #séquentielle
-    trace = FALSE, # ne pas imprimer le suivi
-    keep = function(mod, AIC, ...){ 
-      # autres sorties des modèles à conserver
-      list(bic = BIC(mod), 
-           coef = coef(mod))},
-    k = 2) #
-# Remplacer k=2 par k = log(nrow(dbm_a)) pour BIC
-```
-
-L'historique des étapes est disponible via `seq_AIC$anova`
-
-\normalsize 
-
-# Performance en fonction de la complexité 
-
-```{r, out.width = '80%', fig.align='center'}
-knitr::include_graphics("figures/fig-perfo-sequentiel.pdf")
-```
-
-
-\footnotesize 
-40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. Oracle: 100K données de validation (libellé externe)
-
-\normalsize
-
-# Méthodes de régularisation
-
-Objectif: prévenir le surajustement.
-
-L'erreur moyenne quadratique se décompose comme 
-
-$$ \text{biais carré} + \text{variabilité}$$
-
-Les méthodes de régularisation introduisent du biais dans l'estimation des coefficients en pénalisant leur norme.
-
-# Préalable à la régression avec régularisation
-
-Pénalisation la norme de $\beta_1, \ldots, \beta_p$
-
-- Modèles avec pénalités pas les mêmes selon l'échelle des données         
-    - pas invariant aux transformations affines (par ex., conversion de Celcius en Farenheit)
-
-**Solution**: standardiser variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ **et** variable réponse $\boldsymbol{y}$ (moyenne zéro, écart-type unitaire).
-
-- vérifier selon le logiciel, cette étape peut-être effectuée implicitement
-
-
-# LASSO
-
-Pénalité avec norme $l_1$ pour la valeur absolue des coefficients,
-$$ \min_{\boldsymbol{\beta}} \left\{ n\mathsf{EQM}(\boldsymbol{\beta}) + \lambda(|\beta_1| + \cdots + |\beta_p|)\right\}.$$
-Hyperparamètre $\lambda>0$ qui détermine la force de la pénalisation.
-
-Rétrécissement de certains coefficients **exactement** à zéro: sélection implicite de variable.
-
-
-
-# Contrainte budgétaire et moindres carrés
-
-```{r, out.width = '80%', fig.align='center'}
-knitr::include_graphics("figures/fig-lassopenalty.pdf")
-```
-
-# Code **R** pour le LASSO
-
-Paramètre de pénalité déterminé par validation croisée à partir d'un vecteur
-de valeurs candidates.
-
-```{r}
-#| eval: false
-#| echo: true
-library(glmnet)
-lambda_seq <- seq(from = 0.01, to = 2, by = 0.01)
-cv_output <- 
-  glmnet::cv.glmnet(x = as.matrix(matmod), 
-            y = dbm_a$ymontant, 
-            alpha = 1, 
-            lambda = lambda_seq)
-plot(cv_output)
-```
-
-
-# Trajectoire LASSO
-
-On choisit typiquement $\lambda$ par validation croisée en appliquant la règle du un écart-type (le première modèle à un erreur-type de la valeur minimale).
-
-```{r, out.width = '80%', fig.align='center'}
-knitr::include_graphics("figures/fig-lassopath.pdf")
-```
-
-# Paramètres
-
-```{r}
-#| label: fig-lassopath
-#| eval: true
-#| echo: false
-#| fig.cap: "Coefficients du modèle en fonction de la pénalité"
 #| out.width: '80%'
 #| fig.width: 7
-#| fig.height: 5
-lasso_path <- 
-  glmnet::glmnet(
-    x = as.matrix(as.matrix(matmod)),
-    y = dbm_a$ymontant,
-    alpha = 1, 
-    lambda = seq(from = 0.01, to = 10, by = 0.01))
-plot(lasso_path)
+#| fig.height: 4
+library(ggplot2)
+data(HMDA, package = "AER")
+ggplot(data = HMDA[which(HMDA$pirat < 1 & HMDA$afam == "yes"),],
+       aes(y = ifelse(deny == "yes", 1, 0), 
+           x = pirat)) +
+  geom_hline(yintercept = c(0,1), 
+             alpha = 0.1, 
+             linetype = 2) + 
+  geom_point() +
+  stat_smooth(method = "lm", 
+              se = FALSE, 
+              fullrange = TRUE,
+              col = 4) +
+  stat_smooth(method = "glm", 
+              se = FALSE,
+              fullrange = TRUE,
+              method.args = list(family = "binomial"), col = 2) +
+  labs(subtitle = "demande d'approbation pour crédit hypothécaire", 
+       y = "",
+       x = "ratio paiements sur revenus") +
+  scale_y_continuous(breaks=c(0L,1L), 
+                     limits = c(0,1)) + 
+  scale_x_continuous(breaks = seq(0,1, by = 0.25), 
+                     limits = c(0,1),
+                     expand = c(0,0),
+                     labels = c("0","0.25","0.5","0.75","1")) + 
+  geom_text(data = tibble::tibble(
+    x = c(1,0.05), 
+    y = c(0.1,0.9), 
+    label = c("refusée", "acceptée")), 
+   aes(x = x, y = y, label = label),
+   hjust = "inward") +
+    theme_classic()
 ```
 
+# Fonction de liaison
 
-# Évaluation et prédiction
+Idée: appliquer une transformation au **prédicteur linéaire**
+$$\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p$$
+pour que la prédiction soit entre zéro et un.
 
-Une fois la valeur de $\lambda$ choisie, on réestime le modèle avec la pénalité.
+On considère
+\begin{align*}
+ p &= \textrm{expit}(\eta) = \frac{\exp(\eta)}{1+\exp(\eta)}
+= \frac{1}{1+\exp(-\eta)}.
+\end{align*}
+
+# Courbe sigmoïde
+
+
+
+```{r}
+#| label: fig-logitplot
+#| echo: false
+#| out-width: '90%'
+#| fig.height: 6
+#| fig.width: 10
+#| fig.cap: "Valeurs ajustées du modèle de régression logistique en fonction du prédicteur linéaire $\\eta$."
+#| eval: true
+#| fig.align: 'center'
+logit <- function(x){log(x/(1-x))}
+expit <- function(x){1/(1+exp(-x))}
+par(mar = c(4,4,1,0.1), bty = "l")
+curve(expit, 
+    ylim = c(0,1),
+    yaxs="i",
+    from = -3.5, 
+    to = 3.5, 
+    xlab = expression(eta), 
+    ylab = expression(p))
+
+```
+
+# Ajustement du modèle
+
+La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien pour régression linéaire).
+
+- L'argument `family=binomial(link="logit")` permet de spécifier que l'on ajuste un modèle logistique.
+
+
+```{r}
+#| label: logistique-init
+#| eval: false
+#| echo: true
+#| message: false
+data(logit1, package = "hecmulti")
+# Ajustement du modèle avec toutes
+# les variables explicatives
+modele1 <- glm(formula = y ~ .,
+            family = binomial(link = "logit"),
+            data = logit1)
+```
+
+# Sortie
+
+Tableau résumé avec les coefficients (`summary`)
 
 ```{r}
 #| eval: false
 #| echo: true
-lambopt <- cv_output$lambda.min 
- #ou cv_output$lambda.1se
-lasso_best <- 
-  glmnet::glmnet(
-    x = as.matrix(as.matrix(matmod)),
-    y = dbm_a$ymontant,
-    alpha = 1, 
-    lambda = lambopt)
+summary(modele1)
 ```
 
-# Prédictions
-On crée une matrice avec les données de validation et on calcule l'erreur quadratique moyenne.
+# Interprétation
 
-\footnotesize 
+Par défaut, pour des variables $0/1$, le modèle décrit la probabilité de succès.
+
 
 ```{r}
-#| eval: false
-#| echo: true
-# Prédictions et calcul de l'EQM
-# Données externes
-dbm_v <- dbm |>
-  dplyr::filter(
-    test == 1,
-    !is.na(ymontant))
-pred <- predict(lasso_best, 
-                s = lambopt, 
-                newx = as.matrix(
-                  model.matrix(formule, 
-                               data = dbm_v)))
-eqm_lasso <- mean((pred - dbm_v$ymontant)^2)
+#| label: logitplot2
+#| echo: false
+#| eval: true
+#| out.width: '70%'
+#| fig.align: 'center'
+#| fig.width: 7
+#| fig.height: 3 
+par(mar = c(4,4,1,0.1), bty = "l")
+curve(expit(-3.05 + 0.0749 * x), 
+    ylim = c(0,1),
+    yaxs = "i",
+    from = 18, 
+    to = 59, 
+    xlab = "âge (en années)", 
+    ylab = "p")
+
 ```
+
+Si le coefficient $\beta_j$ de la variable $\mathrm{X}_j$ est positif, alors plus la variable augmente, plus $\Pr(Y=1)$ augmente.
+
+
+# Rappel exponentiels et logarithme
+
+Quelques propriétés de la fonction exponentielle:
+
+- $\exp(0) = 1$
+- $\exp(a + b) = \exp(a)\exp(b)$
+- $\exp(ab)= \exp(a)^b$
+
+Quelques propriétés de la fonction logarithmique
+
+- $\ln(1)=0$,
+- $\ln(\exp(x))=x$ (fonction inverse)
+- $\ln(ab) = \ln(a) + \ln(b)$
+
+
+# Cote
+
+Si on applique la transformation inverse, on obtient
+
+$$\ln\left(\frac{p}{1-p} \right) = \eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p.$$
+
+ou, en prenant l'exponentielle de chaque côté,
+
+$$ 
+\mathsf{cote} = \frac{p}{1-p} = \exp(\beta_0)\cdots\exp(\beta_p \mathrm{X}_p)
+$$
+
+**Modèle multiplicatif** pour la cote.
+
+# Cote et probabilité
+
+La cote est utilisée dans les paris sportifs
+\begin{align*}
+ \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
+\end{align*}
+
+
+```{r}
+#| label: tbl-cotes
+#| eval: true
+#| echo: false
+#| tbl-cap: "Cote et probabilité de succès"
+datf <- matrix("", nrow = 2, ncol = 10)
+datf[1,] <- c("\\(p\\)", sprintf(seq(0.1,0.9, by = 0.1),fmt = "%.1f"))
+datf[2,] <- c("cote", paste0("\\(",c("\\frac{1}{9}","\\frac{1}{4}","\\frac{3}{7}","\\frac{2}{3}","1","\\frac{3}{2}","\\frac{7}{3}","4","9"),"\\)"))
+knitr::kable(datf[-1, , drop = FALSE], 
+             col.names = datf[1, , drop = FALSE],
+             row.names = FALSE,
+             booktabs = TRUE,
+             longtable = FALSE,
+             align =  paste0(c("l",rep("c", 9)),collapse = ""),
+             escape = FALSE,
+             format = "latex") 
+```
+
+
+# Interprétation avec données du PRCA
+
+Le modèle ajusté en termes de cote est
+\begin{align*}
+ \frac{\Pr(Y=1 \mid \mathrm{X}_5=x_5)}{\Pr(Y=0 \mid \mathrm{X}_5=x_5)} = \exp(-3.05)\exp(0.0749x_5).
+\end{align*}
+
+\small
+
+- Lorsque $\mathrm{X}_5$ augmente d'une année, la cote est multipliée par $\exp(0.0749) = 1.078$ peut importe la valeur de $x_5$. 
+- Pour deux personnes dont la différence d'âge
+    - est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
+    - est de 10 ans, la cote de la personne plus âgée est 112\% plus élevée (cote multipliée par $\exp(10 \times 0.0749)=1.078^{10} = 2.12$)
 
 \normalsize
 
-# Motivation pour la moyenne de modèles
+# Modèle complet
 
-Une seule base de données (un seul échantillon) à disposition!
+On considère le modèle avec toutes les variables explicatives:
 
-Peu d'hétérogénéité, hors cette dernière est présente 
+```{r}
+#| eval: false
+#| echo: true
+modele2 <- glm(
+  formula = y ~ .,
+  data = logit1,
+  family = binomial)
+exp(coef(modele2))
+```
 
-- (rappelez-vous l'incertitude de la validation croisée)
+```{r}
+#| eval: true
+#| echo: false
+modele2 <- glm(
+  formula = y ~ .,
+  data = hecmulti::logit1,
+  family = binomial)
+round(exp(coef(modele2)), 3)
+```
+# Interprétation des coefficients
 
-# Moyenne de modèles 
+Si on a plusieurs variables explicatives, les coefficients sont interprétés en modifiant une variable à la fois.
 
-**Solution**: générer nous-mêmes $B$ échantillons différents à partir de l‘échantillon original.
+On compare deux profils identiques, sauf pour la variable en question 
 
-Autoamorçage nonparamétrique: échantillon choisi au hasard et avec remise dans l’échantillon original. 
+- toute chose étant égale par ailleurs
+- *ceteris paribus*
 
-- Une même observation peut être sélectionnée plus d’une fois tandis qu’une autre peut ne pas être sélectionnée du tout.
+# Interprétation des coefficients
 
-**Défaut**: très coûteux en calcul
+**Variable continue**:
 
-# Moyennes de modèles en pseudocode
+- La cote de la personne plus âgée d'un an est 1.116 fois celle de la personne plus jeune, *ceteris paribus*, une augmentation de 11,6%
 
-1. Échantillonnage aléatoire simple avec remise de $B$ jeux de données 
+# Variable binaire
 
-Pour chaque jeu de données étiqueté $b=1, \ldots, B$:
+Le rapport de cote pour les femmes (`x3=1`) versus les hommes (`x3=0`) est de $\exp(\widehat{\beta}_{\mathrm{X}_3}) = 3.854$:
 
-   2. Effectuer la sélection de variables
-   3. Sauvegarder les coefficients (0 si la variable est absente)
+- les femmes sont plus susceptibles de suivre les recommendations d'achat toute chose étant égale par ailleurs, 
+- Inversement, le rapport de cote homme/femme est de 1/3.854=0.259, 
 
-Mettre en commun les résultats:
+On peut donc conclure que:
 
-4. Calculer la moyenne des coefficients
-5. Obtenir les prédictions
+- la cote des femmes est 285.4% plus élevée que celle des hommes. 
+- la cote des hommes est 74.1% inférieure à celle des femmes.
+
+# Variable catégorielle
+
+Toutes les comparaisons sont effectuées avec la catégorie de référence.
+
+Pour `x1`, c'est à la maison. Le rapport de cote est
+$$\frac{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=2 (\text{employé}), \ldots\}}{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=1 (\text{maison}), \ldots\}} = \exp(\widehat{\beta}_{\mathrm{X}_{1}=2}) = 0.438$$
+
+Le coefficient pour $\mathrm{X}_{1}=1$ est zéro, d'où $\exp(\widehat{\beta}_{\mathrm{X}_{1}=1})=1$ (absent du tableau).
+
+On peut ordonner les type d'emploi selon la probabilité de succès à l'aide des coefficients: *ceteris paribus* on obtient le classement
+
+- employé < professionnel < ventes/service < agriculture < maison.
+
+# Invariance
+
+Si on voulait le rapport de cote professionnel vs employé, inutile de réajuster le modèle.
+
+On peut calculer 
+
+$$ 
+\dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
+$$
+
+plutôt que de changer la catégorie de référence via
+
+```{r}
+#| eval: false
+#| echo: true
+logit2 <- logit1 |> 
+   mutate(x1 = relevel(x1, ref = 2))
+```
+
+# Vraisemblance et estimation du modèle
+
+Pour un modèle probabiliste donné, on peut calculer la « probabilité » d'avoir obtenu les données de l'échantillon.
+
+Si on traite cette « probabilité » comme une fonction des paramètres, on l'appelle **vraisemblance**.
+
+
+**Maximum de vraisemblance**: valeurs des paramètres qui maximisent la fonction de vraisemblance.
+
+- on cherche les valeurs des paramètres qui rendent les données les plus plausibles
+   
+
+# Vraisemblance d'une observation
+
+La vraisemblance d'une observation $Y_i \in \{0,1\}$ (loi Bernoulli/binomiale) est 
+
+\begin{align*}
+L(\boldsymbol{\beta}; y_i) = p_i^{y_i}(1-p_i)^{1-y_i} = \begin{cases} 
+p_i & y_i = 1 (\text{succès})\\
+1-p_i & y_i = 0 (\text{échec}) 
+\end{cases}
+\end{align*}
+et où $$p_i = \mathrm{expit}(\eta_i) = \frac{\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}{1+\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}.$$
+
+
+# Probabilité conjointe d'événements binaires
+
+- Si les observations sont indépendantes, la probabilité conjointe d'avoir un résultat donné est le produit des probabilités pour chaque observation. 
+- Il n'y a pas de solution explicite pour $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$ dans le cas de la régression logistique: il faut maximiser la vraisemblance.
+   
+# Log vraisemblance
+
+
+- Pour des raisons de stabilité numérique, on maximise le logarithme naturel $\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})$ de la log vraisemblance conjointe de l'échantillon (transformation monotone croissante).
+- La log vraisemblance est simplement la somme des contributions individuelles.
+- On utilise la log vraisemblance $\ell$ comme mesure d'ajustement et pour construire des tests d'hypothèse.
+
+# Prédiction des probabilités de succès
+
+Des estimations des coefficients $\widehat{\beta}$ découlent une estimation de $\Pr(Y=1)$ pour les valeurs $\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p$ d'un individu donné,
+\begin{align*}
+ \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_px_p).
+\end{align*}
+
+
+
+# Modèle nul
+
+Un modèle avec uniquement l'ordonnée à l'origine retournera $\widehat{p}$, la proportion empirique de succès.
+
+Comme pour la régression linéaire, c'est la moyenne des observations.
+
+
+
+# Test du rapport de vraisemblance {.fragile}
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+Pour les modèles ajustés par maximum de vraisemblance.
+
+
+
+Comparaison de modèles **emboîtés**
+
+
+- Modèle complet (sous l'alternative) avec tous les paramètres
+- Modèle restreint (sous l'hypothèse nulle) sur lequel on impose $k\leq p$ restrictions (typiquement $\beta_j = 0, j \in \{1, \ldots, p\}$).
+
+
+:::
+
+::: {.column width="40%"}
+
+```{r}
+#| echo: false
+#| eval: true
+#| out.width: '100%'
+knitr::include_graphics("figures/poupeesrusses.jpg")
+```
+
+:::
+
+::::
+
+# Exemple
+
+Comparons un modèle avec et sans $X_6$.
+
+Variable catégorielle à trois niveaux (deux coefficients associés à $\mathrm{I}(\mathrm{X}_{6}=2)$ et $\mathrm{I}(\mathrm{X}_{6}=3)$.
+
+```{r}
+#| eval: true
+#| echo: true
+modele2 <-  glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
+                 data = hecmulti::logit1,
+                 family = binomial(link = "logit"))
+modele3 <-  glm(y ~ x1 + x2 + x3 + x4 + x5,
+                 data = hecmulti::logit1,
+                 family = binomial(link = "logit")) 
+```
+
+# Test d'hypothèse
+
+On test l'hypothèse nulle  $\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0$ (soit $k=2$ restrictions).
+
+L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
+
+Si la valeur $p$ est inférieure au seuil de signification, typiquement $\alpha = 0.05$, on rejette l'hypothèse nulle.
+
+ - on conclut que la variable explicative $\mathrm{X}_6$ améliore significativement l'ajustement du modèle.
+
+
+
+# Rapport de vraisemblance
+
+Le test est basé sur la statistique
+\begin{align*}
+ D = -2\{\ell(\widehat{\boldsymbol{\beta}}_0)-\ell(\widehat{\boldsymbol{\beta}})\}.
+\end{align*}
+
+Cette différence $D$, lorsque l'hypothèse $\mathscr{H}_0$ est vraie, suit approximativement une loi khi-deux $\chi^2_k$.
+
+# Exemple de test
 
 \footnotesize
 
-Voir code en ligne
+```{r}
+#| eval: true
+#| echo: true
+# modèle 2 (alternative), modèle 3 (nulle)
+anova(modele3, modele2, test = "LR")
+## Deviance = -2*log vraisemblance
+rvrais <- modele3$deviance - modele2$deviance
+pchisq(rvrais, df = 2, lower.tail = FALSE) # valeur-p
+```
 
 \normalsize
 
-# Évaluation de la performance
+# Tester la significativité des variables
 
-En incluant uniquement les variables de base
+Si un paramètre n'est pas significativement différent de 0, cela veut dire qu'il n'y a pas de lien significatif entre la variable et la réponse *une fois que les autres variables* sont dans le modèle.
 
-| nombre de variables | $\mathsf{EQM}$ |méthode |
-|:----:|:-----:|:-----|
-| 15 | 25,69 | toutes les variables |
-| 12 | 25,53 | exhaustive - $\mathsf{AIC}$ |
-| 10 | 25,04 | exhaustive - $\mathsf{BIC}$ |
+\footnotesize
 
+```{r}
+#| eval: true
+#| echo: true
+car::Anova(modele2, type = "3")
+```
 
-En incluant les termes de base, les carrés et les interactions d'ordre 2.
-
-| nombre de variables | $\mathsf{EQM}$ | méthode |
-|:---:|:-------|:-------------------------|
-| 104 | 19,63  | toutes les variables     |
-| 21  | 12     | séquentielle, choix selon $\mathsf{AIC}$ |
-| 15  | 12,31  | séquentielle, choix selon $\mathsf{BIC}$ |
-| 30  | 12     | LASSO, validation croisée avec 10 groupes |
-
-#  Récapitulatif
+\normalsize
 
 
-- Le nombre de modèles possibles augmente rapidement avec le nombre de prédicteurs.
- - Si un modèle est mal spécifié (variables importantes manquantes), alors les estimations sont biaisées. 
-- Si le modèle est surspécifié, les coefficients correspondants aux variables superflues incluses sont en moyenne nuls, mais contribuent à l’augmentation de la variance. 
-- **Compromis biais/variance**.
+# Intervalles de confiance pour coefficients
+
+On peut aussi considérer des intervalles de confiance pour les coefficients individuels.
+
+Ceux obtenus par défaut dans **R** sont appelés *intervalles de confiance de vraisemblance profilée*.
+
+```{r}
+#| eval: false
+#| echo: true
+confint(modele2)      # IC pour beta
+exp(confint(modele2)) # IC pour exp(beta)
+```
+
+Ces intervalles sont invariants aux reparamétrisation: si $[b_i, b_s]$ est l'intervalle de vraisemblance profilée pour $\beta$, l'intervalle pour $\exp(\beta)$ est simplement $[\exp(b_i), \exp(b_s)]$.
+
+# Intervalles de confiance
+
+```{r}
+#| label: fig-confint-modele2-logist
+#| echo: false
+#| eval: true
+#| out-width: '80%'
+#| fig-width: 10
+#| fit-height: 4
+#| fig-cap: "Intervalles de confiance profilés de niveau 95\\% pour les coefficients du modèle logistique (échelle exponentielle)."
+data(logit1, package = "hecmulti")
+modele2 <- glm(
+  y ~ x1 + x2 + x3 + x4 + x5 + x6,
+  data = logit1,
+  family = binomial(link = "logit")
+)
+modelsummary::modelplot(modele2, 
+                        exponentiate = TRUE,
+       coef_omit = 'Interc') + 
+  ggplot2::labs(x = paste0("exp(", expression(beta),")")) +
+  ggplot2::geom_vline(xintercept = 1)
+
+
+```
+
+
+# Tests et intervalles de confiances
+
+Comme $\exp(\cdot)$ est  une transformation monotone croissante, 
+$$\beta>0 \quad \iff \quad \exp(\beta)>1.$$
+
+Si la valeur postulée, par exemple $\mathscr{H}_0: \beta_j=0$ ou $\exp(\beta_j)=1$, est dans l'intervalle de confiance de niveau $1-\alpha$, on ne rejette pas l'hypothèse nulle.
+
+# Coefficients pour données complètes
+
+\footnotesize
+
+```{r}
+#| label: tbl-logit1-complet
+#| eval: true
+#| echo: false
+#| cache: true
+#| tbl-cap-location: bottom
+#| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
+data(logit1, package = "hecmulti")
+logit1 <- logit1 |> 
+  dplyr::mutate(y = factor(y),
+               x3 = factor(x3),
+               x4 = factor(x4))
+m1 <- glm(y ~ x1 + x2 + x3 + x4 + x5 + x6, 
+          family = binomial(link = "logit"),
+          data = logit1)
+tbl <- m1 |>
+  gtsummary::tbl_regression(
+  exponentiate = TRUE,
+  intercept = FALSE) |>
+  gtsummary::add_global_p() |>
+  gtsummary::bold_labels()
+tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
+tbl$table_body <- tbl$table_body[1:15,]
+# tbl$table_body$label[1] <- "cst"
+tbl$table_styling$footnote_abbrev$footnote <- 
+  c("cote = rapport de cote",
+    "IC = intervalle de confiance",
+    "ET = erreur-type")
+tbl |> 
+   gtsummary::as_gt()  |>
+   gt::tab_options(table.width = gt::pct(100))
+```
+
+\normalsize
+
+# Coefficients pour données complètes
+
+\footnotesize
+
+```{r}
+#| label: tbl-logit1-complet2
+#| eval: true
+#| echo: false
+#| cache: true
+#| tbl-cap-location: bottom
+#| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
+tbl <- m1 |>
+  gtsummary::tbl_regression(
+  exponentiate = TRUE,
+  intercept = FALSE) |>
+  gtsummary::add_global_p() |>
+  gtsummary::bold_labels()
+tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
+tbl$table_body <- tbl$table_body[-(1:15),]
+# tbl$table_body$label[1] <- "cst"
+tbl$table_styling$footnote_abbrev$footnote <- 
+  c("cote = rapport de cote",
+    "IC = intervalle de confiance",
+    "ET = erreur-type")
+tbl |> 
+   gtsummary::as_gt()  |>
+   gt::tab_options(table.width = gt::pct(100))
+```
+
+# Multicolinéarité
+
+Il est difficile de départager l'effet individuel d'une variable explicative lorsqu'elle est fortement corrélée avec d'autres.
+
+
+La multicollinéarité ne dépend pas de la variable réponse $Y$, mais de la matrice $\mathbf{X}$ du modèle.
+
+# Multicolinéarité pour PRCA
+
+Mêmes diagnostics qu'en régression linéaire: considérer les facteurs d'inflation de la variance (`car::vif`).
+
+```{r}
+#| eval: true
+#| echo: true
+car::vif(modele2)
+```
+
+Pas d'inquiétude ici, coefficients faibles (inférieurs à 5)
+
+# Dichotomiser des variables continues
+
+Si $Y$ est continue et qu'on cherche à estimer $\Pr(Y> c \mid \mathbf{X})$ pour une valeur $c$ donnée, il n'est **pas** recommandé de dichotomiser $Y$ via
+
+\begin{align*}
+Y^{*} = \begin{cases}
+1, & Y > c; \\
+0, & Y \leq c.
+\end{cases}
+\end{align*}
+
+et d'ajuster une régression logistique.
+
+Pourquoi? **On perd de l'information**.
+
+# Probabilité de dépassement
+
+On peut estimer plutôt une régression linéaire et prendre 
+$$\Pr(Y > c \mid \mathbf{X}) = \Phi\left(\frac{\widehat{\mu}-c}{\widehat{\sigma}}\right),$$
+
+où 
+
+- $\widehat{\mu}=\widehat{\beta}_0 +  \cdots + \beta_p\mathrm{X}_p$ est la moyenne prédite pour le profil donné, 
+- $\widehat{\sigma}$ est l'estimation de l'écart-type
+- $\Phi(\cdot)$ est la fonction de répartition d'une loi normale standard (`pnorm`)
+
 
 # Récapitulatif
 
-- La taille du modèle (le nombre de variables explicatives) est restreinte par le nombre d’observations disponibles.
-- En général, il faut s’assurer d’avoir suffisamment d’observations pour estimer de manière fiable les coefficients
-- Porter une attention particulière aux variables binaires et aux interactions avec ces dernières: si les effectifs de certaines modalités sont faibles, il y a danger surajustement.
+- Une régression logistique sert à modéliser la moyenne de **variables catégorielles**, typiquement binaires.
+- C'est un cas particulier d'un modèle de régression linéaire généralisée (GLM)
 
 # Récapitulatif
 
-- En pratique, on cherche à essayer plusieurs modèle pour trouver un choix optimal de variables.
-- Une recherche exhaustive garantie le survol du plus grand nombre de modèles possibles, mais est coûteuse
-- On peut effectuer une recherche exhaustive à l'aide d'algorithmes d'optimisation pour un nombre réduit de variables (max 50)
-- Sinon, on a l'option d'utiliser un algorithme glouton qui ne couvre qu'un sous-ensemble de tous les modèles
-- Compromis coût de calcul vs nombre de modèles explorés
-- Possibilité de combiner des méthodes!
+Le modèle est interprétable à l'échelle de la cote
+
+- La cote donne le rapport probabilité de réussite (1) sur probabilité d'échec (0)
+- Interprétation en terme de 
+   - pourcentage d'augmentation si $\exp(\widehat{\beta}) > 1$, avec $\exp(\widehat{\beta})-1$.
+   - pourcentage de diminution si $\exp(\widehat{\beta}) < 1$, avec $1-\exp(\widehat{\beta})$
 
 # Récapitulatif
 
-Certaines méthodes de pénalisation directe changent la fonction objective:
+- Estimation par maximum de vraisemblance
+- Tests d'hypothèse comparent modèles emboîtés 
+   - loi nulle asymptotique $\chi^2$
+   - degrés de liberté égal au nombre de restrictions
+- Intervalles de confiance de vraisemblance profilée
+   - invariants aux reparamétrisations
 
-   - introduction de biais pour les coefficients.
-   - idée globale: échanger biais contre variabilité moindre.
-   
-   
-Une pénalité particulière (LASSO) contraint certains paramètres à être exactement nuls,
-
-- correspond implicitement à une sélection de variables.
-
-# Récapitulatif
-
-- On applique le critère de sélection sur la liste de modèles candidats pour retenir celui qui donne la meilleure performance.
-- Pour éviter une sélection rigide, on peut perturber les données et répéter la procédure pour calculer une moyenne de modèles. 
-- Cette approche est très coûteuse en calcul.

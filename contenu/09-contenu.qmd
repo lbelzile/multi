@@ -4,15 +4,14 @@ title: "Analyse de survie"
 
 ## Contenu
 
-- Introduction à l'analyse de survie
-- Estimateur de Kaplan--Meier
-- Modèle à risques proportionnels de Cox
-
+- Extensions du modèle de Cox
+- Risques non proportionnels
+- [Exercice 4.2](/exercices/04-exercice.html#exercice-4.2)
 
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 6 (analyse de survie)](https://lbelzile.github.io/math60602/06-survie.html), Sections 6.1 à 6.5
+- {{< fa book >}} [Chapitre sur l'analyse de survie](https://lbelzile.github.io/math60602/survie.html), Sections 6 et 7
 
 ## Diapositives 
 
@@ -25,8 +24,8 @@ title: "Analyse de survie"
 
 ## Objectifs d'apprentissage
 
-- Décrire la censure à droite dans un problème de survie.
-- Pouvoir interpréter un tableau de survie et les estimations associées.
-- Interpréter les coefficients d'un modèle de Cox.
+- Pouvoir manipuler une base de données pour des variables explicatives qui varient dans le temps
+- Comprendre les avantages et inconvénients des extensions du modèle de Cox (stratification, risques non proportionnels)
+- Pouvoir correctement spécifier et interpréter un modèle à risques non proportionnels.
 
 

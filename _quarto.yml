@@ -30,7 +30,8 @@ website:
 
   navbar:
     pinned: true
-    background: "#003C71"
+    background: "$aquaf"
+    foreground: "$blanc"
     right:
       - text: "Syllabus"
         file: syllabus.qmd
@@ -44,8 +45,8 @@ website:
         file: exercices/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/math60602"
-      - icon: wechat
-        href: "https://piazza.com/hec.ca/fall2022/math60602/home"
+      - icon: comment
+        href: "https://piazza.com/hec.ca/fall2023/math60602/home"
         aria-label: Piazza
       - icon: inbox-fill
         href: "https://lbelzile.github.io/hecmulti"
@@ -55,7 +56,6 @@ website:
     - title: "Contenu"
       style: "docked"
       search: false
-      foreground: "#003C71"
       contents:
         - text: "Contenu"
           file: contenu/index.qmd
@@ -69,51 +69,47 @@ website:
           contents:
             - text: "1: Introduction"
               file: contenu/01-contenu.qmd
-            - text: "2: Programmation en **R**"
+            - text: "2: Programmation **R**"
               file: contenu/02-contenu.qmd
-            - text: "3: Réduction de la dimension"
+            - text: "3: Sélection de variables"
               file: contenu/03-contenu.qmd
             - text: "4: Sélection de variables"
               file: contenu/04-contenu.qmd
-            - text: "5: Sélection de variables"
+            - text: "5: Régression logistique"
               file: contenu/05-contenu.qmd
-            - text: "6: Régression logistique"
+            - text: "6: Classification"
               file: contenu/06-contenu.qmd
-            - text: "7: Classification"
+            - text: "7: Régression multinomiale"
               file: contenu/07-contenu.qmd
-            - text: "8: Régression multinomiale"
+            - text: "8: Analyse de survie"
               file: contenu/08-contenu.qmd
             - text: "9: Analyse de survie"
               file: contenu/09-contenu.qmd
-            - text: "10: Analyse de survie"
+            - text: "10: Réduction de la dimension"
               file: contenu/10-contenu.qmd
             - text: "11: Analyse de regroupements"
               file: contenu/11-contenu.qmd
             - text: "12: Analyse de regroupements"
               file: contenu/12-contenu.qmd
-            - text: "13: Données manquantes"
-              file: contenu/13-contenu.qmd
     - title: "Devoirs"
       style: "docked"
       search: false
-      foreground: "#ad1aac"
+      foreground: "$aquap"
       contents:
         - text: "Notation"
           file: evaluations/index.qmd
-        - text: "Examen"
-          file: evaluations/final.qmd
+        - text: "Examens"
+          contents:
+            - evaluations/intra.qmd
+            - evaluations/final.qmd
         - section: "Devoirs"
           contents:
             - evaluations/01-devoir.qmd
             - evaluations/02-devoir.qmd
-            - evaluations/03-devoir.qmd
-            - evaluations/04-devoir.qmd
-            - evaluations/05-devoir.qmd
-            - evaluations/06-devoir.qmd
     - title: "Exercices"
       style: "docked"
       search: false
-      foreground: "#003C71"
+      foreground: "aquap"
       contents:
         - text: "Exercices"
           file: exercices/index.qmd
@@ -123,25 +119,25 @@ website:
              file: exercices/01-exercice.qmd
            - text: "Solution 1"
              file: exercices/01-solution.qmd
-        - section: "Analyse factorielle"
+        - section: "Sélection de variables"
           contents:
            - text: "Exercice 2"
              file: exercices/02-exercice.qmd
            - text: "Solutions 2"
              file: exercices/02-solution.qmd
-        - section: "Sélection de variables"
+        - section: "Régression logistique"
           contents:
            - text: "Exercice 3"
              file: exercices/03-exercice.qmd
            - text: "Solutions 3"
              file: exercices/03-solution.qmd
-        - section: "Régression logistique"
+        - section: "Analyse de survie"
           contents:
            - text: "Exercice 4"
              file: exercices/04-exercice.qmd
            - text: "Solutions 4"
              file: exercices/04-solution.qmd
-        - section: "Analyse de survie"
+        - section: "Analyse factorielle"
           contents:
            - text: "Exercice 5"
              file: exercices/05-exercice.qmd
@@ -176,4 +172,3 @@ format:
       - litera
       - html/custom.scss
     toc: true
-    highlight-style: github-light

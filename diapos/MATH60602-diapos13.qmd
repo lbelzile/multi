@@ -1,7 +1,7 @@
 ---
 title: "Données manquantes"
 subtitle: "Analyse multidimensionnelle appliquée"
-date: "automne 2022"
+date: ""
 author: "Léo Belzile"
 institute: "HEC Montréal"
 format: beamer
@@ -14,7 +14,7 @@ beamerarticle: false
 pdf-engine: lualatex
 code-line-numbers: true
 fig-align: 'center'
-mainfont: "D-DIN"
+mainfont: "VisbyCF-Medium"
 mathfont: 'Latin Modern Math'
 sansfont: 'Latin Modern Sans'
 keep-tex: true
@@ -198,10 +198,10 @@ Retirer les observations avec données manquantes pour conserver les cas complet
 
 Méthode par défaut dans les logiciels.
 
-# Méthodes d'imputation: imputation simple
+# Méthodes d'imputation
 
 
-Imputation: emplacer les valeurs manquantes par une valeur judicieuse pour *combler les trous*.
+Imputation: remplacer les valeurs manquantes par une valeur judicieuse pour *combler les trous*.
 
 > Le concept d'imputation est à la fois séduisant et dangereux (Dempster et Rubin, 1983)
 

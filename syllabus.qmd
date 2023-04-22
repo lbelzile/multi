@@ -33,10 +33,10 @@ library(pander)
 
 ### Horaire des cours
 
-- Section J01: les jeudi du 1 septembre au 1 décembre (relâche le 20 octobre)
-- Section S01: les lundi 29 août, 12, 19 et 26 septembre, le mercredi 5 octobre, le mardi 11 octobre, ainsi que les lundi du 31 octobre au 5 décembre
+- Section J01: les jeudi à 12h00
+- Section S01: les mercredi à 18h45
 
-La séance 2 se déroulera au laboratoire LACED. Les autres séances sont dans la salle Victoriaville au troisième étage de l'édifice Decelles.
+La séance 2 se déroulera au laboratoire informatique.
 
 Selon le règlement de l'École, la présence de l'étudiant aux activités du cours est présumée. Ainsi, l'enseignant n'est pas tenu de fournir de l'aide ou d'adapter le cours ou son évaluation en raison d'une absence.
 
@@ -85,19 +85,14 @@ Les notes de cours [en ligne](https://lbelzile.github.io/math60602) font office 
 
 Votre note finale sera basée sur les évaluations suivantes
 
-- Examen final (50%): le jeudi 15 décembre de 18h30 à 21h30
-- Devoirs (50%): il y a six devoirs, qui sont équipondérés (10%). Votre note sera basée sur les cinq meilleures notes. Il y aura trois devoirs individuels et trois devoirs à réaliser en équipe d'au plus quatre personnes. Vous aurez environ un devoir à compléter par chapitre de cours. 
-
-Selon l'avancement du cours, les dates de remise pourraient être décalées. Vous aurez en moyenne deux semaines pour réaliser chaque devoir.
+- Examen intra (30%)
+- Examen final (40%)
+- Devoirs (30%): il y a deux devoirs équipondérés (15% chacun). Les devoirs seront à réaliser en équipe d'au plus quatre personnes. Vous aurez en moyenne deux semaines pour réaliser chaque devoir.
 
 **Dates de remise:**
 
-- Devoir 1 (individuel), date limite le dimanche 25 septembre
-- Devoir 2 (individuel), date limite le mercredi 5 octobre
-- Devoir 3 (équipe), date limite le dimanche 23 octobre
-- Devoir 4 (équipe), date limite le dimanche 13 novembre
-- Devoir 5 (équipe), date limite le dimanche 27 novembre
-- Devoir 6 (individuel), date limite le mercredi 7 décembre
+- Devoir 1, date limite le vendredi 13 octobre
+- Devoir 2, date limite le vendredi 1 décembre
 
 
 
@@ -121,8 +116,9 @@ Vous pouvez trouver une description des évaluations sur la page [évaluations](
 ```{r assignments-grades, include=FALSE}
 assignments <- tibble::tribble(
   ~Note,  ~Evaluation,
-  50 , "Devoirs (5 × 10 pt)",
-  50     , "Examen final (50 pt)",
+  30 , "Devoirs (2 × 15 pts)",
+  30     , "Examen intra (30 pts)",
+  40     , "Examen final (40 pts)",
 )
 
 grading <- tibble::tribble(
@@ -162,7 +158,7 @@ grading %>%
 Les [services aux étudiant(e)s (SAE)](https://www.hec.ca/etudiants/soutien-ressources/soutien-psychologique/) offrent du soutien aux études, du soutien psychologique et de l'aide pour les personnes en situation de handicap. Consultez leur site web pour la liste des services offerts.
 
 ### Intégrité intellectuelle
-Le [Règlement sur l’intégrité intellectuelle des étudiants](https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/REG_integrite-intellectuelle-etudiants.pdf) dicte les comportements proscrits par l'école, notamment la triche, le plagiat et la falsification de résultat. Tout comportement répréhensible sera rapporté aux instances concernées.
+Le [Règlement sur l’intégrité intellectuelle des étudiants](https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/REG_integrite-intellectuelle-etudiants.pdf) dicte les comportements proscrits par l'école, notamment la triche, l'utilisation de l'intelligence artificielle, le plagiat et la falsification de résultat. Tout comportement répréhensible sera rapporté aux instances concernées.
 
 ### Violences à caractère sexuel
 Le [Bureau d'intervention en matière de harcèlement (BIMH)](https://harcelement.hec.ca/) est le guichet unique au service de tous les membres de la communauté de l’École affectés par le harcèlement ou la violence à caractère sexuel. Vous pouvez les rejoindre au 514 343-7020 ou à l'[adresse courriel `harcelement@hec.ca`](mailto:harcelement@hec.ca) du lundi au vendredi entre 8h30 et 16h30.

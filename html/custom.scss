@@ -1,37 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Sans+Condensed:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-/*-- scss:defaults --*/
-$white:    #fff !default;
-$gray-100: #f8f9fa !default;
-$gray-200: #e9ecef !default;
-$gray-300: #ddd !default;
-$gray-400: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-600: #868e96 !default;
-$gray-700: #495057 !default;
-$gray-800: #343a40 !default;
-$gray-900: #212529 !default;
-$black:    #000 !default;
 /* HEC color palette */
-$hecblue:  #003C71 !default;
-$heccyan:  #009FDF !default;
-$red:      #EA002A !default;
-$yellow:   #FFD200 !default;
-$violet:   #AD1AAC !default;
-$magenta:  #D40F7D !default;
-$orange:   #FF8400 !default;
-$yellow:   #FB9E07 !default;
-$cyan:     #00BCB5 !default;
-$lavender: #9678D3 !default;
+$noir:  #000000 !default;
+$blanc:  #FFFFFF !default;
+$bleuhec:  #002855 !default;
+$grisf: #888b8d !default;
+$grisp: #d9d9d6 !default;
+$bleuf: #0072ce !default;
+$bleup: #92c1e9 !default;
+$aquaf: #00aec7 !default;
+$aquap: #88dbdf !default;
+$vertf: #26d07c !default;
+$vertp: #8fe2b0 !default;
+$rougef:  #ff585d !default;
+$rougep:  #ffb1bb !default;
+$rosef: #eb6fbd !default;
+$rosep: #eab8e4 !default;
+$jaunef: #f3d03e !default;
+$jaunep: #f2f0a1 !default;
 
-$primary:       $hecblue !default;
-$secondary:     $gray-500 !default;
-$success:       $violet !default;
-$info:          $cyan !default;
-$warning:       $yellow !default;
-$danger:        $red !default;
-$light:         $gray-100 !default;
-$dark:          $gray-200 !default;
+$primary:       $bleuhec !default;
+$secondary:     $vertf !default;
+$success:       $aquaf !default;
+$info:          $aquap !default;
+$warning:       $jaunef !default;
+$danger:        $rougef !default;
+$light:         $grisp !default;
+$dark:          $grisf !default;
 
 $font-family-sans-serif:      Fira Sans Condensed, sans-serif !default;
 $font-family-serif:           Barlow, serif !default;  /* Not actually a serif font but whatever */
@@ -49,11 +44,11 @@ $h6-font-size: $font-size-base * 0.8;
 $toc-font-size: 1.1rem;
 $sidebar-font-size: 1.1rem;
 $sidebar-font-size-section: 0.9rem;
-
-$link-color: $heccyan;
-$link-hover-color: $gray-400;
-
-$monokai-bg: #2e3440;
+$link-color: $aquaf;
+$link-hover-color: $aquap;
+$code-color: $aquaf;
+$code-bg: lighten($aquap, 90%);
+$navbar-hl: $aquap;
 
 
 /*-- scss:rules --*/
@@ -69,18 +64,18 @@ ol {
 // Home page stuff
 .title-block {
   margin: 1em 0;
-  border-bottom: 3px solid $gray-200;
+  border-bottom: 3px solid $grisp;
   padding-bottom: 1em;
 }
 
 .course-details {
   margin: 0 0 1em;
-  border-bottom: 3px solid $gray-200;
+  border-bottom: 3px solid $grisp;
   padding-bottom: 1em;
 }
 
 .course-title {
-  font-size: 3.3rem;
+  font-size: 2.5rem;
   margin-top: 0;
 }
 
@@ -90,7 +85,7 @@ ol {
 
 .course-meta {
   font-size: 1.2rem;
-  color: $gray-500;
+  color: $grisf;
 }
 
 .course-details ul {
@@ -131,7 +126,7 @@ ol {
 .schedule-page h3 {
   text-align: center;
   margin-top: 3rem;
-  border-bottom: 3px solid $hecblue;
+  border-bottom: 3px solid $aquaf;
   padding-bottom: 0.5rem;
 }
 
@@ -143,11 +138,11 @@ ol {
 }
 
 .bg-content {
-  background-color: $hecblue;
+  background-color: $aquap;
 }
 
 .bg-assignment {
-  background-color: $hecblue;
+  background-color: $aquap;
 }
 
 // Slightly larger buttons
@@ -195,7 +190,7 @@ main {
 // Increase font size in TOC
 #TOC {
   padding-bottom: 0.1em;
-  background-color: lighten($hecblue, 60%);
+  background-color: lighten($aquap, 60%);
 }
 
 #toc-title {
@@ -212,6 +207,7 @@ main {
 // Shrink blocks of code
 pre.text, pre.sourceCode, .cell-output pre {
   font-size: 0.775em;
+  color: $aquaf;
 }
 
 // Slight bottom margin to output
@@ -222,15 +218,15 @@ pre.text, pre.sourceCode, .cell-output pre {
 // Remove margin on pre in output
 .cell-output pre {
   margin-bottom: 0;
-  color: $gray-900;
+  color: $grisf;
 }
 
 // Format output and plain text blocks like code
 .cell-output, pre.text {
   border: none;
   padding: .4em;
-  background-color: $gray-100;
-  border: 1px solid $gray-200;
+  background-color: $grisp;
+  border: 1px solid $grisp;
   border-radius: .25rem;
 }
 

@@ -2,7 +2,7 @@
 title: "Analyse multidimensionnelle appliquée"
 subtitle: "Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l'aide de logiciels appropriés."
 details: |
-  MATH 60602, automne 2022<br>HEC Montréal
+  MATH 60602, automne 2023<br>HEC Montréal
 sidebar: false
 toc: false
 page-layout: full

@@ -8,15 +8,15 @@ instructor:
   github: lbelzile
   office: "4.850, Côte-Sainte-Catherine"
   contact_policy: >
-    Merci de publier toute question relative au contenu du cours sur le [forum Piazza](https://piazza.com/hec.ca/fall2022/math60602/home). Pour toute autre question, je suis plus facilement joignable par courriel.
+    Merci de publier toute question relative au contenu du cours sur le [forum Piazza](https://piazza.com/hec.ca/fall2023/math60602/home). Pour toute autre question, je suis plus facilement joignable par courriel.
 course:
   number: "MATH 60602"
-  semester: "automne 2022"
-  days: "jeudi (J01) et lundi (S01)"
+  semester: "automne 2023"
+  days: "jeudi (J01) et mercredi (S01)"
   time: "12h à 15h (J01) et 18h45 à 21h45 (S01)"
   location: "Decelles, Victoriaville"
   github: "https://www.github.com/lbelzile/multi"
-  copyright_year: "2022"
+  copyright_year: "2022-2023"
 
 university:
   name: "HEC Montréal"

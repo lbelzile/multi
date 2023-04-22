@@ -1,33 +1,28 @@
 ---
-title: "Régression multinomiale"
+title: "Analyse de survie"
 ---
 
 ## Contenu
 
-- Modèles de prédiction avec variables binaires
-- Modèles de régression pour données multinomiales
+- Introduction à l'analyse de survie
+- Estimateur de Kaplan--Meier
+- Modèle à risques proportionnels de Cox
 
 
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 5 (Régression logistique)](https://lbelzile.github.io/math60602/05-reglogistique.html), Sections 5.3.5 et 5.4
+- {{< fa book >}} [Chapitre sur l'analyse de survie](https://lbelzile.github.io/math60602/survie.html), Sections 1 à 5
 
 ## Diapositives 
 
-- {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos8.pdf)
+- {{< fa file >}} [Analyse de survie](/diapos/MATH60602-diapos8.pdf)
 - {{< fa code >}} [Code](/code/MATH60602-diapos8.R)
-
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
 
 ## Objectifs d'apprentissage
 
-- À l'aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification
-- Être en mesure d'expliquer le ciblage et d'offrir des stratégies pour la prédiction.
-- Être capable d'interpréter les coefficients d'un modèle multinomial logistique ou d'un modèle cumulatif à cotes proportionnelles
-- Pouvoir effectuer un test du postulat de cotes proportionnelles
-- Être en mesure de calculer les prédictions d'un modèle multinomial logistique simple
+- Décrire la censure à droite dans un problème de survie.
+- Pouvoir interpréter un tableau de survie et les estimations associées.
+- Interpréter les coefficients d'un modèle de Cox.
 
 

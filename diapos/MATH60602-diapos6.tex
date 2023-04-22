@@ -55,7 +55,7 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{D-DIN}
+  \setmainfont[]{VisbyCF-Medium}
   \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
@@ -147,10 +147,6 @@
 \def\fps@figure{htbp}
 \makeatother
 
-\usepackage{amsmath}
-\usepackage{booktabs}
-\usepackage{caption}
-\usepackage{longtable}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
@@ -162,19 +158,19 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
-  \renewcommand*\contentsname{Table of contents}
+  \renewcommand*\contentsname{Table des matières}
 \else
-  \newcommand\contentsname{Table of contents}
+  \newcommand\contentsname{Table des matières}
 \fi
 \ifdefined\listfigurename
-  \renewcommand*\listfigurename{List of Figures}
+  \renewcommand*\listfigurename{Liste des figures}
 \else
-  \newcommand\listfigurename{List of Figures}
+  \newcommand\listfigurename{Liste des figures}
 \fi
 \ifdefined\listtablename
-  \renewcommand*\listtablename{List of Tables}
+  \renewcommand*\listtablename{Liste des tableaux}
 \else
-  \newcommand\listtablename{List of Tables}
+  \newcommand\listtablename{Liste des tableaux}
 \fi
 \ifdefined\figurename
   \renewcommand*\figurename{Figure}
@@ -182,16 +178,16 @@
   \newcommand\figurename{Figure}
 \fi
 \ifdefined\tablename
-  \renewcommand*\tablename{Table}
+  \renewcommand*\tablename{Tableau}
 \else
-  \newcommand\tablename{Table}
+  \newcommand\tablename{Tableau}
 \fi
 }
 \@ifpackageloaded{float}{}{\usepackage{float}}
 \floatstyle{ruled}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
-\floatname{codelisting}{Listing}
-\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\floatname{codelisting}{Énumération}
+\newcommand*\listoflistings{\listof{codelisting}{Liste des énumérations}}
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -205,6 +201,9 @@
 \makeatother
 \makeatletter
 \makeatother
+\makeatletter
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -212,915 +211,546 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Régression logistique},
+  pdftitle={Classification},
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Régression logistique}
+\title{Classification}
 \subtitle{Analyse multidimensionnelle appliquée}
 \author{Léo Belzile}
-\date{1/1/22}
+\date{}
 \institute{HEC Montréal}
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, interior hidden, frame hidden, boxrule=0pt, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, breakable, sharp corners, boxrule=0pt, enhanced, frame hidden, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 
-\begin{frame}{\emph{Professional Rodeo Cowboys Association}}
-\protect\hypertarget{cowboy}{}
-L'exemple suivant est inspiré de l'article
-
-\begin{quote}
-Daneshvary, R. et Schwer, R. K. (2000) The Association Endorsement and
-Consumers' Intention to Purchase. \emph{Journal of Consumer Marketing}
-\textbf{17}, 203-213.
-\end{quote}
-
-\textbf{Objectif}: Les auteurs cherchent à voir si le fait qu'un produit
-soit recommandé par le \emph{Professional Rodeo Cowboys Association}
-(PRCA) a un effet sur les intentions d'achats.
+\begin{frame}{Rappel}
+\protect\hypertarget{rappel}{}
+La régression logistique spécifie un modèle pour la probabilité de
+succès \[p = \Pr(Y=1 \mid \mathbf{X}) = \frac{1}{1+\exp(-\eta)}\] où
+\(\eta = \beta_0 + \cdots + \beta_p \mathrm{X}_p\).
 \end{frame}
 
-\begin{frame}[fragile]{Données du PRCA}
-\protect\hypertarget{donnuxe9es-du-prca}{}
-On dispose de 500 observations sur les variables suivantes dans la base
-de données \texttt{logit1}: \footnotesize 
+\begin{frame}{Prédiction}
+\protect\hypertarget{pruxe9diction}{}
+En substituant l'estimation
+\(\widehat{\beta}_0, \ldots, \widehat{\beta}_p\), on calcule
 
 \begin{itemize}
 \tightlist
 \item
-  \(Y\): seriez-vous intéressé à acheter un produit recommandé par le
-  PRCA
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{0}\): non
-  \item
-    \(\texttt{1}\): oui
-  \end{itemize}
+  le prédicteur linéaire \(\widehat{\eta}_i\) et
 \item
-  \(\mathrm{X}_1\): quel genre d'emploi occupez-vous?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{1}\): à la maison
-  \item
-    \(\texttt{2}\): employé
-  \item
-    \(\texttt{3}\): ventes/services
-  \item
-    \(\texttt{4}\): professionnel
-  \item
-    \(\texttt{5}\): agriculture/ferme
-  \end{itemize}
-\item
-  \(\mathrm{X}_2\): revenu familial annuel
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{1}\): moins de 25 000
-  \item
-    \(\texttt{2}\): 25 000 à 39 999
-  \item
-    \(\texttt{3}\): 40 000 à 59 999
-  \item
-    \(\texttt{4}\): 60 000 à 79 999
-  \item
-    \(\texttt{5}\): 80 000 et plus
-  \end{itemize}
+  la probabilité de succès \(\widehat{p}_i\)
 \end{itemize}
 
-\normalsize
+pour chaque ligne de la base de données.
 \end{frame}
 
-\begin{frame}{Données du PRCA}
-\protect\hypertarget{donnuxe9es-du-prca-1}{}
+\begin{frame}{Classification de base}
+\protect\hypertarget{classification-de-base}{}
+Choisir un point de coupure \(c\):
+
+\begin{itemize}
+\tightlist
+\item
+  si \(\widehat{p} < c\), on assigne \(\widehat{Y}=0\).
+\item
+  si \(\widehat{p} \geq c\), on assigne \(\widehat{Y}=1\).
+\end{itemize}
+
+Un point de coupure de \(c=0.5\) revient à assigner l'observation à la
+classe (catégorie) la plus probable.
+
+Qu'arrive t'il si \(c=0\) ou \(c=1\)? \textbf{Exemple au tableau}
+\end{frame}
+
+\begin{frame}{Qualité de l'ajustement}
+\protect\hypertarget{qualituxe9-de-lajustement}{}
+L'erreur quadratique pour un problème de classification est
+\[(Y-\widehat{Y})^2 = \begin{cases} 1, & Y \neq \widehat{Y}; \\0, & Y = \widehat{Y}.\end{cases}\]
+et donc on obtient le \textbf{taux de mauvaise classification} si on
+calcule la moyenne.
+
+Plus le taux de mauvaise classification est petit, meilleure est la
+capacité prédictive du modèle.
+\end{frame}
+
+\begin{frame}[fragile]{Base de données marketing}
+\protect\hypertarget{base-de-donnuxe9es-marketing}{}
+On considère un modèle pour \texttt{yachat}, le fait qu'une personne
+achète suite à l'envoi d'un catalogue.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(dbm, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\CommentTok{\# Ne conserver que l\textquotesingle{}échantillon d\textquotesingle{}apprentissage}
+\NormalTok{appr }\OtherTok{\textless{}{-}}\NormalTok{ dbm[(dbm}\SpecialCharTok{$}\NormalTok{test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{),]}
+\NormalTok{formule }\OtherTok{\textless{}{-}} \FunctionTok{formula}\NormalTok{(}\StringTok{"yachat \textasciitilde{} x1 + x2 + x3 +}
+\StringTok{                x4 + x5 + x6 + x7 + x8 + x9 + x10"}\NormalTok{)}
+\NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(formule,}
+              \AttributeTok{data =}\NormalTok{ appr, }
+              \AttributeTok{family =}\NormalTok{ binomial)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Estimation de la performance du modèle}
+\protect\hypertarget{estimation-de-la-performance-du-moduxe8le}{}
+Utiliser les mêmes données pour l'ajustement et l'estimation de la
+performance n'est (toujours) pas recommandé.
+
+Plutôt, considérer la validation croisée ou la division de
+l'échantillon.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{202209}\NormalTok{)}
+\CommentTok{\# Option par défaut: }
+\CommentTok{\# validation croisée à 10 plis, 10 répétitions}
+\NormalTok{predprob }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{predvc}\NormalTok{(}
+  \AttributeTok{modele =}\NormalTok{ modele,}
+  \AttributeTok{data =}\NormalTok{ appr)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Prédictions}
+\protect\hypertarget{pruxe9dictions}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/figclassification0-1.pdf}
+
+}
+
+\end{figure}
+
 \footnotesize
 
-\begin{itemize}
-\tightlist
-\item
-  \(\mathrm{X}_3\): sexe
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{0}\): homme
-  \item
-    \(\texttt{1}\): femme
-  \end{itemize}
-\item
-  \(\mathrm{X}_4\): avez-vous déjà fréquenté une université?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{0}\): non
-  \item
-    \(\texttt{1}\): oui
-  \end{itemize}
-\item
-  \(\mathrm{X}_5\): âge (en années)
-\item
-  \(\mathrm{X}_6\): combien de fois avez-vous assisté à un rodéo au
-  cours de la dernière année?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{1}\): 10 fois ou plus
-  \item
-    \(\texttt{2}\): entre six et neuf fois
-  \item
-    \(\texttt{3}\): cinq fois ou moins
-  \end{itemize}
-\end{itemize}
+Répartition des probabilités de succès prédites par validation croisée.
 
 \normalsize
 \end{frame}
 
-\begin{frame}{Régression logistique}
-\protect\hypertarget{ruxe9gression-logistique}{}
-Expliquer le comportement de la \textbf{moyenne} d'une variable binaire
-\(Y\in\{0,1\}\) en utilisant un modèle de régression avec \(p\)
-variables explicatives \(\mathrm{X}_1, \ldots, \mathrm{X}_p\).
+\begin{frame}{Choix d'un point de coupure.}
+\protect\hypertarget{choix-dun-point-de-coupure.}{}
+On peut faire varier le point de coupure et choisir celui qui maximise
+le taux de bonne classification, \(\widehat{\Pr}(Y = \widehat{Y})\).
 
-\[\underset{\text{moyenne théorique}}{\mathsf{E}(Y=1 \mid \mathbf{X})} = \underset{\text{probabilité de succès}}{\Pr(Y=1 \mid \mathbf{X})}=p\]
-\end{frame}
-
-\begin{frame}{Objectif de la régression}
-\protect\hypertarget{objectif-de-la-ruxe9gression}{}
-\begin{enumerate}
-[1)]
-\tightlist
-\item
-  \textbf{Inférence} : comprendre comment et dans quelles mesures les
-  variables \(\mathbf{X}\) influencent la probabilité que \(Y=1\).
-\item
-  \textbf{Prédiction} : développer un modèle pour prévoir des valeurs de
-  \(Y\) ou la probabilité de succès à partir des \(\mathbf{X}\).
-\end{enumerate}
-\end{frame}
-
-\begin{frame}{Exemples}
-\protect\hypertarget{exemples}{}
-\begin{itemize}
-\tightlist
-\item
-  Est-ce qu'un client potentiel va répondre favorablement à une offre
-  promotionnelle?
-\item
-  Est-ce qu'un client est satisfait du service après-vente?
-\item
-  Est-ce qu'un client va faire faillite ou non au cours des trois
-  prochaines années.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Inférence et interprétation}
-\protect\hypertarget{infuxe9rence-et-interpruxe9tation}{}
-Ce cours est consacré à l'estimation et l'interprétation des paramètres
-du modèle dans le cas binaire.
-
-Par convention, on désigne le résultat « \(1\) » par un succès et «
-\(0\) » par un échec.
-\end{frame}
-
-\begin{frame}{Modéliser une probabilité avec une régression linéaire?}
-\protect\hypertarget{moduxe9liser-une-probabilituxe9-avec-une-ruxe9gression-linuxe9aire}{}
-Mauvaise idée!
-
-\begin{itemize}
-\tightlist
-\item
-  Sans contrainte, on peut obtenir des probabilités négatives ou
-  supérieures à 1!
-\item
-  les données binaires ne respectent pas le postulat d'égalité des
-  variances
-
-  \begin{itemize}
-  \tightlist
-  \item
-    invalide les résultats des tests d'hypothèse pour les coefficients.
-  \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Illustration: linéaire vs logistique}
-\protect\hypertarget{illustration-linuxe9aire-vs-logistique}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/fig-demandecredit-1.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-4-1.pdf}
 
 }
 
-\caption{\label{fig-demandecredit}Données de la réserve de Boston sur
-l'approbation de prêts hypothécaires (1990); données tirées de Stock et
-Watson (2007).}
-
 \end{figure}
+
+Avec \(c=0.465\), on obtient un taux de mauvaise classification de
+15.3\%.
 \end{frame}
 
-\begin{frame}{Fonction de liaison}
-\protect\hypertarget{fonction-de-liaison}{}
-Idée: appliquer une transformation au \textbf{prédicteur linéaire}
-\[\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p\]
-pour que la prédiction soit entre zéro et un.
-
-On considère \begin{align*}
- p &= \textrm{expit}(\eta) = \frac{\exp(\eta)}{1+\exp(\eta)}
-= \frac{1}{1+\exp(-\eta)}.
-\end{align*}
-\end{frame}
-
-\begin{frame}{Courbe sigmoïde}
-\protect\hypertarget{courbe-sigmouxefde}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/fig-logitplot-1.pdf}
-
-}
-
-\caption{\label{fig-logitplot}Valeurs ajustées du modèle de régression
-logistique en fonction du prédicteur linéaire \(\eta\).}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Ajustement du modèle}
-\protect\hypertarget{ajustement-du-moduxe8le}{}
-La fonction \texttt{glm} dans \textbf{R} ajuste un modèle linéaire
-généralisé (par défaut, Gaussien pour régression linéaire).
-
-\begin{itemize}
-\tightlist
-\item
-  L'argument \texttt{family=binomial(link="logit")} permet de spécifier
-  que l'on ajuste un modèle logistique.
-\end{itemize}
-
+\begin{frame}[fragile]{Performance et classification}
+\protect\hypertarget{performance-et-classification}{}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\FunctionTok{data}\NormalTok{(logit1, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\CommentTok{\# Ajustement du modèle avec toutes}
-\CommentTok{\# les variables explicatives}
-\NormalTok{modele1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
-            \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{),}
-            \AttributeTok{data =}\NormalTok{ logit1)}
+\NormalTok{classif }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(dbm, yachat[test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{])}
+\CommentTok{\# Tableau de la performance}
+\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{perfo\_logistique}\NormalTok{(}
+  \AttributeTok{prob =}\NormalTok{ predprob,}
+  \AttributeTok{resp =}\NormalTok{ classif)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
 
-\begin{frame}[fragile]{Sortie}
-\protect\hypertarget{sortie}{}
-Tableau résumé avec les coefficients (\texttt{summary})
+\begin{frame}{Matrice de confusion}
+\protect\hypertarget{matrice-de-confusion}{}
+On peut classifier les observations dans un tableau pour un point de
+coupure donné.
 
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{summary}\NormalTok{(modele1)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Interprétation}
-\protect\hypertarget{interpruxe9tation}{}
-Par défaut, pour des variables \(0/1\), le modèle décrit la probabilité
-de succès.
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/logitplot2-1.pdf}
-
-}
-
-\end{figure}
-
-Si le coefficient \(\beta_j\) de la variable \(\mathrm{X}_j\) est
-positif, alors plus la variable augmente, plus \(\Pr(Y=1)\) augmente.
-\end{frame}
-
-\begin{frame}{Rappel exponentiels et logarithme}
-\protect\hypertarget{rappel-exponentiels-et-logarithme}{}
-Quelques propriétés de la fonction exponentielle:
-
-\begin{itemize}
-\tightlist
-\item
-  \(\exp(0) = 1\)
-\item
-  \(\exp(a + b) = \exp(a)\exp(b)\)
-\item
-  \(\exp(ab)= \exp(a)^b\)
-\end{itemize}
-
-Quelques propriétés de la fonction logarithmique
-
-\begin{itemize}
-\tightlist
-\item
-  \(\ln(1)=0\),
-\item
-  \(\ln(\exp(x))=x\) (fonction inverse)
-\item
-  \(\ln(ab) = \ln(a) + \ln(b)\)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Cote}
-\protect\hypertarget{cote}{}
-Si on applique la transformation inverse, on obtient
-
-\[\ln\left(\frac{p}{1-p} \right) = \eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p.\]
-
-ou, en prenant l'exponentielle de chaque côté,
-
-\[ 
-\mathsf{cote} = \frac{p}{1-p} = \exp(\beta_0)\cdots\exp(\beta_p \mathrm{X}_p)
-\]
-
-\textbf{Modèle multiplicatif} pour la cote.
-\end{frame}
-
-\begin{frame}{Cote et probabilité}
-\protect\hypertarget{cote-et-probabilituxe9}{}
-La cote est utilisée dans les paris sportifs \begin{align*}
- \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
-\end{align*}
-
-\hypertarget{tbl-cotes}{}
+\hypertarget{tbl-confumat}{}
 \begin{table}
-\caption{\label{tbl-cotes}Cote et probabilité de succès }\tabularnewline
+\caption{\label{tbl-confumat}Matrice de confusion avec point de coupure 0.465. }\tabularnewline
 
 \centering
-\begin{tabular}{lccccccccc}
+\begin{tabular}{lrr}
 \toprule
-\(p\) & 0.1 & 0.2 & 0.3 & 0.4 & 0.5 & 0.6 & 0.7 & 0.8 & 0.9\\
+  & \(Y=1\) & \(Y=0\)\\
 \midrule
-cote & \(\frac{1}{9}\) & \(\frac{1}{4}\) & \(\frac{3}{7}\) & \(\frac{2}{3}\) & \(1\) & \(\frac{3}{2}\) & \(\frac{7}{3}\) & \(4\) & \(9\)\\
+\(\widehat{Y}=1\) & 78 & 19\\
+\(\widehat{Y}=0\) & 132 & 771\\
 \bottomrule
 \end{tabular}
 \end{table}
 \end{frame}
 
-\begin{frame}{Interprétation avec données du PRCA}
-\protect\hypertarget{interpruxe9tation-avec-donnuxe9es-du-prca}{}
-Le modèle ajusté en termes de cote est \begin{align*}
- \frac{\Pr(Y=1 \mid \mathrm{X}_5=x_5)}{\Pr(Y=0 \mid \mathrm{X}_5=x_5)} = \exp(-3.05)\exp(0.0749x_5).
-\end{align*}
+\begin{frame}{Classification et mesures de performance}
+\protect\hypertarget{classification-et-mesures-de-performance}{}
+\footnotesize
 
-\small
+Les estimés empiriques sont simplement obtenus en calculant les rapports
+du nombre d'observations dans chaque classe.
+
+\normalsize
+
+\begin{table}
+
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & 78 & 19\\
+\(\widehat{Y}=0\) & 132 & 771\\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & VP & FP\\
+\(\widehat{Y}=0\) & FN & VN\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{itemize}
 \tightlist
 \item
-  Lorsque \(\mathrm{X}_5\) augmente d'une année, la cote est multipliée
-  par \(\exp(0.0749) = 1.078\) peut importe la valeur de \(x_5\).
+  La \textbf{sensibilité} est le taux de succès correctement classés,
+  \(\Pr(Y=1, \widehat{Y}=1 \mid Y=1)\), soit
+  \(\mathsf{VP}/(\mathsf{VP}+\mathsf{FN})\).
 \item
-  Pour deux personnes dont la différence d'âge
+  La \textbf{spécificité} est le taux d'échecs correctement classés,
+  \(\Pr(Y=0, \widehat{Y}=0 \mid Y=0)\), soit
+  \(\mathsf{VN}/(\mathsf{VN}+\mathsf{FP})\).
+\item
+  Le taux de \textbf{faux positifs} est
+  \(\Pr(Y=0, \widehat{Y}=1 \mid \widehat{Y}=1)\).
+\item
+  Le taux de \textbf{faux négatifs} est
+  \(\Pr(Y=1, \widehat{Y}=0 \mid \widehat{Y}=0)\).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Matrice de gain}
+\protect\hypertarget{matrice-de-gain}{}
+Il est également possible d'assigner un poids différent à chaque
+événement selon le scénario et chercher à maximiser le gain.
+
+\hypertarget{tbl-tableconfumat4}{}
+\begin{table}
+\caption{\label{tbl-tableconfumat4}Matrice de gain (cas général) }\tabularnewline
+
+\centering
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & $c_{11}$ & $c_{10}$\\
+\(\widehat{Y}=0\) & $c_{01}$ & $c_{00}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On calcule le gain en faisant la somme des entrées fois les poids, soit
+\[\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.\]
+\end{frame}
+
+\begin{frame}{Gain pour taux de bonne classification}
+\protect\hypertarget{gain-pour-taux-de-bonne-classification}{}
+Si on cherche à maximiser le taux de bonne classification, cela revient
+à assigner les poids suivants.
+
+\hypertarget{tbl-tableconfumat3}{}
+\begin{table}
+\caption{\label{tbl-tableconfumat3}Matrice de gain pour le taux de bonne classification. }\tabularnewline
+
+\centering
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & $1$ & $0$\\
+\(\widehat{Y}=0\) & $0$ & $1$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Coûts et bénéfices du ciblage marketing}
+\protect\hypertarget{couxfbts-et-buxe9nuxe9fices-du-ciblage-marketing}{}
+\begin{itemize}
+\tightlist
+\item
+  Si on n'envoie pas de catalogue, notre gain est nul.
+\item
+  Si on envoie le catalogue
 
   \begin{itemize}
   \tightlist
   \item
-    est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
+    à un client qui n'achète pas, on perd 10\$ (le coût de l'envoi).
   \item
-    est de 10 ans, la cote de la personne plus âgée est 112\% plus
-    élevée (cote multipliée par
-    \(\exp(10 \times 0.0749)=1.078^{10} = 2.12\))
+    à un client qui achète, notre revenu net est de 57\$ (revenu moyen
+    moins coût de l'envoi).
   \end{itemize}
 \end{itemize}
 
-\normalsize
-\end{frame}
-
-\begin{frame}[fragile]{Modèle complet}
-\protect\hypertarget{moduxe8le-complet}{}
-On considère le modèle avec toutes les variables explicatives:
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{modele2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}
-  \AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
-  \AttributeTok{data =}\NormalTok{ logit1,}
-  \AttributeTok{family =}\NormalTok{ binomial)}
-\FunctionTok{exp}\NormalTok{(}\FunctionTok{coef}\NormalTok{(modele2))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-(Intercept)         x12         x13         x14         x15         x22 
-      0.062       0.438       0.512       0.509       0.699       0.833 
-        x23         x24         x25          x3          x4          x5 
-      0.572       0.087       0.264       3.854       6.236       1.116 
-        x62         x63 
-      0.255       0.090 
-\end{verbatim}
-\end{frame}
-
-\begin{frame}{Interprétation des coefficients}
-\protect\hypertarget{interpruxe9tation-des-coefficients}{}
-Si on a plusieurs variables explicatives, les coefficients sont
-interprétés en modifiant une variable à la fois.
-
-On compare deux profils identiques, sauf pour la variable en question
-
-\begin{itemize}
-\tightlist
-\item
-  toute chose étant égale par ailleurs
-\item
-  \emph{ceteris paribus}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Interprétation des coefficients}
-\protect\hypertarget{interpruxe9tation-des-coefficients-1}{}
-\textbf{Variable continue}:
-
-\begin{itemize}
-\tightlist
-\item
-  La cote de la personne plus âgée d'un an est 1.116 fois celle de la
-  personne plus jeune, \emph{ceteris paribus}, une augmentation de
-  11,6\%
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Variable binaire}
-\protect\hypertarget{variable-binaire}{}
-Le rapport de cote pour les femmes (\texttt{x3=1}) versus les hommes
-(\texttt{x3=0}) est de \(\exp(\widehat{\beta}_{\mathrm{X}_3}) = 3.854\):
-
-\begin{itemize}
-\tightlist
-\item
-  les femmes sont plus susceptibles de suivre les recommendations
-  d'achat toute chose étant égale par ailleurs,
-\item
-  Inversement, le rapport de cote homme/femme est de 1/3.854=0.259,
-\end{itemize}
-
-On peut donc conclure que:
-
-\begin{itemize}
-\tightlist
-\item
-  la cote des femmes est 285.4\% plus élevée que celle des hommes.
-\item
-  la cote des hommes est 74.1\% inférieure à celle des femmes.
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Variable catégorielle}
-\protect\hypertarget{variable-catuxe9gorielle}{}
-Toutes les comparaisons sont effectuées avec la catégorie de référence.
-
-Pour \texttt{x1}, c'est à la maison. Le rapport de cote est
-\[\frac{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=2 (\text{employé}), \ldots\}}{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=1 (\text{maison}), \ldots\}} = \exp(\widehat{\beta}_{\mathrm{X}_{1}=2}) = 0.438\]
-
-Le coefficient pour \(\mathrm{X}_{1}=1\) est zéro, d'où
-\(\exp(\widehat{\beta}_{\mathrm{X}_{1}=1})=1\) (absent du tableau).
-
-On peut ordonner les type d'emploi selon la probabilité de succès à
-l'aide des coefficients: \emph{ceteris paribus} on obtient le classement
-
-\begin{itemize}
-\tightlist
-\item
-  employé \textless{} professionnel \textless{} ventes/service
-  \textless{} agriculture \textless{} maison.
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Invariance}
-\protect\hypertarget{invariance}{}
-Si on voulait le rapport de cote professionnel vs employé, inutile de
-réajuster le modèle.
-
-On peut calculer
-
-\[ 
-\dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
-\]
-
-plutôt que de changer la catégorie de référence via
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{logit2 }\OtherTok{\textless{}{-}}\NormalTok{ logit1 }\SpecialCharTok{|\textgreater{}} 
-   \FunctionTok{mutate}\NormalTok{(}\AttributeTok{x1 =} \FunctionTok{relevel}\NormalTok{(x1, }\AttributeTok{ref =} \DecValTok{2}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Vraisemblance et estimation du modèle}
-\protect\hypertarget{vraisemblance-et-estimation-du-moduxe8le}{}
-Pour un modèle probabiliste donné, on peut calculer la « probabilité »
-d'avoir obtenu les données de l'échantillon.
-
-Si on traite cette « probabilité » comme une fonction des paramètres, on
-l'appelle \textbf{vraisemblance}.
-
-\textbf{Maximum de vraisemblance}: valeurs des paramètres qui maximisent
-la fonction de vraisemblance.
-
-\begin{itemize}
-\tightlist
-\item
-  on cherche les valeurs des paramètres qui rendent les données les plus
-  plausibles
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Vraisemblance d'une observation}
-\protect\hypertarget{vraisemblance-dune-observation}{}
-La vraisemblance d'une observation \(Y_i \in \{0,1\}\) (loi
-Bernoulli/binomiale) est
-
-\begin{align*}
-L(\boldsymbol{\beta}; y_i) = p_i^{y_i}(1-p_i)^{1-y_i} = \begin{cases} 
-p_i & y_i = 1 (\text{succès})\\
-1-p_i & y_i = 0 (\text{échec}) 
-\end{cases}
-\end{align*} et où
-\[p_i = \mathrm{expit}(\eta_i) = \frac{\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}{1+\mathrm{exp}(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip})}.\]
-\end{frame}
-
-\begin{frame}{Probabilité conjointe d'événements binaires}
-\protect\hypertarget{probabilituxe9-conjointe-duxe9vuxe9nements-binaires}{}
-\begin{itemize}
-\tightlist
-\item
-  Si les observations sont indépendantes, la probabilité conjointe
-  d'avoir un résultat donné est le produit des probabilités pour chaque
-  observation.
-\item
-  Il n'y a pas de solution explicite pour
-  \(\widehat{\beta}_0, \ldots, \widehat{\beta}_p\) dans le cas de la
-  régression logistique: il faut maximiser la vraisemblance.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Log vraisemblance}
-\protect\hypertarget{log-vraisemblance}{}
-\begin{itemize}
-\tightlist
-\item
-  Pour des raisons de stabilité numérique, on maximise le logarithme
-  naturel \(\ell(\boldsymbol{\beta}) = \ln L(\boldsymbol{\beta})\) de la
-  log vraisemblance conjointe de l'échantillon (transformation monotone
-  croissante).
-\item
-  La log vraisemblance est simplement la somme des contributions
-  individuelles.
-\item
-  On utilise la log vraisemblance \(\ell\) comme mesure d'ajustement et
-  pour construire des tests d'hypothèse.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Prédiction des probabilités de succès}
-\protect\hypertarget{pruxe9diction-des-probabilituxe9s-de-succuxe8s}{}
-Des estimations des coefficients \(\widehat{\beta}\) découlent une
-estimation de \(\Pr(Y=1)\) pour les valeurs
-\(\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p\) d'un individu donné,
-\begin{align*}
- \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_px_p).
-\end{align*}
-\end{frame}
-
-\begin{frame}{Modèle nul}
-\protect\hypertarget{moduxe8le-nul}{}
-Un modèle avec uniquement l'ordonnée à l'origine retournera
-\(\widehat{p}\), la proportion empirique de succès.
-
-Comme pour la régression linéaire, c'est la moyenne des observations.
-\end{frame}
-
-\begin{frame}[fragile]{Test du rapport de vraisemblance}
-\protect\hypertarget{test-du-rapport-de-vraisemblance}{}
-\begin{columns}[T]
-\begin{column}{0.6\textwidth}
-Pour les modèles ajustés par maximum de vraisemblance.
-
-Comparaison de modèles \textbf{emboîtés}
-
-\begin{itemize}
-\tightlist
-\item
-  Modèle complet (sous l'alternative) avec tous les paramètres
-\item
-  Modèle restreint (sous l'hypothèse nulle) sur lequel on impose
-  \(k\leq p\) restrictions (typiquement
-  \(\beta_j = 0, j \in \{1, \ldots, p\}\)).
-\end{itemize}
-\end{column}
-
-\begin{column}{0.4\textwidth}
-\includegraphics[width=1\textwidth,height=\textheight]{figures/poupeesrusses.jpg}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Exemple}
-\protect\hypertarget{exemple}{}
-Comparons un modèle avec et sans \(X_6\).
-
-Variable catégorielle à trois niveaux (deux coefficients associés à
-\(\mathrm{I}(\mathrm{X}_{6}=2)\) et \(\mathrm{I}(\mathrm{X}_{6}=3)\).
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{modele2 }\OtherTok{\textless{}{-}}  \FunctionTok{glm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+}\NormalTok{ x6,}
-                 \AttributeTok{data =}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{logit1,}
-                 \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{))}
-\NormalTok{modele3 }\OtherTok{\textless{}{-}}  \FunctionTok{glm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4 }\SpecialCharTok{+}\NormalTok{ x5,}
-                 \AttributeTok{data =}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{logit1,}
-                 \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{)) }
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Test d'hypothèse}
-\protect\hypertarget{test-dhypothuxe8se}{}
-On test l'hypothèse nulle
-\(\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0\)
-(soit \(k=2\) restrictions).
-
-L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
-
-Si la valeur \(p\) est inférieure au seuil de signification, typiquement
-\(\alpha = 0.05\), on rejette l'hypothèse nulle.
-
-\begin{itemize}
-\tightlist
-\item
-  on conclut que la variable explicative \(\mathrm{X}_6\) améliore
-  significativement l'ajustement du modèle.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Rapport de vraisemblance}
-\protect\hypertarget{rapport-de-vraisemblance}{}
-Le test est basé sur la statistique \begin{align*}
- D = -2\{\ell(\widehat{\boldsymbol{\beta}}_0)-\ell(\widehat{\boldsymbol{\beta}})\}.
-\end{align*}
-
-Cette différence \(D\), lorsque l'hypothèse \(\mathscr{H}_0\) est vraie,
-suit approximativement une loi khi-deux \(\chi^2_k\).
-\end{frame}
-
-\begin{frame}[fragile]{Exemple de test}
-\protect\hypertarget{exemple-de-test}{}
-\footnotesize
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{\# modèle 2 (alternative), modèle 3 (nulle)}
-\FunctionTok{anova}\NormalTok{(modele3, modele2, }\AttributeTok{test =} \StringTok{"LR"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Analysis of Deviance Table
-
-Model 1: y ~ x1 + x2 + x3 + x4 + x5
-Model 2: y ~ x1 + x2 + x3 + x4 + x5 + x6
-  Resid. Df Resid. Dev Df Deviance  Pr(>Chi)    
-1       488     566.45                          
-2       486     516.20  2   50.251 1.225e-11 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\DocumentationTok{\#\# Deviance = {-}2*log vraisemblance}
-\NormalTok{rvrais }\OtherTok{\textless{}{-}}\NormalTok{ modele3}\SpecialCharTok{$}\NormalTok{deviance }\SpecialCharTok{{-}}\NormalTok{ modele2}\SpecialCharTok{$}\NormalTok{deviance}
-\FunctionTok{pchisq}\NormalTok{(rvrais, }\AttributeTok{df =} \DecValTok{2}\NormalTok{, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{) }\CommentTok{\# valeur{-}p}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 1.225046e-11
-\end{verbatim}
-
-\normalsize
-\end{frame}
-
-\begin{frame}[fragile]{Tester la significativité des variables}
-\protect\hypertarget{tester-la-significativituxe9-des-variables}{}
-Si un paramètre n'est pas significativement différent de 0, cela veut
-dire qu'il n'y a pas de lien significatif entre la variable et la
-réponse \emph{une fois que les autres variables} sont dans le modèle.
+\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\toprule
+n & moyenne & écart-type & minimum & maximum\\
+\midrule
+210 & 67.29 & 13.24 & 25 & 109\\
+\bottomrule
+\end{tabu}
 
 \footnotesize
 
+Statistiques descriptives des montants d'achats pour la base de données
+marketing.
+
+\normalsize
+
+\hypertarget{tbl-tableconfumat5}{}
+\begin{table}
+\caption{\label{tbl-tableconfumat5}Matrice de gain pour ciblage marketing. }\tabularnewline
+
+\centering
+\begin{tabular}{lrr}
+\toprule
+  & \(Y=1\) & \(Y=0\)\\
+\midrule
+\(\widehat{Y}=1\) & $57$ & $-10$\\
+\(\widehat{Y}=0\) & $0$ & $0$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Point de coupure avec gain}
+\protect\hypertarget{point-de-coupure-avec-gain}{}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{car}\SpecialCharTok{::}\FunctionTok{Anova}\NormalTok{(modele2, }\AttributeTok{type =} \StringTok{"3"}\NormalTok{)}
+\NormalTok{formule }\OtherTok{=} \FunctionTok{formula}\NormalTok{(yachat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}
+\NormalTok{                    x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+}\NormalTok{ x6 }\SpecialCharTok{+}\NormalTok{ x7 }\SpecialCharTok{+} 
+\NormalTok{                    x8 }\SpecialCharTok{+}\NormalTok{ x9 }\SpecialCharTok{+}\NormalTok{ x10)}
+\NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(formule, }
+              \AttributeTok{family =}\NormalTok{ binomial, }
+              \AttributeTok{data =}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{dbm)}
+\NormalTok{coupe }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{select\_pcoupe}\NormalTok{(}
+  \AttributeTok{modele =}\NormalTok{ modele, }
+  \AttributeTok{c00 =} \DecValTok{0}\NormalTok{, }
+  \AttributeTok{c01 =} \DecValTok{0}\NormalTok{, }
+  \AttributeTok{c10 =} \SpecialCharTok{{-}}\DecValTok{10}\NormalTok{, }
+  \AttributeTok{c11 =} \DecValTok{57}\NormalTok{,}
+  \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-Analysis of Deviance Table (Type III tests)
+\footnotesize
 
-Response: y
-   LR Chisq Df Pr(>Chisq)    
-x1    4.291  4     0.3681    
-x2   32.912  4  1.245e-06 ***
-x3   29.878  1  4.601e-08 ***
-x4   42.957  1  5.597e-11 ***
-x5   36.731  1  1.356e-09 ***
-x6   50.251  2  1.225e-11 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-\end{verbatim}
+La fonction \texttt{select\_pcoupe} estime le gain pour différents
+points de coupures, avec probabilités estimées par validation croisée
+avec \texttt{ncv} groupes, répétée \texttt{nrep} fois.
 
 \normalsize
 \end{frame}
 
-\begin{frame}[fragile]{Intervalles de confiance pour coefficients}
-\protect\hypertarget{intervalles-de-confiance-pour-coefficients}{}
-On peut aussi considérer des intervalles de confiance pour les
-coefficients individuels.
-
-Ceux obtenus par défaut dans \textbf{R} sont appelés \emph{intervalles
-de confiance de vraisemblance profilée}.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{confint}\NormalTok{(modele2)      }\CommentTok{\# IC pour beta}
-\FunctionTok{exp}\NormalTok{(}\FunctionTok{confint}\NormalTok{(modele2)) }\CommentTok{\# IC pour exp(beta)}
-\end{Highlighting}
-\end{Shaded}
-
-Ces intervalles sont invariants aux reparamétrisation: si \([b_i, b_s]\)
-est l'intervalle de vraisemblance profilée pour \(\beta\), l'intervalle
-pour \(\exp(\beta)\) est simplement \([\exp(b_i), \exp(b_s)]\).
-\end{frame}
-
-\begin{frame}{Intervalles de confiance}
-\protect\hypertarget{intervalles-de-confiance}{}
+\begin{frame}{Calcul du gain}
+\protect\hypertarget{calcul-du-gain}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/fig-confint-modele2-logist-1.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/fig-coupure-pondere-1.pdf}
 
 }
 
-\caption{\label{fig-confint-modele2-logist}Intervalles de confiance
-profilés de niveau 95\% pour les coefficients du modèle logistique
-(échelle exponentielle).}
+\caption{\label{fig-coupure-pondere}Estimation du gain moyen en fonction
+du point de coupure pour l'exemple de base de données marketing.}
 
 \end{figure}
 \end{frame}
 
-\begin{frame}{Tests et intervalles de confiances}
-\protect\hypertarget{tests-et-intervalles-de-confiances}{}
-Comme \(\exp(\cdot)\) est une transformation monotone croissante,
-\[\beta>0 \quad \iff \quad \exp(\beta)>1.\]
-
-Si la valeur postulée, par exemple \(\mathscr{H}_0: \beta_j=0\) ou
-\(\exp(\beta_j)=1\), est dans l'intervalle de confiance de niveau
-\(1-\alpha\), on ne rejette pas l'hypothèse nulle.
-\end{frame}
-
-\begin{frame}{Coefficients pour données complètes}
-\protect\hypertarget{coefficients-pour-donnuxe9es-compluxe8tes}{}
-\footnotesize
-
-\hypertarget{tbl-logit1-complet}{}
-\setlength{\LTpost}{0mm}
-\begin{longtable}{lccc}
-\caption{\label{tbl-logit1-complet}Modèle logistique avec toutes les variables catégorielles. }\tabularnewline
-
-\toprule
-variables & cote\textsuperscript{1} & IC 95\%\textsuperscript{1} & valeur-p \\ 
-\midrule
-x1 &  &  & 0.4 \\ 
-1 & — & — &  \\ 
-2 & 0.44 & 0.18, 1.06 &  \\ 
-3 & 0.51 & 0.21, 1.21 &  \\ 
-4 & 0.51 & 0.21, 1.25 &  \\ 
-5 & 0.70 & 0.27, 1.80 &  \\ 
-x2 &  &  & <0.001 \\ 
-1 & — & — &  \\ 
-2 & 0.83 & 0.38, 1.82 &  \\ 
-3 & 0.57 & 0.25, 1.31 &  \\ 
-4 & 0.09 & 0.03, 0.25 &  \\ 
-5 & 0.26 & 0.08, 0.84 &  \\ 
-x3 &  &  & <0.001 \\ 
-0 & — & — &  \\ 
-1 & 3.85 & 2.34, 6.50 &  \\ 
-\bottomrule
-\end{longtable}
-\begin{minipage}{\linewidth}
-\textsuperscript{1}cote = rapport de cote, IC = intervalle de confiance\\
-\end{minipage}
-
-\normalsize
-\end{frame}
-
-\begin{frame}{Coefficients pour données complètes}
-\protect\hypertarget{coefficients-pour-donnuxe9es-compluxe8tes-1}{}
-\footnotesize
-
-\hypertarget{tbl-logit1-complet2}{}
-\setlength{\LTpost}{0mm}
-\begin{longtable}{lccc}
-\caption{\label{tbl-logit1-complet2}Modèle logistique avec toutes les variables catégorielles. }\tabularnewline
-
-\toprule
-variables & cote\textsuperscript{1} & IC 95\%\textsuperscript{1} & valeur-p \\ 
-\midrule
-x4 &  &  & <0.001 \\ 
-0 & — & — &  \\ 
-1 & 6.24 & 3.53, 11.4 &  \\ 
-x5 & 1.12 & 1.08, 1.16 & <0.001 \\ 
-x6 &  &  & <0.001 \\ 
-1 & — & — &  \\ 
-2 & 0.25 & 0.13, 0.49 &  \\ 
-3 & 0.09 & 0.04, 0.18 &  \\ 
-\bottomrule
-\end{longtable}
-\begin{minipage}{\linewidth}
-\textsuperscript{1}cote = rapport de cote, IC = intervalle de confiance\\
-\end{minipage}
-\end{frame}
-
-\begin{frame}{Multicolinéarité}
-\protect\hypertarget{multicolinuxe9arituxe9}{}
-Il est difficile de départager l'effet individuel d'une variable
-explicative lorsqu'elle est fortement corrélée avec d'autres.
-
-La multicollinéarité ne dépend pas de la variable réponse \(Y\), mais de
-la matrice \(\mathbf{X}\) du modèle.
-\end{frame}
-
-\begin{frame}[fragile]{Multicolinéarité pour PRCA}
-\protect\hypertarget{multicolinuxe9arituxe9-pour-prca}{}
-Mêmes diagnostics qu'en régression linéaire: considérer les facteurs
-d'inflation de la variance (\texttt{car::vif}).
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{car}\SpecialCharTok{::}\FunctionTok{vif}\NormalTok{(modele2)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-       GVIF Df GVIF^(1/(2*Df))
-x1 1.698464  4        1.068457
-x2 1.852841  4        1.080139
-x3 1.450100  1        1.204201
-x4 1.491202  1        1.221148
-x5 1.219334  1        1.104234
-x6 1.179133  2        1.042055
-\end{verbatim}
-
-Pas d'inquiétude ici, coefficients faibles (inférieurs à 5)
-\end{frame}
-
-\begin{frame}{Dichotomiser des variables continues}
-\protect\hypertarget{dichotomiser-des-variables-continues}{}
-Si \(Y\) est continue et qu'on cherche à estimer
-\(\Pr(Y> c \mid \mathbf{X})\) pour une valeur \(c\) donnée, il n'est
-\textbf{pas} recommandé de dichotomiser \(Y\) via
-
-\begin{align*}
-Y^{*} = \begin{cases}
-1, & Y > c; \\
-0, & Y \leq c.
-\end{cases}
-\end{align*}
-
-et d'ajuster une régression logistique.
-
-Pourquoi? \textbf{On perd de l'information}.
-\end{frame}
-
-\begin{frame}[fragile]{Probabilité de dépassement}
-\protect\hypertarget{probabilituxe9-de-duxe9passement}{}
-On peut estimer plutôt une régression linéaire et prendre
-\[\Pr(Y > c \mid \mathbf{X}) = \Phi\left(\frac{\widehat{\mu}-c}{\widehat{\sigma}}\right),\]
-
-où
+\begin{frame}{Point de coupure optimal et explication}
+\protect\hypertarget{point-de-coupure-optimal-et-explication}{}
+Dans l'exemple, le point de coupure qui maximise le gain est 0.13. Avec
+ce point de coupure, on estime que
 
 \begin{itemize}
 \tightlist
 \item
-  \(\widehat{\mu}=\widehat{\beta}_0 + \cdots + \beta_p\mathrm{X}_p\) est
-  la moyenne prédite pour le profil donné,
+  le taux de bonne classification est de 70.5
 \item
-  \(\widehat{\sigma}\) est l'estimation de l'écart-type
-\item
-  \(\Phi(\cdot)\) est la fonction de répartition d'une loi normale
-  standard (\texttt{pnorm})
+  la sensibilité est de 90.48.
 \end{itemize}
+
+Ainsi, on va détecter environ 90.48\% des clients qui achètent.
+
+Il est coûteux de rater un client potentiel, donc la stratégie optimale
+est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs
+d'entre eux n'achètent rien.
+\end{frame}
+
+\begin{frame}[fragile]{Fonction d'efficacité du récepteur}
+\protect\hypertarget{fonction-defficacituxe9-du-ruxe9cepteur}{}
+Graphique de la sensibilité en fonction de un moins la spécificité, en
+faisant varier le point de coupure, souvent appelé courbe ROC (de
+l'anglais \emph{receiver operating characteristic}).
+
+La fonction \texttt{hecmulti::courbe\_roc} permet de tracer la courbe et
+de calculer l'aire sous la courbe.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{roc }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{courbe\_roc}\NormalTok{(}
+  \AttributeTok{resp =}\NormalTok{ classif,}
+  \AttributeTok{prob =}\NormalTok{ predprob,}
+  \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(roc)}
+\DocumentationTok{\#\# Pour extraire l\textquotesingle{}aire sous la courbe, roc$aire}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Courbe ROC}
+\protect\hypertarget{courbe-roc}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-15-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Aire sous la courbe}
+\protect\hypertarget{aire-sous-la-courbe}{}
+\begin{itemize}
+\tightlist
+\item
+  Plus la courbe se rapproche de (0, 1) (coin supérieur gauche),
+  meilleure est la classification.
+\item
+  Autrement dit, plus l'aire sous la courbe est près de 1, mieux c'est.
+\item
+  Une aire sous la courbe de 0.5 (ligne diagonale) correspond à la
+  performance d'une allocation aléatoire.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Courbe lift}
+\protect\hypertarget{courbe-lift}{}
+À quelle point notre modèle est meileur qu'une assignation aléatoire?
+
+\begin{itemize}
+\tightlist
+\item
+  Ordonner les probabilités de succès estimées par le modèle,
+  \(\widehat{p}\), en ordre croissant.
+\item
+  Regarder quelle pourcentage de ces derniers seraient bien classifiés
+  (le nombre de vrais positifs sur le nombre de succès). La référence
+  est la ligne diagonale, qui correspond à une détection aléatoire.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Code pour produire la courbe lift}
+\protect\hypertarget{code-pour-produire-la-courbe-lift}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{tab\_lift }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{courbe\_lift}\NormalTok{(}
+  \AttributeTok{prob =}\NormalTok{ predprob,}
+  \AttributeTok{resp =}\NormalTok{ classif, }
+  \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{tab\_lift}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Tableau du lift}
+\protect\hypertarget{tableau-du-lift}{}
+\hypertarget{tbl-lift}{}
+\begin{table}
+\caption{\label{tbl-lift}Tableau du lift (déciles). }\tabularnewline
+
+\centering
+\begin{tabular}{lrrr}
+\toprule
+  & hasard & modèle & lift\\
+\midrule
+10\% & 21 & 78 & 3.71\\
+20\% & 42 & 122 & 2.90\\
+30\% & 63 & 155 & 2.46\\
+40\% & 84 & 177 & 2.11\\
+50\% & 105 & 194 & 1.85\\
+\addlinespace
+60\% & 126 & 202 & 1.60\\
+70\% & 147 & 209 & 1.42\\
+80\% & 168 & 210 & 1.25\\
+90\% & 189 & 210 & 1.11\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\footnotesize
+
+Si on classifiait comme acheteurs les 10\% qui ont la plus forte
+probabilité estimée d'achat, on détecterait 81 des 210 clients.
+
+Le lift est le nombre détecté par le modèle sur la proportion détectée
+par hasard. \normalsize
+\end{frame}
+
+\begin{frame}{Courbe lift}
+\protect\hypertarget{courbe-lift-1}{}
+\includegraphics{MATH60602-diapos6_files/figure-beamer/figcourbe-lift-pr-1.pdf}
+\end{frame}
+
+\begin{frame}{Calibration du modèle}
+\protect\hypertarget{calibration-du-moduxe8le}{}
+Certains modèles sont trop confiants dans leurs prédictions
+(surajustement).
+
+une statistique simple proposée par
+\href{https://doi.org/10.1002/sim.4780050506}{Spiegelhalter (1986)} peut
+être utile à cette fin. Pour une variable Bernoulli \(Y \in \{0,1\}\),
+l'erreur quadratique moyenne s'écrit \begin{align*}
+\overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
+\\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
+\end{align*}
+
+Si notre modèle était parfaitement calibré, \(\mathsf{E}_0(Y_i)=p_i\) et
+\(\mathsf{Va}_0(Y_i) = p_i(1-p_i)\).
+\end{frame}
+
+\begin{frame}{Test de Spiegelhalter}
+\protect\hypertarget{test-de-spiegelhalter}{}
+On peut calculer la moyenne et la variance attendue sous l'hypothèse
+nulle et construire une statistique de test
+\href{https://doi.org/10.1002/sim.4780050506}{(Spiegelhalter, 1986)}.
+\[Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}\]
+
+Sous l'hypothèse nulle de calibration parfaite,
+\(Z \sim \mathsf{No}(0,1)\) en grand échantillon.
+\end{frame}
+
+\begin{frame}[fragile]{Calibration du modèle}
+\protect\hypertarget{calibration-du-moduxe8le-1}{}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{calibration}\NormalTok{(}
+   \AttributeTok{prob =}\NormalTok{ predprob, }
+   \AttributeTok{resp =}\NormalTok{ classif)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Test de calibration de Spiegelhalter (1986)
+Statistique de test: 1.2 
+valeur-p: 0.229
+\end{verbatim}
+
+Il n'y a pas de preuve ici que le modèle est mal calibré.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
@@ -1128,36 +758,169 @@ où
 \begin{itemize}
 \tightlist
 \item
-  Une régression logistique sert à modéliser la moyenne de
-  \textbf{variables catégorielles}, typiquement binaires.
+  La classification est une forme d'apprentissage supervisée.
 \item
-  C'est un cas particulier d'un modèle de régression linéaire
-  généralisée (GLM)
+  On peut assigner l'observation à la classe la plus plausible, ou
+  déterminer un point de coupure.
+\item
+  Si on a un objectif particulier (fonction de gain), on peut optimiser
+  les profits en assignant une importance différente à chaque scénario.
+\item
+  On peut catégoriser les observations dans une matrice de confusion.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
 \protect\hypertarget{ruxe9capitulatif-1}{}
-Le modèle est interprétable à l'échelle de la cote
-
 \begin{itemize}
 \tightlist
 \item
-  La cote donne le rapport probabilité de réussite (1) sur probabilité
-  d'échec (0)
-\item
-  Interprétation en terme de
+  On s'intéresse à
 
   \begin{itemize}
   \tightlist
   \item
-    pourcentage d'augmentation si \(\exp(\widehat{\beta}) > 1\), avec
-    \(\exp(\widehat{\beta})-1\).
+    la spécificité (proportion d'échecs correctement classifiés)
   \item
-    pourcentage de diminution si \(\exp(\widehat{\beta}) < 1\), avec
-    \(1-\exp(\widehat{\beta})\)
+    la sensibilité (proportion de succès correctement classifiés)
+  \item
+    le taux de bonne classification
+  \item
+    le taux de faux positifs ou faux négatifs
+  \end{itemize}
+\item
+  L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe
+  ROC) et le lift donnent une mesure de la qualité des prédictions.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sélection de variables en régression logistique}
+\protect\hypertarget{suxe9lection-de-variables-en-ruxe9gression-logistique}{}
+\begin{itemize}
+\tightlist
+\item
+  On applique les mêmes principes que précédemment.
+\item
+  Notre mesure d'ajustement (gain, taux de bonne classification,
+  log-vraisemblance) peut différer selon l'objectif.
+\item
+  Les modèles de régression logistique sont plus coûteux à estimer.
+\item
+  Pour la classification, le point de coupure est à déterminer.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Fonctions \textbf{R} pour la sélection de
+modèles}
+\protect\hypertarget{fonctions-r-pour-la-suxe9lection-de-moduxe8les}{}
+\begin{itemize}
+\tightlist
+\item
+  \texttt{glmbb::glmbb} permet une recherche exhaustive de tous les
+  sous-modèles à au plus une certaine distance (\texttt{cutoff}) du
+  modèle avec le plus petit critère d'information (\texttt{criterion}).
+\item
+  \texttt{step} permet de faire une recherche séquentielle avec un
+  critère d'information.
+\item
+  \texttt{glmulti::glmulti} permet une recherche exhaustive
+  (\texttt{method\ =\ "h"}) ou par le biais d'un algorithme génétique
+  (\texttt{method\ =\ "g"}).
+\item
+  \texttt{glmnet::glmnet} permet d'ajuster le modèle avec pénalité
+  LASSO.
+\end{itemize}
+
+Voir le
+\href{https://lbelzile.github.io/math60602/05-reglogistique.html\#s\%C3\%A9lection-de-variables-en-r\%C3\%A9gression-logistique}{code
+en ligne}.
+\end{frame}
+
+\begin{frame}{Objectif du ciblage marketing}
+\protect\hypertarget{objectif-du-ciblage-marketing}{}
+Déterminer si le revenu prévu justifie l'envoi du catalogue
+
+\[\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).\]
+
+On peut combiner un modèle de régression logistique avec la régression
+linéaire (ajustés simultanément avec un modèle Heckit).
+
+Ou simplement ignorer le montant d'achat et envoyer un catalogue si la
+probabilité d'achat excède notre point de coupure optimal.
+\end{frame}
+
+\begin{frame}{Stratégie de référence}
+\protect\hypertarget{stratuxe9gie-de-ruxe9fuxe9rence}{}
+\begin{itemize}
+\tightlist
+\item
+  Parmi les 100K clients, 23 179 auraient acheté si on leur avait envoyé
+  le catalogue
+\item
+  Ces clients auraient généré des revenus de 1 601 212\$.
+\item
+  Si on enlève le coût des envois (100 000 \(\times\) 10\$), la
+  stratégie de référence permet un revenu net de 601 212\$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stratégie d'ajustement}
+\protect\hypertarget{stratuxe9gie-dajustement}{}
+En résumé, la procédure numérique à réaliser est la suivante:
+
+\begin{itemize}
+\tightlist
+\item
+  Choisir les variables à essayer (termes quadratiques, interactions,
+  etc.)
+\item
+  Choisir l'algorithme ou la méthode de sélection du modèle.
+\item
+  Construire un catalogue de modèles: pour chacun, calculer les
+  prédictions par validation croisée.
+\item
+  Calculer le point de coupure optimal pour chaque modèle selon la
+  fonction de gain moyen.
+\item
+  Sélectionner le modèle qui \textbf{maximise le gain}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Prédiction et envoi}
+\protect\hypertarget{pruxe9diction-et-envoi}{}
+\begin{itemize}
+\tightlist
+\item
+  Prédire les 100 000 observations de l'échantillon test.
+\item
+  Envoyer un catalogue si la probabilité d'achat excède le point de
+  coupure.
+\item
+  Calculer le revenu résultant:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    zéro si on n'envoie pas de catalogue
+  \item
+    \(-10\) si la personne n'achète pas
+  \item
+    \(-10\) plus l'achat si la personne achète.
   \end{itemize}
 \end{itemize}
+
+\textbf{En pratique}, on ne pourrait pas \emph{a priori} connaître le
+revenu résultant de cette stratégie.
+\end{frame}
+
+\begin{frame}{Conclusion}
+\protect\hypertarget{conclusion}{}
+Si on avait fait une bête recherche séquentielle et qu'on avait pris le
+modèle avec le plus petit BIC (8 variables explicatives), on aurait
+dégagé des revenus de 978 226\$.
+
+C'est une énorme amélioration, de plus de 56\%, par rapport à la
+stratégie de référence.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
@@ -1165,25 +928,20 @@ Le modèle est interprétable à l'échelle de la cote
 \begin{itemize}
 \tightlist
 \item
-  Estimation par maximum de vraisemblance
+  Les principes de sélection de variable couverts précédemment
+  s'appliquent toujours (recherche exhaustive, séquentielle et LASSO).
 \item
-  Tests d'hypothèse comparent modèles emboîtés
-
-  \begin{itemize}
-  \tightlist
-  \item
-    loi nulle asymptotique \(\chi^2\)
-  \item
-    degrés de liberté égal au nombre de restrictions
-  \end{itemize}
+  On peut aussi calculer les critères d'information puisque le modèle
+  est ajusté par maximum de vraisemblance.
 \item
-  Intervalles de confiance de vraisemblance profilée
-
-  \begin{itemize}
-  \tightlist
-  \item
-    invariants aux reparamétrisations
-  \end{itemize}
+  Attention au surajustement! Suspect si les probabilités estimées sont
+  près de 0/1 (vérifier la calibration).
+\item
+  Deux étapes: sélectionner le modèle (variables) et le point de
+  coupure.
+\item
+  D'autres modèles que la régression logistique (arbres de
+  classification, etc.) sont envisageables pour la classification.
 \end{itemize}
 \end{frame}
 

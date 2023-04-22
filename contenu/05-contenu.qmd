@@ -1,33 +1,30 @@
 ---
-title: "Sélection de variables"
+title: "Régression logistique"
 ---
 
 ## Contenu
 
-- Méthodes de sélection de variables: recherches exhaustives et procédures séquentielles
-- Modèle LASSO
-- Moyenne de modèles
+- Modèle de régression logistique
+- Cote
+- Interprétation des paramètres
+- Inférence statistique
+    - tests d'hypothèse
+    - intervalles de confiance
 
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre 4 (Sélection de variables et de modèles)](https://lbelzile.github.io/math60602/04-selectionmodeles.html), Sections 4.4-4.6
+- {{< fa book >}} [Chapitre sur la régression logistique](https://lbelzile.github.io/math60602/reglogistique.html), Sections 1 et 2
 
 
 ## Diapositives 
 
-- {{< fa file >}} [Sélection de variables](/diapos/MATH60602-diapos5.pdf)
+- {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos5.pdf)
 - {{< fa code >}} [Code](/code/MATH60602-diapos5.R)
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
 
-## Exercices
-
-- {{< fa file >}} [Exercices 3](/exercices/03-exercice.html)
 
 ## Objectifs d'apprentissage
 
-- Être capable d'ajuster les procédures de sélections couvertes dans **R**
-- Pouvoir calculer la performance manuellement d'un modèle
-- Être en mesure de diagnostiquer le surajustement et d'appliquer une procédure de sélection de variables
+- Être capable d'ajuster un modèle logistique avec **R**.
+- Pouvoir interpréter les coefficients d'un modèle logistique en terme d'augmentation ou de diminution de la cote.
+- Pouvoir tester la significativité globale et individuelle de variables explicatives à l'aide de tests de rapport de vraisemblance.

@@ -1,7 +1,7 @@
 ---
-title: "Régression logistique: classification"
+title: "Données manquantes et régression multinomiale"
 subtitle: "Analyse multidimensionnelle appliquée"
-date: "automne 2022"
+date: ""
 author: "Léo Belzile"
 institute: "HEC Montréal"
 format: beamer
@@ -15,7 +15,7 @@ pdf-engine: lualatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
-mainfont: "D-DIN"
+mainfont: "VisbyCF-Medium"
 mathfont: 'Latin Modern Math'
 sansfont: 'Latin Modern Sans'
 keep-tex: true
@@ -26,566 +26,861 @@ include-in-header:
         \usepackage{mathrsfs}
 ---
 
-# Rappel
+# Données manquantes et inférence
 
-La régression logistique spécifie un modèle pour la probabilité de succès 
-$$p = \Pr(Y=1 \mid \mathbf{X}) = \frac{1}{1+\exp(-\eta)}$$
-où $\eta = \beta_0 + \cdots + \beta_p \mathrm{X}_p$.
 
-# Prédiction
+- Les données manquantes réduisent la quantité d'information disponible et augmentent l'incertitude.
+- On ne peut **pas** les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
+- On considère des méthodes d'imputation qui remplacent les valeurs manquantes.
 
-En substituant l'estimation $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$, on calcule 
+# Imputation aléatoire
 
-- le prédicteur linéaire $\widehat{\eta}_i$ et
-- la probabilité de succès $\widehat{p}_i$
+Considérons le cas d'une régression logistique pour une variable explicative binaire.
 
-pour chaque ligne de la base de données.
+Plutôt que d'assigner à la classe la plus probable, une prédiction aléatoire simule une variable 0/1 avec probabilité $(1-\widehat{p}_i, \widehat{p}_i)$.
 
-# Classification de base
+```{r}
+#| eval: true
+#| echo: true
+pred <- 0.3 #probabilité de succès
+rbinom(n = 15, size = 1, prob = pred)
+```
 
-Choisir un point de coupure $c$:
+# Problèmes de l'imputation simple
 
-- si $\widehat{p} < c$, on assigne $\widehat{Y}=0$.
-- si $\widehat{p} \geq c$, on assigne $\widehat{Y}=1$.
+On ne tient pas compte du fait que des valeurs ont été remplacées (on fait comme si c'était de vraies observations). 
 
-Un point de coupure de $c=0.5$ revient à assigner l'observation à la classe (catégorie) la plus probable.
+On sous-évalue encore une fois la **variabilité** des données
 
-Qu'arrive t'il si $c=0$ ou $c=1$? **Exemple au tableau**
+- les écarts-type des estimations sont trop petits.
 
-# Qualité de l'ajustement
+# Inspection des valeurs manquantes
 
-L'erreur quadratique pour un problème de classification est
-$$(Y-\widehat{Y})^2 = \begin{cases} 1, & Y \neq \widehat{Y}; \\0, & Y = \widehat{Y}.\end{cases}$$
-et donc on obtient le **taux de mauvaise classification** si on calcule la moyenne.
+Il est donc nécessaire d'examiner la configuration des valeurs manquantes avant de faire quoi que ce soit. 
 
-Plus le taux de mauvaise classification est petit, meilleure est la capacité prédictive du modèle.
+```{r}
+#| label: manquantes-summary-uni
+#| echo: true
+#| eval: false
+data(manquantes, package = 'hecmulti')
+summary(manquantes)
+# Pourcentage de valeurs manquantes
+apply(manquantes, 2, function(x){mean(is.na(x))})
+# Voir les configurations de valeurs manquantes
+md.pattern(manquantes) # graphique diapo suivante
+```
 
-# Base de données marketing
+```{r}
+#| label: tbl-manquantes-univ
+#| cache: true
+#| eval: true
+#| echo: false
+#| tbl-cap: "Nombre et pourcentage de valeurs manquantes par variable."
+data(manquantes, package = 'hecmulti')
+manq <- formatC(apply(manquantes, 2, 
+                      function(x){c(sum(is.na(x)), 100*mean(is.na(x)))}))
+rownames(manq) <- c("nombre", "pourcentage")
+knitr::kable(manq,
+             booktabs = TRUE) |>
+  kableExtra::kable_styling()
+```
 
-On considère un modèle pour `yachat`, le fait qu'une personne achète suite à l'envoi d'un catalogue.
+# Configuration des valeurs manquantes
 
-```{r, echo = TRUE, eval = TRUE}
-data(dbm, package = "hecmulti")
-formule <- formula("yachat ~ x1 + x2 + x3 +
-                x4 + x5 + x6 + x7 + x8 + x9 + x10")
-modele <- glm(formule,
-              data = dbm, 
-              family = binomial,
-              subset = test == 0)
+```{r}
+#| label: fig-manquantes2
+#| echo: false
+#| eval: true
+#| out-width: '50%'
+#| fig-cap: "Configurations des valeurs manquantes pour  `manquantes`."
+puzle <- mice::md.pattern(hecmulti::manquantes[,1:6], 
+                          plot = TRUE)
 ```
 
 
-# Estimation de la performance du modèle
 
-Utiliser les mêmes données pour l'ajustement et l'estimation de la performance n'est (toujours) pas recommandé.
 
-Plutôt, considérer la validation croisée ou la division de l'échantillon.
+
+# Imputation multiple
+
+Valides pour les données manquantes de manière aléatoire et complètement aléatoires (MAR et MCAR).
+
+1. Procéder à plusieurs imputations **aléatoires** pour obtenir un échantillon complet (`mice`)
+2. Ajuster le modèle d'intérêt avec chaque échantillon (`with`). 3. Combiner les résultats obtenus (`pool` et `summary`)
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '70%'
+#| fig-align: 'center'
+knitr::include_graphics("figures/donnees_manquantes_workflow.pdf")
+```
+
+# Combinaison des résultats
+
+Considérons un seul paramètre $\theta$ (ex: coefficient d'une régression) et supposons qu'on procède à $K$ imputations.
+
+On estime les paramètres du modèle séparément pour chacun des $K$ ensembles de données imputés, disons 
+
+- $\widehat{\theta}_k$ pour l'estimation du paramètre $\theta$ dans l'échantillon $k$ et
+- $\widehat{\sigma}_k^2=\mathsf{Va}(\widehat{\theta}_k)$ pour l'estimation de la variance de $\widehat{\theta}_k$. 
+
+# Estimation du paramètre moyen
+
+L'estimation finale de $\theta$, dénotée $\widehat{\theta}$, est obtenue tout simplement en faisant la moyenne des estimations de tous les modèles, c'est-à-dire,
+\begin{align*}
+\widehat{\theta} = \frac{\widehat{\theta}_1 + \cdots + \widehat{\theta}_K}{K}.
+\end{align*}
+
+# Estimation des erreurs-types
+
+Une estimation ajustée de la variance de $\widehat{\theta}$ est 
+\begin{align*}
+\mathsf{Va}(\hat{\theta}) &= W+ \frac{K+1}{K}B, 
+\intertext{où}
+W &= \frac{1}{K} \sum_{k=1}^K \widehat{\sigma}^2_k = \frac{\widehat{\sigma}_1^2 + \cdots + \widehat{\sigma}_K^2}{K},\\
+B &= \frac{1}{K-1} \sum_{k=1}^K (\widehat{\theta}_k - \widehat{\theta})^2.
+\end{align*}
+
+- $W$ est la moyenne des variances (variance intra-groupe) et
+- $B$ la variance des moyennes (variance inter-groupe).
+
+# Imputation multiple
+
+Des formules analogues existent pour les degrés de liberté, les valeurs-$p$, etc. ainsi que pour la cas multidimensionnel (plusieurs paramètres).
+
+Si on procédait à une seule imputation (même en ajoutant une part d'aléatoire pour essayer de reproduire la variabilité des données), on ne serait pas en mesure d'estimer la variance inter-groupe de l'estimateur.
+
+
+On peut estimer la fraction de l'information manquante sur $\theta$ avec $(1+1/K)B/\mathsf{Va}(\hat{\theta})$.
+
+
+# Imputation multiple par équations chaînées (MICE)
+
+Avec $p$ variables $X_1, \ldots, X_p$, spécifier un ensemble de modèles **conditionnels** pour chaque variable $X_j$ en fonction de
+
+- toutes les autres variables, $\boldsymbol{X}_{-j}$
+- les valeurs observées pour cette variable, $X_{j, \text{obs}}$
+
+1. Initialisation: remplir les trous avec des données au hasard parmi $X_{j, \text{obs}}$ pour $X_{j, \text{man}}$
+2. À l'itération $t$, pour chaque variable $j=1, \ldots, p$, à tour de rôle:
+   a) tirage aléatoire des paramètres $\phi_j^{(t)}$ du modèle pour $X_{j,\text{man}}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
+   b) échantillonnage de nouvelles observations $X^{(t)}_{j,\text{man}}$ du modèle avec paramètres $\phi_j^{(t)}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
+3. Répéter le cycle
+
+
+
+# Imputation multiple avec `mice`
+
+
+
+```{r}
+#| label: manquante2
+#| eval: false
+#| echo: true
+library(mice)
+# Intensif en calcul, réduire "m" si nécessaire
+impdata <- mice(
+   data = manquantes,
+   # argument "method" pour le modèle
+   # dépend du type des variables, par ex.
+   # régression logistique pour données binaires
+   m = 50, # nombre d'imputations
+   seed = 60602, # germe aléatoire
+   printFlag = FALSE)
+# Extraite une copie (m=1,..., 50) imputée 
+complete(data = impdata, 
+         action = 1) #no de la copie
+```
+
+# Estimation et combinaison avec `mice`
 
 ```{r}
 #| eval: false
 #| echo: true
-set.seed(202209)
-# Option par défaut: 
-# validation croisée à 10 plis
-# 10 répétitions
-predprob <- hecmulti::predvc(modele)
+# ajuste le modèle avec les données imputées
+adj_im <- with(
+  data = impdata,
+  expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
+             family = binomial))
+# combinaison des résultats 
+fit <- pool(adj_im)
+summary(fit)
 ```
 
+
+# Résultats
+
+```{r}
+#| label: manquantsres
+#| eval: true
+#| echo: false
+#| cache: true
+library(mice)
+# Intensif en calcul, réduire "m" si nécessaire
+impdata <- mice(data = hecmulti::manquantes,
+                # argument method pour le type de modèles
+                # selon les variables
+                m = 50, # nombre d'imputations
+                seed = 60602, # germe aléatoire
+                printFlag = FALSE)
+
+# ajuste le modèle avec les données imputées
+adj_im <- with(
+  data = impdata,
+  expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
+             family = binomial))
+# combinaison des résultats 
+fit <- pool(adj_im)
+fit_df <- tibble::as_tibble(summary(fit))
+fit_df$p.value <- format.pval(fit_df$p.value,
+                              digits = 1, 
+                              eps = 1e-4)
+knitr::kable(fit_df, 
+             digits = 2, 
+             booktabs = TRUE,
+             linesep = "",
+             col.names = c("terme","estimation", "erreur-type", "stat", "ddl", "valeur-p")) |>
+  kableExtra::kable_styling()
+```
+
+# Récapitulatif
+
+- Les données manquantes réduisent la quantité d'information disponible et augmentent l'incertitude.
+- On ne peut **pas** les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
+- Pour bien capturer l'**incertitude** et ne pas modifier les relations entre variables, il faut utiliser une méthode **aléatoire**.
+- Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque variable à tour de rôle
+
+# Récapitulatif
+
+L'imputation multiple est préférée à l'imputation simple car elle permet d'estimer l'incertitude sous-jacente en raison des données manquantes.
+
+- On procède à l'imputation plusieurs fois (avec un modèle conditionel, prédictions différentes chaque fois)
+- on crée plusieurs copies
+- ajuste le modèle sur chacune et 
+- combine les résultats
+
+Traitement spécial pour erreurs-type, degrés de liberté, valeurs-$p$ et intervalles de confiance.
+
+
+
+# Régression pour données multinomiale
+
+On considère une variable réponse catégorielle avec $K \ge 2$ modalités.
+
+**Objectif**: modéliser la probabilité de chaque catégorie de la variable réponse.
+
+Soit la probabilité d'appartenir à la modalité $k$, $$p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).$$ 
+
+La somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
+
+# Modèle multinomial logistique 
+
+Comme avec la régression logistique, on fixe une catégorie de référence (disons `1`) et on modélise le log de la cote de chacune des autres catégories par rapport à cette référence,
+\begin{align*}
+ \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \beta_{1j} \mathrm{X}_{i1} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
+\end{align*}
+
+- Avec $K$ modalités et $p$ variables explicatives, on obtiendra $(K-1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
+
+L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
+
+# Modèle logistique multinomial et probabilités 
+
+On peut aussi exprimer le modèle en termes des probabilités,
+\begin{align*}
+ p_{i1} &= \Pr(Y_i=1 \mid \mathbf{X}_i) = \frac{1}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}\\
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) = \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =2, \ldots, K.
+\end{align*}
+où $\eta_{ij}$ est le prédicteur linéaire de l'individu $i$ pour le log de la cote de $Y_i=j$ versus la référence $Y_i=1$.
+
+# Taux de participation lors des élections américaines
+
+Les [données](https://github.com/fivethirtyeight/data/tree/master/non-voters) de cet exemple sont tirées d'un sondage Ipsos réalisé pour le site de nouvelles *FiveThirtyEight*. 
+
+La base de données `vote` contient 5837 observations avec les pondérations associées.
+
+Nous allons modéliser l'intention de vote, `catvote` à l'aide d'une régression logistique multinomiale.
+
+# Analyse exploratoire
+
+```{r}
+#| label: fig-multinom_means-Ipsos
+#| echo: false
+#| eval: true
+#| out-width: '80%'
+#| fig-width: 8
+#| fig-height: 6
+#| cache: true
+#| fig-cap: "Proportion des modalités des variables sociodémographiques des données de participation électorale."
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+data(vote, package = "hecmulti")
+g1 <- vote |> 
+  dplyr::count(revenu, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = revenu)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "revenu", 
+       x = "", y = "", fill = "vote") +
+  theme_classic()
+g2 <- vote |> 
+  dplyr::count(sexe, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = sexe)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "sexe", 
+       x = "", y = "", fill = "vote") +
+  theme_classic()
+g3 <- vote |> 
+  dplyr::count(race, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = race)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "race", 
+       x = "", y = "", fill = "vote")+
+  theme_classic()
+g4 <- vote |> 
+  dplyr::count(educ, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = educ)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top",
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "niveau d'éducation", 
+       x = "", y = "", fill = "vote")+
+  theme_classic()
+g5 <- vote |> 
+  dplyr::count(affiliation, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = affiliation)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top", 
+                     expand = c(0,0),
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100")) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "affiliation politique", 
+       x = "", y = "", fill = "vote")+
+  theme_classic()
+g6 <- vote |> 
+  mutate(agecat = with(vote, cut(age, c(20,40,60,100)))) |>
+  dplyr::count(agecat, catvote, wt = poids) |>
+ggplot(aes(fill = catvote,
+           x = n,
+           y = agecat)) +
+  ggplot2::geom_bar(position = "fill",
+                    stat = "identity") +
+  scale_x_continuous(name = NULL,
+                     position = "top", 
+                     breaks = c(0, 0.25,0.5,0.75,1),
+                     labels = c("0%","25","50","75","100"),
+                     expand = c(0,0)) +
+  scale_y_discrete(expand = c(0,0)) +
+  labs(subtitle = "âge", 
+       x = "", y = "", fill = "vote") +
+  theme_classic()
+(g1 + g2) / (g3 +g4) / (g5 + g6) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+```
+
+
+# Analyse exploratoire  (`age`)
+
+```{r}
+#| label: fig-vote-age
+#| eval: true
+#| echo: false
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: '70%'
+#| fig-cap: "Fréquence de vote selon l'âge."
+ggplot(data = vote, 
+       aes(x = age, fill = catvote)) +
+  geom_density(alpha = 0.2) + 
+  labs(fill = "vote", 
+       x = "âge (années)", 
+       y = "densité") + 
+  theme(legend.position = "bottom") +
+  theme_minimal()
+```
+Notez le comportement des jeunes voteurs (bimodal). Ces personnes n'ont souvent eu qu'une seule occasion de voter...
+
+
+# Ajustement du modèle
+
+La fonction `multinom` du paquet `nnet` ajuste le modèle multinomial logistique.
+
+```{r}
+#| label: mullogit
+#| eval: true
+#| echo: true
+data(vote, package = "hecmulti")
+levels(vote$catvote)
+# Modèle multinomial
+multi1 <- nnet::multinom(
+  catvote ~ age + sexe + race + revenu + 
+    educ + affiliation, 
+  data = vote,       # base de données
+  subset = age > 30, # sous-ensemble des données
+  weights = poids,   # poids de sondage
+  trace = FALSE)     # infos sur convergence
+```
+
+# Méthodes **R** pour l'analyse
+
+```{r}
+#| eval: false
+#| echo: true
+# Tableau résumé de l'ajustement
+summary(multi1)
+# Estimations des coefficients
+coef(multi1)
+# Intervalles de confiance (Wald)
+confint(multi1)
+# Critères d'information
+AIC(multi1)
+BIC(multi1)
+# Prédiction: probabilité de chaque modalité
+predict(multi1, type = "probs")
+# Prédiction: classe la plus susceptible
+predict(multi1, type = "class")
+```
+
+# Comparaison de modèles emboîtés
+
+Le modèle avec uniquement l'ordonnée à l'origine possède $K-1$ paramètres.
+Il retourne comme probabilité prédite la proportion empirique de chaque catégorie.
+
+```{r}
+#| eval: false
+#| echo: true
+multi0 <- nnet::multinom(catvote ~ 1,
+                         weights = poids,
+			 subset = age > 30,
+                         data = vote,
+                         trace = FALSE)
+# Test de rapport de vraisemblance
+anova(multi0, multi1)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+multi0 <- nnet::multinom(catvote ~ 1,
+			 subset = age > 30,
+                         weights = poids,
+                         data = vote,
+                         trace = FALSE)
+# Test de rapport de vraisemblance
+options(knitr.kable.NA = '')
+knitr::kable(anova(multi0, multi1)[,-1], digits = 2)
+```
 
 # Prédictions
 
+Pour un profil $\mathbf{X}_i$ donné, on peut 
 
+- calculer chacun des $K-1$ prédicteurs linéaires $\widehat{\eta}_{i2}, \ldots, \widehat{\eta}_{iK}$.
+- écrire $p_{ik} = p_{i1}\exp(\widehat{\eta}_{ik})$ (formule de la cote)
+- substituer cette mesure dans l'équation $p_{i1} + \cdots + p_{iK}=1$
+- isoler la prédiction numérique pour $p_{i1}$.
+- en déduire les probabilités de succès de chaque modalité de $Y$.
+
+**Exemple au tableau**
+
+
+# Classification
+
+La prédiction du modèle est une probabilité pour chacune des $K$ modalités.
+
+
+On peut toujours classifier les événements 
+
+- avec $K-1$ points de coupure...
+- ou assigner à la modalité la plus probable
+
+Avec les prédictions, on peut comparer les observations et les prédictions à l'aide d'une matrice de confusion $K \times K$.
+
+- Le taux de bonne classification est toujours valide
+- Il existe des extensions multidimensionnelles de l'aire sous la courbe
+
+# Commentaires
+
+- Contrairement à la régression logistique, le nombre de paramètres augmente rapidement avec le nombre de variables explicatives, $p$.
+- Il y a moins d'information pour estimer les paramètres qu'une régression linéaire: prévoir de plus grandes tailles d'échantillon.
+- Attention aux modalités à faible fréquence et à la répartition des variables explicatives au sein des différentes modalités.
+
+# Données ordinales
+
+Outre la régression multinomiale logistique, on peut également considérer la *régression logistique cumulative à cotes proportionnelles*.
+
+
+- modèle plus parcimonieux que le modèle multinomial logistique,
+- mais au prix de postulats supplémentaires...
+
+En **R**, la variable réponse doit être de classe `ordered`, un facteur dont les niveaux sont ordonnés en ordre croissant.
 ```{r}
-#| label: figclassification0
-#| echo: false
-#| eval: true
-#| cache: true
-#| fig-width: 8
-#| fig-height: 6
-#| out-width: '80%'
-#| fig-align: 'center'
-data(dbm, package = 'hecmulti')
-# Transformer les variables catégorielles en facteurs
-# Ne conserver que l'échantillon d'apprentissage
-train <- dbm[(dbm$test == 0),]
-# Formule pour la moyenne du modèle logistique
-form <- formula("yachat ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10")
-mod <- glm(data = train,
-           formula = form, 
-           family = binomial)
-# Créer un conteneur pour les probabilités
-set.seed(60602)
-prob <- hecmulti::predvc(mod)
-# Histogramme des probabilités prédites par validation croisée avec n groupes
-library(ggplot2)
-ggplot(data = data.frame(x = prob),
-       aes(x = x)) +
-  geom_histogram() + 
-  labs(x = "probabilité d'achat prédite", 
-       y = "") +
-  theme_minimal()
-#  Modèle complet et valeurs prédites
-train_prob <- fitted(glm(data = train, 
-                         formula = form, 
-                         family=binomial), 
-                     type = "response") 
-
-perfo <- function(prob, resp, plot = FALSE){
-   # VRAI == 1, FAUX == 0
-   cuts <- seq(from = 0.005, to = 0.995, by = 0.005)
-   tab <- data.frame(coupe = cuts,
-      t(sapply(cuts, function(cut){
-   nsucces <- sum(resp == 1)
-   nechec <- length(resp) - nsucces
-   n <- length(resp)
-   predy <- ifelse(prob >= cut, 1, 0) 
-   c1 <- sum(predy & resp) # Y=1, Yhat=1
-   c0 <- sum(!predy & !resp) # Y=0, Yhat=0
-   i1 <- sum(!predy & resp) # Y=1, Yhat=0
-   i0 <- sum(predy & !resp) # Y=0, Yhat=1
-   c(c1 = c1, 
-     c0 = c0, 
-     i0 = i0,
-     i1 = i1,      
-     pcorrect = 100*(c0+c1)/n, 
-     sensi = 100*c1/(c1+i1), # Y=1 & Yhat=1 / # Y=1
-     speci = 100*c0/(c0+i0), # Y=0 & Yhat=0 / # Y=0
-     fpos = 100*i0/(c1+i0), # Y=0 & Yhat=1 / # Yhat=1
-     fneg = 100*i1/(c0+i1)) # Y=1 & Yhat=0 / # Yhat=0
-   })))
-   if(plot){
-     plot(c(1,1-tab$speci/100,0), c(1,tab$sensi/100,0), type = "l", pty = "s", bty = "l", 
-          xlab = "1-spécificité", 
-          ylab = "sensibilité", 
-          main ="Fonction d'efficacité du récepteur (ROC)",
-          panel.first = abline(a=0,b=1), 
-          ylim = c(0,1), xlim = c(0,1), yaxs = "i", xaxs = "i")
-   }
-   invisible(list(cut = tab[which.max(tab$pcorrect),"coupe"],
-        confusion = matrix(tab[which.max(tab$pcorrect), c(2,5,4,3)], nrow = 2, ncol = 2),
-        table = tab))
-   
-}
-# Performance du modèle avec données d'apprentissage
-perfo0 <- perfo(prob = train_prob, resp = train$yachat)
-perfo1 <- perfo(prob = prob, resp = train$yachat)
-```
-
-\footnotesize 
-
-Répartition des probabilités de succès prédites par validation croisée.
-
-\normalsize 
-
-# Choix d'un point de coupure.
-
-On peut faire varier le point de coupure et choisir celui qui maximise le taux de bonne classification, $\widehat{\Pr}(Y = \widehat{Y})$.
-
-```{r}
-#| fig-width: 8
-#| fig-height: 4
-#| out-width: '80%'
-#| fig-align: 'center'
-library(ggplot2)
-ggplot(data = perfo1$table,
-       aes(x = coupe, 
-           y = 100 - pcorrect)) +
-  geom_line() +
-  geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) + 
-  labs(x = "point de coupure",
-       y = "",
-       subtitle = "taux de mauvaise classification (pourcentage)") +
-  scale_x_continuous(expand = c(0.01,0.01),
-                     breaks = c(0,0.25,0.5,0.75,1),
-                     labels = c("0","0.25","0.5","0.75","1")) + 
-  theme_classic()
-```
-
-Avec $c=0.465$, on obtient un taux de mauvaise classification de 15.3\%.
-
-# Performance et classification
-
-
-
-```{r}
-#| eval: false
 #| echo: true
-classif <- with(dbm, yachat[test == 0])
-# Tableau de la performance
-hecmulti::perfo_logistique(
-  prob = predprob,
-  resp = classif)
-```
-
-# Matrice de confusion
-
-On peut classifier les observations dans un tableau pour un point de coupure donné.
-
-```{r}
-#| label: tbl-confumat
 #| eval: true
-#| echo: false
-#| tbl-cap: "Matrice de confusion avec point de coupure 0.465."
-confumat <- perfo1$confusion
-rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
-colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
-knitr::kable(x = confumat, 
-                align = "r",
-                escape = FALSE,
-                booktabs = TRUE,
-             format = "latex")
+class(hecmulti::vote$catvote)
 ```
 
+# Notation du modèle
 
-# Classification et mesures de performance
+- Soit $p_1, \ldots, p_K$ les probabilités associées aux événements $Y=1, \ldots$
+- On définit les points de coupure pour les $K$ classes,
+$$ -\infty = \zeta_0 < \zeta_1 < \cdots < \zeta_K = \infty.$$
+- Il y a $K-1$ paramètres $\zeta$ à déduire pour identifier les probabilités puisque $p_1 + \cdots + p_K=1$.
 
-\footnotesize 
+#  Formulation du modèle
 
-Les estimés empiriques sont simplement obtenus en calculant les rapports du nombre d'observations dans chaque classe.
-
-\normalsize 
-
-```{r}
-#| label: tableconfumat2
-#| eval: true
-#| echo: false
-confumat <- perfo1$confusion
-rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
-colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
-confumat_th <- confumat
-confumat_th[1:4] <- c("VP","FN","FP","VN")
-tab1 <- knitr::kable(x = confumat,
-                align = "r",
-                escape = FALSE,
-                booktabs = TRUE,
-             format = "latex")
-tab2 <- knitr::kable(x = confumat_th,
-                align = "r",
-                escape = FALSE,
-                booktabs = TRUE,
-             format = "latex")
-knitr::kables(list(tab1, tab2))
-
-```
-
-
-- La **sensibilité** est le taux de succès correctement classés, $\Pr(Y=1, \widehat{Y}=1 \mid Y=1)$, soit $\mathsf{VP}/(\mathsf{VP}+\mathsf{FN})$.
-- La **spécificité** est le taux d'échecs correctement classés, $\Pr(Y=0, \widehat{Y}=0 \mid Y=0)$, soit $\mathsf{VN}/(\mathsf{VN}+\mathsf{FP})$.
-- Le taux de **faux positifs** est $\Pr(Y=0, \widehat{Y}=1 \mid \widehat{Y}=1)$.
-- Le taux de **faux négatifs** est $\Pr(Y=1, \widehat{Y}=0 \mid \widehat{Y}=0)$.
-
-# Matrice de gain
-
-Il est également possible d'assigner un poids différent à chaque événement selon le scénario et chercher à maximiser le gain.
-
-
-```{r}
-#| label: tbl-tableconfumat4
-#| eval: true
-#| echo: false
-#| tbl-cap: "Matrice de gain (cas général)"
-confumat_tbclassif <- confumat
-confumat_tbclassif[1:4] <- c("$c_{11}$","$c_{01}$","$c_{10}$","$c_{00}$")
-tab1 <- knitr::kable(x = confumat_tbclassif,
-                align = "r",
-                escape = FALSE,
-                booktabs = TRUE,
-             format = "latex")
-tab1
-
-```
-
-
-
-On calcule le gain en faisant la somme des entrées fois les poids, soit $$\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.$$
-
-# Gain pour taux de bonne classification
-
-Si on cherche à maximiser le taux de bonne classification, cela revient à assigner les poids suivants.
-
-
-```{r}
-#| label: tbl-tableconfumat3
-#| tbl-cap: "Matrice de gain pour le taux de bonne classification."
-#| eval: true
-#| echo: false
-#| fig-align: 'center'
-confumat_tbclassif <- confumat
-confumat_tbclassif[1:4] <- c("$1$","$0$","$0$","$1$")
-tab1 <- knitr::kable(x = confumat_tbclassif,
-                align = "r",
-                escape = FALSE,
-                booktabs = TRUE,
-             format = "latex",)
-tab1
-
-```
-
-# Coûts et bénéfices du ciblage marketing
-
-
-
-- Si on n'envoie pas de catalogue, notre gain est nul. 
-- Si on envoie le catalogue 
-   - à un client qui n'achète pas, on perd 10$ (le coût de l'envoi). 
-   - à un client qui achète, notre revenu net est de 57\$ (revenu moyen moins coût de l'envoi).
-
-
-
-```{r}
-#| label: tbl-dbm-ymontant-apprentissage
-#| echo: false
-#| eval: true
-#| tbl-cap: "Statistiques descriptives des montants d'achats pour la base de données marketing."
-data(dbm, package = "hecmulti")
-dbm |>
-  dplyr::filter(test == 0,
-                  !is.na(ymontant))  |>
-  dplyr::summarize("n" = length(ymontant), 
-            "moyenne" = round(mean(ymontant),2), 
-            "écart-type" =round(sd(ymontant),2), 
-            "minimum" = min(ymontant), 
-            "maximum" = max(ymontant)) |>
-knitr::kable(booktabs = TRUE) |>
-    kableExtra::kable_styling(full_width = TRUE)
-```
-\footnotesize 
-Statistiques descriptives des montants d'achats pour la base de données marketing.
-
-\normalsize
-
-
-```{r}
-#| label: tbl-tableconfumat5
-#| eval: true
-#| echo: false
-#| tbl-cap: "Matrice de gain pour ciblage marketing."
-confumat_tbclassif <- confumat
-confumat_tbclassif[1:4] <- c("$57$","$0$","$-10$","$0$")
-knitr::kable(x = confumat_tbclassif,
-                align = "r",
-                escape = FALSE,
-                booktabs = TRUE,
-             format = "latex")
-```
-
-
-# Point de coupure avec gain
-
-```{r}
-#| label: fig-coupure-pondere-fake
-#| eval: false
-#| echo: true
-#| cache: true
-#| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
-formule = formula(yachat ~ x1 + x2 + x3 +
-                    x4 + x5 + x6 + x7 + 
-                    x8 + x9 + x10)
-modele <- glm(formule, 
-              family = binomial, 
-              data = hecmulti::dbm)
-coupe <- hecmulti::select_pcoupe(
-  modele = modele, 
-  c00 = 0, 
-  c01 = 0, 
-  c10 = -10, 
-  c11 = 57,
-  plot = TRUE)
-```
-
-\footnotesize
-
-
-La fonction `select_pcoupe` estime le gain pour différents points de coupures, avec probabilités estimées par validation croisée avec `ncv` groupes, répétée `nrep` fois.
-
-\normalsize
-
-# Calcul du gain
-
-
-```{r}
-#| label: fig-coupure-pondere
-#| eval: true
-#| echo: false
-#| cache: true
-#| fig-align: 'center'
-#| out-width: '80%'
-#| fig-width: 6
-#| fig-height: 4
-#| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
-formule = formula(yachat ~ x1 + x2 + x3 +
-                    x4 + x5 + x6 + x7 + 
-                    x8 + x9 + x10)
-modele <- glm(formule, 
-              family = binomial, 
-              data = hecmulti::dbm)
-coupe <- hecmulti::select_pcoupe(
-  modele = modele, 
-  c00 = 0, 
-  c01 = 0, 
-  c10 = -10, 
-  c11 = 57,
-  plot = TRUE)
-```
-
-
-
-# Point de coupure optimal et explication
-
-Dans l'exemple, le point de coupure qui maximise le gain est `r coupe$optim`. Avec ce point de coupure, on estime que 
-
-- le taux de bonne classification est de `r round(perfo1$table[24,"pcorrect"], 2)` 
-- la sensibilité est de `r round(perfo1$table[24,"sensi"], 2)`. 
-
-Ainsi, on va détecter environ `r round(perfo1$table[24,"sensi"],2)`\% des clients qui achètent. 
-
-Il est coûteux de rater un client potentiel, donc la stratégie optimale est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs d'entre eux n'achètent rien. 
-
-
-# Fonction d'efficacité du récepteur
-
-Graphique de la sensibilité en fonction de un moins la spécificité, en faisant varier le point de coupure, souvent appelé courbe ROC (de l'anglais *receiver operating characteristic*).
-
-La fonction `hecmulti::courbe_roc` permet de tracer la courbe et de calculer l’aire sous la courbe. 
-
-```{r}
-#| eval: false
-#| echo: true
-roc <- hecmulti::courbe_roc(
-  resp = classif,
-  prob = predprob,
-  plot = TRUE)
-print(roc)
-## Pour extraire l'aire sous la courbe, roc$aire
-```
-
-
-# Courbe ROC
-
-```{r}
-#| eval: true
-#| echo: false
-#| out-width: '80%'
-#| fig-align: 'center'
-predprob <- predict(cv_glm, type = "prob")[,2]
-classif <- with(dbm, yachat[test == 0])
-roc <- hecmulti::courbe_roc(
-  resp = classif,
-  prob = predprob,
-  plot = TRUE)
-## Pour extraire l'aire sous la courbe, roc$aire
-```
-
-# Aire sous la courbe
-
-- Plus la courbe se rapproche de (0, 1) (coin supérieur gauche), meilleure est la classification.
-- Autrement dit, plus l'aire sous la courbe est près de 1, mieux c’est.
-- Une aire sous la courbe de 0.5 (ligne diagonale) correspond à la performance d'une allocation aléatoire.
-
-# Courbe lift
-
-À quelle point notre modèle est meileur qu'une assignation aléatoire?
-
-- Ordonner les probabilités de succès estimées par le modèle, $\widehat{p}$, en ordre croissant.
-- Regarder quelle pourcentage de ces derniers seraient bien classifiés (le nombre de vrais positifs sur le nombre de succès).
-La référence est la ligne diagonale, qui correspond à une détection aléatoire.
-
-# Code pour produire la courbe lift 
-
-```{r}
-#| label: figcourbe-lift
-#| eval: false
-#| echo: true
-tab_lift <- hecmulti::courbe_lift(
-  prob = predprob,
-  resp = classif, 
-  plot = TRUE)
-tab_lift
-```
-
-
-# Tableau du lift
-
-```{r}
-#| label: tbl-lift
-#| echo: false
-#| eval: true
-#| tbl-cap: "Tableau du lift (déciles)."
-knitr::kable(tab_lift[,-1], 
-             booktabs = TRUE,
-             digits = 2,
-             col.names = c("hasard", 
-                           "modèle", 
-                           "lift"),
-             format = "latex") 
-```
-
-\footnotesize 
-Si on classifiait comme acheteurs les 10\% qui ont la plus forte probabilité estimée d'achat, on détecterait 81 des 210 clients.
-
-Le lift est le nombre détecté par le modèle sur la proportion détectée par hasard.
-\normalsize
-
-
-# Courbe lift
-
-```{r}
-#| label: figcourbe-lift-pr
-#| eval: true
-#| echo: false
-tab_lift <- hecmulti::courbe_lift(
-  prob = predprob,
-  resp = classif, 
-  plot = TRUE)
-```
-
-
-# Calibration du modèle
-
-Certains modèles sont trop confiants dans leurs prédictions (surajustement).
-
-
-une statistique simple proposée par [Spiegelhalter (1986)]( https://doi.org/10.1002/sim.4780050506) peut être utile à cette fin. Pour une variable Bernoulli $Y \in \{0,1\}$, l'erreur quadratique moyenne s'écrit
+Le modèle logistique à cote proportionnelle spécifie $K-1$ équations logistiques; pour $k=1, \ldots, K-1$,
 \begin{align*}
-\overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
-\\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
+\ln \left(\frac{\Pr(Y_i> k\mid \mathbf{X}_i)}{\Pr(Y_i \le k\mid \mathbf{X}_i)}\right) = -\zeta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}.
 \end{align*}
 
-Si notre modèle était parfaitement calibré, $\mathsf{E}_0(Y_i)=p_i$ et $\mathsf{Va}_0(Y_i) = p_i(1-p_i)$.
-
-# Test de Spiegelhalter
-
-On peut calculer la moyenne et la variance attendue sous l'hypothèse nulle et construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506). $$Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}$$ 
-
-Sous l'hypothèse nulle de calibration parfaite, $Z \sim \mathsf{No}(0,1)$ en grand échantillon. 
+- Les paramètres associés aux variables explicatives, $\beta_1, \ldots, \beta_p$ sont les **mêmes** pour chacune des log-cotes
+- mais il y a une ordonnée à l'origine différente par rapport de cote, $-\zeta_k$. 
 
 
-# Calibration du modèle 
+# Interprétation des paramètres
+
+On considère la cote de $\Pr(Y_i> k\mid \mathbf{X}_i)$ versus $\Pr(Y_i \le k\mid \mathbf{X}_i)$, qui mesure à quel point il est plus probable que $Y_i$ prenne une valeur supérieure à $k$ par rapport à une valeur inférieure ou égale à $k$, avec
+
+Pour chaque augmentation d'une unité de $\mathrm{X}_j$, cette cote est multipliée par $\exp(\beta_j)$, peu importe la valeur de $Y$ (**cote proportionnelle**). 
+
+# Interprétation des coefficients
 
 ```{r}
-#| label: classification
+#| label: tbl-ordered-logistic
+#| tbl-cap: "Tableau des estimations des coefficients du modèle pour réponses ordinales pour la régression logistique à cotes proportionnelles avec sexe."
+#| echo: false
 #| eval: true
-#| echo: true
-hecmulti::calibration(
-   prob = predprob, 
-   resp = classif)
+#| message: false
+#| warning: false
+multi2a <- MASS::polr(catvote ~ sexe, 
+                      data = vote,
+                      subset = age > 30,
+                      weights = poids,
+                      method = "logistic", 
+                      Hess = TRUE)
+# multi2b <- nnet::multinom(
+#   catvote ~ affiliation, 
+#   data = vote,
+#   subset = age > 30,
+#   weights = poids,
+#   Hess = TRUE,
+#   trace = FALSE)
+rapp <- summary(multi2a)
+coefs <- rapp$coefficients
+options(knitr.kable.NA = '')
+tabcoef <- tibble::as_tibble(coefs[,1:2])
+tabcoef <- cbind("effet" = c("sexe [homme]","cst [rarement/jamais|occasionnellement]","cst [occasionnellement|toujours]"), tabcoef)
+kableExtra::kbl(tabcoef,
+	        longtable = FALSE, 
+	        booktabs = TRUE,
+          col.names = c("effet","coefficient","erreur-type"),
+          digits = 3,
+	        format = "latex")
+pval_lrt_multi2a_drop1 <- sprintf(round(drop1(multi2a, test = "Chisq")[2,4],3), fmt = "%.3f")
 ```
 
-Il n'y a pas de preuve ici que le modèle est mal calibré.
+Les hommes de plus de 30 ans sont moins susceptibles de voter fréquemment que les femmes. 
+
+La cote catégorie plus fréquente de vote (vs moins fréquente) pour les hommes est $\exp(`r sprintf(round(as.numeric(coef(multi2a)),3), fmt = "%.3f")`)=`r sprintf(round(exp(as.numeric(coef(multi2a))),3), fmt = "%.3f")`$ fois celle des femmes, soit une diminution de $`r round(100*(1-exp(as.numeric(coef(multi2a)))), 1)`\%$ de la cote.
+
+# Ajustement dans **R**
+
+Pour simplifier, on utilise uniquement `sexe` comme variable explicative.
+
+```{r}
+#| label: ordinal-logistique
+#| eval: false
+#| echo: true
+#| warning: false
+#| error: false
+# with(vote, is.ordered(catvote))
+multi2a <- MASS::polr(
+  catvote ~ sexe, 
+  data = vote, 
+  subset = age > 30,
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+summary(multi2a)
+```
+
+```{r}
+#| label: ordinal-logistique-eval
+#| eval: true
+#| echo: false
+#| warning: false
+#| error: false
+# with(vote, is.ordered(catvote))
+multi2a <- MASS::polr(
+  catvote ~ sexe, 
+  data = vote, 
+  subset = age > 30,
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+expit <- function(x){ exp(x)/(1+exp(x))}
+```
+
+
+# Méthodes pour `polr`
+
+
+```{r}
+#| echo: true
+#| eval: false
+# IC pour beta_x (vraisemblance profilée)
+confint(multi2a)
+# On peut obtenir les intervalles de Wald 
+# avec confint.default (PAS RECOMMANDÉ)
+
+# Critères d'information
+AIC(multi2a); BIC(multi2a)
+# Tableau des coefficients 
+# Coefficients (variables explicatives)
+coef(multi2a)
+# Négatif de l'ordonnée à l'origine:
+multi2a$zeta
+```
+
+# Coefficients pour l'ordonnée à l'origine
+
+
+Si on écrit les équations pour la cote, on obtient
+\begin{align*}
+\frac{\Pr(Y = \texttt{rarement} \mid \texttt{sexe})}{\Pr(Y \geq \texttt{occasionnellement} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[1] < 0, "+","-"), round(abs(multi2a$zeta[1]), 3))`) \\ 
+\frac{\Pr(Y \leq \texttt{occasionnellement} \mid \texttt{sexe})}{\Pr(Y = \texttt{toujours} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[2] < 0, "+","-"), round(abs(multi2a$zeta[2]), 3))`).
+\end{align*}
+
+# Probabilités prédites
+
+En terme de probabilité cumulée d'excéder $k$,
+\begin{align*}
+\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \quad k=1, \ldots, K-1.
+\end{align*}
+En utilisant ces expressions, on peut obtenir la probabilité de chaque catégorie,
+\begin{align*}
+&\Pr(Y_i = k \mid \mathbf{X}_{i}) =\Pr(Y_i > k \mid \mathbf{X}_{i}) - \Pr(Y_i > k-1 \mid \mathbf{X}_{i}).
+\end{align*}
+
+# Prédictions
+
+- Soit $p_1 = \Pr(Y = \texttt{rarement/jamais} \mid \texttt{femme})$, etc. 
+- On a $\mathrm{expit}(\zeta_k)$ ($k=0, \ldots, K$) qui donne $0$, $`r round(expit(multi2a$zeta)[1], 3)`$, $`r round(expit(multi2a$zeta)[2], 3)`$ et $1$.
+- Les différences donnent $\widehat{p}_1 = `r round(expit(multi2a$zeta)[1], 3)`$, $\widehat{p}_2 = `r round(expit(multi2a$zeta)[2]-expit(multi2a$zeta)[1], 3)`$ et $\widehat{p}_3 = `r round(1-expit(multi2a$zeta)[2], 3)`$. 
+- Un rapide calcul numérique montre que c'est bien ce que retourne les prédictions.
+
+```{r}
+#| eval: false
+#| echo: true
+predict(multi2a, 
+        newdata = data.frame(sexe = factor("femme")), 
+        type = "probs")
+```
+
+
+# Postulat de rapport de cote proportionnel
+
+Une des hypothèses de ce modèle est que les effets des variables explicatives sont les mêmes pour chaque équation. 
+
+- $\mathscr{H}_0$ : l'effet de chaque variable est le même pour les $K$ logit du modèle .
+
+Une très petite valeur-$p$ (rejet de $\mathscr{H}_0$) pour ce test serait une indication que le modèle multinomial logistique serait préférable. 
+
+# Test de rapport de vraisemblance 
+
+Ce test compare les deux modèles emboîtés, avec 
+
+- hypothèse nulle $\mathscr{H}_0$: modèle cumulatif à cotes proportionnelles, avec $p+K-1$ paramètres
+- hypothèse alternative $\mathscr{H}_a$: modèle multinomial, avec $(K-1)\times(p+1)$ paramètres
+
+
+```{r}
+#| eval: true
+#| echo: true
+multi2b <- nnet::multinom(catvote ~ sexe, 
+  data = vote,  subset = age > 30, 
+  weights = poids, trace = FALSE)
+# Valeur-p du test de rapport de vraisemblance
+pchisq(q = deviance(multi2a) - deviance(multi2b),
+       df = length(coef(multi2a)), 
+       lower.tail = FALSE)
+```
+
+Le modèle sous $\mathscr{H}_0$ semble être une simplification adéquate.
+
+# Test du rapport de vraisemblance
+
+
+```{r}
+#| eval: true
+#| echo: false
+multi3a <- MASS::polr(
+  catvote ~ age, 
+  data = vote, 
+  subset = age > 30,
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+multi3b <- nnet::multinom(catvote ~ age, 
+  data = vote,  subset = age > 30, 
+  weights = poids, trace = FALSE)
+# Valeur-p du test de rapport de vraisemblance
+pval <- pchisq(q = deviance(multi3a) - deviance(multi3b),
+       df = length(coef(multi2a)), 
+       lower.tail = FALSE)
+```
+
+Si on ajuste plutôt le modèle avec uniquement `age`, la valeur-$p$ est inférieure à $10^{-5}$: le modèle cumulatif à cote proportionnelles ne serait pas une simplification adéquate.
+
+On peut également effectuer des tests pour déterminer la significativité
+
+ - la significativité globale (ordonnée à l'origine vs modèle complet)
+ - l'effet d'une variable explicative (modèle complet, moins une variable)
+
+# Comparaison des prédictions 
+
+\footnotesize 
+Prédictions pour le modèle avec uniquement `age` comme variable explicative.
+
+```{r}
+#| label: fig-predmultinom
+#| fig-cap: "Probabilités prédites pour chaque modalité selon l'âge."
+#| fig-width: 8
+#| fig-height: 6
+#| out-width: '70%'
+#| cache: true
+#| eval: true
+#| echo: false
+#| warning: false
+library(MASS)
+multi3a <- MASS::polr(
+  catvote ~ scale(age, scale = FALSE), 
+  data = vote,
+  subset = age > 30, 
+  weights = poids,
+  method = "logistic", 
+  Hess = TRUE)
+
+multi3b <- nnet::multinom(
+  catvote ~ scale(age, scale = FALSE), 
+  data = vote,
+  subset = age > 30, 
+  weights = poids,
+  Hess = TRUE,
+  trace = FALSE)
+xpred <- seq(30, 95, by = 0.1) - mean(vote$age)
+nobs <- length(xpred)
+pred1 <- predict(multi3b, 
+                 newdata = data.frame(age = xpred),
+                 type = "prob")
+pred2 <- predict(multi3a, 
+                 newdata = data.frame(age = xpred),
+                 type = "prob")
+df <- data.frame(
+  x = rep(xpred + mean(vote$age), length.out = 6*nobs),
+  modele = factor(rep(c("multinomial", "ordinal"), 
+                       each = 3*nobs)),
+  reponse = factor(c(rep(c("rarement/jamais",
+                    "occasionnellement",
+                    "toujours"), 
+                  each = nobs),
+                  rep(c("rarement/jamais",
+                    "occasionnellement",
+                    "toujours"), 
+                  each = nobs))),
+  pred = c(pred1, pred2))
+                  
+ggplot2::ggplot(
+  data = df,
+  mapping = ggplot2::aes(
+    x = x,
+    y = pred,
+    color = reponse,
+    linetype = modele)) + 
+  ggplot2::geom_line() +
+  ggplot2::labs(y = "probabilité prédite",
+       linetype = "modèle",
+       color = "vote",
+       x = "âge (années)") +
+  MetBrewer::scale_color_met_d("Hiroshige") + 
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom") 
+```
+
+\normalsize
 
 # Récapitulatif
 
-- La classification est une forme d'apprentissage supervisée.
-- On peut assigner l'observation à la classe la plus plausible, ou déterminer un point de coupure.
-- Si on a un objectif particulier (fonction de gain), on peut optimiser les profits en assignant une importance différente à chaque scénario.
-- On peut catégoriser les observations dans une matrice de confusion.
+- La régression multinomiale logistique pour une variable catégorielle à $K$ niveaux est une extension directe de la régression logistique pour données binaires
+   - la somme des probabilités vaut 1.
+   - il y a $K-1$ équations de cote en termes des variables explicatives,
+   - donc le nombre de paramètres croît rapidement.
+   
+# Récapitulatif
+
+On met beaucoup l'accent sur l'interprétation des coefficients à l'échelle de la cote.
+
+   - rapports de cote = modèle multiplicatif: la cote de catégorie $k$ vs référence est multipliée par $\exp(\beta_{jk})$ pour chaque augmentation de $\mathrm{X}_j$ d'une unité.
+   - les coefficients manquants (cote de $Y=k$ vs $Y=l$) peut être déduits par des manipulations algébriques.
+    
+# Récapitulatif
+
+Les outils usuels d'inférence pour les modèles estimés par maximum de vraisemblance sont applicables.
+
+ - intervalles de confiance (Wald ou vraisemblance profilée)
+ - tests de rapport de vraisemblance
+ - critères d'information
 
 # Récapitulatif
 
-- On s'intéresse à
-   - la spécificité (proportion d'échecs correctement classifiés) 
-   - la sensibilité (proportion de succès correctement classifiés)
-   - le taux de bonne classification
-   - le taux de faux positifs ou faux négatifs
-- L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe ROC) et le lift donnent une mesure de la qualité des prédictions.
+Côté classification, on va règle générale assigner à la classe la plus probable.
 
+- il existe des équivalents multidimensionnels directs à ce qu'on a couvert (matrice de confusion, taux de bonne classification, gain, etc.) 
+- certains concepts (sensibilité, spécificité, fonction d'efficacité du récepteur) ne sont en revanche pas applicables ou n'ont pas d'équivalent.
+
+# Récapitulatif
+
+Le modèle cumulatif à cote proportionnelle est une simplification du modèle multinomial pour des **données ordinales**.
+
+- On suppose que l'effet des variables est le même pour la cote de la survie de chaque modalité.
+- Moins de paramètres, mais postulat à vérifier (via test de rapport de vraisemblance).
