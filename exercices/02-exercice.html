@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Analyse factorielle</title>
+<title>Analyse multidimensionnelle appliquée - Sélection de variables</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home"><i class="bi bi-comment" role="img" aria-label="Piazza">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -120,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Analyse factorielle</h1>
+      <h1 class="quarto-secondary-nav-title">Sélection de variables</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -160,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Analyse factorielle</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Sélection de variables</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -180,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Sélection de variables</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Régression logistique</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -200,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Régression logistique</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Analyse de survie</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -220,7 +220,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse de survie</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse factorielle</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -268,7 +268,6 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#exercice-2.1" id="toc-exercice-2.1" class="nav-link active" data-scroll-target="#exercice-2.1">Exercice 2.1</a></li>
-  <li><a href="#exercice-2.2" id="toc-exercice-2.2" class="nav-link" data-scroll-target="#exercice-2.2">Exercice 2.2</a></li>
   </ul>
 </nav>
     </div>
@@ -277,7 +276,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Analyse factorielle</h1>
+<h1 class="title d-none d-lg-block">Sélection de variables</h1>
 </div>
 
 
@@ -294,35 +293,20 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="exercice-2.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-2.1">Exercice 2.1</h2>
-<p>Les données <code>sondage_entreprise</code> contiennent les résultats d’un sondage effectué par une compagnie auprès de ses employés. Le but de l’exercice est d’ajuster un modèle d’analyse factorielle exploratoire (avec rotation varimax) aux données.</p>
+<p>Le but de l’exercice est de bâtir un modèle prédictif pour le nombre annuel de demandes d’admission à partir de la base de données <code>college</code>.</p>
 <ol type="1">
-<li>Produisez des statistiques descriptives pour les variables <code>q8</code> à <code>q17</code></li>
-<li>Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.</li>
-<li>Utilisez la méthode d’estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d’analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?</li>
-<li>Répétez l’exercice, cette fois avec la méthode du maximum de vraisemblance
+<li>Faites une analyse exploratoire des variables explicatives:
 <ul>
-<li>Est-ce qu’un de ces modèles ajustés est un cas de quasi-Heywood?</li>
-<li>Combien de facteurs les critères d’information recommendent-ils?</li>
-<li>Si vous ajoutez des facteurs, est-ce que votre interprétation change?</li>
+<li>Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse.</li>
+<li>Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l’ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?</li>
+<li>Vérifiez s’il y a des variables catégorielles encodées comme des variables numériques.</li>
 </ul></li>
-<li>Créez des échelles et vérifiez leur cohérence interne.</li>
-</ol>
-</section>
-<section id="exercice-2.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercice-2.2">Exercice 2.2</h2>
-<p>Effectuez une analyse factorielle exploratoire des données <code>aerien_facto</code>: cette base de données contient toutes les questions en lien avec la satisfaction de la base de données <code>aerien</code>. Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).</p>
-<ol type="1">
-<li>Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.
+<li>Scindez la base de données en échantillon avec données d’entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire <code>60602</code> via <code>set.seed(60602)</code>.
 <ul>
-<li>Combien de facteurs le critère des valeurs propres suggère-t-il?</li>
-<li>Combien de facteurs le diagramme d’éboulis suggère-t-il?</li>
-<li>Interprétez les chargements obtenus suite à la rotation. Commentez sur l’interprétabilité de ces derniers.</li>
-<li>En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.</li>
+<li>Sélectionnez un modèle à l’aide d’une des méthodes couvertes, mais en basant votre choix sur l’erreur moyenne quadratique évaluée sur l’échantillon de validation.</li>
 </ul></li>
-<li>Répétez l’exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.
-<ul>
-<li>Qu’arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.</li>
-</ul></li>
+<li>Répétez la sélection, cette fois en prenant comme critère pour l’erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.</li>
+<li>Créez un tableau avec le nombre de coefficients de votre modèle final et un estimé de l’erreur moyenne quadratique obtenu par validation externe ou croisée.</li>
 </ol>
 
 
@@ -465,7 +449,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022-2023 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
     <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>

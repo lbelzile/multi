@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Régression logistique</title>
+<title>Analyse multidimensionnelle appliquée - Analyse de survie</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -83,6 +83,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -168,7 +187,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home"><i class="bi bi-comment" role="img" aria-label="Piazza">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -184,7 +203,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Régression logistique</h1>
+      <h1 class="quarto-secondary-nav-title">Analyse de survie</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -224,7 +243,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Analyse factorielle</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Sélection de variables</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -244,7 +263,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Sélection de variables</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Régression logistique</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -264,7 +283,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Régression logistique</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Analyse de survie</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -284,7 +303,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse de survie</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse factorielle</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -341,7 +360,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Régression logistique</h1>
+<h1 class="title d-none d-lg-block">Analyse de survie</h1>
 </div>
 
 
@@ -358,476 +377,311 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="exercice-4.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-4.1">Exercice 4.1</h2>
-<p><em>Les données <code>logistclient</code> contiennent des données simulées pour un cas fictif de promotion pour des clients.</em></p>
+<p><em><span class="citation" data-cites="Fotopoulos.Louri:2000">Fotopoulos &amp; Louri (<a href="#ref-Fotopoulos.Louri:2000" role="doc-biblioref">2000</a>)</span> considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l’article pour pour répondre aux questions suivantes:</em></p>
 <ol type="1">
-<li><em>Estimez le modèle logistique pour la probabilité que <code>promo=1</code> avec les variables explicatives <code>nachats</code>, <code>sexe</code> et <code>tclient</code>.</em></li>
+<li><em>Quel type de mécanisme de censure est présent dans ces données?</em></li>
 </ol>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(logistclient, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle logistique</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(promo <span class="sc">~</span> nachats <span class="sc">+</span> sexe <span class="sc">+</span> tclient, </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> logistclient)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficients du modèle et statistique de Wald</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-glm(formula = promo ~ nachats + sexe + tclient, family = binomial(link = "logit"), 
-    data = logistclient)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--1.7552  -1.0874  -0.7992   1.1806   1.7042  
-
-Coefficients:
-                   Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)        -0.98615    0.24634  -4.003 6.25e-05 ***
-nachats             0.20775    0.03509   5.921 3.20e-09 ***
-sexe               -0.26796    0.13872  -1.932   0.0534 .  
-tclientoccasionnel  0.06873    0.15638   0.439   0.6603    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 1384.5  on 999  degrees of freedom
-Residual deviance: 1330.6  on 996  degrees of freedom
-AIC: 1338.6
-
-Number of Fisher Scoring iterations: 4</code></pre>
-</div>
-</div>
+<p>Censure par intervalle (nombre connu à une année près, seule l’année du début d’activités et le nombre de bilans sont connus des auteurs) et censure à droite (certaines firmes sont encore en activité en 1992 à la fin de la période de collecte de données).</p>
+<p>On pourrait ignorer la censure par intervalle en associant chaque intervalle de la forme <span class="math inline">\([t, t+1)\)</span> à la valeur <span class="math inline">\(t\)</span>.</p>
 <ol start="2" type="1">
-<li><em>Interprétez les coefficients du modèle à l’échelle de la cote en terme de pourcentage d’augmentation ou de diminution.</em></li>
+<li><em>Donnez une estimation de la probabilité qu’une entreprise survive trois ans et plus.</em></li>
 </ol>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(mod)) <span class="co"># Rapport de cote</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>       (Intercept)            nachats               sexe tclientoccasionnel 
-         0.3730111          1.2309041          0.7649396          1.0711432 </code></pre>
-</div>
-</div>
-<ul>
-<li>La cote pour l’offre promotionnelle (oui versus non) des hommes est 23.5% plus faible que celle des femmes, <em>ceteris paribus</em></li>
-<li>La cote des clients occasionnels est 7.11% supérieure à celle des clients fréquents, <em>ceteris paribus</em>. De manière équivalente, le rapport de cotes pour <code>tclient</code> fréquent sur occasionnel est de1/1.0711 = 0.934: les clients fréquents ont une cote 6.6% inférieure à celle des clients occasionnels, toute chose étant égale par ailleurs.</li>
-<li>La cote de <code>nachats</code> augmente de 23.1% pour chaque augmentation du nombre d’achats dans le dernier mois, <em>ceteris paribus</em></li>
-</ul>
+<p>On veut la survie <span class="math inline">\(\Pr(T \geq 3)\)</span> L’estimation est donnée dans la colonne <em>Cumulative survival rate</em> du Tableau 1, soit 0.6393.</p>
 <ol start="3" type="1">
-<li><em>Testez si l’effet de <code>nachats</code> est statistiquement significatif à niveau <span class="math inline">\(\alpha = 0.05\)</span>.</em></li>
+<li><em>Donnez une estimation de la probabilité qu’une entreprise survive entre 4 et 5 ans, soit l’intervalle [4,5) ans.</em></li>
 </ol>
-<ul>
-<li>L’intervalle de confiance à 95% pour le rapport de cote de <code>nachats</code>, basé sur la vraisemblance profilée, est de <span class="math inline">\([1.15, 1.32]\)</span>; comme 1 est exclu, cette différence est statistiquement significative.</li>
-</ul>
-<p>On obtiendrait la même conclusion avec la statistique du test de rapport de vraisemblance, ici <span class="math inline">\(37.237\)</span> pour 1 degré de liberté. La probabilité, si <span class="math inline">\(\beta_{\text{nachats}}=0\)</span>, d’obtenir une telle différence d’ajustement est inférieure à <span class="math inline">\(10^{-4}\)</span>, bien en deça du seuil de significativité. On rejette l’hypothèse nulle et on conclut que le nombre d’achat est important pour expliquer si une personne s’est prévalue de l’offre promotionnelle.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">confint</span>(mod)) <span class="co">#IC pour rapport de cote</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>                       2.5 %    97.5 %
-(Intercept)        0.2292101 0.6025441
-nachats            1.1500139 1.3197437
-sexe               0.5825467 1.0037294
-tclientoccasionnel 0.7889239 1.4568553</code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(mod, <span class="at">type =</span> <span class="dv">3</span>) <span class="co"># tests de rapport de vraisemblance</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Deviance Table (Type III tests)
-
-Response: promo
-        LR Chisq Df Pr(&gt;Chisq)    
-nachats   37.237  1  1.046e-09 ***
-sexe       3.737  1    0.05322 .  
-tclient    0.193  1    0.66011    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
+<p>Puisque la fonction de survie empirique est constante, cela revient à la probabilité de défaillance dans l’intervalle [4,5) ans, soit <span class="math display">\[\begin{align*}
+\Pr\{T \in [4,5)\} &amp;= \Pr(T \ge 5) - \Pr(T \ge 4) \\&amp;= 0.5525 - 0.5023 \\&amp;= 0.0502.
+\end{align*}\]</span> Si on traçait la courbe de Kaplan–Meier, cette probabilité correspond à la hauteur de la contre-marche entre 4 et 5 ans.</p>
 <ol start="4" type="1">
-<li><em>Choisissez un point de coupure pour la classification pour maximiser le taux de bonne classification.</em>
-<ol type="i">
-<li><em>Pour le point de coupure choisi, construisez une matrice de confusion.</em></li>
-<li><em>Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.</em></li>
-</ol></li>
+<li><em>Quel pourcentage des observations sont censurées?</em></li>
 </ol>
-<div class="cell" data-hash="04-solution_cache/html/unnamed-chunk-4_c94090c9ee5c1ed1e04f5dc32d817a4a">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60602</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prédictions par validation croisée </span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (moyenne de 10 réplications, K=10 plis)</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> hecmulti<span class="sc">::</span><span class="fu">predvc</span>(mod)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraire la variable réponse binaire 0/1</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> logistclient<span class="sc">$</span>promo</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p><strong>Notez que les prédictions obtenues par validation croisée sont aléatoires, donc les résultats (aire sous la courbe, valeur-<span class="math inline">\(p\)</span> du test d’adéquation, etc.) peuvent varier si vous n’utilisez pas le même germe aléatoire.</strong></p>
-<p>On prend le modèle ajusté avec <code>glm</code> et on calcule la prédiction à l’aide de la validation croisée à 10 groupes, répétée 10 fois. La fonction <code>predvc</code> retourne la moyenne des prédictions (ici, des probabilités) pour chacune des 1000 observations.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tableau <span class="ot">&lt;-</span> <span class="fu">perfo_logistique</span>(<span class="at">prob =</span> pred, </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">resp =</span> resp)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Graphique du taux de bonne classification</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># selon le point de coupure</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tableau, </span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> coupe, <span class="at">y =</span> pcorrect)) <span class="sc">+</span> </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"point de coupure"</span>,</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>,</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Taux de bonne classification"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="04-solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> <span class="fu">which.max</span>(tableau<span class="sc">$</span>pcorrect)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tableau[opt,], <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<table class="table table-sm table-striped">
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;">coupe</th>
-<th style="text-align: right;">VP</th>
-<th style="text-align: right;">VN</th>
-<th style="text-align: right;">FP</th>
-<th style="text-align: right;">FN</th>
-<th style="text-align: right;">pcorrect</th>
-<th style="text-align: right;">sensi</th>
-<th style="text-align: right;">speci</th>
-<th style="text-align: right;">fpos</th>
-<th style="text-align: right;">fneg</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">45</td>
-<td style="text-align: right;">0.45</td>
-<td style="text-align: right;">316</td>
-<td style="text-align: right;">281</td>
-<td style="text-align: right;">240</td>
-<td style="text-align: right;">163</td>
-<td style="text-align: right;">59.7</td>
-<td style="text-align: right;">65.97</td>
-<td style="text-align: right;">53.93</td>
-<td style="text-align: right;">43.17</td>
-<td style="text-align: right;">36.71</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Ensuite, il suffit de passer les valeurs de la variable réponse et nos probabilités de succès prédites aux différentes fonctions.</p>
-<p>Si on considère des points de coupure de 0.01 à 0.99 en incréments de 0.01, on obtient un point de coupure optimal à 0.45. On note que le taux de bonne classification change assez peu au final.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="tbl-confusion" class="anchored">
-<table class="table table-sm table-striped">
-<caption>Tableau&nbsp;1: Matrice de confusion avec point de coupure optimal</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;"><span class="math inline">\(Y=1\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(Y=0\)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><span class="math inline">\(\widehat{Y}=1\)</span></td>
-<td style="text-align: right;">316</td>
-<td style="text-align: right;">240</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><span class="math inline">\(\widehat{Y}=0\)</span></td>
-<td style="text-align: right;">163</td>
-<td style="text-align: right;">281</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<p>Ainsi, si on fait les calculs à la main, on estime</p>
-<ul>
-<li>la sensibilité, <span class="math inline">\(\mathsf{VP}/(\mathsf{VP} + \mathsf{FN})\)</span>, soit 316 / (316 + 163) ou 0.66.</li>
-<li>la spécificité, <span class="math inline">\(\mathsf{VN}/(\mathsf{VN} + \mathsf{FP})\)</span>, soit 281 / (281 + 240) ou 0.539.</li>
-<li>le taux de bonne classification <span class="math inline">\(\mathsf{VN} + \mathsf{VP}/(\mathsf{VN} + \mathsf{VP} + \mathsf{FN} + \mathsf{FP})\)</span>, soit (316 + 281) / 1000 ou 0.597.</li>
-</ul>
-<p>Ces valeurs coincident, à arrondi près, avec ce qui est reporté dans le tableau.</p>
+<p>Il y a 219 observations au total et <span class="math inline">\(38=13+25\)</span> firmes sont toujours en activité et donc leur temps de survie est censuré; le pourcentage est 38/219 ou 17.35%.</p>
 <ol start="5" type="1">
-<li><em>Produisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l’aire sous la courbe estimée à l’aide de la validation croisée.</em></li>
+<li><em>Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.</em></li>
 </ol>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>roc <span class="ot">&lt;-</span> <span class="fu">courbe_roc</span>(<span class="at">prob =</span> pred, <span class="at">resp =</span> resp)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="04-solution_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>On obtient une estimation de l’aire sous la courbe de 0.616.</p>
+<p>Non, puisque les plus grandes temps observés sont censurées et l’estimation de la fonction de survie s’arrête à 0.2921; la fonction de survie ne traverse pas la valeur horizontale de 0.25</p>
+<p><em>Le Tableau 3 de l’article fournit les estimations d’un modèle à risques proportionnels de Cox.</em></p>
 <ol start="6" type="1">
-<li><em>Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?</em></li>
+<li><em>Comparez les modèles (1) et (2). Est-ce que l’effet de cohorte impacte la survie?</em></li>
 </ol>
+<p>Oui. On peut voir cela de plusieurs façons puisque (1) les deux coefficients associés sont significativement différents de zéro (tests de Wald) avec, pour <code>COHORT_82</code>, <span class="math inline">\(Z = -0.5518/0.2081=-2.651\)</span> et une valeur-<span class="math inline">\(p\)</span> basée sur l’approximation normale de 0.008 (idem pour <code>COHORT_83</code>).</p>
+<p>On peut aussi construire une statistique du rapport de vraisemblance avec <span class="math display">\[-2\ell_{(1)} + 2 \ell_{(2)} =1503.442-1471.353 = 32.089.\]</span> Or, l’inclusion des cohortes ajoute deux paramètres, donc cette statistique est à comparer avec une loi <span class="math inline">\(\chi^2_2\)</span>.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">calibration</span>(<span class="at">prob =</span> pred, <span class="at">resp =</span> resp)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test de Wald: beta_cohort82 = 0</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">*</span><span class="fu">pnorm</span>(<span class="sc">-</span><span class="fl">0.5518</span><span class="sc">/</span><span class="fl">0.2081</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Test de calibration de Spiegelhalter (1986)
-Statistique de test: 0.55 
-valeur-p: 0.581</code></pre>
+<pre><code>[1] 0.008010906</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test de Wald: beta_cohort83 = 0</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">*</span><span class="fu">pnorm</span>(<span class="sc">-</span><span class="fl">0.5464</span><span class="sc">/</span><span class="fl">0.2021</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.006859031</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test de rapport de vraisemblance</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(<span class="fl">1503.442</span> <span class="sc">-</span> <span class="fl">1471.353</span>, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">df =</span> <span class="dv">2</span>, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.076371e-07</code></pre>
 </div>
 </div>
-<p>L’hypothèse nulle est que le modèle est calibré; ici, la valeur-<span class="math inline">\(p\)</span> est près de 0.5, donc on ne rejette pas l’hypothèse nulle et on conclut qu’il n’y a pas de preuve de surajustement.</p>
+<ol start="7" type="1">
+<li><em>Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (<code>FIXED_ASSET</code>) et le montant de la dette (<code>DEBT</code>) sur la durée de vie des entreprises.</em></li>
+</ol>
+<p>Toute chose étant égale par ailleurs, une augmentation du ratio du passif total sur le total des actifs (<code>DEBT</code>) de 1 augmente le risque de 119.3%; le rapport de risque étant multiplié par <span class="math inline">\(\exp(0.83)=2.293\)</span>.</p>
+<p><em>Ceteris paribus</em>, une augmentation du ratio des immobilisations sur le total des actifs de 1 diminue le risque d’environ 59.8%, avec un rapport de risque de <span class="math inline">\(\exp(-0.9091) =0.4028\)</span>.</p>
 </section>
 <section id="exercice-4.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-4.2">Exercice 4.2</h2>
-<p><em>On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (<code>1</code>) à très satisfait (<code>5</code>). Les 1000 observations se trouvent dans la base de données <code>multinom</code> du paquet <code>hecmulti</code>.</em></p>
-<p><em>Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.</em></p>
+<p><em>Un commerce de chaussures de Montréal veut optimiser son inventaire afin de maximiser ses profits et fait appel à votre société de conseil. La base de données <code>chaussures</code> contient des observations fictives et les variables suivantes:</em></p>
+<ul>
+<li><code>statut</code>: <em>variable catégorielle, <code>0</code> s’il est vendu, <code>1</code> si l’article est toujours en stock, <code>2</code> s’il est déstocké (les modèles invendus après 40 mois en magasins sont passés aux pertes et profits).</em></li>
+<li><code>temps</code>: <em>temps de stockage de l’article (en mois).</em></li>
+<li><code>prix</code>: <em>prix de vente réelle de l’article (avec rabais si applicable), arrondi à l’unité près.</em></li>
+<li><code>sexe</code>: <em>variable catégorielle, <code>0</code> pour modèle pour homme, <code>1</code> pour femme.</em></li>
+</ul>
+<p><em>Notre objectif premier est d’estimer le temps qu’un article passe en stock avant d’être vendu.</em></p>
 <ol type="1">
-<li><em>Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Sinon, ajustez le modèle de régression multinomiale logistique avec <code>1</code> comme catégorie de référence, <code>1</code> pour revenu et <code>sec</code> pour éducation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> et utilisez ce dernier pour répondre aux autres questions.</em></li>
+<li><em>Que représente la censure dans cet exemple?</em></li>
 </ol>
-<p>Les niveaux des facteurs non-ordonnés (catégories) dans <strong>R</strong> sont classés en ordre alphanumérique. Il faut donc modifier la catégorie de référence uniquement pour le niveau d’éducation avant d’ajuster le modèle.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(multinom, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> multinom <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">educ =</span> <span class="fu">relevel</span>(educ, <span class="at">ref =</span> <span class="st">"sec"</span>),</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">ordered</span>(y))</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> nnet<span class="sc">::</span><span class="fu">multinom</span>(</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> sexe <span class="sc">+</span> educ <span class="sc">+</span> revenu <span class="sc">+</span> age,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">trace =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>Le modèle a 4 coefficients, dont deux pour éducation et revenu et un pour sexe et age, par niveau.</p>
-<p>Pour ajuster le modèle à cotes proportionnelles, il faut d’abord convertir la variable réponse en variable ordinale à l’aide de <code>ordered</code> si ce n’est pas déjà la classe de la variable. Cela permettra de spécifier l’ordre des modalités.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuster modèle à cote proportionnelle</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">polr</span>(</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ordered</span>(y) <span class="sc">~</span> sexe <span class="sc">+</span> educ <span class="sc">+</span> revenu <span class="sc">+</span> age,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer statistique de test</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># (rapport de vraisemblance)</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>stat <span class="ot">&lt;-</span> <span class="fu">deviance</span>(mod0) <span class="sc">-</span> <span class="fu">deviance</span>(mod1)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># À comparer à une loi khi-deux avec </span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># npar1-npar0 degrés de liberté</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>npar0 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod0)) <span class="sc">+</span> <span class="fu">length</span>(mod0<span class="sc">$</span>zeta)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>npar1 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod1))</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcul de la valeur-p</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité que khi-deux (df) excède 'stat'</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(stat, </span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">df =</span> npar1 <span class="sc">-</span> npar0, </span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0008817018</code></pre>
-</div>
-</div>
-<p>Le modèle ordinal a 10 paramètres, contre 28 pour le modèle multinomial logistique. On peut faire un test du rapport de vraisemblance en comparant la différence des log-vraisemblance des deux modèles emboîtés: la valeur de la statistique est 42.702. La valeur-<span class="math inline">\(p\)</span> estimée est <span class="math inline">\(8.8 \times 10^{-4}\)</span>$, donc on rejette l’hypothèse nulle et on conclut que le modèle à cote proportionnelle n’est pas adéquat.</p>
+<p>Les données censurées à droites correspondent aux paires de chaussure qui sont toujours en stock à la fin de la période d’observation ou qui sont invendues après 40 mois.</p>
 <ol start="2" type="1">
-<li><em>Interprétez l’effet des variables éducation et sexe pour la catégorie 2 (par rapport à 1).</em></li>
+<li><em>Estimez le temps de stockage à l’aide d’un modèle de Kaplan–Meier et rapportez les estimés des quartiles.</em></li>
 </ol>
-<p>Il suffit de regarder les coefficients <span class="math inline">\(\exp(\widehat{\beta}_{\text{sexe}}), \ldots\)</span> associés et les interpréter en termes de rapport de cote, pour une régression logistique ordinaire.</p>
+<p>On note d’abord que la colonne <code>temps</code> début à 1, ce qui indique que les chaussures sont vendues dans le premier mois. Un temps de <span class="math inline">\(t\)</span> mois correspond à la plage <span class="math inline">\([t-1, t)\)</span> mois en stock.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficient correspondants à sexe et éducation</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(mod1)[<span class="st">"2"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>])</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(chaussures, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># censure si 1 ou 2</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># statut == 0 =&gt; TRUE (1) si vendu, FALSE (0) sinon</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>km <span class="ot">&lt;-</span> <span class="fu">survfit</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> <span class="fu">Surv</span>(<span class="at">time =</span> temps, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"kaplan-meier"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> chaussures)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(km)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="04-solution_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimation des quartiles</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(km)<span class="sc">$</span>quantile</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>     sexe educcegep   educuni 
- 1.424053  1.104006  1.316095 </code></pre>
+<pre><code>25 50 75 
+ 5  8 12 </code></pre>
 </div>
 </div>
-<ul>
-<li>La cote pour les femmes pour insatisfait par rapport à très insatisfait est 42.4% plus élevée que pour les hommes, toute chose étant égale par ailleurs.</li>
-<li>La cote pour les individus qui ont un diplôme collégial pour insatisfait par rapport à très insatisfait est 10.4% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.</li>
-<li>La cote pour les individus qui ont un diplôme universitaire pour insatisfait par rapport à très insatisfait est 31.6% plus élevée que pour ceux qui on un diplôme secondaire, toute chose étant égale par ailleurs.</li>
-</ul>
+<p>Les quartiles sont 5 mois (25% des chaussures sont en inventaire moins de ce temps), 8 mois (temps médian en stock) et 12 mois (75% des chaussures sont vendues dans l’année de leur achat).</p>
 <ol start="3" type="1">
-<li><em>Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?</em></li>
-</ol>
-<p>Pour répondre à cette question, on ajuste le modèle multinomial logistique avec uniquement une constante. Les probabilités prédites sont simplement la proportion empirique des observations de l’échantillon: on peut ainsi vérifier que le modèle a convergé en comparant les prédictions et ces proportions. Une petite différence numérique est possible puisque le modèle multinomial logistique est ajusté à l’aide d’une procédure d’optimisation numérique itérative.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuster modèle avec proba constante</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> nnet<span class="sc">::</span><span class="fu">multinom</span>(</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ordonnée à l'origine seulement</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Vérifier convergence</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>pred0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> mod0,</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Entrer une bd avec une ligne</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> db[<span class="dv">1</span>,], </span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"prob"</span>)</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer la proportion de chaque categ.</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>proportions_y <span class="ot">&lt;-</span> <span class="fu">table</span>(db<span class="sc">$</span>y)<span class="sc">/</span><span class="fu">nrow</span>(db)</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer différences</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>pred0 <span class="sc">-</span> proportions_y</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-            1             2             3             4             5 
- 2.278825e-05  1.157814e-05 -6.983907e-06 -5.040094e-06 -2.234239e-05 </code></pre>
-</div>
-</div>
-<p>On peut ensuite calculer la statistique de rapport de vraisemblance en comparant les déviances des deux modèles.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer statistique de test</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (rapport de vraisemblance)</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>stat <span class="ot">&lt;-</span> <span class="fu">deviance</span>(mod0) <span class="sc">-</span> <span class="fu">deviance</span>(mod1)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># À comparer à une loi khi-deux avec </span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># npar1-npar0 degrés de liberté</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>npar0 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod0)) <span class="sc">+</span> <span class="fu">length</span>(mod0<span class="sc">$</span>zeta)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>npar1 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod1))</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcul de la valeur-p</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité que khi-deux (df) excède 'stat'</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(stat, </span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">df =</span> npar1 <span class="sc">-</span> npar0, </span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0002755707</code></pre>
-</div>
-</div>
-<p>La statistique pour le test du rapport de vraisemblance que tous les coefficients associés aux covariables sont nuls (24 paramètres supplémentaires) est 55.41, et si le modèle sans covariable était vrai, cette statistique serait approximativement <span class="math inline">\(\chi^2_{24}\)</span>. La valeur-<span class="math inline">\(p\)</span> arrondie est 0.0003, on rejette l’hypothèse nulle que tous les coefficients associés aux variables explicatives sont nuls. On conclut qu’au moins une covariable est utile pour prédire une cote par rapport au modèle avec une probabilité constante.</p>
-<ol start="4" type="1">
-<li><em>Est-ce que l’effet de la variable âge est globalement significatif?</em></li>
-</ol>
-<p>Puisqu’on modélise quatre rapport de cotes à l’aide d’un modèle logistique, d’où <span class="math inline">\(\beta_{\texttt{age}_2}=\beta_{\texttt{age}_3}=\beta_{\texttt{age}_4}=\beta_{\texttt{age}_5}=0.\)</span> On peut obtenir la valeur-<span class="math inline">\(p\)</span> avec le tableau d’analyse de déviance, qui rapporte la valeur du test de rapport de vraisemblance. On conclut que l’âge impacte la probabilité des différents items de satisfaction.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(mod1, <span class="at">type =</span> <span class="dv">3</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Deviance Table (Type III tests)
-
-Response: y
-       LR Chisq Df Pr(&gt;Chisq)    
-sexe    14.6448  4  0.0054975 ** 
-educ     9.7083  8  0.2860960    
-revenu   7.8239  8  0.4508547    
-age     23.1285  4  0.0001194 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
-<ol start="5" type="1">
-<li><em>Fournissez un intervalle de confiance à niveau 95% pour l’effet multiplicatif d’une augmentation d’une unité de la variable âge pour chacune des cote par rapport à très insatisfait (<code>1</code>). Que concluez-vous sur l’effet de âge pour les réponses 2 à 5 par rapport à 1?</em></li>
-</ol>
-<p>Les intervalles de confiance sont obtenus en prenant l’exponentielle des intervalles de confiance profilée pour les coefficients associés à <code>age</code>:</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">confint</span>(mod1)[<span class="st">"age"</span>,,])</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>               2         3         4         5
-2.5 %  0.9745999 0.8723827 0.9415834 0.9879372
-97.5 % 1.0108252 0.9640311 0.9893561 1.0205983</code></pre>
-</div>
-</div>
+<li><em>Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.</em>
 <ul>
-<li><span class="math inline">\([0.975; 1.011]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{2|1}}\)</span> (pas significatif),</li>
-<li><span class="math inline">\([0.871; 0.963]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{3|1}}\)</span> (significatif),</li>
-<li><span class="math inline">\([0.941; 0.989]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{4|1}}\)</span> (significatif) et</li>
-<li><span class="math inline">\([0.988; 1.021]\)</span> pour <span class="math inline">\(\beta_{\texttt{age}_{5|1}}\)</span> (pas significatif).</li>
-</ul>
+<li><em>Rapportez et interprétez les coefficients des variables.</em></li>
+<li><em>Est-ce que les effets estimés sont significatifs?</em></li>
+</ul></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>modcox <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(<span class="at">time =</span> temps, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> sexe <span class="sc">+</span> prix,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> chaussures)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modcox)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(time = temps, event = statut == 0) ~ sexe + 
+    prix, data = chaussures)
+
+  n= 6807, number of events= 5880 
+
+           coef  exp(coef)   se(coef)       z Pr(&gt;|z|)    
+sexe -0.1640023  0.8487400  0.0262256  -6.254 4.01e-10 ***
+prix -0.0135855  0.9865064  0.0009587 -14.170  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+     exp(coef) exp(-coef) lower .95 upper .95
+sexe    0.8487      1.178    0.8062    0.8935
+prix    0.9865      1.014    0.9847    0.9884
+
+Concordance= 0.589  (se = 0.005 )
+Likelihood ratio test= 247.8  on 2 df,   p=&lt;2e-16
+Wald test            = 239.1  on 2 df,   p=&lt;2e-16
+Score (logrank) test = 238.9  on 2 df,   p=&lt;2e-16</code></pre>
+</div>
+</div>
+<p>Chaque augmentation du prix d’un dollar mène à une diminution de risque de vente de 1.35%. De manière équivalente, une augmentation d’un dollar multiplie le risque par 0.9865, soit une diminution de 12.7% pour une différence de prix de 10$. Cet effet est significativement différent de zéro (statistique de Wald de <span class="math inline">\(z = -14.17\)</span>, valeur-<span class="math inline">\(p\)</span> négligeable).</p>
+<p>Pour une paire de chaussure du même prix, le risque de vendre la paire de chaussures pour femmes est de 15.13% inférieur à celui d’une paire pour hommes. Cette différence est significative à niveau 1% (statistique de Wald <span class="math inline">\(z=-6.254\)</span>). Les souliers pour femmes restent plus longtemps en stock que ceux des hommes au même prix.</p>
+<ol start="4" type="1">
+<li><em>Tracez les estimés des courbes de survie d’une chaussure de l’année dont le prix de vente est 120$ pour les modèles pour homme et pour femme.</em></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nouvelle base de données avec profil des chaussures</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ndb <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sexe =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">prix =</span> <span class="fu">rep</span>(<span class="dv">120</span>, <span class="dv">2</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtention des prédictions de la survie</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">survfit</span>(modcox, </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">newdata =</span> ndb, </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"kaplan-meier"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Graphique R de basedes prédictions</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pred, </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="co"># couleur</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">lty =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="co"># type de ligne</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"temps (en mois)"</span>, <span class="co">#axe des abcisses</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"survie"</span>) <span class="co">#axe des ordonnées</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-predcox" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="04-solution_files/figure-html/fig-predcox-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Estimé de la fonction de survie pour une paire de chaussure de 120$ pour hommes (traits pleins rouges) et femme (traitillé bleu)</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><em>On vous informe que, pour éliminer les invendus lors de l’arrivée de nouveaux modèles, l’entreprise offre une réduction de 20% après 15 mois.</em></p>
+<ol start="5" type="1">
+<li><em>Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?</em></li>
+</ol>
+<p>Pour ce faire il faut modifier la base de données et casser la contribution en deux selon que le temps soit supérieur à 15 mois ou pas.</p>
+<p>On obtient donc une plage de <span class="math inline">\((0,t]\)</span> pour les chaussures vendues en dessous de 15 mois (aucun changement).</p>
+<p>Pour les chaussures mises au rabais on a une plage de <span class="math inline">\((0, 15]\)</span> avec censure à droite (dans <code>chaussure1</code> ci dessous) et finalement <span class="math inline">\((15,t]\)</span> avec l’événement pour les autres chaussures (<code>chaussures2</code>).</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>chaussures1 <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">temps0 =</span> <span class="dv">0</span>, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># censure si chaussures invendues après 15 semaines</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">statut =</span> <span class="fu">ifelse</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>, <span class="dv">1</span>, statut),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># enlever rabais pour obtenir prix initial</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">prix =</span> <span class="fu">ifelse</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>, prix<span class="sc">/</span><span class="fl">0.8</span>, prix),</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">temps =</span> <span class="fu">pmin</span>(temps, <span class="dv">15</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>chaussures2 <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">temps0 =</span> <span class="dv">15</span>) </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>modcox2 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(<span class="at">time =</span> temps0, </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">time2 =</span> temps,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> sexe <span class="sc">+</span> prix,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">full_join</span>(chaussures1, </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>                          chaussures2))</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modcox2)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(time = temps0, time2 = temps, event = statut == 
+    0) ~ sexe + prix, data = dplyr::full_join(chaussures1, chaussures2))
+
+  n= 7553, number of events= 5880 
+
+          coef exp(coef)  se(coef)       z Pr(&gt;|z|)    
+sexe -0.116920  0.889657  0.026250  -4.454 8.43e-06 ***
+prix -0.042049  0.958823  0.001034 -40.665  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+     exp(coef) exp(-coef) lower .95 upper .95
+sexe    0.8897      1.124    0.8450    0.9366
+prix    0.9588      1.043    0.9569    0.9608
+
+Concordance= 0.675  (se = 0.004 )
+Likelihood ratio test= 1922  on 2 df,   p=&lt;2e-16
+Wald test            = 1686  on 2 df,   p=&lt;2e-16
+Score (logrank) test = 1683  on 2 df,   p=&lt;2e-16</code></pre>
+</div>
+</div>
+<p>La différence est à peine perceptible, une différence de quatres chiffres après la virgule pour <span class="math inline">\(\exp(\widehat{\beta}_{\text{prix}})\)</span>. Les coefficients sont toujours significatifs.</p>
 <ol start="6" type="1">
-<li><em>Écrivez l’équation de la cote ajustée pour satisfait (<code>4</code>) par rapport à très insatisfait (<code>1</code>).</em></li>
+<li><em>On pourrait considérer un modèle à risque non-proportionnels contenant une interaction entre le prix et le temps de manière à ajuster le même modèle. Expliquez comment cela pourrait être fait de manière à obtenir les mêmes estimés des paramètres.</em></li>
 </ol>
-<p>Pour obtenir l’équation ajustée, on utilise uniquement les coefficients pour <span class="math inline">\(Y=4\)</span> dans le tableau des coefficients.</p>
+<p>On peut ajuster un modèle à risque non-proportionnel avec le terme <span class="math display">\[\texttt{tprix} = \texttt{prix} -0.2\texttt{prix}\mathrm{I}(t &gt; 15),\]</span> avec le modèle de Cox <span class="math display">\[\begin{align*}
+h(t; \texttt{sexe}, \texttt{prix}) = h_0(t) \exp \left\{\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{tprix}} \texttt{tprix}\right\}.
+\end{align*}\]</span> Notez que, si on inclut <span class="math inline">\(\texttt{prix}\)</span> et un terme d’interaction, on se retrouverait avec deux coefficients pour le prix plutôt qu’un seul.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(mod1)[<span class="st">"4"</span>,], <span class="dv">3</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer prix initial</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>chaussures <span class="ot">&lt;-</span> chaussures <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">prixinit =</span> <span class="fu">ifelse</span>(temps <span class="sc">&gt;</span> <span class="dv">15</span>, </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                      prix<span class="sc">/</span><span class="fl">0.8</span>, </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                      prix))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>modcox3 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(<span class="at">time =</span> temps,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">event =</span> statut <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">~</span> sexe <span class="sc">+</span> <span class="fu">tt</span>(prixinit),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> chaussures,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">tt =</span> <span class="cf">function</span>(x, t, ...){ x<span class="fl">-0.2</span><span class="sc">*</span><span class="fu">I</span>(t<span class="sc">&gt;</span><span class="dv">15</span>)<span class="sc">*</span>x})</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modcox3)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>(Intercept)        sexe   educcegep     educuni     revenu2     revenu3 
-     -0.502       0.613       0.676       0.800      -0.038       0.009 
-        age 
-     -0.035 </code></pre>
+<pre><code>Call:
+coxph(formula = Surv(time = temps, event = statut == 0) ~ sexe + 
+    tt(prixinit), data = chaussures, tt = function(x, t, ...) {
+    x - 0.2 * I(t &gt; 15) * x
+})
+
+  n= 6807, number of events= 5880 
+
+                  coef exp(coef)  se(coef)       z Pr(&gt;|z|)    
+sexe         -0.116920  0.889657  0.026250  -4.454 8.43e-06 ***
+tt(prixinit) -0.042049  0.958823  0.001034 -40.665  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+             exp(coef) exp(-coef) lower .95 upper .95
+sexe            0.8897      1.124    0.8450    0.9366
+tt(prixinit)    0.9588      1.043    0.9569    0.9608
+
+Concordance= 0.675  (se = 0.004 )
+Likelihood ratio test= 1922  on 2 df,   p=&lt;2e-16
+Wald test            = 1686  on 2 df,   p=&lt;2e-16
+Score (logrank) test = 1683  on 2 df,   p=&lt;2e-16</code></pre>
 </div>
 </div>
-<p><span class="math display">\[\begin{align*}
-\frac{\Pr(Y=4 \mid\boldsymbol{X})}{\Pr(Y=1 \mid \boldsymbol{X})} &amp; =\exp(-0.502 - 0.035\texttt{age} + 0.676 \texttt{cegep} + 0.8\texttt{uni} \\&amp;-0.038 \texttt{revenu}_2 +0.009 \texttt{revenu}_3 + 0.613 \texttt{sexe})
-\end{align*}\]</span></p>
-<ol start="7" type="1">
-<li><em>Prédisez la probabilité qu’un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?</em></li>
-</ol>
+<p>Une fois qu’on a obtenu les estimations, on peut vérifier que les coefficients sont les mêmes</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Profil du client</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>profil <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sexe =</span> <span class="dv">0</span>, </span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> <span class="dv">30</span>, </span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">educ =</span> <span class="st">"cegep"</span>, </span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">revenu =</span> <span class="st">"2"</span>)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité du score de satisfication</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod1, </span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> profil, </span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"prob"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isTRUE</span>(<span class="fu">all.equal</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>(modcox3), </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>(modcox2), </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.attributes =</span> <span class="cn">FALSE</span>))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>         1          2          3          4          5 
-0.32094804 0.22162733 0.03852415 0.12699328 0.29190719 </code></pre>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modalité la plus susceptible</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod1, </span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> profil)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1
-Levels: 1 2 3 4 5</code></pre>
+<pre><code>[1] TRUE</code></pre>
 </div>
 </div>
-<p>Les probabilités prédites sont (0.321; 0.222; 0.039; 0.127; 0.292). La modalité la plus susceptible est donc très insatisfait (<code>1</code>).</p>
+
 
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
-
-<ol>
-<li id="fn1"><p>Utilisez la fonction <code>relevel</code> pour changer la catégorie de référence, avec <code>relevel(educ, ref = 'sec')</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-Fotopoulos.Louri:2000" class="csl-entry" role="doc-biblioentry">
+Fotopoulos, G., &amp; Louri, H. (2000). Determinants of hazard confronting new entry: Does financial structure matter? <em>Review of Industrial Organization</em>, <em>17</em>(3), 285–300. <a href="https://doi.org/10.1023/A:1007862922531">https://doi.org/10.1023/A:1007862922531</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -964,7 +818,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022-2023 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
     <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>

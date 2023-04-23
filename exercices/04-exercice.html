@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Régression logistique</title>
+<title>Analyse multidimensionnelle appliquée - Analyse de survie</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,25 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
+}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
 }
 </style>
 
@@ -60,7 +79,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -105,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home"><i class="bi bi-comment" role="img" aria-label="Piazza">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -121,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Régression logistique</h1>
+      <h1 class="quarto-secondary-nav-title">Analyse de survie</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -161,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Analyse factorielle</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Sélection de variables</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -181,7 +199,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Sélection de variables</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Régression logistique</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -201,7 +219,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Régression logistique</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Analyse de survie</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -221,7 +239,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse de survie</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse factorielle</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -278,7 +296,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Régression logistique</h1>
+<h1 class="title d-none d-lg-block">Analyse de survie</h1>
 </div>
 
 
@@ -295,44 +313,55 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="exercice-4.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-4.1">Exercice 4.1</h2>
-<p>Les données <code>logistclient</code> contiennent des données simulées pour un cas fictif de promotion pour des clients.</p>
+<p><span class="citation" data-cites="Fotopoulos.Louri:2000">Fotopoulos &amp; Louri (<a href="#ref-Fotopoulos.Louri:2000" role="doc-biblioref">2000</a>)</span> considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l’article pour pour répondre aux questions suivantes:</p>
 <ol type="1">
-<li>Estimez le modèle logistique pour la probabilité que <code>promo=1</code> avec les variables explicatives <code>nachats</code>, <code>sexe</code> et <code>tclient</code>.</li>
-<li>Interprétez les coefficients du modèle à l’échelle de la cote en terme de pourcentage d’augmentation ou de diminution.</li>
-<li>Testez si l’effet de <code>nachats</code> est statistiquement significatif à niveau <span class="math inline">\(\alpha = 0.05\)</span>.</li>
-<li>Choisissez un point de coupure pour la classification pour maximiser le taux de bonne classification.
-<ol type="i">
-<li>Pour le point de coupure choisi, construisez une matrice de confusion.</li>
-<li>Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.</li>
-</ol></li>
-<li>Produisez un graphique de la fonction d’efficacité du récepteur (courbe ROC) et rapportez l’aire sous la courbe estimée à l’aide de la validation croisée.</li>
-<li>Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?</li>
+<li>Quel type de mécanisme de censure est présent dans ces données?</li>
+<li>Donnez une estimation de la probabilité qu’une entreprise survive trois ans ou plus.</li>
+<li>Donnez une estimation de la probabilité qu’une entreprise survive entre 4 et 5 ans, soit l’intervalle [4,5) ans</li>
+<li>Quel pourcentage des observations sont censurées?</li>
+<li>Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.</li>
+</ol>
+<p>Le Tableau 3 de l’article fournit les estimations d’un modèle à risques proportionnels de Cox.</p>
+<ol start="6" type="1">
+<li>Comparez les modèles (1) et (2). Est-ce que l’effet de cohorte impacte la survie?</li>
+<li>Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (<code>FIXED_ASSET</code>) et le montant de la dette (<code>DEBT</code>) sur la durée de vie des entreprises.</li>
 </ol>
 </section>
-<section id="exercice-4.2" class="level1">
-<h1>Exercice 4.2</h1>
-<p>On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (<code>1</code>) à très satisfait (<code>5</code>). Les 1000 observations se trouvent dans la base de données <code>multinom</code> du paquet <code>hecmulti</code>.</p>
-<p>Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.</p>
+<section id="exercice-4.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-4.2">Exercice 4.2</h2>
+<p>Un commerce de chaussures de Montréal veut optimiser son inventaire afin de maximiser ses profits et fait appel à votre société de conseil. La base de données <code>chaussures</code> contient des observations fictives et les variables suivantes:</p>
+<ul>
+<li><code>statut</code>: variable catégorielle, <code>0</code> s’il est vendu, <code>1</code> si l’article est toujours en stock, <code>2</code> s’il est déstocké (les modèles invendus après 40 mois en magasins sont passés aux pertes et profits).</li>
+<li><code>temps</code>: temps de stockage de l’article (en mois).</li>
+<li><code>prix</code>: prix de vente réelle de l’article (avec rabais si applicable), arrondi à l’unité près.</li>
+<li><code>sexe</code>: variable catégorielle, <code>0</code> pour modèle pour homme, <code>1</code> pour femme.</li>
+</ul>
+<p>Notre objectif premier est d’estimer le temps qu’un article passe en stock avant d’être vendu.</p>
 <ol type="1">
-<li>Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec <code>1</code> comme catégorie de référence pour la satisfaction, <code>1</code> pour revenu et <code>sec</code> pour éducation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> et utilisez ce dernier pour répondre aux autres questions.</li>
-<li>Interprétez l’effet des variables éducation et sexe pour la catégorie 2 par rapport à 1.</li>
-<li>Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?</li>
-<li>Est-ce que l’effet de la variable âge est globalement significatif?</li>
-<li>Fournissez un intervalle de confiance à niveau 95% pour l’effet multiplicatif d’une augmentation d’une unité de la variable âge pour chacune des cote par rapport à très insatisfait (<code>1</code>). Que concluez-vous sur l’effet de âge pour les réponses 2 à 5 par rapport à 1?</li>
-<li>Écrivez l’équation de la cote ajustée pour satisfait (<code>4</code>) par rapport à très insatisfait (<code>1</code>).</li>
-<li>Prédisez la probabilité qu’un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?</li>
+<li>Que représente la censure dans cet exemple?</li>
+<li>Estimez le temps de stockage à l’aide d’un modèle de Kaplan–Meier et rapportez les estimés des quartiles.</li>
+<li>Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.
+<ul>
+<li>Rapportez et interprétez les coefficients des variables.</li>
+<li>Est-ce que les effets estimés sont significatifs?</li>
+</ul></li>
+<li>Tracez les estimés des courbes de survie d’une chaussure de l’année dont le prix de vente est 120$ pour les modèles pour homme et pour femme.</li>
 </ol>
+<p>On vous informe que, pour éliminer les invendus lors de l’arrivée de nouveaux modèles, l’entreprise offre une réduction de 20% après 15 mois.</p>
+<ol start="5" type="1">
+<li>Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?</li>
+<li>On pourrait considérer un modèle à risque non-proportionnels contenant une interaction entre le prix et le temps de manière à ajuster le même modèle. Expliquez comment cela pourrait être fait de manière à obtenir les mêmes estimés des paramètres.</li>
+</ol>
+
 
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
-
-<ol>
-<li id="fn1"><p>Utilisez la fonction <code>relevel</code> pour changer la catégorie de référence, avec <code>relevel(educ, ref = 'sec')</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-Fotopoulos.Louri:2000" class="csl-entry" role="doc-biblioentry">
+Fotopoulos, G., &amp; Louri, H. (2000). Determinants of hazard confronting new entry: Does financial structure matter? <em>Review of Industrial Organization</em>, <em>17</em>(3), 285–300. <a href="https://doi.org/10.1023/A:1007862922531">https://doi.org/10.1023/A:1007862922531</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -469,7 +498,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022-2023 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
     <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>

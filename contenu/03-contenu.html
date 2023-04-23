@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Réduction de la dimension</title>
+<title>Analyse multidimensionnelle appliquée - Sélection de variables</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home"><i class="bi bi-comment" role="img" aria-label="Piazza">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -120,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Réduction de la dimension</h1>
+      <h1 class="quarto-secondary-nav-title">Sélection de variables</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -173,12 +173,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/02-contenu.html" class="sidebar-item-text sidebar-link">2: Programmation en <strong>R</strong></a>
+  <a href="../contenu/02-contenu.html" class="sidebar-item-text sidebar-link">2: Programmation <strong>R</strong></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/03-contenu.html" class="sidebar-item-text sidebar-link active">3: Réduction de la dimension</a>
+  <a href="../contenu/03-contenu.html" class="sidebar-item-text sidebar-link active">3: Sélection de variables</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -188,22 +188,22 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/05-contenu.html" class="sidebar-item-text sidebar-link">5: Sélection de variables</a>
+  <a href="../contenu/05-contenu.html" class="sidebar-item-text sidebar-link">5: Régression logistique</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/06-contenu.html" class="sidebar-item-text sidebar-link">6: Régression logistique</a>
+  <a href="../contenu/06-contenu.html" class="sidebar-item-text sidebar-link">6: Classification</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/07-contenu.html" class="sidebar-item-text sidebar-link">7: Classification</a>
+  <a href="../contenu/07-contenu.html" class="sidebar-item-text sidebar-link">7: Régression multinomiale</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/08-contenu.html" class="sidebar-item-text sidebar-link">8: Régression multinomiale</a>
+  <a href="../contenu/08-contenu.html" class="sidebar-item-text sidebar-link">8: Analyse de survie</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -213,7 +213,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link">10: Analyse de survie</a>
+  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link">10: Réduction de la dimension</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -224,11 +224,6 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../contenu/12-contenu.html" class="sidebar-item-text sidebar-link">12: Analyse de regroupements</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/13-contenu.html" class="sidebar-item-text sidebar-link">13: Données manquantes</a>
   </div>
 </li>
       </ul>
@@ -245,7 +240,6 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#contenu" id="toc-contenu" class="nav-link active" data-scroll-target="#contenu">Contenu</a></li>
   <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture">Lecture</a></li>
   <li><a href="#diapositives" id="toc-diapositives" class="nav-link" data-scroll-target="#diapositives">Diapositives</a></li>
-  <li><a href="#exercices" id="toc-exercices" class="nav-link" data-scroll-target="#exercices">Exercices</a></li>
   <li><a href="#objectifs-dapprentissage" id="toc-objectifs-dapprentissage" class="nav-link" data-scroll-target="#objectifs-dapprentissage">Objectifs d’apprentissage</a></li>
   </ul>
 </nav>
@@ -254,46 +248,42 @@ ul.task-list li input[type="checkbox"] {
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header">
-<h2 class="title d-none d-lg-block anchored display-7">Réduction de la dimension</h2>
+<h2 class="title d-none d-lg-block anchored display-7">Sélection de variables</h2>
 
 </header>
 
 <section id="contenu" class="level2">
 <h2 class="anchored" data-anchor-id="contenu">Contenu</h2>
 <ul>
-<li>Analyse en composantes principales</li>
-<li>Analyse factorielle exploratoire</li>
+<li>Rappels sur la régression</li>
+<li>Surajustement</li>
+<li>Méthodes d’estimation de l’erreur:
+<ul>
+<li>pénalisation,</li>
+<li>validation croisée et</li>
+<li>validation externe</li>
+</ul></li>
 </ul>
 </section>
 <section id="lecture" class="level2">
 <h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
 <ul>
-<li><i class="fa-solid fa-book" aria-hidden="true"></i> <a href="https://lbelzile.github.io/math60602/02-analysefactorielle.html">Chapitre 3 (Réduction de la dimension)</a></li>
+<li><i class="fa-solid fa-book" aria-hidden="true"></i> <a href="https://lbelzile.github.io/math60602/selectionmodeles.html">Chapitre sur la sélection de variables et de modèles</a>, Sections 1 à 3</li>
 </ul>
 </section>
 <section id="diapositives" class="level2">
 <h2 class="anchored" data-anchor-id="diapositives">Diapositives</h2>
 <ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../diapos/MATH60602-diapos3.pdf">Réduction de la dimension</a></li>
+<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../diapos/MATH60602-diapos3.pdf">Sélection de variables</a></li>
 <li><i class="fa-solid fa-code" aria-hidden="true"></i> <a href="../code/MATH60602-diapos3.R">Code</a></li>
-</ul>
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
-</section>
-<section id="exercices" class="level2">
-<h2 class="anchored" data-anchor-id="exercices">Exercices</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../exercices/02-exercice.html">Exercices 2</a></li>
 </ul>
 </section>
 <section id="objectifs-dapprentissage" class="level2">
 <h2 class="anchored" data-anchor-id="objectifs-dapprentissage">Objectifs d’apprentissage</h2>
 <ul>
-<li>Reconnaître les situations où la réduction de la dimension est utile</li>
-<li>Pouvoir déterminer le nombre adéquats de composantes principales ou de facteurs</li>
-<li>Pouvoir lister les avantages et inconvénients des méthodes d’estimation pour l’analyse factorielle</li>
-<li>Pouvoir calculer des échelles et vérifier leur cohérence interne.</li>
+<li>Être capable d’ajuster un modèle linéaire avec <strong>R</strong></li>
+<li>Être en mesure de décrire le suroptimisme et son impact sur l’évaluation de modèles</li>
+<li>Pouvoir expliquer les avantages et inconvénients des méthodes d’estimation de l’erreur</li>
 </ul>
 
 
@@ -436,7 +426,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022-2023 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
     <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>

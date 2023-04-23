@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Analyse factorielle</title>
+<title>Analyse multidimensionnelle appliquée - Sélection de variables</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -123,9 +123,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
-<script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -171,7 +168,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home"><i class="bi bi-comment" role="img" aria-label="Piazza">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -187,7 +184,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Analyse factorielle</h1>
+      <h1 class="quarto-secondary-nav-title">Sélection de variables</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -227,7 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Analyse factorielle</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Sélection de variables</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -247,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Sélection de variables</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Régression logistique</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -267,7 +264,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Régression logistique</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Analyse de survie</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -287,7 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse de survie</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse factorielle</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -335,7 +332,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#exercice-2.1" id="toc-exercice-2.1" class="nav-link active" data-scroll-target="#exercice-2.1">Exercice 2.1</a></li>
-  <li><a href="#exercice-2.2" id="toc-exercice-2.2" class="nav-link" data-scroll-target="#exercice-2.2">Exercice 2.2</a></li>
   </ul>
 </nav>
     </div>
@@ -344,7 +340,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Analyse factorielle</h1>
+<h1 class="title d-none d-lg-block">Sélection de variables</h1>
 </div>
 
 
@@ -361,451 +357,357 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="exercice-2.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-2.1">Exercice 2.1</h2>
-<p>Les données <code>sondage_entreprise</code> contiennent les résultats d’un sondage effectué par une compagnie auprès de ses employés.</p>
-<p><strong>1. Produisez des statistiques descriptives pour les variables <code>q8</code> à <code>q17</code>.</strong></p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(sondage_entreprise, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sondage_entreprise) <span class="co">#aperçu de la base de données</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Classes 'tbl_df', 'tbl' and 'data.frame':   482 obs. of  10 variables:
- $ q8 : int  4 3 5 3 3 4 1 3 2 3 ...
- $ q9 : int  3 3 5 3 3 4 1 4 2 3 ...
- $ q10: int  4 3 5 2 3 4 1 5 4 5 ...
- $ q11: int  4 3 5 2 3 5 1 4 4 4 ...
- $ q12: int  4 3 5 3 3 5 1 4 3 3 ...
- $ q13: int  4 2 5 4 4 5 1 4 3 4 ...
- $ q14: int  2 3 5 4 3 5 1 4 3 3 ...
- $ q15: int  3 3 5 3 3 5 1 3 3 2 ...
- $ q16: int  3 3 5 3 3 3 1 3 3 2 ...
- $ q17: int  4 3 5 3 3 4 1 3 3 4 ...</code></pre>
-</div>
-</div>
-<p>On peut utiliser <code>summary</code> pour obtenir les statistiques descriptives, mais les échelles de Likert sont toutes de 1 à 5.</p>
-<div class="cell" data-hash="02-solution_cache/html/tbl-statdescriptfactor_59ff42fcfd5fe61ea81efaa8a9503b19">
-<div class="cell-output-display">
-<div id="tbl-statdescriptfactor" class="anchored">
-
-<table class="table" style="margin-left: auto; margin-right: auto;"><caption>Tableau&nbsp;1:  Statistiques descriptives des questions du sondage en entreprise. </caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> moyenne </th>
-   <th style="text-align:right;"> écart-type </th>
-   <th style="text-align:left;"> histogramme </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 3.44 </td>
-   <td style="text-align:right;"> 0.91 </td>
-   <td style="text-align:left;"> ▁▁▇▅▂ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.39 </td>
-   <td style="text-align:right;"> 0.97 </td>
-   <td style="text-align:left;"> ▁▂▇▆▂ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4.33 </td>
-   <td style="text-align:right;"> 0.73 </td>
-   <td style="text-align:left;"> ▁▁▂▇▇ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4.10 </td>
-   <td style="text-align:right;"> 0.84 </td>
-   <td style="text-align:left;"> ▁▁▂▇▆ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.83 </td>
-   <td style="text-align:right;"> 0.89 </td>
-   <td style="text-align:left;"> ▁▁▇▇▆ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4.02 </td>
-   <td style="text-align:right;"> 0.84 </td>
-   <td style="text-align:left;"> ▁▁▃▇▆ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.88 </td>
-   <td style="text-align:right;"> 0.96 </td>
-   <td style="text-align:left;"> ▁▁▅▇▅ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.54 </td>
-   <td style="text-align:right;"> 0.85 </td>
-   <td style="text-align:left;"> ▁▁▇▅▂ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.54 </td>
-   <td style="text-align:right;"> 0.91 </td>
-   <td style="text-align:left;"> ▁▁▇▆▃ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.51 </td>
-   <td style="text-align:right;"> 0.84 </td>
-   <td style="text-align:left;"> ▁▁▇▅▂ </td>
-  </tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>On peut voir sur le corrélogramme que toutes les variables sont très corrélées entre elles.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(<span class="at">corr =</span> <span class="fu">cor</span>(sondage_entreprise),</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">"upper"</span>, </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">diag =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="02-solution_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p><strong>2. Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.</strong></p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(sondage_entreprise)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>Il y a 482 observations et 10 variables. C’est suffisant pour une analyse factorielle, mais le nombre de facteurs ne sera probablement pas très élevé.</p>
-<p><strong>3. Utilisez la méthode d’estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d’analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?</strong></p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Composantes principales, critère de Kaiser</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>afk <span class="ot">&lt;-</span> <span class="fu">factocp</span>(sondage_entreprise, </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">cor =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>spectral <span class="ot">&lt;-</span> <span class="fu">eigen</span>(<span class="fu">cor</span>(sondage_entreprise))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">eboulis</span>(spectral)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="02-solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(afk, <span class="at">cutoff =</span> <span class="fl">0.5</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>$loadings
-
-Loadings:
-    F1     F2    
-q8  -0.836       
-q9  -0.850       
-q10        -0.814
-q11        -0.619
-q12        -0.716
-q13        -0.821
-q14 -0.652       
-q15 -0.633       
-q16 -0.677       
-q17 -0.713       
-
-                  F1    F2
-SS loadings    3.698 2.797
-Proportion Var 0.370 0.280
-Cumulative Var 0.370 0.649
-
-$rotmat
-           [,1]      [,2]
-[1,]  0.7762843 0.6303829
-[2,] -0.6303829 0.7762843</code></pre>
-</div>
-</div>
-<p>Le critère de Kaiser (valeurs propres supérieures à 1) avec la matrice de corrélation suggère deux facteurs. Le diagramme d’éboulis donne deux facteurs également avec la matrice de corrélation.</p>
-<p>On peut constater en étudiant les chargements que le premier facteur est très corrélé avec plusieurs variables. En augmentant le point de coupure, on obtient un regroupement avec grosso-modo pour le facteur 1 (Q8-Q9 et Q14-Q17) les questions qui se réfèrent à la réputation sociale de l’entreprise et la balance pour le facteur 2 (Q10-Q13) pour la réputation sur le plan de la gestion. Seule la question Q15 semble un peu à part</p>
-<p><strong>4. Répétez l’exercice, cette fois avec la méthode du maximum de vraisemblance</strong></p>
-<pre><code>- **Est-ce qu'un de ces modèles ajustés est un cas de quasi-Heywood?**
-- **Combien de facteurs les critères d'information recommendent-ils?**
-- **Si vous ajoutez des facteurs, est-ce que votre interprétation change?**</code></pre>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_tableau <span class="ot">&lt;-</span> <span class="fu">ajustement_factanal</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">covmat =</span> <span class="fu">cor</span>(sondage_entreprise),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.obs =</span> <span class="fu">nrow</span>(sondage_entreprise))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(res_tableau)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<table class="table table-sm table-striped">
-<thead>
-<tr class="header">
-<th style="text-align: right;">k</th>
-<th style="text-align: right;">AIC</th>
-<th style="text-align: right;">BIC</th>
-<th style="text-align: left;">pval</th>
-<th style="text-align: right;">npar</th>
-<th style="text-align: right;">heywood</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2671.696</td>
-<td style="text-align: right;">2755.255</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">2469.875</td>
-<td style="text-align: right;">2591.036</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">29</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">2401.128</td>
-<td style="text-align: right;">2555.712</td>
-<td style="text-align: left;">6.646e-05</td>
-<td style="text-align: right;">37</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">2374.255</td>
-<td style="text-align: right;">2558.084</td>
-<td style="text-align: left;">0.5227</td>
-<td style="text-align: right;">44</td>
-<td style="text-align: right;">1</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>On voit que le modèle AIC suggère un modèle à quatre facteurs (un cas de quasi-Heywood), tandis que le BIC suggère plutôt trois facteurs. Le test du rapport de vraisemblance comparant la corrélation empirique au modèle d’analyse factorielle indique que le modèle est raisonnable à partir de quatre. Le problème de convergence nous amène à interpréter les résultats pour le modèle à quatre facteurs avec un grin de sel.</p>
-<p>Puisque la corrélation est très élevée, il est difficile ici d’interpréter les facteurs résultants parce que plusieurs variables sont corrélées avec de multiples facteurs. On peut augmenter le point de coupure à 0.5 pour déterminer les amalgames suivants:</p>
+<ol type="1">
+<li><em>Faites une analyse exploratoire des variables explicatives</em>:
 <ul>
-<li>Le facteur 1 incluant Q8, Q9, Q16 et Q17 font référence à la réputation sociale et éthique de l’entreprise</li>
-<li>le facteur 2 comprenant Q10-Q13 correspond à la perception financière (innovation, gestion, finances)</li>
-<li>le facteur 3 regroupe Q9, Q11 et Q14 (éthique, confiance et innovation)</li>
-</ul>
-<p>L’interprétation change puisque ce qui était dans le premier facteur se retrouve dans le troisième, avec Q9 qui est présente dans les deux. En pratique, on pourrait décider de l’associer à l’une ou l’autre des échelles, selon la cohérence interne, et la logique.</p>
-<p><strong>5. Créez des échelles et vérifiez leur cohérence interne. </strong></p>
-<div class="cell">
+<li><em>Quelles variables devraient êtres exclues de la modélisation? Justifiez votre réponse.</em></li>
+<li><em>Comparez la variable réponse avec les autres variables: y a-t-il des transformations qui améliorerait l’ensemble de variables candidates: interactions, création de variables dychotomiques, transformations (racines carrée, transformation logarithmique, etc.)?</em></li>
+<li><em>Vérifiez s’il y a des variables catégorielles encodées comme des variables numériques.</em></li>
+</ul></li>
+</ol>
+<p>On remarque en consultant la documentation de la base de données à l’aide de <code>?college</code> que le nombre de demandes d’admissions (<code>napplications</code>), le nombre d’admissions parmi ces applications <code>nadmission</code> et le nombre d’offres converties par les candidat.e.s, <code>ninscrits</code>, sont reliées et ne peuvent être employées.</p>
+<p>Plusieurs variables seront fortement corrélées parce qu’elles dépendent de la capacité d’accueil de l’établissement d’enseignement. Ainsi, on pourrait créer une variable qui représente le pourcentage de temps partiels pour les premiers cycles (plutôt que le décompte). Les variables <code>pourcentdoctorat</code> et <code>pourcentterminal</code>, sont fortement corrélées puisque la plupart des diplômes terminaux (incluant les titres professionnels, les doctorats de premier cycle en médecine, etc.) sont des PhD: le modèle choisira la variable la plus adéquate. Il n’y a pas de variables catégorielles hors variables binaires. Côté vérifications d’usage, on note que <code>tauxdiplom</code> et <code>pourcentdoctorat</code> sont supérieurs à 100%.</p>
+<p>On devra retirer la variable catégorielle <code>nom</code>, qui a une modalité différente pour chaque observation.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-1_ed93304068801c31bcab550f2cf743cc">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>e1 <span class="ot">&lt;-</span> sondage_entreprise <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(q8<span class="sc">:</span>q9, q14<span class="sc">:</span>q17))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">alphaC</span>(e1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(college, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(college)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8768725</code></pre>
+<pre><code>tibble [777 × 19] (S3: tbl_df/tbl/data.frame)
+ $ prive                  : int [1:777] 1 1 1 1 1 1 1 1 1 1 ...
+ $ napplications          : num [1:777] 1660 2186 1428 417 193 ...
+ $ nadmission             : num [1:777] 1232 1924 1097 349 146 ...
+ $ ninscrits              : num [1:777] 721 512 336 137 55 158 103 489 227 172 ...
+ $ m10p                   : num [1:777] 23 16 22 60 16 38 17 37 30 21 ...
+ $ m25p                   : num [1:777] 52 29 50 89 44 62 45 68 63 44 ...
+ $ tempsplein1c           : num [1:777] 2885 2683 1036 510 249 ...
+ $ tempspart1c            : num [1:777] 537 1227 99 63 869 ...
+ $ fraiscolexternes       : num [1:777] 7440 12280 11250 12960 7560 ...
+ $ fraisres               : num [1:777] 3300 6450 3750 5450 4120 ...
+ $ fraislivres            : num [1:777] 450 750 400 450 800 500 500 450 300 660 ...
+ $ fraisperso             : num [1:777] 2200 1500 1165 875 1500 ...
+ $ pourcentdoctorat       : num [1:777] 70 29 53 92 76 67 90 89 79 40 ...
+ $ pourcentterminal       : num [1:777] 78 30 66 97 72 73 93 100 84 41 ...
+ $ ratioetudprof          : num [1:777] 18.1 12.2 12.9 7.7 11.9 9.4 11.5 13.7 11.3 11.5 ...
+ $ pourcentdonationdiplome: num [1:777] 12 16 30 37 2 11 26 37 23 15 ...
+ $ depenseparetud         : num [1:777] 7041 10527 8735 19016 10922 ...
+ $ tauxdiplom             : num [1:777] 60 56 54 59 15 55 63 73 80 52 ...
+ $ nom                    : Factor w/ 777 levels "Abilene Christian University",..: 1 2 3 4 5 6 7 8 9 10 ...</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>echelle1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(e1)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>e2 <span class="ot">&lt;-</span> sondage_entreprise <span class="sc">|&gt;</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(q10<span class="sc">:</span>q13))</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">alphaC</span>(e2)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(college)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8292554</code></pre>
+<pre><code>     prive        napplications     nadmission      ninscrits   
+ Min.   :0.0000   Min.   :   81   Min.   :   72   Min.   :  35  
+ 1st Qu.:0.0000   1st Qu.:  776   1st Qu.:  604   1st Qu.: 242  
+ Median :1.0000   Median : 1558   Median : 1110   Median : 434  
+ Mean   :0.7272   Mean   : 3002   Mean   : 2019   Mean   : 780  
+ 3rd Qu.:1.0000   3rd Qu.: 3624   3rd Qu.: 2424   3rd Qu.: 902  
+ Max.   :1.0000   Max.   :48094   Max.   :26330   Max.   :6392  
+                                                                
+      m10p            m25p        tempsplein1c    tempspart1c     
+ Min.   : 1.00   Min.   :  9.0   Min.   :  139   Min.   :    1.0  
+ 1st Qu.:15.00   1st Qu.: 41.0   1st Qu.:  992   1st Qu.:   95.0  
+ Median :23.00   Median : 54.0   Median : 1707   Median :  353.0  
+ Mean   :27.56   Mean   : 55.8   Mean   : 3700   Mean   :  855.3  
+ 3rd Qu.:35.00   3rd Qu.: 69.0   3rd Qu.: 4005   3rd Qu.:  967.0  
+ Max.   :96.00   Max.   :100.0   Max.   :31643   Max.   :21836.0  
+                                                                  
+ fraiscolexternes    fraisres     fraislivres       fraisperso  
+ Min.   : 2340    Min.   :1780   Min.   :  96.0   Min.   : 250  
+ 1st Qu.: 7320    1st Qu.:3597   1st Qu.: 470.0   1st Qu.: 850  
+ Median : 9990    Median :4200   Median : 500.0   Median :1200  
+ Mean   :10441    Mean   :4358   Mean   : 549.4   Mean   :1341  
+ 3rd Qu.:12925    3rd Qu.:5050   3rd Qu.: 600.0   3rd Qu.:1700  
+ Max.   :21700    Max.   :8124   Max.   :2340.0   Max.   :6800  
+                                                                
+ pourcentdoctorat pourcentterminal ratioetudprof   pourcentdonationdiplome
+ Min.   :  8.00   Min.   : 24.0    Min.   : 2.50   Min.   : 0.00          
+ 1st Qu.: 62.00   1st Qu.: 71.0    1st Qu.:11.50   1st Qu.:13.00          
+ Median : 75.00   Median : 82.0    Median :13.60   Median :21.00          
+ Mean   : 72.66   Mean   : 79.7    Mean   :14.09   Mean   :22.74          
+ 3rd Qu.: 85.00   3rd Qu.: 92.0    3rd Qu.:16.50   3rd Qu.:31.00          
+ Max.   :103.00   Max.   :100.0    Max.   :39.80   Max.   :64.00          
+                                                                          
+ depenseparetud    tauxdiplom                               nom     
+ Min.   : 3186   Min.   : 10.00   Abilene Christian University:  1  
+ 1st Qu.: 6751   1st Qu.: 53.00   Adelphi University          :  1  
+ Median : 8377   Median : 65.00   Adrian College              :  1  
+ Mean   : 9660   Mean   : 65.46   Agnes Scott College         :  1  
+ 3rd Qu.:10830   3rd Qu.: 78.00   Alaska Pacific University   :  1  
+ Max.   :56233   Max.   :118.00   Albertson College           :  1  
+                                  (Other)                     :771  </code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>echelle2 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(e1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Est-ce que pourcentdoctorat &lt; pourcenterminal?</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">with</span>(college,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>             pourcentdoctorat<span class="sc">/</span>pourcentterminal))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.1379  0.8824  0.9390  0.9112  0.9775  1.9167 </code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Non</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> college <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">tauxdiplom =</span> <span class="fu">pmin</span>(tauxdiplom, <span class="dv">100</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pourcentdoctorat =</span> <span class="fu">pmin</span>(pourcentdoctorat, <span class="dv">100</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pctpart1c =</span> tempspart1c<span class="sc">/</span>(tempsplein1c<span class="sc">+</span>tempspart1c)) <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span> <span class="fu">c</span>(nom, </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>             tempsplein1c, </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>             tempspart1c, </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>             nadmission, </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>             ninscrits))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>On voit que les deux échelles créées ont un <span class="math inline">\(\alpha\)</span> de Cronbach de plus de 0.8, donc les échelles sont cohérentes. C’est en grande partie dû à la forte corrélation observée entre tous les items</p>
-</section>
-<section id="exercice-2.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercice-2.2">Exercice 2.2</h2>
-<p>Effectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données <code>aerien</code>. Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).</p>
-<p><strong>1. Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.</strong></p>
+<ol start="2" type="1">
+<li><em>Scindez la base de données en échantillon avec données d’entraînement (environ 2/3 des données) et échantillon de validation; utilisez le germe aléatoire <code>60602</code> via <code>set.seed(60602)</code>.</em>
 <ul>
-<li><strong>Combien de facteurs le critère des valeurs propres suggère-t-il?</strong></li>
-<li><strong>Combien de facteurs le diagramme d’éboulis suggère-t-il?</strong></li>
-<li><strong>Interprétez les chargements obtenus suite à la rotation. Commentez sur l’interprétabilité de ces derniers.</strong></li>
-<li><strong>En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.</strong></li>
-</ul>
-<p>La base de données est la même que celle de l’Exercice 1.1, mais on ne sélectionne que les colonnes 7 à 20 qui correspondent aux réponses du questionnaire.</p>
-<p>Il faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir <code>?cor</code>); j’utilise ici <code>use = pairwise.complete.obs</code> qui utilise toutes les paires.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="cell">
+<li><em>Sélectionnez un modèle à l’aide d’une des méthodes couvertes, mais en basant votre choix sur l’erreur moyenne quadratique évaluée sur l’échantillon de validation.</em></li>
+</ul></li>
+</ol>
+<p>On peut désormais considérer une séparation en tiers. Pour ce faire, je vais échantillonner des variables logiques vrais et faux avec une cote de 2 pour 1 et ensuite sélectionner les lignes qui correspondent.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-2_38284de341e660a0830b3c2e55302ebc">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(aerien, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>bd <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span> </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>            <span class="sc">~</span><span class="fu">na_if</span>(., <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>corbd <span class="ot">&lt;-</span> <span class="fu">cor</span>(bd, </span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>afk <span class="ot">&lt;-</span> <span class="fu">factocp</span>(<span class="at">covmat =</span> corbd)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">eboulis</span>(<span class="fu">eigen</span>(corbd))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60602</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="fu">nrow</span>(db),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">replace =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">prob =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>db_a <span class="ot">&lt;-</span> db[test,]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>db_v <span class="ot">&lt;-</span> db[<span class="sc">!</span>test,]</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Pour l’estimation, on pourrait simplement calculer l’erreur quadratique moyenne de validation pour tous les cinquante premiers modèles en considérant toutes les interactions d’ordre 2.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-3_c72b89afcb4e8e33f2b813340514f11b">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle avec interactions de toutes les variables</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>formule <span class="ot">&lt;-</span> <span class="fu">formula</span>(napplications <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sélection séquentielle ascendante</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>rec_seq <span class="ot">&lt;-</span> leaps<span class="sc">::</span><span class="fu">regsubsets</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> formule, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db_a,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"seqrep"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">nvmax =</span> <span class="dv">50</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Si <code>regsubsets</code> permet de recouvrer les différents modèles, il n’y a pas d’utilitaire pour obtenir le résumé et les prédictions. Le paquet <code>hecmulti</code> inclut une fonction pour faire les prédictions d’un modèle donné. À des fins d’illustration, on considère celui qui a le plus petit critère BIC intra-échantillon d’apprentissage.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-4_b61304c31173813ac8913936be1af1f6">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer les BIC </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>bic_mod <span class="ot">&lt;-</span> <span class="fu">summary</span>(rec_seq)<span class="sc">$</span>bic</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prédire du modèle avec id variables</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ici, celui avec le plus petit BIC du lot</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(rec_seq, <span class="at">id =</span> <span class="fu">which.min</span>(bic_mod))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Ici, on s’intéresse uniquement au calcul de l’erreur quadratique moyenne pour les modèles choisis par la procédure de recherche séquentielle. La fonction <code>eval_EQM_regsubsets</code> fait le calcul et nous retourne un vecteur avec toutes les mesures. On choisit le modèle qui minimise l’erreur.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-5_0746229159b6f08f5490f1651d9c6bf4">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle avec la plus petite erreur </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># moyenne quadratique de validation externe</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>reqm_seq_ve_list <span class="ot">&lt;-</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  hecmulti<span class="sc">::</span><span class="fu">eval_EQM_regsubsets</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> rec_seq, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">select =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> formule,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db_a,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> db_v)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># La fonction calcule la racine EQM sur </span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># les données de validation</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>mod_seq_ve <span class="ot">&lt;-</span> <span class="fu">which.min</span>(reqm_seq_ve_list)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>nvar_seq_ve <span class="ot">&lt;-</span> mod_seq_ve <span class="sc">+</span> <span class="dv">1</span> </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># nombre variables + ordonnée à l'origine.</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>reqm_seq_ve <span class="ot">&lt;-</span> reqm_seq_ve_list[mod_seq_ve]</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Une logique similaire s’appliquerait avec le LASSO, même si c’est loin d’être la norme (on utilise d’ordinaire la validation croisée). Ici, on ajusterait le modèle avec plusieurs valeurs de <span class="math inline">\(\lambda\)</span>, puis on calculerait l’erreur quadratique moyenne de validation. On prendra la valeur de la pénalisation <span class="math inline">\(\lambda\)</span> qui minimise cette dernière. Spécifier la séquence de valeurs de <span class="math inline">\(\lambda\)</span> à essayer nécessite un peu d’essai/erreur.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-6_00fc69b577debd9618bd8890bdd3f12a">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtenir X et y</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Xmat_a <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(formule, <span class="at">data =</span> db_a)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>y_a <span class="ot">&lt;-</span> db_a<span class="sc">$</span>napplications</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>lambda_seq <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">log</span>(<span class="fl">0.1</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">to =</span> <span class="fu">log</span>(<span class="dv">50</span>), </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">length.out =</span> 100L))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>lasso <span class="ot">&lt;-</span> glmnet<span class="sc">::</span><span class="fu">glmnet</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> Xmat_a,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> y_a,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="dv">1</span>, </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">lambda =</span> lambda_seq)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Prédictions et calcul de l'EQM</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># On pourrait remplacer `newx` par </span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># d'autres données (validation externe)</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>eqm_lasso_externe <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(lambda_seq))</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(lambda_seq)){</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">object =</span> lasso, </span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> lambda_seq[i], </span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">newx =</span> <span class="fu">model.matrix</span>(formule, <span class="at">data =</span> db_v)[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  eqm_lasso_externe[i] <span class="ot">&lt;-</span> </span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>((pred <span class="sc">-</span> db_v<span class="sc">$</span>napplications)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>minl <span class="ot">&lt;-</span> <span class="fu">which.min</span>(eqm_lasso_externe)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>lambda_opt <span class="ot">&lt;-</span> lambda_seq[minl]</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Nombre de coefficients non nuls</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>nvar_lasso_ve <span class="ot">&lt;-</span> Matrix<span class="sc">::</span><span class="fu">nnzero</span>(lasso<span class="sc">$</span>beta[,minl, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>reqm_lasso_ve <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(eqm_lasso_externe[minl])</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ol start="3" type="1">
+<li><em>Répétez la sélection, cette fois en prenant comme critère pour l’erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.</em></li>
+</ol>
+<p>On peut utiliser <code>boot::cv.glm</code> ou <code>caret::train</code> avec les différentes méthodes pour ajuster les modèles. Je fais varier le nombre maximal de variables pour retourner les différentes solutions. Comme le résultat de la validation croisée est aléatoire, on peut répéter cette étape pour réduire l’incertitude de prédiction et obtenir une meilleur valeur de l’écart-type.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-7_c1f33b740811e12dc54a7783b78b6938">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrice du modèle complet, moins ordonnée à l'origine</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Xmat <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(formule, <span class="at">data =</span> db)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable réponse</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> db<span class="sc">$</span>napplications</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>seq_vc <span class="ot">&lt;-</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">form =</span> formule,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> db,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">'leapSeq'</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">tuneGrid =</span> <span class="fu">expand.grid</span>(<span class="at">nvmax =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>),</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">trControl =</span> caret<span class="sc">::</span><span class="fu">trainControl</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"repeatedcv"</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">number =</span> <span class="dv">10</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">repeats =</span> <span class="dv">10</span>))</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Graphique de la racine de l'EQM en fonction de</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># nvmax</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(seq_vc)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="02-solution_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Meilleur modèle</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mod_seq_vc <span class="ot">&lt;-</span> <span class="fu">which.min</span>(seq_vc<span class="sc">$</span>results<span class="sc">$</span>RMSE)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>reqm_seq_vc <span class="ot">&lt;-</span> <span class="fu">min</span>(seq_vc<span class="sc">$</span>results<span class="sc">$</span>RMSE)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>nvar_seq_vc <span class="ot">&lt;-</span> seq_vc<span class="sc">$</span>results<span class="sc">$</span>nvmax[mod_seq_vc]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Calcul des prédictions</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># predict(seq_vc, newdata = db)</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Les notes de cours donnent une approche pas à pas avec <code>glmnet</code> pour ajuster le LASSO en choisissant la valeur de <span class="math inline">\(\lambda\)</span> par validation croisée, mais on peut changer le type de model dans <code>caret</code> et utiliser les mêmes fonctionnalités.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-8_bb7020e5b59002a0725ab55bb52aeaac">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Autre approche que glmnet</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>lasso_vc <span class="ot">&lt;-</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  caret<span class="sc">::</span><span class="fu">train</span>(<span class="at">form =</span> formule,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> db,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">'glmnet'</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">tuneGrid =</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">lambda =</span> lambda_seq),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">trControl =</span> caret<span class="sc">::</span><span class="fu">trainControl</span>(</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"repeatedcv"</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">number =</span> <span class="dv">10</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">repeats =</span> <span class="dv">10</span>))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lasso_vc)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="02-solution_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copier noms de variables</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(afk<span class="sc">$</span>loadings) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(bd)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(afk, </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">cutoff =</span> <span class="fl">0.4</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Meilleur modèle</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>coefs_lasso_cv <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="at">object =</span> lasso_vc<span class="sc">$</span>finalModel, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">s =</span> lasso_vc<span class="sc">$</span>bestTune<span class="sc">$</span>lambda)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Nombre de paramètres non-nuls pour la solution</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>nvar_lasso_vc <span class="ot">&lt;-</span> Matrix<span class="sc">::</span><span class="fu">nnzero</span>(coefs_lasso_cv)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimation de la racine de l'erreur quadratique moyenne</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>reqm_lasso_vc <span class="ot">&lt;-</span> <span class="fu">min</span>(lasso_vc<span class="sc">$</span>results<span class="sc">$</span>RMSE)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Calcul des prédictions - comme avec n'importe quel modèle</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># predict(lasso_vc, newdata = db)</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>$loadings
-
-Loadings:
-                                F1     F2     F3     F4    
-service_internet_en_vol                -0.698         0.450
-temps_arrivee_depart_convenable        -0.773              
-facilite_reservation_en_ligne          -0.831              
-localisation_porte                     -0.804              
-nourriture                       0.858                     
-preenregistrement_en_ligne                            0.813
-confort_siege                    0.813                     
-divertissement_en_vol            0.803         0.444       
-service_embarquement                           0.774       
-service_espace_jambes                          0.595       
-gestion_bagages                                0.826       
-service_enregistrement                                0.518
-service_vol                                    0.844       
-proprete                         0.880                     
-
-                  F1    F2    F3    F4
-SS loadings    2.949 2.463 2.665 1.429
-Proportion Var 0.211 0.176 0.190 0.102
-Cumulative Var 0.211 0.387 0.577 0.679
-
-$rotmat
-           [,1]        [,2]       [,3]        [,4]
-[1,]  0.7073582 -0.26756771  0.5522576  0.35080391
-[2,]  0.3270379  0.92656348  0.1200968 -0.14178537
-[3,] -0.5658174  0.08130568  0.8163773 -0.08226889
-[4,] -0.2693348  0.25154925 -0.1188123  0.92198989</code></pre>
 </div>
-</div>
-<p>Le diagramme d’éboulis suggère quatre facteurs, idem pour le critère de Kaiser.</p>
-<p>Si on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une corrélation suffisante pour être considérés lors de la création d’échelles, on obtient la division suivante:</p>
-<ul>
-<li>Le facteur 1 inclut les items 5, 7, 8 et 14 (nourriture, confort du siège et divertissement en vol, proprete) qui sont tous en lien avec l’offre de service en vol</li>
-<li>Le facteur 2 inclut items 1-4 (service internet en vol, temps d’arrivée et de départ convenable, facilité de réservation en ligne et localisation de la porte). Difficilement interprétable à cause d’internet, sinon rattachés à l’expérience client avant le vol.</li>
-<li>Le facteur 3 inclut les items 9, 11, 13 (embarquement, gestion des bagages et service en vol). Les questions sont en lien avec les contacts avec le personnel de bord et la rapidité du service.</li>
-<li>Le facteur 4 inclut l’item 6, peut-être 12, les deux en lien avec l’enregistrement</li>
-</ul>
-<p>Augmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.</p>
-<div class="cell">
+<ol start="4" type="1">
+<li><em>Créez un tableau avec le nombre de coefficients non-nuls de votre modèle final et un estimé de l’erreur moyenne quadratique obtenu par validation externe ou croisée.</em></li>
+</ol>
+<p>Il suffit de colliger notre estimation de l’erreur et le nombre de coefficients.</p>
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-9_61b5e2ed6d2870505a5aba62631fa8a0">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">F1 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">8</span>)), </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">F3 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">11</span>,<span class="dv">13</span>)),</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">F4 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>)),</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>  F1   F2   F3   F4 
-0.82 0.80 0.79 0.37 </code></pre>
-</div>
-</div>
-<p>Si les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n’ont pas un <span class="math inline">\(\alpha\)</span> de Cronbach supérieur à 0.6.</p>
-<p><strong>2. Répétez l’exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.</strong></p>
-<ul>
-<li><strong>Qu’arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.</strong></li>
-</ul>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">ajustement_factanal</span>(<span class="at">covmat =</span> corbd,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">n.obs =</span> <span class="fu">nrow</span>(<span class="fu">na.omit</span>(bd)), </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">factors =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">|&gt;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>resultats <span class="ot">&lt;-</span><span class="fu">data.frame</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">erreur =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"validation croisée"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"validation externe"</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">methode =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"sequentielle"</span>,<span class="st">"lasso"</span>), </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">length.out =</span> <span class="dv">4</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">reqm =</span> <span class="fu">c</span>(reqm_seq_vc,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>           reqm_lasso_vc,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>           reqm_seq_ve,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>           reqm_lasso_ve),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">npar =</span> <span class="fu">c</span>(nvar_seq_vc,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>           nvar_lasso_vc,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>           nvar_seq_ve,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>           nvar_lasso_ve))</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resultats)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <thead>
 <tr class="header">
-<th style="text-align: right;">k</th>
-<th style="text-align: right;">AIC</th>
-<th style="text-align: right;">BIC</th>
-<th style="text-align: left;">pval</th>
+<th style="text-align: left;">erreur</th>
+<th style="text-align: left;">methode</th>
+<th style="text-align: right;">reqm</th>
 <th style="text-align: right;">npar</th>
-<th style="text-align: right;">heywood</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1373466.2</td>
-<td style="text-align: right;">1373737.6</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">28</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">validation croisée</td>
+<td style="text-align: left;">sequentielle</td>
+<td style="text-align: right;">2559.108</td>
+<td style="text-align: right;">18</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1199520.3</td>
-<td style="text-align: right;">1199917.6</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">41</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">validation croisée</td>
+<td style="text-align: left;">lasso</td>
+<td style="text-align: right;">2490.672</td>
+<td style="text-align: right;">56</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1027721.9</td>
-<td style="text-align: right;">1028235.6</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">53</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">validation externe</td>
+<td style="text-align: left;">sequentielle</td>
+<td style="text-align: right;">2324.801</td>
+<td style="text-align: right;">12</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">989241.7</td>
-<td style="text-align: right;">989862.0</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">64</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">965748.7</td>
-<td style="text-align: right;">966465.9</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">74</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">962429.3</td>
-<td style="text-align: right;">963233.7</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">83</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">960890.1</td>
-<td style="text-align: right;">961772.0</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">91</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: left;">validation externe</td>
+<td style="text-align: left;">lasso</td>
+<td style="text-align: right;">2276.097</td>
+<td style="text-align: right;">105</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>En raison du nombre excessivement élevé d’observations, l’ajustement du modèle est médiocre et les critères d’information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n’est pas adéquate et on rejette à coup sûr le test d’hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l’analyse factorielle parce que notre puissance est élevée vu qu’on a 119567 réponses complètes.</p>
-<p>À partir de 7 facteurs, l’optimisation ne converge pas et retourne un cas de Heywood.</p>
-<p>Ainsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu’une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible.</p>
+<ol start="5" type="1">
+<li><em>Commentez sur le meilleur modèle parmi les combinaisons.</em></li>
+</ol>
+<p>Si la taille de la base de données est plus conséquente, la validation croisée reste préférable à la validation externe, surtout si on répète cette méthode plusieurs fois pour réduire l’incertitude.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Le nombre de paramètres dans le modèle LASSO peut sembler élevé, mais il faut garder en tête que les autres paramètres sont rétrécis vers zéro même s’ils sont non-nuls.</p>
+<p>Impossible de savoir quel est le meilleur modèle: le modèle avec la plus petite erreur quadratique moyenne est notre meilleur choix ici à défaut d’autres observations. Rappelez-vous qu’un modèle peut donner une bonne performance, mais être choisi parce qu’il surajuste une valeur aberrante.</p>
+<p>Le but de l’exercice était davantage de démontrer le travail que de faire une prédiction convaincante. Puisqu’on essaie de prédire une variable de dénombrement, un modèle plus adapté (modèle de régression binomiale négative, ou un modèle pour le log du nombre d’admission) pourrait probablement être plus adéquat dans la mesure où la variance de la réponse dépend de la taille de l’école.</p>
 
 
 </section>
@@ -814,7 +716,7 @@ $rotmat
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
 
 <ol>
-<li id="fn1"><p>Le défaut de cette option, qui extrait le maximum d’information à l’aide de toutes les paires complètes, est que l’on a pas de garantie que la matrice de covariance résultante est positive définie.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Rien ne nous empêche de faire de même avec la validation externe, soit dit en passant.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -953,7 +855,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022-2023 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
     <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>

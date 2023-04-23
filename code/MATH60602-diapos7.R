@@ -1,110 +1,166 @@
-data(dbm, package = 'hecmulti')
-# Transformer les variables catégorielles en facteurs si nécessaire
-# Ne conserver que l'échantillon des données d'entraînement (1000 obs)
-train <- dbm[(dbm$test == 0),]
+library(mice)
 
+data(manquantes, package = 'hecmulti')
+summary(manquantes)
+# Pourcentage de valeurs manquantes
+# Fonction apply: appliquer une fonction
+# 2 signifie qu'on veut conserver les colonnes
+# Ici, on calcule la proportion de valeurs manquantes
+# variables par variables
+apply(manquantes, 2, function(x){mean(is.na(x))})
+# Voir les configurations de valeurs manquantes
+md.pattern(manquantes) 
 
-# Formule pour la moyenne du modèle logistique
-form <- formula("yachat ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10")
-# Modèle de base avec variables (sans interaction)
-modele <- glm(
-  data = train,
-  formula = form,
-  family = binomial) # modèle logistique, fn de liaison logistique par défaut
-# Créer un conteneur pour les probabilités
-set.seed(60602)
-## # Option par défaut:
-## # validation croisée à 10 plis avec 10 répétitions
-## les probabilités prédites sont les moyennes des 10
-cv_prob <- hecmulti::predvc(modele)
+# Intensif en calcul, réduire "m" si nécessaire
+impdata <- mice(data = manquantes,
+# argument method pour le type de modèles
+# selon les variables
+m = 50, # nombre d'imputations
+seed = 60602, # germe aléatoire
+printFlag = FALSE) # ne pas imprimer le suivi
+# Chaque copie est disponible (1, ..., 50)
+complete(impdata, action = 1)
+# ajuste le modèle avec les données imputées
+adj_im <- with(
+  data = impdata,
+  expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
+             family = binomial))
+# combinaison des résultats 
+fit <- pool(adj_im)
+# Tableau résumé avec valeurs-p, degrés de liberté et erreur-types corrigées
+summary(fit)
 
-# Histogramme des probabilités prédites par validation croisée avec n groupes
+## -----------------------------------------------------------------------------
 library(ggplot2)
-ggplot(data = data.frame(x = cv_prob),
-       aes(x = x)) +
-  geom_histogram(bins = 30) +
-  labs(x = "probabilité d'achat prédite",
-       y = "") +
-  theme_minimal()
-#  Modèle complet et valeurs prédites
-train_prob <- fitted(modele,
-                     type = "response")
+library(dplyr)
+library(patchwork)
+data(vote, package = "hecmulti")
 
-# Performance du modèle avec données d'apprentissage
-
-# Probabilités calculées avec données ajustées
-perfo0 <- hecmulti::perfo_logistique(
-  prob = train_prob, 
-  resp = train$yachat) 
-# Probabilités obtenues par validation croisée (mieux, plus fiable)
-perfo1 <- hecmulti::perfo_logistique(
-  prob = cv_prob, 
-  resp = train$yachat)
+## -----------------------------------------------------------------------------
+data(vote, package = "hecmulti")
+levels(vote$catvote)
+# Modèle multinomial
+multi1 <- nnet::multinom(
+  catvote ~ age + sexe + race + revenu + educ + affiliation,
+  data = vote,       # base de données
+  subset = age > 30, # sous-ensemble
+  weights = poids,   # poids de sondage
+  trace = FALSE)     # infos sur convergence
 
 
 ## -----------------------------------------------------------------------------
-## Diagramme montrant le taux de mauvaise classification
-## % mauvaise classification = 1- % bonne classif
-library(ggplot2)
-ggplot(data = perfo1,
-       aes(x = coupe,
-           y = 100 - pcorrect)) +
-  geom_line() +
-  geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) +
-  labs(x = "point de coupure",
-       y = "",
-       subtitle = "taux de mauvaise classification (pourcentage)") +
-  scale_x_continuous(expand = c(0.01,0.01),
-                     breaks = c(0,0.25,0.5,0.75,1),
-                     labels = c("0","0.25","0.5","0.75","1")) +
-  theme_classic()
-
-## -----------------------------------------------------------------------------
-## Tableaux de classification pour chaque point de coupure
-tab0 <- knitr::kable(x = perfo1[,1:5],
-                     align = "r",
-                     escape = FALSE,
-                     booktabs = TRUE)
-tab0
-
-# Point de coupure optimal avec 
-# fonction de coût
-coupe <- hecmulti::select_pcoupe(
-  modele = modele,
-  c00 = 0,
-  c01 = 0,
-  c10 = -10,
-  c11 = 57,
-  plot = TRUE)
+# Tableau résumé de l'ajustement
+summary(multi1)
+# Estimations des coefficients
+coef(multi1)
+# Intervalles de confiance (Wald)
+confint(multi1)
+# Critères d'information
+AIC(multi1)
+BIC(multi1)
+# Prédiction: probabilité de chaque modalité
+predict(multi1, type = "probs")
+# Prédiction: classe la plus susceptible
+predict(multi1, type = "class")
 
 
 ## -----------------------------------------------------------------------------
-roc <- hecmulti::courbe_roc(
-   resp = train$yachat,
-   prob = cv_prob,
-   plot = TRUE)
-print(roc)
-## ## Pour extraire l'aire sous la courbe, roc$aire
+# Modèle avec uniquement l'ordonnée à l'origine (~ 1)
+# Il faut qu'on utilise les mêmes données pour la comparaison!
+multi0 <- nnet::multinom(catvote ~ 1,
+                         weights = poids,
+                         data = vote,
+                         subset = age > 30,
+                         trace = FALSE)
+# Test de rapport de vraisemblance
+anova(multi0, multi1)
+
+## -----------------------------------------------------------------------------
+# Modèle logistique à cote proportionnelle
+with(vote, is.ordered(catvote))
+multi2a <- MASS::polr(
+  catvote ~ sexe,
+  data = vote,
+  subset = age > 30,
+  weights = poids,
+  method = "logistic",
+  Hess = TRUE)
+summary(multi2a)
 
 
-## ----------------------------------------------------------------------------- 
-## Tableau lift
-## La fonction calcule le lift et 
-## retourne un graphique (plot = TRUE)
-## ainsi que le tableau pour les déciles
-## pourcentage détecté si on classe 10% plus élevé
-## en succès comparativement à 10% des obs. au hasard, etc.
-tab_lift <- hecmulti::courbe_lift(
-   prob = cv_prob,
-   resp = train$yachat,
-   plot = TRUE)
-tab_lift
+-----------------------------------------------------------------------------
+# IC pour beta_x (vraisemblance profilée)
+confint(multi2a)
 
 
+# Critères d'information
+AIC(multi2a); BIC(multi2a)
+# Tableau des coefficients
+# Coefficients (variables explicatives)
+coef(multi2a)
+# Ordonnées à l'origine:
+multi2a$zeta
 
 
 ## -----------------------------------------------------------------------------
-## Test de calibration de Spiegelhalter
-hecmulti::calibration(
-  prob = cv_prob,
-  resp = train$yachat)
+multi2b <- nnet::multinom(
+   catvote ~ sexe,
+   data = vote,  
+   subset = age > 30,
+   weights = poids, 
+   trace = FALSE)
+   
+# Combien de paramètres de plus avec modèle logistique?
+# Même nombre d'ordonnées à l'origine, mais pour les p variables explicatives
+# (K-1)*p vs p  paramètres, une différence de (K-2) * p 
+difddl <- (length(multi2a$zeta) - 1) * length(coef(multi2a))
+# Valeur-p du test de rapport de vraisemblance
+# Probabilité qu'une variable khi-deux avec ddl(0)-ddl(1)
+#  dépasse la valeur numérique de la statistique
+pchisq(q = deviance(multi2a) - deviance(multi2b),
+       df = difddl,
+       lower.tail = FALSE)
+
+
+## -----------------------------------------------------------------------------
+multi3a <- MASS::polr(
+  catvote ~ age,
+  data = vote,
+  subset = age > 30,
+  weights = poids,
+  method = "logistic",
+  Hess = TRUE)
+multi3b <- nnet::multinom(catvote ~ age,
+  data = vote,  subset = age > 30,
+  weights = poids, trace = FALSE)
+# Valeur-p du test de rapport de vraisemblance
+pval <- pchisq(q = deviance(multi3a) - deviance(multi3b),
+       df = length(coef(multi2a)),
+       lower.tail = FALSE)
+
+
+## -----------------------------------------------------------------------------
+library(MASS)
+multi3a <- MASS::polr(
+  catvote ~ scale(age, scale = FALSE),
+  data = vote,
+  subset = age > 30,
+  weights = poids,
+  method = "logistic",
+  Hess = TRUE)
+
+multi3b <- nnet::multinom(
+  catvote ~ scale(age, scale = FALSE),
+  data = vote,
+  subset = age > 30,
+  weights = poids,
+  Hess = TRUE,
+  trace = FALSE)
+xpred <- seq(30, 95, by = 0.1) - mean(vote$age)
+nobs <- length(xpred)
+pred1 <- predict(multi3b,
+                 newdata = data.frame(age = xpred),
+                 type = "prob")
+pred2 <- predict(multi3a,
+                 newdata = data.frame(age = xpred),
+                 type = "prob")

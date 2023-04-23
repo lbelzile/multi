@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Analyse multidimensionnelle appliquée - Analyse de survie</title>
+<title>Analyse multidimensionnelle appliquée - Analyse factorielle</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,25 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
-}
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
 }
 </style>
 
@@ -123,7 +104,7 @@ div.csl-indent {
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://piazza.com/hec.ca/fall2022/math60602/home"><i class="bi bi-wechat" role="img" aria-label="Piazza">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home"><i class="bi bi-comment" role="img" aria-label="Piazza">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -139,7 +120,7 @@ div.csl-indent {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Analyse de survie</h1>
+      <h1 class="quarto-secondary-nav-title">Analyse factorielle</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -179,7 +160,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Analyse factorielle</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Sélection de variables</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -199,7 +180,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Sélection de variables</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Régression logistique</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -219,7 +200,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Régression logistique</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Analyse de survie</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -239,7 +220,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse de survie</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse factorielle</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -296,7 +277,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Analyse de survie</h1>
+<h1 class="title d-none d-lg-block">Analyse factorielle</h1>
 </div>
 
 
@@ -313,55 +294,41 @@ div.csl-indent {
 
 <section id="exercice-5.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-5.1">Exercice 5.1</h2>
-<p><span class="citation" data-cites="Fotopoulos.Louri:2000">Fotopoulos &amp; Louri (<a href="#ref-Fotopoulos.Louri:2000" role="doc-biblioref">2000</a>)</span> considèrent les facteurs de risque pour les nouvelles compagnies manufacturières en Grèce établies entre 1982 et 1984. Utilisez le Tableau 1 de l’article pour pour répondre aux questions suivantes:</p>
+<p>Les données <code>sondage_entreprise</code> contiennent les résultats d’un sondage effectué par une compagnie auprès de ses employés. Le but de l’exercice est d’ajuster un modèle d’analyse factorielle exploratoire (avec rotation varimax) aux données.</p>
 <ol type="1">
-<li>Quel type de mécanisme de censure est présent dans ces données?</li>
-<li>Donnez une estimation de la probabilité qu’une entreprise survive trois ans ou plus.</li>
-<li>Donnez une estimation de la probabilité qu’une entreprise survive entre 4 et 5 ans, soit l’intervalle [4,5) ans</li>
-<li>Quel pourcentage des observations sont censurées?</li>
-<li>Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.</li>
-</ol>
-<p>Le Tableau 3 de l’article fournit les estimations d’un modèle à risques proportionnels de Cox.</p>
-<ol start="6" type="1">
-<li>Comparez les modèles (1) et (2). Est-ce que l’effet de cohorte impacte la survie?</li>
-<li>Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (<code>FIXED_ASSET</code>) et le montant de la dette (<code>DEBT</code>) sur la durée de vie des entreprises.</li>
+<li>Produisez des statistiques descriptives pour les variables <code>q8</code> à <code>q17</code></li>
+<li>Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.</li>
+<li>Utilisez la méthode d’estimation par composantes principales et le critère de Kaiser pour ajuster le modèle d’analyse factorielle. Combien de facteurs serait-il raisonnable de retenir?</li>
+<li>Répétez l’exercice, cette fois avec la méthode du maximum de vraisemblance
+<ul>
+<li>Est-ce qu’un de ces modèles ajustés est un cas de quasi-Heywood?</li>
+<li>Combien de facteurs les critères d’information recommendent-ils?</li>
+<li>Si vous ajoutez des facteurs, est-ce que votre interprétation change?</li>
+</ul></li>
+<li>Créez des échelles et vérifiez leur cohérence interne.</li>
 </ol>
 </section>
 <section id="exercice-5.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-5.2">Exercice 5.2</h2>
-<p>Un commerce de chaussures de Montréal veut optimiser son inventaire afin de maximiser ses profits et fait appel à votre société de conseil. La base de données <code>chaussures</code> contient des observations fictives et les variables suivantes:</p>
-<ul>
-<li><code>statut</code>: variable catégorielle, <code>0</code> s’il est vendu, <code>1</code> si l’article est toujours en stock, <code>2</code> s’il est déstocké (les modèles invendus après 40 mois en magasins sont passés aux pertes et profits).</li>
-<li><code>temps</code>: temps de stockage de l’article (en mois).</li>
-<li><code>prix</code>: prix de vente réelle de l’article (avec rabais si applicable), arrondi à l’unité près.</li>
-<li><code>sexe</code>: variable catégorielle, <code>0</code> pour modèle pour homme, <code>1</code> pour femme.</li>
-</ul>
-<p>Notre objectif premier est d’estimer le temps qu’un article passe en stock avant d’être vendu.</p>
+<p>Effectuez une analyse factorielle exploratoire des données <code>aerien_facto</code>: cette base de données contient toutes les questions en lien avec la satisfaction de la base de données <code>aerien</code>. Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).</p>
 <ol type="1">
-<li>Que représente la censure dans cet exemple?</li>
-<li>Estimez le temps de stockage à l’aide d’un modèle de Kaplan–Meier et rapportez les estimés des quartiles.</li>
-<li>Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.
+<li>Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.
 <ul>
-<li>Rapportez et interprétez les coefficients des variables.</li>
-<li>Est-ce que les effets estimés sont significatifs?</li>
+<li>Combien de facteurs le critère des valeurs propres suggère-t-il?</li>
+<li>Combien de facteurs le diagramme d’éboulis suggère-t-il?</li>
+<li>Interprétez les chargements obtenus suite à la rotation. Commentez sur l’interprétabilité de ces derniers.</li>
+<li>En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.</li>
 </ul></li>
-<li>Tracez les estimés des courbes de survie d’une chaussure de l’année dont le prix de vente est 120$ pour les modèles pour homme et pour femme.</li>
+<li>Répétez l’exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.
+<ul>
+<li>Qu’arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.</li>
+</ul></li>
 </ol>
-<p>On vous informe que, pour éliminer les invendus lors de l’arrivée de nouveaux modèles, l’entreprise offre une réduction de 20% après 15 mois.</p>
-<ol start="5" type="1">
-<li>Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?</li>
-<li>On pourrait considérer un modèle à risque non-proportionnels contenant une interaction entre le prix et le temps de manière à ajuster le même modèle. Expliquez comment cela pourrait être fait de manière à obtenir les mêmes estimés des paramètres.</li>
-</ol>
-
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
-<div id="ref-Fotopoulos.Louri:2000" class="csl-entry" role="doc-biblioentry">
-Fotopoulos, G., &amp; Louri, H. (2000). Determinants of hazard confronting new entry: Does financial structure matter? <em>Review of Industrial Organization</em>, <em>17</em>(3), 285–300. <a href="https://doi.org/10.1023/A:1007862922531">https://doi.org/10.1023/A:1007862922531</a>
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -498,7 +465,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022-2023 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
     <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>
