@@ -13,7 +13,7 @@ title: "Introduction"
 ## Avant le cours
 
 - Se familiariser avec le [plan de cours](/syllabus), le [contenu des séances](/contenu/), le [forum en ligne](https://piazza.com/hec.ca/fall2023/math60602/home), les [exercices](/exercices) et les [devoirs](/evaluations/).
-- S'inscrire sur Piazza.
+- S'inscrire sur [Piazza](http://piazza.com/hec.ca/fall2023/math60602).
 
 
 ## Lectures
@@ -23,7 +23,7 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 :::
 
 - {{< fa book >}} [Chapitre sur l'analyse exploratoire des données](https://lbelzile.github.io/math60602/analyseexploratoire.html)
-- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html)
+- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html), partie 
 
 ## Diapositives 
 
@@ -31,7 +31,7 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 - {{< fa file >}} [Survol des sujets](/diapos/MATH60602-diapos0.pdf)
 - {{< fa file >}} [Graphiques et analyse exploratoire](/diapos/MATH60602-diapos1.pdf)
 
-
+<!--
 ## Activités
 
 **[Atelier de visualisation](/files/graphiques.zip)**: vous devrez analyser des graphiques en équipes et donner une appréciation d'ensemble de l'efficacité du graphique pour transmettre une histoire en plus d'identifier les informations suivantes:
@@ -41,6 +41,7 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 - le type de représentation (diagramme en bâton, nuage de point, en violon, etc.)
 - les forces et faiblesses des représentations graphiques (absence de légende, problème de lisibilité, etc.)
 
+-->
 
 
 ## Objectifs d'apprentissage

@@ -97,7 +97,7 @@ ggplot(data.frame(x = x, y = y),
 L'estimation des paramètres $\widehat{\beta}_0, \cdots,  \widehat{\beta}_p$ nous donne
 $$\underset{\text{prédiction}}{\widehat{Y}_i} = \widehat{\beta}_0 + \widehat{\beta}_1\mathrm{X}_{i1} \cdots + \widehat{\beta}_p\mathrm{X}_{ip}.$$
 
-On peut approximer l'aléa à l'aide du **résidu ordinaires**, soit
+On peut approximer l'aléa à l'aide du **résidu ordinaire**, soit
 $$\underset{\text{résidu ordinaire}}{e_i} = \underset{\text{observation}}{Y_i} - \underset{\text{prédiction}}{\widehat{Y}_i}.$$
 
 - par construction, la moyenne des $e_i$ est zéro.

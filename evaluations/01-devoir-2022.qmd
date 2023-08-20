@@ -4,7 +4,7 @@ title: "Devoir 1"
 
 [Téléchargez la version PDF de l'énoncé](MATH60602-A22-Devoir1.pdf)
 
-La base de données `visaprem` du paquet `hecmulti` contiennent les profils de 1294 clients d'une institution bancaire française avant la zone euro. Les données ont été collectées lors d'une enquête mensuelle.
+La base de données `visaprem` du paquet `hecmulti` contiennent les profils de 1294 clients d'une institution bancaire française avant l'entrée de la France dans la zone euro. Les données ont été collectées lors d'une enquête mensuelle.
 
 
 1. Transformez la variable catégorielle `sexe` en variable binaire entière avec `homme`=`0`, `femme`=`1`, et `NA` pour les valeurs manquantes. 

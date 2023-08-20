@@ -8,7 +8,171 @@ execute:
   error: false
 ---
 
+
+
 ## Exercice 5.1
+
+Les observations de la base de données [`bjffacto`](https://lbelzile.github.io/hecmulti/reference/bjffacto.html) sont tirées de l'article @Bastian:2014 et sont rattachées à une expérience en psychologie visant à corroborer l'hypothèse qu'il y a une coopération accrue entre individus sujets à une expérience traumatisante. La moitié des participant(e)s a dû plonger sa main dans un bain d'eau glacé, tandis que l'autre moitié a dû faire la même chose dans un bain d'eau tiède; les deux groupes devaient ensuite faire un jeu visant à identifier leur niveau de coopération.
+
+La variable `condition` indique le groupe expérimental (zéro pour groupe contrôle, un pour douleur).
+
+**Indication**: utilisez la matrice de corrélation pour vos analyses factorielles
+
+1. *Pourquoi n'est-il pas nécessaire de standardiser les variables avant de procéder à l'analyse exploratoire? Justifiez votre réponse*
+
+Ce sont toutes des échelles de Likert avec le même nombre de modalités, donc comparables entre elles. La différence entre la matrice de corrélation et la matrice de covariance réside dans l'importance accordée aux variables. On mettra moins de poids dans le deuxième cas sur les items plus consensuels (pour lesquels l'écart-type est inférieur).
+
+
+Il est important pour la suite de retirer la variable condition, qui n'est pas un item du questionnaire (le but étant de calucler les différences d'échelles selon le groupe expérimental).
+
+2. *Effectuez une analyse factorielle exploratoire à l'aide de la méthode des composantes principales.* 
+    a. *En utilisant le critère de Kaiser (valeurs propres) ou le diagramme d'éboulis, déterminez un nombre adéquat de facteurs à employer.*
+    b. *Produisez un diagramme d'éboulis et rapportez ce dernier.*
+    c. *Quel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?*
+    
+```{r}
+#| message: false
+#| note: false
+#| warning: false
+library(dplyr)
+library(hecmulti)
+db <- bjffacto |> select(!condition)
+covdb <- cor(db)
+decompo <- eigen(covdb)
+eboulis(decompo)
+nkaiser <- sum(decompo$values > 1)
+var_cumu <- with(decompo,
+                 cumsum(values)/sum(values))
+```
+    
+Le critère des valeurs propres de Kaiser (variances des composantes principales supérieures à 1) indique `r sum(decompo$values > 1)` facteurs, qui conjointement expliquent `r round(100*var_cumu[nkaiser], 1)` pourcent de la variance totale des items du questionnaire. 
+
+Le diagramme d'éboulis indique un coude à partir de deux facteurs.
+
+```{r}
+cp_2 <- factocp(covmat = covdb, 
+                nfact = 2)
+print(cp_2, cutoff = 0.5)
+```
+   
+```{r}
+cp_2 <- factocp(x = db,
+                nfact = 2)
+print(cp_2, cutoff = 0.5)
+```   
+
+
+Rappelez-vous que, peu importe le signe de la corrélation avec le facteur, il est surtout important qu'on considère des variables avec le même signe. Il est possible selon la formulation de la question que le signe soit opposé même si l'échelle est la même, si par exemple: «je fais confiance à mes gestionnaires» versus «je ne suis pas convaincu par l'équipe dirigeante» alors, on pourra inverser l'échelle avant d'aggréger et de créer une échelle.
+
+Logiquement, il faut aussi que les échelles soient constituées de variables semblables: on ne fera pas la moyenne d'un item mesuré sur $[1, 100]$ et d'un autre sur $[-10, 10]$!
+
+<!-- La solution à cinq facteurs (corrélation) fait ressortir davantage de détail en séparant les émotions: degré d'engagement (facteur 1), fébrilité et peur (facteur 2), force et degré d'alerte (facteur 3), peur et honte (facteur 4) et détresse (facteur 5). Comme la frontière n'est pas claire, la solution à deux facteurs pourrait être préférée ici. -->
+
+    
+3. *Répétez la procédure, cette fois avec la méthode d'estimation par maximum de vraisemblance.* 
+    a. *Rapportez les valeurs des critères d'information (AIC et BIC) pour $m=2, \ldots, 6$ facteurs dans un tableau.* 
+    b. *Quel nombre optimal de facteurs ces différents critères retournent-ils?*
+    c. *Y a-t-il un problème avec la solution de l'un d'entre eux?*
+
+Avec 20 variables explicatives, on ne considérera pas plus de cinq facteurs. Si on ajuste le modèle de manière répété jusqu'à ce maximum, le modèle sélectionné par le AIC contient cinq variables (mais c'est un cas de Heywood), tandis que le BIC retourne le modèle avec deux facteurs.
+    
+```{r}
+knitr::kable(
+  ajustement_factanal(db, factors = 1:5), 
+  digits = 2)
+```
+Si on ajuste le modèle avec deux facteurs, on obtient la même classification des variables par facteur qu'avec le modèle ajusté par la méthode des composantes principales (matrice de corrélation).
+    
+```{r} 
+fa_2 <- factanal(x = db, factors = 2)
+print(fa_2, cutoff = 0.4)
+```
+
+La solution à quatre facteurs n'est pas intéressante ici, puisque plusieurs variables sont fortement corrélées avec des facteurs. On pourrait les associer et créer des échelles, mais on créera une corrélation entre elles (du fait qu'elles sont construites à partir des mêmes variables) qui n'est pas forcément désirable.
+
+La solution à cinq facteurs (corrélation) fait ressortir davantage de détail en séparant les émotions: degré d'engagement (facteur 1), fébrilité et peur (facteur 2), force et degré d'alerte (facteur 3), peur et honte (facteur 4) et détresse (facteur 5). Comme la frontière n'est pas claire, la solution à deux facteurs pourrait être préférée ici.
+    
+4. *Comparez les regroupements obtenus avec les deux méthodes: est-ce que les regroupements sont semblables (c'est-à-dire, est-ce que les variables retournées dans les regroupements sont associées aux mêmes facteurs)?*
+
+Oui pour la solution à deux facteurs avec la matrice de corrélation.
+
+5.  *Étiquetez les facteurs obtenus avec la méthode des composantes principales et $m=2$ facteurs. Expliquez brièvement leur signification. Utilisez le seuil de coupure $r=0.5$ pour les chargements avec rotation varimax pour déterminer si une variable fait partie d'un facteur.*
+
+
+Avec deux facteurs et un point de coupure de 0.5, on retrouve les émotions positives et négatives si on utilise la matrice de corrélation. 
+
+- Facteur 1 (émotions positives): `interested`, `excited`, `strong`, `enthusiastic`, `proud`, `alert`, `inspired`, `determined`, `attentive` et `active`
+- Facteur 2 (émotions négatives): `distressed`, `upset`, `guilty`, `scared`, `hostile`, `irritable`, `ashamed`, `nervous`, `jittery` et `afraid`
+
+
+6. *Créez des échelles à partir des facteurs et calculez leur cohérence interne: rapportez le $\alpha$ de Cronbach pour chacun des facteurs.*
+
+```{r}
+vars <- apply(cp_2$loadings, 2, function(x){
+  which(abs(x) > 0.5)}, simplify = FALSE)
+alphaCronbach <- sapply(vars, function(index){
+  hecmulti::alphaC(db[, index])
+})
+alphaCronbach
+```
+
+Les deux échelles incluent des variables fortement corrélées et leur cohérence interne est suffisante pour que l'on aggrège en formant des échelles.
+
+7. *Retournez un tableau de statistiques descriptives (moyenne et écart-type uniquement) pour chaque échelle, par condition expérimental (`condition`). Arrondissez à deux chiffres après la virgule et commentez sur les différences entre groupes, le cas échéant.*
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: tbl-statdescript
+#| tbl-cap: "Moyenne et écart-type des échelles par condition expérimentale"
+db_echelles <- data.frame(
+  ech1 = rowMeans(db[,vars[[1]]]),
+  ech2 = rowMeans(db[,vars[[2]]]),
+  condition = bjffacto$condition) |>
+  dplyr::mutate(condition = case_match(
+    condition,
+    0 ~ "contrôle",
+    1 ~ "douleur"))
+statsdescript <- db_echelles |>
+  dplyr::group_by(condition) |>
+  dplyr::summarize_all(
+    .funs = list(
+      moyenne = mean, 
+      ecarttype = sd))
+knitr::kable(statsdescript, 
+             digits = 2,
+             col.names = c("condition", 
+                           "moyenne E1", 
+                           "moyenne E2", 
+                           "écart-type E1",
+                           "écart-type E2"))
+```
+On peut considérer les différences entres groupes à l'aide d'un test de Welch pour deux échantillons (échantillons aléatoires indépendants). Aucune des différences n'est statistiquement significative à niveau 5%.
+
+
+```{r}
+#| eval: false
+#| echo: true
+t.test(ech1 ~ condition, data = db_echelles)
+t.test(ech2 ~ condition, data = db_echelles)
+```
+
+```{r}
+#| warning: false
+#| eval: true
+#| echo: false
+#| tbl-cap: "Tests-t pour deux échantillons par condition expérimentale pour chacune des échelles."
+#| label: tbl-ttests
+infer::t_test(formula = ech1 ~ condition, x = db_echelles) |>
+  dplyr::select(-"alternative") |>
+  knitr::kable(digits = 2, col.names = c("statistique", "ddl", "valeur-p", "différence", "borne inf.", "borne sup."), caption = "Échelle 1")
+infer::t_test(formula = ech2 ~ condition, x = db_echelles) |>
+  dplyr::select(-"alternative") |>
+  knitr::kable(digits = 2, col.names = c("statistique", "ddl", "valeur-p", "différence", "borne inf.", "borne sup."), caption = "Échelle 2")
+```
+
+
+## Exercice 5.2
 
 Les données `sondage_entreprise` contiennent les résultats d'un sondage effectué par une compagnie auprès de ses employés. 
 
@@ -108,7 +272,9 @@ echelle2 <- rowMeans(e1)
 
 On voit que les deux échelles créées ont un $\alpha$ de Cronbach de plus de 0.8, donc les échelles sont cohérentes. C'est en grande partie dû à la forte corrélation observée entre tous les items
 
-## Exercice 5.2
+<!--
+
+## Exercice 5.3
  
 Effectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données `aerien`.  Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).
 
@@ -184,3 +350,5 @@ En raison du nombre excessivement élevé d'observations, l'ajustement du modèl
 À partir de 7 facteurs, l'optimisation ne converge pas et retourne un cas de Heywood.
 
 Ainsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu'une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible.
+
+-->

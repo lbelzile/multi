@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.Rprofile
 
 /.quarto/
 /_freeze/
@@ -13,3 +14,4 @@ projects/*.zip
 # knitr and caching stuff
 **/*_files/*
 **/*_cache/*
+.gitignore

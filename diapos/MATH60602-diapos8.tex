@@ -172,19 +172,19 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
-  \renewcommand*\contentsname{Table des matières}
+  \renewcommand*\contentsname{Table of contents}
 \else
-  \newcommand\contentsname{Table des matières}
+  \newcommand\contentsname{Table of contents}
 \fi
 \ifdefined\listfigurename
-  \renewcommand*\listfigurename{Liste des figures}
+  \renewcommand*\listfigurename{List of Figures}
 \else
-  \newcommand\listfigurename{Liste des figures}
+  \newcommand\listfigurename{List of Figures}
 \fi
 \ifdefined\listtablename
-  \renewcommand*\listtablename{Liste des tableaux}
+  \renewcommand*\listtablename{List of Tables}
 \else
-  \newcommand\listtablename{Liste des tableaux}
+  \newcommand\listtablename{List of Tables}
 \fi
 \ifdefined\figurename
   \renewcommand*\figurename{Figure}
@@ -192,16 +192,16 @@
   \newcommand\figurename{Figure}
 \fi
 \ifdefined\tablename
-  \renewcommand*\tablename{Tableau}
+  \renewcommand*\tablename{Table}
 \else
-  \newcommand\tablename{Tableau}
+  \newcommand\tablename{Table}
 \fi
 }
 \@ifpackageloaded{float}{}{\usepackage{float}}
 \floatstyle{ruled}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
-\floatname{codelisting}{Énumération}
-\newcommand*\listoflistings{\listof{codelisting}{Liste des énumérations}}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -214,9 +214,6 @@
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
 \makeatother
 \makeatletter
-\makeatother
-\makeatletter
-\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -238,7 +235,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, interior hidden, boxrule=0pt, frame hidden, sharp corners, breakable, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, breakable, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de survie}
 \protect\hypertarget{analyse-de-survie}{}
@@ -324,7 +321,7 @@ La plage des valeurs possibles est tronquée.
 \begin{column}{0.5\textwidth}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/Lexis_censure.pdf}
+{\centering \includegraphics{figures/Lexis_censure.pdf}
 
 }
 
@@ -353,13 +350,7 @@ La plage des valeurs possibles est tronquée.
 
 \begin{frame}{Troncature par intervalle}
 \protect\hypertarget{troncature-par-intervalle}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/lexis_troncationintervalle.pdf}
-
-}
-
-\end{figure}
+\includegraphics{figures/lexis_troncationintervalle.pdf}
 
 \footnotesize
 
@@ -630,18 +621,18 @@ fonction de survie pour chaque temps d'échec (événement).
 \toprule
 temps & nb à risque & nb échecs & nb cumul. & survie & erreur-type\\
 \midrule
-2 & 500 & 1 & 1 & 0.998 & 0.002\\
-11 & 499 & 1 & 2 & 0.996 & 0.003\\
-14 & 498 & 1 & 3 & 0.994 & 0.003\\
-18 & 497 & 1 & 4 & 0.992 & 0.004\\
-27 & 496 & 1 & 5 & 0.990 & 0.004\\
-29 & 495 & 1 & 6 & 0.988 & 0.005\\
-30 & 494 & 1 & 7 & 0.986 & 0.005\\
-34 & 493 & 4 & 11 & 0.978 & 0.007\\
+2 & 500 & 1 & 1 & 0.9980 & 0.002\\
+11 & 499 & 1 & 2 & 0.9960 & 0.003\\
+14 & 498 & 1 & 3 & 0.9940 & 0.003\\
+18 & 497 & 1 & 4 & 0.9920 & 0.004\\
+27 & 496 & 1 & 5 & 0.9900 & 0.004\\
+29 & 495 & 1 & 6 & 0.9880 & 0.005\\
+30 & 494 & 1 & 7 & 0.9860 & 0.005\\
+34 & 493 & 4 & 11 & 0.9780 & 0.007\\
  &  &  &  &  & \\
-189 & 13 & 1 & 331 & 0.204 & 0.028\\
-202 & 6 & 1 & 332 & 0.170 & 0.039\\
-216 & 2 & 2 & 334 & 0.000 & \\
+189 & 13 & 1 & 331 & 0.2037 & 0.028\\
+202 & 6 & 1 & 332 & 0.1697 & 0.039\\
+216 & 2 & 2 & 334 & 0.0000 & \\
 \bottomrule
 \end{tabu}
 
@@ -843,16 +834,19 @@ On stratifie l'échantillon selon le sexe.
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{survdiff}\NormalTok{(}\AttributeTok{formula =} \FunctionTok{Surv}\NormalTok{(temps, censure) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sexe, }
          \AttributeTok{data =}\NormalTok{ survie1)}
-\DocumentationTok{\#\# Call:}
-\DocumentationTok{\#\# survdiff(formula = Surv(temps, censure) \textasciitilde{} sexe, data = survie1)}
-\DocumentationTok{\#\# }
-\DocumentationTok{\#\#          N Observed Expected (O{-}E)\^{}2/E (O{-}E)\^{}2/V}
-\DocumentationTok{\#\# sexe=0 309      217      181      7.33      16.4}
-\DocumentationTok{\#\# sexe=1 191      117      153      8.63      16.4}
-\DocumentationTok{\#\# }
-\DocumentationTok{\#\#  Chisq= 16.4  on 1 degrees of freedom, p= 5e{-}05}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+Call:
+survdiff(formula = Surv(temps, censure) ~ sexe, data = survie1)
+
+         N Observed Expected (O-E)^2/E (O-E)^2/V
+sexe=0 309      217      181      7.33      16.4
+sexe=1 191      117      153      8.63      16.4
+
+ Chisq= 16.4  on 1 degrees of freedom, p= 5e-05 
+\end{verbatim}
 
 \footnotesize
 
@@ -1099,10 +1093,10 @@ khi-deux (\(\chi^2\)) avec \texttt{ddl} degrés de liberté.
 \toprule
 terme & statistique & ddl & valeur-p\\
 \midrule
-age & 68.07 & 1 & <0.0001\\
-sexe & 32.82 & 1 & <0.0001\\
+age & 68.07 & 1 & <1e-04\\
+sexe & 32.82 & 1 & <1e-04\\
 region & 7.67 & 4 & 0.1\\
-service & 159.31 & 3 & <0.0001\\
+service & 159.31 & 3 & <1e-04\\
 \bottomrule
 \end{tabular}
 \end{table}

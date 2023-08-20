@@ -150,7 +150,7 @@ filter(.data = DATA, ...)
 ', eval = FALSE) |> 
   flair("DATA", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("...", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -167,7 +167,7 @@ filter(.data = gapminder, country == "Denmark")
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('country == "Denmark"', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left[
@@ -207,7 +207,7 @@ filter(.data = gapminder,
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('country == "Denmark"', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -317,7 +317,7 @@ filter(gapminder,
        country = "Canada")
 ', eval = FALSE) |> 
   flair("=", color = "#FF4136", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ```{r echo=FALSE, tidy=FALSE}
@@ -326,7 +326,7 @@ filter(gapminder,
        country == "Canada")
 ', eval = FALSE) |> 
   flair("==", color = "#2ECC40", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -341,7 +341,7 @@ filter(gapminder,
        country == Canada)
 ', eval = FALSE) |> 
   flair("Canada", color = "#FF4136", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ```{r echo=FALSE, tidy=FALSE}
@@ -350,7 +350,7 @@ filter(gapminder,
        country == "Canada")
 ', eval = FALSE) |> 
   flair('"Canada"', color = "#2ECC40", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -368,7 +368,7 @@ filter(gapminder, country == "Denmark", year > 2000)
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('country == "Denmark", year > 2000', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -379,7 +379,7 @@ filter(gapminder, country == "Denmark", year > 2000)
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('country == "Denmark", year > 2000', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left[
@@ -444,7 +444,7 @@ filter(gapminder, country == "Denmark", year > 2000)
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('country == "Denmark", year > 2000', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ```{r echo=FALSE, tidy=FALSE}
@@ -453,7 +453,7 @@ filter(gapminder, country == "Denmark" & year > 2000)
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('country == "Denmark" & year > 2000', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -506,7 +506,7 @@ decorate('
 filter(gapminder, 1960 &lt; year &lt; 1980)
 ', eval = FALSE) |> 
   flair("1960 &lt; year &lt; 1980", color = "#FF4136", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -517,7 +517,7 @@ filter(gapminder,
        year > 1960, year &lt; 1980)
 ', eval = FALSE) |> 
   flair("year > 1960, year &lt; 1980", color = "#2ECC40", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 ]
@@ -538,7 +538,7 @@ filter(gapminder,
   flair('country == "Mexico", 
        country == "Canada", 
        country == "United States"', color = "#FF4136", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -551,7 +551,7 @@ filter(gapminder,
 ', eval = FALSE) |> 
   flair('country %in% c("Mexico", "Canada", 
                       "United States")', color = "#2ECC40", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 ]
@@ -574,7 +574,7 @@ VERB(DATA, ...)
   flair("VERB", background = "#EFB3FF", before = "<b>", after = "</b>") |> 
   flair("DATA", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("...", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -599,7 +599,7 @@ mutate(.data, ...)
 ', eval = FALSE) |> 
   flair(".data", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("...", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -616,7 +616,7 @@ mutate(gapminder, gdp = gdpPercap * pop)
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('gdp = gdpPercap * pop', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left.small[
@@ -653,7 +653,7 @@ mutate(gapminder, gdp = gdpPercap * pop,
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('gdp = gdpPercap * pop,', background = "#FFD0CF", before = "<b>", after = "</b>") |> 
   flair('pop_mil = round(pop / 1000000)', background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left.small[
@@ -699,7 +699,7 @@ ifelse(TEST,
   flair("TEST", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
   flair("VALEUR_SI_TRUE", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("VALEUR_SI_FALSE", background = "#CBB5FF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 ]
 
@@ -722,7 +722,7 @@ mutate(gapminder,
        after_1960 = year > 1960)
 ', eval = FALSE) |> 
   flair("year > 1960", background = "#FFC0DC", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ```{r echo=FALSE, tidy=FALSE}
@@ -735,7 +735,7 @@ mutate(gapminder,
   flair("year > 1960", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
   flair('"After 1960"', background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair('"Before 1960"', background = "#CBB5FF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -746,7 +746,7 @@ mutate(gapminder,
        after_1960 = year > 1960)
 ', eval = FALSE) |> 
   flair("year > 1960", background = "#FFC0DC", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 
@@ -865,7 +865,7 @@ gapminder_2002_log <- mutate(gapminder_2002,
 ', eval = FALSE) |> 
   flair("gapminder_2002", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
   flair("gapminder_2002_log", background = "#FFDFD1", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -889,7 +889,7 @@ filter(mutate(gapminder_2002,
   flair("year == 2002)", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
   flair("mutate(gapminder_2002,", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("log_gdpPercap = log(gdpPercap))", background = "#FFDFD1", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -910,7 +910,7 @@ gapminder |> filter(_____, country == "Canada")
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
   flair("_____", background = "#FFC0DC", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -926,7 +926,7 @@ decorate('
 filter(gapminder, country == "Canada")
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFC0DC", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ```{r echo=FALSE, tidy=FALSE}
@@ -934,7 +934,7 @@ decorate('
 gapminder |> filter(country == "Canada")
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFC0DC", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -954,7 +954,7 @@ gapminder |>
   filter(year == 2002) |> 
   mutate(log_gdpPercap = log(gdpPercap))
 ', eval = FALSE) |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -970,7 +970,7 @@ leave_house(get_dressed(get_out_of_bed(wake_up(me, time = "8:00"), side = "corre
   flair_args(color = "#0D0887") |>
   flair_funs(background = "#FFC0DC", before = "<b>", after = "</b>") |>
   flair_input_vals(color = "#E16462") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 --
@@ -986,7 +986,7 @@ me |>
   flair_args(color = "#0D0887") |>
   flair_funs(background = "#FFC0DC", before = "<b>", after = "</b>") |>
   flair_input_vals(color = "#E16462") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---
@@ -1003,7 +1003,7 @@ gapminder |> summarize(mean_life = mean(lifeExp))
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("mean_life = mean(lifeExp)", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left.small[
@@ -1041,7 +1041,7 @@ gapminder |> summarize(mean_life = mean(lifeExp),
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("mean_life = mean(lifeExp),", background = "#FFD0CF", before = "<b>", after = "</b>") |> 
   flair("min_life = min(lifeExp)", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left.small[
@@ -1154,7 +1154,7 @@ gapminder |> group_by(continent)
 ', eval = FALSE) |> 
   flair("gapminder", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("continent", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 &nbsp;
@@ -1209,7 +1209,7 @@ pollution |>
 ', eval = FALSE) |> 
   flair("pollution", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("mean = mean(amount), sum = sum(amount), n = n()", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left.small[
@@ -1240,7 +1240,7 @@ pollution |>
   flair("pollution", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("mean = mean(amount), sum = sum(amount), n = n()", background = "#FFD0CF", before = "<b>", after = "</b>") |> 
   flair("city", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left.small[
@@ -1278,7 +1278,7 @@ pollution |>
   flair("pollution", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("mean = mean(amount), sum = sum(amount), n = n()", background = "#FFD0CF", before = "<b>", after = "</b>") |> 
   flair("particle_size", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 .pull-left.small[

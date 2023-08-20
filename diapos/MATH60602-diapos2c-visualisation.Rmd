@@ -358,7 +358,7 @@ ggplot(data = DONNÉES) +
   flair("DONNÉES", background = "#CBB5FF", before = "<b>", after = "</b>") %>% 
   flair("FONCTION_GEOM", background = "#FFDFD1", before = "<b>", after = "</b>") %>% 
   flair("APPLICATION ESTHÉTIQUE", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair::knit_print.with_flair()
+  flair:::knit_print.decorated()
 ```
 
 ---

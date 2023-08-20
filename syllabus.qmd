@@ -85,13 +85,13 @@ Les notes de cours [en ligne](https://lbelzile.github.io/math60602) font office 
 
 Votre note finale sera basée sur les évaluations suivantes
 
-- Examen intra (30%)
-- Examen final (40%)
+- Examen intra (30%), le samedi 28 octobre à 13h30
+- Examen final (40%), le jeudi 14 décembre à 18h30
 - Devoirs (30%): il y a deux devoirs équipondérés (15% chacun). Les devoirs seront à réaliser en équipe d'au plus quatre personnes. Vous aurez en moyenne deux semaines pour réaliser chaque devoir.
 
 **Dates de remise:**
 
-- Devoir 1, date limite le vendredi 13 octobre
+- Devoir 1, date limite le vendredi 20 octobre
 - Devoir 2, date limite le vendredi 1 décembre
 
 
@@ -107,7 +107,7 @@ Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seron
 
 Tout travail remis hors délai sera pénalisé de 5% par jour de retard.
 
-
+La note obtenue lors des travaux d’équipe contribuera à la note globale seulement si la note combinée des évaluations individuelles est supérieure à 50%. Autrement, la note finale de l’étudiant(e) est calculée au pro rata des évaluations individuelles.
 
 
 Vous pouvez trouver une description des évaluations sur la page [évaluations](/evaluations/).
@@ -120,7 +120,11 @@ assignments <- tibble::tribble(
   30     , "Examen intra (30 pts)",
   40     , "Examen final (40 pts)",
 )
+```
 
+<!--
+
+```{r assignments-ratings, include = FALSE}
 grading <- tibble::tribble(
   ~Grade, ~Range,  ~Grade1, ~Range1,
   "A+",  "90-100%", "B",  "70-75%",
@@ -129,6 +133,8 @@ grading <- tibble::tribble(
   "B+",  "75-80%",  "F",  "<60%"
 )
 ```
+
+-->
 
 <div class="centered-table">
 
@@ -167,21 +173,4 @@ Si vous êtes en situation d'urgence ou craignez pour votre sécurité, pour vot
 
 - Appelez immédiatement les services d'urgence au 911
 - Appelez ensuite la Sécurité de HEC Montréal au 514 340-6611
-
-## Consignes pandémiques
-
-[Consultez le site web](https://www.hec.ca/COVID-19/information-generale/) de l'école pour les dernières mesures sanitaires en vigueur.
-
-À compter du trimestre d’automne 2022, la COVID-19 (test positif ou symptômes s’y apparentant) sera considérée en vertu du règlement pédagogique comme toute autre maladie, à l’exception qu’elle sera jugée d’office comme un motif valable sans billet médical requis. Pour tous les autres motifs d’absence, la procédure en vigueur avant la pandémie (article 3.3.1) se poursuit.
-
-Si un membre de la communauté étudiante doit s’absenter pour un motif lié à la COVID-19, voici la procédure à suivre :
-
- - En cas d’absence pour une ou plusieurs séances de cours : l’étudiant(e) continue de remplir le formulaire d’avis d’absence générant un courriel automatique à votre attention, précisant sa date de retour sur le campus.  Il reviendra à chaque étudiant(e) de faire les démarches pour rattraper le contenu manqué (article 2.1 du règlement pédagogique).
-- En cas d’absence à l'examen final : la procédure demeure la même qu’aux trimestres précédents. L’étudiant(e) doit remplir le formulaire avis d’absence au plus tard cinq jours ouvrables suivant la date de l’examen. Le Registrariat recevra et traitera ce formulaire selon le processus habituel. Si le motif de l’absence est jugé valable, l’examen sera différé au prochain trimestre où le cours est offert.
-
-Le masque de procédure n’est plus obligatoire sur le campus. Cependant, afin de limiter la propagation de la COVID-19, certaines mesures sanitaires demeurent **recommandées** notamment la distanciation physique, les barrières physiques et le port du masque de procédure. Ces consignes relèvent désormais d’un choix personnel. L’École continue de fournir gratuitement pour celles et ceux qui le désirent:
-
-- Masques de procédure;
-- Gel hydroalcoolique;
-- Boîtes de tests rapides, disponibles à la Boutique COOP de l’édifice Côte-Sainte-Catherine ainsi qu’à la ZoneInfo à l’édifice Decelles.
 
