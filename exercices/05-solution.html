@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.3.433">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,9 +17,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -46,44 +47,33 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -119,13 +109,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "correspondances de plus dans ce document",
     "search-clear-button-title": "Effacer",
     "search-detached-cancel-button-title": "Annuler",
-    "search-submit-button-title": "Envoyer"
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Search"
   }
 }</script>
 
 <script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="../site_libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet">
+<script src="../site_libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -141,186 +135,209 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="navbar-title">Analyse multidimensionnelle appliquée</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../syllabus.html">
+    <a class="nav-link" href="../syllabus.html" rel="" target="">
  <span class="menu-text">Syllabus</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../horaire.html">
+    <a class="nav-link" href="../horaire.html" rel="" target="">
  <span class="menu-text">Horaire</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../contenu/index.html">
+    <a class="nav-link" href="../contenu/index.html" rel="" target="">
  <span class="menu-text">Contenu</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../evaluations/index.html">
+    <a class="nav-link" href="../evaluations/index.html" rel="" target="">
  <span class="menu-text">Évaluations</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../exercices/index.html" aria-current="page">
+    <a class="nav-link active" href="../exercices/index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Exercices</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://lbelzile.github.io/math60602">
+    <a class="nav-link" href="https://lbelzile.github.io/math60602" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home"><i class="bi bi-comment" role="img" aria-label="Piazza">
+    <a class="nav-link" href="https://piazza.com/hec.ca/fall2023/math60602/home" rel="" target=""><i class="bi bi-comment" role="img" aria-label="Piazza">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://lbelzile.github.io/hecmulti"><i class="bi bi-inbox-fill" role="img" aria-label="Données">
+    <a class="nav-link" href="https://lbelzile.github.io/hecmulti" rel="" target=""><i class="bi bi-inbox-fill" role="img" aria-label="Données">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Analyse factorielle</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercices/05-exercice.html">Analyse factorielle</a></li><li class="breadcrumb-item"><a href="../exercices/05-solution.html">Solutions 5</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
     </div>
   </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/index.html" class="sidebar-item-text sidebar-link">Exercices</a>
+  <a href="../exercices/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercices</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Analyse exploratoire</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Analyse exploratoire</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/01-exercice.html" class="sidebar-item-text sidebar-link">Exercice 1</a>
+  <a href="../exercices/01-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/01-solution.html" class="sidebar-item-text sidebar-link">Solution 1</a>
+  <a href="../exercices/01-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 1</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Sélection de variables</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Sélection de variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/02-exercice.html" class="sidebar-item-text sidebar-link">Exercice 2</a>
+  <a href="../exercices/02-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/02-solution.html" class="sidebar-item-text sidebar-link">Solutions 2</a>
+  <a href="../exercices/02-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 2</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Régression logistique</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Régression logistique</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/03-exercice.html" class="sidebar-item-text sidebar-link">Exercice 3</a>
+  <a href="../exercices/03-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/03-solution.html" class="sidebar-item-text sidebar-link">Solutions 3</a>
+  <a href="../exercices/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 3</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Analyse de survie</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Analyse de survie</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/04-exercice.html" class="sidebar-item-text sidebar-link">Exercice 4</a>
+  <a href="../exercices/04-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/04-solution.html" class="sidebar-item-text sidebar-link">Solutions 4</a>
+  <a href="../exercices/04-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 4</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Analyse factorielle</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Analyse factorielle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/05-exercice.html" class="sidebar-item-text sidebar-link">Exercice 5</a>
+  <a href="../exercices/05-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/05-solution.html" class="sidebar-item-text sidebar-link active">Solutions 5</a>
+  <a href="../exercices/05-solution.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Solutions 5</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Analyse de regroupements</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+ <span class="menu-text">Analyse de regroupements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/06-exercice.html" class="sidebar-item-text sidebar-link">Exercice 6</a>
+  <a href="../exercices/06-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercices/06-solution.html" class="sidebar-item-text sidebar-link">Solutions 6</a>
+  <a href="../exercices/06-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 6</span></a>
   </div>
 </li>
       </ul>
@@ -328,6 +345,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -344,7 +362,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Analyse factorielle</h1>
+<h1 class="title">Analyse factorielle</h1>
 </div>
 
 
@@ -361,115 +379,525 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="exercice-5.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-5.1">Exercice 5.1</h2>
+<p>Les observations de la base de données <a href="https://lbelzile.github.io/hecmulti/reference/bjffacto.html"><code>bjffacto</code></a> sont tirées de l’article <span class="citation" data-cites="Bastian:2014">Bastian et al. (<a href="#ref-Bastian:2014" role="doc-biblioref">2014</a>)</span> et sont rattachées à une expérience en psychologie visant à corroborer l’hypothèse qu’il y a une coopération accrue entre individus sujets à une expérience traumatisante. La moitié des participant(e)s a dû plonger sa main dans un bain d’eau glacé, tandis que l’autre moitié a dû faire la même chose dans un bain d’eau tiède; les deux groupes devaient ensuite faire un jeu visant à identifier leur niveau de coopération.</p>
+<p>La variable <code>condition</code> indique le groupe expérimental (zéro pour groupe contrôle, un pour douleur).</p>
+<p><strong>Indication</strong>: utilisez la matrice de corrélation pour vos analyses factorielles</p>
+<ol type="1">
+<li><em>Pourquoi n’est-il pas nécessaire de standardiser les variables avant de procéder à l’analyse exploratoire? Justifiez votre réponse</em></li>
+</ol>
+<p>Ce sont toutes des échelles de Likert avec le même nombre de modalités, donc comparables entre elles. La différence entre la matrice de corrélation et la matrice de covariance réside dans l’importance accordée aux variables. On mettra moins de poids dans le deuxième cas sur les items plus consensuels (pour lesquels l’écart-type est inférieur).</p>
+<p>Il est important pour la suite de retirer la variable condition, qui n’est pas un item du questionnaire (le but étant de calucler les différences d’échelles selon le groupe expérimental).</p>
+<ol start="2" type="1">
+<li><em>Effectuez une analyse factorielle exploratoire à l’aide de la méthode des composantes principales.</em>
+<ol type="a">
+<li><em>En utilisant le critère de Kaiser (valeurs propres) ou le diagramme d’éboulis, déterminez un nombre adéquat de facteurs à employer.</em></li>
+<li><em>Produisez un diagramme d’éboulis et rapportez ce dernier.</em></li>
+<li><em>Quel pourcentage de la variance totale est expliquée par votre combinaison de facteurs?</em></li>
+</ol></li>
+</ol>
+<div class="cell" data-note="false">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> bjffacto <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span>condition)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>covdb <span class="ot">&lt;-</span> <span class="fu">cor</span>(db)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>decompo <span class="ot">&lt;-</span> <span class="fu">eigen</span>(covdb)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">eboulis</span>(decompo)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="05-solution_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>nkaiser <span class="ot">&lt;-</span> <span class="fu">sum</span>(decompo<span class="sc">$</span>values <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>var_cumu <span class="ot">&lt;-</span> <span class="fu">with</span>(decompo,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">cumsum</span>(values)<span class="sc">/</span><span class="fu">sum</span>(values))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Le critère des valeurs propres de Kaiser (variances des composantes principales supérieures à 1) indique 5 facteurs, qui conjointement expliquent 74.3 pourcent de la variance totale des items du questionnaire.</p>
+<p>Le diagramme d’éboulis indique un coude à partir de deux facteurs.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cp_2 <span class="ot">&lt;-</span> <span class="fu">factocp</span>(<span class="at">covmat =</span> covdb, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">nfact =</span> <span class="dv">2</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cp_2, <span class="at">cutoff =</span> <span class="fl">0.5</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+      F1     F2    
+ [1,] -0.719       
+ [2,]        -0.557
+ [3,] -0.761       
+ [4,]        -0.537
+ [5,] -0.742       
+ [6,]        -0.849
+ [7,]        -0.805
+ [8,]        -0.570
+ [9,] -0.872       
+[10,] -0.803       
+[11,]        -0.578
+[12,] -0.551       
+[13,]        -0.763
+[14,] -0.775       
+[15,]        -0.685
+[16,] -0.788       
+[17,] -0.688       
+[18,]        -0.596
+[19,] -0.835       
+[20,]        -0.799
+
+                  F1    F2
+SS loadings    5.990 4.787
+Proportion Var 0.299 0.239
+Cumulative Var 0.299 0.539</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cp_2 <span class="ot">&lt;-</span> <span class="fu">factocp</span>(<span class="at">x =</span> db,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">nfact =</span> <span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cp_2, <span class="at">cutoff =</span> <span class="fl">0.5</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Loadings:
+             F1     F2    
+interested   -0.719       
+distressed          -0.557
+excited      -0.761       
+upset               -0.537
+strong       -0.742       
+guilty              -0.849
+scared              -0.805
+hostile             -0.570
+enthusiastic -0.872       
+proud        -0.803       
+irritable           -0.578
+alert        -0.551       
+ashamed             -0.763
+inspired     -0.775       
+nervous             -0.685
+determined   -0.788       
+attentive    -0.688       
+jittery             -0.596
+active       -0.835       
+afraid              -0.799
+
+                  F1    F2
+SS loadings    5.990 4.787
+Proportion Var 0.299 0.239
+Cumulative Var 0.299 0.539</code></pre>
+</div>
+</div>
+<p>Rappelez-vous que, peu importe le signe de la corrélation avec le facteur, il est surtout important qu’on considère des variables avec le même signe. Il est possible selon la formulation de la question que le signe soit opposé même si l’échelle est la même, si par exemple: «je fais confiance à mes gestionnaires» versus «je ne suis pas convaincu par l’équipe dirigeante» alors, on pourra inverser l’échelle avant d’aggréger et de créer une échelle.</p>
+<p>Logiquement, il faut aussi que les échelles soient constituées de variables semblables: on ne fera pas la moyenne d’un item mesuré sur <span class="math inline">\([1, 100]\)</span> et d’un autre sur <span class="math inline">\([-10, 10]\)</span>!</p>
+<!-- La solution à cinq facteurs (corrélation) fait ressortir davantage de détail en séparant les émotions: degré d'engagement (facteur 1), fébrilité et peur (facteur 2), force et degré d'alerte (facteur 3), peur et honte (facteur 4) et détresse (facteur 5). Comme la frontière n'est pas claire, la solution à deux facteurs pourrait être préférée ici. -->
+<ol start="3" type="1">
+<li><em>Répétez la procédure, cette fois avec la méthode d’estimation par maximum de vraisemblance.</em>
+<ol type="a">
+<li><em>Rapportez les valeurs des critères d’information (AIC et BIC) pour <span class="math inline">\(m=2, \ldots, 6\)</span> facteurs dans un tableau.</em></li>
+<li><em>Quel nombre optimal de facteurs ces différents critères retournent-ils?</em></li>
+<li><em>Y a-t-il un problème avec la solution de l’un d’entre eux?</em></li>
+</ol></li>
+</ol>
+<p>Avec 20 variables explicatives, on ne considérera pas plus de cinq facteurs. Si on ajuste le modèle de manière répété jusqu’à ce maximum, le modèle sélectionné par le AIC contient cinq variables (mais c’est un cas de Heywood), tandis que le BIC retourne le modèle avec deux facteurs.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ajustement_factanal</span>(db, <span class="at">factors =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">k</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: left;">pval</th>
+<th style="text-align: right;">npar</th>
+<th style="text-align: right;">heywood</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">855.45</td>
+<td style="text-align: right;">935.01</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">676.10</td>
+<td style="text-align: right;">793.45</td>
+<td style="text-align: left;">5.430e-09</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">653.16</td>
+<td style="text-align: right;">806.31</td>
+<td style="text-align: left;">2.687e-06</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">626.10</td>
+<td style="text-align: right;">813.06</td>
+<td style="text-align: left;">0.0009868</td>
+<td style="text-align: right;">94</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">607.76</td>
+<td style="text-align: right;">826.55</td>
+<td style="text-align: left;">0.0356262</td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Si on ajuste le modèle avec deux facteurs, on obtient la même classification des variables par facteur qu’avec le modèle ajusté par la méthode des composantes principales (matrice de corrélation).</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fa_2 <span class="ot">&lt;-</span> <span class="fu">factanal</span>(<span class="at">x =</span> db, <span class="at">factors =</span> <span class="dv">2</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fa_2, <span class="at">cutoff =</span> <span class="fl">0.4</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+factanal(x = db, factors = 2)
+
+Uniquenesses:
+  interested   distressed      excited        upset       strong       guilty 
+       0.531        0.796        0.426        0.804        0.529        0.176 
+      scared      hostile enthusiastic        proud    irritable        alert 
+       0.294        0.692        0.212        0.403        0.765        0.735 
+     ashamed     inspired      nervous   determined    attentive      jittery 
+       0.427        0.386        0.614        0.434        0.602        0.643 
+      active       afraid 
+       0.303        0.463 
+
+Loadings:
+             Factor1 Factor2
+interested    0.682         
+distressed            0.424 
+excited       0.757         
+upset                 0.440 
+strong        0.686         
+guilty                0.896 
+scared                0.839 
+hostile               0.511 
+enthusiastic  0.884         
+proud         0.763         
+irritable             0.485 
+alert         0.492         
+ashamed               0.756 
+inspired      0.770         
+nervous               0.612 
+determined    0.742         
+attentive     0.622         
+jittery               0.505 
+active        0.831         
+afraid                0.730 
+
+               Factor1 Factor2
+SS loadings      5.546   4.218
+Proportion Var   0.277   0.211
+Cumulative Var   0.277   0.488
+
+Test of the hypothesis that 2 factors are sufficient.
+The chi square statistic is 272.3 on 151 degrees of freedom.
+The p-value is 5.43e-09 </code></pre>
+</div>
+</div>
+<p>La solution à quatre facteurs n’est pas intéressante ici, puisque plusieurs variables sont fortement corrélées avec des facteurs. On pourrait les associer et créer des échelles, mais on créera une corrélation entre elles (du fait qu’elles sont construites à partir des mêmes variables) qui n’est pas forcément désirable.</p>
+<p>La solution à cinq facteurs (corrélation) fait ressortir davantage de détail en séparant les émotions: degré d’engagement (facteur 1), fébrilité et peur (facteur 2), force et degré d’alerte (facteur 3), peur et honte (facteur 4) et détresse (facteur 5). Comme la frontière n’est pas claire, la solution à deux facteurs pourrait être préférée ici.</p>
+<ol start="4" type="1">
+<li><em>Comparez les regroupements obtenus avec les deux méthodes: est-ce que les regroupements sont semblables (c’est-à-dire, est-ce que les variables retournées dans les regroupements sont associées aux mêmes facteurs)?</em></li>
+</ol>
+<p>Oui pour la solution à deux facteurs avec la matrice de corrélation.</p>
+<ol start="5" type="1">
+<li><em>Étiquetez les facteurs obtenus avec la méthode des composantes principales et <span class="math inline">\(m=2\)</span> facteurs. Expliquez brièvement leur signification. Utilisez le seuil de coupure <span class="math inline">\(r=0.5\)</span> pour les chargements avec rotation varimax pour déterminer si une variable fait partie d’un facteur.</em></li>
+</ol>
+<p>Avec deux facteurs et un point de coupure de 0.5, on retrouve les émotions positives et négatives si on utilise la matrice de corrélation.</p>
+<ul>
+<li>Facteur 1 (émotions positives): <code>interested</code>, <code>excited</code>, <code>strong</code>, <code>enthusiastic</code>, <code>proud</code>, <code>alert</code>, <code>inspired</code>, <code>determined</code>, <code>attentive</code> et <code>active</code></li>
+<li>Facteur 2 (émotions négatives): <code>distressed</code>, <code>upset</code>, <code>guilty</code>, <code>scared</code>, <code>hostile</code>, <code>irritable</code>, <code>ashamed</code>, <code>nervous</code>, <code>jittery</code> et <code>afraid</code></li>
+</ul>
+<ol start="6" type="1">
+<li><em>Créez des échelles à partir des facteurs et calculez leur cohérence interne: rapportez le <span class="math inline">\(\alpha\)</span> de Cronbach pour chacun des facteurs.</em></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">apply</span>(cp_2<span class="sc">$</span>loadings, <span class="dv">2</span>, <span class="cf">function</span>(x){</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">which</span>(<span class="fu">abs</span>(x) <span class="sc">&gt;</span> <span class="fl">0.5</span>)}, <span class="at">simplify =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>alphaCronbach <span class="ot">&lt;-</span> <span class="fu">sapply</span>(vars, <span class="cf">function</span>(index){</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  hecmulti<span class="sc">::</span><span class="fu">alphaC</span>(db[, index])</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>alphaCronbach</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       F1        F2 
+0.9157199 0.8448532 </code></pre>
+</div>
+</div>
+<p>Les deux échelles incluent des variables fortement corrélées et leur cohérence interne est suffisante pour que l’on aggrège en formant des échelles.</p>
+<ol start="7" type="1">
+<li><em>Retournez un tableau de statistiques descriptives (moyenne et écart-type uniquement) pour chaque échelle, par condition expérimental (<code>condition</code>). Arrondissez à deux chiffres après la virgule et commentez sur les différences entre groupes, le cas échéant.</em></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>db_echelles <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ech1 =</span> <span class="fu">rowMeans</span>(db[,vars[[<span class="dv">1</span>]]]),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ech2 =</span> <span class="fu">rowMeans</span>(db[,vars[[<span class="dv">2</span>]]]),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">condition =</span> bjffacto<span class="sc">$</span>condition) <span class="sc">|&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">condition =</span> <span class="fu">case_match</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    condition,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span> <span class="sc">~</span> <span class="st">"contrôle"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span> <span class="sc">~</span> <span class="st">"douleur"</span>))</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>statsdescript <span class="ot">&lt;-</span> db_echelles <span class="sc">|&gt;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(condition) <span class="sc">|&gt;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarize_all</span>(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.funs =</span> <span class="fu">list</span>(</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">moyenne =</span> mean, </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">ecarttype =</span> sd))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(statsdescript, </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"condition"</span>, </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"moyenne E1"</span>, </span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"moyenne E2"</span>, </span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"écart-type E1"</span>,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"écart-type E2"</span>))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-statdescript" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Tableau&nbsp;1: Moyenne et écart-type des échelles par condition expérimentale</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">condition</th>
+<th style="text-align: right;">moyenne E1</th>
+<th style="text-align: right;">moyenne E2</th>
+<th style="text-align: right;">écart-type E1</th>
+<th style="text-align: right;">écart-type E2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">contrôle</td>
+<td style="text-align: right;">2.80</td>
+<td style="text-align: right;">1.27</td>
+<td style="text-align: right;">0.83</td>
+<td style="text-align: right;">0.37</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">douleur</td>
+<td style="text-align: right;">3.05</td>
+<td style="text-align: right;">1.34</td>
+<td style="text-align: right;">0.82</td>
+<td style="text-align: right;">0.45</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>On peut considérer les différences entres groupes à l’aide d’un test de Welch pour deux échantillons (échantillons aléatoires indépendants). Aucune des différences n’est statistiquement significative à niveau 5%.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(ech1 <span class="sc">~</span> condition, <span class="at">data =</span> db_echelles)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(ech2 <span class="sc">~</span> condition, <span class="at">data =</span> db_echelles)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="tbl-ttests" class="cell tbl-parent quarto-layout-panel anchored">
+<div class="panel-caption table-caption">
+<p>Tableau&nbsp;2: Tests-t pour deux échantillons par condition expérimentale pour chacune des échelles.</p>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="tbl-ttests-1" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-ttests" style="flex-basis: 100.0%;justify-content: center;">
+<table class="table table-sm table-striped small">
+<caption>(a) Échelle 1</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">statistique</th>
+<th style="text-align: right;">ddl</th>
+<th style="text-align: right;">valeur-p</th>
+<th style="text-align: right;">différence</th>
+<th style="text-align: right;">borne inf.</th>
+<th style="text-align: right;">borne sup.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">-1.09</td>
+<td style="text-align: right;">51.99</td>
+<td style="text-align: right;">0.28</td>
+<td style="text-align: right;">-0.24</td>
+<td style="text-align: right;">-0.7</td>
+<td style="text-align: right;">0.21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="tbl-ttests-2" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-ttests" style="flex-basis: 100.0%;justify-content: center;">
+<table class="table table-sm table-striped small">
+<caption>(b) Échelle 2</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">statistique</th>
+<th style="text-align: right;">ddl</th>
+<th style="text-align: right;">valeur-p</th>
+<th style="text-align: right;">différence</th>
+<th style="text-align: right;">borne inf.</th>
+<th style="text-align: right;">borne sup.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">-0.6</td>
+<td style="text-align: right;">49.81</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">-0.07</td>
+<td style="text-align: right;">-0.29</td>
+<td style="text-align: right;">0.16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-5.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-5.2">Exercice 5.2</h2>
 <p>Les données <code>sondage_entreprise</code> contiennent les résultats d’un sondage effectué par une compagnie auprès de ses employés.</p>
 <p><strong>1. Produisez des statistiques descriptives pour les variables <code>q8</code> à <code>q17</code>.</strong></p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(sondage_entreprise, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sondage_entreprise) <span class="co">#aperçu de la base de données</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(sondage_entreprise, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sondage_entreprise) <span class="co">#aperçu de la base de données</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Classes 'tbl_df', 'tbl' and 'data.frame':   482 obs. of  10 variables:
- $ q8 : int  4 3 5 3 3 4 1 3 2 3 ...
- $ q9 : int  3 3 5 3 3 4 1 4 2 3 ...
- $ q10: int  4 3 5 2 3 4 1 5 4 5 ...
- $ q11: int  4 3 5 2 3 5 1 4 4 4 ...
- $ q12: int  4 3 5 3 3 5 1 4 3 3 ...
- $ q13: int  4 2 5 4 4 5 1 4 3 4 ...
- $ q14: int  2 3 5 4 3 5 1 4 3 3 ...
- $ q15: int  3 3 5 3 3 5 1 3 3 2 ...
- $ q16: int  3 3 5 3 3 3 1 3 3 2 ...
- $ q17: int  4 3 5 3 3 4 1 3 3 4 ...</code></pre>
+<pre><code>tibble [482 × 10] (S3: tbl_df/tbl/data.frame)
+ $ q8 : int [1:482] 4 3 5 3 3 4 1 3 2 3 ...
+ $ q9 : int [1:482] 3 3 5 3 3 4 1 4 2 3 ...
+ $ q10: int [1:482] 4 3 5 2 3 4 1 5 4 5 ...
+ $ q11: int [1:482] 4 3 5 2 3 5 1 4 4 4 ...
+ $ q12: int [1:482] 4 3 5 3 3 5 1 4 3 3 ...
+ $ q13: int [1:482] 4 2 5 4 4 5 1 4 3 4 ...
+ $ q14: int [1:482] 2 3 5 4 3 5 1 4 3 3 ...
+ $ q15: int [1:482] 3 3 5 3 3 5 1 3 3 2 ...
+ $ q16: int [1:482] 3 3 5 3 3 3 1 3 3 2 ...
+ $ q17: int [1:482] 4 3 5 3 3 4 1 3 3 4 ...</code></pre>
 </div>
 </div>
 <p>On peut utiliser <code>summary</code> pour obtenir les statistiques descriptives, mais les échelles de Likert sont toutes de 1 à 5.</p>
 <div class="cell" data-hash="05-solution_cache/html/tbl-statdescriptfactor_d42344fd1e4f93f14fdf8591f4e5f223">
 <div class="cell-output-display">
 <div id="tbl-statdescriptfactor" class="anchored">
-
-<table class="table" style="margin-left: auto; margin-right: auto;"><caption>Tableau&nbsp;1:  Statistiques descriptives des questions du sondage en entreprise. </caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> moyenne </th>
-   <th style="text-align:right;"> écart-type </th>
-   <th style="text-align:left;"> histogramme </th>
-  </tr>
- </thead>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Tableau&nbsp;3: Statistiques descriptives des questions du sondage en entreprise.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">moyenne</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">écart-type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">histogramme</th>
+</tr>
+</thead>
 <tbody>
-  <tr>
-   <td style="text-align:right;"> 3.44 </td>
-   <td style="text-align:right;"> 0.91 </td>
-   <td style="text-align:left;"> ▁▁▇▅▂ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.39 </td>
-   <td style="text-align:right;"> 0.97 </td>
-   <td style="text-align:left;"> ▁▂▇▆▂ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4.33 </td>
-   <td style="text-align:right;"> 0.73 </td>
-   <td style="text-align:left;"> ▁▁▂▇▇ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4.10 </td>
-   <td style="text-align:right;"> 0.84 </td>
-   <td style="text-align:left;"> ▁▁▂▇▆ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.83 </td>
-   <td style="text-align:right;"> 0.89 </td>
-   <td style="text-align:left;"> ▁▁▇▇▆ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4.02 </td>
-   <td style="text-align:right;"> 0.84 </td>
-   <td style="text-align:left;"> ▁▁▃▇▆ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.88 </td>
-   <td style="text-align:right;"> 0.96 </td>
-   <td style="text-align:left;"> ▁▁▅▇▅ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.54 </td>
-   <td style="text-align:right;"> 0.85 </td>
-   <td style="text-align:left;"> ▁▁▇▅▂ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.54 </td>
-   <td style="text-align:right;"> 0.91 </td>
-   <td style="text-align:left;"> ▁▁▇▆▃ </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3.51 </td>
-   <td style="text-align:right;"> 0.84 </td>
-   <td style="text-align:left;"> ▁▁▇▅▂ </td>
-  </tr>
+<tr class="odd">
+<td style="text-align: right;">3.44</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: left;">▁▁▇▅▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3.39</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: left;">▁▂▇▆▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.33</td>
+<td style="text-align: right;">0.73</td>
+<td style="text-align: left;">▁▁▂▇▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.10</td>
+<td style="text-align: right;">0.84</td>
+<td style="text-align: left;">▁▁▂▇▆</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3.83</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: left;">▁▁▇▇▆</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.02</td>
+<td style="text-align: right;">0.84</td>
+<td style="text-align: left;">▁▁▃▇▆</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3.88</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: left;">▁▁▅▇▅</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3.54</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: left;">▁▁▇▅▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3.54</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: left;">▁▁▇▆▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3.51</td>
+<td style="text-align: right;">0.84</td>
+<td style="text-align: left;">▁▁▇▅▂</td>
+</tr>
 </tbody>
 </table>
-
 </div>
+
+
 </div>
 </div>
 <p>On peut voir sur le corrélogramme que toutes les variables sont très corrélées entre elles.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(<span class="at">corr =</span> <span class="fu">cor</span>(sondage_entreprise),</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">"upper"</span>, </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">diag =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(<span class="at">corr =</span> <span class="fu">cor</span>(sondage_entreprise),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">"upper"</span>, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">diag =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="05-solution_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="05-solution_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><strong>2. Combien y a-t-il de répondants? Déterminez si ce nombre est suffisant pour effectuer une analyse factorielle.</strong></p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(sondage_entreprise)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(sondage_entreprise)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Il y a 482 observations et 10 variables. C’est suffisant pour une analyse factorielle, mais le nombre de facteurs ne sera probablement pas très élevé.</p>
@@ -477,19 +905,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Composantes principales, critère de Kaiser</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>afk <span class="ot">&lt;-</span> <span class="fu">factocp</span>(sondage_entreprise, </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">cor =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>spectral <span class="ot">&lt;-</span> <span class="fu">eigen</span>(<span class="fu">cor</span>(sondage_entreprise))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">eboulis</span>(spectral)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Composantes principales, critère de Kaiser</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>afk <span class="ot">&lt;-</span> <span class="fu">factocp</span>(sondage_entreprise, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">cor =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>spectral <span class="ot">&lt;-</span> <span class="fu">eigen</span>(<span class="fu">cor</span>(sondage_entreprise))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">eboulis</span>(spectral)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="05-solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="05-solution_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(afk, <span class="at">cutoff =</span> <span class="fl">0.5</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(afk, <span class="at">cutoff =</span> <span class="fl">0.5</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -521,60 +949,60 @@ Cumulative Var 0.370 0.649</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_tableau <span class="ot">&lt;-</span> <span class="fu">ajustement_factanal</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">covmat =</span> <span class="fu">cor</span>(sondage_entreprise),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.obs =</span> <span class="fu">nrow</span>(sondage_entreprise))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(res_tableau)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>res_tableau <span class="ot">&lt;-</span> <span class="fu">ajustement_factanal</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">factors =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">covmat =</span> <span class="fu">cor</span>(sondage_entreprise),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.obs =</span> <span class="fu">nrow</span>(sondage_entreprise))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(res_tableau)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-
-<table>
- <thead>
-  <tr>
-   <th style="text-align:right;"> k </th>
-   <th style="text-align:right;"> AIC </th>
-   <th style="text-align:right;"> BIC </th>
-   <th style="text-align:left;"> pval </th>
-   <th style="text-align:right;"> npar </th>
-   <th style="text-align:right;"> heywood </th>
-  </tr>
- </thead>
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">BIC</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">pval</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">npar</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">heywood</th>
+</tr>
+</thead>
 <tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> 2671.696 </td>
-   <td style="text-align:right;"> 2755.255 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 20 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:right;"> 2469.875 </td>
-   <td style="text-align:right;"> 2591.036 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 29 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 2401.128 </td>
-   <td style="text-align:right;"> 2555.712 </td>
-   <td style="text-align:left;"> 6.646e-05 </td>
-   <td style="text-align:right;"> 37 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:right;"> 2374.255 </td>
-   <td style="text-align:right;"> 2558.084 </td>
-   <td style="text-align:left;"> 0.5227 </td>
-   <td style="text-align:right;"> 44 </td>
-   <td style="text-align:right;"> 1 </td>
-  </tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2671.696</td>
+<td style="text-align: right;">2755.255</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2469.875</td>
+<td style="text-align: right;">2591.036</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2401.128</td>
+<td style="text-align: right;">2555.712</td>
+<td style="text-align: left;">6.646e-05</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2374.255</td>
+<td style="text-align: right;">2558.084</td>
+<td style="text-align: left;">0.5227</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">1</td>
+</tr>
 </tbody>
 </table>
+
 
 </div>
 </div>
@@ -590,70 +1018,79 @@ Cumulative Var 0.370 0.649</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>e1 <span class="ot">&lt;-</span> sondage_entreprise <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(q8<span class="sc">:</span>q9, q14<span class="sc">:</span>q17))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">alphaC</span>(e1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>e1 <span class="ot">&lt;-</span> sondage_entreprise <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(q8<span class="sc">:</span>q9, q14<span class="sc">:</span>q17))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">alphaC</span>(e1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8768725</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>echelle1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(e1)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>e2 <span class="ot">&lt;-</span> sondage_entreprise <span class="sc">|&gt;</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(q10<span class="sc">:</span>q13))</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">alphaC</span>(e2)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>echelle1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(e1)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>e2 <span class="ot">&lt;-</span> sondage_entreprise <span class="sc">|&gt;</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(q10<span class="sc">:</span>q13))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">alphaC</span>(e2)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8292554</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>echelle2 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(e1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>echelle2 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(e1)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>On voit que les deux échelles créées ont un <span class="math inline">\(\alpha\)</span> de Cronbach de plus de 0.8, donc les échelles sont cohérentes. C’est en grande partie dû à la forte corrélation observée entre tous les items</p>
-</section>
-<section id="exercice-5.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercice-5.2">Exercice 5.2</h2>
-<p>Effectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données <code>aerien</code>. Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).</p>
-<p><strong>1. Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.</strong></p>
-<ul>
-<li><strong>Combien de facteurs le critère des valeurs propres suggère-t-il?</strong></li>
-<li><strong>Combien de facteurs le diagramme d’éboulis suggère-t-il?</strong></li>
-<li><strong>Interprétez les chargements obtenus suite à la rotation. Commentez sur l’interprétabilité de ces derniers.</strong></li>
-<li><strong>En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.</strong></li>
-</ul>
-<p>La base de données est la même que celle de l’Exercice 1.1, mais on ne sélectionne que les colonnes 7 à 20 qui correspondent aux réponses du questionnaire.</p>
-<p>Il faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir <code>?cor</code>); j’utilise ici <code>use = pairwise.complete.obs</code> qui utilise toutes les paires.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hecmulti)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(aerien, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>bd <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span> </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>            <span class="sc">~</span><span class="fu">na_if</span>(., <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>corbd <span class="ot">&lt;-</span> <span class="fu">cor</span>(bd, </span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>afk <span class="ot">&lt;-</span> <span class="fu">factocp</span>(<span class="at">covmat =</span> corbd)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">eboulis</span>(<span class="fu">eigen</span>(corbd))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<p><img src="05-solution_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
-</div>
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copier noms de variables</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(afk<span class="sc">$</span>loadings) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(bd)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(afk, </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">cutoff =</span> <span class="fl">0.4</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>
+
+<!--
+
+## Exercice 5.3
+ 
+Effectuez une analyse factorielle exploratoire de toutes les questions en lien avec la satisfaction de la base de données `aerien`.  Les valeurs 0 correspondent à des champs non applicables (une forme de données manquantes).
+
+**1. Ajustez un modèle avec la méthode des composantes principales et une rotation varimax.** 
+
+- **Combien de facteurs le critère des valeurs propres suggère-t-il?**
+- **Combien de facteurs le diagramme d'éboulis suggère-t-il?**
+- **Interprétez les chargements obtenus suite à la rotation. Commentez sur l'interprétabilité de ces derniers.**
+- **En utilisant un nombre adéquat de facteurs et un point de coupure approprié, formez des échelles et vérifiez leur cohérence interne.**
+   
+La base de données est la même que celle de l'Exercice 1.1, mais on ne sélectionne que les colonnes 7 à 20 qui correspondent aux réponses du questionnaire.
+
+Il faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir `?cor`); j'utilise ici `use = pairwise.complete.obs` qui utilise toutes les paires.^[Le défaut de cette option, qui extrait le maximum d'information à l'aide de toutes les paires complètes, est que l'on a pas de garantie que la matrice de covariance résultante est positive définie.]
+    
+
+::: {.cell}
+
+```{.r .cell-code}
+library(hecmulti)
+library(dplyr)
+data(aerien, package = "hecmulti")
+bd <- aerien |> 
+  mutate_at(7:20,
+            ~na_if(., 0)) |>
+  select(7:20)
+corbd <- cor(bd, 
+             use = "pairwise.complete.obs")
+afk <- factocp(covmat = corbd)
+eboulis(eigen(corbd))
+```
+
+::: {.cell-output-display}
+![](05-solution_files/figure-html/unnamed-chunk-17-1.png){width=672}
+:::
+
+```{.r .cell-code}
+# Copier noms de variables
+rownames(afk$loadings) <- colnames(bd)
+print(afk, 
+      cutoff = 0.4)
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+
 Loadings:
                                 F1     F3     F2     F4    
 service_internet_en_vol                       -0.698  0.450
@@ -674,139 +1111,164 @@ proprete                         0.880
                   F1    F3    F2    F4
 SS loadings    2.949 2.665 2.463 1.429
 Proportion Var 0.211 0.190 0.176 0.102
-Cumulative Var 0.211 0.401 0.577 0.679</code></pre>
-</div>
-</div>
-<p>Le diagramme d’éboulis suggère quatre facteurs, idem pour le critère de Kaiser.</p>
-<p>Si on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une corrélation suffisante pour être considérés lors de la création d’échelles, on obtient la division suivante:</p>
-<ul>
-<li>Le facteur 1 inclut les items 5, 7, 8 et 14 (nourriture, confort du siège et divertissement en vol, proprete) qui sont tous en lien avec l’offre de service en vol</li>
-<li>Le facteur 2 inclut items 1-4 (service internet en vol, temps d’arrivée et de départ convenable, facilité de réservation en ligne et localisation de la porte). Difficilement interprétable à cause d’internet, sinon rattachés à l’expérience client avant le vol.</li>
-<li>Le facteur 3 inclut les items 9, 11, 13 (embarquement, gestion des bagages et service en vol). Les questions sont en lien avec les contacts avec le personnel de bord et la rapidité du service.</li>
-<li>Le facteur 4 inclut l’item 6, peut-être 12, les deux en lien avec l’enregistrement</li>
-</ul>
-<p>Augmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.</p>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">F1 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">8</span>)), </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">F3 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">11</span>,<span class="dv">13</span>)),</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">F4 =</span> <span class="fu">alphaC</span>(bd <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>)),</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>  F1   F2   F3   F4 
-0.82 0.80 0.79 0.37 </code></pre>
-</div>
-</div>
-<p>Si les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n’ont pas un <span class="math inline">\(\alpha\)</span> de Cronbach supérieur à 0.6.</p>
-<p><strong>2. Répétez l’exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.</strong></p>
-<ul>
-<li><strong>Qu’arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.</strong></li>
-</ul>
-<div class="cell">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>hecmulti<span class="sc">::</span><span class="fu">ajustement_factanal</span>(<span class="at">covmat =</span> corbd,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">n.obs =</span> <span class="fu">nrow</span>(<span class="fu">na.omit</span>(bd)), </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">factors =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">|&gt;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+Cumulative Var 0.211 0.401 0.577 0.679
+```
+:::
+:::
 
-<table>
- <thead>
-  <tr>
-   <th style="text-align:right;"> k </th>
-   <th style="text-align:right;"> AIC </th>
-   <th style="text-align:right;"> BIC </th>
-   <th style="text-align:left;"> pval </th>
-   <th style="text-align:right;"> npar </th>
-   <th style="text-align:right;"> heywood </th>
-  </tr>
- </thead>
+    
+Le diagramme d'éboulis suggère quatre facteurs, idem pour le critère de Kaiser.
+
+Si on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une corrélation suffisante pour être considérés lors de la création d'échelles, on obtient la division suivante:
+
+- Le facteur 1 inclut les items 5, 7, 8 et 14 (nourriture, confort du siège et divertissement en vol, proprete) qui sont tous en lien avec l'offre de service en vol
+- Le facteur 2 inclut items 1-4 (service internet en vol, temps d'arrivée et de départ convenable, facilité de réservation en ligne et localisation de la porte). Difficilement interprétable à cause d'internet, sinon rattachés à l'expérience client avant le vol.
+- Le facteur 3 inclut les items 9, 11, 13 (embarquement, gestion des bagages et service en vol). Les questions sont en lien avec les contacts avec le personnel de bord et la rapidité du service.
+- Le facteur 4 inclut l'item 6, peut-être 12, les deux en lien avec l'enregistrement
+
+Augmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+print(
+  c(F1 = alphaC(bd |> select(c(5,7,8)), 
+       na.rm = TRUE),
+  F2 = alphaC(bd |> select(1:4),
+       na.rm = TRUE),
+  F3 = alphaC(bd |> select(c(9,11,13)),
+       na.rm = TRUE),
+  F4 = alphaC(bd |> select(c(6,12)),
+       na.rm = TRUE)), 
+  digits = 2)
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+  F1   F2   F3   F4 
+0.82 0.80 0.79 0.37 
+```
+:::
+:::
+
+
+Si les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n'ont pas un $\alpha$ de Cronbach supérieur à 0.6.
+
+**2. Répétez l'exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.**
+
+- **Qu'arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.**
+
+
+::: {.cell}
+
+```{.r .cell-code}
+hecmulti::ajustement_factanal(covmat = corbd,
+                              n.obs = nrow(na.omit(bd)), 
+                              factors = 1:7) |>
+  knitr::kable(digits = 2)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">BIC</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">pval</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">npar</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">heywood</th>
+</tr>
+</thead>
 <tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> 1373466.2 </td>
-   <td style="text-align:right;"> 1373737.6 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 28 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:right;"> 1199520.3 </td>
-   <td style="text-align:right;"> 1199917.6 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 41 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 1027721.9 </td>
-   <td style="text-align:right;"> 1028235.6 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 53 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:right;"> 989241.7 </td>
-   <td style="text-align:right;"> 989862.0 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 64 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:right;"> 965748.7 </td>
-   <td style="text-align:right;"> 966465.9 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 74 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 962429.3 </td>
-   <td style="text-align:right;"> 963233.7 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 83 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 7 </td>
-   <td style="text-align:right;"> 960890.1 </td>
-   <td style="text-align:right;"> 961772.0 </td>
-   <td style="text-align:left;"> &lt; 2.2e-16 </td>
-   <td style="text-align:right;"> 91 </td>
-   <td style="text-align:right;"> 1 </td>
-  </tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1373466.2</td>
+<td style="text-align: right;">1373737.6</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1199520.3</td>
+<td style="text-align: right;">1199917.6</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1027721.9</td>
+<td style="text-align: right;">1028235.6</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">989241.7</td>
+<td style="text-align: right;">989862.0</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">965748.7</td>
+<td style="text-align: right;">966465.9</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">962429.3</td>
+<td style="text-align: right;">963233.7</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">960890.1</td>
+<td style="text-align: right;">961772.0</td>
+<td style="text-align: left;">&lt; 2.2e-16</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">1</td>
+</tr>
 </tbody>
 </table>
 
-</div>
-</div>
-<p>En raison du nombre excessivement élevé d’observations, l’ajustement du modèle est médiocre et les critères d’information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n’est pas adéquate et on rejette à coup sûr le test d’hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l’analyse factorielle parce que notre puissance est élevée vu qu’on a 119567 réponses complètes.</p>
-<p>À partir de 7 facteurs, l’optimisation ne converge pas et retourne un cas de Heywood.</p>
-<p>Ainsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu’une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible.</p>
+
+`````
+
+:::
+:::
+
+
+En raison du nombre excessivement élevé d'observations, l'ajustement du modèle est médiocre et les critères d'information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n'est pas adéquate et on rejette à coup sûr le test d'hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l'analyse factorielle parce que notre puissance est élevée vu qu'on a 119567 réponses complètes. 
+
+
+À partir de 7 facteurs, l'optimisation ne converge pas et retourne un cas de Heywood.
+
+Ainsi, on remarque que les critères qui nous permettraient de choisir le modèle sont moins utiles. Il est apparent que 7 facteurs pour 14 variables serait excessif: la plupart de ces modèles ne contiendraient qu'une seule variable fortement corrélée avec un facteur, ou une poignée de variables pour lesquelles la corrélation est excessivement faible.
+
+-->
+
 
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
-
-<ol>
-<li id="fn1"><p>Le défaut de cette option, qui extrait le maximum d’information à l’aide de toutes les paires complètes, est que l’on a pas de garantie que la matrice de covariance résultante est positive définie.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Bastian:2014" class="csl-entry" role="listitem">
+Bastian, B., Jetten, J., &amp; Ferris, L. J. (2014). Pain as social glue: Shared pain increases cooperation. <em>Psychological Science</em>, <em>25</em>(11), 2079–2085. <a href="https://doi.org/10.1177/0956797614545886">https://doi.org/10.1177/0956797614545886</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -834,9 +1296,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -901,6 +1377,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -944,6 +1506,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">Contenu <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2022-2023 par <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a>; canevas du site par <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> sous <a href="https://mit-license.org/">licence MIT</a> <br> Tout le contenu du site (hors notes) est distribué sous licence <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
     <div class="nav-footer-right">Fabriqué avec <i class="fa-brands fa-r-project" aria-hidden="true"></i> et <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/multi">Code source sur <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>
