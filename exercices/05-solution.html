@@ -956,15 +956,15 @@ Cumulative Var 0.370 0.649</code></pre>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(res_tableau)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">BIC</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">pval</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">npar</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">heywood</th>
+<th style="text-align: right;">k</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: left;">pval</th>
+<th style="text-align: right;">npar</th>
+<th style="text-align: right;">heywood</th>
 </tr>
 </thead>
 <tbody>
@@ -1002,8 +1002,6 @@ Cumulative Var 0.370 0.649</code></pre>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 <p>On voit que le modèle AIC suggère un modèle à quatre facteurs (un cas de quasi-Heywood), tandis que le BIC suggère plutôt trois facteurs. Le test du rapport de vraisemblance comparant la corrélation empirique au modèle d’analyse factorielle indique que le modèle est raisonnable à partir de quatre. Le problème de convergence nous amène à interpréter les résultats pour le modèle à quatre facteurs avec un grin de sel.</p>
@@ -1170,83 +1168,15 @@ hecmulti::ajustement_factanal(covmat = corbd,
 ```
 
 ::: {.cell-output-display}
-
-`````{=html}
-
-<table data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">AIC</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">BIC</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">pval</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">npar</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">heywood</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1373466.2</td>
-<td style="text-align: right;">1373737.6</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">28</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1199520.3</td>
-<td style="text-align: right;">1199917.6</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">41</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1027721.9</td>
-<td style="text-align: right;">1028235.6</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">53</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">989241.7</td>
-<td style="text-align: right;">989862.0</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">64</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">965748.7</td>
-<td style="text-align: right;">966465.9</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">74</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">962429.3</td>
-<td style="text-align: right;">963233.7</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">83</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">960890.1</td>
-<td style="text-align: right;">961772.0</td>
-<td style="text-align: left;">&lt; 2.2e-16</td>
-<td style="text-align: right;">91</td>
-<td style="text-align: right;">1</td>
-</tr>
-</tbody>
-</table>
-
-
-`````
-
+|  k|       AIC|       BIC|pval      | npar| heywood|
+|--:|---------:|---------:|:---------|----:|-------:|
+|  1| 1373466.2| 1373737.6|< 2.2e-16 |   28|       0|
+|  2| 1199520.3| 1199917.6|< 2.2e-16 |   41|       0|
+|  3| 1027721.9| 1028235.6|< 2.2e-16 |   53|       0|
+|  4|  989241.7|  989862.0|< 2.2e-16 |   64|       0|
+|  5|  965748.7|  966465.9|< 2.2e-16 |   74|       0|
+|  6|  962429.3|  963233.7|< 2.2e-16 |   83|       0|
+|  7|  960890.1|  961772.0|< 2.2e-16 |   91|       1|
 :::
 :::
 
