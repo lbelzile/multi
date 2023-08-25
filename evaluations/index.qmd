@@ -6,11 +6,24 @@ En plus de l'examen intratrimestriel et de l'examen final, vous aurez deux devoi
 
 Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:
 
+
+
+| Clarté |  Contenu | Rigueur | Présentation |
+|:-------|:---------|:--------|:-------------|
+| Énoncés sans jargon, explications claires et enchaînement logique des idées.  | Le contenu présenté est succinct et pertinent pour répondre aux questions. | Réponses correctes, réflexion poussée | Pas d'erreur d'orthographe, de grammaire ou de syntaxe. Références bibliographiques adéquates (le cas échéant). Règles de présentation respectées. |
+| Énoncés généralement clairs. Explications majoritairement claires. Justification adéquate des arguments énoncés. | Le contenu est présenté de manière adéquate, mais parfois superflu ou présentant quelques lacunes. | La plupart des réponses sont correctes, réflexion soutenue | Quelques fautes de français au plus. Références bibliographes présentes, mais inadéquatement citées. Organisation de la présentation globalement satisfaisante. |
+| Formulation alambiquée ne répondant que partiellement aux questions. | Le contenu présenté est parfois tangentiel, trop de détails inutiles sont présentés ou plusieurs éléments de réponse sont manquants. | Plusieurs erreurs logiques, réflexion ténue et superficielle | Plusieurs erreurs de français, absence de bibliographie ou de sources. Présentation déficiente non conformes au vade mecum. |
+
+J'assignerai 0% pour un devoir non remis ou visiblement bâclé.
+
+
+<!--
 - 110%: Devoir 100% complété. Travail de qualité exceptionnelle démontrant un engagement soutenu avec le cours et une réflexion poussée. L'écriture du document soumis est claire, concise et le français est excellent. Je n'assignerai pas ces notes régulièrement.
 - 100%: Devoir 100% complété avec erreurs mineures.
 - 75%: Devoir majoritairement complété (plus de 70%), la plupart des réponses sont correctes.
 - 50%: Devoir complété à moins de 70% et/ou pour lequel la plupart des réponses sont incorrectes. Témoigne d'un besoin d'amélioration; j'espère ne pas assigner cette note fréquemment.
 - 0%: Devoir non remis, ou visiblement bâclé.
+-->
 
 
 Tout travail remis hors délai sera pénalisé de 5% par jour de retard.

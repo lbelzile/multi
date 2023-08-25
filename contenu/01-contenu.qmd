@@ -23,7 +23,7 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 :::
 
 - {{< fa book >}} [Chapitre sur l'analyse exploratoire des données](https://lbelzile.github.io/math60602/analyseexploratoire.html)
-- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html), partie 
+- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html), section 8.1
 
 ## Diapositives 
 
