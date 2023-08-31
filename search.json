@@ -11,7 +11,7 @@
     "href": "syllabus.html#thèmes-couverts",
     "title": "Plan de cours",
     "section": "Thèmes couverts",
-    "text": "Thèmes couverts\n\nAnalyse exploratoire\nAnalyse factorielle exploratoire (analyse en composantes principales)\nAnalyse de regroupements\nSélection de variables pour les modèles de régression\nSélection logistique (incluant les données multinomiales, modèle à cotes proportionnelles)\nAnalyse de survie\nDonnées manquantes"
+    "text": "Thèmes couverts\n\nAnalyse exploratoire\nAnalyse factorielle exploratoire (analyse en composantes principales)\nAnalyse de regroupements\nSélection de variables pour les modèles de régression\nRégression logistique (incluant les données multinomiales, modèle à cotes proportionnelles)\nAnalyse de survie\nDonnées manquantes"
   },
   {
     "objectID": "syllabus.html#clientèle-cible",
@@ -32,7 +32,7 @@
     "href": "syllabus.html#logiciels-et-programmation",
     "title": "Plan de cours",
     "section": "Logiciels et programmation",
-    "text": "Logiciels et programmation\nNous utiliserons le langage de programmation R. Les notes de cours et les exercices contiennent des scripts pour vous aider. La courbe d’apprentissage est abrupte, mais nous consacrerons la deuxième séances de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des instructions pour installer, R, Rstudio et d’autres utilitaires ici.\nChercher sur un moteur de recherche des sujets liés à R est parfois fastidieux; essayez rstats comme mot-clé si r ne retourne rien. Le forum de question StackOverflow, un site de questions et réponses pour la programmation, ainsi que la communauté RStudio, un forum dédié à RStudio et au tidyverse, sont d’autres ressources utiles."
+    "text": "Logiciels et programmation\nNous utiliserons le langage de programmation R. Les notes de cours et les exercices contiennent des scripts pour vous aider. La courbe d’apprentissage est abrupte, mais nous consacrerons la deuxième séance de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des instructions pour installer, R, Rstudio et d’autres utilitaires ici.\nChercher sur un moteur de recherche des sujets liés à R est parfois fastidieux; essayez rstats comme mot-clé si r ne retourne rien. Le forum de question StackOverflow, un site de questions et réponses pour la programmation, ainsi que la communauté RStudio, un forum dédié à RStudio et au tidyverse, sont d’autres ressources utiles."
   },
   {
     "objectID": "syllabus.html#manuel",
