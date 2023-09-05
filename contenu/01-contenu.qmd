@@ -6,7 +6,7 @@ title: "Introduction"
 
 - Plan de cours et objectifs d'apprentissage
 - Survol du contenu du cours
-- Considérations éthiques: discussion de l'article [*How Companies Learn Your Secrets*](https://www.nytimes.com/2012/02/19/magazine/shopping-habits.html), via [ZoneCours](https://zonecours2.hec.ca/access/content/group/MATH60602.A2022/NYT_How_companies_learn_your_secrets.pdf)
+- Considérations éthiques: discussion de l'article [*How Companies Learn Your Secrets*](https://www.nytimes.com/2012/02/19/magazine/shopping-habits.html), via [ZoneCours](https://zonecours2.hec.ca/access/content/group/MATH60602.A2023/NYT_How_companies_learn_your_secrets.pdf)
 - Analyse exploratoire des données
 - Introduction aux données manquantes
 
@@ -23,7 +23,6 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 :::
 
 - {{< fa book >}} [Chapitre sur l'analyse exploratoire des données](https://lbelzile.github.io/math60602/analyseexploratoire.html)
-- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html), section 8.1
 
 ## Diapositives 
 
@@ -31,7 +30,7 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 - {{< fa file >}} [Survol des sujets](/diapos/MATH60602-diapos0.pdf)
 - {{< fa file >}} [Graphiques et analyse exploratoire](/diapos/MATH60602-diapos1.pdf)
 
-<!--
+
 ## Activités
 
 **[Atelier de visualisation](/files/graphiques.zip)**: vous devrez analyser des graphiques en équipes et donner une appréciation d'ensemble de l'efficacité du graphique pour transmettre une histoire en plus d'identifier les informations suivantes:
@@ -41,15 +40,13 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 - le type de représentation (diagramme en bâton, nuage de point, en violon, etc.)
 - les forces et faiblesses des représentations graphiques (absence de légende, problème de lisibilité, etc.)
 
--->
 
 
 ## Objectifs d'apprentissage
 
 - Réaliser une analyse exploratoire et formuler des questions en lien avec une base de données.
 - Décomposer un graphique en éléments et déterminer la représentation adéquate pour une question donnée.
-- Déterminer les méthodes appropriées selon le type de données manquantes
-- Calculer le taux de cas manquants
+
 
 
 ## Ressources complémentaires

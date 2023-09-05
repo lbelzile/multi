@@ -7,6 +7,18 @@ title: "Programmation en **R**"
 #| echo: false
 #| include: false
 source(here::here("R", "fonctions_diapos.R"))
+source(here::here("R", "youtube-playlist.R"))
+
+playlist_id <- "PLUB8VZzxA8IsfCYPSi2gYDJLedCcCss3W"
+
+slide_details <- tibble::tribble(
+  ~youtube_id,   ~title, ~slide, ~active,
+  "nHbNjowSXko", "Introduction (partie 1)", "1", TRUE,
+  "Ull9G_tBoeM", "Introduction (partie 2)", "introb", FALSE,
+  "XDGSH7oKrHM", "Manipulations", "manip", FALSE,
+  "52P9R5byOnw", "Graphiques", "graphes", FALSE
+)
+
 ```
 
 ## Contenu
@@ -60,6 +72,13 @@ xaringanExtra::embed_xaringan(
   url = "/diapos/MATH60602-diapos2c-visualisation.html",
   ratio = "16:9"
 )
+```
+
+## Vidéos
+
+
+```{r show-youtube-list, echo=FALSE, results="asis"}
+youtube_list(slide_details, playlist_id)
 ```
 
 ## Exercices

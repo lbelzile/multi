@@ -45,7 +45,6 @@
 }
 
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -55,14 +54,18 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
-  \setmathfont[]{Latin Modern Math}
 \fi
+\usepackage{lmodern}
 \usecolortheme{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
 \useinnertheme{Flip}
 \useoutertheme{Flip}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[]{VisbyCF-Medium}
+  \setsansfont[]{Latin Modern Sans}
+  \setmathfont[]{Latin Modern Math}
+\fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -194,10 +197,12 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -221,7 +226,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, breakable, boxrule=0pt, frame hidden, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Données manquantes et inférence}
 \protect\hypertarget{donnuxe9es-manquantes-et-infuxe9rence}{}
@@ -237,6 +242,208 @@
 \item
   On considère des méthodes d'imputation qui remplacent les valeurs
   manquantes.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Données manquantes}
+\protect\hypertarget{donnuxe9es-manquantes}{}
+Plusieurs champs d'une base de donnée peuvent être manquants
+
+\begin{itemize}
+\tightlist
+\item
+  non-réponse
+\item
+  valeurs erronées (erreur d'encodage)
+\item
+  perte de suivi et censure
+\item
+  plusieurs versions de formulaires (question optionnelles)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pourquoi s'en préoccuper?}
+\protect\hypertarget{pourquoi-sen-pruxe9occuper}{}
+La plupart des procédures ne gèrent que les cas complets (toute
+observation avec des valeurs manquantes est éliminée).
+
+Les données manquantes réduisent l'information disponible.
+
+Sans traitement adéquat, les estimations seront \textbf{biaisées}.
+\end{frame}
+
+\begin{frame}{Références}
+\protect\hypertarget{ruxe9fuxe9rences}{}
+\begin{itemize}
+\tightlist
+\item
+  van Buuren, S. (2018).
+  \href{https://stefvanbuuren.name/fimd/}{\emph{Flexible imputation of
+  missing data}}, CRC Press, 2e édition.
+\item
+  Little, R. et D. Rubin (2019). \emph{Statistical Analysis with Missing
+  Data}, Wiley, 3e édition
+\item
+  Schafer, J. L. (1997). \emph{Analysis of Incomplete Multivariate
+  Data}. Chapman \& Hall / CRC.
+\end{itemize}
+
+Les valeurs manquantes dans un contexte de prédictions sont couvertes
+dans le cours MATH 60600.
+\end{frame}
+
+\begin{frame}{Classification des données manquantes (MCAR)}
+\protect\hypertarget{classification-des-donnuxe9es-manquantes-mcar}{}
+Cas 1: Données manquantes de façon complètement aléatoire (\emph{missing
+completely at random})
+
+La probabilité que la valeur soit manquante ne dépend ni de la valeur,
+ni de celles des autres variables.
+
+Exemple: questionnaire trop long, la personne ne répond pas à tout (sans
+lien avec les questions posées).
+
+Hypothèse souvent irréaliste en pratique.
+\end{frame}
+
+\begin{frame}{Classification des données manquantes (MAR)}
+\protect\hypertarget{classification-des-donnuxe9es-manquantes-mar}{}
+Cas 2: données manquantes de façon aléatoire (\emph{missing at random}):
+la probabilité que la valeur soit manquante ne dépend pas de la valeur
+\emph{une fois qu'on a contrôlé pour les autres variables}.
+
+Exemple: les hommes sont plus susceptibles dans l'ensemble de divulguer
+leur âge que les femmes.
+\end{frame}
+
+\begin{frame}{Classification des données manquantes (MNAR)}
+\protect\hypertarget{classification-des-donnuxe9es-manquantes-mnar}{}
+Cas 3: données manquantes de façon non-aléatoire (\emph{missing not at
+random}): la probabilité que la mesure soit manquante dépend de la
+valeur elle-même, pas déterminable avec d'autres variables
+
+Exemple: une personne transgenre ne répond pas à la question genre (si
+seulement deux choix, homme/femme) et aucune autre question ne se
+rattache au genre ou à l'identité sexuelle.
+\end{frame}
+
+\begin{frame}{Comment déterminer le type de données manquantes}
+\protect\hypertarget{comment-duxe9terminer-le-type-de-donnuxe9es-manquantes}{}
+Une personne ne divulgue pas son salaire? Données manquante de manière
+aléatoire ou non aléatoire?
+
+Hypothèse pas testable, dépend du contexte et des variables auxiliaires
+disponibles.
+\end{frame}
+
+\begin{frame}{Valeur logique}
+\protect\hypertarget{valeur-logique}{}
+Les données manquantes ont souvent une valeur logique:
+
+\begin{itemize}
+\tightlist
+\item
+  un client qui n'a pas de carte de crédit a un solde de 0!
+\end{itemize}
+
+D'où l'importance des validations d'usage et du nettoyage préliminaire
+de la base de données.
+\end{frame}
+
+\begin{frame}{Types de schémas de données manquantes}
+\protect\hypertarget{types-de-schuxe9mas-de-donnuxe9es-manquantes}{}
+Matrice \(n \times p\) (observations en lignes, variables en colonnes).
+
+\includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-1-1.pdf}
+
+\footnotesize
+
+Les cases grises représentent des valeurs manquantes. Illustration
+adapté de la Figure 4.1 de van Buuren (2022)
+\end{frame}
+
+\begin{frame}{Analyse des cas complet}
+\protect\hypertarget{analyse-des-cas-complet}{}
+Retirer les observations avec données manquantes pour conserver les cas
+complets.
+
+\begin{itemize}
+\tightlist
+\item
+  Valide uniquement pour complètement aléatoire.
+\item
+  On perd de la précision en utilisant moins d'observations.
+\end{itemize}
+
+Méthode par défaut dans les logiciels.
+\end{frame}
+
+\begin{frame}{Méthodes d'imputation}
+\protect\hypertarget{muxe9thodes-dimputation}{}
+Imputation: remplacer les valeurs manquantes par une valeur judicieuse
+pour \emph{combler les trous}.
+
+\begin{quote}
+Le concept d'imputation est à la fois séduisant et dangereux (Dempster
+et Rubin, 1983)
+\end{quote}
+
+Par exemple, on remplacer la valeur manquante par la moyenne (variables
+continues) ou le mode (variables catégorielles).
+
+Approche pas recommandée (pourquoi?)
+\end{frame}
+
+\begin{frame}{Faut-il toujours imputer?}
+\protect\hypertarget{faut-il-toujours-imputer}{}
+Il faut utiliser son jugement.
+
+Une observation imputée ne remplacera jamais une vraie observation.
+
+\begin{itemize}
+\tightlist
+\item
+  Si la proportion d'observations manquantes est petite (moins de 5\%),
+  on pourrait faire une analyse avec les cas complets (et valider au
+  besoin en utilisant l'imputation multiple).
+\item
+  Si la proportion de valeurs manquantes est 30\% et que cette
+  proportion baisse à 3\% lorsque vous éliminez quelques variables peu
+  importantes pour votre étude, alors procédez à leur élimination.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Imputation par la moyenne}
+\protect\hypertarget{imputation-par-la-moyenne}{}
+Dilution de la relation (corrélation) entre variables explicatives.
+Réduction de la variabilité.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-2-1.pdf}
+
+}
+
+\end{figure}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\protect\hypertarget{ruxe9capitulatif}{}
+\begin{itemize}
+\tightlist
+\item
+  Les données manquantes réduisent la quantité d'information disponible
+  et augmentent l'incertitude.
+\item
+  On ne peut \textbf{pas} les ignorer (étude des cas complets) sans
+  biaiser les interprétations et réduire la quantité d'information
+  disponible.
+\item
+  On distingue plusieurs types de mécanismes qui génèrent des données
+  manquantes.
+\item
+  Nous couvrirons les méthodes d'imputation dans le cadre de la
+  régression logistique.
 \end{itemize}
 \end{frame}
 
@@ -257,7 +464,7 @@ aléatoire simule une variable 0/1 avec probabilité
 \end{Shaded}
 
 \begin{verbatim}
- [1] 0 1 1 0 0 0 0 1 1 1 1 0 1 0 1
+ [1] 0 0 0 1 0 0 1 0 0 0 0 1 1 0 0
 \end{verbatim}
 \end{frame}
 
@@ -333,7 +540,8 @@ aléatoires (MAR et MCAR).
   échantillon complet (\texttt{mice})
 \item
   Ajuster le modèle d'intérêt avec chaque échantillon (\texttt{with}).
-  3. Combiner les résultats obtenus (\texttt{pool} et \texttt{summary})
+\item
+  Combiner les résultats obtenus (\texttt{pool} et \texttt{summary})
 \end{enumerate}
 
 \begin{figure}
@@ -512,7 +720,7 @@ x63 & -2.58 & 0.41 & -6.24 & 399.50 & <1e-04\\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
+\protect\hypertarget{ruxe9capitulatif-1}{}
 \begin{itemize}
 \tightlist
 \item
@@ -533,7 +741,7 @@ x63 & -2.58 & 0.41 & -6.24 & 399.50 & <1e-04\\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
+\protect\hypertarget{ruxe9capitulatif-2}{}
 L'imputation multiple est préférée à l'imputation simple car elle permet
 d'estimer l'incertitude sous-jacente en raison des données manquantes.
 
@@ -712,15 +920,15 @@ empirique de chaque catégorie.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tabular}{r|r|l|r|r|r}
-\hline
-Resid. df & Resid. Dev & Test &    Df & LR stat. & Pr(Chi)\\
-\hline
-9692 & 9781.07 &  &  &  & \\
-\hline
-9668 & 8504.74 & 1 vs 2 & 24 & 1276.33 & 0\\
-\hline
-\end{tabular}
+\begin{longtable}[]{@{}rrlrrr@{}}
+\toprule\noalign{}
+Resid. df & Resid. Dev & Test & Df & LR stat. & Pr(Chi) \\
+\midrule\noalign{}
+\endhead
+9692 & 9781.07 & & & & \\
+9668 & 8504.74 & 1 vs 2 & 24 & 1276.33 & 0 \\
+\bottomrule\noalign{}
+\end{longtable}
 \end{frame}
 
 \begin{frame}{Prédictions}
@@ -1068,7 +1276,7 @@ modalité selon l'âge.}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
+\protect\hypertarget{ruxe9capitulatif-3}{}
 \begin{itemize}
 \tightlist
 \item
@@ -1090,7 +1298,7 @@ modalité selon l'âge.}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-3}{}
+\protect\hypertarget{ruxe9capitulatif-4}{}
 On met beaucoup l'accent sur l'interprétation des coefficients à
 l'échelle de la cote.
 
@@ -1107,7 +1315,7 @@ l'échelle de la cote.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-4}{}
+\protect\hypertarget{ruxe9capitulatif-5}{}
 Les outils usuels d'inférence pour les modèles estimés par maximum de
 vraisemblance sont applicables.
 
@@ -1123,7 +1331,7 @@ vraisemblance sont applicables.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-5}{}
+\protect\hypertarget{ruxe9capitulatif-6}{}
 Côté classification, on va règle générale assigner à la classe la plus
 probable.
 
@@ -1141,7 +1349,7 @@ probable.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-6}{}
+\protect\hypertarget{ruxe9capitulatif-7}{}
 Le modèle cumulatif à cote proportionnelle est une simplification du
 modèle multinomial pour des \textbf{données ordinales}.
 
