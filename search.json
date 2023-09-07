@@ -504,6 +504,13 @@
     "text": "Objectifs d’apprentissage\n\nPouvoir utiliser R à partir d’un environnement de développement intégré (EDI)\nÊtre en mesure de réaliser un graphique (histogramme, boîte à moustaches, nuage de points, diagramme à bande)\nIdentifier les éléments géométriques d’un graphique\nÊtre capable d’extraire des statistiques descriptives, manipuler, transformer, extraire des variables d’une base de données"
   },
   {
+    "objectID": "contenu/02-contenu.html#ressources-complémentaires",
+    "href": "contenu/02-contenu.html#ressources-complémentaires",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Ressources complémentaires",
+    "text": "Ressources complémentaires\n\nChapitres 2 et 4 de R for Data Science"
+  },
+  {
     "objectID": "contenu/04-contenu.html",
     "href": "contenu/04-contenu.html",
     "title": "Analyse multidimensionnelle appliquée",
