@@ -13,11 +13,17 @@ playlist_id <- "PLUB8VZzxA8IsfCYPSi2gYDJLedCcCss3W"
 
 slide_details <- tibble::tribble(
   ~youtube_id,   ~title, ~slide, ~active,
-  "nHbNjowSXko", "Introduction (partie 1)", "1", TRUE,
-  "Ull9G_tBoeM", "Introduction (partie 2)", "introb", FALSE,
-  "XDGSH7oKrHM", "Manipulations", "manip", FALSE,
-  "52P9R5byOnw", "Graphiques", "graphes", FALSE
+  "_lP1MCj0Mgo", "Introduction (partie 1)", "1", TRUE,
+  "ymewVkwIAeU", "Introduction (partie 2)", "introb", FALSE,
+  "xuSroiFMAGU", "Manipulations", "manip", FALSE,
+  "qTJZjne_ZKE", "Graphiques", "graphes", FALSE
 )
+
+# https://youtu.be/_lP1MCj0Mgo
+# https://youtu.be/ymewVkwIAeU
+# https://youtu.be/xuSroiFMAGU
+# https://youtu.be/qTJZjne_ZKE
+# https://www.youtube.com/playlist?list=PLUB8VZzxA8IsfCYPSi2gYDJLedCcCss3W
 
 ```
 
@@ -41,9 +47,6 @@ Si vous tapez<kbd>?</kbd> (ou <kbd>shift</kbd> + <kbd>/</kbd>) en naviguant à t
 :::
 
 
-```{r show-slide-tabs-1, echo=FALSE, results="asis"}
-slide_buttons("/diapos/MATH60602-diapos2a-intro")
-```
 
 ```{r, show-slide-tabs1, echo=FALSE, eval=TRUE}
 xaringanExtra::embed_xaringan(
@@ -51,27 +54,32 @@ xaringanExtra::embed_xaringan(
   ratio = "16:9"
 )
 ```
-
-```{r show-slide-tabs-3, echo=FALSE, results="asis"}
-slide_buttons("/diapos/MATH60602-diapos2b-manipulations")
+```{r show-slide-tabs-1, echo=FALSE, results="asis"}
+slide_buttons("/diapos/MATH60602-diapos2a-intro")
 ```
+
+
+
 ```{r show-slide-tabs3, echo=FALSE}
 xaringanExtra::embed_xaringan(
   url = "/diapos/MATH60602-diapos2b-manipulations.html",
   ratio = "16:9"
 ) 
 ```
-
-
-```{r show-slide-tabs-2, echo=FALSE, results="asis"}
-slide_buttons("/diapos/MATH60602-diapos2c-visualisation")
+```{r show-slide-tabs-3, echo=FALSE, results="asis"}
+slide_buttons("/diapos/MATH60602-diapos2b-manipulations")
 ```
+
+
 
 ```{r, show-slide-tabs2, echo=FALSE, eval=TRUE}
 xaringanExtra::embed_xaringan(
   url = "/diapos/MATH60602-diapos2c-visualisation.html",
   ratio = "16:9"
 )
+```
+```{r show-slide-tabs-2, echo=FALSE, results="asis"}
+slide_buttons("/diapos/MATH60602-diapos2c-visualisation")
 ```
 
 ## Vidéos
@@ -92,4 +100,6 @@ youtube_list(slide_details, playlist_id)
 - Identifier les éléments géométriques d'un graphique
 - Être capable d'extraire des statistiques descriptives, manipuler, transformer, extraire des variables d'une base de données
 
+## Ressources complémentaires
 
+-  Chapitres [2](https://r4ds.hadley.nz/data-visualize) et [4](https://r4ds.hadley.nz/data-transform) de [***R** for Data Science*](https://r4ds.hadley.nz/)

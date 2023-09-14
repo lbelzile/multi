@@ -245,7 +245,7 @@ Notre but sera de sélectionner un **bon** modèle, selon les objectifs de l'ét
 
 **Prédiction**: obtenir une estimation de $\widehat{Y}$: on veut un modèle performant
 
-**Inférence**: estimer l'effet de variables explicatives, effectuer des tests d'hypothèse
+**Inférence**: estimer l'effet de variables explicatives, effectuer des tests d'hypothèses
 
 Pour l'inférence, il est préférable de spécifier le modèle dès le départ (devis expérimental) selon des considérations scientifiques et de s’y tenir.
 
