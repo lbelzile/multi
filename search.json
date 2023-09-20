@@ -168,6 +168,13 @@
     "text": "Modèle de régression logistique\nCote\nInterprétation des paramètres\nInférence statistique\n\ntests d’hypothèse\nintervalles de confiance"
   },
   {
+    "objectID": "contenu/05-contenu.html#prérequis",
+    "href": "contenu/05-contenu.html#prérequis",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Prérequis",
+    "text": "Prérequis\nCe chapitre suppose que vous êtes familiers avec la notion de variable aléatoire et la méthode du maximum de vraisemblance (couvert notamment dans le cours de MATH 60619 Analyse et inférence statistique. La première capsule reprend cette matière (jusqu’à diapo 9).\nLes vidéos pour cette section sont disponibles sur cette chaîne YouTube.\n\nLoi Bernoulli\nLoi normale\nLoi Poisson\n\nVous pouvez aussi visionner les différents vidéos de la chaîne (en passant d’une vidéo à l’autre) ici:"
+  },
+  {
     "objectID": "contenu/05-contenu.html#lecture",
     "href": "contenu/05-contenu.html#lecture",
     "title": "Analyse multidimensionnelle appliquée",

@@ -1,34 +1,47 @@
-## ---------------------------------------------------------------------------------
+
+# Vérifier si les paquets nécessaires sont installés, les installer au besoin
+paquets <- c("dplyr", "ggplot2", "patchwork", "knitr", "remotes", "MASS", "leaps", "glmnet")
+for(paquet in paquets){
+   if(!paquet %in% rownames(installed.packages())){
+      install.packages(paquet)
+   }
+}
+# Charger les paquets
+library(ggplot2)
+library(patchwork)
+# (Ré)-installer la base de données si elle n'a pas été modifié
+remotes::install_github("lbelzile/hecmulti")
+
+# Charger les données
 data(dbm, package = "hecmulti")
+# Imprimer une description succincte
 str(dbm)
 
-
-## ---------------------------------------------------------------------------------
+# Sélection des 1000 données tests
 dbm_sub <- dbm |>
   dplyr::filter(test == 0) |>
-  dplyr::select(!test)
-
+  dplyr::select(!test) # enlever colonne superflue
+# Tableau de contingence 
+# Décompte des modalités des variables catégorielles
 table(dbm_sub$x1)
 table(dbm_sub$x5)
 table(dbm_sub$x3)
 table(dbm_sub$x4)
 
+# Analyse exploratoire des données
 
-
-## ---------------------------------------------------------------------------------
-library(ggplot2)
-library(patchwork)
+# Histogramme de l'âge
 g1 <- ggplot(data = dbm_sub,
              aes(x = x2)) +
-      geom_histogram(alpha = 0.5,
-                     aes(y = ..density..),
-                     bins = 30) +
-  labs(y = "densité",
-       x = "âge")
+      geom_histogram( # histogramme
+         alpha = 0.5, # transparence à 50%
+         aes(y = ..density..), # mettre à l'échelle de la densité
+         bins = 30) + # contrôler le nombre de groupes
+  labs(y = "densité", # libellés des étiquettes pour l'axe des ordonnées
+       x = "âge") # idem, pour l'axe des abcisses.
+# Histogramme des montants du dernier achat
 g2 <- ggplot(data = dbm_sub,
-             aes(
-                 x = x8
-                 )) +
+             mapping = aes(x = x8)) +
       geom_histogram(alpha = 0.5,
                      aes(y = ..density..),
                      bins = 30) +
@@ -61,48 +74,35 @@ g6 <- ggplot(data = dbm_sub,
       geom_histogram(alpha = 0.5,
                      aes(y = ..density..),
                      bins = 30) +
-  labs( y = "densité",
+  labs(y = "densité",
        x = "nombre d'achats différents depuis un an")
-library(patchwork)
-(g1 + g2)/(g3 + g4) / (g5 + g6) +
-  patchwork::plot_layout(guides = 'collect') &
-  theme_classic() &
-  theme(legend.position = "bottom")
+
+# Avec le paquet 'patchwork', on peut combiner les graphiques
+(g1 + g2)/(g3 + g4) / (g5 + g6) + # + pour combiner par colonne, `/` pour séparer les lignes
+  patchwork::plot_layout(guides = 'collect') & # combiner les légendes
+  theme_classic() & # thème classique, sans grille ni fond gris
+  theme(legend.position = "bottom") # déplacer la légende de droite vers le bas
 
 
 
-## ---------------------------------------------------------------------------------
+## Sélectionner toutes les variables numériques
+# et créer un tableau résumé pour chaque variable
 dbm_sub_c <- dbm_sub |>
-    dplyr::select(x2, x6, x7, x8, x9, x10)
-tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
-                               moyenne = apply(dbm_sub_c, 2, mean),
-               "écart-type" = apply(dbm_sub_c, 2, sd),
-               min = apply(dbm_sub_c, 2, min),
-               max = apply(dbm_sub_c, 2, max)) |>
-  knitr::kable(digits = 2, booktabs = TRUE, linesep = "") |>
-  kableExtra::kable_styling(full_width = TRUE)
+   # Sélection les variables
+    dplyr::select(x2, x6:x10) |>
+   # Fournir une liste avec noms et les fonctions à calculer
+    dplyr::summarize_all(list(moy = mean, min = min, max = max))
+# Pour imprimer dans un fichier Rmarkdown ou Quarto, on peut utiliser
+# la fonction 'kable' du paquet 'knitr' pour formatter (arrondir, etc.)
+dbm_sub_c |>
+  knitr::kable(digits = 2, booktabs = TRUE, linesep = "")
 
-tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
-               description = c("âge",
-                               "nombre d’année comme client",
-                               "nombre de semaines depuis le dernier achat",
-                               "montant du dernier achat",
-                               "montant total dépensé sur un an",
-                               "nombre d'achats différents sur un an")) |>
-  knitr::kable(booktabs = TRUE, linesep = "") |>
-  kableExtra::kable_styling(full_width = TRUE)
+#Créer la base de données d'entraînement
+dbm_a <- dbm_sub |>
+  dplyr::filter(!is.na(ymontant)) # personnes qui ont acheté
 
 
-
-## ---------------------------------------------------------------------------------
-data(dbm, package = "hecmulti")
-dbm_a <- dbm |>
-  dplyr::filter(
-    test == 0, #données d'entraînement
-    !is.na(ymontant)) # personnes qui ont acheté
-
-
-## ---------------------------------------------------------------------------------
+## Créer une formule avec tous les coefficients de régression possibles considérés
 # (...)^2 crée toutes les interactions d'ordre deux
 # I(x^2) permet de créer les termes quadratiques
 formule <-
@@ -112,19 +112,25 @@ formule <-
             I(x2^2) + I(x6^2) + I(x7^2) +
             I(x8^2) + I(x9^2) + I(x10^2))
 mod_complet <- lm(formule, data = dbm_a)
-# Matrice avec toutes les variables
+# Matrice du modèle avec toutes les variables obtenues par transformation (produit et termes quadratiques)
 matmod <- model.matrix(mod_complet)
 
 
-## ---------------------------------------------------------------------------------
-# Recherche exhaustive avec variables de base
+# Recherche exhaustive, ici avec uniquement les variables de base
 rec_ex <- leaps::regsubsets(
   x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10,
-  nvmax = 13L,
-  method = "exhaustive",
-  data = dbm_a)
+  nvmax = 13L, # nombre maximum de termes à inclure 
+  # avec les variables catégorielles, plusieurs coefficients
+  method = "exhaustive", # choix de la méthode
+  data = dbm_a) # nom de la base de données
+
+# Imprimer un résumé de la sélection et des meilleurs modèles
 resume_rec_ex <- summary(rec_ex,
                          matrix.logical = TRUE)
+# La même chose, mais sous format graphique
+# Variables incluses (oui/non) avec valeurs du BIC
+plot(rec_ex)
+
 # Trouver le modèle avec le plus petit BIC
 min_BIC <- which.min(resume_rec_ex$bic)
 # Nom des variables dans le modèle retenu
@@ -133,10 +139,10 @@ rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
 
 
 
-## ---------------------------------------------------------------------------------
+## Méthode de sélection séquentielle avec AIC
 seq_AIC <- MASS::stepAIC(
-  lm(ymontant ~ 1, data = dbm_a),
-  # modèle initial sans variables explicative
+  lm(ymontant ~ 1, data = dbm_a), # modèle de départ
+  # le modèle initial n'inclut aucune variable explicative
     scope = formule, # modèle maximal possible
     direction = "both", #séquentielle
     trace = FALSE, # ne pas imprimer le suivi
@@ -144,18 +150,23 @@ seq_AIC <- MASS::stepAIC(
       # autres sorties des modèles à conserver
       list(bic = BIC(mod),
            coef = coef(mod))},
-    k = 2) #
+    k = 2) # pénalité pour critère d'information
 # Remplacer k=2 par k = log(nrow(dbm_a)) pour BIC
 
 
-## ---------------------------------------------------------------------------------
-library(glmnet)
+## Sélection de variable et régression LASSO
+
+# Créer une grille de pénalités
 lambda_seq <- seq(from = 0.01, to = 2, by = 0.01)
+# Ajuster le modèle pour toutes les valeurs de lambda_seq d'un coup
 cv_output <-
+   # Attention: la fonction `glmnet` prend une matrice de modèle 
+   # et un vecteur de réponses
   glmnet::cv.glmnet(x = as.matrix(matmod),
             y = dbm_a$ymontant,
-            alpha = 1,
+            alpha = 1, # garder cette valeur fixe à un pour le lasso
             lambda = lambda_seq)
+#
 plot(cv_output)
 
 
@@ -172,8 +183,9 @@ lasso_path <-
 plot(lasso_path)
 
 
-## ---------------------------------------------------------------------------------
+# Pénalité qui minimise l'EQM de validation croisée
 lambopt <- cv_output$lambda.min #ou cv_output$lambda.1se
+## Une fois la pénalité choisie (lambopt), réajuster le modèle avec cette dernière
 lasso_best <-
   glmnet::glmnet(
     x = as.matrix(as.matrix(matmod)),
@@ -187,12 +199,12 @@ lasso_best <-
 # Données externes
 dbm_v <- dbm |>
   dplyr::filter(
-    test == 1,
-    !is.na(ymontant))
-pred <- predict(lasso_best,
-                s = lambopt,
-                newx = as.matrix(
-                  model.matrix(formule,
-                               data = dbm_v)))
+    test == 1, # Données de validation
+    !is.na(ymontant)) # Uniquement le montant des personnes qui ont acheté
+pred <- predict(lasso_best, # modèle duquel prédire
+                s = lambopt, # valeur de la pénalité optimale
+                newx = as.matrix( # matrice du modèle avec toutes les variables
+                  model.matrix(formule, data = dbm_v)))
+# Calcul de l'erreur quadratique moyenne à la mitaine
 eqm_lasso <- mean((pred - dbm_v$ymontant)^2)
 
