@@ -21,7 +21,7 @@ str(dbm)
 dbm_sub <- dbm |>
   dplyr::filter(test == 0) |>
   dplyr::select(!test) # enlever colonne superflue
-# Tableau de contingence 
+# Tableau de contingence
 # Décompte des modalités des variables catégorielles
 table(dbm_sub$x1)
 table(dbm_sub$x5)
@@ -119,7 +119,7 @@ matmod <- model.matrix(mod_complet)
 # Recherche exhaustive, ici avec uniquement les variables de base
 rec_ex <- leaps::regsubsets(
   x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10,
-  nvmax = 13L, # nombre maximum de termes à inclure 
+  nvmax = 13L, # nombre maximum de termes à inclure
   # avec les variables catégorielles, plusieurs coefficients
   method = "exhaustive", # choix de la méthode
   data = dbm_a) # nom de la base de données
@@ -160,7 +160,7 @@ seq_AIC <- MASS::stepAIC(
 lambda_seq <- seq(from = 0.01, to = 2, by = 0.01)
 # Ajuster le modèle pour toutes les valeurs de lambda_seq d'un coup
 cv_output <-
-   # Attention: la fonction `glmnet` prend une matrice de modèle 
+   # Attention: la fonction `glmnet` prend une matrice de modèle
    # et un vecteur de réponses
   glmnet::cv.glmnet(x = as.matrix(matmod),
             y = dbm_a$ymontant,
@@ -176,7 +176,7 @@ plot(cv_output)
 # avec les valeurs des coefficients
 lasso_path <-
   glmnet::glmnet(
-    x = as.matrix(as.matrix(matmod)),
+    x = as.matrix(matmod),
     y = dbm_a$ymontant,
     alpha = 1,
     lambda = seq(from = 0.01, to = 10, by = 0.01))
@@ -188,7 +188,7 @@ lambopt <- cv_output$lambda.min #ou cv_output$lambda.1se
 ## Une fois la pénalité choisie (lambopt), réajuster le modèle avec cette dernière
 lasso_best <-
   glmnet::glmnet(
-    x = as.matrix(as.matrix(matmod)),
+    x = as.matrix(matmod),
     y = dbm_a$ymontant,
     alpha = 1,
     lambda = lambopt)
