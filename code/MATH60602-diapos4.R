@@ -21,7 +21,12 @@ str(dbm)
 dbm_sub <- dbm |>
   dplyr::filter(test == 0) |>
   dplyr::select(!test) # enlever colonne superflue
-# Tableau de contingence 
+
+# Tableau résumé avec décomptes (pour les facteurs)
+# et statistiques descriptives (variables numériques)
+summary(dbm_sub)
+
+# Tableaux de contingence
 # Décompte des modalités des variables catégorielles
 table(dbm_sub$x1)
 table(dbm_sub$x5)
@@ -97,10 +102,26 @@ dbm_sub_c <- dbm_sub |>
 dbm_sub_c |>
   knitr::kable(digits = 2, booktabs = TRUE, linesep = "")
 
-#Créer la base de données d'entraînement
+#Créer les bases de données d'entraînement (dbm_a) et de validation (dbm_v)
 dbm_a <- dbm_sub |>
-  dplyr::filter(!is.na(ymontant)) # personnes qui ont acheté
+  dplyr::filter(!is.na(ymontant)) |> # personnes qui ont acheté
+  dplyr::select(!yachat)
+dbm_v <- dbm |>
+  dplyr::filter(test == 1,
+                !is.na(ymontant)) |>
+  dplyr::select(! c(test, yachat)) # conserver toutes les variables sauf test et yachat
 
+# On peut considérer le modèle avc toutes les variables explicatives
+mod_additif <- lm(ymontant ~ x1 + x2 + x3 + x4 + x5 +
+                    x6 + x7 + x8 + x9 + x10,
+                  data = dbm_a)
+# Nombre de coefficients
+length(coef(mod_additif))
+# Calculer la vraie erreur de prédiction théorique sur la population
+pred_additif <- predict(object = mod_additif,
+                        # modèle ajusté sur les données d'entraînement avec coefficients
+                        newdata = dbm_v) #bd sur laquelle calculer les prédictions
+mean((dbm_v$ymontant - pred_additif)^2)
 
 ## Créer une formule avec tous les coefficients de régression possibles considérés
 # (...)^2 crée toutes les interactions d'ordre deux
@@ -114,12 +135,13 @@ formule <-
 mod_complet <- lm(formule, data = dbm_a)
 # Matrice du modèle avec toutes les variables obtenues par transformation (produit et termes quadratiques)
 matmod <- model.matrix(mod_complet)
-
+# nombre de coefficients
+ncol(matmod)
 
 # Recherche exhaustive, ici avec uniquement les variables de base
 rec_ex <- leaps::regsubsets(
   x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10,
-  nvmax = 13L, # nombre maximum de termes à inclure 
+  nvmax = 13L, # nombre maximum de termes à inclure
   # avec les variables catégorielles, plusieurs coefficients
   method = "exhaustive", # choix de la méthode
   data = dbm_a) # nom de la base de données
@@ -131,11 +153,23 @@ resume_rec_ex <- summary(rec_ex,
 # Variables incluses (oui/non) avec valeurs du BIC
 plot(rec_ex)
 
+# Calcul du AIC avec générique hecmulti "AIC"
+AIC(rec_ex)
+BIC(rec_ex)
+
 # Trouver le modèle avec le plus petit BIC
 min_BIC <- which.min(resume_rec_ex$bic)
 # Nom des variables dans le modèle retenu
 rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
 
+# Calculer l'erreur quadratique moyenne pour des données de validation
+# avec une fonction maison
+mod_BIC <- eval_EQM_regsubsets(model = rec_ex,
+                    select = "BIC",
+                    formula = formula(ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10),
+                    data = dbm_a,
+                    newdata = dbm_v
+)^2 # la fonction retourne la racine de l'EQM
 
 
 
@@ -154,13 +188,66 @@ seq_AIC <- MASS::stepAIC(
 # Remplacer k=2 par k = log(nrow(dbm_a)) pour BIC
 
 
+# Estimation de l'EQM par validation croisée
+
+# Calculons cette fois ci les modèles par recherche séquentielle
+# En partant du modèle le plus simple (moyenne globale), on ajoute des variables
+# et à chaque étape, on vérifie si on peut en enlever par la suite
+
+# Calculer les matrices numériques des modèles ajustés pour les données d'appentissage
+dbm_af <- dbm_af <- data.frame( # créer une nouvell base de données
+  cbind(ymontant = dbm_a$ymontant, # ajouter la variable réponse
+        model.matrix(mod_complet)[,-1])) # enlever ordonnée à l'origine
+rec_seq <- leaps::regsubsets(
+  x = formula(ymontant ~ .),  # ~ . indique régression avec toutes les variables
+  data = dbm_af, # plutôt que la bd, on passe la matrice (plus simple pour la suite)
+  method = "seqrep",
+  nvmax = length(coef(mod_complet)))
+# Créer une matrice de variables binaires (oui/non) indiquant quelle variable est présente
+srec_seq <- summary(rec_seq, matrix.logical = TRUE)
+# créer un conteneur de la même longueur que le nombre de modèles (ici 105)
+valid_crois <- valid_crois_erreurtype <- numeric(length = nrow(srec_seq$which))
+# Pour chaque modèle (celui à une variable, 2 variables, ...)
+for(i in seq_along(valid_crois)){
+  set.seed(60602) # même séparation aléatoire pour tous les modèles!
+  # obtenir la liste des variables utilisées
+  wvars <- which(srec_seq$which[i,])
+  # réajuster le modèle linéare
+  cv_caret <- caret::train(
+    form = ymontant ~ ., # plutôt que de mettre à jour à formule
+    data = dbm_af[,wvars], # on sélection uniquement les variables utilisées
+    method = "lm", # type de modèle, ici régression linéaire
+    trControl = caret::trainControl(
+      method = "cv", # validation croisée à
+      number = 10)) # 10 plis
+  valid_crois[i] <- cv_caret$results$RMSE
+  # Erreur-type, ici basée sur 10 moyennes
+  valid_crois_erreurtype[i] <- cv_caret$results$RMSESD/sqrt(10)
+}
+
+# sauvegarder la racine de l'erreur quadratique moyenne
+ggplot(data = data.frame(nvar = seq_along(valid_crois),
+                         eqm = valid_crois,
+                         erreurtype = valid_crois_erreurtype)) +
+  geom_pointrange(mapping = aes(x = nvar,
+                                y = eqm,
+                                ymax = eqm + erreurtype,
+                                ymin = eqm - erreurtype )) +
+  labs(x = "nombre de variables",
+       y = "",
+       subtitle = "Racine de l'erreur quadratique moyenne ($) de validation croisée") +
+  theme_classic()
+# notez l'absence de monotonicité dans la courbe -
+# problème avec certaines variables catégorielles?
+
+
 ## Sélection de variable et régression LASSO
 
 # Créer une grille de pénalités
 lambda_seq <- seq(from = 0.01, to = 2, by = 0.01)
 # Ajuster le modèle pour toutes les valeurs de lambda_seq d'un coup
 cv_output <-
-   # Attention: la fonction `glmnet` prend une matrice de modèle 
+   # Attention: la fonction `glmnet` prend une matrice de modèle
    # et un vecteur de réponses
   glmnet::cv.glmnet(x = as.matrix(matmod),
             y = dbm_a$ymontant,
@@ -176,7 +263,7 @@ plot(cv_output)
 # avec les valeurs des coefficients
 lasso_path <-
   glmnet::glmnet(
-    x = as.matrix(as.matrix(matmod)),
+    x = as.matrix(matmod),
     y = dbm_a$ymontant,
     alpha = 1,
     lambda = seq(from = 0.01, to = 10, by = 0.01))
@@ -188,7 +275,7 @@ lambopt <- cv_output$lambda.min #ou cv_output$lambda.1se
 ## Une fois la pénalité choisie (lambopt), réajuster le modèle avec cette dernière
 lasso_best <-
   glmnet::glmnet(
-    x = as.matrix(as.matrix(matmod)),
+    x = as.matrix(matmod),
     y = dbm_a$ymontant,
     alpha = 1,
     lambda = lambopt)
