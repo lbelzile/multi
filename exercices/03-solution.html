@@ -330,6 +330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#exercice-3.1" id="toc-exercice-3.1" class="nav-link active" data-scroll-target="#exercice-3.1">Exercice 3.1</a></li>
   <li><a href="#exercice-3.2" id="toc-exercice-3.2" class="nav-link" data-scroll-target="#exercice-3.2">Exercice 3.2</a></li>
+  <li><a href="#exercice-3.3" id="toc-exercice-3.3" class="nav-link" data-scroll-target="#exercice-3.3">Exercice 3.3</a></li>
   </ul>
 </nav>
     </div>
@@ -597,6 +598,114 @@ valeur-p: 0.581</code></pre>
 </section>
 <section id="exercice-3.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-3.2">Exercice 3.2</h2>
+<ol type="1">
+<li><em>Interprétez le coefficient pour l’ordonnée à l’origine <span class="math inline">\(\alpha\)</span> en terme de pourcentage d’augmentation ou de diminution de la cote par rapport à la référence jouer à l’extérieur.</em></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(lnh_BT, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuster le modèle de régression logistique</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(vainqueur <span class="sc">~</span> ., <span class="at">data =</span> lnh_BT, <span class="at">family =</span> binomial)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraire les coefficients et les IC</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>expcoef <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">coef</span>(mod))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>ic <span class="ot">&lt;-</span> <span class="fu">confint</span>(mod)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>L’ordonnée à l’origine (premier coefficient) représente l’avantage de jouer à domicile (si <span class="math inline">\(\alpha&gt;0\)</span>), peu importe les équipes qui jouent. Le coefficient <span class="math inline">\(\widehat{\alpha} = 0\)</span> la cote pour l’équipe à domicile est 18.3 % plus élevée que celle de l’équipe en déplacement.</p>
+<ol start="2" type="1">
+<li><em>Calculez un intervalle de confiance de niveau 95% pour l’ordonnée à l’origine et déterminez si jouer à domicile impacte significativement le score.</em></li>
+</ol>
+<p>L’intervalle de confiance de vraisemblance profilée est [0.1,0.3] et n’inclut pas zéro: l’effet est donc significatif. Alternativement, l’intervalle pour l’effet multiplicatif de la cote est [1.1,1.3] différent de 1.</p>
+<ol start="3" type="1">
+<li><em>Fournissez un tableau avec le classement des cinq premières équipes qui ont la plus grande chance de succès selon le modèle.</em></li>
+</ol>
+<p>Il suffit de prendre les cinq équipes qui ont les plus grands coefficients de régression (en vérifiant que ces derniers sont supérieurs à zéro, le coefficient fantôme de la catégorie de référence).</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer les coefficients (moins ordonnée à l'origine)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># trier et garder les cinq plus grandes valeurs</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>classements <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="st">"Anaheim_Ducks"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="fu">coef</span>(mod)[<span class="sc">-</span><span class="dv">1</span>]),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>top5 <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">names</span>(classements), <span class="dv">5</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Créer un tableau avec les noms</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># remplacer les barres de soulignement par des espaces</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">x =</span> <span class="fu">gsub</span>(<span class="st">"_"</span>,<span class="st">" "</span>, top5), </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.names =</span> <span class="st">"équipe"</span>,)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-top5" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Tableau&nbsp;2: Classement des cinq meilleurs équipes de la LNH.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">équipe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Florida Panthers</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Colorado Avalanche</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Carolina Hurricanes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Toronto Maple Leafs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Minnesota Wild</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li><em>Pour chaque match, utilisez le modèle logistique pour prédire l’équipe gagnante.</em>
+<ul>
+<li><em>Construisez une matrice de confusion (1 pour une victoire de l’équipe à domicile, 0 sinon) avec un point de coupure de 0.5 (assignation à l’événement ou à la classe la plus probable) et rapportez cette dernière.</em></li>
+<li><em>Calculez le taux de bonne classification, la sensibilité et la spécificité à partir de votre matrice de confusion.</em></li>
+</ul></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60602</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prédire par validation croisée avec point de coupure 0.5</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> hecmulti<span class="sc">::</span><span class="fu">predvc</span>(<span class="at">modele =</span> mod)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>classif <span class="ot">&lt;-</span> pred <span class="sc">&gt;</span> <span class="fl">0.5</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Créer une matrice de confusion TRUE=1, FALSE=0</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">prediction =</span> <span class="fu">as.integer</span>(classif), </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">vainqueur =</span> <span class="fu">as.integer</span>(lnh_BT<span class="sc">$</span>vainqueur))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>          vainqueur
+prediction   0   1
+         0 345 215
+         1 263 489</code></pre>
+</div>
+</div>
+<p>Le taux de bonne classification est de 63.6%, la sensibilité de 69.5% et la spécificité de 56.7%</p>
+<ol start="5" type="1">
+<li><em>Produisez un graphique de la fonction d’efficacité du récepteur et rapportez l’aire sous la courbe. Commentez sur la qualité prédictive globale du modèle.</em></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>roc <span class="ot">&lt;-</span> hecmulti<span class="sc">::</span><span class="fu">courbe_roc</span>(<span class="at">prob =</span> pred, <span class="at">resp =</span> lnh_BT<span class="sc">$</span>vainqueur)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="03-solution_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>L’aire sous la courbe est de 0.67, soit plus qu’une assignation aléatoire de 0.5. Le modèle a un faible pouvoir prédictif, mais ça peut suffire pour des paris sportifs si le modèle bat la concurrence.</p>
+</section>
+<section id="exercice-3.3" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3.3">Exercice 3.3</h2>
 <p><em>On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (<code>1</code>) à très satisfait (<code>5</code>). Les 1000 observations se trouvent dans la base de données <code>multinom</code> du paquet <code>hecmulti</code>.</em></p>
 <p><em>Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.</em></p>
 <ol type="1">
@@ -606,37 +715,37 @@ valeur-p: 0.581</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(multinom, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> multinom <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">educ =</span> <span class="fu">relevel</span>(educ, <span class="at">ref =</span> <span class="st">"sec"</span>),</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">ordered</span>(y))</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> nnet<span class="sc">::</span><span class="fu">multinom</span>(</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> sexe <span class="sc">+</span> educ <span class="sc">+</span> revenu <span class="sc">+</span> age,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">trace =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(multinom, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> multinom <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">educ =</span> <span class="fu">relevel</span>(educ, <span class="at">ref =</span> <span class="st">"sec"</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">ordered</span>(y))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> nnet<span class="sc">::</span><span class="fu">multinom</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> sexe <span class="sc">+</span> educ <span class="sc">+</span> revenu <span class="sc">+</span> age,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">trace =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Le modèle a 4 coefficients, dont deux pour éducation et revenu et un pour sexe et age, par niveau.</p>
+<p>Le modèle a 32 coefficients, dont deux pour éducation et revenu et un pour sexe et age, par niveau.</p>
 <p>Pour ajuster le modèle à cotes proportionnelles, il faut d’abord convertir la variable réponse en variable ordinale à l’aide de <code>ordered</code> si ce n’est pas déjà la classe de la variable. Cela permettra de spécifier l’ordre des modalités.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuster modèle à cote proportionnelle</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">polr</span>(</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ordered</span>(y) <span class="sc">~</span> sexe <span class="sc">+</span> educ <span class="sc">+</span> revenu <span class="sc">+</span> age,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer statistique de test</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># (rapport de vraisemblance)</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>stat <span class="ot">&lt;-</span> <span class="fu">deviance</span>(mod0) <span class="sc">-</span> <span class="fu">deviance</span>(mod1)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># À comparer à une loi khi-deux avec </span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># npar1-npar0 degrés de liberté</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>npar0 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod0)) <span class="sc">+</span> <span class="fu">length</span>(mod0<span class="sc">$</span>zeta)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>npar1 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod1))</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcul de la valeur-p</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité que khi-deux (df) excède 'stat'</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(stat, </span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">df =</span> npar1 <span class="sc">-</span> npar0, </span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuster modèle à cote proportionnelle</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">polr</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ordered</span>(y) <span class="sc">~</span> sexe <span class="sc">+</span> educ <span class="sc">+</span> revenu <span class="sc">+</span> age,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer statistique de test</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># (rapport de vraisemblance)</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>stat <span class="ot">&lt;-</span> <span class="fu">deviance</span>(mod0) <span class="sc">-</span> <span class="fu">deviance</span>(mod1)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># À comparer à une loi khi-deux avec </span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># npar1-npar0 degrés de liberté</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>npar0 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod0)) <span class="sc">+</span> <span class="fu">length</span>(mod0<span class="sc">$</span>zeta)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>npar1 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod1))</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcul de la valeur-p</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité que khi-deux (df) excède 'stat'</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(stat, </span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">df =</span> npar1 <span class="sc">-</span> npar0, </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.0008817018</code></pre>
@@ -650,8 +759,8 @@ valeur-p: 0.581</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficient correspondants à sexe et éducation</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(mod1)[<span class="st">"2"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>])</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficient correspondants à sexe et éducation</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(mod1)[<span class="st">"2"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>])</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     sexe educcegep   educuni 
@@ -670,22 +779,22 @@ valeur-p: 0.581</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuster modèle avec proba constante</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> nnet<span class="sc">::</span><span class="fu">multinom</span>(</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ordonnée à l'origine seulement</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Vérifier convergence</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>pred0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> mod0,</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Entrer une bd avec une ligne</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> db[<span class="dv">1</span>,], </span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"prob"</span>)</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer la proportion de chaque categ.</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>proportions_y <span class="ot">&lt;-</span> <span class="fu">table</span>(db<span class="sc">$</span>y)<span class="sc">/</span><span class="fu">nrow</span>(db)</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer différences</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>pred0 <span class="sc">-</span> proportions_y</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuster modèle avec proba constante</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> nnet<span class="sc">::</span><span class="fu">multinom</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ordonnée à l'origine seulement</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> db,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Vérifier convergence</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>pred0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> mod0,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Entrer une bd avec une ligne</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> db[<span class="dv">1</span>,], </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer la proportion de chaque categ.</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>proportions_y <span class="ot">&lt;-</span> <span class="fu">table</span>(db<span class="sc">$</span>y)<span class="sc">/</span><span class="fu">nrow</span>(db)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer différences</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>pred0 <span class="sc">-</span> proportions_y</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -697,18 +806,18 @@ valeur-p: 0.581</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer statistique de test</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (rapport de vraisemblance)</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>stat <span class="ot">&lt;-</span> <span class="fu">deviance</span>(mod0) <span class="sc">-</span> <span class="fu">deviance</span>(mod1)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># À comparer à une loi khi-deux avec </span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># npar1-npar0 degrés de liberté</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>npar0 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod0)) <span class="sc">+</span> <span class="fu">length</span>(mod0<span class="sc">$</span>zeta)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>npar1 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod1))</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcul de la valeur-p</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité que khi-deux (df) excède 'stat'</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(stat, </span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">df =</span> npar1 <span class="sc">-</span> npar0, </span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer statistique de test</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (rapport de vraisemblance)</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>stat <span class="ot">&lt;-</span> <span class="fu">deviance</span>(mod0) <span class="sc">-</span> <span class="fu">deviance</span>(mod1)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># À comparer à une loi khi-deux avec </span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># npar1-npar0 degrés de liberté</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>npar0 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod0)) <span class="sc">+</span> <span class="fu">length</span>(mod0<span class="sc">$</span>zeta)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>npar1 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(mod1))</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcul de la valeur-p</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité que khi-deux (df) excède 'stat'</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">pchisq</span>(stat, </span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">df =</span> npar1 <span class="sc">-</span> npar0, </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.0002755707</code></pre>
@@ -722,7 +831,7 @@ valeur-p: 0.581</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(mod1, <span class="at">type =</span> <span class="dv">3</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(mod1, <span class="at">type =</span> <span class="dv">3</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table (Type III tests)
@@ -744,7 +853,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">confint</span>(mod1)[<span class="st">"age"</span>,,])</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">confint</span>(mod1)[<span class="st">"age"</span>,,])</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>               2         3         4         5
@@ -765,7 +874,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(mod1)[<span class="st">"4"</span>,], <span class="dv">3</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(mod1)[<span class="st">"4"</span>,], <span class="dv">3</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Intercept)        sexe   educcegep     educuni     revenu2     revenu3 
@@ -783,16 +892,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Profil du client</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>profil <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sexe =</span> <span class="dv">0</span>, </span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> <span class="dv">30</span>, </span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">educ =</span> <span class="st">"cegep"</span>, </span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">revenu =</span> <span class="st">"2"</span>)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité du score de satisfication</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod1, </span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> profil, </span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"prob"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Profil du client</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>profil <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sexe =</span> <span class="dv">0</span>, </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> <span class="dv">30</span>, </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">educ =</span> <span class="st">"cegep"</span>, </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">revenu =</span> <span class="st">"2"</span>)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilité du score de satisfication</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod1, </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> profil, </span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"prob"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         1          2          3          4          5 
@@ -800,9 +909,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modalité la plus susceptible</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod1, </span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> profil)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modalité la plus susceptible</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod1, </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> profil)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1
