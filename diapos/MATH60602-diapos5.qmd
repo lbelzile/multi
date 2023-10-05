@@ -450,7 +450,7 @@ et où $$p_i = \mathrm{expit}(\eta_i) = \frac{\mathrm{exp}(\beta_0 + \beta_1 \ma
 
 # Prédiction des probabilités de succès
 
-Des estimations des coefficients $\widehat{\beta}$ découlent une estimation de $\Pr(Y=1)$ pour les valeurs $\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p$ d'un individu donné,
+Des estimés des coefficients $\widehat{\beta}$ découlent une estimation de $\Pr(Y=1)$ pour les valeurs $\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p$ d'un individu donné,
 \begin{align*}
  \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_px_p).
 \end{align*}
@@ -478,8 +478,8 @@ Pour les modèles ajustés par maximum de vraisemblance.
 Comparaison de modèles **emboîtés**
 
 
-- Modèle complet (sous l'alternative) avec tous les paramètres
-- Modèle restreint (sous l'hypothèse nulle) sur lequel on impose $k\leq p$ restrictions (typiquement $\beta_j = 0, j \in \{1, \ldots, p\}$).
+- Modèle complet (sous l'alternative) avec $p$ variables explicatives
+- Modèle restreint (sous l'hypothèse nulle) sur lequel on impose $k\leq p$ restrictions.
 
 
 :::
@@ -516,7 +516,7 @@ modele3 <-  glm(y ~ x1 + x2 + x3 + x4 + x5,
 
 # Test d'hypothèse
 
-On test l'hypothèse nulle  $\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0$ (soit $k=2$ restrictions).
+On teste l'hypothèse nulle  $\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0$ (soit $k=2$ restrictions).
 
 L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
 
@@ -725,7 +725,50 @@ où
 
 - $\widehat{\mu}=\widehat{\beta}_0 +  \cdots + \beta_p\mathrm{X}_p$ est la moyenne prédite pour le profil donné, 
 - $\widehat{\sigma}$ est l'estimation de l'écart-type
-- $\Phi(\cdot)$ est la fonction de répartition d'une loi normale standard (`pnorm`)
+- $\Phi(\cdot)$ est la fonction de répartition d'une loi normale standard (`pnorm` dans **R**)
+
+# Modèle linéaire et probabilité d'excès
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-density-normalcurves
+#| out-width: '80%'
+#| fig-cap: "Régression linéaire simple et densité normale à différentes valeurs de $x$."
+## Sample data
+set.seed(0)
+dat <- data.frame(x=(x=runif(100, 0, 50)),
+                  y=rnorm(100, 10*x, 100))
+
+## breaks: where you want to compute densities
+breaks <- seq(0, max(dat$x), len=5)
+dat$section <- cut(dat$x, breaks)
+
+## Get the residuals
+dat$res <- residuals(lm(y ~ x, data=dat))
+ypos <- predict(lm(y~ x, data = dat), newdata = data.frame(x=breaks[-1]))
+stdev <- sd(dat$res)
+## Compute densities for each section, and flip the axes, and add means of sections
+## Note: the densities need to be scaled in relation to the section size (2000 here)
+xs <- seq(min(dat$y)-ypos[1]-100, max(dat$y)-ypos[4]+100, length.out = 200)
+xs4 <- length(xs)*4L
+dens <- data.frame(y = rep(xs, length.out = xs4) +
+                       rep(ypos, each = length(xs)),
+                   x = rep(breaks[-1], each = length(xs)) - 
+                     rep(2000*dnorm(xs, 0, stdev), length.out = xs4),
+                   section = factor(rep(levels(dat$section), each = length(xs))))
+
+## Plot both empirical and theoretical
+ggplot(dat, aes(x, y)) +
+  geom_point() +
+  geom_smooth(method="lm", fill=NA, lwd=2) +
+  geom_path(data=dens, 
+            aes(x, y, group=interaction(section)), lwd=1.1) +
+  geom_vline(xintercept=breaks, lty=2) +
+  labs(x = "", y = "") +
+  theme_bw()
+  
+```
 
 
 # Récapitulatif
