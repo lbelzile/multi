@@ -226,7 +226,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}, interior hidden, frame hidden, enhanced, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Données manquantes et inférence}
 \protect\hypertarget{donnuxe9es-manquantes-et-infuxe9rence}{}
@@ -384,8 +384,8 @@ Imputation: remplacer les valeurs manquantes par une valeur judicieuse
 pour \emph{combler les trous}.
 
 \begin{quote}
-Le concept d'imputation est à la fois séduisant et dangereux (Dempster
-et Rubin, 1983)
+\emph{Le concept d'imputation est à la fois séduisant et dangereux}.
+(Dempster et Rubin, 1983)
 \end{quote}
 
 Par exemple, on remplacer la valeur manquante par la moyenne (variables
@@ -776,12 +776,12 @@ Soit la probabilité d'appartenir à la modalité \(k\),
 La somme des probabilités, \(p_{i0} + \cdots + p_{iK}\), vaut 1.
 \end{frame}
 
-\begin{frame}[fragile]{Modèle multinomial logistique}
+\begin{frame}{Modèle multinomial logistique}
 \protect\hypertarget{moduxe8le-multinomial-logistique}{}
 Comme avec la régression logistique, on fixe une catégorie de référence
-(disons \texttt{1}) et on modélise le log de la cote de chacune des
-autres catégories par rapport à cette référence, \begin{align*}
- \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \beta_{1j} \mathrm{X}_{i1} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
+(disons \(1\)) et on modélise le log de la cote de chacune des autres
+catégories par rapport à cette référence, \begin{align*}
+ \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
 \end{align*}
 
 \begin{itemize}
@@ -800,10 +800,10 @@ sauf qu'il faut y aller équation par équation.
 \protect\hypertarget{moduxe8le-logistique-multinomial-et-probabilituxe9s}{}
 On peut aussi exprimer le modèle en termes des probabilités,
 \begin{align*}
- p_{i1} &= \Pr(Y_i=1 \mid \mathbf{X}_i) = \frac{1}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}\\
- p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) = \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =2, \ldots, K.
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
 \end{align*} où \(\eta_{ij}\) est le prédicteur linéaire de l'individu
 \(i\) pour le log de la cote de \(Y_i=j\) versus la référence \(Y_i=1\).
+On fixe \(\eta_{i1}=0\).
 \end{frame}
 
 \begin{frame}[fragile]{Taux de participation lors des élections
@@ -833,6 +833,11 @@ d'une régression logistique multinomiale.
 variables sociodémographiques des données de participation électorale.}
 
 \end{figure}
+\end{frame}
+
+\begin{frame}{Analyse exploratoire}
+\protect\hypertarget{analyse-exploratoire-1}{}
+\includegraphics{MATH60602-diapos7_files/figure-beamer/figure-age-1.pdf}
 \end{frame}
 
 \begin{frame}{Analyse exploratoire (\texttt{age})}
@@ -1077,8 +1082,7 @@ multipliée par \(\exp(\beta_j)\), peu importe la valeur de \(Y\)
 \hypertarget{tbl-ordered-logistic}{}
 \begin{table}
 \caption{\label{tbl-ordered-logistic}Tableau des estimations des coefficients du modèle pour réponses
-ordinales pour la régression logistique à cotes proportionnelles avec
-sexe. }\tabularnewline
+ordinales à cotes proportionnelles. }\tabularnewline
 
 \centering
 \begin{tabular}[t]{lrr}
@@ -1086,8 +1090,8 @@ sexe. }\tabularnewline
 effet & coefficient & erreur-type\\
 \midrule
 sexe [homme] & -0.166 & 0.055\\
-cst [rarement/jamais|occasionnellement] & -1.297 & 0.044\\
-cst [occasionnellement|toujours] & 0.865 & 0.041\\
+cst [rarement/jamais|occas.] & -1.297 & 0.044\\
+cst [occas.|toujours] & 0.865 & 0.041\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1143,15 +1147,16 @@ explicative.
 \begin{frame}{Coefficients pour l'ordonnée à l'origine}
 \protect\hypertarget{coefficients-pour-lordonnuxe9e-uxe0-lorigine}{}
 Si on écrit les équations pour la cote, on obtient \begin{align*}
-\frac{\Pr(Y = \texttt{rarement} \mid \texttt{sexe})}{\Pr(Y \geq \texttt{occasionnellement} \mid \texttt{sexe})} &= \exp(-0.166\texttt{sexe} + 1.297) \\ 
-\frac{\Pr(Y \leq \texttt{occasionnellement} \mid \texttt{sexe})}{\Pr(Y = \texttt{toujours} \mid \texttt{sexe})} &= \exp(-0.166\texttt{sexe} - 0.865).
+\frac{\Pr(Y = \texttt{rarement} \mid \texttt{sexe})}{\Pr(Y \geq \texttt{occas.} \mid \texttt{sexe})} &= \exp(-0.166\texttt{sexe} + 1.297) \\ 
+\frac{\Pr(Y \leq \texttt{occas.} \mid \texttt{sexe})}{\Pr(Y = \texttt{toujours} \mid \texttt{sexe})} &= \exp(-0.166\texttt{sexe} - 0.865).
 \end{align*}
 \end{frame}
 
 \begin{frame}{Probabilités prédites}
 \protect\hypertarget{probabilituxe9s-pruxe9dites}{}
-En terme de probabilité cumulée d'excéder \(k\), \begin{align*}
-\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \quad k=1, \ldots, K-1.
+En terme de probabilité cumulée d'excéder \(k\in \{1, \ldots, K-1\}\),
+\begin{align*}
+\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}).
 \end{align*} En utilisant ces expressions, on peut obtenir la
 probabilité de chaque catégorie, \begin{align*}
 &\Pr(Y_i = k \mid \mathbf{X}_{i}) =\Pr(Y_i > k \mid \mathbf{X}_{i}) - \Pr(Y_i > k-1 \mid \mathbf{X}_{i}).

@@ -213,7 +213,7 @@ Méthode par défaut dans les logiciels.
 
 Imputation: remplacer les valeurs manquantes par une valeur judicieuse pour *combler les trous*.
 
-> Le concept d'imputation est à la fois séduisant et dangereux (Dempster et Rubin, 1983)
+> *Le concept d'imputation est à la fois séduisant et dangereux*. (Dempster et Rubin, 1983)
 
  Par exemple, on remplacer la valeur manquante par la moyenne (variables continues) ou le mode (variables catégorielles).
 
@@ -492,7 +492,7 @@ summary(fit)
 ```
 
 
-# Résultats
+# Résultats {.smaller}
 
 ```{r}
 #| label: manquantsres
@@ -520,7 +520,7 @@ fit_df$p.value <- format.pval(fit_df$p.value,
                               digits = 1, 
                               eps = 1e-4)
 knitr::kable(fit_df, 
-             digits = 2, 
+             digits = 2, 	
              booktabs = TRUE,
              linesep = "",
              col.names = c("terme","estimation", "erreur-type", "stat", "ddl", "valeur-p")) |>
@@ -559,23 +559,23 @@ La somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
 
 # Modèle multinomial logistique 
 
-Comme avec la régression logistique, on fixe une catégorie de référence (disons `1`) et on modélise le log de la cote de chacune des autres catégories par rapport à cette référence,
+Comme avec la régression logistique, on fixe une catégorie de référence (disons $1$) et on modélise le log de la cote de chacune des autres catégories par rapport à cette référence,
 \begin{align*}
- \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \beta_{1j} \mathrm{X}_{i1} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
+ \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
 \end{align*}
 
 - Avec $K$ modalités et $p$ variables explicatives, on obtiendra $(K-1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
 
 L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
 
-# Modèle logistique multinomial et probabilités 
+# Modèle logistique multinomial et probabilités
 
-On peut aussi exprimer le modèle en termes des probabilités,
+On peut aussi exprimer le modèle en termes des probabilités, 
 \begin{align*}
- p_{i1} &= \Pr(Y_i=1 \mid \mathbf{X}_i) = \frac{1}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}\\
- p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) = \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =2, \ldots, K.
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
 \end{align*}
-où $\eta_{ij}$ est le prédicteur linéaire de l'individu $i$ pour le log de la cote de $Y_i=j$ versus la référence $Y_i=1$.
+où $\eta_{ij}$ est le prédicteur linéaire de l'individu $i$ pour le log de la cote de $Y_i=j$ versus la référence $Y_i=1$. On fixe $\eta_{i1}=0$.
+
 
 # Taux de participation lors des élections américaines
 
@@ -701,6 +701,49 @@ ggplot(aes(fill = catvote,
 ```
 
 
+# Analyse exploratoire
+
+
+```{r}
+#| message: false
+#| warning: false
+#| eval: true
+#| echo: false
+#| label: figure-age
+votecat <- as.integer(factor(vote$catvote, ordered = FALSE))-1L
+mod <- mgcv::gam(
+  formula = list(
+    votecat ~ s(age, bs = "cr"), 
+            ~ s(age, bs = "cr")), 
+  weights = poids,
+  family = mgcv::multinom(K = 2), 
+  data = vote)
+
+newage <- 20:90
+nb <- length(newage)
+pred <- c(predict(mod,
+                newdata = data.frame(age = newage), 
+                type = "response"))
+cat <- factor(rep(c("rarement/jamais","occasionnellement","toujours"), each = nb))
+cat <- relevel(cat, ref = "rarement/jamais")
+ggplot(data = data.frame(age = rep(newage, 3L*nb),
+                         pred = pred, 
+                         cat = cat),
+       mapping = aes(x = age, y = pred, col = cat, group = cat)) + 
+  geom_line() + 
+  scale_y_continuous(limits = c(0,1), 
+                     expand = c(0,0),
+                     labels = scales::percent) + 
+  labs(color = "catégorie de vote",
+       x = "âge)",
+       y = "",
+       subtitle = "Proportion par catégorie de vote (lissage)") +
+  viridis::scale_color_viridis(discrete = TRUE) + 
+  theme_classic() +
+  theme(legend.position = "bottom")
+```
+
+
 # Analyse exploratoire  (`age`)
 
 ```{r}
@@ -720,6 +763,7 @@ ggplot(data = vote,
   theme(legend.position = "bottom") +
   theme_minimal()
 ```
+
 Notez le comportement des jeunes voteurs (bimodal). Ces personnes n'ont souvent eu qu'une seule occasion de voter...
 
 
@@ -870,7 +914,7 @@ Pour chaque augmentation d'une unité de $\mathrm{X}_j$, cette cote est multipli
 
 ```{r}
 #| label: tbl-ordered-logistic
-#| tbl-cap: "Tableau des estimations des coefficients du modèle pour réponses ordinales pour la régression logistique à cotes proportionnelles avec sexe."
+#| tbl-cap: "Tableau des estimations des coefficients du modèle pour réponses ordinales à cotes proportionnelles."
 #| echo: false
 #| eval: true
 #| message: false
@@ -892,7 +936,7 @@ rapp <- summary(multi2a)
 coefs <- rapp$coefficients
 options(knitr.kable.NA = '')
 tabcoef <- tibble::as_tibble(coefs[,1:2])
-tabcoef <- cbind("effet" = c("sexe [homme]","cst [rarement/jamais|occasionnellement]","cst [occasionnellement|toujours]"), tabcoef)
+tabcoef <- cbind("effet" = c("sexe [homme]","cst [rarement/jamais|occas.]","cst [occas.|toujours]"), tabcoef)
 kableExtra::kbl(tabcoef,
 	        longtable = FALSE, 
 	        booktabs = TRUE,
@@ -970,15 +1014,15 @@ multi2a$zeta
 
 Si on écrit les équations pour la cote, on obtient
 \begin{align*}
-\frac{\Pr(Y = \texttt{rarement} \mid \texttt{sexe})}{\Pr(Y \geq \texttt{occasionnellement} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[1] < 0, "+","-"), round(abs(multi2a$zeta[1]), 3))`) \\ 
-\frac{\Pr(Y \leq \texttt{occasionnellement} \mid \texttt{sexe})}{\Pr(Y = \texttt{toujours} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[2] < 0, "+","-"), round(abs(multi2a$zeta[2]), 3))`).
+\frac{\Pr(Y = \texttt{rarement} \mid \texttt{sexe})}{\Pr(Y \geq \texttt{occas.} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[1] < 0, "+","-"), round(abs(multi2a$zeta[1]), 3))`) \\ 
+\frac{\Pr(Y \leq \texttt{occas.} \mid \texttt{sexe})}{\Pr(Y = \texttt{toujours} \mid \texttt{sexe})} &= \exp(`r round(coef(multi2a)[1], 3)`\texttt{sexe} `r paste(ifelse(multi2a$zeta[2] < 0, "+","-"), round(abs(multi2a$zeta[2]), 3))`).
 \end{align*}
 
 # Probabilités prédites
 
-En terme de probabilité cumulée d'excéder $k$,
+En terme de probabilité cumulée d'excéder $k\in \{1, \ldots, K-1\}$,
 \begin{align*}
-\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}), \quad k=1, \ldots, K-1.
+\Pr(Y_i > k \mid \mathbf{X}_i) &= \textrm{expit}(-\eta_k + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}).
 \end{align*}
 En utilisant ces expressions, on peut obtenir la probabilité de chaque catégorie,
 \begin{align*}

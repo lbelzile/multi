@@ -1,4 +1,8 @@
-library(mice)
+library(ggplot2) # grammaire des graphiques
+library(dplyr) # manipulation de données
+library(patchwork) # combiner les graphiques
+library(MASS) # modèles de régression multinomiale
+library(mice) # données manquantes
 
 data(manquantes, package = 'hecmulti')
 summary(manquantes)
@@ -9,7 +13,7 @@ summary(manquantes)
 # variables par variables
 apply(manquantes, 2, function(x){mean(is.na(x))})
 # Voir les configurations de valeurs manquantes
-md.pattern(manquantes) 
+md.pattern(manquantes)
 
 # Intensif en calcul, réduire "m" si nécessaire
 impdata <- mice(data = manquantes,
@@ -25,16 +29,10 @@ adj_im <- with(
   data = impdata,
   expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
              family = binomial))
-# combinaison des résultats 
+# combinaison des résultats
 fit <- pool(adj_im)
 # Tableau résumé avec valeurs-p, degrés de liberté et erreur-types corrigées
 summary(fit)
-
-## -----------------------------------------------------------------------------
-library(ggplot2)
-library(dplyr)
-library(patchwork)
-data(vote, package = "hecmulti")
 
 ## -----------------------------------------------------------------------------
 data(vote, package = "hecmulti")
@@ -48,7 +46,6 @@ multi1 <- nnet::multinom(
   trace = FALSE)     # infos sur convergence
 
 
-## -----------------------------------------------------------------------------
 # Tableau résumé de l'ajustement
 summary(multi1)
 # Estimations des coefficients
@@ -63,8 +60,6 @@ predict(multi1, type = "probs")
 # Prédiction: classe la plus susceptible
 predict(multi1, type = "class")
 
-
-## -----------------------------------------------------------------------------
 # Modèle avec uniquement l'ordonnée à l'origine (~ 1)
 # Il faut qu'on utilise les mêmes données pour la comparaison!
 multi0 <- nnet::multinom(catvote ~ 1,
@@ -75,20 +70,20 @@ multi0 <- nnet::multinom(catvote ~ 1,
 # Test de rapport de vraisemblance
 anova(multi0, multi1)
 
-## -----------------------------------------------------------------------------
 # Modèle logistique à cote proportionnelle
 with(vote, is.ordered(catvote))
 multi2a <- MASS::polr(
-  catvote ~ sexe,
+  catvote ~ sexe, # formule
   data = vote,
   subset = age > 30,
   weights = poids,
   method = "logistic",
-  Hess = TRUE)
+  Hess = TRUE) # Calculer la hessienne (pour erreurs-types)
+# message d'avertissement en raison de poids non-entiers
+# (vous pouvez les ignorer sans conséquence)
+
 summary(multi2a)
 
-
------------------------------------------------------------------------------
 # IC pour beta_x (vraisemblance profilée)
 confint(multi2a)
 
@@ -101,18 +96,17 @@ coef(multi2a)
 # Ordonnées à l'origine:
 multi2a$zeta
 
-
-## -----------------------------------------------------------------------------
+# Modèle de régression logistique multinomiale, avec la même formule
 multi2b <- nnet::multinom(
    catvote ~ sexe,
-   data = vote,  
+   data = vote,
    subset = age > 30,
-   weights = poids, 
+   weights = poids,
    trace = FALSE)
-   
+
 # Combien de paramètres de plus avec modèle logistique?
 # Même nombre d'ordonnées à l'origine, mais pour les p variables explicatives
-# (K-1)*p vs p  paramètres, une différence de (K-2) * p 
+# (K-1)*p vs p  paramètres, une différence de (K-2) * p
 difddl <- (length(multi2a$zeta) - 1) * length(coef(multi2a))
 # Valeur-p du test de rapport de vraisemblance
 # Probabilité qu'une variable khi-deux avec ddl(0)-ddl(1)
@@ -122,25 +116,9 @@ pchisq(q = deviance(multi2a) - deviance(multi2b),
        lower.tail = FALSE)
 
 
-## -----------------------------------------------------------------------------
-multi3a <- MASS::polr(
-  catvote ~ age,
-  data = vote,
-  subset = age > 30,
-  weights = poids,
-  method = "logistic",
-  Hess = TRUE)
-multi3b <- nnet::multinom(catvote ~ age,
-  data = vote,  subset = age > 30,
-  weights = poids, trace = FALSE)
-# Valeur-p du test de rapport de vraisemblance
-pval <- pchisq(q = deviance(multi3a) - deviance(multi3b),
-       df = length(coef(multi2a)),
-       lower.tail = FALSE)
+# Nouveau modèle, cette fois avec la variable âge
+# On recentre la variable explicative pour faciliter l'optimisation
 
-
-## -----------------------------------------------------------------------------
-library(MASS)
 multi3a <- MASS::polr(
   catvote ~ scale(age, scale = FALSE),
   data = vote,
@@ -156,6 +134,11 @@ multi3b <- nnet::multinom(
   weights = poids,
   Hess = TRUE,
   trace = FALSE)
+# Valeur-p du test de rapport de vraisemblance
+pval <- pchisq(q = deviance(multi3a) - deviance(multi3b),
+       df = length(coef(multi2a)),
+       lower.tail = FALSE)
+# calcul des prédictions à l'échelle des probabilités pour chaque modèle
 xpred <- seq(30, 95, by = 0.1) - mean(vote$age)
 nobs <- length(xpred)
 pred1 <- predict(multi3b,
