@@ -26,6 +26,7 @@ include-in-header:
         \usepackage{mathrsfs}
 ---
 
+<!--
 # Données manquantes et inférence
 
 
@@ -33,6 +34,7 @@ include-in-header:
 - On ne peut **pas** les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
 - On considère des méthodes d'imputation qui remplacent les valeurs manquantes.
 
+-->
 
 # Données manquantes
 

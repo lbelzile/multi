@@ -4,8 +4,8 @@ title: "Examen intra"
 
 L’examen intratrimestriel est d'une durée de 180 minutes. Aucune documentation écrite n’est permise.
 
-L’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non
-programmable est autorisée.
+L’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non programmable est autorisée.
 
+[Téléchargez le PDF de l'examen de pratique](MATH60602-examen_intra_pratique.pdf) et le [solutionnaire](MATH60602-examen_intra_pratique_solutions.pdf)
 
 L'examen compte pour 30% de la note finale du cours.
