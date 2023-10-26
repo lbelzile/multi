@@ -83,11 +83,13 @@ Cas 3: données manquantes de façon non-aléatoire (*missing not at random*): l
 
 Exemple: une personne transgenre ne répond pas à la question genre (si seulement deux choix, homme/femme) et aucune autre question ne se rattache au genre ou à l'identité sexuelle. 
 
-# Comment déterminer le type de données manquantes
+# Type de données manquantes
 
-Une personne ne divulgue pas son salaire? Données manquante de manière aléatoire ou non aléatoire?
+Comment déterminer le type de données manquantes?
 
-Hypothèse pas testable, dépend du contexte et des variables auxiliaires disponibles.
+Par exemple, si une personne ne divulgue pas son salaire, est ce qu les données sont manquantes de manière aléatoire ou non aléatoire?
+
+L'hypothèse pas testable, la réponse dépend du contexte et des variables auxiliaires disponibles.
 
 # Valeur logique
 
@@ -217,22 +219,10 @@ Imputation: remplacer les valeurs manquantes par une valeur judicieuse pour *com
 
 > *Le concept d'imputation est à la fois séduisant et dangereux*. (Dempster et Rubin, 1983)
 
- Par exemple, on remplacer la valeur manquante par la moyenne (variables continues) ou le mode (variables catégorielles).
+On distinguera 
 
-Approche pas recommandée (pourquoi?)
-
-
-# Faut-il toujours imputer?
-
-Il faut utiliser son jugement. 
-
-
-Une observation imputée ne remplacera jamais une vraie observation.
-
-- Si la proportion d'observations manquantes est petite (moins de 5\%), on pourrait faire une analyse avec les cas complets (et valider au besoin en utilisant l'imputation multiple).
-- Si la proportion de  valeurs manquantes est 30\%  et que cette proportion baisse à 3\% lorsque vous éliminez quelques variables peu importantes pour votre étude, alors procédez à leur élimination.
-
-
+- l'imputation déterministe (par exemple, remplacer les valeurs manquantes par la moyenne) versus aléatoire 
+- l'imputation simple (une copie) versus multiple (plusieurs imputations)
 
 # Imputation par la moyenne
 
@@ -309,14 +299,6 @@ library(patchwork)
 g2 + g1 
 ```
 
-
-# Récapitulatif
-
-- Les données manquantes réduisent la quantité d'information disponible et augmentent l'incertitude.
-- On ne peut **pas** les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
-- On distingue plusieurs types de mécanismes qui génèrent des données manquantes.
-- Nous couvrirons les méthodes d'imputation dans le cadre de la régression logistique.
-
 # Imputation aléatoire
 
 Considérons le cas d'une régression logistique pour une variable explicative binaire.
@@ -329,6 +311,18 @@ Plutôt que d'assigner à la classe la plus probable, une prédiction aléatoire
 pred <- 0.3 #probabilité de succès
 rbinom(n = 15, size = 1, prob = pred)
 ```
+
+
+# Faut-il toujours imputer?
+
+Il faut utiliser son jugement. 
+
+
+Une observation imputée ne remplacera jamais une vraie observation.
+
+- Si la proportion d'observations manquantes est petite (moins de 5\%), on pourrait faire une analyse avec les cas complets (et valider au besoin en utilisant l'imputation multiple).
+- Si la proportion de  valeurs manquantes est 30\%  et que cette proportion baisse à 3\% lorsque vous éliminez quelques variables peu importantes pour votre étude, alors procédez à leur élimination.
+
 
 # Problèmes de l'imputation simple
 
@@ -376,7 +370,7 @@ knitr::kable(manq,
 #| echo: false
 #| eval: true
 #| out-width: '50%'
-#| fig-cap: "Configurations des valeurs manquantes pour  `manquantes`."
+#| fig-cap: "Les noms des variables sont indiquées au dessus, le nombre total de valeurs manquantes par variable en dessous, le nombre d’observations pour chaque configuration de valeurs manquantes à gauche et le nombre de variables avec des valeurs manquantes par configuration à droitef."
 puzle <- mice::md.pattern(hecmulti::manquantes[,1:6], 
                           plot = TRUE)
 ```
@@ -410,34 +404,28 @@ On estime les paramètres du modèle séparément pour chacun des $K$ ensembles 
 - $\widehat{\theta}_k$ pour l'estimation du paramètre $\theta$ dans l'échantillon $k$ et
 - $\widehat{\sigma}_k^2=\mathsf{Va}(\widehat{\theta}_k)$ pour l'estimation de la variance de $\widehat{\theta}_k$. 
 
-# Estimation du paramètre moyen
+# Estimations
 
-L'estimation finale de $\theta$, dénotée $\widehat{\theta}$, est obtenue tout simplement en faisant la moyenne des estimations de tous les modèles, c'est-à-dire,
-\begin{align*}
-\widehat{\theta} = \frac{\widehat{\theta}_1 + \cdots + \widehat{\theta}_K}{K}.
-\end{align*}
+L'estimation finale de $\theta$, dénotée $\widehat{\theta}$, est obtenue tout simplement en faisant la moyenne des estimations de tous les modèles.
 
-# Estimation des erreurs-types
+Pour la variance de $\widehat{\theta}$, on calcule la somme de
 
-Une estimation ajustée de la variance de $\widehat{\theta}$ est 
-\begin{align*}
-\mathsf{Va}(\hat{\theta}) &= W+ \frac{K+1}{K}B, 
-\intertext{où}
-W &= \frac{1}{K} \sum_{k=1}^K \widehat{\sigma}^2_k = \frac{\widehat{\sigma}_1^2 + \cdots + \widehat{\sigma}_K^2}{K},\\
-B &= \frac{1}{K-1} \sum_{k=1}^K (\widehat{\theta}_k - \widehat{\theta})^2.
-\end{align*}
+- la moyenne des $K$ variances pour chaque imputation, $\widehat{\sigma}_1^2, \ldots, \widehat{\sigma}_K^2$, appelée variance intra-groupe.
+- la variance des estimations moyennes, $\widehat{\theta}_1, \ldots, \widehat{\theta}_K$, appelée variance inter-groupe.
 
-- $W$ est la moyenne des variances (variance intra-groupe) et
-- $B$ la variance des moyennes (variance inter-groupe).
+En combinant ces deux sources variabilités, on enfle la variance par rapport à l'imputation simple
+
+<!-- 
 
 # Imputation multiple
 
 Des formules analogues existent pour les degrés de liberté, les valeurs-$p$, etc. ainsi que pour la cas multidimensionnel (plusieurs paramètres).
 
-Si on procédait à une seule imputation (même en ajoutant une part d'aléatoire pour essayer de reproduire la variabilité des données), on ne serait pas en mesure d'estimer la variance inter-groupe de l'estimateur.
+Si on procédait à une seule imputation (même en ajoutant une part d'aléatoire pour essayer de reproduire la variabilité des données), on ne serait pas en mesure d'estimer la variance inter-groupe de l'estimateur. 
 
+On peut estimer la fraction de l'information manquante sur $\theta$ avec $(1+1/K)B/\mathsf{Va}(\hat{\theta})$. 
 
-On peut estimer la fraction de l'information manquante sur $\theta$ avec $(1+1/K)B/\mathsf{Va}(\hat{\theta})$.
+-->
 
 
 # Imputation multiple par équations chaînées (MICE)
@@ -496,20 +484,28 @@ summary(fit)
 
 # Résultats {.smaller}
 
+- Les estimations avec les données complètes ont la plus grande incertitude, parce qu'elles utilisent uniquement $n=180$ observations.
+- L'imputation multiple donne $n=500$ observations et prend correctement en compte l'incertitude.
+- L'imputation simple sous-estime l'incertitude des coefficients.
+
 ```{r}
-#| label: manquantsres
+#| label: tbl-manquantsres
 #| eval: true
 #| echo: false
 #| cache: true
+#| tbl-cap: "Estimation des coefficients et erreurs type pour quelques paramètres du modèle."
 library(mice)
 # Intensif en calcul, réduire "m" si nécessaire
+data(manquantes, package = "hecmulti")
+complet <- glm(y ~ ., family = binomial, data = manquantes)
+
 impdata <- mice(data = hecmulti::manquantes,
                 # argument method pour le type de modèles
                 # selon les variables
                 m = 50, # nombre d'imputations
                 seed = 60602, # germe aléatoire
                 printFlag = FALSE)
-
+imp_simple <- glm(y ~ ., family = binomial, data = complete(impdata, 1))
 # ajuste le modèle avec les données imputées
 adj_im <- with(
   data = impdata,
@@ -517,16 +513,40 @@ adj_im <- with(
              family = binomial))
 # combinaison des résultats 
 fit <- pool(adj_im)
-fit_df <- tibble::as_tibble(summary(fit))
-fit_df$p.value <- format.pval(fit_df$p.value,
-                              digits = 1, 
-                              eps = 1e-4)
-knitr::kable(fit_df, 
-             digits = 2, 	
-             booktabs = TRUE,
-             linesep = "",
-             col.names = c("terme","estimation", "erreur-type", "stat", "ddl", "valeur-p")) |>
-  kableExtra::kable_styling()
+
+
+tab <- cbind(summary(complet)$coefficients[2:6,1:2],
+             summary(fit)[2:6,2:3], 
+             summary(imp_simple)$coefficients[2:6,1:2])
+colnames(tab) <- paste0(rep(c("est","stderr"), length.out = 6), rep(1:3, each = 2))
+
+library(gt)
+tab |>
+  gt() |>
+  fmt_number(columns = everything(), decimals = 2) |>
+  cols_label(
+    starts_with("est") ~ "coef.",
+    starts_with("stderr") ~ "err. type"
+  ) |>
+   tab_spanner(
+    label = "imputation multiple",
+    columns = 3:4) |>
+   tab_spanner(
+    label = "données complètes",
+    columns = 1:2) |>
+  tab_spanner(
+    label = "imputation simple",
+    columns = 5:6)|>
+  as_latex()
+# fit_df_mi <- tibble::as_tibble(summary(fit))
+# fit_df_mi$p.value <- format.pval(fit_df$p.value,
+#                               digits = 1, 
+#                               eps = 1e-4)
+# knitr::kable(gt_tbl, 
+#              digits = 2, 	
+#              booktabs = TRUE,
+#              linesep = "") |>
+#   kableExtra::kable_styling()
 ```
 
 # Récapitulatif
@@ -549,43 +569,13 @@ Traitement spécial pour erreurs-type, degrés de liberté, valeurs-$p$ et inter
 
 
 
-# Régression pour données multinomiale
-
-On considère une variable réponse catégorielle avec $K \ge 2$ modalités.
-
-**Objectif**: modéliser la probabilité de chaque catégorie de la variable réponse.
-
-Soit la probabilité d'appartenir à la modalité $k$, $$p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).$$ 
-
-La somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
-
-# Modèle multinomial logistique 
-
-Comme avec la régression logistique, on fixe une catégorie de référence (disons $1$) et on modélise le log de la cote de chacune des autres catégories par rapport à cette référence,
-\begin{align*}
- \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
-\end{align*}
-
-- Avec $K$ modalités et $p$ variables explicatives, on obtiendra $(K-1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
-
-L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
-
-# Modèle logistique multinomial et probabilités
-
-On peut aussi exprimer le modèle en termes des probabilités, 
-\begin{align*}
- p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
-\end{align*}
-où $\eta_{ij}$ est le prédicteur linéaire de l'individu $i$ pour le log de la cote de $Y_i=j$ versus la référence $Y_i=1$. On fixe $\eta_{i1}=0$.
-
-
 # Taux de participation lors des élections américaines
 
 Les [données](https://github.com/fivethirtyeight/data/tree/master/non-voters) de cet exemple sont tirées d'un sondage Ipsos réalisé pour le site de nouvelles *FiveThirtyEight*. 
 
 La base de données `vote` contient 5837 observations avec les pondérations associées.
 
-Nous allons modéliser l'intention de vote, `catvote` à l'aide d'une régression logistique multinomiale.
+Nous allons modéliser l'intention de vote, `catvote` à l'aide d'une régression logistique multinomiale. Il y a trois modalités possible (rarement ou jamais, occasionnellement et toujours).
 
 # Analyse exploratoire
 
@@ -769,6 +759,36 @@ ggplot(data = vote,
 Notez le comportement des jeunes voteurs (bimodal). Ces personnes n'ont souvent eu qu'une seule occasion de voter...
 
 
+# Régression pour données multinomiale
+
+On considère une variable réponse catégorielle avec $K \ge 2$ modalités.
+
+**Objectif**: modéliser la probabilité de chaque catégorie de la variable réponse.
+
+Soit la probabilité d'appartenir à la modalité $k$, $$p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).$$ 
+
+La somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
+
+# Modèle multinomial logistique 
+
+Comme avec la régression logistique, on fixe une catégorie de référence (disons $1$) et on modélise le log de la cote de chacune des autres catégories par rapport à cette référence,
+\begin{align*}
+ \ln\left(\frac{p_{ij}}{p_{i1}}\right) = \eta_{ij} = \beta_{0j} + \cdots + \beta_{pj} \mathrm{X}_{ip}, \quad (j=2, \ldots, K).
+\end{align*}
+
+- Avec $K$ modalités et $p$ variables explicatives, on obtiendra $(K-1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
+
+L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
+
+# Modèle logistique multinomial et probabilités
+
+On peut aussi exprimer le modèle en termes des probabilités, 
+\begin{align*}
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
+\end{align*}
+où $\eta_{ij}$ est le prédicteur linéaire de l'individu $i$ pour le log de la cote de $Y_i=j$ versus la référence $Y_i=1$. On fixe $\eta_{i1}=0$.
+
+
 # Ajustement du modèle
 
 La fonction `multinom` du paquet `nnet` ajuste le modèle multinomial logistique.
@@ -815,13 +835,30 @@ Le modèle avec uniquement l'ordonnée à l'origine possède $K-1$ paramètres.
 Il retourne comme probabilité prédite la proportion empirique de chaque catégorie.
 
 ```{r}
-#| eval: false
+#| eval: true
 #| echo: true
-multi0 <- nnet::multinom(catvote ~ 1,
-                         weights = poids,
-			 subset = age > 30,
-                         data = vote,
-                         trace = FALSE)
+multi_cst <- nnet::multinom(
+  catvote ~ 1,
+  weights = poids,
+  subset = age > 30,
+  data = vote,
+  trace = FALSE)
+head(predict(multi_cst, type = "probs"), n = 3)
+```
+
+
+# Tests de rapport de vraisemblance
+
+On peut comparer des modèles emboîtés avec la fonction `anova`: ici, on compare le modèle complet au même modèle, moins la variable `sexe`.
+
+```{r}
+#| eval: false
+multi0 <- nnet::multinom(
+  catvote ~ age + race + revenu + educ + affiliation,
+  weights = poids,
+  subset = age > 30,
+  data = vote,
+  trace = FALSE)
 # Test de rapport de vraisemblance
 anova(multi0, multi1)
 ```
@@ -829,15 +866,22 @@ anova(multi0, multi1)
 ```{r}
 #| eval: true
 #| echo: false
-multi0 <- nnet::multinom(catvote ~ 1,
-			 subset = age > 30,
-                         weights = poids,
-                         data = vote,
-                         trace = FALSE)
+multi0 <- nnet::multinom(
+  catvote ~ age + race + revenu + educ + affiliation,
+  weights = poids,
+  subset = age > 30,
+  data = vote,
+  trace = FALSE)
 # Test de rapport de vraisemblance
 options(knitr.kable.NA = '')
-knitr::kable(anova(multi0, multi1)[,-1], digits = 2)
+knitr::kable(
+  anova(multi0, multi1)[,-c(1,4)], 
+  col.names = c("ddl resid", "deviance", "ddl","stat", "valeur-p"), 
+  booktabs = TRUE,
+  digits = 2)
 ```
+
+La différence est significative à niveau 5%, l'effet de `sexe` est non null.
 
 # Prédictions
 
@@ -867,6 +911,23 @@ Avec les prédictions, on peut comparer les observations et les prédictions à 
 - Le taux de bonne classification est toujours valide
 - Il existe des extensions multidimensionnelles de l'aire sous la courbe
 
+# Matrice de confusion
+
+```{r}
+#| tbl-cap: "Prédictions (lignes) versus observations (colonnes) pour le résultat du sondage pour les personnes âgées de plus de 30 ans."
+#| label: tbl-confusmat
+#| eval: true
+#| echo: false
+catvote <- with(vote, catvote[age > 30])
+levels(catvote) <- c("rare", "occas.", "toujours")
+pred <- predict(multi1, type = "class")
+levels(pred) <- c("rare", "occas.", "toujours")
+tab <- table(pred, catvote)
+knitr::kable(tab, digits = 0, booktabs = TRUE)
+```
+
+Le taux de bonne classification est `r sum(diag(tab))`/`r sum(tab)`=`r round(sum(diag(tab))/sum(tab), 2)`.
+
 # Commentaires
 
 - Contrairement à la régression logistique, le nombre de paramètres augmente rapidement avec le nombre de variables explicatives, $p$.
@@ -881,7 +942,10 @@ Outre la régression multinomiale logistique, on peut également considérer la 
 - modèle plus parcimonieux que le modèle multinomial logistique,
 - mais au prix de postulats supplémentaires...
 
-En **R**, la variable réponse doit être de classe `ordered`, un facteur dont les niveaux sont ordonnés en ordre croissant.
+Voir les notes de cours pour plus de détails.
+
+<!--
+En **R**, la variable réponse doit être de classe `ordered`, un facteur dont les niveaux sont ordonnés en ordre croissant. Voir
 ```{r}
 #| echo: true
 #| eval: true
@@ -1178,6 +1242,8 @@ ggplot2::ggplot(
 
 \normalsize
 
+-->
+
 # Récapitulatif
 
 - La régression multinomiale logistique pour une variable catégorielle à $K$ niveaux est une extension directe de la régression logistique pour données binaires
@@ -1207,9 +1273,12 @@ Côté classification, on va règle générale assigner à la classe la plus pro
 - il existe des équivalents multidimensionnels directs à ce qu'on a couvert (matrice de confusion, taux de bonne classification, gain, etc.) 
 - certains concepts (sensibilité, spécificité, fonction d'efficacité du récepteur) ne sont en revanche pas applicables ou n'ont pas d'équivalent.
 
+<!--
 # Récapitulatif
 
 Le modèle cumulatif à cote proportionnelle est une simplification du modèle multinomial pour des **données ordinales**.
 
 - On suppose que l'effet des variables est le même pour la cote de la survie de chaque modalité.
 - Moins de paramètres, mais postulat à vérifier (via test de rapport de vraisemblance).
+
+-->
