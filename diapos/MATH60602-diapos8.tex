@@ -45,7 +45,6 @@
 }
 
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -55,14 +54,18 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
-  \setmathfont[]{Latin Modern Math}
 \fi
+\usepackage{lmodern}
 \usecolortheme{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
 \useinnertheme{Flip}
 \useoutertheme{Flip}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[]{VisbyCF-Medium}
+  \setsansfont[]{Latin Modern Sans}
+  \setmathfont[]{Latin Modern Math}
+\fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -208,10 +211,12 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -235,7 +240,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, breakable, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, frame hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de survie}
 \protect\hypertarget{analyse-de-survie}{}
@@ -486,7 +491,7 @@ Les données \texttt{survie1} contiennent les variables suivantes.
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.4167}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2250}}@{}}
-\toprule()
+\toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 réponse \(Y\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
@@ -496,7 +501,7 @@ comparaison de deux groupes
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
 modèle général
 \end{minipage} \\
-\midrule()
+\midrule\noalign{}
 \endhead
 continue & moyenne & test-\(t\) pour deux échantillons & régression
 linéaire \\
@@ -505,7 +510,7 @@ logistique \\
 temps de survie censuré à droite & fonction de survie, temps de survie
 médian & test log-rang, test de Wilcoxon généralisé (Gehan) & modèle de
 Cox \\
-\bottomrule()
+\bottomrule\noalign{}
 \end{longtable}
 \end{frame}
 
@@ -516,41 +521,6 @@ survie \(t\). La fonction de survie, \begin{align*}
 S(t)= \Pr(T > t) = 1-F(t),
 \end{align*} donne la probabilité que le temps de survie soit supérieur
 à \(t\).
-\end{frame}
-
-\begin{frame}{Fonction de risque}
-\protect\hypertarget{fonction-de-risque}{}
-La \textbf{fonction de risque} (en anglais, \emph{hazard}) est
-\begin{align*}
-h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
-\end{align*} où \(f(t)\) est la fonction de densité (pour \(T\) continu)
-ou de masse pour \(T\) discret.
-
-Plus le risque est élevé au temps \(t\), plus l'événement est
-susceptible d'arriver.
-\end{frame}
-
-\begin{frame}{Fonction de risque (bis)}
-\protect\hypertarget{fonction-de-risque-bis}{}
-Dans le cas discret où le temps peut seulement prendre les valeurs
-\(0, 1, 2, \ldots\), le risque est \begin{align*}
-h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
-\end{align*} la probabilité conditionnelle que l'événement survienne au
-temps \(t\), étant donné qu'il n'était pas survenu juste avant.
-\end{frame}
-
-\begin{frame}{Risque vs survie}
-\protect\hypertarget{risque-vs-survie}{}
-Les fonctions de survie et de risque sont intimement reliées, avec
-\begin{align*}
-h(t) = - \frac{\mathrm{d} \ln\{S(t)\}}{\mathrm{d} t}, \qquad \qquad S(t) = \exp \left\{ -\int_0^t h(u) \mathrm{d} u\right\}.
-\end{align*}
-
-Cette équation sert à illustrer qu'un modèle pour la fonction de survie
-spécifie une fonction de risque (et vice-versa).
-
-Un profil avec un risque plus élevé (pour tout temps \(t\)) aura une
-survie plus courte.
 \end{frame}
 
 \begin{frame}{Estimateur de Kaplan--Meier}
@@ -617,7 +587,14 @@ fonction de survie pour chaque temps d'échec (événement).
 
 \begin{frame}{Tableau résumé (sortie tronqué)}
 \protect\hypertarget{tableau-ruxe9sumuxe9-sortie-tronquuxe9}{}
-\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\hypertarget{tbl-survie1-tableau}{}
+\begin{table}
+\caption{\label{tbl-survie1-tableau}Estimation de la fonction de survie (Kaplan--Meier) pour les données de
+survie d'abonnement. }\tabularnewline
+
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{rrrrrr}
 \toprule
 temps & nb à risque & nb échecs & nb cumul. & survie & erreur-type\\
 \midrule
@@ -634,7 +611,8 @@ temps & nb à risque & nb échecs & nb cumul. & survie & erreur-type\\
 202 & 6 & 1 & 332 & 0.1697 & 0.039\\
 216 & 2 & 2 & 334 & 0.0000 & \\
 \bottomrule
-\end{tabu}
+\end{tabular}}
+\end{table}
 
 \footnotesize
 
@@ -979,6 +957,41 @@ explicatives à proprement parler.
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Fonction de risque}
+\protect\hypertarget{fonction-de-risque}{}
+La \textbf{fonction de risque} (en anglais, \emph{hazard}) est
+\begin{align*}
+h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
+\end{align*} où \(f(t)\) est la fonction de densité (pour \(T\) continu)
+ou de masse pour \(T\) discret.
+
+Plus le risque est élevé au temps \(t\), plus l'événement est
+susceptible d'arriver.
+\end{frame}
+
+\begin{frame}{Fonction de risque (bis)}
+\protect\hypertarget{fonction-de-risque-bis}{}
+Dans le cas discret où le temps peut seulement prendre les valeurs
+\(0, 1, 2, \ldots\), le risque est \begin{align*}
+h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
+\end{align*} la probabilité conditionnelle que l'événement survienne au
+temps \(t\), étant donné qu'il n'était pas survenu juste avant.
+\end{frame}
+
+\begin{frame}{Risque vs survie}
+\protect\hypertarget{risque-vs-survie}{}
+Les fonctions de survie et de risque sont intimement reliées, avec
+\begin{align*}
+h(t) = - \frac{\mathrm{d} \ln\{S(t)\}}{\mathrm{d} t}, \qquad \qquad S(t) = \exp \left\{ -\int_0^t h(u) \mathrm{d} u\right\}.
+\end{align*}
+
+Cette équation sert à illustrer qu'un modèle pour la fonction de survie
+spécifie une fonction de risque (et vice-versa).
+
+Un profil avec un risque plus élevé (pour tout temps \(t\)) aura une
+survie plus courte.
+\end{frame}
+
 \begin{frame}{Modèle à risques proportionnels de Cox}
 \protect\hypertarget{moduxe8le-uxe0-risques-proportionnels-de-cox}{}
 Si on veut inclure l'effet de variable explicatives, on se tourne vers
@@ -1231,7 +1244,7 @@ constants dans le temps avec
 
 \hypertarget{tbl-coxph-hypothese}{}
 \begin{table}
-\caption{\label{tbl-coxph-hypothese}Tests du score avec valeur-p basée sur la loi nulle khi-deux. }\tabularnewline
+\caption{\label{tbl-coxph-hypothese}Tests du score avec valeur-\(p\) basée sur la loi nulle khi-deux. }\tabularnewline
 
 \centering
 \begin{tabular}{lrrl}

@@ -243,39 +243,6 @@ S(t)= \Pr(T > t) = 1-F(t),
 \end{align*}
 donne la probabilité que le temps de survie soit supérieur à $t$.
 
-# Fonction de risque
-
-
-La **fonction de risque** (en anglais, _hazard_) est 
-\begin{align*}
-h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
-\end{align*}
-où $f(t)$ est la fonction de densité (pour $T$ continu) ou de masse pour $T$ discret.
-
-
-Plus le risque est élevé au temps $t$, plus l'événement est susceptible d'arriver.
-
-# Fonction de risque (bis)
-
-Dans le cas discret où le temps peut seulement prendre les valeurs $0, 1, 2, \ldots$, le risque est
-\begin{align*}
-h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
-\end{align*}
-la probabilité conditionnelle que l'événement survienne au temps $t$, étant donné qu'il n'était pas survenu juste avant.
-
-
-# Risque vs survie
-
-
-Les fonctions de survie et de risque sont intimement reliées, avec
-\begin{align*}
-h(t) = - \frac{\mathrm{d} \ln\{S(t)\}}{\mathrm{d} t}, \qquad \qquad S(t) = \exp \left\{ -\int_0^t h(u) \mathrm{d} u\right\}.
-\end{align*}
-
-Cette équation sert à illustrer qu'un modèle pour la fonction de survie spécifie une fonction de risque (et vice-versa).
-
-Un profil avec un risque plus élevé (pour tout temps $t$) aura une survie plus courte.
-
 # Estimateur de Kaplan--Meier
 
 L'estimateur de Kaplan--Meier est un estimateur de la fonction de survie en présense de censure à droite. 
@@ -361,7 +328,7 @@ knitr::kable(km_subtab,
                 booktabs = TRUE, 
                 longtable = FALSE,
                 row.names = FALSE) |>
-  kableExtra::kable_styling(full_width = TRUE)
+  kableExtra::kable_styling(latex_options = 'scale_down')
 ```
 
 \footnotesize 
@@ -572,6 +539,40 @@ L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables explicative
 
 - Le test du log-rang permet de valider si plusieurs fonctions de survie sont égales (en tout temps).
 - On peut estimer la fonction de survie indépendamment pour chaque modalité d'une variable explicative catégorielle en stratifiant: cela réduit la taille de l'échantillon dans chaque strate.
+
+
+# Fonction de risque
+
+
+La **fonction de risque** (en anglais, _hazard_) est 
+\begin{align*}
+h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
+\end{align*}
+où $f(t)$ est la fonction de densité (pour $T$ continu) ou de masse pour $T$ discret.
+
+
+Plus le risque est élevé au temps $t$, plus l'événement est susceptible d'arriver.
+
+# Fonction de risque (bis)
+
+Dans le cas discret où le temps peut seulement prendre les valeurs $0, 1, 2, \ldots$, le risque est
+\begin{align*}
+h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
+\end{align*}
+la probabilité conditionnelle que l'événement survienne au temps $t$, étant donné qu'il n'était pas survenu juste avant.
+
+
+# Risque vs survie
+
+
+Les fonctions de survie et de risque sont intimement reliées, avec
+\begin{align*}
+h(t) = - \frac{\mathrm{d} \ln\{S(t)\}}{\mathrm{d} t}, \qquad \qquad S(t) = \exp \left\{ -\int_0^t h(u) \mathrm{d} u\right\}.
+\end{align*}
+
+Cette équation sert à illustrer qu'un modèle pour la fonction de survie spécifie une fonction de risque (et vice-versa).
+
+Un profil avec un risque plus élevé (pour tout temps $t$) aura une survie plus courte.
 
 
 
