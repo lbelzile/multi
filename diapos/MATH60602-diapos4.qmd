@@ -93,8 +93,8 @@ str(dbm)
 #| echo: false
 #| warning: false
 dbm_sub <- dbm |>
-  dplyr::filter(test == 0) |> # données d'apprentissage
-  dplyr::select(!test) # en
+  dplyr::filter(test == 0) |>
+  dplyr::select(!test)
 knitr::kables(list(
 knitr::kable(table(dbm_sub$x1), 
              booktabs = TRUE, 
@@ -257,9 +257,9 @@ Idée initiale:
 
 # Approximation
 
-On essaie d'estimer la moyenne de la variable cible `ymontant` de la manière le plus flexible possible. 
+Soit $\mathsf{E}(Y \mid \mathbf{X}) = f(\mathrm{X}_1, \ldots, \mathrm{X}_p)$ pour $f$ une fonction inconnue supposée lisse.
 
-Pour ce faire, on pourrait aussi considérer tous les termes quadratiques, et les interactions d'ordre 2:
+On peut approximer la fonction en faisant une expansion (série de Taylor) de degré 2 (tous les termes quadratiques, et les interactions d'ordre 2):
 
 - on n'inclut pas le carré de variables indicatrices binaires (car $0^2=0, 1^2=1$).
 - idem pour les interactions entre indicateurs qui représentent des niveaux d'une même variable catégorielle.
@@ -285,7 +285,7 @@ mod_complet <- lm(formule, data = dbm_a)
 matmod <- model.matrix(mod_complet)
 ```
 
-Le modèle complet est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` variables.
+Le modèle est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` variables.
 
 # Fléau de la dimensionalité
 
@@ -414,7 +414,7 @@ rec_seq <-
 which.min(summary(rec_seq)$bic)
 ```
 
-# Sélection séquentielle avec critères d'information
+# Sélection séquentielle avec critères d'informations en **R** 
 \footnotesize
 
 La procédure est plus longue à rouler (car les modèles linéaires sont ajustés).
@@ -515,10 +515,7 @@ plot(cv_output)
 
 # Trajectoire LASSO
 
-On choisit typiquement $\lambda$ par validation croisée, soit
-
-- le modèle avec la plus valeur de $\mathsf{EQM}_{\mathrm{VC}}$.
-- le modèle le plus parsimonieux à au plus un erreur-type de ce dernier (pénalité plus élevée, plus de coefficients nuls)
+On choisit typiquement $\lambda$ par validation croisée en appliquant la règle du un écart-type (le première modèle à un erreur-type de la valeur minimale).
 
 ```{r, out.width = '80%', fig.align='center'}
 knitr::include_graphics("figures/fig-lassopath.pdf")
@@ -536,7 +533,7 @@ knitr::include_graphics("figures/fig-lassopath.pdf")
 #| fig.height: 5
 lasso_path <- 
   glmnet::glmnet(
-    x = as.matrix(matmod),
+    x = as.matrix(as.matrix(matmod)),
     y = dbm_a$ymontant,
     alpha = 1, 
     lambda = seq(from = 0.01, to = 10, by = 0.01))
@@ -593,54 +590,54 @@ Peu d'hétérogénéité, hors cette dernière est présente
 
 - (rappelez-vous l'incertitude de la validation croisée)
 
-<!-- # Moyenne de modèles  -->
+# Moyenne de modèles 
 
-<!-- **Solution**: générer nous-mêmes $B$ échantillons différents à partir de l‘échantillon original. -->
+**Solution**: générer nous-mêmes $B$ échantillons différents à partir de l‘échantillon original.
 
-<!-- Autoamorçage nonparamétrique: échantillon choisi au hasard et avec remise dans l’échantillon original.  -->
+Autoamorçage nonparamétrique: échantillon choisi au hasard et avec remise dans l’échantillon original. 
 
-<!-- - Une même observation peut être sélectionnée plus d’une fois tandis qu’une autre peut ne pas être sélectionnée du tout. -->
+- Une même observation peut être sélectionnée plus d’une fois tandis qu’une autre peut ne pas être sélectionnée du tout.
 
-<!-- **Défaut**: très coûteux en calcul -->
+**Défaut**: très coûteux en calcul
 
-<!-- # Moyennes de modèles en pseudocode -->
+# Moyennes de modèles en pseudocode
 
-<!-- 1. Échantillonnage aléatoire simple avec remise de $B$ jeux de données  -->
+1. Échantillonnage aléatoire simple avec remise de $B$ jeux de données 
 
-<!-- Pour chaque jeu de données étiqueté $b=1, \ldots, B$: -->
+Pour chaque jeu de données étiqueté $b=1, \ldots, B$:
 
-<!--    2. Effectuer la sélection de variables -->
-<!--    3. Sauvegarder les coefficients (0 si la variable est absente) -->
+   2. Effectuer la sélection de variables
+   3. Sauvegarder les coefficients (0 si la variable est absente)
 
-<!-- Mettre en commun les résultats: -->
+Mettre en commun les résultats:
 
-<!-- 4. Calculer la moyenne des coefficients -->
-<!-- 5. Obtenir les prédictions -->
+4. Calculer la moyenne des coefficients
+5. Obtenir les prédictions
 
-<!-- \footnotesize -->
+\footnotesize
 
-<!-- Voir code en ligne -->
+Voir code en ligne
 
-<!-- \normalsize -->
+\normalsize
 
 # Évaluation de la performance
 
 En incluant uniquement les variables de base
 
-| nb variables | $\mathsf{EQM}$ |méthode |
+| nombre de variables | $\mathsf{EQM}$ |méthode |
 |:----:|:-----:|:-----|
-| 15 | 25.69 | toutes les variables |
-| 12 | 25.53 | exhaustive - $\mathsf{AIC}$ |
-| 10 | 25.04 | exhaustive - $\mathsf{BIC}$ |
+| 15 | 25,69 | toutes les variables |
+| 12 | 25,53 | exhaustive - $\mathsf{AIC}$ |
+| 10 | 25,04 | exhaustive - $\mathsf{BIC}$ |
 
 
 En incluant les termes de base, les carrés et les interactions d'ordre 2.
 
-| nb variables | $\mathsf{EQM}$ | méthode |
+| nombre de variables | $\mathsf{EQM}$ | méthode |
 |:---:|:-------|:-------------------------|
-| 104 | 19.63  | toutes les variables     |
+| 104 | 19,63  | toutes les variables     |
 | 21  | 12     | séquentielle, choix selon $\mathsf{AIC}$ |
-| 15  | 12.31  | séquentielle, choix selon $\mathsf{BIC}$ |
+| 15  | 12,31  | séquentielle, choix selon $\mathsf{BIC}$ |
 | 30  | 12     | LASSO, validation croisée avec 10 groupes |
 
 #  Récapitulatif
@@ -655,11 +652,11 @@ En incluant les termes de base, les carrés et les interactions d'ordre 2.
 
 - La taille du modèle (le nombre de variables explicatives) est restreinte par le nombre d’observations disponibles.
 - En général, il faut s’assurer d’avoir suffisamment d’observations pour estimer de manière fiable les coefficients
-- Porter une attention particulière aux variables binaires et aux interactions avec ces dernières: si les effectifs de certaines modalités sont faibles, il y a danger de surajustement.
+- Porter une attention particulière aux variables binaires et aux interactions avec ces dernières: si les effectifs de certaines modalités sont faibles, il y a danger surajustement.
 
 # Récapitulatif
 
-
+- En pratique, on cherche à essayer plusieurs modèle pour trouver un choix optimal de variables.
 - Une recherche exhaustive garantie le survol du plus grand nombre de modèles possibles, mais est coûteuse
 - On peut effectuer une recherche exhaustive à l'aide d'algorithmes d'optimisation pour un nombre réduit de variables (max 50)
 - Sinon, on a l'option d'utiliser un algorithme glouton qui ne couvre qu'un sous-ensemble de tous les modèles
@@ -680,7 +677,6 @@ Une pénalité particulière (LASSO) contraint certains paramètres à être exa
 
 # Récapitulatif
 
-- En pratique, on cherche à essayer le plus possible de bons modèles pour trouver le choix optimal de variables.
 - On applique le critère de sélection sur la liste de modèles candidats pour retenir celui qui donne la meilleure performance.
-<!-- - Pour éviter une sélection rigide, on peut perturber les données et répéter la procédure pour calculer une moyenne de modèles.  -->
-<!-- - Cette approche est très coûteuse en calcul. -->
+- Pour éviter une sélection rigide, on peut perturber les données et répéter la procédure pour calculer une moyenne de modèles. 
+- Cette approche est très coûteuse en calcul.

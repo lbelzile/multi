@@ -1,6 +1,5 @@
 ---
 title: Installer **R** et RStudio
-format: html
 ---
 
 
@@ -43,12 +42,16 @@ include_graphics("../files/img/install/install-r-windows.png", error = FALSE)
 
 Une fois **R** installée, nous installerons une interface utilisateur graphique, RStudio, pour interagir avec **R**.
 
-1. Naviguez jusqu'à la section de téléchargements gratuits du site de RStudio: <https://posit.co/download/rstudio-desktop/>
+1. Naviguez jusqu'à la section de téléchargements gratuits du site de RStudio: <https://www.rstudio.com/products/rstudio/download/#download>
+2. Le site internet devrait automatiquement détecter votre système d'exploitation (Linux, macOS ou Windows). Cliquez sur le bouton pour lancer le téléchargement:
 
-Naviguez vers le tableau et choisissez la version de RStudio Desktop adéquate.
+```{r, echo=FALSE, out.width="50%"}
+include_graphics("../files/img/install/install-r-rstudio1.png", error = FALSE)
+```
+Sinon, naviguez vers le tableau et choisissez la version de RStudion adéquate.
 
 ```{r, echo=FALSE, out.width="100%"}
-include_graphics("../files/img/install/posit-rstudio-desktop-install.png", error = FALSE)
+include_graphics("../files/img/install/install-r-rstudio2.png", error = FALSE)
 ```
 
 3. Double-cliquez sur le fichier de téléchargement (potentiellement caché dans votre dossier de Téléchargements). Installez comme n'importe lequel autre logiciel.
@@ -73,27 +76,7 @@ include_graphics("../files/img/install/install-r-tidyverse.png", error = FALSE)
 Notez que RStudio  génère le code **R** pour l'installation: `install.packages("tidyverse")`. Vous pourriez utiliser directement cette fonction et faire copier-coller dans la console pour installer les paquets du tidyverse.
 
 
-### Installer Quarto
-
-[Quarto](https://quarto.org/) est un système de publication de documents sous formats (Word, PDF, html) qui combine un bloc d'instructions définissant les paramètres du document (YAML), de même que des blocs codes (**R**, Python, Julia, ...) et des blocs textes ([Markdown](https://www.markdownguide.org/), avec support pour [$\LaTeX$](https://www.latex-project.org/)).
-
-Vous pouvez installer Quarto en visitant le site du projet, en téléchargeant les fichiers d'installation
-
-```{r, echo=FALSE, out.width="70%"}
-include_graphics("../files/img/install/quarto-download.png", error = FALSE)
-```
-
-Une fois l'utilitaire installé, installez le paquet **R** `quarto` via 
-
-```{r}
-#| eval: false
-#| echo: true
-install.packages("quarto")
-```
-
-
-
-### Installer LaTeX via `tinytex`
+### Installer `tinytex`
 
 Quand vous créez un fichier Rmarkdown (.Rmd) ou Quarto (.qmd) pour créer un document reproductible qui inclut calculs et texte et que vous tricotez ce dernier en PDF, **R** utilise le programme de typographie scientifique LaTeX. L'installation la plus aisée pour ce dernier, si votre machine n'a pas déjà de suite LaTeX, est d'installer le paquet [`tinytex`](https://yihui.org/tinytex/) pour obtenir une version minimale qui prend moins d'espace.
 

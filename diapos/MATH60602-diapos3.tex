@@ -45,6 +45,7 @@
 }
 
 \usepackage{amsmath,amssymb}
+\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -54,18 +55,14 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-\usepackage{lmodern}
-\usecolortheme{Flip}
-\usefonttheme{serif} % use mainfont rather than sansfont for slide text
-\useinnertheme{Flip}
-\useoutertheme{Flip}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
   \setmainfont[]{VisbyCF-Medium}
   \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
+\usecolortheme{Flip}
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+\useinnertheme{Flip}
+\useoutertheme{Flip}
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -197,12 +194,10 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -226,7 +221,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, frame hidden, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, boxrule=0pt, interior hidden, frame hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Modèles prédictifs}
 \protect\hypertarget{moduxe8les-pruxe9dictifs}{}
@@ -317,7 +312,7 @@ L'estimation des paramètres
 \(\widehat{\beta}_0, \cdots, \widehat{\beta}_p\) nous donne
 \[\underset{\text{prédiction}}{\widehat{Y}_i} = \widehat{\beta}_0 + \widehat{\beta}_1\mathrm{X}_{i1} \cdots + \widehat{\beta}_p\mathrm{X}_{ip}.\]
 
-On peut approximer l'aléa à l'aide du \textbf{résidu ordinaire}, soit
+On peut approximer l'aléa à l'aide du \textbf{résidu ordinaires}, soit
 \[\underset{\text{résidu ordinaire}}{e_i} = \underset{\text{observation}}{Y_i} - \underset{\text{prédiction}}{\widehat{Y}_i}.\]
 
 \begin{itemize}
@@ -510,14 +505,14 @@ Considérons une variable catégorielle \texttt{cat} avec niveaux
 \texttt{1}, \texttt{2}, et \texttt{3}.
 
 \begin{longtable}[]{@{}ccc@{}}
-\toprule\noalign{}
+\toprule()
 \texttt{cat} & \texttt{cat2} & \texttt{cat3} \\
-\midrule\noalign{}
+\midrule()
 \endhead
 1 & 0 & 0 \\
 2 & 1 & 0 \\
 3 & 0 & 1 \\
-\bottomrule\noalign{}
+\bottomrule()
 \end{longtable}
 
 La catégorie de référence est associée à l'ordonnée à l'origine (quand
@@ -554,7 +549,7 @@ objectifs de l'étude
 un modèle performant
 
 \textbf{Inférence}: estimer l'effet de variables explicatives, effectuer
-des tests d'hypothèses
+des tests d'hypothèse
 
 Pour l'inférence, il est préférable de spécifier le modèle dès le départ
 (devis expérimental) selon des considérations scientifiques et de s'y
@@ -570,8 +565,7 @@ tenir.
 \item
   Omettre des termes importants mène à un \textbf{modèle biaisé}.
 \item
-  Ajouter des termes superflus augmente la \textbf{variabilité} (on
-  estime des zéros).
+  Ajouter des termes superflus augmente la \textbf{variabilité}.
 \end{itemize}
 \end{block}
 \end{frame}
@@ -764,41 +758,12 @@ des coefficients.
 
 \begin{frame}{Critères d'information}
 \protect\hypertarget{crituxe8res-dinformation}{}
-Valables uniquement pour les modèles ajustés par \textbf{maximum de
-vraisemblance}, ils sont de la forme
-
-\begin{align*}
-\mathsf{IC} &= -\text{ajustement} + \text{pénalité} \times\text{nb param} \\
+Les critères d'information sont de la forme \begin{align*}
+\mathsf{IC} &=-2 \ell(\widehat{\boldsymbol{\beta}}, \widehat{\sigma}^2) +\text{pénalité}\times \text{nb param} \\&= n \ln (\widehat{\mathsf{EQM}}) +\text{pénalité}\cdot \text{nb param}+ \text{constante},
 \end{align*}
 
-\begin{itemize}
-\tightlist
-\item
-  On veut maximiser l'ajustement, donc minimiser le premier terme.
-\item
-  La pénalité vient contrebalancer l'amélioration mécanique de
-  l'ajustement quand le modèle a plus de flexibilité.
-\item
-  Plus le critère d'information est petit, meilleur c'est.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Critères d'information}
-\protect\hypertarget{crituxe8res-dinformation-1}{}
-Pour la régression linéaire, on peut réécrire les critères d'information
-sous la forme \begin{align*}
-\mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +2\times \text{nb param}+ \text{constante},\\
-\mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +\ln(n)\times \text{nb param}+ \text{constante},
-\end{align*}
-
-\begin{itemize}
-\item
-  Le critère d'Akaike (\(\text{AIC}\)) utilise une pénalité de 2, le
-  critère bayésien (\(\text{BIC}\)) de \(\ln(n)\).
-\item
-  Le \(\mathsf{BIC}\) (critère Bayésien de Schwarz) pénalise donc
-  davantage que le \(\mathsf{AIC}\) (critère d'Akaike).
-\end{itemize}
+Le critère d'Akaike (\(\text{AIC}\)) utilise une pénalité de 2, le
+critère bayésien (\(\text{BIC}\)) de \(\ln(n)\).
 \end{frame}
 
 \begin{frame}[fragile]{Utiliser les critères d'information}
@@ -806,16 +771,16 @@ sous la forme \begin{align*}
 \begin{itemize}
 \tightlist
 \item
-  Plus la valeur du critère d'information est petite, meilleure est
-  l'adéquation (et donc la performance).
+  Plus la valeur du critère d'information, meilleure est l'adéquation
+  (et donc la performance).
 \item
-  La pénalité assure que les modèles plus complexes ne sont pas
+  La pénalité assure que les modèles plus simples ne sont pas
   systématiquement retournés.
 \item
   Le \(\textsf{BIC}\) retourne toujours des modèles plus parcimonieux
-  (c'est-à-dire avec moins de paramètres) que le \(\textsf{AIC}\).
+  (simples) que le \(\textsf{AIC}\).
 \item
-  Génériques \texttt{AIC} et \texttt{BIC} en \textbf{R}
+  Génériques \texttt{logLik}, \texttt{AIC} et \texttt{BIC} en \textbf{R}
 \end{itemize}
 \end{frame}
 
@@ -831,8 +796,6 @@ sous la forme \begin{align*}
 fonction de l'ordre du polynôme.}
 
 \end{figure}
-
-Les deux critères d'information retournent \(K=3\) comme choix optimal.
 \end{frame}
 
 \begin{frame}{Séparation des données}
@@ -889,13 +852,13 @@ faille.
 \protect\hypertarget{validation-croisuxe9e}{}
 Une autre méthode de rééchantillonage
 
-Diviser l'échantillon en \(M\) groupes d'observations de taille moyenne
+Diviser l'échantillon en \(K\) groupes d'observations de taille moyenne
 égale
 
 \begin{itemize}
 \tightlist
 \item
-  utiliser \(M-1\) groupes pour l'ajustement
+  utiliser \(K-1\) groupes pour l'ajustement
 \item
   estimer la performance avec les données du dernier groupe
 \end{itemize}
@@ -904,16 +867,16 @@ Les regroupements sont aléatoires, tout comme la mesure finale de
 performance!
 \end{frame}
 
-\begin{frame}{Étapes de la validation croisée à \(M\) groupes}
-\protect\hypertarget{uxe9tapes-de-la-validation-croisuxe9e-uxe0-m-groupes}{}
+\begin{frame}{Étapes de la validation croisée à \(K\) groupes}
+\protect\hypertarget{uxe9tapes-de-la-validation-croisuxe9e-uxe0-k-groupes}{}
 \begin{enumerate}
 \tightlist
 \item
-  Diviser l'échantillon au hasard en \(M\) parties
-  \(P_1, P_2, \ldots, P_M\) contenant toutes à peu près le même nombre
+  Diviser l'échantillon au hasard en \(K\) parties
+  \(P_1, P_2, \ldots, P_K\) contenant toutes à peu près le même nombre
   d'observations.
 \item
-  Pour \(j = 1\) à \(M\),
+  Pour \(j = 1\) à \(K\),
 
   \begin{enumerate}
   [i.]
@@ -922,14 +885,14 @@ performance!
     Enlever la partie \(j\).
   \item
     Estimer les paramètres du modèle en utilisant les observations des
-    \(M-1\) autres parties combinées.
+    \(K-1\) autres parties combinées.
   \item
     Calculer la mesure de performance (par exemple la somme du carré des
     erreurs \(\{Y_i - \widehat{Y}_i\}^2\)) de ce modèle pour le groupe
     \(P_j\).
   \end{enumerate}
 \item
-  Combiner les \(M\) estimations de performance pour obtenir une mesure
+  Combiner les \(K\) estimations de performance pour obtenir une mesure
   de performance finale.
 \end{enumerate}
 \end{frame}
@@ -939,23 +902,23 @@ performance!
 \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/validationcroiseeillust-1.pdf}
 \end{frame}
 
-\begin{frame}{Combien de groupes \(M\) pour la validation croisée?}
-\protect\hypertarget{combien-de-groupes-m-pour-la-validation-croisuxe9e}{}
-La validation croisée est plus coûteuse parce qu'on doit ajuster \(M\)
+\begin{frame}{Combien de groupes \(K\) pour la validation croisée?}
+\protect\hypertarget{combien-de-groupes-k-pour-la-validation-croisuxe9e}{}
+La validation croisée est plus coûteuse parce qu'on doit ajuster \(K\)
 fois le modèles
 
 \begin{itemize}
 \tightlist
 \item
-  Pour la régression linéaire, choisir \(M=n\) (\emph{leave-one-out
+  Pour la régression linéaire, choisir \(K=n\) (\emph{leave-one-out
   cross-validation}) permet d'éviter de réajuster le modèle grâce à un
   artifice de calcul.
 \item
-  On recommande habituellement de prendre \(\min\{n^{1/2}, 10\}\)
-  groupes,
+  On recommande habituellement de prendre \(K=\min\{n^{1/2}, 10\}\)
+  groupes.
 \item
-  mais les choix \(M=5\) ou \(M=10\) sont ceux qui revient le plus
-  souvent en pratique.
+  les choix de \(K=5\) ou \(K=10\) sont ceux qui revient le plus souvent
+  en pratique.
 \end{itemize}
 
 \footnotesize
@@ -970,44 +933,33 @@ l'algorithme 6.5 pour une meilleure implémentation.
 \begin{frame}{Validation croisée = résultat aléatoire!}
 \protect\hypertarget{validation-croisuxe9e-ruxe9sultat-aluxe9atoire}{}
 Soit \(\widehat{\mathsf{EQM}}_{\text{VC}}\) l'estimation de l'erreur
-quadratique moyenne obtenue par validation croisée à \(M\) plis pour un
+quadratique moyenne obtenue par validation croisée à \(K\) plis pour un
 modèle \(\mathcal{M}\) donné.
 
-Si on a un nombre similaire d'observations dans chaque groupe:
+Si on a un nombre similaire d'observations dans chaque groupe, on peut
+plutôt
 
 \begin{itemize}
 \tightlist
 \item
-  calculer l'erreur quadratique moyenne de chaque pli,
-  \(\widehat{\mathsf{EQM}}_{\text{VC}, m}\)
+  calculer l'erreur quadratique moyenne de chaque pli, disons
+  \(\widehat{\mathsf{EQM}}_{\text{VC}, k}\)
 \item
-  si \(M\) est suffisamment grand (disons \(M \geq 10\)), on peut
-  estimer l'écart-type empirique de ces moyennes
-  \[ \mathsf{sd} = \frac{1}{M-1} \sum_{m=1}^{M} (\widehat{\mathsf{EQM}}_{\text{VC}, m}-\widehat{\mathsf{EQM}}_{\text{VC}})^2\]
-\item
-  Pour obtenir l'\textbf{erreur-type de la moyenne globale}, diviser par
-  la racine de la taille du nombre de groupes, d'où
-  \[\mathsf{se}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \mathsf{sd}/\sqrt{M}\]
+  si \(K\) est suffisamment grand (disons \(K>10\)), on peut estimer
+  l'écart-type empirique de cette moyenne via
+  \[ \mathsf{sd}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \frac{1}{K-1} \sum_{k=1}^{K} (\widehat{\mathsf{EQM}}_{\text{VC}, k}-\widehat{\mathsf{EQM}}_{\text{VC}})^2\]
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Règle d'une erreur-type}
-\protect\hypertarget{ruxe8gle-dune-erreur-type}{}
-Soit \(\mathcal{M}_{\text{opt}}\) le modèle avec la plus petite erreur
-quadratique moyenne de validation croisée.
+\begin{frame}{Règle d'un écart-type}
+\protect\hypertarget{ruxe8gle-dun-uxe9cart-type}{}
+Suivant Breiman, on choisit le modèle le plus simple parmi un ensemble
+\(\mathcal{M}_0 \subset\cdots \subset \mathcal{M}_m\) qui satisfasse
 
-Suivant Breiman, on choisit le modèle le plus simple qui soit à au plus
-une erreur-type de la performance du modèle
-\(\mathcal{M}_{\text{opt}}\), en prenant prend
-\(\mathsf{se}\{\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_{\text{opt}})\}\).
-\end{frame}
+\[\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_i) \leq \min_{m = i+1}^M \widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m) + \mathsf{sd}\{\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m)\}\]
 
-\begin{frame}{Illustration de la règle de une erreur-type}
-\protect\hypertarget{illustration-de-la-ruxe8gle-de-une-erreur-type}{}
-\includegraphics{figures/fig-validationcroisee-une-erreur-type.pdf}
-
-La bande jaune donne une erreur-type du meilleur modèle. On choisirait
-le modèle avec \(M=2\), plutôt que \(M=4\)
+Choisir le modèle le plus simple qui soit à au plus un écart-type de la
+performance des modèles plus compliqués.
 \end{frame}
 
 \begin{frame}[fragile]{Validation croisée en \textbf{R}}
@@ -1025,8 +977,7 @@ croisée.
                \AttributeTok{method =} \StringTok{"cv"}\NormalTok{,}
                \AttributeTok{number =} \DecValTok{10}\NormalTok{)) }\CommentTok{\#nb plis}
 \NormalTok{reqm\_cv }\OtherTok{\textless{}{-}}\NormalTok{ cv\_caret}\SpecialCharTok{$}\NormalTok{results}\SpecialCharTok{$}\NormalTok{RMSE }\CommentTok{\# racine EQM}
-\NormalTok{reqm\_se\_cv }\OtherTok{\textless{}{-}}\NormalTok{ cv\_caret}\SpecialCharTok{$}\NormalTok{results}\SpecialCharTok{$}\NormalTok{RMSESD }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{10}\NormalTok{) }
-\CommentTok{\# calcul de l\textquotesingle{}erreur{-}type de la racine EMQ pour ce modèle}
+\NormalTok{reqm\_sd\_cv }\OtherTok{\textless{}{-}}\NormalTok{ cv\_caret}\SpecialCharTok{$}\NormalTok{results}\SpecialCharTok{$}\NormalTok{RMSESD}
 \end{Highlighting}
 \end{Shaded}
 

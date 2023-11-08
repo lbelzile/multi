@@ -34,14 +34,13 @@ Pour démarrer notre analyse exploratoire, on formule quelques questions. Par ex
 **2. Examinez la base de données; identifiez le type de variable et leur nature.**
 
 ```{r}
-str(aerien)
-summary(aerien)
+dplyr::glimpse(aerien)
 ```
-La plupart des variables, dont les colonnes 7 à 20 qui contiennent les réponses au questionnaire, sont des variables entières (`int`) formées d'échelles de Likert de 1 à 5; les valeurs manquantes encodées 0. Le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l'indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (`dbl`). Les délais sont encodées avec des valeurs entières (valeur arrondie). 
+La plupart des variables sont des variables entières (`int`) formées d'échelles de Likert plus valeurs manquantes encodées 0. L'identifiant, le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l'indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (`dbl`). Les délais sont encodées avec des valeurs entières (valeur arrondie). Les colonnes 7 à 20 encodent les réponses au questionnaire.
 
 **3. Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?**
 
-Oui, il y a des valeurs manquantes. Selon la description (voir la section Détails sous `?hecmulti::aerien`), toutes les valeurs 0 dans les questionnaires encodent des chanmps non applicables. Les imputer par la moyenne serait donc illogique, puisque certains services (divertissement, nourriture) ne sont pas offerts dans ces vols. Selon ce qui nous intéresse, on pourrait faire une segmentation manuelle de la base de données pour prendre le sous-ensemble qui nous intéresse.
+Oui, il y a des valeurs manquantes. Selon la description, toutes les valeurs 0 dans les questionnaires qui peut encoder deux situations: non-réponse ou non-applicable. Les imputer par la moyenne serait donc illogique, puisque certains services (divertissement, nourriture) ne sont pas offerts dans les vols. On pourrait segmenter manuellement la base de données pour séparer selon le type de vol.
 
 Il serait possible en revanche d'imputer l'information pour les valeurs de délai (`r sum(is.na(aerien$delai_arrivee_min))` valeurs manquantes).
 
@@ -81,7 +80,7 @@ aerien |>
 ```
 
 
-On note que `r round(100*as.numeric(table(aerien$loyaute_consommateur)[2]/nrow(aerien)), 0)` % des résultats sont pour des clients. L'âge médian est de `r median(aerien$age)` ans, et la majorité des déplacements sont pour affaires, soit environ  `r round(100*as.numeric(table(aerien$type_deplacement)[1]/nrow(aerien)), 0)` pourcent. Il y a presque autant d'hommes que de femmes. Les personnes qui disposent d'une carte fidélité voyagent davantage en classe affaire (presque la moitié des vols).
+On note que `r round(100*as.numeric(table(aerien$loyaute_consommateur)[2]/nrow(aerien)), 0)` pourcent des résultats sont pour des clients. L'âge médian est de `r median(aerien$age)` ans, et la majorité des déplacements sont pour affaires, soit environ  `r round(100*as.numeric(table(aerien$type_deplacement)[1]/nrow(aerien)), 0)` pourcent. Il y a presque autant d'hommes que de femmes. Les personnes qui disposent d'une carte fidélité voyagent davantage en classe affaire (presque la moitié des vols).
 
 ```{r}
 aerien |> 

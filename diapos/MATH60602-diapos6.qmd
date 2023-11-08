@@ -190,12 +190,12 @@ On peut faire varier le point de coupure et choisir celui qui maximise le taux d
 library(ggplot2)
 ggplot(data = perfo1$table,
        aes(x = coupe, 
-           y = pcorrect)) +
+           y = 100 - pcorrect)) +
   geom_line() +
   geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) + 
   labs(x = "point de coupure",
        y = "",
-       subtitle = "taux de bonne classification (pourcentage)") +
+       subtitle = "taux de mauvaise classification (pourcentage)") +
   scale_x_continuous(expand = c(0.01,0.01),
                      breaks = c(0,0.25,0.5,0.75,1),
                      labels = c("0","0.25","0.5","0.75","1")) + 
@@ -317,7 +317,7 @@ tab1 <- knitr::kable(x = confumat_tbclassif,
                 align = "r",
                 escape = FALSE,
                 booktabs = TRUE,
-             format = "latex")
+             format = "latex",)
 tab1
 
 ```
@@ -337,7 +337,7 @@ tab1
 #| label: tbl-dbm-ymontant-apprentissage
 #| echo: false
 #| eval: true
-#| tbl-cap: "Statistiques descriptives des montants d'achats."
+#| tbl-cap: "Statistiques descriptives des montants d'achats pour la base de données marketing."
 data(dbm, package = "hecmulti")
 dbm |>
   dplyr::filter(test == 0,
@@ -347,10 +347,14 @@ dbm |>
             "écart-type" =round(sd(ymontant),2), 
             "minimum" = min(ymontant), 
             "maximum" = max(ymontant)) |>
-knitr::kable(booktabs = TRUE)
+knitr::kable(booktabs = TRUE) |>
+    kableExtra::kable_styling(full_width = TRUE)
 ```
+\footnotesize 
+Statistiques descriptives des montants d'achats pour la base de données marketing.
 
-# Matrice de gain pour ciblage marketing
+\normalsize
+
 
 ```{r}
 #| label: tbl-tableconfumat5
@@ -360,9 +364,9 @@ knitr::kable(booktabs = TRUE)
 confumat_tbclassif <- confumat
 confumat_tbclassif[1:4] <- c("$57$","$0$","$-10$","$0$")
 knitr::kable(x = confumat_tbclassif,
-             align = "r",
-             escape = FALSE,
-             booktabs = TRUE,
+                align = "r",
+                escape = FALSE,
+                booktabs = TRUE,
              format = "latex")
 ```
 
@@ -480,7 +484,7 @@ roc <- hecmulti::courbe_roc(
 
 # Courbe lift
 
-À quelle point notre modèle est-il meilleur qu'une assignation aléatoire?
+À quelle point notre modèle est meileur qu'une assignation aléatoire?
 
 - Ordonner les probabilités de succès estimées par le modèle, $\widehat{p}$, en ordre croissant.
 - Regarder quelle pourcentage de ces derniers seraient bien classifiés (le nombre de vrais positifs sur le nombre de succès).
@@ -520,17 +524,11 @@ knitr::kable(tab_lift[,-1],
              format = "latex") 
 ```
 
-# Calcul du lift
+\footnotesize 
+Si on classifiait comme acheteurs les 10\% qui ont la plus forte probabilité estimée d'achat, on détecterait 81 des 210 clients.
 
-
-Si on classifiait comme acheteurs les 10\% qui ont la plus forte probabilité estimée d'achat, on détecterait 78 des 210 clients.
-
-
-Si on prend 10\% des clients au hasard et que 21\% des observations correspondent à des achats, on détecterait en moyenne 21 clients par tranche de 100 personnes.
-
-
-Le lift est le nombre de succès détecté par le modèle sur le nombre détecté au hasard.
-
+Le lift est le nombre détecté par le modèle sur la proportion détectée par hasard.
+\normalsize
 
 
 # Courbe lift
@@ -551,7 +549,7 @@ tab_lift <- hecmulti::courbe_lift(
 Certains modèles sont trop confiants dans leurs prédictions (surajustement).
 
 
-Une statistique simple proposée par [Spiegelhalter (1986)]( https://doi.org/10.1002/sim.4780050506) peut être utile à cette fin. Pour une variable Bernoulli $Y \in \{0,1\}$, l'erreur quadratique moyenne s'écrit
+une statistique simple proposée par [Spiegelhalter (1986)]( https://doi.org/10.1002/sim.4780050506) peut être utile à cette fin. Pour une variable Bernoulli $Y \in \{0,1\}$, l'erreur quadratique moyenne s'écrit
 \begin{align*}
 \overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
 \\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
@@ -561,15 +559,12 @@ Si notre modèle était parfaitement calibré, $\mathsf{E}_0(Y_i)=p_i$ et $\math
 
 # Test de Spiegelhalter
 
-<!--  $$Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}$$  -->
+On peut calculer la moyenne et la variance attendue sous l'hypothèse nulle et construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506). $$Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}$$ 
 
-<!-- Sous l'hypothèse nulle, $Z \sim \mathsf{No}(0,1)$ en grand échantillon.  -->
+Sous l'hypothèse nulle de calibration parfaite, $Z \sim \mathsf{No}(0,1)$ en grand échantillon. 
 
-On peut construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506) pour l'hypothèse nulle  de calibration parfaite.
 
-Sous l'hypothèse nulle $\mathcal{H}_0$, le modèle est adéquat (correctement calibré). 
-
-Une petite valeur-$p$ mène au rejet de $\mathcal{H}_0$ et à conclure que le modèle est surajusté.
+# Calibration du modèle 
 
 ```{r}
 #| label: classification

@@ -33,10 +33,10 @@ library(pander)
 
 ### Horaire des cours
 
-- Section J01: les jeudi à 12h00 en salle Forestville (Decelles)
-- Section S01: les mercredi à 18h45 en salle Victoriaville (Decelles)
+- Section J01: les jeudi à 12h00
+- Section S01: les mercredi à 18h45
 
-La séance 2 se déroulera au laboratoire informatique Laced.
+La séance 2 se déroulera au laboratoire informatique.
 
 Selon le règlement de l'École, la présence de l'étudiant aux activités du cours est présumée. Ainsi, l'enseignant n'est pas tenu de fournir de l'aide ou d'adapter le cours ou son évaluation en raison d'une absence.
 
@@ -56,7 +56,7 @@ L'emploi de concepts mathématiques sera réduit à son minimum et ces derniers 
 - Analyse factorielle exploratoire (analyse en composantes principales)
 - Analyse de regroupements
 - Sélection de variables pour les modèles de régression
-- Régression logistique (incluant les données multinomiales, modèle à cotes proportionnelles)
+- Sélection logistique (incluant les données multinomiales, modèle à cotes proportionnelles)
 - Analyse de survie
 - Données manquantes
 
@@ -71,7 +71,7 @@ Vous ne pouvez pas vous inscrire à ce cours si vous avez postulé ou réussi le
 
 ## Logiciels et programmation
 
-Nous utiliserons le langage de programmation [**R**](https://cran.r-project.org/). Les notes de cours et les [exercices](/exercices) contiennent des scripts pour vous aider. La courbe d'apprentissage est abrupte, mais nous consacrerons la deuxième séance de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des [instructions pour installer, **R**, Rstudio et d'autres utilitaires ici.](/contenu/installation)
+Nous utiliserons le langage de programmation [**R**](https://cran.r-project.org/). Les notes de cours et les [exercices](/exercices) contiennent des scripts pour vous aider. La courbe d'apprentissage est abrupte, mais nous consacrerons la deuxième séances de cours à couvrir les bases du langage, la manipulation de bases de données et la visualisation. Vous trouverez des [instructions pour installer, **R**, Rstudio et d'autres utilitaires ici.](/contenu/installation)
 
 Chercher sur un moteur de recherche des sujets liés à **R** est parfois fastidieux; essayez `rstats` comme mot-clé si `r` ne retourne rien. Le forum de question [StackOverflow](https://stackoverflow.com/), un site de questions et réponses pour la programmation, ainsi que la [communauté RStudio](https://community.rstudio.com/), un forum dédié à RStudio et au tidyverse, sont d'autres ressources utiles.
 
@@ -100,11 +100,11 @@ Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seron
 
 <div class="centered-table">
 
-| Clarté (20%) |  Contenu (40%) | Rigueur (30%) | Présentation (10%) |
+| Clarté |  Contenu | Rigueur | Présentation |
 |:-------|:---------|:--------|:-------------|
 | Énoncés sans jargon, explications claires et enchaînement logique des idées.  | Le contenu présenté est succinct et pertinent pour répondre aux questions. | Réponses correctes, réflexion poussée | Pas d'erreur d'orthographe, de grammaire ou de syntaxe. Références bibliographiques adéquates (le cas échéant). Règles de présentation respectées. |
-| Énoncés généralement clairs. Explications majoritairement claires. Justification adéquate des arguments énoncés. | Le contenu est présenté de manière adéquate, mais parfois est superflu ou lacunaire. | La plupart des réponses sont correctes et accompagnées d'une réflexion soutenue | Quelques fautes de français au plus. Références bibliographes présentes, mais inadéquatement citées. Organisation de la présentation globalement satisfaisante. |
-| Formulation alambiquée ne répondant que partiellement aux questions. | Le contenu présenté est parfois tangentiel, trop de détails inutiles sont présentés ou plusieurs éléments de réponse sont manquants. | Plusieurs erreurs logiques, réflexion ténue et superficielle | Plusieurs erreurs de français, absence de bibliographie ou de sources. Présentation déficiente non conformes au *vade mecum*. |
+| Énoncés généralement clairs. Explications majoritairement claires. Justification adéquate des arguments énoncés. | Le contenu est présenté de manière adéquate, mais parfois superflu ou présentant quelques lacunes. | La plupart des réponses sont correctes, réflexion soutenue | Quelques fautes de français au plus. Références bibliographes présentes, mais inadéquatement citées. Organisation de la présentation globalement satisfaisante. |
+| Formulation alambiquée ne répondant que partiellement aux questions. | Le contenu présenté est parfois tangentiel, trop de détails inutiles sont présentés ou plusieurs éléments de réponse sont manquants. | Plusieurs erreurs logiques, réflexion ténue et superficielle | Plusieurs erreurs de français, absence de bibliographie ou de sources. Présentation déficiente non conformes au vade mecum. |
 
 J'assignerai 0% pour un devoir non remis ou visiblement bâclé.
 

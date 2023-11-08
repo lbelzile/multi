@@ -45,6 +45,7 @@
 }
 
 \usepackage{amsmath,amssymb}
+\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -54,18 +55,14 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-\usepackage{lmodern}
-\usecolortheme{Flip}
-\usefonttheme{serif} % use mainfont rather than sansfont for slide text
-\useinnertheme{Flip}
-\useoutertheme{Flip}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
   \setmainfont[]{VisbyCF-Medium}
   \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
+\usecolortheme{Flip}
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+\useinnertheme{Flip}
+\useoutertheme{Flip}
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -200,12 +197,10 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -229,7 +224,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, breakable, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, breakable, interior hidden, borderline west={3pt}{0pt}{shadecolor}, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \begin{frame}{\emph{Professional Rodeo Cowboys Association}}
 \protect\hypertarget{cowboy}{}
@@ -789,7 +784,7 @@ p_i & y_i = 1 (\text{succès})\\
 
 \begin{frame}{Prédiction des probabilités de succès}
 \protect\hypertarget{pruxe9diction-des-probabilituxe9s-de-succuxe8s}{}
-Des estimés des coefficients \(\widehat{\beta}\) découlent une
+Des estimations des coefficients \(\widehat{\beta}\) découlent une
 estimation de \(\Pr(Y=1)\) pour les valeurs
 \(\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p\) d'un individu donné,
 \begin{align*}
@@ -816,10 +811,11 @@ Comparaison de modèles \textbf{emboîtés}
 \begin{itemize}
 \tightlist
 \item
-  Modèle complet (sous l'alternative) avec \(p\) variables explicatives
+  Modèle complet (sous l'alternative) avec tous les paramètres
 \item
   Modèle restreint (sous l'hypothèse nulle) sur lequel on impose
-  \(k\leq p\) restrictions.
+  \(k\leq p\) restrictions (typiquement
+  \(\beta_j = 0, j \in \{1, \ldots, p\}\)).
 \end{itemize}
 \end{column}
 
@@ -850,7 +846,7 @@ Variable catégorielle à trois niveaux (deux coefficients associés à
 
 \begin{frame}{Test d'hypothèse}
 \protect\hypertarget{test-dhypothuxe8se}{}
-On teste l'hypothèse nulle
+On test l'hypothèse nulle
 \(\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0\)
 (soit \(k=2\) restrictions).
 
@@ -1122,22 +1118,8 @@ où
   \(\widehat{\sigma}\) est l'estimation de l'écart-type
 \item
   \(\Phi(\cdot)\) est la fonction de répartition d'une loi normale
-  standard (\texttt{pnorm} dans \textbf{R})
+  standard (\texttt{pnorm})
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Modèle linéaire et probabilité d'excès}
-\protect\hypertarget{moduxe8le-linuxe9aire-et-probabilituxe9-dexcuxe8s}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos5_files/figure-beamer/fig-density-normalcurves-1.pdf}
-
-}
-
-\caption{\label{fig-density-normalcurves}Régression linéaire simple et
-densité normale à différentes valeurs de \(x\).}
-
-\end{figure}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
