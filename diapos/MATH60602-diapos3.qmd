@@ -245,7 +245,7 @@ Notre but sera de sélectionner un **bon** modèle, selon les objectifs de l'ét
 
 **Prédiction**: obtenir une estimation de $\widehat{Y}$: on veut un modèle performant
 
-**Inférence**: estimer l'effet de variables explicatives, effectuer des tests d'hypothèse
+**Inférence**: estimer l'effet de variables explicatives, effectuer des tests d'hypothèses
 
 Pour l'inférence, il est préférable de spécifier le modèle dès le départ (devis expérimental) selon des considérations scientifiques et de s’y tenir.
 
@@ -254,7 +254,7 @@ Pour l'inférence, il est préférable de spécifier le modèle dès le départ 
 ## Démonstration **R**
 
 - Omettre des termes importants mène à un **modèle biaisé**.
-- Ajouter des termes superflus augmente la **variabilité**.
+- Ajouter des termes superflus augmente la **variabilité** (on estime des zéros).
 
 
 # Évaluer la performance d'un modèle
@@ -455,23 +455,40 @@ Si on suppose que les aléas sont indépendants et suivent une loi normale de va
 
 Ainsi, l'estimateur des moindres carrés, $\widehat{\boldsymbol{\beta}}$, correspond au maximum de vraisemblance des coefficients.
 
+
+
 # Critères d'information
 
+Valables uniquement pour les modèles ajustés par **maximum de vraisemblance**, ils sont de la forme
 
-Les critères d'information sont de la forme
 \begin{align*}
-\mathsf{IC} &=-2 \ell(\widehat{\boldsymbol{\beta}}, \widehat{\sigma}^2) +\text{pénalité}\times \text{nb param} \\&= n \ln (\widehat{\mathsf{EQM}}) +\text{pénalité}\cdot \text{nb param}+ \text{constante},
+\mathsf{IC} &= -\text{ajustement} + \text{pénalité} \times\text{nb param} \\
 \end{align*}
 
-Le critère d'Akaike ($\text{AIC}$) utilise une pénalité de 2, le critère bayésien ($\text{BIC}$) de $\ln(n)$.
+- On veut maximiser l'ajustement, donc minimiser le premier terme.
+- La pénalité vient contrebalancer l'amélioration mécanique de l'ajustement quand le modèle a plus de flexibilité.
+- Plus le critère d'information est petit, meilleur c'est.
 
+
+
+# Critères d'information
+
+Pour la régression linéaire, on peut réécrire les critères d'information sous la forme
+\begin{align*}
+\mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +2\times \text{nb param}+ \text{constante},\\
+\mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +\ln(n)\times \text{nb param}+ \text{constante},
+\end{align*}
+
+- Le critère d'Akaike ($\text{AIC}$) utilise une pénalité de 2, le critère bayésien ($\text{BIC}$) de $\ln(n)$.
+
+- Le $\mathsf{BIC}$ (critère Bayésien de Schwarz) pénalise donc davantage que le $\mathsf{AIC}$ (critère d'Akaike).
 
 # Utiliser les critères d'information
 
-- Plus la valeur du critère d'information, meilleure est l'adéquation (et donc la performance).
-- La pénalité assure que les modèles plus simples ne sont pas systématiquement retournés.
-- Le $\textsf{BIC}$ retourne toujours des modèles plus parcimonieux (simples) que le $\textsf{AIC}$.
-- Génériques `logLik`, `AIC` et `BIC` en **R**
+- Plus la valeur du critère d'information est petite, meilleure est l'adéquation (et donc la performance).
+- La pénalité assure que les modèles plus complexes ne sont pas systématiquement retournés.
+- Le $\textsf{BIC}$ retourne toujours des modèles plus parcimonieux (c'est-à-dire avec moins de paramètres) que le $\textsf{AIC}$.
+- Génériques `AIC` et `BIC` en **R**
 
 # Illustration
 
@@ -563,6 +580,7 @@ ggplot(data = EQM_graph,
         legend.title=element_blank())
 ```
  
+Les deux critères d'information retournent $K=3$ comme choix optimal. 
 ---
 
 # Séparation des données
@@ -596,21 +614,21 @@ Cette approche, qui compartimente les échantillons, n'est pas sans faille.
 
 Une autre méthode de rééchantillonage
 
-Diviser l'échantillon en $K$ groupes d'observations de taille moyenne égale
+Diviser l'échantillon en $M$ groupes d'observations de taille moyenne égale
 
-- utiliser $K-1$ groupes pour l'ajustement
+- utiliser $M-1$ groupes pour l'ajustement
 - estimer la performance avec les données du dernier groupe 
 
 Les regroupements sont aléatoires, tout comme la mesure finale de performance!
 
-# Étapes de la validation croisée à $K$ groupes
+# Étapes de la validation croisée à $M$ groupes
 
-1. Diviser l'échantillon au hasard en $K$ parties $P_1, P_2, \ldots, P_K$ contenant toutes à peu près le même nombre d'observations.
-2. Pour $j = 1$ à $K$,
+1. Diviser l'échantillon au hasard en $M$ parties $P_1, P_2, \ldots, P_M$ contenant toutes à peu près le même nombre d'observations.
+2. Pour $j = 1$ à $M$,
     i. Enlever la partie $j$.
-    ii. Estimer les paramètres du modèle en utilisant les observations des $K-1$ autres parties combinées.
+    ii. Estimer les paramètres du modèle en utilisant les observations des $M-1$ autres parties combinées.
     iii. Calculer la mesure de performance (par exemple la somme du carré des erreurs $\{Y_i - \widehat{Y}_i\}^2$) de ce modèle pour le groupe $P_j$.
-3. Combiner les $K$ estimations de performance pour obtenir une mesure de performance finale.
+3. Combiner les $M$ estimations de performance pour obtenir une mesure de performance finale.
 
 # Illustration de la validation croisée
 
@@ -646,13 +664,13 @@ ggplot(df, aes(x, y)) +
 
 ```
 
-# Combien de groupes $K$ pour la validation croisée?
+# Combien de groupes $M$ pour la validation croisée?
 
-La validation croisée est plus coûteuse parce qu'on doit ajuster $K$ fois le modèles
+La validation croisée est plus coûteuse parce qu'on doit ajuster $M$ fois le modèles
 
-- Pour la régression linéaire, choisir $K=n$ (_leave-one-out cross-validation_) permet d'éviter de réajuster le modèle grâce à un artifice de calcul.
-- On recommande habituellement de prendre $K=\min\{n^{1/2}, 10\}$ groupes.
-- les choix de $K=5$ ou $K=10$ sont ceux qui revient le plus souvent en pratique.
+- Pour la régression linéaire, choisir $M=n$ (_leave-one-out cross-validation_) permet d'éviter de réajuster le modèle grâce à un artifice de calcul.
+- On recommande habituellement de prendre $\min\{n^{1/2}, 10\}$ groupes,
+- mais les choix $M=5$ ou $M=10$ sont ceux qui revient le plus souvent en pratique.
 
 
 \footnotesize
@@ -663,22 +681,31 @@ Voir Davison \& Hinkley (1997), *Bootstrap methods and their applications*, Sect
 
 # Validation croisée = résultat aléatoire!
 
-Soit $\widehat{\mathsf{EQM}}_{\text{VC}}$ l'estimation de l'erreur quadratique moyenne  obtenue par validation croisée à $K$ plis pour un modèle $\mathcal{M}$ donné.
+Soit $\widehat{\mathsf{EQM}}_{\text{VC}}$ l'estimation de l'erreur quadratique moyenne  obtenue par validation croisée à $M$ plis pour un modèle $\mathcal{M}$ donné.
 
-Si on a un nombre similaire d'observations dans chaque groupe, on peut plutôt
+Si on a un nombre similaire d'observations dans chaque groupe:
 
-- calculer l'erreur quadratique moyenne de chaque pli, disons $\widehat{\mathsf{EQM}}_{\text{VC}, k}$
-- si $K$ est suffisamment grand (disons $K>10$), on peut estimer l'écart-type empirique de cette moyenne via
-$$ \mathsf{sd}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \frac{1}{K-1} \sum_{k=1}^{K} (\widehat{\mathsf{EQM}}_{\text{VC}, k}-\widehat{\mathsf{EQM}}_{\text{VC}})^2$$
+- calculer l'erreur quadratique moyenne de chaque pli, $\widehat{\mathsf{EQM}}_{\text{VC}, m}$
+- si $M$ est suffisamment grand (disons $M \geq 10$), on peut estimer l'écart-type empirique de ces moyennes
+$$ \mathsf{sd} = \frac{1}{M-1} \sum_{m=1}^{M} (\widehat{\mathsf{EQM}}_{\text{VC}, m}-\widehat{\mathsf{EQM}}_{\text{VC}})^2$$
+- Pour obtenir l'**erreur-type de la moyenne globale**, diviser par la racine de la taille du nombre de groupes, d'où
+$$\mathsf{se}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \mathsf{sd}/\sqrt{M}$$
 
 
-# Règle d'un écart-type
+# Règle d'une erreur-type
 
-Suivant Breiman, on choisit le modèle le plus simple parmi un ensemble $\mathcal{M}_0 \subset\cdots \subset \mathcal{M}_m$ qui satisfasse
 
-$$\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_i) \leq \min_{m = i+1}^M \widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m) + \mathsf{sd}\{\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_m)\}$$
+Soit $\mathcal{M}_{\text{opt}}$ le modèle avec la plus petite erreur quadratique moyenne de validation croisée.
 
-Choisir le modèle le plus simple qui soit à au plus un écart-type de la performance des modèles plus compliqués.
+Suivant Breiman, on choisit le modèle le plus simple qui soit à au plus une erreur-type de la performance du modèle $\mathcal{M}_{\text{opt}}$, en prenant prend $\mathsf{se}\{\widehat{\mathsf{EQM}}_{\text{VC}}(\mathcal{M}_{\text{opt}})\}$.
+
+# Illustration de la règle de une erreur-type
+
+![](figures/fig-validationcroisee-une-erreur-type.pdf)
+
+
+La bande jaune donne une erreur-type du meilleur modèle. On choisirait le modèle avec $M=2$, plutôt que $M=4$
+
 
 # Validation croisée en **R**
 
@@ -694,7 +721,8 @@ cv_caret <-
                method = "cv",
                number = 10)) #nb plis
 reqm_cv <- cv_caret$results$RMSE # racine EQM
-reqm_sd_cv <- cv_caret$results$RMSESD
+reqm_se_cv <- cv_caret$results$RMSESD / sqrt(10) 
+# calcul de l'erreur-type de la racine EMQ pour ce modèle
 ```
 
 Aussi `boot::cv.glm()` qui inclut une correction de biais pour les modèles linéaires généralisé.

@@ -15,12 +15,10 @@ On cherche à prédire si une personne s'est prévalue d'une offre promotionnell
 Les étapes suivantes sont obligatoires:
 
 a. Fusion de catégories: ré-étiquetez les situations familiales (`famiq`) selon que la personne est seule (`seu`) ou en couple (`cou`). 
-b. Transformez les valeurs manquantes (par ex., `inc` pour inconnu) en `NA` (voir `?dplyr::na_if`). 
-c. Que représentent les variables manquantes résiduelles de `zocnb`? 
-d. Produisez et rapportez un histogramme de la variable ancienneté du compte (`relat`) et un nuage de point de `relat` et `age`. Que remarquez vous? Commentez sur la relation entre les deux variables.
+b. Produisez et rapportez un histogramme de la variable ancienneté du compte (`relat`) et un nuage de point de `relat` et `age`. Que remarquez vous? Commentez sur la relation entre les deux variables.
 
 
-Résumez votre analyse en une page maximum (texte et graphiques): ne soulevez que les points importants.
+Résumez votre analyse en **deux** pages maximum (texte): ne soulevez que les points importants et n'incluez que les graphiques nécessaires.
 
 2. Choisissez un modèle à l'aide des méthodes de sélection couvertes en classe (sélection exhaustive, séquentielle, pénalité LASSO, etc.) pour prédire si les personnes se prévalent de l'offre promotionnelle ou pas. Le critère employé pour juger sera le taux de bonne classification.
 

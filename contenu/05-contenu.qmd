@@ -2,6 +2,23 @@
 title: "Régression logistique"
 ---
 
+
+```{r}
+#| label: slides-videos
+#| echo: false
+#| include: false
+source(here::here("R", "fonctions_diapos.R"))
+source(here::here("R", "youtube-playlist.R"))
+playlist_id <- "PLUB8VZzxA8Iv5gSEh5wacmFR7gyVFMr3O"
+slide_details <- tibble::tribble(
+  ~youtube_id,   ~title, ~slide, ~active,
+  "VJItA6EX5-s", "Loi Bernoulli", "bern", TRUE,
+  "XedJWhn6RYg", "Loi normale", "normale", FALSE,
+  "X3-DI3L-FPw", "Loi Poisson", "poisson", FALSE,
+)
+# https://youtube.com/playlist?list=PLUB8VZzxA8Iv5gSEh5wacmFR7gyVFMr3O
+```
+
 ## Contenu
 
 - Modèle de régression logistique
@@ -10,6 +27,16 @@ title: "Régression logistique"
 - Inférence statistique
     - tests d'hypothèse
     - intervalles de confiance
+
+## Prérequis
+
+Ce chapitre suppose que vous êtes familiers avec la notion de variable aléatoire et la méthode du maximum de vraisemblance (couvert notamment dans le cours de MATH 60619 *Analyse et inférence statistique*. La première capsule reprend cette matière (jusqu'à diapo 9).
+
+
+```{r show-youtube-list, echo=FALSE, results="asis"}
+youtube_list(slide_details, playlist_id)
+```
+
 
 ## Lecture
 

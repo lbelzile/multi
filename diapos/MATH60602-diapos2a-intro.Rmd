@@ -190,7 +190,7 @@ class: title title-1 section-title-inv-1
 ]
 
 .pull-right-narrow[
-.box-1[Trouvez `a-intro.Rmd`]
+.box-1[Trouvez `a-intro.qmd`]
 
 .box-1[Cliquez sur le nom pour ouvrir le fichier]
 ]
@@ -340,7 +340,7 @@ class: title title-1
 # Paquets et fonctionalités
 
 
-.box-inv-1[Charger un paquet ajoute à l'environnement<br> toutes ses fonctions et données.]
+.box-inv-1[Charger un paquet ajoute à l'environnement<br> toutes ses fonctions et bases de données.]
 
 .box-inv-1[Peut masquer des fonctions homonymes!]
 
@@ -360,7 +360,7 @@ class: title title-1
 
 class: title title-1
 
-# Fonctionalités sans chargement
+# Fonctionalités
 
 
 .box-inv-1[Charger une base de données]
@@ -369,7 +369,8 @@ class: title title-1
 data(bd, package = "nomdupaquet")
 ```
 
-.box-inv-1[Utiliser directement une fonction]
+.box-inv-1[Utiliser directement une fonction sans charger un paquet]
+
 ```{r eval=FALSE}
 paquet::fonction(...)
 ```
@@ -397,11 +398,11 @@ renfe
 
 class: title title-1
 
-# R Markdown
+# Quarto
 
 .pull-left.center[
 <figure>
-  <img src="img/01/rstudio-rmd.png" alt="RStudio R Markdown document" title="RStudio R Markdown document" width="100%">
+  <img src="img/01/quarto-penguins.png" alt="Posit Quarto document" title="Document Quarto" width="100%">
 </figure>
 ]
 
@@ -415,11 +416,11 @@ class: title title-1
 
 class: title title-1
 
-# R Markdown
+# Quarto
 
 .pull-left[
 <figure>
-  <img src="img/01/rstudio-rmd-text.png" alt="RStudio R Markdown text" title="RStudio R Markdown text" width="100%">
+  <img src="img/01/quarto-text.png" alt="Document Quarto, bloc de texte (Markdown)" title="Quarto (texte)" width="100%">
 </figure>
 ]
 
@@ -431,11 +432,11 @@ class: title title-1
 
 
 class: title title-1
-# R Markdown
+# Quarto
 
 .pull-left[
 <figure>
-  <img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%">
+  <img src="img/01/quarto-code.png" alt="Document Quarto, bloc de code" title="Quarto (code)" width="100%">
 </figure>
 ]
 
@@ -449,11 +450,11 @@ class: title title-1
 
 
 class: title title-1
-# R Markdown
+# Quarto
 
 .pull-left[
 <figure>
-  <img src="img/01/rstudio-rmd-output.png" alt="RStudio R Markdown output" title="RStudio R Markdown output" width="100%">
+  <img src="img/01/quarto-sortie.png" alt="Quarto (sortie)" title="Quarto (sortie)" width="100%">
 </figure>
 ]
 
@@ -473,7 +474,7 @@ class: title title-1 section-title-inv-1
 
 .pull-left[
 <figure>
-  <img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%">
+  <img src="img/01/quarto-code.png" alt="Quarto code" title="Quarto code" width="100%">
 </figure>
 ]
 
@@ -481,6 +482,8 @@ class: title title-1 section-title-inv-1
 .box-1[Lisez les instructions]
 
 .box-1[Compilez le bloc de code<br>avec le bouton `démarrer`]
+
+.box-1.sp-after-half[(icône avec triangle vert)]
 ]
 
 ---
@@ -497,13 +500,14 @@ class: title title-1 section-title-inv-1
 
 
 class: title title-1
-# Tricoter
 
-.box-inv-1["Knit" un document R Markdown en un fichier portable]
+# Compilation
+
+.box-inv-1[Compiler un document Quarto]
 
 .center[
 <figure>
-  <img src="img/01/rstudio-knit.png" alt="RStudio knit button" title="RStudio knit button" width="70%">
+  <img src="img/01/quarto-render.png" alt="Quarto render" title="Compilation de document Quarto" width="70%">
 </figure>
 ]
 
@@ -523,7 +527,7 @@ filter(mtcars, cyl == 4)
 four_cyls <- filter(mtcars, cyl == 4)
 ```
 
-.box-1[Trouvez ces instructions dans votre carnet et compilez.<br>Quelle est la différence en sortie?]
+.box-1[Trouvez ces instructions dans votre carnet et compilez ce dernier. <br>Quelle est la différence en sortie?]
 
 ---
 

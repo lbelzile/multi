@@ -45,7 +45,6 @@
 }
 
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -55,14 +54,18 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
-  \setmathfont[]{Latin Modern Math}
 \fi
+\usepackage{lmodern}
 \usecolortheme{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
 \useinnertheme{Flip}
 \useoutertheme{Flip}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[]{VisbyCF-Medium}
+  \setsansfont[]{Latin Modern Sans}
+  \setmathfont[]{Latin Modern Math}
+\fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -194,10 +197,12 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -221,7 +226,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, breakable, enhanced, frame hidden, borderline west={3pt}{0pt}{shadecolor}, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, interior hidden, sharp corners, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Rappel}
 \protect\hypertarget{rappel}{}
@@ -494,21 +499,25 @@ Si on cherche à maximiser le taux de bonne classification, cela revient
   \end{itemize}
 \end{itemize}
 
-\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
-\toprule
-n & moyenne & écart-type & minimum & maximum\\
-\midrule
-210 & 67.29 & 13.24 & 25 & 109\\
-\bottomrule
-\end{tabu}
+\hypertarget{tbl-dbm-ymontant-apprentissage}{}
+\begin{longtable}[]{@{}rrrrr@{}}
+\caption{\label{tbl-dbm-ymontant-apprentissage}Statistiques descriptives
+des montants d'achats.}\tabularnewline
+\toprule\noalign{}
+n & moyenne & écart-type & minimum & maximum \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+n & moyenne & écart-type & minimum & maximum \\
+\midrule\noalign{}
+\endhead
+210 & 67.29 & 13.24 & 25 & 109 \\
+\bottomrule\noalign{}
+\end{longtable}
+\end{frame}
 
-\footnotesize
-
-Statistiques descriptives des montants d'achats pour la base de données
-marketing.
-
-\normalsize
-
+\begin{frame}{Matrice de gain pour ciblage marketing}
+\protect\hypertarget{matrice-de-gain-pour-ciblage-marketing}{}
 \hypertarget{tbl-tableconfumat5}{}
 \begin{table}
 \caption{\label{tbl-tableconfumat5}Matrice de gain pour ciblage marketing. }\tabularnewline
@@ -637,7 +646,8 @@ de calculer l'aire sous la courbe.
 
 \begin{frame}{Courbe lift}
 \protect\hypertarget{courbe-lift}{}
-À quelle point notre modèle est meileur qu'une assignation aléatoire?
+À quelle point notre modèle est-il meilleur qu'une assignation
+aléatoire?
 
 \begin{itemize}
 \tightlist
@@ -688,14 +698,19 @@ de calculer l'aire sous la courbe.
 \bottomrule
 \end{tabular}
 \end{table}
+\end{frame}
 
-\footnotesize
-
+\begin{frame}{Calcul du lift}
+\protect\hypertarget{calcul-du-lift}{}
 Si on classifiait comme acheteurs les 10\% qui ont la plus forte
-probabilité estimée d'achat, on détecterait 81 des 210 clients.
+probabilité estimée d'achat, on détecterait 78 des 210 clients.
 
-Le lift est le nombre détecté par le modèle sur la proportion détectée
-par hasard. \normalsize
+Si on prend 10\% des clients au hasard et que 21\% des observations
+correspondent à des achats, on détecterait en moyenne 21 clients par
+tranche de 100 personnes.
+
+Le lift est le nombre de succès détecté par le modèle sur le nombre
+détecté au hasard.
 \end{frame}
 
 \begin{frame}{Courbe lift}
@@ -708,7 +723,7 @@ par hasard. \normalsize
 Certains modèles sont trop confiants dans leurs prédictions
 (surajustement).
 
-une statistique simple proposée par
+Une statistique simple proposée par
 \href{https://doi.org/10.1002/sim.4780050506}{Spiegelhalter (1986)} peut
 être utile à cette fin. Pour une variable Bernoulli \(Y \in \{0,1\}\),
 l'erreur quadratique moyenne s'écrit \begin{align*}
@@ -720,19 +735,18 @@ Si notre modèle était parfaitement calibré, \(\mathsf{E}_0(Y_i)=p_i\) et
 \(\mathsf{Va}_0(Y_i) = p_i(1-p_i)\).
 \end{frame}
 
-\begin{frame}{Test de Spiegelhalter}
+\begin{frame}[fragile]{Test de Spiegelhalter}
 \protect\hypertarget{test-de-spiegelhalter}{}
-On peut calculer la moyenne et la variance attendue sous l'hypothèse
-nulle et construire une statistique de test
-\href{https://doi.org/10.1002/sim.4780050506}{(Spiegelhalter, 1986)}.
-\[Z = \frac{\overline{B} -\mathsf{E}_0(\overline{B})}{\mathsf{sd}_0(\overline{B})}\]
+On peut construire une statistique de test
+\href{https://doi.org/10.1002/sim.4780050506}{(Spiegelhalter, 1986)}
+pour l'hypothèse nulle de calibration parfaite.
 
-Sous l'hypothèse nulle de calibration parfaite,
-\(Z \sim \mathsf{No}(0,1)\) en grand échantillon.
-\end{frame}
+Sous l'hypothèse nulle \(\mathcal{H}_0\), le modèle est adéquat
+(correctement calibré).
 
-\begin{frame}[fragile]{Calibration du modèle}
-\protect\hypertarget{calibration-du-moduxe8le-1}{}
+Une petite valeur-\(p\) mène au rejet de \(\mathcal{H}_0\) et à conclure
+que le modèle est surajusté.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{calibration}\NormalTok{(}

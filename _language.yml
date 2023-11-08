@@ -17,11 +17,12 @@ title-block-affiliation-single: "Association"
 title-block-affiliation-plural: "Associations"
 title-block-published: "Date de publication"
 
-callout-tip-caption: "Astuce"
-callout-note-caption: "Note"
-callout-warning-caption: "Avertissement"
-callout-important-caption: "Important"
-callout-danger-caption: "Danger"
+
+callout-tip-title: "Astuce"
+callout-note-title: "Note"
+callout-warning-title: "Avertissement"
+callout-important-title: "Important"
+callout-caution-title: "Danger"
 
 code-summary: "Code"
 

@@ -71,7 +71,7 @@ class: title title-1 section-title-inv-1
 
 # À votre tour #1
 
-.box-1[Compilez le code du fichier Rmd pour créer un graphique]
+.box-1[Compilez le code du fichier Quarto pour créer un graphique]
 
 .box-1[Portez attention à l'orthographe, aux majuscules et aux parenthèses!]
 

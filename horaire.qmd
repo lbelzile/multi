@@ -52,7 +52,7 @@ schedule <- schedule_raw %>%
 schedule_nested <- schedule %>% 
   select(group, subgroup, 
          ` ` = col_date, Titre = col_title, Contenu = col_content, 
-         Exemple = col_exercice, Evaluation = col_evaluations) %>% 
+         Exercice = col_exercice, Evaluation = col_evaluations) %>% 
   group_by(group) %>% 
   nest() %>% 
   mutate(subgroup_count = map(data, ~count(.x, subgroup)),
@@ -80,7 +80,7 @@ show_table <- function(group_id) {
 ```
 
 ```{r show-table, echo=FALSE, results="asis"}
-walk(seq(1, nrow(schedule_nested)), ~show_table(.x)) 
+walk(seq(1, nrow(schedule_nested)), ~show_table(.x))
 ```
 
 :::

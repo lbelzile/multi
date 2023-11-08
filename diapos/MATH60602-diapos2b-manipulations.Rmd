@@ -32,7 +32,6 @@ library(gapminder)
 library(countdown)
 library(flair)
 library(knitr)
-library(kableExtra)
 ```
 
 ```{r xaringanExtra, echo=FALSE}
@@ -56,16 +55,6 @@ class: center middle main-title section-title-1
 layout: false
 class: title title-1 section-title-inv-1
 
-# À votre tour #0: chargez les données
-
-1. Compilez le bloc `setup`
-2. Jetez un coup d'oeil aux données `gapminder`
-
-```{r echo=FALSE}
-countdown(minutes = 2, play_sound = TRUE, font_size = "1.5em")
-```
-
----
 
 .small[
 ```{r show-gapminder}
@@ -177,7 +166,8 @@ gapminder |>
   head(5) |> 
   mutate(year = as.character(year)) |> 
   bind_rows(tibble(country = "…", continent = "…", year = "…")) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -189,7 +179,8 @@ gapminder |>
   select(country, continent, year) |> 
   filter(country == "Denmark") |> 
   head(6) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -214,7 +205,7 @@ filter(.data = gapminder,
 .pull-right[
 .box-inv-1[Un signe `=`<br> pour l'assignation d'un argument]
 
-.box-inv-1[Deux signes `==`<br>teste l'égalité entre objets<br>.small[retourne TRUE ou FALSE)]]
+.box-inv-1[Deux signes `==`<br>teste l'égalité entre objets<br>.small[(retourne TRUE ou FALSE)]]
 ]
 
 ---
@@ -225,7 +216,7 @@ class: title title-1
 
 <table>
   <tr>
-    <th class="cell-center">Teste</th>
+    <th class="cell-center">Test</th>
     <th class="cell-left">Signification</th>
     <th class="cell-center">Test</th>
     <th class="cell-left">Signification</th>
@@ -389,7 +380,8 @@ gapminder |>
   head(5) |> 
   mutate(year = as.character(year)) |> 
   bind_rows(tibble(country = "…", continent = "…", year = "…")) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -401,7 +393,8 @@ gapminder |>
   select(country, continent, year) |> 
   filter(country == "Denmark", year > 2000) |> 
   head(6) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -626,7 +619,8 @@ gapminder |>
   head(5) |> 
   mutate_at(vars(year, gdpPercap, pop), ~as.character(.)) |> 
   bind_rows(tibble(country = "…", year = "…", gdpPercap = "…", pop = "…")) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -639,7 +633,8 @@ gapminder |>
   mutate(`…` = "…") |> 
   select(country, year, `…`, gdp) |> 
   head(6) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -663,7 +658,8 @@ gapminder |>
   head(5) |> 
   mutate_at(vars(year, gdpPercap, pop), ~as.character(.)) |> 
   bind_rows(tibble(country = "…", year = "…", gdpPercap = "…", pop = "…")) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -677,7 +673,8 @@ gapminder |>
   mutate(`…` = "…") |> 
   select(country, year, `…`, gdp, pop_mil) |> 
   head(6) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -693,24 +690,24 @@ class: title title-1
 ```{r echo=FALSE, tidy=FALSE}
 decorate('
 ifelse(TEST, 
-       VALEUR_SI_TRUE, 
-       VALEUR_SI_FALSE)
+       VALEUR_SI_VRAI, 
+       VALEUR_SI_FAUX)
 ', eval = FALSE) |> 
   flair("TEST", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
-  flair("VALEUR_SI_TRUE", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
-  flair("VALEUR_SI_FALSE", background = "#CBB5FF", before = "<b>", after = "</b>") |>
+  flair("VALEUR_SI_VRAI", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
+  flair("VALEUR_SI_FAUX", background = "#CBB5FF", before = "<b>", after = "</b>") |>
   flair:::knit_print.decorated()
 ```
 ]
 
 .pull-right[
 - <b><span style="background: #FFC0DC">`TEST`</span></b> = un test logique
-- <b><span style="background: #FFDFD1">`VALEUR_SI_TRUE`</span></b> = valeur si vrai
-- <b><span style="background: #CBB5FF">`VALUE_IF_FALSE`</span></b> = valeur si faux
+- <b><span style="background: #FFDFD1">`VALEUR_SI_VRAI`</span></b> = valeur si vrai
+- <b><span style="background: #CBB5FF">`VALEUR_SI_FAUX`</span></b> = valeur si faux
 ]
 
 .box-inv-1[
-Vecteur en sortie de la longueur de <b>`TEST`</b>
+Vecteur en sortie de la même longueur que <b>`TEST`</b>
 ]
 
 ---
@@ -881,13 +878,13 @@ class: title title-1
 
 ```{r echo=FALSE, tidy=FALSE}
 decorate('
-filter(mutate(gapminder_2002, 
+filter(mutate(gapminder, 
               log_gdpPercap = log(gdpPercap)), 
        year == 2002)
 ', eval = FALSE) |> 
   flair("filter(", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
   flair("year == 2002)", background = "#FFC0DC", before = "<b>", after = "</b>") |> 
-  flair("mutate(gapminder_2002,", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
+  flair("mutate(gapminder,", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("log_gdpPercap = log(gdpPercap))", background = "#FFDFD1", before = "<b>", after = "</b>") |>
   flair:::knit_print.decorated()
 ```
@@ -1013,7 +1010,8 @@ gapminder |>
   head(4) |> 
   mutate_at(vars(year, lifeExp), ~as.character(.)) |> 
   bind_rows(tibble(country = "…", continent = "…", year = "…", lifeExp = "…")) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1023,7 +1021,8 @@ gapminder |>
 ```{r echo=FALSE}
 gapminder |> 
   summarize(mean_life = mean(lifeExp)) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1051,7 +1050,8 @@ gapminder |>
   head(5) |> 
   mutate_at(vars(year, lifeExp), ~as.character(.)) |> 
   bind_rows(tibble(country = "…", continent = "…", year = "…", lifeExp = "…")) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1062,7 +1062,8 @@ gapminder |>
 gapminder |> 
   summarize(mean_life = mean(lifeExp),
             min_life = min(lifeExp)) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1100,7 +1101,8 @@ gapminder |>
             last = max(year),
             num_rows = n(),
             num_unique = n_distinct(country)) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1136,7 +1138,8 @@ gapminder |>
   filter(continent == "Africa", year == 2007) |>
   summarise(n_countries = n_distinct(country), 
             med_le = median(lifeExp)) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1182,7 +1185,8 @@ gapminder |>
 gapminder |> 
   group_by(continent) |> 
   summarize(n_countries = n_distinct(country)) |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1215,7 +1219,8 @@ pollution |>
 .pull-left.small[
 ```{r echo=FALSE}
 pollution |> 
-  knitr::kable(format = "html")
+  knitr::kable(format = "html") 
+  
 ```
 ]
 
@@ -1240,16 +1245,17 @@ pollution |>
   flair("pollution", background = "#FFDFD1", before = "<b>", after = "</b>") |> 
   flair("mean = mean(amount), sum = sum(amount), n = n()", background = "#FFD0CF", before = "<b>", after = "</b>") |> 
   flair("city", background = "#FFD0CF", before = "<b>", after = "</b>") |>
-  flair:::knit_print.decorated()
+  flair:::knit_print.decorated() 
 ```
 
 .pull-left.small[
 ```{r echo=FALSE}
 pollution |> 
-  knitr::kable(format = "html") |> 
-  row_spec(1:2, background = "#B2B1F9") |> 
-  row_spec(3:4, background = "#EFB3FF") |> 
-  row_spec(5:6, background = "#FFD0CF")
+  knitr::kable(format = "html")  |>
+  kableExtra::row_spec(1:2, background = "#B2B1F9") |> 
+  kableExtra::row_spec(3:4, background = "#EFB3FF") |> 
+  kableExtra::row_spec(5:6, background = "#FFD0CF")
+  
 ```
 ]
 
@@ -1261,9 +1267,9 @@ pollution |>
   group_by(city) |> 
   summarize(mean = mean(amount), sum = sum(amount), n = n()) |> 
   kable(format = "html") |> 
-  row_spec(3, background = "#B2B1F9") |> 
-  row_spec(2, background = "#EFB3FF") |> 
-  row_spec(1, background = "#FFD0CF")
+  kableExtra::row_spec(3, background = "#B2B1F9") |> 
+  kableExtra::row_spec(2, background = "#EFB3FF") |> 
+  kableExtra::row_spec(1, background = "#FFD0CF")
 ```
 ]
 
@@ -1284,9 +1290,10 @@ pollution |>
 .pull-left.small[
 ```{r echo=FALSE}
 pollution |> 
-  knitr::kable(format = "html") |> 
-  row_spec(c(1, 3, 5), background = "#FFDFD1") |> 
-  row_spec(c(2, 4, 6), background = "#FFF0D4")
+  knitr::kable(format = "html") |>
+  kableExtra::row_spec(c(1, 3, 5), background = "#FFDFD1") |> 
+  kableExtra::row_spec(c(2, 4, 6), background = "#FFF0D4")
+  
 ```
 ]
 
@@ -1298,8 +1305,8 @@ pollution |>
   group_by(particle_size) |> 
   summarize(mean = mean(amount), sum = sum(amount), n = n()) |> 
   kable(format = "html") |> 
-  row_spec(1, background = "#FFDFD1") |> 
-  row_spec(2, background = "#FFF0D4")
+  kableExtra::row_spec(1, background = "#FFDFD1") |> 
+  kableExtra::row_spec(2, background = "#FFF0D4")
 ```
 ]
 

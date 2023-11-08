@@ -10,7 +10,7 @@ title: "Régression multinomiale"
 
 ## Lecture
 
-- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html), Sections 2 et 3
+- {{< fa book >}} [Chapitre sur les données manquantes](https://lbelzile.github.io/math60602/donneesmanquantes.html)
 - {{< fa book >}} [Chapitre sur la régression logistique](https://lbelzile.github.io/math60602/reglogistique.html), Section 4
 
 ## Diapositives 
@@ -20,11 +20,14 @@ title: "Régression multinomiale"
 
 ## Objectifs d'apprentissage
 
+- Pouvoir calculer le taux de cas manquants
+- Classifier les données manquantes (complètement aléatoire, aléatoire, non aléatoire) selon le contexte
 - Pouvoir utiliser l'imputation multiple avec les modèles de régression
 - À l'aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification
 - Être en mesure d'expliquer le ciblage et d'offrir des stratégies pour la prédiction.
 - Être capable d'interpréter les coefficients d'un modèle multinomial logistique ou d'un modèle cumulatif à cotes proportionnelles
 - Pouvoir effectuer un test du postulat de cotes proportionnelles
 - Être en mesure de calculer les prédictions d'un modèle multinomial logistique simple
+
 
 
