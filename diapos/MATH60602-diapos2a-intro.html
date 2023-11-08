@@ -4,7 +4,7 @@
     <title>Débuter avec R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Andrew Heiss, Léo Belzile (traduction et adaptation)" />
-    <script src="libs/header-attrs-2.18/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.24/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.2.6/tile-view.js"></script>
@@ -179,7 +179,7 @@ class: title title-1 section-title-inv-1
 ]
 
 .pull-right-narrow[
-.box-1[Trouvez `a-intro.Rmd`]
+.box-1[Trouvez `a-intro.qmd`]
 
 .box-1[Cliquez sur le nom pour ouvrir le fichier]
 ]
@@ -268,7 +268,7 @@ class: title title-1  section-title-inv-1
 remotes::install_github("lbelzile/hecmulti")
 ```
 
-<div class="countdown" id="timer_fbe9372a" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
+<div class="countdown" id="timer_814199fb" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -333,7 +333,7 @@ class: title title-1
 # Paquets et fonctionalités
 
 
-.box-inv-1[Charger un paquet ajoute à l'environnement&lt;br&gt; toutes ses fonctions et données.]
+.box-inv-1[Charger un paquet ajoute à l'environnement&lt;br&gt; toutes ses fonctions et bases de données.]
 
 .box-inv-1[Peut masquer des fonctions homonymes!]
 
@@ -353,7 +353,7 @@ class: title title-1
 
 class: title title-1
 
-# Fonctionalités sans chargement
+# Fonctionalités
 
 
 .box-inv-1[Charger une base de données]
@@ -363,7 +363,8 @@ class: title title-1
 data(bd, package = "nomdupaquet")
 ```
 
-.box-inv-1[Utiliser directement une fonction]
+.box-inv-1[Utiliser directement une fonction sans charger un paquet]
+
 
 ```r
 paquet::fonction(...)
@@ -377,7 +378,7 @@ class: title title-1 section-title-inv-1
 
 .box-1[Chargez les données `renfe` du paquet `hecmulti`]
 
-<div class="countdown" id="timer_37bede45" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
+<div class="countdown" id="timer_62b282ba" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -394,11 +395,11 @@ renfe
 
 class: title title-1
 
-# R Markdown
+# Quarto
 
 .pull-left.center[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd.png" alt="RStudio R Markdown document" title="RStudio R Markdown document" width="100%"&gt;
+  &lt;img src="img/01/quarto-penguins.png" alt="Posit Quarto document" title="Document Quarto" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -412,11 +413,11 @@ class: title title-1
 
 class: title title-1
 
-# R Markdown
+# Quarto
 
 .pull-left[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-text.png" alt="RStudio R Markdown text" title="RStudio R Markdown text" width="100%"&gt;
+  &lt;img src="img/01/quarto-text.png" alt="Document Quarto, bloc de texte (Markdown)" title="Quarto (texte)" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -428,11 +429,11 @@ class: title title-1
 
 
 class: title title-1
-# R Markdown
+# Quarto
 
 .pull-left[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%"&gt;
+  &lt;img src="img/01/quarto-code.png" alt="Document Quarto, bloc de code" title="Quarto (code)" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -446,11 +447,11 @@ class: title title-1
 
 
 class: title title-1
-# R Markdown
+# Quarto
 
 .pull-left[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-output.png" alt="RStudio R Markdown output" title="RStudio R Markdown output" width="100%"&gt;
+  &lt;img src="img/01/quarto-sortie.png" alt="Quarto (sortie)" title="Quarto (sortie)" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -470,7 +471,7 @@ class: title title-1 section-title-inv-1
 
 .pull-left[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-rmd-code.png" alt="RStudio R Markdown code" title="RStudio R Markdown code" width="100%"&gt;
+  &lt;img src="img/01/quarto-code.png" alt="Quarto code" title="Quarto code" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -478,6 +479,8 @@ class: title title-1 section-title-inv-1
 .box-1[Lisez les instructions]
 
 .box-1[Compilez le bloc de code&lt;br&gt;avec le bouton `démarrer`]
+
+.box-1.sp-after-half[(icône avec triangle vert)]
 ]
 
 ---
@@ -494,13 +497,14 @@ class: title title-1 section-title-inv-1
 
 
 class: title title-1
-# Tricoter
 
-.box-inv-1["Knit" un document R Markdown en un fichier portable]
+# Compilation
+
+.box-inv-1[Compiler un document Quarto]
 
 .center[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-knit.png" alt="RStudio knit button" title="RStudio knit button" width="70%"&gt;
+  &lt;img src="img/01/quarto-render.png" alt="Quarto render" title="Compilation de document Quarto" width="70%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -522,7 +526,7 @@ filter(mtcars, cyl == 4)
 four_cyls &lt;- filter(mtcars, cyl == 4)
 ```
 
-.box-1[Trouvez ces instructions dans votre carnet et compilez.&lt;br&gt;Quelle est la différence en sortie?]
+.box-1[Trouvez ces instructions dans votre carnet et compilez ce dernier. &lt;br&gt;Quelle est la différence en sortie?]
 
 ---
 
@@ -805,7 +809,7 @@ class: title title-1  section-title-inv-1
 
 .box-1[Ajouter un bloc qui utilise `seq()` pour créer un&lt;br&gt;vecteur de nombres de 5 à 30, espacés par sauts de 5&lt;br&gt;.small[(5, 10, 15, 20, …)]]
 
-<div class="countdown" id="timer_7a330003" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
+<div class="countdown" id="timer_d48c4f9d" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -854,8 +858,8 @@ mean("mtcars")
 ```
 
 ```
-## Warning in mean.default("mtcars"): l'argument n'est ni numérique, ni logique :
-## renvoi de NA
+## Warning in mean.default("mtcars"): argument is not numeric or logical:
+## returning NA
 ```
 
 ```
@@ -876,7 +880,7 @@ MEAN(mtcars)
 ```
 
 ```
-## Error in MEAN(mtcars): impossible de trouver la fonction "MEAN"
+## Error in MEAN(mtcars): could not find function "MEAN"
 ```
 
 ---

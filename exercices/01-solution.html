@@ -376,51 +376,112 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(aerien)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(aerien)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Rows: 129,880
-Columns: 23
-$ sexe                            &lt;fct&gt; femme, femme, homme, homme, femme, hom…
-$ loyaute_consommateur            &lt;fct&gt; oui, oui, non, oui, oui, oui, oui, oui…
-$ age                             &lt;int&gt; 52, 36, 20, 44, 49, 16, 77, 43, 47, 46…
-$ type_deplacement                &lt;fct&gt; affaires, affaires, affaires, affaires…
-$ classe                          &lt;fct&gt; eco, affaire, eco, affaire, eco, eco, …
-$ distance_vol                    &lt;dbl&gt; 160, 2863, 192, 3377, 1182, 311, 3987,…
-$ service_internet_en_vol         &lt;int&gt; 5, 1, 2, 0, 2, 3, 5, 2, 5, 2, 4, 2, 5,…
-$ temps_arrivee_depart_convenable &lt;int&gt; 4, 1, 0, 0, 3, 3, 5, 2, 2, 2, 1, 5, 5,…
-$ facilite_reservation_en_ligne   &lt;int&gt; 3, 3, 2, 0, 4, 3, 5, 2, 2, 2, 1, 5, 5,…
-$ localisation_porte              &lt;int&gt; 4, 1, 4, 2, 3, 3, 5, 2, 2, 2, 1, 5, 5,…
-$ nourriture                      &lt;int&gt; 3, 5, 2, 3, 4, 5, 3, 4, 5, 3, 5, 1, 4,…
-$ preenregistrement_en_ligne      &lt;int&gt; 4, 4, 2, 4, 1, 5, 5, 4, 5, 4, 1, 3, 5,…
-$ confort_siege                   &lt;int&gt; 3, 5, 2, 4, 2, 3, 5, 5, 5, 4, 5, 4, 5,…
-$ divertissement_en_vol           &lt;int&gt; 5, 4, 2, 1, 2, 5, 5, 4, 5, 4, 3, 2, 5,…
-$ service_embarquement            &lt;int&gt; 5, 4, 4, 1, 2, 4, 5, 4, 2, 4, 3, 2, 5,…
-$ service_espace_jambes           &lt;int&gt; 5, 4, 1, 1, 2, 3, 5, 4, 2, 4, 4, 2, 5,…
-$ gestion_bagages                 &lt;int&gt; 5, 4, 3, 1, 2, 1, 5, 4, 5, 4, 3, 2, 5,…
-$ service_enregistrement          &lt;int&gt; 2, 3, 2, 3, 4, 1, 4, 5, 3, 5, 1, 3, 5,…
-$ service_vol                     &lt;int&gt; 5, 4, 2, 1, 2, 2, 5, 4, 3, 4, 3, 2, 5,…
-$ proprete                        &lt;int&gt; 5, 5, 2, 4, 4, 5, 3, 3, 5, 4, 4, 4, 3,…
-$ delai_depart_min                &lt;int&gt; 50, 0, 0, 0, 0, 0, 0, 77, 1, 28, 29, 1…
-$ delai_arrivee_min               &lt;int&gt; 44, 0, 0, 6, 20, 0, 0, 65, 0, 14, 19, …
-$ satisfaction                    &lt;fct&gt; oui, oui, non, oui, oui, oui, oui, oui…</code></pre>
+<pre><code>Classes 'tbl_df', 'tbl' and 'data.frame':   129880 obs. of  23 variables:
+ $ sexe                           : Factor w/ 2 levels "femme","homme": 1 1 2 2 1 2 1 1 2 1 ...
+ $ loyaute_consommateur           : Factor w/ 2 levels "non","oui": 2 2 1 2 2 2 2 2 2 2 ...
+ $ age                            : int  52 36 20 44 49 16 77 43 47 46 ...
+ $ type_deplacement               : Factor w/ 2 levels "affaires","personnel": 1 1 1 1 1 1 1 1 1 1 ...
+ $ classe                         : Factor w/ 3 levels "affaire","eco",..: 2 1 2 1 2 2 1 1 2 1 ...
+ $ distance_vol                   : num  160 2863 192 3377 1182 ...
+ $ service_internet_en_vol        : int  5 1 2 0 2 3 5 2 5 2 ...
+ $ temps_arrivee_depart_convenable: int  4 1 0 0 3 3 5 2 2 2 ...
+ $ facilite_reservation_en_ligne  : int  3 3 2 0 4 3 5 2 2 2 ...
+ $ localisation_porte             : int  4 1 4 2 3 3 5 2 2 2 ...
+ $ nourriture                     : int  3 5 2 3 4 5 3 4 5 3 ...
+ $ preenregistrement_en_ligne     : int  4 4 2 4 1 5 5 4 5 4 ...
+ $ confort_siege                  : int  3 5 2 4 2 3 5 5 5 4 ...
+ $ divertissement_en_vol          : int  5 4 2 1 2 5 5 4 5 4 ...
+ $ service_embarquement           : int  5 4 4 1 2 4 5 4 2 4 ...
+ $ service_espace_jambes          : int  5 4 1 1 2 3 5 4 2 4 ...
+ $ gestion_bagages                : int  5 4 3 1 2 1 5 4 5 4 ...
+ $ service_enregistrement         : int  2 3 2 3 4 1 4 5 3 5 ...
+ $ service_vol                    : int  5 4 2 1 2 2 5 4 3 4 ...
+ $ proprete                       : int  5 5 2 4 4 5 3 3 5 4 ...
+ $ delai_depart_min               : int  50 0 0 0 0 0 0 77 1 28 ...
+ $ delai_arrivee_min              : int  44 0 0 6 20 0 0 65 0 14 ...
+ $ satisfaction                   : Factor w/ 2 levels "non","oui": 2 2 1 2 2 2 2 2 2 2 ...</code></pre>
+</div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aerien)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    sexe       loyaute_consommateur      age         type_deplacement
+ femme:65899   non: 23780           Min.   : 7.00   affaires :89693  
+ homme:63981   oui:106100           1st Qu.:27.00   personnel:40187  
+                                    Median :40.00                    
+                                    Mean   :39.43                    
+                                    3rd Qu.:51.00                    
+                                    Max.   :85.00                    
+                                                                     
+     classe       distance_vol  service_internet_en_vol
+ affaire:62160   Min.   :  31   Min.   :0.000          
+ eco    :58309   1st Qu.: 414   1st Qu.:2.000          
+ ecoplus: 9411   Median : 844   Median :3.000          
+                 Mean   :1190   Mean   :2.729          
+                 3rd Qu.:1744   3rd Qu.:4.000          
+                 Max.   :4983   Max.   :5.000          
+                                                       
+ temps_arrivee_depart_convenable facilite_reservation_en_ligne
+ Min.   :0.000                   Min.   :0.000                
+ 1st Qu.:2.000                   1st Qu.:2.000                
+ Median :3.000                   Median :3.000                
+ Mean   :3.058                   Mean   :2.757                
+ 3rd Qu.:4.000                   3rd Qu.:4.000                
+ Max.   :5.000                   Max.   :5.000                
+                                                              
+ localisation_porte   nourriture    preenregistrement_en_ligne confort_siege  
+ Min.   :0.000      Min.   :0.000   Min.   :0.000              Min.   :0.000  
+ 1st Qu.:2.000      1st Qu.:2.000   1st Qu.:2.000              1st Qu.:2.000  
+ Median :3.000      Median :3.000   Median :3.000              Median :4.000  
+ Mean   :2.977      Mean   :3.205   Mean   :3.253              Mean   :3.441  
+ 3rd Qu.:4.000      3rd Qu.:4.000   3rd Qu.:4.000              3rd Qu.:5.000  
+ Max.   :5.000      Max.   :5.000   Max.   :5.000              Max.   :5.000  
+                                                                              
+ divertissement_en_vol service_embarquement service_espace_jambes
+ Min.   :0.000         Min.   :0.000        Min.   :0.000        
+ 1st Qu.:2.000         1st Qu.:2.000        1st Qu.:2.000        
+ Median :4.000         Median :4.000        Median :4.000        
+ Mean   :3.358         Mean   :3.383        Mean   :3.351        
+ 3rd Qu.:4.000         3rd Qu.:4.000        3rd Qu.:4.000        
+ Max.   :5.000         Max.   :5.000        Max.   :5.000        
+                                                                 
+ gestion_bagages service_enregistrement  service_vol       proprete    
+ Min.   :1.000   Min.   :0.000          Min.   :0.000   Min.   :0.000  
+ 1st Qu.:3.000   1st Qu.:3.000          1st Qu.:3.000   1st Qu.:2.000  
+ Median :4.000   Median :3.000          Median :4.000   Median :3.000  
+ Mean   :3.632   Mean   :3.306          Mean   :3.642   Mean   :3.286  
+ 3rd Qu.:5.000   3rd Qu.:4.000          3rd Qu.:5.000   3rd Qu.:4.000  
+ Max.   :5.000   Max.   :5.000          Max.   :5.000   Max.   :5.000  
+                                                                       
+ delai_depart_min  delai_arrivee_min satisfaction
+ Min.   :   0.00   Min.   :   0.00   non:73452   
+ 1st Qu.:   0.00   1st Qu.:   0.00   oui:56428   
+ Median :   0.00   Median :   0.00               
+ Mean   :  14.71   Mean   :  15.09               
+ 3rd Qu.:  12.00   3rd Qu.:  13.00               
+ Max.   :1592.00   Max.   :1584.00               
+                   NA's   :393                   </code></pre>
 </div>
 </div>
-<p>La plupart des variables sont des variables entières (<code>int</code>) formées d’échelles de Likert plus valeurs manquantes encodées 0. L’identifiant, le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l’indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (<code>dbl</code>). Les délais sont encodées avec des valeurs entières (valeur arrondie). Les colonnes 7 à 20 encodent les réponses au questionnaire.</p>
+<p>La plupart des variables, dont les colonnes 7 à 20 qui contiennent les réponses au questionnaire, sont des variables entières (<code>int</code>) formées d’échelles de Likert de 1 à 5; les valeurs manquantes encodées 0. Le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l’indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (<code>dbl</code>). Les délais sont encodées avec des valeurs entières (valeur arrondie).</p>
 <p><strong>3. Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?</strong></p>
-<p>Oui, il y a des valeurs manquantes. Selon la description, toutes les valeurs 0 dans les questionnaires qui peut encoder deux situations: non-réponse ou non-applicable. Les imputer par la moyenne serait donc illogique, puisque certains services (divertissement, nourriture) ne sont pas offerts dans les vols. On pourrait segmenter manuellement la base de données pour séparer selon le type de vol.</p>
+<p>Oui, il y a des valeurs manquantes. Selon la description (voir la section Détails sous <code>?hecmulti::aerien</code>), toutes les valeurs 0 dans les questionnaires encodent des chanmps non applicables. Les imputer par la moyenne serait donc illogique, puisque certains services (divertissement, nourriture) ne sont pas offerts dans ces vols. Selon ce qui nous intéresse, on pourrait faire une segmentation manuelle de la base de données pour prendre le sous-ensemble qui nous intéresse.</p>
 <p>Il serait possible en revanche d’imputer l’information pour les valeurs de délai (393 valeurs manquantes).</p>
 <p><strong>4. Calculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?</strong></p>
 <p>A minima, il faut transformer les zéros en valeurs manquantes pour éviter de fausser les résultats. Il serait aussi préférable de transformer les scores des items du questionnaire en variables catégorielles.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Remplacer valeurs manquantes (0 en NA)</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>aerien <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>, <span class="sc">~</span><span class="fu">na_if</span>(., <span class="dv">0</span>))</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Statistiques descriptives</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aerien)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Remplacer valeurs manquantes (0 en NA)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>aerien <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>, <span class="sc">~</span><span class="fu">na_if</span>(., <span class="dv">0</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Statistiques descriptives</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aerien)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    sexe       loyaute_consommateur      age         type_deplacement
@@ -482,11 +543,11 @@ $ satisfaction                    &lt;fct&gt; oui, oui, non, oui, oui, oui, oui,
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Voir décompte pour éléments du questionnaire</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>aerien <span class="sc">|&gt;</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>, <span class="sc">~</span><span class="fu">factor</span>(., <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Statistiques descriptives</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Voir décompte pour éléments du questionnaire</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>aerien <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>, <span class="sc">~</span><span class="fu">factor</span>(., <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Statistiques descriptives</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    sexe       loyaute_consommateur      age         type_deplacement
@@ -548,20 +609,20 @@ $ satisfaction                    &lt;fct&gt; oui, oui, non, oui, oui, oui, oui,
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Moyenne et écart-type par variable</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># selon niveau de satisfaction</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>aerien <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(satisfaction) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">.names =</span> <span class="st">"moy_{.col}"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pivoter tableau</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">names_to =</span> <span class="st">"variable"</span>,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">names_prefix =</span> <span class="st">"moy_"</span>,</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values_to =</span> <span class="st">"moyenne"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(variable) <span class="sc">|&gt;</span> <span class="co"># trier</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Moyenne et écart-type par variable</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># selon niveau de satisfaction</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>aerien <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(satisfaction) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">.names =</span> <span class="st">"moy_{.col}"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pivoter tableau</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">names_to =</span> <span class="st">"variable"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">names_prefix =</span> <span class="st">"moy_"</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values_to =</span> <span class="st">"moyenne"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(variable) <span class="sc">|&gt;</span> <span class="co"># trier</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -757,16 +818,16 @@ $ satisfaction                    &lt;fct&gt; oui, oui, non, oui, oui, oui, oui,
 </table>
 </div>
 </div>
-<p>On note que 82 pourcent des résultats sont pour des clients. L’âge médian est de 40 ans, et la majorité des déplacements sont pour affaires, soit environ 69 pourcent. Il y a presque autant d’hommes que de femmes. Les personnes qui disposent d’une carte fidélité voyagent davantage en classe affaire (presque la moitié des vols).</p>
+<p>On note que 82 % des résultats sont pour des clients. L’âge médian est de 40 ans, et la majorité des déplacements sont pour affaires, soit environ 69 pourcent. Il y a presque autant d’hommes que de femmes. Les personnes qui disposent d’une carte fidélité voyagent davantage en classe affaire (presque la moitié des vols).</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>aerien <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(loyaute_consommateur, </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>           classe) <span class="sc">|&gt;</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">cnt =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">freq =</span> formattable<span class="sc">::</span><span class="fu">percent</span>(cnt <span class="sc">/</span> <span class="fu">sum</span>(cnt))) <span class="sc">|&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>aerien <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(loyaute_consommateur, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           classe) <span class="sc">|&gt;</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">cnt =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">freq =</span> formattable<span class="sc">::</span><span class="fu">percent</span>(cnt <span class="sc">/</span> <span class="fu">sum</span>(cnt))) <span class="sc">|&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -823,12 +884,12 @@ $ satisfaction                    &lt;fct&gt; oui, oui, non, oui, oui, oui, oui,
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">corr =</span> <span class="fu">cor</span>(aerien[,<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>], </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>), </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">diag =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"upper"</span>, </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tl.pos =</span> <span class="st">"n"</span>) <span class="co"># pas de nom</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">corr =</span> <span class="fu">cor</span>(aerien[,<span class="dv">7</span><span class="sc">:</span><span class="dv">20</span>], </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>), </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">diag =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"upper"</span>, </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tl.pos =</span> <span class="st">"n"</span>) <span class="co"># pas de nom</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="01-solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
@@ -838,75 +899,75 @@ $ satisfaction                    &lt;fct&gt; oui, oui, non, oui, oui, oui, oui,
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> aerien, </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> loyaute_consommateur,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"loyauté du consommateur"</span>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(service_internet_en_vol, </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        satisfaction) <span class="sc">|&gt;</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(satisfaction) <span class="sc">|&gt;</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> service_internet_en_vol,</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> pct,</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>,</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">"dodge2"</span>) <span class="sc">+</span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Pourcentage des réponses"</span>,</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"service internet en vol"</span>)</span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(preenregistrement_en_ligne, </span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        satisfaction) <span class="sc">|&gt;</span></span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(satisfaction) <span class="sc">|&gt;</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> preenregistrement_en_ligne,</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> pct,</span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>,</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">"dodge2"</span>) <span class="sc">+</span></span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Pourcentage des réponses"</span>,</span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"préenregistrement en ligne"</span>)</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> aerien, </span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> delai_arrivee_min,</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">boundary =</span> <span class="dv">0</span>,</span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>                 <span class="at">binwidth =</span> <span class="dv">2</span>,</span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>                 <span class="at">position =</span> <span class="st">"dodge2"</span>) <span class="sc">+</span></span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_trans</span>(<span class="at">x =</span> <span class="st">'log1p'</span>,</span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> <span class="st">'log1p'</span>) <span class="sc">+</span></span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"délai à l'arrivée (en minutes)"</span>)</span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>g5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> aerien,</span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> delai_depart_min,</span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> delai_arrivee_min),</span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"délais au départ (en minutes)"</span>,</span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"délais à l'arrivée (en minutes)"</span>) <span class="sc">+</span></span>
-<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_trans</span>(<span class="at">x =</span> <span class="st">"log1p"</span>,</span>
-<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> <span class="st">"log1p"</span>)</span>
-<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimer plusieurs graphiques</span></span>
-<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>(g1 <span class="sc">+</span> g2) <span class="sc">/</span> (g3 <span class="sc">+</span> g4) <span class="sc">+</span></span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> aerien, </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> loyaute_consommateur,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"loyauté du consommateur"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(service_internet_en_vol, </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        satisfaction) <span class="sc">|&gt;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(satisfaction) <span class="sc">|&gt;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> service_internet_en_vol,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> pct,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">"dodge2"</span>) <span class="sc">+</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Pourcentage des réponses"</span>,</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"service internet en vol"</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> aerien <span class="sc">|&gt;</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(preenregistrement_en_ligne, </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        satisfaction) <span class="sc">|&gt;</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(satisfaction) <span class="sc">|&gt;</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> preenregistrement_en_ligne,</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> pct,</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">"dodge2"</span>) <span class="sc">+</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Pourcentage des réponses"</span>,</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"préenregistrement en ligne"</span>)</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> aerien, </span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> delai_arrivee_min,</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> satisfaction)) <span class="sc">+</span></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">boundary =</span> <span class="dv">0</span>,</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>                 <span class="at">binwidth =</span> <span class="dv">2</span>,</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>                 <span class="at">position =</span> <span class="st">"dodge2"</span>) <span class="sc">+</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_trans</span>(<span class="at">x =</span> <span class="st">'log1p'</span>,</span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> <span class="st">'log1p'</span>) <span class="sc">+</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"délai à l'arrivée (en minutes)"</span>)</span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>g5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> aerien,</span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> delai_depart_min,</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> delai_arrivee_min),</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"délais au départ (en minutes)"</span>,</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"délais à l'arrivée (en minutes)"</span>) <span class="sc">+</span></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_trans</span>(<span class="at">x =</span> <span class="st">"log1p"</span>,</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> <span class="st">"log1p"</span>)</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimer plusieurs graphiques</span></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>(g1 <span class="sc">+</span> g2) <span class="sc">/</span> (g3 <span class="sc">+</span> g4) <span class="sc">+</span></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="01-solution_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>g5</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>g5</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="01-solution_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>

@@ -20,7 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -296,6 +315,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#exercice-3.1" id="toc-exercice-3.1" class="nav-link active" data-scroll-target="#exercice-3.1">Exercice 3.1</a></li>
   <li><a href="#exercice-3.2" id="toc-exercice-3.2" class="nav-link" data-scroll-target="#exercice-3.2">Exercice 3.2</a></li>
+  <li><a href="#exercice-3.3" id="toc-exercice-3.3" class="nav-link" data-scroll-target="#exercice-3.3">Exercice 3.3</a></li>
   </ul>
 </nav>
     </div>
@@ -335,12 +355,43 @@ ul.task-list li input[type="checkbox"] {
 <li>Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?</li>
 </ol>
 </section>
-<section id="exercice-3.2" class="level1">
-<h1>Exercice 3.2</h1>
+<section id="exercice-3.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3.2">Exercice 3.2</h2>
+<p>Le modèle de <span class="citation" data-cites="Bradley.Terry:1952">Bradley &amp; Terry (<a href="#ref-Bradley.Terry:1952" role="doc-biblioref">1952</a>)</span> décrit la probabilité que le résultat de l’ «équipe <span class="math inline">\(i\)</span> » soit supérieur à celui de l’«équipe» <span class="math inline">\(j\)</span>, <span class="math display">\[\begin{align*}
+\Pr(Y_i &gt; Y_j)= \frac{\exp(\beta_i)}{\exp(\beta_i) + \exp(\beta_j)}, \quad i, j \in \{1, \ldots, K\},
+\end{align*}\]</span> en assumant que les doublons (égalité) ne surviennent pas.</p>
+<p>Ce modèle simple peut servir pour prédire le classement d’équipes sportives: si on écrit le modèle en terme de cote, on obtient pour l’équipe <span class="math inline">\(i\)</span> à domicile et l’équipe <span class="math inline">\(j\)</span> en visite <span class="math display">\[\begin{align*}
+\ln\left\{\frac{\Pr(\text{victoire équipe $i$ (domicile)})}{\Pr(\text{victoire équipe $j$ (visiteur)})}\right\}= \beta_i - \beta_j.
+\end{align*}\]</span></p>
+<p>Le modèle décrit ci-dessus peut être ajusté à l’aide d’une régression logistique avec un ensemble de <span class="math inline">\(K-1\)</span> variable explicatives<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> où pour le match <span class="math inline">\(i\)</span> et l’équipe <span class="math inline">\(k=2, \ldots, K\)</span>, on a <span class="math display">\[\begin{align*}
+X_{ik} = \begin{cases}
+\hphantom{-}1, &amp; k = i,\\
+-1, &amp; k = j,\\
+\hphantom{-}0, &amp; \text{sinon}.
+\end{cases}
+\end{align*}\]</span> Le modèle Bradley–Terry de base n’a pas d’ordonnée à l’origine. Si on l’ajoute, l’équation du modèle pour une partie devient <span class="math display">\[\begin{align*}
+\ln\left\{\frac{\Pr(\text{victoire équipe $i$ (domicile)})}{\Pr(\text{victoire équipe $j$ (visiteur)})}\right\}= \alpha + \beta_i - \beta_j,
+\end{align*}\]</span> où <span class="math inline">\(\beta_i\)</span> représente la force de l’équipe à domicile, <span class="math inline">\(\beta_j\)</span> la force de l’équipe en visite et l’ordonnée à l’origine <span class="math inline">\(\alpha\)</span> capture l’effet du jeu à domicile.</p>
+<p>La base de données <code>lnh</code> du paquet <code>hecmulti</code> contient les résultats de chaque partie par équipe, tandis que <code>lnh_BT</code> fournit les mêmes données, mais dans un format propice pour l’ajustement du modèle de Bradley–Terry.</p>
+<p>Ajustez le modèle de Bradley–Terry aux données <code>lnh_BT</code> (utilisez la formule <code>vainqueur ~ .</code> pour ajuster le modèle avec toutes les équipes). La catégorie de référence est <code>Anaheim_Ducks</code>, qui n’apparaît pas dans les sorties.</p>
+<ol type="1">
+<li>Interprétez le coefficient pour l’ordonnée à l’origine <span class="math inline">\(\alpha\)</span> en terme de pourcentage d’augmentation ou de diminution de la cote par rapport à la référence jouer à l’extérieur.</li>
+<li>Calculez un intervalle de confiance de niveau 95% pour l’ordonnée à l’origine et déterminez si jouer à domicile impacte significativement le score.</li>
+<li>Fournissez un tableau avec le classement des cinq premières équipes qui ont la plus grande chance de succès selon le modèle.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li>Pour chaque match, utilisez le modèle logistique pour prédire l’équipe gagnante.
+<ul>
+<li>Construisez une matrice de confusion (1 pour une victoire de l’équipe à domicile, 0 sinon) avec un point de coupure de 0.5 (assignation à l’événement ou à la classe la plus probable) et rapportez cette dernière.</li>
+<li>Calculez le taux de bonne classification, la sensibilité et la spécificité à partir de votre matrice de confusion.</li>
+</ul></li>
+<li>Produisez un graphique de la fonction d’efficacité du récepteur et rapportez l’aire sous la courbe. Commentez sur la qualité prédictive globale du modèle.</li>
+</ol>
+</section>
+<section id="exercice-3.3" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3.3">Exercice 3.3</h2>
 <p>On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (<code>1</code>) à très satisfait (<code>5</code>). Les 1000 observations se trouvent dans la base de données <code>multinom</code> du paquet <code>hecmulti</code>.</p>
 <p>Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu.</p>
 <ol type="1">
-<li>Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec <code>1</code> comme catégorie de référence pour la satisfaction, <code>1</code> pour revenu et <code>sec</code> pour éducation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> et utilisez ce dernier pour répondre aux autres questions.</li>
+<li>Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec <code>1</code> comme catégorie de référence pour la satisfaction, <code>1</code> pour revenu et <code>sec</code> pour éducation<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> et utilisez ce dernier pour répondre aux autres questions.</li>
 <li>Interprétez l’effet des variables éducation et sexe pour la catégorie 2 par rapport à 1.</li>
 <li>Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?</li>
 <li>Est-ce que l’effet de la variable âge est globalement significatif?</li>
@@ -350,13 +401,20 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 
 
+
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Bradley.Terry:1952" class="csl-entry" role="listitem">
+Bradley, R. A., &amp; Terry, M. E. (1952). Rank analysis of incomplete block designs: I. The method of paired comparisons. <em>Biometrika</em>, <em>39</em>(3/4), 324–345. <a href="https://doi.org/10.2307/233402">https://doi.org/10.2307/233402</a>
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
 
 <ol>
-<li id="fn1"><p>Utilisez la fonction <code>relevel</code> pour changer la catégorie de référence, avec <code>relevel(educ, ref = 'sec')</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Il n’y a pas de variable explicative <span class="math inline">\(X_{\text{ref}}\)</span> pour la catégorie de référence, autrement les données seraient colinéaires. Une des catégories <span class="math inline">\(\text{ref} \in \{1, \ldots, K\}\)</span> sert de référence et le coefficient correspondant est nul, soit <span class="math inline">\(\beta_{\text{ref}}=0\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Attention à la catégorie de référence!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Utilisez la fonction <code>relevel</code> pour changer la catégorie de référence, avec <code>relevel(educ, ref = 'sec')</code>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
