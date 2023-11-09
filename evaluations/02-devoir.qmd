@@ -5,6 +5,12 @@ title: "Devoir 2"
 
 Ce travail est à réaliser en équipe (minimum deux, maximum quatre personnes). 
 
+Vous devez avant de commencer le devoir retélécharger le paquet `hecmulti`, viz.
+```{r}
+#| eval: false
+#| echo: true
+remotes::install_github("lbelzile/hecmulti")
+```
 
 Vous devez remettre votre rapport au format PDF ainsi que votre code R (ou un fichier Quarto).
 Utilisez la convention de nomenclature `d2_matricule.extension`, où matricule est le matricule de l’étudiant(e) qui soumet le rapport et extension est un de `pdf`, `qmd`, `rmd` ou `R`.
@@ -14,7 +20,7 @@ Utilisez la convention de nomenclature `d2_matricule.extension`, où matricule e
 
 ## Question 1
 
-Plusieurs systèmes de technologies de l'information servent à centraliser les requêtes pour des services. On considère le temps d'attente (en heures, variable `duree`) avant la résolution d'un billet, jusqu'à concurrence de 120 heures.
+Plusieurs systèmes de technologies de l'information servent à centraliser les requêtes pour des services. On considère le temps d'attente (en heures, variable `duree`) avant la résolution d'un billet, jusqu'à concurrence de 120 heures dans la base de données `tisupport` du paquet `hecmulti`. 
 
 1. Une des opérations préliminaires à l'analyse de survie est le calcul du temps d'attente sur la base des registres informatiques; les données sont typiquement au format `YYYY:MM:DD HH.MM`. Si l'entreprise opère uniquement de 9h à 17h du lundi au vendredi, décrivez brièvement comment vous pourriez prendre en compte cette particularité lors du calcul du temps entre l'ouverture et la fermeture du billet de support si vous aviez à calculer `duree` vous-même.
 2. Estimez la fonction de survie séparément pour chaque `type` de billets à l'aide de l'estimateur de Kaplan--Meier.
@@ -47,7 +53,7 @@ cox2 <- coxph(Surv(duree, statut=="ferme") ~ type + niveau + ncommentaires,
 
 ## Question 2
 
-Les données de cette question, extraites de [ResearchBox 159](https://researchbox.org/159) et mises à disposition sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), ont servi à construire une échelle psychométrique pour mesurer l'avarice. Les données de $n=300$ participant(e)s ont été collectées à partir de Amazon M'Turk.
+Les données de cette question, dans la base de données `avarice` du paquet `hecmulti`, sont extraites de [ResearchBox 159](https://researchbox.org/159) et mises à disposition sous licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), ont servi à construire une échelle psychométrique pour mesurer l'avarice. Les données de $n=300$ participant(e)s ont été collectées à partir de Amazon M'Turk.
 
 > Zeelenberg M, Seuntjens TG, van de Ven N, Breugelmans SM (2021). *Dispositional Greed Scales*. European Journal of Psychological Assessment. 1--10. [`doi: 10.1027/1015-5759/a000647`](https://doi.org/10.1027/1015-5759/a000647)
 
