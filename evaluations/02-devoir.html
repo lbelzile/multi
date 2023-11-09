@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -219,11 +253,15 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 <p>Ce travail est à réaliser en équipe (minimum deux, maximum quatre personnes).</p>
+<p>Vous devez avant de commencer le devoir retélécharger le paquet <code>hecmulti</code>, viz.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"lbelzile/hecmulti"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Vous devez remettre votre rapport au format PDF ainsi que votre code R (ou un fichier Quarto). Utilisez la convention de nomenclature <code>d2_matricule.extension</code>, où matricule est le matricule de l’étudiant(e) qui soumet le rapport et extension est un de <code>pdf</code>, <code>qmd</code>, <code>rmd</code> ou <code>R</code>.</p>
 <p><a href="MATH60602-A23-Devoir2.pdf">Téléchargez la version PDF de l’énoncé</a></p>
 <section id="question-1" class="level2">
 <h2 class="anchored" data-anchor-id="question-1">Question 1</h2>
-<p>Plusieurs systèmes de technologies de l’information servent à centraliser les requêtes pour des services. On considère le temps d’attente (en heures, variable <code>duree</code>) avant la résolution d’un billet, jusqu’à concurrence de 120 heures.</p>
+<p>Plusieurs systèmes de technologies de l’information servent à centraliser les requêtes pour des services. On considère le temps d’attente (en heures, variable <code>duree</code>) avant la résolution d’un billet, jusqu’à concurrence de 120 heures dans la base de données <code>tisupport</code> du paquet <code>hecmulti</code>.</p>
 <ol type="1">
 <li>Une des opérations préliminaires à l’analyse de survie est le calcul du temps d’attente sur la base des registres informatiques; les données sont typiquement au format <code>YYYY:MM:DD HH.MM</code>. Si l’entreprise opère uniquement de 9h à 17h du lundi au vendredi, décrivez brièvement comment vous pourriez prendre en compte cette particularité lors du calcul du temps entre l’ouverture et la fermeture du billet de support si vous aviez à calculer <code>duree</code> vous-même.</li>
 <li>Estimez la fonction de survie séparément pour chaque <code>type</code> de billets à l’aide de l’estimateur de Kaplan–Meier.
@@ -246,7 +284,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-2" class="level2">
 <h2 class="anchored" data-anchor-id="question-2">Question 2</h2>
-<p>Les données de cette question, extraites de <a href="https://researchbox.org/159">ResearchBox 159</a> et mises à disposition sous licence <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, ont servi à construire une échelle psychométrique pour mesurer l’avarice. Les données de <span class="math inline">\(n=300\)</span> participant(e)s ont été collectées à partir de Amazon M’Turk.</p>
+<p>Les données de cette question, dans la base de données <code>avarice</code> du paquet <code>hecmulti</code>, sont extraites de <a href="https://researchbox.org/159">ResearchBox 159</a> et mises à disposition sous licence <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, ont servi à construire une échelle psychométrique pour mesurer l’avarice. Les données de <span class="math inline">\(n=300\)</span> participant(e)s ont été collectées à partir de Amazon M’Turk.</p>
 <blockquote class="blockquote">
 <p>Zeelenberg M, Seuntjens TG, van de Ven N, Breugelmans SM (2021). <em>Dispositional Greed Scales</em>. European Journal of Psychological Assessment. 1–10. <a href="https://doi.org/10.1027/1015-5759/a000647"><code>doi: 10.1027/1015-5759/a000647</code></a></p>
 </blockquote>
