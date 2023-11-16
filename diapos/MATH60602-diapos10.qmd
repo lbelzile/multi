@@ -101,18 +101,6 @@ Typiquement utilisé à des fins
 
 Réduire la dimension en préservant le plus de variabilité possible.
 
-# Comment manger le plus de krill?
-
-::: {#fig-krill layout-ncol=2}
-
-![]("figures/whaleshark.png")
-
-![]("figures/krill.png")
-
-Illustrations d'Allison Horst (CC BY 4.0)
-
-:::
-
 
 
 # Composantes principales:
@@ -134,7 +122,7 @@ C_j &= \underset{\text{somme de poids fois variables explicatives}}{w_{j1} X_1 +
 et $\mathsf{Cor}(C_i, C_j)=0$ pour $i \neq j$.
 
 - L'ensemble de $k$ variables qui maximise la variance totale exprimée est $C_1, \ldots, C_k$.
--   Par construction, la variance des composantes principales est décroissante.
+- Par construction, la variance des composantes principales est décroissante.
 
 ```{r}
 #| label: tbl-eigenvalues
@@ -158,6 +146,34 @@ kableExtra::kbl(t(acp_var[,1:8]),
  # kableExtra::kable_styling(full_width = TRUE)
 
 ```
+
+# Calcul des composantes principales
+
+On calcule la matrice de covariance (ou de corrélation) et on effectue
+une décomposition en valeurs propres/vecteurs propres.
+
+```{r}
+mat_cor <- cor(factor)
+decompo <- eigen(mat_cor)
+# Variances des composantes principales
+variances <- decompo$values
+# Il faut standardiser les données
+composantes <- as.matrix(scale(factor)) %*% decompo$vectors
+# cor(composantes) # corrélations nulles
+```
+
+- Les valeurs propres donnent les variances des différentes composantes.
+- Les vecteurs propres donnent la matrice de changement de base pour obtenir les composantes principales.
+- Les vecteurs propres (et donc les composantes) sont orthogonales
+
+
+# Covariance ou corrélation?
+
+La matrice de corrélation est la matrice de covariance des données **standardisées** (variance unitaire)
+
+- la covariance accorde plus d'importante aux variables qui ont une variance élevée
+- si les variables sont sur la même échelle, covariance et corrélation sont utilisables
+- sinon, utiliser la matrice de corrélation *par défaut*.
 
 
 # Rotation et système de coordonnées
@@ -224,7 +240,6 @@ g1 + g2
 # Analyse en composantes principales
 # de la matrice de corrélation
 acp <- princomp(factor, cor = TRUE)
-loadings(acp) # chargements
 biplot(acp) # bigramme
 ```
 
@@ -238,14 +253,14 @@ biplot(acp) # bigramme
 #| echo: false
 acp <- princomp(hecmulti::factor, cor = TRUE)
 loadings <- round(loadings(acp)[,1:8], 2)
-loadings[loadings < 0.2] <- ""
+loadings[abs(loadings) < 0.2] <- ""
 knitr::kable(loadings, booktabs = TRUE, col.names = paste0("C", 1:8)) |>
   kableExtra::kable_styling()
 ```
 
 \footnotesize 
 
-Les poids inférieurs à 0.2 en valeur absolue sont omis.
+Tableau des poids $\mathbf{W}$. Les poids inférieurs à 0.2 en valeur absolue sont omis.
 
 # Bigramme
 
@@ -253,7 +268,7 @@ Les poids inférieurs à 0.2 en valeur absolue sont omis.
 #| label: fig-bigramme
 #| echo: false
 #| eval: true
-#| out-width: '60%'
+#| out-width: '70%'
 #| fig-cap: "Bigramme (représentation sur les deux premières composantes principales)"
 # Analyse en composantes principales
 # de la matrice de corrélation
@@ -267,7 +282,15 @@ biplot(acp,
        )
 ```
 
+# Interprétation du bigramme
+
+- Le nuage de points représente les nouvelles coordonnées des $n$ observations dans l'espace engendré par les deux premières composantes principales.
+- Les flèches donnent les poids de chaque variable servant à la création des composantes (ces poids sont appelés chargements). 
+- On peut distinguer des directions générales qui représentent l'orientation: si des variables pointent dans la même direction, elles sont typiquement fortement corrélées.
+
 # Choix du nombre de composantes
+
+L'objectif est de réduire la dimension, on ne conserve qu'une poignée de composantes.
 
 - **critère des valeurs propres de Kaiser**: variances des composantes principales (valeurs propres) supérieures à 1. 
 - **critère du coude de Cattell**:  diagramme d'éboulis  (`screeplot`)
@@ -294,22 +317,17 @@ hecmulti::eboulis(acp)
 # Pourcentage de variance exprimée
 
 La variance totale  des composantes principales est identique à celle des variables originales:
-$$ \mathsf{Va}(C_1) + \cdots + \mathsf{Va}(C_p) = \mathsf{Va}(X_1) + \cdots + \mathsf{Va}(X_p)$$
+$$\mathsf{Va}(C_1) + \cdots + \mathsf{Va}(C_p) = \mathsf{Va}(X_1) + \cdots + \mathsf{Va}(X_p)$$
 
 - Si on travaille avec la matrice de corrélation (variance unitaire), alors la variance totale est $p$.
-
-# Covariance ou corrélation?
-
-La matrice de corrélation est la matrice de covariance des données **standardisées** (variance unitaire)
-
-- la covariance accorde plus d'importante aux variables qui ont une variance élevée
-- si les variables sont sur la même échelle, covariance et corrélation sont utilisables
-- sinon, utiliser la matrice de corrélation *par défaut*.
 
 # Inconvénients des composantes principales
 
 - Toutes les variables sont nécessaires pour créer des composantes principales avec de nouvelles observations
-- Le critère d'optimisation ne prend pas en compte une potentielle variable réponse (voir analyse canonique et moindres carrés partiels).
+- Le critère d'optimisation ne prend pas en compte une potentielle variable réponse. Dans chaque cas, on cherche une combinaison linéaire des variables explicatives telle que
+  - la variance de cette combinaison est maximale (ACP)
+  - la corrélation avec $Y$ est maximale (analyse canonique)
+  - la covariance avec $Y$ est maximale (moindres carrés partiels, PLS).
 
 
 
