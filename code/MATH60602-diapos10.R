@@ -13,11 +13,22 @@ acp_var <- acp$sdev^2
 data(factor, package = "hecmulti")
 acp <- princomp(factor, cor = TRUE)
 loadings(acp)  # chargements
-biplot(acp, 
+biplot(acp,
        xlab = "composante principale 1",
        ylab = "composante principale 2",
        cex = 0.5
        )
+
+# Calcul des composantes principales
+mat_cor <- cor(factor)
+decompo <- eigen(mat_cor)
+# Variances des composantes principales
+variances <- decompo$values
+# Il faut standardiser les données
+factor_std <- as.matrix(scale(factor))
+composantes <- factor_std %*% decompo$vectors
+# cor(composantes) # corrélations nulles
+
 
 ## -----------------------------------------------------------------------------
 hecmulti::eboulis(acp)
@@ -26,8 +37,8 @@ hecmulti::eboulis(acp)
 ## -----------------------------------------------------------------------------
 data(factor, package = "hecmulti")
 # Représentation graphique de la matrice de corrélation
-corrplot::corrplot(cor(factor), 
-                   type = "upper", 
+corrplot::corrplot(cor(factor),
+                   type = "upper",
                    diag = FALSE,
                    tl.col = "black")
 
