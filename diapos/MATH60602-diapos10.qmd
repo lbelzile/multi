@@ -54,7 +54,7 @@ Utilisé principalement pour les questionnaires
 
 # Datasaurus
 
-![Datasaurus (13 jeux de données avec la même corrélation linéaire)](figures/DataSaurusDozen.pdf)
+![Datasaurus (jeux de données avec la même corrélation)](figures/DataSaurusDozen.pdf)
 
 # Exemple
 
@@ -152,19 +152,25 @@ kableExtra::kbl(t(acp_var[,1:8]),
 On calcule la matrice de covariance (ou de corrélation) et on effectue
 une décomposition en valeurs propres/vecteurs propres.
 
+- Les valeurs propres donnent les variances des différentes composantes.
+- Les vecteurs propres donnent la matrice de changement de base pour obtenir les composantes principales.
+- Les vecteurs propres (et donc les composantes) sont orthogonales
+
+# Calcul dans **R**
+
+
 ```{r}
+#| eval: false
+#| echo: true
 mat_cor <- cor(factor)
 decompo <- eigen(mat_cor)
 # Variances des composantes principales
 variances <- decompo$values
 # Il faut standardiser les données
-composantes <- as.matrix(scale(factor)) %*% decompo$vectors
+factor_std <- as.matrix(scale(factor))
+composantes <- factor_std %*% decompo$vectors
 # cor(composantes) # corrélations nulles
 ```
-
-- Les valeurs propres donnent les variances des différentes composantes.
-- Les vecteurs propres donnent la matrice de changement de base pour obtenir les composantes principales.
-- Les vecteurs propres (et donc les composantes) sont orthogonales
 
 
 # Covariance ou corrélation?
@@ -445,6 +451,58 @@ On transforme la solution pour garantir une solution **interprétable** puisque 
 
 - La rotation *varimax* maximise la variance de la somme des carrés des chargements pour les facteurs.
 - Donne des chargements dispersés (valeurs élevées positives ou négatives, d’autres presque nuls).
+
+# Chargements après rotation varimax
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '70%'
+#| fig-width: 8
+#| fig-height: 8
+#| fig-align: "center"
+mat_cor <- cor(factor)
+decompo <- eigen(mat_cor)
+# valeurs propres = variances des composantes principales
+variances <- decompo$values
+# Il faut standardiser les données si on travaille avec les corrélations
+factor_std <- as.matrix(scale(factor))
+# On multiplie la matrice d'observations par la matrice changement de base
+# donnée par les vecteurs propres -> nouvelles coordonnées
+# (qu'on appelle les composantes principales)
+composantes <- factor_std %*% decompo$vectors
+rotation <- varimax(princomp(x = cor(factor))$loadings[,1:2])
+data <- composantes[,1:2] %*% rotation$rotmat
+colnames(data) <- c("C1", "C2")
+charg_rot <- rotation$loadings
+compo_rot <- composantes[,1:2] %*% rotation$rotmat
+scaling <- max(compo_rot)/2/max(charg_rot)
+charg_rot_norm <-  data.frame(
+  x = scaling * charg_rot[,1],
+  y = scaling * charg_rot[,2],
+  names = colnames(factor))
+colnames(compo_rot) <- c("CP1", "CP2")
+
+library(ggplot2)
+ggplot() +
+  geom_point(data = as.data.frame(compo_rot),
+             mapping = aes(x = CP1, y = CP2)) +
+  geom_segment(data = charg_rot_norm,
+               mapping = aes(x = x, y = y), xend = 0, yend = 0,
+               arrow = arrow(length=unit(0.2,"cm")),
+               alpha = 0.75, 
+               color = 2) +
+  geom_text(data = charg_rot_norm, 
+            aes(x = x,
+                y = y,
+                label = names), 
+            size = 5, vjust=1, 
+            color = 2) +
+  labs(x = "composante principale 1",
+       y = "composante principale 2") +
+  theme_classic()
+```
+
 
 # Estimation avec composantes principales
 
