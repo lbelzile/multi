@@ -121,9 +121,9 @@ ggplot(data = dat, aes(x = x1, y = x2)) +
 
 # Analogie avec analyse factorielle
 
-En analyse factorielle, on combine des variables similaires (colonnes).
+En analyse factorielle, on combine des variables similaires.
 
-Pour l'analyse de regroupements, on regroupe des observations (lignes).
+Pour l'analyse de regroupements, on regroupe des observations.
 
 ```{r}
 include_graphics(path = "figures/tidy-data-sub.png")
@@ -202,7 +202,7 @@ Une poignée de dons sont très élevés, mais la plupart des montants tourne au
 
 # Modification des données
 
-On se concentre sur les personnes qui ont fait plusieurs dons.
+On se concentre sur les personnes qui ont donné.
 
 
 ```{r}
@@ -236,7 +236,7 @@ corrplot::corrplot(cor(donsmult))
 
 1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
 2. Décider quel méthode sera utilisée pour la segmentation.
-3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissemblance.
+3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissimilarité.
 4. Étiqueter les observations.
 5. Obtenir le prototype de chaque groupe. 
 6. Valider la qualité de la segmentation.
@@ -250,28 +250,28 @@ knitr::include_graphics("figures/typologie-vote-france.jpg")
 ```
 
 
-# Mesures de dissemblance et de similarité
+# Mesures de dissimilarité et de similarité
 
 Comment mesurer si deux observations appartiennent à un même regroupement et sont similaires?
 
-Une mesure de dissemblance sert à quantifier la proximité de deux objets à partir de leurs coordoonnées. 
+Une mesure de dissimilarité sert à quantifier la proximité de deux objets à partir de leurs coordoonnées. 
 
-Plus la dissemblance est élevée, moins les observations sont semblables (plus éloignées).
+Plus la dissimilarité est élevée, moins les observations sont semblables (plus éloignées).
 
 
 
-# Mesures de dissemblance
+# Mesures de dissimilarité
 
-Quelques propriétés des mesures de dissemblance:
+Quelques propriétés des mesures de dissimilarité:
 
 1. positivité: la distance entre deux observations est nulle si et seulement si on a les mêmes caractéristiques pour toutes les variables explicatives et strictement positive sinon.
-2. la dissemblance est la même peu importe l'ordre des observations (symmétrie)
+2. la dissimilarité est la même peu importe l'ordre des observations (symmétrie)
 
-Toute distance est une mesure de dissemblance.
+Toute distance est une mesure de dissimilarité.
 
 # Distance euclidienne
 
-La mesure de dissemblance la plus utilisée en pratique est la distance euclidienne.
+La mesure de dissimilarité la plus utilisée en pratique est la distance euclidienne.
 
 
 La distance entre les vecteurs ligne $\mathbf{X}_i$ et $\mathbf{X}_j$ (deux lignes de la base de données) est
@@ -280,10 +280,11 @@ d(\mathbf{X}_i, \mathbf{X}_j; l_2) = \left\{(X_{i1}-X_{j1})^2 + \cdots + (X_{ip}
 \end{align*}
 C'est tout simplement la longueur du segment qui relie deux points dans l'espace $p$ dimensionnel. 
 
-# Autres mesures de dissemblance
+# Autres mesures de dissimilarité
 
 
 ```{r}
+#| out-width: '70%'
 knitr::include_graphics("figures/distance.pdf")
 ```
 
@@ -292,14 +293,14 @@ knitr::include_graphics("figures/distance.pdf")
 
 
 
-# Autres mesures de dissemblance
+# Autres mesures de dissimilarité
 
-Pour les données catégorielles nominales, on peut assigner une dissemblance de 0 si les variables ont la même modalité et 1 sinon. 
+Pour les données catégorielles nominales, on peut assigner une dissimilarité de 0 si les variables ont la même modalité et 1 sinon. 
 
 Pour le cas de variables mixtes, la distance de Gower permet de traiter
 les valeurs manquantes et standardise automatiquement.
 
-# Dissemblances dans **R**
+# dissimilarités dans **R**
 
 Avec notre base de données `donsmult`, le stockage des distances prend environ 750MB!
 
@@ -315,7 +316,7 @@ d3 <- cluster::daisy(donsmult, metric = "gower")
 
 \footnotesize 
 
-Les objets de class `dist` ne stockent que la matrice triangulaire inférieure (symmétrie).
+Les objets de class `dist` ne stockent que la matrice triangulaire inférieure (puisque la distance est symmétrique).
 
 # Au plus fort la poche
 
@@ -329,7 +330,7 @@ Le poids accordé à une variable explicative dépend de son étendu et de sa va
 Généralement, on standardise les données avant l'analyse de regroupements.
 
 - Soustraire la moyenne et diviser par l'écart-type empiriques (fonction `scale` dans **R**)
-- utiliser mesures robustes: soustraire médiane et diviser par l'écart absolu à la médiane (mad)
+- ou utiliser des mesures robustes: soustraire la médiane et diviser par l'écart absolu à la médiane (*mad*)
 
 
 Notez qu'il est illogique de standardiser les variables catégorielles (déclarer obligatoirement les variables binaires en facteurs et traiter à part!)
@@ -371,21 +372,32 @@ L'analyse de regroupements cherche à créer une division de $n$ observations de
 1. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides)
 2. mélanges de modèles
 3. méthodes basées sur la connectivité (regroupements hiérarchiques agglomératifs et divisifs)
-4. méthodes basées sur la densité
+4. méthodes basées sur la densité (pas couvertes)
 
+
+# Notation pour la complexité
+
+- La notation $\mathrm{O}(\cdot)$ nous renseigne sur l'ordre du nombre d'opérations nécessaires pour le calcul. Par exemple, additionner une colonne de chiffres nécessite $\mathrm{O}(n)$ flops
+
+- De même, le stockage d'une matrice de distance, qui contient $n(n-1)/2$ entrées distinctes, est $\mathrm{O}(n^2)$.
+
+Plus le chiffre (ou la puissance) est élevé, plus le calcul ou le stockage est coûteux. 
 
 # Critères pour sélection
 
 - Complexité: plus un algorithme a une complexité élevée (coût de calcul et quantité de stockage), moins il sera susceptible d'être applicable à des mégadonnées.
-- Choix des hyperparamètres: plusieurs paramètres (nombre de groupes, rayon, choix de la dissemblance, etc.) à spécifier selon les méthodes.
+- Choix des hyperparamètres: plusieurs paramètres (nombre de groupes, rayon, choix de la dissimilarité, etc.) à spécifier selon les méthodes.
 
 
 # Méthodes basées sur les centroïdes et les médoïdes 
 
 
-On assigne chaque observation à un de $K$ regroupements (le nombre $K$ est fixé apriori) représenté par un prototype, disons $\boldsymbol{\mu}_k$ pour le regroupement $k$. 
+On assigne chaque observation à un de $K$ regroupements, représentés par un prototype, disons $\boldsymbol{\mu}_k$ pour le regroupement $k$. 
 
-On cherche à assigner les observations aux groupes de manière à minimiser la distance avec les prototypes.
+
+- le nombre $K$ est fixé apriori
+
+On cherche à assigner les observations aux groupes de manière à minimiser la distance entre les observations et les prototypes.
 
 # $K$ moyennes
 
@@ -433,9 +445,11 @@ Visionner l'animation [en ligne](https://lbelzile.github.io/math60602/03-regroup
 
 # Forces et faiblesses
 
+Quelques forces ($+$) et faiblesses ($-$) de l'algorithme des $K$ moyennes
+
 - ($+$) Complexité **linéaire** dans la dimension et dans le nombre de variables.
 - ($+$) L'algorithme converge rapidement vers une solution locale (garantie théorique).
-- ($-$) Regroupements globulaires d'apparence sphérique (distance euclidienne). 
+- ($-$) Regroupements globulaires d'apparence sphérique (distance Euclidienne). 
 - ($+$) Pour les prédictions, on peut assigner les nouvelles observations au barycentre le plus près.
 
 # Performance
@@ -702,9 +716,9 @@ La fonction objective de l'@eq-fobjKmoy avec la distance euclidienne représente
 \intertext{où}
 \mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|^2_2,
 \end{align*}
-est la somme des distance $l_2$ entre les observation du groupe $G_k$ et leur barycentre $\boldsymbol{\mu}_k$.
+est la somme des distances euclidiennes au carré entre les observation du groupe $G_k$ et leur barycentre $\boldsymbol{\mu}_k$.
 
-Avec un seul groupe, la distance par rapport à la moyenne est $\mathsf{SCT} = \mathsf{SCD}_{1}$.
+Avec un seul groupe, la distance par rapport à la moyenne est $\mathsf{SCT} = \mathsf{SCD}_{1}$, la somme totale du carré de toutes les distances par rapport au barycentre global.
 
 
 
@@ -795,10 +809,10 @@ Il est possible que la silhouette $s_i$ soit négative: cela indique généralem
 
 De bons regroupements seront obtenus si la silhouette moyenne est élevée.
 
-# Graphique des silhouettes
+# Graphique des silhouettes {.smaller}
 
 \footnotesize
-Coûteux en calcul (nécessite matrice de dissemblance), possible de faire avec un sous-échantillon aléatoire.
+Coûteux en calcul (nécessite matrice de dissimilarité), possible de faire avec un sous-échantillon aléatoire.
 
 La segmentation de droite de la @fig-silhouette est supérieure parce que les regroupements sont plus homogènes et mieux équilibrés.
 
@@ -807,6 +821,7 @@ La segmentation de droite de la @fig-silhouette est supérieure parce que les re
 #| echo: false
 #| label: fig-silhouette
 #| fig-cap: "Profil des silhouettes pour deux regroupements d'un jeu de données."
+#| out-width: '70%'
 par(mfrow=c(1,2))
 library(cluster)
 cols <- MetBrewer::MetPalettes$Hiroshige[[1]][c(10,5,1)]
@@ -921,7 +936,7 @@ Les regroupements obtenus sont interprétables:
 # Récapitulatif
 
 - L'analyse de regroupement (*clustering*) est une méthode d'apprentissage non-supervisée
-- Plusieurs choix de l'analyste (mesure de dissemblance, algorithme, choix des hyperparamètres) impactent la segmentation et peuvent mener à des résultats très différents avec les mêmes données.
+- Plusieurs choix de l'analyste (mesure de dissimilarité, algorithme, choix des hyperparamètres) impactent la segmentation et peuvent mener à des résultats très différents avec les mêmes données.
 - L'algorithme des $K$-moyennes est le plus employé et son faible coût permet son utilisation avec des mégadonnées.
 
 

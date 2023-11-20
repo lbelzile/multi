@@ -546,10 +546,10 @@ L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables explicative
 
 La **fonction de risque** (en anglais, _hazard_) est 
 \begin{align*}
-h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
+h(t) =  \lim_{\Delta t \to 0} \frac{\Pr( t < T  \leq t + \Delta t] \mid T \geq t)}{\Delta t }
 \end{align*}
-où $f(t)$ est la fonction de densité (pour $T$ continu) ou de masse pour $T$ discret.
 
+et $h(t) \Delta t$ est la probabilité que l'événement survienne juste après le temps $t$, sachant qu'il n'est pas survenu jusque là.
 
 Plus le risque est élevé au temps $t$, plus l'événement est susceptible d'arriver.
 

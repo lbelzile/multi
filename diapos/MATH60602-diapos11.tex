@@ -45,7 +45,6 @@
 }
 
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -55,14 +54,18 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
-  \setmathfont[]{Latin Modern Math}
 \fi
+\usepackage{lmodern}
 \usecolortheme{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
 \useinnertheme{Flip}
 \useoutertheme{Flip}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[]{VisbyCF-Medium}
+  \setsansfont[]{Latin Modern Sans}
+  \setmathfont[]{Latin Modern Math}
+\fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -208,10 +211,12 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -235,7 +240,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, sharp corners, enhanced, interior hidden, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -298,9 +303,9 @@ regroupements hypothétiques.}
 
 \begin{frame}{Analogie avec analyse factorielle}
 \protect\hypertarget{analogie-avec-analyse-factorielle}{}
-En analyse factorielle, on combine des variables similaires (colonnes).
+En analyse factorielle, on combine des variables similaires.
 
-Pour l'analyse de regroupements, on regroupe des observations (lignes).
+Pour l'analyse de regroupements, on regroupe des observations.
 
 \begin{figure}
 
@@ -434,7 +439,7 @@ tourne autour de 5\$, 10\$, 20\$, etc.
 
 \begin{frame}[fragile]{Modification des données}
 \protect\hypertarget{modification-des-donnuxe9es}{}
-On se concentre sur les personnes qui ont fait plusieurs dons.
+On se concentre sur les personnes qui ont donné.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -478,7 +483,7 @@ On se concentre sur les personnes qui ont fait plusieurs dons.
   Décider quel méthode sera utilisée pour la segmentation.
 \item
   Choisir les hyperparamètres de l'algorithme (nombre de regroupements,
-  rayon, etc.) et la mesure de dissemblance.
+  rayon, etc.) et la mesure de dissimilarité.
 \item
   Étiqueter les observations.
 \item
@@ -501,21 +506,21 @@ On se concentre sur les personnes qui ont fait plusieurs dons.
 \end{figure}
 \end{frame}
 
-\begin{frame}{Mesures de dissemblance et de similarité}
-\protect\hypertarget{mesures-de-dissemblance-et-de-similarituxe9}{}
+\begin{frame}{Mesures de dissimilarité et de similarité}
+\protect\hypertarget{mesures-de-dissimilarituxe9-et-de-similarituxe9}{}
 Comment mesurer si deux observations appartiennent à un même
 regroupement et sont similaires?
 
-Une mesure de dissemblance sert à quantifier la proximité de deux objets
-à partir de leurs coordoonnées.
+Une mesure de dissimilarité sert à quantifier la proximité de deux
+objets à partir de leurs coordoonnées.
 
-Plus la dissemblance est élevée, moins les observations sont semblables
+Plus la dissimilarité est élevée, moins les observations sont semblables
 (plus éloignées).
 \end{frame}
 
-\begin{frame}{Mesures de dissemblance}
-\protect\hypertarget{mesures-de-dissemblance}{}
-Quelques propriétés des mesures de dissemblance:
+\begin{frame}{Mesures de dissimilarité}
+\protect\hypertarget{mesures-de-dissimilarituxe9}{}
+Quelques propriétés des mesures de dissimilarité:
 
 \begin{enumerate}
 \tightlist
@@ -524,16 +529,16 @@ Quelques propriétés des mesures de dissemblance:
   seulement si on a les mêmes caractéristiques pour toutes les variables
   explicatives et strictement positive sinon.
 \item
-  la dissemblance est la même peu importe l'ordre des observations
+  la dissimilarité est la même peu importe l'ordre des observations
   (symmétrie)
 \end{enumerate}
 
-Toute distance est une mesure de dissemblance.
+Toute distance est une mesure de dissimilarité.
 \end{frame}
 
 \begin{frame}{Distance euclidienne}
 \protect\hypertarget{distance-euclidienne}{}
-La mesure de dissemblance la plus utilisée en pratique est la distance
+La mesure de dissimilarité la plus utilisée en pratique est la distance
 euclidienne.
 
 La distance entre les vecteurs ligne \(\mathbf{X}_i\) et
@@ -543,11 +548,11 @@ d(\mathbf{X}_i, \mathbf{X}_j; l_2) = \left\{(X_{i1}-X_{j1})^2 + \cdots + (X_{ip}
 points dans l'espace \(p\) dimensionnel.
 \end{frame}
 
-\begin{frame}{Autres mesures de dissemblance}
-\protect\hypertarget{autres-mesures-de-dissemblance}{}
+\begin{frame}{Autres mesures de dissimilarité}
+\protect\hypertarget{autres-mesures-de-dissimilarituxe9}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/distance.pdf}
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/distance.pdf}
 
 }
 
@@ -565,17 +570,17 @@ points dans l'espace \(p\) dimensionnel.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Autres mesures de dissemblance}
-\protect\hypertarget{autres-mesures-de-dissemblance-1}{}
+\begin{frame}{Autres mesures de dissimilarité}
+\protect\hypertarget{autres-mesures-de-dissimilarituxe9-1}{}
 Pour les données catégorielles nominales, on peut assigner une
-dissemblance de 0 si les variables ont la même modalité et 1 sinon.
+dissimilarité de 0 si les variables ont la même modalité et 1 sinon.
 
 Pour le cas de variables mixtes, la distance de Gower permet de traiter
 les valeurs manquantes et standardise automatiquement.
 \end{frame}
 
-\begin{frame}[fragile]{Dissemblances dans \textbf{R}}
-\protect\hypertarget{dissemblances-dans-r}{}
+\begin{frame}[fragile]{dissimilarités dans \textbf{R}}
+\protect\hypertarget{dissimilarituxe9s-dans-r}{}
 Avec notre base de données \texttt{donsmult}, le stockage des distances
 prend environ 750MB!
 
@@ -592,7 +597,7 @@ prend environ 750MB!
 \footnotesize
 
 Les objets de class \texttt{dist} ne stockent que la matrice
-triangulaire inférieure (symmétrie).
+triangulaire inférieure (puisque la distance est symmétrique).
 \end{frame}
 
 \begin{frame}{Au plus fort la poche}
@@ -622,8 +627,8 @@ regroupements.
   Soustraire la moyenne et diviser par l'écart-type empiriques (fonction
   \texttt{scale} dans \textbf{R})
 \item
-  utiliser mesures robustes: soustraire médiane et diviser par l'écart
-  absolu à la médiane (mad)
+  ou utiliser des mesures robustes: soustraire la médiane et diviser par
+  l'écart absolu à la médiane (\emph{mad})
 \end{itemize}
 
 Notez qu'il est illogique de standardiser les variables catégorielles
@@ -688,8 +693,24 @@ observations de \(p\) variables en regroupements.
   méthodes basées sur la connectivité (regroupements hiérarchiques
   agglomératifs et divisifs)
 \item
-  méthodes basées sur la densité
+  méthodes basées sur la densité (pas couvertes)
 \end{enumerate}
+\end{frame}
+
+\begin{frame}{Notation pour la complexité}
+\protect\hypertarget{notation-pour-la-complexituxe9}{}
+\begin{itemize}
+\item
+  La notation \(\mathrm{O}(\cdot)\) nous renseigne sur l'ordre du nombre
+  d'opérations nécessaires pour le calcul. Par exemple, additionner une
+  colonne de chiffres nécessite \(\mathrm{O}(n)\) flops
+\item
+  De même, le stockage d'une matrice de distance, qui contient
+  \(n(n-1)/2\) entrées distinctes, est \(\mathrm{O}(n^2)\).
+\end{itemize}
+
+Plus le chiffre (ou la puissance) est élevé, plus le calcul ou le
+stockage est coûteux.
 \end{frame}
 
 \begin{frame}{Critères pour sélection}
@@ -702,18 +723,25 @@ observations de \(p\) variables en regroupements.
   à des mégadonnées.
 \item
   Choix des hyperparamètres: plusieurs paramètres (nombre de groupes,
-  rayon, choix de la dissemblance, etc.) à spécifier selon les méthodes.
+  rayon, choix de la dissimilarité, etc.) à spécifier selon les
+  méthodes.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Méthodes basées sur les centroïdes et les médoïdes}
 \protect\hypertarget{muxe9thodes-basuxe9es-sur-les-centrouxefdes-et-les-muxe9douxefdes}{}
-On assigne chaque observation à un de \(K\) regroupements (le nombre
-\(K\) est fixé apriori) représenté par un prototype, disons
-\(\boldsymbol{\mu}_k\) pour le regroupement \(k\).
+On assigne chaque observation à un de \(K\) regroupements, représentés
+par un prototype, disons \(\boldsymbol{\mu}_k\) pour le regroupement
+\(k\).
+
+\begin{itemize}
+\tightlist
+\item
+  le nombre \(K\) est fixé apriori
+\end{itemize}
 
 On cherche à assigner les observations aux groupes de manière à
-minimiser la distance avec les prototypes.
+minimiser la distance entre les observations et les prototypes.
 \end{frame}
 
 \begin{frame}{\(K\) moyennes}
@@ -774,6 +802,9 @@ site}.
 
 \begin{frame}{Forces et faiblesses}
 \protect\hypertarget{forces-et-faiblesses}{}
+Quelques forces (\(+\)) et faiblesses (\(-\)) de l'algorithme des \(K\)
+moyennes
+
 \begin{itemize}
 \tightlist
 \item
@@ -784,7 +815,7 @@ site}.
   (garantie théorique).
 \item
   (\(-\)) Regroupements globulaires d'apparence sphérique (distance
-  euclidienne).
+  Euclidienne).
 \item
   (\(+\)) Pour les prédictions, on peut assigner les nouvelles
   observations au barycentre le plus près.
@@ -993,11 +1024,12 @@ euclidienne représente la somme du carré des distances (SCD)
 \mathsf{SCD}_K &= \mathsf{SCD}_{1,K} + \cdots + \mathsf{SCD}_{K,K};
 \intertext{où}
 \mathsf{SCD}_{k,K} &= \sum_{i \in G_k}\|\mathbf{X}_i -  \boldsymbol{\mu}_{k}\|^2_2,
-\end{align*} est la somme des distance \(l_2\) entre les observation du
-groupe \(G_k\) et leur barycentre \(\boldsymbol{\mu}_k\).
+\end{align*} est la somme des distances euclidiennes au carré entre les
+observation du groupe \(G_k\) et leur barycentre \(\boldsymbol{\mu}_k\).
 
 Avec un seul groupe, la distance par rapport à la moyenne est
-\(\mathsf{SCT} = \mathsf{SCD}_{1}\).
+\(\mathsf{SCT} = \mathsf{SCD}_{1}\), la somme totale du carré de toutes
+les distances par rapport au barycentre global.
 \end{frame}
 
 \begin{frame}{Somme du carré des distances}
@@ -1084,8 +1116,8 @@ De bons regroupements seront obtenus si la silhouette moyenne est
 \protect\hypertarget{graphique-des-silhouettes}{}
 \footnotesize
 
-Coûteux en calcul (nécessite matrice de dissemblance), possible de faire
-avec un sous-échantillon aléatoire.
+Coûteux en calcul (nécessite matrice de dissimilarité), possible de
+faire avec un sous-échantillon aléatoire.
 
 La segmentation de droite de la Figure~\ref{fig-silhouette} est
 supérieure parce que les regroupements sont plus homogènes et mieux
@@ -1093,7 +1125,7 @@ supérieure parce que les regroupements sont plus homogènes et mieux
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/fig-silhouette-1.pdf}
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/fig-silhouette-1.pdf}
 
 }
 
@@ -1130,7 +1162,7 @@ Vérifiez que la taille des segments n'est pas fortement débalancée.
 \hypertarget{tbl-kmoy5resume}{}
 \begin{table}
 \caption{\label{tbl-kmoy5resume}Moyenne des variables explicatives par segment (segmentation avec
-K-moyennes et cinq regroupements). }\tabularnewline
+\(K\)-moyennes et cinq regroupements). }\tabularnewline
 
 \centering
 \begin{tabular}{lrrrrr}
@@ -1185,7 +1217,7 @@ Les regroupements obtenus sont interprétables:
   L'analyse de regroupement (\emph{clustering}) est une méthode
   d'apprentissage non-supervisée
 \item
-  Plusieurs choix de l'analyste (mesure de dissemblance, algorithme,
+  Plusieurs choix de l'analyste (mesure de dissimilarité, algorithme,
   choix des hyperparamètres) impactent la segmentation et peuvent mener
   à des résultats très différents avec les mêmes données.
 \item
