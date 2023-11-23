@@ -202,7 +202,7 @@ ggplot(data = perfo1$table,
   theme_classic()
 ```
 
-Avec $c=0.465$, on obtient un taux de mauvaise classification de 15.3\%.
+Avec $c=0.465$, on obtient un taux de mauvaise classification de $15.3$\%.
 
 # Performance et classification
 
@@ -328,8 +328,8 @@ tab1
 
 - Si on n'envoie pas de catalogue, notre gain est nul. 
 - Si on envoie le catalogue 
-   - à un client qui n'achète pas, on perd 10$ (le coût de l'envoi). 
-   - à un client qui achète, notre revenu net est de 57\$ (revenu moyen moins coût de l'envoi).
+   - à un client qui n'achète pas, on perd $10$\$ (le coût de l'envoi). 
+   - à un client qui achète, notre revenu net est de $57$\$ (revenu moyen moins coût de l'envoi).
 
 
 
@@ -474,9 +474,9 @@ roc <- hecmulti::courbe_roc(
 
 # Aire sous la courbe
 
-- Plus la courbe se rapproche de (0, 1) (coin supérieur gauche), meilleure est la classification.
-- Autrement dit, plus l'aire sous la courbe est près de 1, mieux c’est.
-- Une aire sous la courbe de 0.5 (ligne diagonale) correspond à la performance d'une allocation aléatoire.
+- Plus la courbe se rapproche de ($0, 1$) (coin supérieur gauche), meilleure est la classification.
+- Autrement dit, plus l'aire sous la courbe est près de $1$, mieux c’est.
+- Une aire sous la courbe de $0.5$ (ligne diagonale) correspond à la performance d'une allocation aléatoire.
 
 # Courbe lift
 
@@ -523,10 +523,10 @@ knitr::kable(tab_lift[,-1],
 # Calcul du lift
 
 
-Si on classifiait comme acheteurs les 10\% qui ont la plus forte probabilité estimée d'achat, on détecterait 78 des 210 clients.
+Si on classifiait comme acheteurs les $10$\% qui ont la plus forte probabilité estimée d'achat, on détecterait $78$ des $210$ clients.
 
 
-Si on prend 10\% des clients au hasard et que 21\% des observations correspondent à des achats, on détecterait en moyenne 21 clients par tranche de 100 personnes.
+Si on prend $10$\% des clients au hasard et que $21$\% des observations correspondent à des achats, on détecterait en moyenne $21$ clients par tranche de $100$ personnes.
 
 
 Le lift est le nombre de succès détecté par le modèle sur le nombre détecté au hasard.
@@ -582,6 +582,122 @@ hecmulti::calibration(
 
 Il n'y a pas de preuve ici que le modèle est mal calibré.
 
+# Problèmes avec la régression logistique
+
+Il arrive que, lors de l'ajustement d'une régression logistique, on obtienne un message d'avertissement: 
+
+\footnotesize
+
+```{r}
+#| echo: true
+#| eval: false
+Warning messages:
+1: glm.fit: algorithm did not converge 
+2: glm.fit: fitted probabilities numerically 0 or 1 occurred 
+```
+
+\normalsize
+
+# Quasi-séparation de variables
+
+Le deuxième message d'erreur survient quand une combinaison linéaire de variables explicatives permet de prédire exactement la réponse: nos probabilités prédites sont $0$ ou $1$.
+
+- par exemple, si on ajuste un modèle pour `yachat` en fonction de `ymontant`.
+
+\footnotesize
+
+```{r}
+#| eval: false
+#| echo: true
+quasisep <- hecmulti::dbm |>  
+  # remplacer les valeurs manquantes par des zéros
+  dplyr::mutate(ymontant = ifelse(yachat == 0, 0, ymontant))
+# Régression logistique pour l'achat (0 ou 1) en fonction du montant
+modele <- glm(yachat ~ ymontant, 
+              family = binomial, 
+              data = quasisep, 
+              subset = test == 0)
+```
+
+\normalsize
+
+# Illustration de la séparation de variables
+
+```{r}
+#| echo: false
+#| eval: true
+#| out-width: '60%'
+#| fig-width: 8
+#| fig-height: 5
+#| fig-align: center
+set.seed(1234)
+x <- sort(rexp(20, rate = 0.2))
+y <- as.integer(x>9)
+m1 <- glm(y~ x, family=binomial)
+fittedsepmod <- function(x){1/(1+exp(-coef(m1)[1] - x*coef(m1)[2]))}
+library(ggplot2)
+ggplot(data.frame(x, y), aes(x=x,y=y)) +
+  geom_point() +
+  geom_function(fun = fittedsepmod, n = 1001L, linewidth = 1.1) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25), labels = c("0","0.25","0.5","0.75","1")) +
+  labs(y = "", x = "x") +
+  theme_classic()
+```
+
+\footnotesize 
+
+Quasi-séparation de variable: les estimations des paramètres sont presques infinies pour permettre une transition abrupte de la probabilité de succès de $\widehat{p}=0$ à $\widehat{p}=1$ à $x=9$.
+
+\normalsize
+
+# Coefficients avec séparation de variable
+
+Les valeurs élevées des coefficients et erreurs-type sont une autre indication de quasi-séparation de variables.
+
+Avec des variables standardisées, un coefficient $|\beta_j| > 10$ est suspect.
+
+```{r quasisepvar}
+#| echo: false
+#| eval: true
+#| label: tbl-quasisep
+#| tbl-cap: "Données simulées avec séparation de variable pour modèle logistique (gauche) et correction de Firth (droite)."
+#| warning: false
+#| message: false
+set.seed(1234)
+x <- sort(rexp(20, rate = 0.2))
+y <- as.integer(x>9)
+m1 <- glm(y~ x, family=binomial)
+m2 <- logistf::logistf(y~x, data = data.frame(x=x,y=y), family=binomial)
+tab1 <- data.frame(estimate = as.numeric(m1$coefficients), "std.error" = as.numeric(sqrt(diag(vcov(m1)))))
+colnames(tab1) <- c("coef.", "erreur-type")
+tab1 <- apply(tab1, 1:2, function(x){paste0("$", sprintf(x, fmt = "%.1f"), "$")})
+rownames(tab1) <- c("cst","x")
+tab2 <- data.frame(estimate = as.numeric(m2$coef), "std.error" = as.numeric(sqrt(diag(m2$var))))
+colnames(tab2) <- c("coef.", "erreur-type")
+tab2 <- apply(tab2, 1:2, function(x){paste0("$", sprintf(x, fmt = "%.1f"), "$")})
+rownames(tab2) <- c("cst","x")
+knitr::kable(x = list(tab1, tab2), align = "rrr", booktabs = TRUE, escape = FALSE)
+```
+
+
+# Causes de la quasi-séparation de variables
+
+Typiquement, le problème survient parce que
+
+- on a ajouté un dérivé de la variable réponse comme variable explicative
+- on a un modèle surajusté, souvent une variable catégorielle pour laquelle toutes les observations d'un niveau donné ont la même réponse, soit $0$ ou $1$.
+
+Ce n'est pas nécessairement un enjeu pour la prédiction, mais c'est souvent indicateur de problèmes plus importants. Les coefficients et interprétations ne sont plus valides...
+
+# Solutions pour la quasi séparation de variables
+
+1. Regarder quelles probabilités sont presque $0$ ou $1$ pour identifier les observations problématiques et s'assurer que l'échantillon que l'on emploie est adéquat.
+   - Par exemple, les femmes ne peuvent pas avoir un cancer de la prostate, donc la probabilité prédite pour ces dernières est $0$. On pourrait simplement enlever les femmes et prédire zéro manuellement.
+2. Déterminer si une variable explicative cause du surajustement en étudiant les coefficients dont la valeur absolue est très élevée.
+3. Si on a des problèmes de convergence numérique ($1$e message d'erreur), on peut aussi ajouter une pénalité, proposée par Firth (1993) pour empêcher les valeurs des coefficients d'être trop élevés (un peu comme le LASSO). 
+    - Dans **R**, via la fonction `logistf` du paquet éponyme.
+
+
 # Récapitulatif
 
 - La classification est une forme d'apprentissage supervisée.
@@ -628,9 +744,9 @@ Ou simplement ignorer le montant d'achat et envoyer un catalogue si la probabili
 
 # Stratégie de référence
 
-- Parmi les 100K clients, 23 179 auraient acheté si on leur avait envoyé le catalogue
-- Ces clients auraient généré des revenus de 1 601 212\$.
-- Si on enlève le coût des envois (100 000 $\times$ 10\$), la stratégie de référence permet un revenu net de 601 212\$.
+- Parmi les $100$K clients, $23 179$ auraient acheté si on leur avait envoyé le catalogue
+- Ces clients auraient généré des revenus de $1 601 212$\$.
+- Si on enlève le coût des envois ($100 000 \times 10$\$), la stratégie de référence permet un revenu net de $601 212$\$.
 
 
 # Stratégie d'ajustement
@@ -646,7 +762,7 @@ En résumé, la procédure numérique à réaliser est la suivante:
 
 # Prédiction et envoi
 
-- Prédire les 100 000 observations de l'échantillon test.
+- Prédire les $100 000$ observations de l'échantillon test.
 - Envoyer un catalogue si la probabilité d'achat excède le point de coupure.
 - Calculer le revenu résultant:
     - zéro si on n'envoie pas de catalogue
@@ -658,16 +774,16 @@ En résumé, la procédure numérique à réaliser est la suivante:
 # Conclusion
 
 
-Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus de 978 226\$.
+Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus de $978 226$\$.
 
-C’est une énorme amélioration, de plus de 56%, par rapport à la stratégie de référence.
+C’est une énorme amélioration, de plus de $56$%, par rapport à la stratégie de référence.
 
 
 # Récapitulatif
 
 - Les principes de sélection de variable couverts précédemment s'appliquent toujours (recherche exhaustive, séquentielle et LASSO).
 - On peut aussi calculer les critères d'information puisque le modèle est ajusté par maximum de vraisemblance.
-- Attention au surajustement! Suspect si les probabilités estimées sont près de 0/1 (vérifier la calibration).
+- Attention au surajustement! Suspect si les probabilités estimées sont près de $0$ ou $1$ (vérifier la calibration).
 - Deux étapes: sélectionner le modèle (variables) et le point de coupure.
 - D'autres modèles que la régression logistique (arbres de classification, etc.) sont envisageables pour la classification.
 

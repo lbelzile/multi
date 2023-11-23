@@ -226,14 +226,6 @@ Les données `survie1` contiennent les variables suivantes.
 - `region`: région où habite le client en ce moment (valeurs entre `1` et `5`).
 
 
-# Survie vs régression
-
-| réponse $Y$                        	| résumé descriptif                          	| comparaison de deux groupes                        	| modèle général        	|
-|-----------------------	|--------------------	|--------------------------------------------------	|---------------------------|
-| continue                           	|  moyenne                                   	|  test-$t$ pour  deux échantillons                  	| régression linéaire   	|
-| binaire                            	| proportion                                 	| test d'indépendance du khi-deux                    	| régression logistique 	|
-| temps de survie censuré à droite	|  fonction de survie, temps de survie médian 	|  test log-rang, test de Wilcoxon généralisé (Gehan) 	| modèle de Cox         	|
-
 # Fonction de survie
 
 
@@ -331,11 +323,17 @@ knitr::kable(km_subtab,
   kableExtra::kable_styling(latex_options = 'scale_down')
 ```
 
-\footnotesize 
+# Calcul du temps de survie
 
-La probabilité estimée que le temps d'abonnement dépasse 30 semaines est 0.986.
+La fonction de survie estimée est une fonction escalier.
 
-\normalsize
+
+Pour trouver la survie au temps $t$, on regarde la valeur rapportée dans le tableau pour le temps $t_0 \leq t$ le plus proche.
+
+La survie, soit la probabilité estimée que le temps d'abonnement dépasse
+
+ - 30 semaines, est 0.986;
+ - 32 semaines, est 0.986.
 
 
 # Graphique de la fonction de survie
@@ -367,7 +365,7 @@ autoplot(kapm) +
 # Comprendre l'estimateur de Kaplan--Meier
 
 - On parle d'**échec** au temps $t_i$ si $T = t_i$ et $C=0$ (événement observé au temps $t_i$).
-- Le nombre de **personnes à risque** au temps $t_i$ est le total des observations dont le temps mesuré excède $t_i$ (censure et événements postérieurs à $t_i$)
+- Le nombre de **personnes à risque** au temps $t_i$ est le total des observations dont le temps mesuré excède $t_i$ (censure et événements postérieurs à $t_i$ si troncation à gauche)
 
 **Construction**:
 
@@ -393,6 +391,18 @@ Pour un temps $t$ donné, on multiplie tous les termes ($1-\widehat{h}_i$) des t
 - la survie ne change qu'aux valeurs de $t_{(i)}$ ($i=1, \ldots, m$)
 - les contre-marches interviennent uniquement aux temps observés d'**échecs**.
 - si la plus grande observation est censurée, la courbe de survie n'atteindra jamais zéro.
+
+# Syntaxe pour variable réponse
+
+La troncature à gauche impacte seulement l'ensemble des observations à risque
+
+- une personne n'est pas à risque d'échec avant le temps enregistré pour la censure à gauche.
+
+Avec `survival`, la syntaxe pour la variable réponse devient `Surv(time, time2, event, type = 'right')`, où
+
+- `time` est le temps de troncature à gauche, ou zéro
+- `time2` est le temps de défaillance, ou de censure à droite
+- `event` est une variable entière qui vaut 1 pour les temps observés et 0 pour les temps censurés à droite.
 
 # Quantiles de la fonction de survie
 
@@ -420,6 +430,15 @@ knitr::kable(quantiles,
 
 - L'estimé du temps de survie médian est de 114 semaines: on estime que la moitié des clients vont avoir une durée d'abonnement supérieure (ou inférieure) à 114 semaines.
 - Un intervalle de confiance (IC) de niveau 95%, pour le temps médian est [110, 119] semaines (IC de Wald, transformé).
+
+# Calcul des quantiles
+
+Le quantile à niveau $1-\alpha$ est la valeur $\min\{t: S(t) \leq \alpha\}$.
+
+C'est le point sur l'axe des abcisse auquel une ligne horizontale de hauteur $\alpha$ croise la courbe de survie empirique (une contre-marche).
+
+- En regardant le tableau, le quantile 80% de la survie est la valeur à laquelle la survie descend en dessous de 0.2, soit 202 semaines. 
+- Interprétation: on estime que 80% des gens se sont désabonnés avant 202 semaines.
 
 # Estimateur déficient et moyenne restreinte
 

@@ -240,7 +240,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, frame hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, sharp corners, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de survie}
 \protect\hypertarget{analyse-de-survie}{}
@@ -484,36 +484,6 @@ Les données \texttt{survie1} contiennent les variables suivantes.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Survie vs régression}
-\protect\hypertarget{survie-vs-ruxe9gression}{}
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1917}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.4167}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2250}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-réponse \(Y\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-résumé descriptif
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-comparaison de deux groupes
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-modèle général
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-continue & moyenne & test-\(t\) pour deux échantillons & régression
-linéaire \\
-binaire & proportion & test d'indépendance du khi-deux & régression
-logistique \\
-temps de survie censuré à droite & fonction de survie, temps de survie
-médian & test log-rang, test de Wilcoxon généralisé (Gehan) & modèle de
-Cox \\
-\bottomrule\noalign{}
-\end{longtable}
-\end{frame}
-
 \begin{frame}{Fonction de survie}
 \protect\hypertarget{fonction-de-survie}{}
 Soit \(F(t)=\Pr(T \leq t)\) la fonction de répartition du temps de
@@ -613,13 +583,24 @@ temps & nb à risque & nb échecs & nb cumul. & survie & erreur-type\\
 \bottomrule
 \end{tabular}}
 \end{table}
+\end{frame}
 
-\footnotesize
+\begin{frame}{Calcul du temps de survie}
+\protect\hypertarget{calcul-du-temps-de-survie}{}
+La fonction de survie estimée est une fonction escalier.
 
-La probabilité estimée que le temps d'abonnement dépasse 30 semaines est
-0.986.
+Pour trouver la survie au temps \(t\), on regarde la valeur rapportée
+dans le tableau pour le temps \(t_0 \leq t\) le plus proche.
 
-\normalsize
+La survie, soit la probabilité estimée que le temps d'abonnement dépasse
+
+\begin{itemize}
+\tightlist
+\item
+  30 semaines, est 0.986;
+\item
+  32 semaines, est 0.986.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Graphique de la fonction de survie}
@@ -647,7 +628,7 @@ confiance ponctuels à 95\%.}
 \item
   Le nombre de \textbf{personnes à risque} au temps \(t_i\) est le total
   des observations dont le temps mesuré excède \(t_i\) (censure et
-  événements postérieurs à \(t_i\))
+  événements postérieurs à \(t_i\) si troncation à gauche)
 \end{itemize}
 
 \textbf{Construction}:
@@ -703,6 +684,34 @@ Pour un temps \(t\) donné, on multiplie tous les termes
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Syntaxe pour variable réponse}
+\protect\hypertarget{syntaxe-pour-variable-ruxe9ponse}{}
+La troncature à gauche impacte seulement l'ensemble des observations à
+risque
+
+\begin{itemize}
+\tightlist
+\item
+  une personne n'est pas à risque d'échec avant le temps enregistré pour
+  la censure à gauche.
+\end{itemize}
+
+Avec \texttt{survival}, la syntaxe pour la variable réponse devient
+\texttt{Surv(time,\ time2,\ event,\ type\ =\ \textquotesingle{}right\textquotesingle{})},
+où
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{time} est le temps de troncature à gauche, ou zéro
+\item
+  \texttt{time2} est le temps de défaillance, ou de censure à droite
+\item
+  \texttt{event} est une variable entière qui vaut 1 pour les temps
+  observés et 0 pour les temps censurés à droite.
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Quantiles de la fonction de survie}
 \protect\hypertarget{quantiles-de-la-fonction-de-survie}{}
 On obtient le quantile à partir du tableau: c'est le premier temps
@@ -731,6 +740,26 @@ niveau (\%) & quantile & IC 95\% (borne inf.) & IC 95\% (borne sup.)\\
 \item
   Un intervalle de confiance (IC) de niveau 95\%, pour le temps médian
   est {[}110, 119{]} semaines (IC de Wald, transformé).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Calcul des quantiles}
+\protect\hypertarget{calcul-des-quantiles}{}
+Le quantile à niveau \(1-\alpha\) est la valeur
+\(\min\{t: S(t) \leq \alpha\}\).
+
+C'est le point sur l'axe des abcisse auquel une ligne horizontale de
+hauteur \(\alpha\) croise la courbe de survie empirique (une
+contre-marche).
+
+\begin{itemize}
+\tightlist
+\item
+  En regardant le tableau, le quantile 80\% de la survie est la valeur à
+  laquelle la survie descend en dessous de 0.2, soit 202 semaines.
+\item
+  Interprétation: on estime que 80\% des gens se sont désabonnés avant
+  202 semaines.
 \end{itemize}
 \end{frame}
 
@@ -961,9 +990,11 @@ explicatives à proprement parler.
 \protect\hypertarget{fonction-de-risque}{}
 La \textbf{fonction de risque} (en anglais, \emph{hazard}) est
 \begin{align*}
-h(t) =  \lim_{\mathrm{d} t \to 0} \frac{\Pr(T \in [t, t + \mathrm{d} t) \mid T > t)}{\mathrm{d} t} = \frac{f(t)}{S(t)}
-\end{align*} où \(f(t)\) est la fonction de densité (pour \(T\) continu)
-ou de masse pour \(T\) discret.
+h(t) =  \lim_{\Delta t \to 0} \frac{\Pr( t < T  \leq t + \Delta t] \mid T \geq t)}{\Delta t }
+\end{align*}
+
+et \(h(t) \Delta t\) est la probabilité que l'événement survienne juste
+après le temps \(t\), sachant qu'il n'est pas survenu jusque là.
 
 Plus le risque est élevé au temps \(t\), plus l'événement est
 susceptible d'arriver.

@@ -226,7 +226,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, interior hidden, sharp corners, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, boxrule=0pt, sharp corners, interior hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Rappel}
 \protect\hypertarget{rappel}{}
@@ -350,7 +350,7 @@ le taux de bonne classification, \(\widehat{\Pr}(Y = \widehat{Y})\).
 \end{figure}
 
 Avec \(c=0.465\), on obtient un taux de mauvaise classification de
-15.3\%.
+\(15.3\)\%.
 \end{frame}
 
 \begin{frame}[fragile]{Performance et classification}
@@ -380,8 +380,8 @@ coupure donné.
 \toprule
   & \(Y=1\) & \(Y=0\)\\
 \midrule
-\(\widehat{Y}=1\) & 78 & 19\\
-\(\widehat{Y}=0\) & 132 & 771\\
+\(\widehat{Y}=1\) & 89 & 30\\
+\(\widehat{Y}=0\) & 121 & 760\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -402,8 +402,8 @@ du nombre d'observations dans chaque classe.
 \toprule
   & \(Y=1\) & \(Y=0\)\\
 \midrule
-\(\widehat{Y}=1\) & 78 & 19\\
-\(\widehat{Y}=0\) & 132 & 771\\
+\(\widehat{Y}=1\) & 89 & 30\\
+\(\widehat{Y}=0\) & 121 & 760\\
 \bottomrule
 \end{tabular}
 \begin{tabular}{lrr}
@@ -492,10 +492,10 @@ Si on cherche à maximiser le taux de bonne classification, cela revient
   \begin{itemize}
   \tightlist
   \item
-    à un client qui n'achète pas, on perd 10\$ (le coût de l'envoi).
+    à un client qui n'achète pas, on perd \(10\)\$ (le coût de l'envoi).
   \item
-    à un client qui achète, notre revenu net est de 57\$ (revenu moyen
-    moins coût de l'envoi).
+    à un client qui achète, notre revenu net est de \(57\)\$ (revenu
+    moyen moins coût de l'envoi).
   \end{itemize}
 \end{itemize}
 
@@ -587,10 +587,10 @@ ce point de coupure, on estime que
 \item
   le taux de bonne classification est de 70.5
 \item
-  la sensibilité est de 90.48.
+  la sensibilité est de 88.57.
 \end{itemize}
 
-Ainsi, on va détecter environ 90.48\% des clients qui achètent.
+Ainsi, on va détecter environ 88.57\% des clients qui achètent.
 
 Il est coûteux de rater un client potentiel, donc la stratégie optimale
 est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs
@@ -634,12 +634,13 @@ de calculer l'aire sous la courbe.
 \begin{itemize}
 \tightlist
 \item
-  Plus la courbe se rapproche de (0, 1) (coin supérieur gauche),
+  Plus la courbe se rapproche de (\(0, 1\)) (coin supérieur gauche),
   meilleure est la classification.
 \item
-  Autrement dit, plus l'aire sous la courbe est près de 1, mieux c'est.
+  Autrement dit, plus l'aire sous la courbe est près de \(1\), mieux
+  c'est.
 \item
-  Une aire sous la courbe de 0.5 (ligne diagonale) correspond à la
+  Une aire sous la courbe de \(0.5\) (ligne diagonale) correspond à la
   performance d'une allocation aléatoire.
 \end{itemize}
 \end{frame}
@@ -686,13 +687,13 @@ aléatoire?
   & hasard & modèle & lift\\
 \midrule
 10\% & 21 & 78 & 3.71\\
-20\% & 42 & 122 & 2.90\\
-30\% & 63 & 155 & 2.46\\
-40\% & 84 & 177 & 2.11\\
-50\% & 105 & 194 & 1.85\\
+20\% & 42 & 120 & 2.86\\
+30\% & 63 & 157 & 2.49\\
+40\% & 84 & 180 & 2.14\\
+50\% & 105 & 195 & 1.86\\
 \addlinespace
-60\% & 126 & 202 & 1.60\\
-70\% & 147 & 209 & 1.42\\
+60\% & 126 & 201 & 1.60\\
+70\% & 147 & 208 & 1.41\\
 80\% & 168 & 210 & 1.25\\
 90\% & 189 & 210 & 1.11\\
 \bottomrule
@@ -702,12 +703,12 @@ aléatoire?
 
 \begin{frame}{Calcul du lift}
 \protect\hypertarget{calcul-du-lift}{}
-Si on classifiait comme acheteurs les 10\% qui ont la plus forte
-probabilité estimée d'achat, on détecterait 78 des 210 clients.
+Si on classifiait comme acheteurs les \(10\)\% qui ont la plus forte
+probabilité estimée d'achat, on détecterait \(78\) des \(210\) clients.
 
-Si on prend 10\% des clients au hasard et que 21\% des observations
-correspondent à des achats, on détecterait en moyenne 21 clients par
-tranche de 100 personnes.
+Si on prend \(10\)\% des clients au hasard et que \(21\)\% des
+observations correspondent à des achats, on détecterait en moyenne
+\(21\) clients par tranche de \(100\) personnes.
 
 Le lift est le nombre de succès détecté par le modèle sur le nombre
 détecté au hasard.
@@ -757,11 +758,169 @@ que le modèle est surajusté.
 
 \begin{verbatim}
 Test de calibration de Spiegelhalter (1986)
-Statistique de test: 1.2 
-valeur-p: 0.229
+Statistique de test: 1.26 
+valeur-p: 0.207
 \end{verbatim}
 
 Il n'y a pas de preuve ici que le modèle est mal calibré.
+\end{frame}
+
+\begin{frame}[fragile]{Problèmes avec la régression logistique}
+\protect\hypertarget{probluxe8mes-avec-la-ruxe9gression-logistique}{}
+Il arrive que, lors de l'ajustement d'une régression logistique, on
+obtienne un message d'avertissement:
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{Warning messages}\SpecialCharTok{:}
+\DecValTok{1}\SpecialCharTok{:}\NormalTok{ glm.fit}\SpecialCharTok{:}\NormalTok{ algorithm did not converge }
+\DecValTok{2}\SpecialCharTok{:}\NormalTok{ glm.fit}\SpecialCharTok{:}\NormalTok{ fitted probabilities numerically }\DecValTok{0}\NormalTok{ or }\DecValTok{1}\NormalTok{ occurred }
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Quasi-séparation de variables}
+\protect\hypertarget{quasi-suxe9paration-de-variables}{}
+Le deuxième message d'erreur survient quand une combinaison linéaire de
+variables explicatives permet de prédire exactement la réponse: nos
+probabilités prédites sont \(0\) ou \(1\).
+
+\begin{itemize}
+\tightlist
+\item
+  par exemple, si on ajuste un modèle pour \texttt{yachat} en fonction
+  de \texttt{ymontant}.
+\end{itemize}
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{quasisep }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{dbm }\SpecialCharTok{|\textgreater{}}  
+  \CommentTok{\# remplacer les valeurs manquantes par des zéros}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{ymontant =} \FunctionTok{ifelse}\NormalTok{(yachat }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, ymontant))}
+\CommentTok{\# Régression logistique pour l\textquotesingle{}achat (0 ou 1) en fonction du montant}
+\NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(yachat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ymontant, }
+              \AttributeTok{family =}\NormalTok{ binomial, }
+              \AttributeTok{data =}\NormalTok{ quasisep, }
+              \AttributeTok{subset =}\NormalTok{ test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Illustration de la séparation de variables}
+\protect\hypertarget{illustration-de-la-suxe9paration-de-variables}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-22-1.pdf}
+
+}
+
+\end{figure}
+
+\footnotesize
+
+Quasi-séparation de variable: les estimations des paramètres sont
+presques infinies pour permettre une transition abrupte de la
+probabilité de succès de \(\widehat{p}=0\) à \(\widehat{p}=1\) à
+\(x=9\).
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Coefficients avec séparation de variable}
+\protect\hypertarget{coefficients-avec-suxe9paration-de-variable}{}
+Les valeurs élevées des coefficients et erreurs-type sont une autre
+indication de quasi-séparation de variables.
+
+Avec des variables standardisées, un coefficient \(|\beta_j| > 10\) est
+suspect.
+
+\hypertarget{tbl-quasisep}{}
+\begin{table}
+\caption{\label{tbl-quasisep}Données simulées avec séparation de variable pour modèle logistique
+(gauche) et correction de Firth (droite). }\tabularnewline
+
+
+\centering
+\begin{tabular}[t]{lrr}
+\toprule
+  & coef. & erreur-type\\
+\midrule
+cst & $-829.0$ & $311290.6$\\
+x & $92.5$ & $34780.6$\\
+\bottomrule
+\end{tabular}
+\centering
+\begin{tabular}[t]{lrr}
+\toprule
+  & coef. & erreur-type\\
+\midrule
+cst & $-5.6$ & $2.6$\\
+x & $0.6$ & $0.3$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Causes de la quasi-séparation de variables}
+\protect\hypertarget{causes-de-la-quasi-suxe9paration-de-variables}{}
+Typiquement, le problème survient parce que
+
+\begin{itemize}
+\tightlist
+\item
+  on a ajouté un dérivé de la variable réponse comme variable
+  explicative
+\item
+  on a un modèle surajusté, souvent une variable catégorielle pour
+  laquelle toutes les observations d'un niveau donné ont la même
+  réponse, soit \(0\) ou \(1\).
+\end{itemize}
+
+Ce n'est pas nécessairement un enjeu pour la prédiction, mais c'est
+souvent indicateur de problèmes plus importants. Les coefficients et
+interprétations ne sont plus valides\ldots{}
+\end{frame}
+
+\begin{frame}[fragile]{Solutions pour la quasi séparation de variables}
+\protect\hypertarget{solutions-pour-la-quasi-suxe9paration-de-variables}{}
+\begin{enumerate}
+\tightlist
+\item
+  Regarder quelles probabilités sont presque \(0\) ou \(1\) pour
+  identifier les observations problématiques et s'assurer que
+  l'échantillon que l'on emploie est adéquat.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Par exemple, les femmes ne peuvent pas avoir un cancer de la
+    prostate, donc la probabilité prédite pour ces dernières est \(0\).
+    On pourrait simplement enlever les femmes et prédire zéro
+    manuellement.
+  \end{itemize}
+\item
+  Déterminer si une variable explicative cause du surajustement en
+  étudiant les coefficients dont la valeur absolue est très élevée.
+\item
+  Si on a des problèmes de convergence numérique (\(1\)e message
+  d'erreur), on peut aussi ajouter une pénalité, proposée par Firth
+  (1993) pour empêcher les valeurs des coefficients d'être trop élevés
+  (un peu comme le LASSO).
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Dans \textbf{R}, via la fonction \texttt{logistf} du paquet éponyme.
+  \end{itemize}
+\end{enumerate}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
@@ -865,13 +1024,13 @@ probabilité d'achat excède notre point de coupure optimal.
 \begin{itemize}
 \tightlist
 \item
-  Parmi les 100K clients, 23 179 auraient acheté si on leur avait envoyé
-  le catalogue
+  Parmi les \(100\)K clients, \(23 179\) auraient acheté si on leur
+  avait envoyé le catalogue
 \item
-  Ces clients auraient généré des revenus de 1 601 212\$.
+  Ces clients auraient généré des revenus de \(1 601 212\)\$.
 \item
-  Si on enlève le coût des envois (100 000 \(\times\) 10\$), la
-  stratégie de référence permet un revenu net de 601 212\$.
+  Si on enlève le coût des envois (\(100 000 \times 10\)\$), la
+  stratégie de référence permet un revenu net de \(601 212\)\$.
 \end{itemize}
 \end{frame}
 
@@ -902,7 +1061,7 @@ En résumé, la procédure numérique à réaliser est la suivante:
 \begin{itemize}
 \tightlist
 \item
-  Prédire les 100 000 observations de l'échantillon test.
+  Prédire les \(100 000\) observations de l'échantillon test.
 \item
   Envoyer un catalogue si la probabilité d'achat excède le point de
   coupure.
@@ -928,9 +1087,9 @@ revenu résultant de cette stratégie.
 \protect\hypertarget{conclusion}{}
 Si on avait fait une bête recherche séquentielle et qu'on avait pris le
 modèle avec le plus petit BIC (8 variables explicatives), on aurait
-dégagé des revenus de 978 226\$.
+dégagé des revenus de \(978 226\)\$.
 
-C'est une énorme amélioration, de plus de 56\%, par rapport à la
+C'est une énorme amélioration, de plus de \(56\)\%, par rapport à la
 stratégie de référence.
 \end{frame}
 
@@ -946,7 +1105,7 @@ stratégie de référence.
   est ajusté par maximum de vraisemblance.
 \item
   Attention au surajustement! Suspect si les probabilités estimées sont
-  près de 0/1 (vérifier la calibration).
+  près de \(0\) ou \(1\) (vérifier la calibration).
 \item
   Deux étapes: sélectionner le modèle (variables) et le point de
   coupure.
