@@ -80,7 +80,28 @@ Chaque observation se voit assigner une étiquette de groupe.
 On procède ensuite à une analyse **descriptive**, segment par segment.
 
 
-# Exemples
+# Analogie avec analyse factorielle
+
+En analyse factorielle, on combine des variables similaires.
+
+Pour l'analyse de regroupements, on regroupe des observations.
+
+```{r}
+include_graphics(path = "figures/tidy-data-sub.png")
+```
+
+Ce sont des méthodes dites d'**apprentissage non-supervisé**: l'objectif est de déduire les regroupements sans étiquette préalable (contrairement à la classification).
+
+
+# Étapes d'une analyse de regroupements
+
+1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
+2. Choisir un algorithme et ses hyperparamètres (dissemblance, nombre de regroupements, etc.)
+3. Regrouper et étiqueter les observations.
+4. Valider la qualité de la segmentation.
+5. Obtenir le prototype de chaque groupe et interpréter les regroupements à l'aide de ces derniers.
+
+# Exemples d'analyses de regroupements
 
 - Programmes de fidélisation et résolution d'entités
 - Segmentation de la clientèle de transport en commun et élaboration de forfaits 
@@ -119,17 +140,6 @@ ggplot(data = dat, aes(x = x1, y = x2)) +
 ```
 
 
-# Analogie avec analyse factorielle
-
-En analyse factorielle, on combine des variables similaires.
-
-Pour l'analyse de regroupements, on regroupe des observations.
-
-```{r}
-include_graphics(path = "figures/tidy-data-sub.png")
-```
-
-Ce sont des méthodes dites d'**apprentissage non-supervisé**: l'objectif est de déduire la structure présente dans un ensemble de points $\mathbf{X}$ sans étiquette préalable (contrairement à la classification).
 
 # Structure de la base de données
 
@@ -192,61 +202,49 @@ Typiquement, ne pas utiliser les variables sociodémographiques (âge, revenu, s
 
 La base de données `dons` contient `r nrow(hecmulti::dons)` observations pour `r ncol(hecmulti::dons)` variables.
 
-- Trois grandes catégories: personnes qui n'ont pas donné, dons uniques, dons multiples.
-- valeur des dons (total, min, max) et des promesses, nombre de dons, fréquence, ancienneté, etc. 
+Nous avons plusieurs variables:
 
-Une rapide exploration des données révèle que près de 61% des employé(e)s n'ont pas donné à l'organisme. 
+- la valeur des dons (total, min, max)
+- la valeur des promesses, 
+- le délai entre les dons (moyen, min, max)
+- le nombre de dons, 
+- la fréquence, 
+- l'ancienneté, etc. 
+
 
 Une poignée de dons sont très élevés, mais la plupart des montants tourne autour de 5\$, 10\$, 20\$, etc.
 
 
 # Modification des données
 
-On se concentre sur les personnes qui ont donné.
 
 
 ```{r}
 #| eval: true
 #| echo: true
 donsmult <- hecmulti::dons |>
-  filter(ndons > 1L) |>
-  mutate(mtdons = vdons/ndons,
+  filter(ndons > 1L) |> #seulement dons multiples
+  mutate(mtdons = vdons/ndons, # montant moyen
+         # nombre de dons selon l'anciennete
          snrefus = nrefus/anciennete*mean(anciennete),
          mpromesse = case_when(
-           npromesse > 0 ~ vpromesse/npromesse,
-           TRUE ~ 0)) |>
+           npromesse > 0 ~ vpromesse/npromesse, #montant moyen
+           TRUE ~ 0)) |> # zero si aucune promesse
   select(!c(
-    vradiations, # valeurs manquantes
+    vradiations, # trop de valeurs manquantes dans vradations
     nindecis, vdons, ddonsmax,
     ddonsmin, vdonsmin, npromesse,
     vpromesse, nrefus, nradiations)) |>
-  relocate(mtdons)
+  relocate(mtdons) # mettre mtdons dans la 1e colonne
 ```
 
-# Corrélation pour nouvelles données
+# Corrélation des nouvelles données
 
 ```{r}
 #| eval: true
 #| echo: false
-#| out-width: '60%'
+#| out-width: '80%'
 corrplot::corrplot(cor(donsmult))
-```
-
-# Étapes d'une analyse de regroupements
-
-1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
-2. Décider quel méthode sera utilisée pour la segmentation.
-3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissimilarité.
-4. Étiqueter les observations.
-5. Obtenir le prototype de chaque groupe. 
-6. Valider la qualité de la segmentation.
-7. Interpréter les regroupements obtenus à partir des prototypes.
-
-
-# Exemple: typologie des votants en France
-
-```{r}
-knitr::include_graphics("figures/typologie-vote-france.jpg")
 ```
 
 
@@ -364,6 +362,13 @@ Quelques solutions
 - faire une segmentation manuelle si les valeurs manquantes déterminent des regroupements (ex: temps entre dons valide uniquement pour dons multiples).
 - imputer les données manquantes (voir chapitre sur les données manquantes)
  
+ 
+# Exemple: typologie des votants en France
+
+```{r}
+knitr::include_graphics("figures/typologie-vote-france.jpg")
+```
+
 
 # Algorithmes pour la segmentation
 

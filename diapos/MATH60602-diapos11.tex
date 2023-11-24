@@ -240,7 +240,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, enhanced, interior hidden, borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Analyse de regroupements}
 \protect\hypertarget{analyse-de-regroupements}{}
@@ -261,8 +261,48 @@ On procède ensuite à une analyse \textbf{descriptive}, segment par
 segment.
 \end{frame}
 
-\begin{frame}{Exemples}
-\protect\hypertarget{exemples}{}
+\begin{frame}{Analogie avec analyse factorielle}
+\protect\hypertarget{analogie-avec-analyse-factorielle}{}
+En analyse factorielle, on combine des variables similaires.
+
+Pour l'analyse de regroupements, on regroupe des observations.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/tidy-data-sub.png}
+
+}
+
+\end{figure}
+
+Ce sont des méthodes dites d'\textbf{apprentissage non-supervisé}:
+l'objectif est de déduire les regroupements sans étiquette préalable
+(contrairement à la classification).
+\end{frame}
+
+\begin{frame}{Étapes d'une analyse de regroupements}
+\protect\hypertarget{uxe9tapes-dune-analyse-de-regroupements}{}
+\begin{enumerate}
+\tightlist
+\item
+  Choisir les variables pertinentes à l'analyse. Cette étape peut
+  nécessiter de créer, transformer de nouvelles variables ou d'aggréger
+  les données.
+\item
+  Choisir un algorithme et ses hyperparamètres (dissemblance, nombre de
+  regroupements, etc.)
+\item
+  Regrouper et étiqueter les observations.
+\item
+  Valider la qualité de la segmentation.
+\item
+  Obtenir le prototype de chaque groupe et interpréter les regroupements
+  à l'aide de ces derniers.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Exemples d'analyses de regroupements}
+\protect\hypertarget{exemples-danalyses-de-regroupements}{}
 \begin{itemize}
 \tightlist
 \item
@@ -299,26 +339,6 @@ segment.
 regroupements hypothétiques.}
 
 \end{figure}
-\end{frame}
-
-\begin{frame}{Analogie avec analyse factorielle}
-\protect\hypertarget{analogie-avec-analyse-factorielle}{}
-En analyse factorielle, on combine des variables similaires.
-
-Pour l'analyse de regroupements, on regroupe des observations.
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/tidy-data-sub.png}
-
-}
-
-\end{figure}
-
-Ce sont des méthodes dites d'\textbf{apprentissage non-supervisé}:
-l'objectif est de déduire la structure présente dans un ensemble de
-points \(\mathbf{X}\) sans étiquette préalable (contrairement à la
-classification).
 \end{frame}
 
 \begin{frame}{Structure de la base de données}
@@ -420,18 +440,23 @@ revenu, sexe, etc.)
 La base de données \texttt{dons} contient 19353 observations pour 16
 variables.
 
+Nous avons plusieurs variables:
+
 \begin{itemize}
 \tightlist
 \item
-  Trois grandes catégories: personnes qui n'ont pas donné, dons uniques,
-  dons multiples.
+  la valeur des dons (total, min, max)
 \item
-  valeur des dons (total, min, max) et des promesses, nombre de dons,
-  fréquence, ancienneté, etc.
+  la valeur des promesses,
+\item
+  le délai entre les dons (moyen, min, max)
+\item
+  le nombre de dons,
+\item
+  la fréquence,
+\item
+  l'ancienneté, etc.
 \end{itemize}
-
-Une rapide exploration des données révèle que près de 61\% des
-employé(e)s n'ont pas donné à l'organisme.
 
 Une poignée de dons sont très élevés, mais la plupart des montants
 tourne autour de 5\$, 10\$, 20\$, etc.
@@ -439,67 +464,31 @@ tourne autour de 5\$, 10\$, 20\$, etc.
 
 \begin{frame}[fragile]{Modification des données}
 \protect\hypertarget{modification-des-donnuxe9es}{}
-On se concentre sur les personnes qui ont donné.
-
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{donsmult }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{dons }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{filter}\NormalTok{(ndons }\SpecialCharTok{\textgreater{}}\NormalTok{ 1L) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{mtdons =}\NormalTok{ vdons}\SpecialCharTok{/}\NormalTok{ndons,}
+  \FunctionTok{filter}\NormalTok{(ndons }\SpecialCharTok{\textgreater{}}\NormalTok{ 1L) }\SpecialCharTok{|\textgreater{}} \CommentTok{\#seulement dons multiples}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{mtdons =}\NormalTok{ vdons}\SpecialCharTok{/}\NormalTok{ndons, }\CommentTok{\# montant moyen}
+         \CommentTok{\# nombre de dons selon l\textquotesingle{}anciennete}
          \AttributeTok{snrefus =}\NormalTok{ nrefus}\SpecialCharTok{/}\NormalTok{anciennete}\SpecialCharTok{*}\FunctionTok{mean}\NormalTok{(anciennete),}
          \AttributeTok{mpromesse =} \FunctionTok{case\_when}\NormalTok{(}
-\NormalTok{           npromesse }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{\textasciitilde{}}\NormalTok{ vpromesse}\SpecialCharTok{/}\NormalTok{npromesse,}
-           \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \DecValTok{0}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{           npromesse }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{\textasciitilde{}}\NormalTok{ vpromesse}\SpecialCharTok{/}\NormalTok{npromesse, }\CommentTok{\#montant moyen}
+           \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \DecValTok{0}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# zero si aucune promesse}
   \FunctionTok{select}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{c}\NormalTok{(}
-\NormalTok{    vradiations, }\CommentTok{\# valeurs manquantes}
+\NormalTok{    vradiations, }\CommentTok{\# trop de valeurs manquantes dans vradations}
 \NormalTok{    nindecis, vdons, ddonsmax,}
 \NormalTok{    ddonsmin, vdonsmin, npromesse,}
 \NormalTok{    vpromesse, nrefus, nradiations)) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{relocate}\NormalTok{(mtdons)}
+  \FunctionTok{relocate}\NormalTok{(mtdons) }\CommentTok{\# mettre mtdons dans la 1e colonne}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
 
-\begin{frame}{Corrélation pour nouvelles données}
-\protect\hypertarget{corruxe9lation-pour-nouvelles-donnuxe9es}{}
+\begin{frame}{Corrélation des nouvelles données}
+\protect\hypertarget{corruxe9lation-des-nouvelles-donnuxe9es}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-5-1.pdf}
-
-}
-
-\end{figure}
-\end{frame}
-
-\begin{frame}{Étapes d'une analyse de regroupements}
-\protect\hypertarget{uxe9tapes-dune-analyse-de-regroupements}{}
-\begin{enumerate}
-\tightlist
-\item
-  Choisir les variables pertinentes à l'analyse. Cette étape peut
-  nécessiter de créer, transformer de nouvelles variables ou d'aggréger
-  les données.
-\item
-  Décider quel méthode sera utilisée pour la segmentation.
-\item
-  Choisir les hyperparamètres de l'algorithme (nombre de regroupements,
-  rayon, etc.) et la mesure de dissimilarité.
-\item
-  Étiqueter les observations.
-\item
-  Obtenir le prototype de chaque groupe.
-\item
-  Valider la qualité de la segmentation.
-\item
-  Interpréter les regroupements obtenus à partir des prototypes.
-\end{enumerate}
-\end{frame}
-
-\begin{frame}{Exemple: typologie des votants en France}
-\protect\hypertarget{exemple-typologie-des-votants-en-france}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/typologie-vote-france.jpg}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos11_files/figure-beamer/unnamed-chunk-5-1.pdf}
 
 }
 
@@ -675,6 +664,17 @@ Quelques solutions
   imputer les données manquantes (voir chapitre sur les données
   manquantes)
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemple: typologie des votants en France}
+\protect\hypertarget{exemple-typologie-des-votants-en-france}{}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/typologie-vote-france.jpg}
+
+}
+
+\end{figure}
 \end{frame}
 
 \begin{frame}{Algorithmes pour la segmentation}

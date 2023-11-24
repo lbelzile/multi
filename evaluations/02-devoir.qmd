@@ -72,34 +72,33 @@ Les participant(e)s devaient répondre à 30 questions`. Les instructions étaie
  
 ### Liste des questions {.nonumber} 
  
-1. I like to collect expensive things
-2. At work/school, I keep good ideas to myself so that only I can get credit for them in the long run
-3. No matter how much I have of something, I always want more
-4. My actions are strongly focused on material things
-5. I get the most fun out of buying myself all sorts of things
-6. A simple basic life is sufficient for me
-7. When I think about all the things I have, my first thought is about what I would like to have next
-8. One can never have enough
-9. When something is being shared, I try to get as big a share as possible
-10. One can never have too much money
-11. I enjoy being a part of exclusive clubs or groups that are not open to everyone
-12. I believe that money is essential; friends are replaceable
-13. I consider myself successful if I have a job that pays a lot of money
-14. The pursuit of more and better is an important goal in life for me
-15. No matter how much I have, I always want more
-16. I am easily satisfied with what I’ve got
-17. “I want it all” would be a good motto for me
-18. Sometimes I feel a real urge to possess something
-19. I can't imagine having too many things
-20. I do not enjoy sharing positions of power
-21. I always want more
-22. Actually, I'm kind of greedy
-23. It doesn't matter how much I have, I'm never completely satisfied
-24. When I play on my own, I sometimes cheat a little
+1. I always want more
+2. Actually, I'm kind of greedy
+3. One can never have too much money
+4. As soon as I have acquired something, I start to think about the next thing I want
+5. It doesn't matter how much I have, I'm never completely satisfied
+6. My life motto is ``more is better''
+7. I can't imagine having  too  many things
+8. No matter how much I have of something, I always want more
+9. One can never have enough
+10. Even when I am fulfilled, I often seek more
+11. The pursuit of more and better is an important goal in life for me
+12. A simple basic life is sufficient for me
+13. I am easily satisfied with what I've got
+14. When I think about all the things I have, my first thought is about what I would like to have next
+15. My actions are strongly focused on material things
+16. Sometimes I feel a real urge to possess something
+17. When something is being shared, I try to get as big a share as possible
+18. In order to get what I want, I can accept the fact that other people may suffer damage
+19. I get the most fun out of buying myself all sorts of things
+20. When I play on my own, I sometimes cheat a little
+21. I enjoy being a part of exclusive clubs or groups that are not open to everyone
+22. I do not enjoy sharing positions of power
+23. I like to collect expensive things
+24. At work/school, I keep good ideas to myself so that only I can get credit for them in the long run
 25. Financially supporting the less fortunate is a priority for me
-26. As soon as I have acquired something, I start to think about the next thing I want
-27. Even when I am fulfilled, I often seek more
-28. My life motto is 'more is better'
-29. Being financially wealthy is my number one goal.
-30. In order to get what I want, I can accept the fact that other people may suffer damage
-
+26. I believe that money is essential; friends are replaceable
+27. Being financially wealthy is my number one goal.
+28. I consider myself successful if I have a job that pays a lot of money
+29. No matter how much I have, I always want more
+30. ``I want it all'' would be a good motto for me
