@@ -25,6 +25,16 @@ include-in-header:
         \usepackage{mathrsfs}
 ---
 
+# Segmentation
+
+On continue notre couverture des algorithmes de segmentation.
+
+Les diapositives expliquent 
+
+1. les étapes des regroupements
+2. les avantages et inconvénients des méthodes
+3. les conditions pour lesquelles la segmentation risque d'être applicable.
+
 # Algorithmes pour l'analyse de regroupements
 
 
@@ -33,7 +43,7 @@ L'analyse de regroupements cherche à créer une division de $n$ observations de
 1. méthodes basées sur les centroïdes et les médoïdes ($k$-moyennes, $k$-médoides)
 2. mélanges de modèles
 3. méthodes basées sur la connectivité (regroupements hiérarchiques agglomératifs et divisifs)
-4. méthodes basées sur la densité
+4. méthodes basées sur la densité (pas couvertes)
 
 
 
@@ -196,20 +206,20 @@ On suppose qu'on a $K$ groupes, chacun caractérisé par une densité de dimensi
 
 Généralement, on choisit une loi normale multidimensionnelle pour le $k$e groupe $G$,
 \begin{align*}
-\boldsymbol{X} \mid G=k \sim \mathsf{No}_p(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+\boldsymbol{X} \mid G=k \sim \mathsf{Normal}_p(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
 \end{align*}
 
-La probabilité qu'une observation soit tirée du groupe $G=k$ est $\pi_k$.
+La probabilité qu'une observation soit tirée du groupe $k$ est $\pi_k$.
 
 # Estimation du mélange de modèle
 
-
+<!--
 La vraisemblance est une fonction des paramètres $\boldsymbol{\mu}_k$, $\boldsymbol{\Sigma}_k$ et de la probabilité $\pi_k$ qu'une observation $\mathbf{X}_i$ tombe dans le groupe $k$,
 \begin{align*}
  L_i(\{\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k, \boldsymbol{\pi}_k\}_{k-1}^K; \mathbf{X}_i)= \sum_{k=1}^K\pi_k
 f_{k}(\boldsymbol{X}_i \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k).
 \end{align*}
-
+-->
 
 Le maximum de vraisemblance est obtenu à l'aide de l'algorithme d'espérance-maximisation en augmentant les observations avec un indicateur de groupe.
 
@@ -220,21 +230,21 @@ Le mélange de modèle nous donne accès à la probabilité $\pi_k$ qu'une obser
 
 # Fléau de la dimension
 
-Chacune des $K$ matrice de covariance contient $p(p+1)/2$ paramètres!
+Chacune des $K$ matrices de variance contient $p(p+1)/2$ paramètres!
 
 En paramétrisant ces dernière, on peut réduire le nombre de paramètres à estimer.
 
-- compromis entre simplicité (d'estimation) et nombre de paramètres
+- compromis entre simplicité d'estimation et nombre de paramètres
 
 # Paramétrisation des matrices de covariance
 
-La matrice de covariance dans `mclust` est paramétrisée en fonction de 
+La matrice de covariance dans `mclust` est paramétrisée en fonction de trois composantes:
 
 - $\lambda$, qui contrôle le volume, 
 - une matrice diagonale $\mathbf{A}$ qui contrôle les variances de chaque observation et 
 - $\mathbf{D}$ une matrice orthogonale qui permet de créer de la corrélation entre observations.
 
-Un index $k$ spécifie que cette composante varie d'un regroupement à l'autre.
+Un sous-indice $k$ spécifie que cette composante varie d'un regroupement à l'autre.
 
 # Paramétrisation des variables
 
@@ -242,7 +252,7 @@ Voir `mclust.options("emModelNames")` et la documentation dans le Tableau 3 de [
 
 ```{r}
 #| label: fig-modeles
-#| fig-cap: "Forme des ellipsoïdes pour le mélange de modèle selon la forme de la structure de covariance. Tirée de [`mclust5`]((https://journal.r-project.org/archive/2016/RJ-2016-021/RJ-2016-021.pdf)), licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)."
+#| fig-cap: "Forme des ellipsoïdes pour le mélange de modèle selon la covariance. Tirée de [`mclust5`]((https://journal.r-project.org/archive/2016/RJ-2016-021/RJ-2016-021.pdf)), licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)."
 #| eval: true
 #| echo: false
 knitr::include_graphics("figures/mclust5-parametrization.png")
@@ -282,6 +292,14 @@ Les mêmes considérations pratiques qu'avec les $K$-moyennes s'appliquent.
 
 En pratique, on ajuste le modèle avec différent nombre de regroupements et différentes structures de covariance et on prend le modèle avec le plus petit BIC.
 
+
+
+```{r}
+#| eval: false
+#| echo: true
+plot(mmg, what = "BIC")
+```
+
 # Sélection des hyperparamètres
 
 ```{r}
@@ -300,11 +318,6 @@ mmg <- mclust::Mclust(data = donsmult_std,
        initialization = list(noise = TRUE))
 ```
 
-```{r}
-#| eval: false
-#| echo: true
-plot(mmg, what = "BIC")
-```
 \footnotesize 
 
 ```{r}
@@ -351,17 +364,17 @@ plot(reduc_dim_mmg, what = "scatterplot")
 
 #  Avantages et inconvénients des mélanges de modèles
 
-- ($+$) approche est plus flexible que les $K$-moyennes.
+- ($+$) approche plus flexible que les $K$-moyennes.
 - ($+$) l'ajout d'une composante uniforme permet de gérer les aberrances (supporté par `mclust`).
 - ($+$) l'algorithme EM garantie la convergence à un optimum local (comme pour les $K$-moyennes)
 - ($+$) on obtient une assignation probabiliste plutôt que rigide
 - ($-$) le coût de calcul est plus élevé que les $K$-moyennes 
-- ($-$) le nombre de paramètre des matrices de covariance augmente rapidement avec la dimension $p$.
+- ($-$) le nombre de paramètres des matrices de covariance augmente rapidement avec le nombre de variables explicatives $p$.
 
 
 #  Regroupements hiérarchiques
 
-Méthode déterministe de regroupement à partir d'une matrice de dissimilarité.
+Méthode **déterministe** de regroupement à partir d'une matrice de dissimilarité.
 
 1. Initialisation: chaque observation est assignée à son propre groupe.
 2. les deux groupes les plus rapprochés sont fusionnés; la distance entre le nouveau groupe et les autres regroupements est recalculée.
@@ -455,7 +468,7 @@ Pour chaque groupe, on calcule la somme des carrés des distances par rapport à
 
 On calcule ensuite la somme des distances, $$\mathrm{SCD}_{(M)} = \mathsf{SCD}_{1,M} + \cdots + \mathsf{SCD}_{M,M}.$$
 
-La méthode de Ward va fusionner les deux groupes qui feront augmenter le moins possible l'homogénéité.
+La méthode de Ward va fusionner les deux groupes qui font le moins augmenter l'homogénéité.
 
 # Performance relative
 
@@ -470,9 +483,9 @@ Voir la page [scikit-learn](https://scikit-learn.org/stable/auto_examples/cluste
 
 # Méthodes hiérarchiques et coût de calcul
 
-Les algorithmes de regroupement hiérarchiques stockent une matrice de dissemblance $n \times n$: coût de stockage quadratique $\mathrm{O}(n^2)$.
+Les algorithmes de regroupement hiérarchiques stockent une matrice de dissemblance $n \times n$: coût de stockage quadratique ou $\mathrm{O}(n^2)$.
 
-Généralement, le coût de calcul est au mieux $\Omega(n^2)$ et au pire $\mathrm{O}(n^3)$. 
+Généralement, le coût de calcul est au mieux quadratique et au pire cubique en $n$. 
 
 Pour la méthode de liaison simple, un algorithme permet d'obtenir un coût de calcul quadratique de $\mathrm{O}(n^2)$ sans stocker la matrice de dissemblance, d'où un coût de stockage linéaire de $\mathrm{O}(n)$. 
 
@@ -567,9 +580,11 @@ hecmulti::homogeneite(rhier = ward,
 - ($+$) les méthodes d'arborescence sont faciles à expliquer
 - ($-$) l'assignation d'une observation à un regroupement est finale
 - ($-$) les aberrances ne sont pas traitées et sont souvent assignées dans des regroupements à part
-- ($-$) le nombre de groupes n'a pas à être spécifié apriori (une seule estimation)
-- ($-$) le coût de calcul est prohibitif, avec une complexité quadratique de $\mathrm{O}(n^2)$ pour la méthode de liaison simple et autrement $\mathrm{O}(n^3)$ pour la plupart des autres fonctions de liaison.
+- ($+$) le nombre de groupes n'a pas à être spécifié apriori (une seule estimation)
+- ($-$) le coût de calcul est très élevé, avec une complexité quadratique de $\mathrm{O}(n^2)$ pour la méthode de liaison simple et autrement $\mathrm{O}(n^3)$ pour la plupart des autres fonctions de liaison.
 
+
+<!--
 # Méthodes basées sur la densité
 
 L'algorithme DBSCAN (*density-based spatial clustering of applications with noise*) est une méthode de partitionnement basée sur la densité des points. 
@@ -601,11 +616,6 @@ L'algorithme répète les étapes suivantes jusqu'à ce que chaque observation a
 - le rayon $\epsilon$ et 
 - le  nombre minimal de points pour former un regroupement, $M$
 
-
-
-<!--
-Avec une mesure de dissemblance, on peut créer une matrice qui pour chaque paire de points indique si l'observation est à distance au plus $\epsilon$: cela permet de créer un graphe où chaque observation est un noeud et où il y a une arête entre deux noeuds si la distance entre les deux observations est inférieure à $\epsilon$.
--->
 
 
 Hyperparamètres $M$ et $\epsilon$ corrélés: si on augmente le nombre minimal de point $M$ par regroupement, il faudra également augmenter le rayon $\epsilon$ pour éviter d'avoir un nombre trop élevé de points isolés et d'aberrances.
@@ -729,7 +739,7 @@ g1 + g2
 - ($-$) DBSCAN ne permet pas de traiter le cas où la densité des regroupements change et risque de fusionner des regroupements s'il y a une série d'observations qui permet de relier deux regroupements.
 - ($-$) comme la plupart des algorithmes, le voisinage des points devient épars quand $p$ augmente en raison du fléau de la dimension.
 
-
+-->
 
 # Comparaison de segmentations
 
@@ -748,20 +758,20 @@ Idée: comparer à tour de rôle chacune des $n(n-1)/2$ paires d'observation.
 
 # Indice de Rand
 
-On indique si les paires d'observations sont dans le même groupe (1) ou un groupe différent (0).
+On indique si les paires d'observations sont dans le même groupe ($1$) ou un groupe différent ($0$).
 
 Exemple: deux partitions de 4 observations
 
-- Étiquettes de la méthode $A$ avec deux regroupements: (2, 2, 2, 1) 
-- Étiquettes de la méthode $B$ avec trois regroupements: (3, 1, 3, 2)
+- Étiquettes de la méthode $A$ avec 2 regroupements: (2, 2, 2, 1) 
+- Étiquettes de la méthode $B$ avec 3 regroupements: (3, 1, 3, 2)
 
 
 
-| \{1,2\} | \{1,3\} | \{1,4\} | \{2,3\} | \{2,4\} | \{3,4\} |
-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| 10 | 11 | 00 | 10 | 00 | 00 |
+| paire | \{1,2\} | \{1,3\} | \{1,4\} | \{2,3\} | \{2,4\} | \{3,4\} |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| $A, B$ | $1,0$ | $1,1$ | $0,0$ | $1,0$ | $0,0$ | $0,0$ |
 
-L'indice de Rand est le taux de bonne classification du tableau de contingence résultant. Parmi les six paires, quatre sont concordantes (00 ou 11), d'où un indice de $\textsf{Rand} = 0.66$
+L'indice de Rand est le taux de bonne classification du tableau de contingence résultant. Parmi les six paires, quatre sont concordantes ($0,0$ ou $1,1$), d'où un indice de $\textsf{Rand} = 0.66$
 
 Une valeur de 1 indique que les deux partitions sont identiques.
 
@@ -773,7 +783,7 @@ Les étapes d'une analyse de regroupements
 1. Choisir les variables pertinentes à l'analyse. Cette étape peut nécessiter de créer, transformer de nouvelles variables ou d'aggréger les données.
 2. Décider quel méthode sera utilisée pour la segmentation.
 3. Choisir les hyperparamètres de l'algorithme (nombre de regroupements, rayon, etc.) et la mesure de dissemblance.
-4. Valider la qualité de la segmentation (interprétabilité, taille des groupes, homogénéité des regroupements).
+4. Effectuer la segmentation et valider la qualité de cette dernière (interprétabilité, taille des groupes, homogénéité des regroupements).
 5. Avec les étiquettes, calculer un prototype de groupe. 
 6. Interpréter les regroupements obtenus à partir des prototypes.
 
@@ -782,7 +792,7 @@ Les étapes d'une analyse de regroupements
 - L'analyste a une grande marge de manoeuvre.
 - Il n'y a pas de vérité: la segmentation n'est utile que si elle a une valeur ajoutée.
 - Aucun algorithme ne performe uniformément mieux, mais certains sont plus faciles à employer que d'autres.
-   - avec des mégadonnées, la complexité est un facteur important pour choisir la méthode.
+   - avec des mégadonnées, la complexité (coût de calcul et de stockage) est un facteur important pour choisir la méthode.
    - la plupart du temps, le choix des hyperparamètres nécessite un peu d'essai-erreur.
    - la segmentation peut être médiocre parce que les hyperparamètres sont mal choisis.
 
