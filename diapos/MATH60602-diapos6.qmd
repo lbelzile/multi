@@ -39,7 +39,7 @@ En substituant l'estimation $\widehat{\beta}_0, \ldots, \widehat{\beta}_p$, on c
 - le prédicteur linéaire $\widehat{\eta}_i$ et
 - la probabilité de succès $\widehat{p}_i$
 
-pour chaque ligne de la base de données.
+pour chaque observation de la base de données.
 
 
 # Classification de base
@@ -55,20 +55,28 @@ Qu'arrive t'il si $c=0$ ou $c=1$? **Exemple au tableau**
 
 # Qualité de l'ajustement
 
+Considérons une prédiction $\widehat{Y} \in \{0,1\}$.
+
+
 L'erreur quadratique pour un problème de classification est
 $$(Y-\widehat{Y})^2 = \begin{cases} 1, & Y \neq \widehat{Y}; \\0, & Y = \widehat{Y}.\end{cases}$$
-et donc on obtient le **taux de mauvaise classification** si on calcule la moyenne.
+et donc on obtient le **taux de mauvaise classification** si on calcule la moyenne
+\begin{align*}
+\frac{1}{n} \sum_{i=1}^n (y_i - \widehat{y}_i)^2.
+\end{align*}
 
 Plus le taux de mauvaise classification est petit, meilleure est la capacité prédictive du modèle.
 
 # Base de données marketing
 
-On considère un modèle pour `yachat`, le fait qu'une personne achète suite à l'envoi d'un catalogue.
+On considère un modèle pour la variable binaire `yachat`, qui vaut $1$ si une personne achète suite à l'envoi d'un catalogue et $0$ sinon.
 
-```{r, echo = TRUE, eval = TRUE}
+```{r}
+#| echo: true
+#| eval: true
 data(dbm, package = "hecmulti")
 # Ne conserver que l'échantillon d'apprentissage
-appr <- dbm[(dbm$test == 0),]
+appr <- dbm[dbm$test == 0,]
 formule <- formula("yachat ~ x1 + x2 + x3 +
                 x4 + x5 + x6 + x7 + x8 + x9 + x10")
 modele <- glm(formule,
@@ -86,14 +94,19 @@ Plutôt, considérer la validation croisée ou la division de l'échantillon.
 ```{r}
 #| eval: true
 #| echo: true
-set.seed(202209)
-# Option par défaut: 
-# validation croisée à 10 plis, 10 répétitions
-predprob <- hecmulti::predvc(
-  modele = modele,
+set.seed(60602)
+cv_prob <- hecmulti::predvc(
+  modele = modele,  
+  K = 10, # nb de plis pour la valid. croisée
+  nrep = 10, # nb de répétitions de la valid. croisée
   data = appr)
 ```
 
+\footnotesize
+
+La fonction `predvc` ajuste le modèle sur chaque 9/10 des données et prédit le dixième restant. On répète la procédure 10 fois et on calcule la moyenne des 10 probabilités prédites pour chaque observation. 
+
+\normalsize
 
 # Prédictions
 
@@ -107,7 +120,6 @@ predprob <- hecmulti::predvc(
 #| fig-height: 6
 #| out-width: '80%'
 #| fig-align: 'center'
-data(dbm, package = 'hecmulti')
 # Transformer les variables catégorielles en facteurs
 # Formule pour la moyenne du modèle logistique
 form <- formula("yachat ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10")
@@ -116,12 +128,11 @@ mod <- glm(data = appr,
            family = binomial)
 # Créer un conteneur pour les probabilités
 set.seed(60602)
-prob <- hecmulti::predvc(mod)
 # Histogramme des probabilités prédites par validation croisée avec n groupes
 library(ggplot2)
-ggplot(data = data.frame(x = prob),
+ggplot(data = data.frame(x = cv_prob),
        aes(x = x)) +
-  geom_histogram() + 
+  geom_histogram(bins = 30) + 
   labs(x = "probabilité d'achat prédite", 
        y = "") +
   theme_minimal()
@@ -133,7 +144,7 @@ appr_prob <- fitted(glm(data = appr,
 
 perfo <- function(prob, resp, plot = FALSE){
    # VRAI == 1, FAUX == 0
-   cuts <- seq(from = 0.005, to = 0.995, by = 0.005)
+   cuts <- seq(from = 0.01, to = 0.99, by = 0.01)
    tab <- data.frame(coupe = cuts,
       t(sapply(cuts, function(cut){
    nsucces <- sum(resp == 1)
@@ -169,7 +180,7 @@ perfo <- function(prob, resp, plot = FALSE){
 }
 # Performance du modèle avec données d'apprentissage
 perfo0 <- perfo(prob = appr_prob, resp = appr$yachat)
-perfo1 <- perfo(prob = prob, resp = appr$yachat)
+perfo1 <- perfo(prob = cv_prob, resp = appr$yachat)
 ```
 
 \footnotesize 
@@ -192,7 +203,7 @@ ggplot(data = perfo1$table,
        aes(x = coupe, 
            y = pcorrect)) +
   geom_line() +
-  geom_vline(xintercept = 0.465, linetype = "dashed", alpha = 0.5) + 
+  geom_vline(xintercept = perfo1$cut, linetype = "dashed", alpha = 0.5) + 
   labs(x = "point de coupure",
        y = "",
        subtitle = "taux de bonne classification (pourcentage)") +
@@ -202,7 +213,7 @@ ggplot(data = perfo1$table,
   theme_classic()
 ```
 
-Avec $c=0.465$, on obtient un taux de mauvaise classification de $15.3$\%.
+Avec $c=`r perfo1$cut`$, on obtient un taux de mauvaise classification de $`r perfo1$table$pcorrect[which.max(perfo1$table$pcorrect)]`$\%.
 
 # Performance et classification
 
@@ -211,10 +222,10 @@ Avec $c=0.465$, on obtient un taux de mauvaise classification de $15.3$\%.
 ```{r}
 #| eval: false
 #| echo: true
-classif <- with(dbm, yachat[test == 0])
+classif <- appr$yachat
 # Tableau de la performance
 hecmulti::perfo_logistique(
-  prob = predprob,
+  prob = cv_prob,
   resp = classif)
 ```
 
@@ -226,7 +237,7 @@ On peut classifier les observations dans un tableau pour un point de coupure don
 #| label: tbl-confumat
 #| eval: true
 #| echo: false
-#| tbl-cap: "Matrice de confusion avec point de coupure 0.465."
+#| tbl-cap: "Matrice de confusion avec point de coupure optimal. Les entrées donnent le décompte du nombre d'observation par combinaison $(Y, \\widehat{Y})$"
 confumat <- perfo1$confusion
 rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
 colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
@@ -284,7 +295,7 @@ Il est également possible d'assigner un poids différent à chaque événement 
 #| label: tbl-tableconfumat4
 #| eval: true
 #| echo: false
-#| tbl-cap: "Matrice de gain (cas général)"
+#| tbl-cap: "Pondération des entrées de la matrice de confusion pour le calcul du gain."
 confumat_tbclassif <- confumat
 confumat_tbclassif[1:4] <- c("$c_{11}$","$c_{01}$","$c_{10}$","$c_{00}$")
 tab1 <- knitr::kable(x = confumat_tbclassif,
@@ -307,7 +318,7 @@ Si on cherche à maximiser le taux de bonne classification, cela revient à assi
 
 ```{r}
 #| label: tbl-tableconfumat3
-#| tbl-cap: "Matrice de gain pour le taux de bonne classification."
+#| tbl-cap: "Pondération des entrées de la matrice de confusion pour le calcul du taux de bonne classification."
 #| eval: true
 #| echo: false
 #| fig-align: 'center'
@@ -329,7 +340,7 @@ tab1
 - Si on n'envoie pas de catalogue, notre gain est nul. 
 - Si on envoie le catalogue 
    - à un client qui n'achète pas, on perd $10$\$ (le coût de l'envoi). 
-   - à un client qui achète, notre revenu net est de $57$\$ (revenu moyen moins coût de l'envoi).
+   - à un client qui achète, notre revenu net est de $57$\$ (revenu moyen moins coût de l'envoi, arrondi à l'entier près pour simplifier).
 
 
 
@@ -373,14 +384,8 @@ knitr::kable(x = confumat_tbclassif,
 #| label: fig-coupure-pondere-fake
 #| eval: false
 #| echo: true
-#| cache: true
 #| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
-formule = formula(yachat ~ x1 + x2 + x3 +
-                    x4 + x5 + x6 + x7 + 
-                    x8 + x9 + x10)
-modele <- glm(formule, 
-              family = binomial, 
-              data = hecmulti::dbm)
+set.seed(60602)
 coupe <- hecmulti::select_pcoupe(
   modele = modele, 
   c00 = 0, 
@@ -410,12 +415,7 @@ La fonction `select_pcoupe` estime le gain pour différents points de coupures, 
 #| fig-width: 6
 #| fig-height: 4
 #| fig-cap: "Estimation du gain moyen en fonction du point de coupure pour l'exemple de base de données marketing."
-formule = formula(yachat ~ x1 + x2 + x3 +
-                    x4 + x5 + x6 + x7 + 
-                    x8 + x9 + x10)
-modele <- glm(formule, 
-              family = binomial, 
-              data = hecmulti::dbm)
+set.seed(60602)
 coupe <- hecmulti::select_pcoupe(
   modele = modele, 
   c00 = 0, 
@@ -450,7 +450,7 @@ La fonction `hecmulti::courbe_roc` permet de tracer la courbe et de calculer l�
 #| echo: true
 roc <- hecmulti::courbe_roc(
   resp = classif,
-  prob = predprob,
+  prob = cv_prob,
   plot = TRUE)
 print(roc)
 ## Pour extraire l'aire sous la courbe, roc$aire
@@ -464,10 +464,10 @@ print(roc)
 #| echo: false
 #| out-width: '80%'
 #| fig-align: 'center'
-classif <- with(dbm, yachat[test == 0])
+classif <- appr$yachat
 roc <- hecmulti::courbe_roc(
   resp = classif,
-  prob = predprob,
+  prob = cv_prob,
   plot = TRUE)
 ## Pour extraire l'aire sous la courbe, roc$aire
 ```
@@ -482,18 +482,26 @@ roc <- hecmulti::courbe_roc(
 
 À quelle point notre modèle est-il meilleur qu'une assignation aléatoire?
 
-- Ordonner les probabilités de succès estimées par le modèle, $\widehat{p}$, en ordre croissant.
-- Regarder quelle pourcentage de ces derniers seraient bien classifiés (le nombre de vrais positifs sur le nombre de succès).
-La référence est la ligne diagonale, qui correspond à une détection aléatoire.
+Le nombre de vrais positifs sur le nombre de succès donne le taux de succès d'une détection aléatoire (si on sélectionnait au hasard des observations).
+
+Pour calculer le nombre de succès prédit par le modèle, on va
+
+- Ordonner les probabilités de succès estimées par le modèle, $\widehat{p}$, en ordre décroissant.
+- Sélectionner les $x$% d'observations ayant les plus grandes probabilités de succès. 
+- Calculer le nombre total de succès parmi ces observations.
+
 
 # Code pour produire la courbe lift 
+
+
+La courbe lift donne le rapport nombre de succès du modèle versus ceux détectés au hasard. La référence est la ligne diagonale, qui correspond à une détection aléatoire.
 
 ```{r}
 #| label: figcourbe-lift
 #| eval: false
 #| echo: true
 tab_lift <- hecmulti::courbe_lift(
-  prob = predprob,
+  prob = cv_prob,
   resp = classif, 
   plot = TRUE)
 tab_lift
@@ -508,7 +516,7 @@ tab_lift
 #| eval: true
 #| tbl-cap: "Tableau du lift (déciles)."
 tab_lift <- hecmulti::courbe_lift(
-  prob = predprob,
+  prob = cv_prob,
   resp = classif, 
   plot = FALSE)
 knitr::kable(tab_lift[,-1], 
@@ -523,13 +531,15 @@ knitr::kable(tab_lift[,-1],
 # Calcul du lift
 
 
-Si on classifiait comme acheteurs les $10$\% qui ont la plus forte probabilité estimée d'achat, on détecterait $78$ des $210$ clients.
+Si on classifiait comme acheteurs les $`r tab_lift$pourcent[1]`$\% qui ont la plus forte probabilité estimée d'achat, on détecterait $`r tab_lift$modele[1]`$ des $210$ clients.
 
 
-Si on prend $10$\% des clients au hasard et que $21$\% des observations correspondent à des achats, on détecterait en moyenne $21$ clients par tranche de $100$ personnes.
+Si on prend $10$\% des clients au hasard et que $`r tab_lift$hasard[1]`$\% des observations correspondent à des achats, on détecterait en moyenne $`r tab_lift$hasard[1]`$ clients par tranche de $100$ personnes.
 
 
 Le lift est le nombre de succès détecté par le modèle sur le nombre détecté au hasard.
+
+Si on a un budget limité suffisant pour l'envoi du catalogue à $x$% des clients, on peut utiliser le lift pour comparer notre métrique.
 
 
 
@@ -540,7 +550,7 @@ Le lift est le nombre de succès détecté par le modèle sur le nombre détect�
 #| eval: true
 #| echo: false
 tab_lift <- hecmulti::courbe_lift(
-  prob = predprob,
+  prob = cv_prob,
   resp = classif, 
   plot = TRUE)
 ```
@@ -551,7 +561,9 @@ tab_lift <- hecmulti::courbe_lift(
 Certains modèles sont trop confiants dans leurs prédictions (surajustement).
 
 
-Une statistique simple proposée par [Spiegelhalter (1986)]( https://doi.org/10.1002/sim.4780050506) peut être utile à cette fin. Pour une variable Bernoulli $Y \in \{0,1\}$, l'erreur quadratique moyenne s'écrit
+Une statistique simple proposée par [Spiegelhalter (1986)]( https://doi.org/10.1002/sim.4780050506) peut vérifier ce fait. 
+
+Pour une variable binaire $Y \in \{0,1\}$, l'erreur quadratique moyenne s'écrit
 \begin{align*}
 \overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
 \\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
@@ -576,7 +588,7 @@ Une petite valeur-$p$ mène au rejet de $\mathcal{H}_0$ et à conclure que le mo
 #| eval: true
 #| echo: true
 hecmulti::calibration(
-   prob = predprob, 
+   prob = cv_prob, 
    resp = classif)
 ```
 
@@ -609,14 +621,13 @@ Le deuxième message d'erreur survient quand une combinaison linéaire de variab
 ```{r}
 #| eval: false
 #| echo: true
-quasisep <- hecmulti::dbm |>  
-  # remplacer les valeurs manquantes par des zéros
-  dplyr::mutate(ymontant = ifelse(yachat == 0, 0, ymontant))
+quasisep <- appr |>  
+  # remplacer les valeurs manquantes par des zéros et standardiser
+  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
 # Régression logistique pour l'achat (0 ou 1) en fonction du montant
-modele <- glm(yachat ~ ymontant, 
+modele_qs <- glm(yachat ~ ymontant, 
               family = binomial, 
-              data = quasisep, 
-              subset = test == 0)
+              data = quasisep)
 ```
 
 \normalsize
@@ -660,23 +671,21 @@ Avec des variables standardisées, un coefficient $|\beta_j| > 10$ est suspect.
 #| echo: false
 #| eval: true
 #| label: tbl-quasisep
-#| tbl-cap: "Données simulées avec séparation de variable pour modèle logistique (gauche) et correction de Firth (droite)."
+#| tbl-cap: "Modèle logistique pour `yachat` en fonction de `ymontant` (variable standardisée)."
 #| warning: false
 #| message: false
-set.seed(1234)
-x <- sort(rexp(20, rate = 0.2))
-y <- as.integer(x>9)
-m1 <- glm(y~ x, family=binomial)
-m2 <- logistf::logistf(y~x, data = data.frame(x=x,y=y), family=binomial)
+quasisep <- appr |>  
+  # remplacer les valeurs manquantes par des zéros et standardiser
+  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
+# Régression logistique pour l'achat (0 ou 1) en fonction du montant
+m1 <- glm(yachat ~ ymontant, 
+              family = binomial, 
+              data = quasisep)
 tab1 <- data.frame(estimate = as.numeric(m1$coefficients), "std.error" = as.numeric(sqrt(diag(vcov(m1)))))
 colnames(tab1) <- c("coef.", "erreur-type")
 tab1 <- apply(tab1, 1:2, function(x){paste0("$", sprintf(x, fmt = "%.1f"), "$")})
-rownames(tab1) <- c("cst","x")
-tab2 <- data.frame(estimate = as.numeric(m2$coef), "std.error" = as.numeric(sqrt(diag(m2$var))))
-colnames(tab2) <- c("coef.", "erreur-type")
-tab2 <- apply(tab2, 1:2, function(x){paste0("$", sprintf(x, fmt = "%.1f"), "$")})
-rownames(tab2) <- c("cst","x")
-knitr::kable(x = list(tab1, tab2), align = "rrr", booktabs = TRUE, escape = FALSE)
+rownames(tab1) <- c("cst","ymontant")
+knitr::kable(x = tab1, align = "rrr", booktabs = TRUE, escape = FALSE)
 ```
 
 
@@ -694,9 +703,6 @@ Ce n'est pas nécessairement un enjeu pour la prédiction, mais c'est souvent in
 1. Regarder quelles probabilités sont presque $0$ ou $1$ pour identifier les observations problématiques et s'assurer que l'échantillon que l'on emploie est adéquat.
    - Par exemple, les femmes ne peuvent pas avoir un cancer de la prostate, donc la probabilité prédite pour ces dernières est $0$. On pourrait simplement enlever les femmes et prédire zéro manuellement.
 2. Déterminer si une variable explicative cause du surajustement en étudiant les coefficients dont la valeur absolue est très élevée.
-3. Si on a des problèmes de convergence numérique ($1$e message d'erreur), on peut aussi ajouter une pénalité, proposée par Firth (1993) pour empêcher les valeurs des coefficients d'être trop élevés (un peu comme le LASSO). 
-    - Dans **R**, via la fonction `logistf` du paquet éponyme.
-
 
 # Récapitulatif
 
@@ -730,7 +736,7 @@ Ce n'est pas nécessairement un enjeu pour la prédiction, mais c'est souvent in
 - `glmulti::glmulti` permet une recherche exhaustive (`method = "h"`) ou par le biais d'un algorithme génétique (`method = "g"`).
 - `glmnet::glmnet` permet d'ajuster le modèle avec pénalité LASSO.
 
-Voir le [code en ligne](https://lbelzile.github.io/math60602/05-reglogistique.html#s%C3%A9lection-de-variables-en-r%C3%A9gression-logistique).
+Voir le [code en ligne](https://lbelzile.github.io/math60602/05-reglogistique.html#s%C3%A9lection-de-variables-en-r%C3%A9gression-logistique) dans les notes de cours.
 
 # Objectif du ciblage marketing
 
@@ -738,15 +744,15 @@ Déterminer si le revenu prévu justifie l'envoi du catalogue
 
 $$\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).$$
 
-On peut combiner un modèle de régression logistique avec la régression linéaire (ajustés simultanément avec un modèle Heckit).
+On peut combiner un modèle de régression logistique avec la régression linéaire et les ajuster simultanément --- voir les notes de cours pour plus de détail.
 
-Ou simplement ignorer le montant d'achat et envoyer un catalogue si la probabilité d'achat excède notre point de coupure optimal.
+Plus simplement, on pourrait ignorer le montant d'achat et envoyer un catalogue si la probabilité d'achat excède notre point de coupure optimal.
 
 # Stratégie de référence
 
 - Parmi les $100$K clients, $23 179$ auraient acheté si on leur avait envoyé le catalogue
 - Ces clients auraient généré des revenus de $1 601 212$\$.
-- Si on enlève le coût des envois ($100 000 \times 10$\$), la stratégie de référence permet un revenu net de $601 212$\$.
+- Si on enlève le coût des envois ($100 000 \times 10$\$), la stratégie de référence permet d'obtenir un revenu net de $601 212$\$.
 
 
 # Stratégie d'ajustement
@@ -767,16 +773,16 @@ En résumé, la procédure numérique à réaliser est la suivante:
 - Calculer le revenu résultant:
     - zéro si on n'envoie pas de catalogue
     - $-10$ si la personne n'achète pas
-    - $-10$ plus l'achat si la personne achète.
+    - $-10$ plus le montant d'achat sinon.
 
 **En pratique**, on ne pourrait pas *a priori* connaître le revenu résultant de cette stratégie.
 
 # Conclusion
 
 
-Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus de $978 226$\$.
+Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus nets de $978 226$\$.
 
-C’est une énorme amélioration, de plus de $56$%, par rapport à la stratégie de référence.
+C’est une énorme amélioration, de plus de $`r round(978226/601212*100,1)-100`$%, par rapport à la stratégie de référence (soit envoyer un catalogue à tout le monde).
 
 
 # Récapitulatif

@@ -4,7 +4,7 @@ title: "Analyse de regroupements"
 
 ## Exercice 6.1
 
-Les données fictives `regroupement1` sont inspirées de @Hsu.Lee:2002. Ces données contiennent des échelles pour certains éléments d'un questionnaire. Ce dernier a été élaboré afin d’évaluer l’importance de 55 caractéristiques des opérateurs de voyages organisés en autobus et des voyages eux-mêmes à l’aide d’une échelle de Likert à cinq points, allant de extrêmement important (5) à pas du tout important (1). 
+Les données fictives `regroupements1` sont inspirées de @Hsu.Lee:2002. Ces données contiennent des échelles pour certains éléments d'un questionnaire. Ce dernier a été élaboré afin d’évaluer l’importance de 55 caractéristiques des opérateurs de voyages organisés en autobus et des voyages eux-mêmes à l’aide d’une échelle de Likert à cinq points, allant de extrêmement important (5) à pas du tout important (1). 
 
 
 Les variables représentent les activités sociales, les politiques de l’opérateur et références, la flexibilité des horaires, la santé et sécurité, le matériel publicitaire et la réputation.

@@ -226,7 +226,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, boxrule=0pt, sharp corners, interior hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, breakable, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Rappel}
 \protect\hypertarget{rappel}{}
@@ -248,7 +248,7 @@ En substituant l'estimation
   la probabilité de succès \(\widehat{p}_i\)
 \end{itemize}
 
-pour chaque ligne de la base de données.
+pour chaque observation de la base de données.
 \end{frame}
 
 \begin{frame}{Classification de base}
@@ -271,10 +271,14 @@ Qu'arrive t'il si \(c=0\) ou \(c=1\)? \textbf{Exemple au tableau}
 
 \begin{frame}{Qualité de l'ajustement}
 \protect\hypertarget{qualituxe9-de-lajustement}{}
+Considérons une prédiction \(\widehat{Y} \in \{0,1\}\).
+
 L'erreur quadratique pour un problème de classification est
 \[(Y-\widehat{Y})^2 = \begin{cases} 1, & Y \neq \widehat{Y}; \\0, & Y = \widehat{Y}.\end{cases}\]
 et donc on obtient le \textbf{taux de mauvaise classification} si on
-calcule la moyenne.
+calcule la moyenne \begin{align*}
+\frac{1}{n} \sum_{i=1}^n (y_i - \widehat{y}_i)^2.
+\end{align*}
 
 Plus le taux de mauvaise classification est petit, meilleure est la
 capacité prédictive du modèle.
@@ -282,14 +286,15 @@ capacité prédictive du modèle.
 
 \begin{frame}[fragile]{Base de données marketing}
 \protect\hypertarget{base-de-donnuxe9es-marketing}{}
-On considère un modèle pour \texttt{yachat}, le fait qu'une personne
-achète suite à l'envoi d'un catalogue.
+On considère un modèle pour la variable binaire \texttt{yachat}, qui
+vaut \(1\) si une personne achète suite à l'envoi d'un catalogue et
+\(0\) sinon.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(dbm, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
 \CommentTok{\# Ne conserver que l\textquotesingle{}échantillon d\textquotesingle{}apprentissage}
-\NormalTok{appr }\OtherTok{\textless{}{-}}\NormalTok{ dbm[(dbm}\SpecialCharTok{$}\NormalTok{test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{),]}
+\NormalTok{appr }\OtherTok{\textless{}{-}}\NormalTok{ dbm[dbm}\SpecialCharTok{$}\NormalTok{test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{,]}
 \NormalTok{formule }\OtherTok{\textless{}{-}} \FunctionTok{formula}\NormalTok{(}\StringTok{"yachat \textasciitilde{} x1 + x2 + x3 +}
 \StringTok{                x4 + x5 + x6 + x7 + x8 + x9 + x10"}\NormalTok{)}
 \NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(formule,}
@@ -309,14 +314,22 @@ l'échantillon.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{202209}\NormalTok{)}
-\CommentTok{\# Option par défaut: }
-\CommentTok{\# validation croisée à 10 plis, 10 répétitions}
-\NormalTok{predprob }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{predvc}\NormalTok{(}
-  \AttributeTok{modele =}\NormalTok{ modele,}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
+\NormalTok{cv\_prob }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{predvc}\NormalTok{(}
+  \AttributeTok{modele =}\NormalTok{ modele,  }
+  \AttributeTok{K =} \DecValTok{10}\NormalTok{, }\CommentTok{\# nb de plis pour la valid. croisée}
+  \AttributeTok{nrep =} \DecValTok{10}\NormalTok{, }\CommentTok{\# nb de répétitions de la valid. croisée}
   \AttributeTok{data =}\NormalTok{ appr)}
 \end{Highlighting}
 \end{Shaded}
+
+\footnotesize
+
+La fonction \texttt{predvc} ajuste le modèle sur chaque 9/10 des données
+et prédit le dixième restant. On répète la procédure 10 fois et on
+calcule la moyenne des 10 probabilités prédites pour chaque observation.
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Prédictions}
@@ -349,18 +362,18 @@ le taux de bonne classification, \(\widehat{\Pr}(Y = \widehat{Y})\).
 
 \end{figure}
 
-Avec \(c=0.465\), on obtient un taux de mauvaise classification de
-\(15.3\)\%.
+Avec \(c=0.63\), on obtient un taux de mauvaise classification de
+\(84.9\)\%.
 \end{frame}
 
 \begin{frame}[fragile]{Performance et classification}
 \protect\hypertarget{performance-et-classification}{}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{classif }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(dbm, yachat[test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{])}
+\NormalTok{classif }\OtherTok{\textless{}{-}}\NormalTok{ appr}\SpecialCharTok{$}\NormalTok{yachat}
 \CommentTok{\# Tableau de la performance}
 \NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{perfo\_logistique}\NormalTok{(}
-  \AttributeTok{prob =}\NormalTok{ predprob,}
+  \AttributeTok{prob =}\NormalTok{ cv\_prob,}
   \AttributeTok{resp =}\NormalTok{ classif)}
 \end{Highlighting}
 \end{Shaded}
@@ -373,15 +386,16 @@ coupure donné.
 
 \hypertarget{tbl-confumat}{}
 \begin{table}
-\caption{\label{tbl-confumat}Matrice de confusion avec point de coupure 0.465. }\tabularnewline
+\caption{\label{tbl-confumat}Matrice de confusion avec point de coupure optimal. Les entrées donnent
+le décompte du nombre d'observation par combinaison \((Y, \widehat{Y})\) }\tabularnewline
 
 \centering
 \begin{tabular}{lrr}
 \toprule
   & \(Y=1\) & \(Y=0\)\\
 \midrule
-\(\widehat{Y}=1\) & 89 & 30\\
-\(\widehat{Y}=0\) & 121 & 760\\
+\(\widehat{Y}=1\) & 78 & 19\\
+\(\widehat{Y}=0\) & 132 & 771\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -402,8 +416,8 @@ du nombre d'observations dans chaque classe.
 \toprule
   & \(Y=1\) & \(Y=0\)\\
 \midrule
-\(\widehat{Y}=1\) & 89 & 30\\
-\(\widehat{Y}=0\) & 121 & 760\\
+\(\widehat{Y}=1\) & 78 & 19\\
+\(\widehat{Y}=0\) & 132 & 771\\
 \bottomrule
 \end{tabular}
 \begin{tabular}{lrr}
@@ -442,7 +456,8 @@ Il est également possible d'assigner un poids différent à chaque
 
 \hypertarget{tbl-tableconfumat4}{}
 \begin{table}
-\caption{\label{tbl-tableconfumat4}Matrice de gain (cas général) }\tabularnewline
+\caption{\label{tbl-tableconfumat4}Pondération des entrées de la matrice de confusion pour le calcul du
+gain. }\tabularnewline
 
 \centering
 \begin{tabular}{lrr}
@@ -466,7 +481,8 @@ Si on cherche à maximiser le taux de bonne classification, cela revient
 
 \hypertarget{tbl-tableconfumat3}{}
 \begin{table}
-\caption{\label{tbl-tableconfumat3}Matrice de gain pour le taux de bonne classification. }\tabularnewline
+\caption{\label{tbl-tableconfumat3}Pondération des entrées de la matrice de confusion pour le calcul du
+taux de bonne classification. }\tabularnewline
 
 \centering
 \begin{tabular}{lrr}
@@ -495,7 +511,8 @@ Si on cherche à maximiser le taux de bonne classification, cela revient
     à un client qui n'achète pas, on perd \(10\)\$ (le coût de l'envoi).
   \item
     à un client qui achète, notre revenu net est de \(57\)\$ (revenu
-    moyen moins coût de l'envoi).
+    moyen moins coût de l'envoi, arrondi à l'entier près pour
+    simplifier).
   \end{itemize}
 \end{itemize}
 
@@ -538,12 +555,7 @@ n & moyenne & écart-type & minimum & maximum \\
 \protect\hypertarget{point-de-coupure-avec-gain}{}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{formule }\OtherTok{=} \FunctionTok{formula}\NormalTok{(yachat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}
-\NormalTok{                    x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+}\NormalTok{ x6 }\SpecialCharTok{+}\NormalTok{ x7 }\SpecialCharTok{+} 
-\NormalTok{                    x8 }\SpecialCharTok{+}\NormalTok{ x9 }\SpecialCharTok{+}\NormalTok{ x10)}
-\NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(formule, }
-              \AttributeTok{family =}\NormalTok{ binomial, }
-              \AttributeTok{data =}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{dbm)}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
 \NormalTok{coupe }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{select\_pcoupe}\NormalTok{(}
   \AttributeTok{modele =}\NormalTok{ modele, }
   \AttributeTok{c00 =} \DecValTok{0}\NormalTok{, }
@@ -579,18 +591,18 @@ du point de coupure pour l'exemple de base de données marketing.}
 
 \begin{frame}{Point de coupure optimal et explication}
 \protect\hypertarget{point-de-coupure-optimal-et-explication}{}
-Dans l'exemple, le point de coupure qui maximise le gain est 0.13. Avec
+Dans l'exemple, le point de coupure qui maximise le gain est 0.12. Avec
 ce point de coupure, on estime que
 
 \begin{itemize}
 \tightlist
 \item
-  le taux de bonne classification est de 70.5
+  le taux de bonne classification est de 79.8
 \item
-  la sensibilité est de 88.57.
+  la sensibilité est de 75.71.
 \end{itemize}
 
-Ainsi, on va détecter environ 88.57\% des clients qui achètent.
+Ainsi, on va détecter environ 75.71\% des clients qui achètent.
 
 Il est coûteux de rater un client potentiel, donc la stratégie optimale
 est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs
@@ -610,7 +622,7 @@ de calculer l'aire sous la courbe.
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{roc }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{courbe\_roc}\NormalTok{(}
   \AttributeTok{resp =}\NormalTok{ classif,}
-  \AttributeTok{prob =}\NormalTok{ predprob,}
+  \AttributeTok{prob =}\NormalTok{ cv\_prob,}
   \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
 \FunctionTok{print}\NormalTok{(roc)}
 \DocumentationTok{\#\# Pour extraire l\textquotesingle{}aire sous la courbe, roc$aire}
@@ -650,24 +662,35 @@ de calculer l'aire sous la courbe.
 À quelle point notre modèle est-il meilleur qu'une assignation
 aléatoire?
 
+Le nombre de vrais positifs sur le nombre de succès donne le taux de
+succès d'une détection aléatoire (si on sélectionnait au hasard des
+observations).
+
+Pour calculer le nombre de succès prédit par le modèle, on va
+
 \begin{itemize}
 \tightlist
 \item
   Ordonner les probabilités de succès estimées par le modèle,
-  \(\widehat{p}\), en ordre croissant.
+  \(\widehat{p}\), en ordre décroissant.
 \item
-  Regarder quelle pourcentage de ces derniers seraient bien classifiés
-  (le nombre de vrais positifs sur le nombre de succès). La référence
-  est la ligne diagonale, qui correspond à une détection aléatoire.
+  Sélectionner les \(x\)\% d'observations ayant les plus grandes
+  probabilités de succès.
+\item
+  Calculer le nombre total de succès parmi ces observations.
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Code pour produire la courbe lift}
 \protect\hypertarget{code-pour-produire-la-courbe-lift}{}
+La courbe lift donne le rapport nombre de succès du modèle versus ceux
+détectés au hasard. La référence est la ligne diagonale, qui correspond
+à une détection aléatoire.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{tab\_lift }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{courbe\_lift}\NormalTok{(}
-  \AttributeTok{prob =}\NormalTok{ predprob,}
+  \AttributeTok{prob =}\NormalTok{ cv\_prob,}
   \AttributeTok{resp =}\NormalTok{ classif, }
   \AttributeTok{plot =} \ConstantTok{TRUE}\NormalTok{)}
 \NormalTok{tab\_lift}
@@ -686,14 +709,14 @@ aléatoire?
 \toprule
   & hasard & modèle & lift\\
 \midrule
-10\% & 21 & 78 & 3.71\\
-20\% & 42 & 120 & 2.86\\
-30\% & 63 & 157 & 2.49\\
-40\% & 84 & 180 & 2.14\\
-50\% & 105 & 195 & 1.86\\
+10\% & 21 & 79 & 3.76\\
+20\% & 42 & 122 & 2.90\\
+30\% & 63 & 155 & 2.46\\
+40\% & 84 & 179 & 2.13\\
+50\% & 105 & 194 & 1.85\\
 \addlinespace
 60\% & 126 & 201 & 1.60\\
-70\% & 147 & 208 & 1.41\\
+70\% & 147 & 209 & 1.42\\
 80\% & 168 & 210 & 1.25\\
 90\% & 189 & 210 & 1.11\\
 \bottomrule
@@ -704,7 +727,7 @@ aléatoire?
 \begin{frame}{Calcul du lift}
 \protect\hypertarget{calcul-du-lift}{}
 Si on classifiait comme acheteurs les \(10\)\% qui ont la plus forte
-probabilité estimée d'achat, on détecterait \(78\) des \(210\) clients.
+probabilité estimée d'achat, on détecterait \(79\) des \(210\) clients.
 
 Si on prend \(10\)\% des clients au hasard et que \(21\)\% des
 observations correspondent à des achats, on détecterait en moyenne
@@ -712,6 +735,9 @@ observations correspondent à des achats, on détecterait en moyenne
 
 Le lift est le nombre de succès détecté par le modèle sur le nombre
 détecté au hasard.
+
+Si on a un budget limité suffisant pour l'envoi du catalogue à \(x\)\%
+des clients, on peut utiliser le lift pour comparer notre métrique.
 \end{frame}
 
 \begin{frame}{Courbe lift}
@@ -726,8 +752,10 @@ Certains modèles sont trop confiants dans leurs prédictions
 
 Une statistique simple proposée par
 \href{https://doi.org/10.1002/sim.4780050506}{Spiegelhalter (1986)} peut
-être utile à cette fin. Pour une variable Bernoulli \(Y \in \{0,1\}\),
-l'erreur quadratique moyenne s'écrit \begin{align*}
+vérifier ce fait.
+
+Pour une variable binaire \(Y \in \{0,1\}\), l'erreur quadratique
+moyenne s'écrit \begin{align*}
 \overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
 \\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
 \end{align*}
@@ -751,15 +779,15 @@ que le modèle est surajusté.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{calibration}\NormalTok{(}
-   \AttributeTok{prob =}\NormalTok{ predprob, }
+   \AttributeTok{prob =}\NormalTok{ cv\_prob, }
    \AttributeTok{resp =}\NormalTok{ classif)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 Test de calibration de Spiegelhalter (1986)
-Statistique de test: 1.26 
-valeur-p: 0.207
+Statistique de test: 1.22 
+valeur-p: 0.222
 \end{verbatim}
 
 Il n'y a pas de preuve ici que le modèle est mal calibré.
@@ -800,14 +828,13 @@ probabilités prédites sont \(0\) ou \(1\).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{quasisep }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{dbm }\SpecialCharTok{|\textgreater{}}  
-  \CommentTok{\# remplacer les valeurs manquantes par des zéros}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{ymontant =} \FunctionTok{ifelse}\NormalTok{(yachat }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, ymontant))}
+\NormalTok{quasisep }\OtherTok{\textless{}{-}}\NormalTok{ appr }\SpecialCharTok{|\textgreater{}}  
+  \CommentTok{\# remplacer les valeurs manquantes par des zéros et standardiser}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{ymontant =} \FunctionTok{scale}\NormalTok{(}\FunctionTok{ifelse}\NormalTok{(yachat }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, ymontant)))}
 \CommentTok{\# Régression logistique pour l\textquotesingle{}achat (0 ou 1) en fonction du montant}
-\NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(yachat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ymontant, }
+\NormalTok{modele\_qs }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(yachat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ymontant, }
               \AttributeTok{family =}\NormalTok{ binomial, }
-              \AttributeTok{data =}\NormalTok{ quasisep, }
-              \AttributeTok{subset =}\NormalTok{ test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
+              \AttributeTok{data =}\NormalTok{ quasisep)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -834,7 +861,7 @@ probabilité de succès de \(\widehat{p}=0\) à \(\widehat{p}=1\) à
 \normalsize
 \end{frame}
 
-\begin{frame}{Coefficients avec séparation de variable}
+\begin{frame}[fragile]{Coefficients avec séparation de variable}
 \protect\hypertarget{coefficients-avec-suxe9paration-de-variable}{}
 Les valeurs élevées des coefficients et erreurs-type sont une autre
 indication de quasi-séparation de variables.
@@ -843,30 +870,21 @@ Avec des variables standardisées, un coefficient \(|\beta_j| > 10\) est
 suspect.
 
 \hypertarget{tbl-quasisep}{}
-\begin{table}
-\caption{\label{tbl-quasisep}Données simulées avec séparation de variable pour modèle logistique
-(gauche) et correction de Firth (droite). }\tabularnewline
-
-
-\centering
-\begin{tabular}[t]{lrr}
-\toprule
-  & coef. & erreur-type\\
-\midrule
-cst & $-829.0$ & $311290.6$\\
-x & $92.5$ & $34780.6$\\
-\bottomrule
-\end{tabular}
-\centering
-\begin{tabular}[t]{lrr}
-\toprule
-  & coef. & erreur-type\\
-\midrule
-cst & $-5.6$ & $2.6$\\
-x & $0.6$ & $0.3$\\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{longtable}[]{@{}lrr@{}}
+\caption{\label{tbl-quasisep}Modèle logistique pour \texttt{yachat} en
+fonction de \texttt{ymontant} (variable standardisée).}\tabularnewline
+\toprule\noalign{}
+& coef. & erreur-type \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& coef. & erreur-type \\
+\midrule\noalign{}
+\endhead
+cst & \(-0.3\) & \(6547.6\) \\
+ymontant & \(50.7\) & \(14441.8\) \\
+\bottomrule\noalign{}
+\end{longtable}
 \end{frame}
 
 \begin{frame}{Causes de la quasi-séparation de variables}
@@ -889,7 +907,7 @@ souvent indicateur de problèmes plus importants. Les coefficients et
 interprétations ne sont plus valides\ldots{}
 \end{frame}
 
-\begin{frame}[fragile]{Solutions pour la quasi séparation de variables}
+\begin{frame}{Solutions pour la quasi séparation de variables}
 \protect\hypertarget{solutions-pour-la-quasi-suxe9paration-de-variables}{}
 \begin{enumerate}
 \tightlist
@@ -909,17 +927,6 @@ interprétations ne sont plus valides\ldots{}
 \item
   Déterminer si une variable explicative cause du surajustement en
   étudiant les coefficients dont la valeur absolue est très élevée.
-\item
-  Si on a des problèmes de convergence numérique (\(1\)e message
-  d'erreur), on peut aussi ajouter une pénalité, proposée par Firth
-  (1993) pour empêcher les valeurs des coefficients d'être trop élevés
-  (un peu comme le LASSO).
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Dans \textbf{R}, via la fonction \texttt{logistf} du paquet éponyme.
-  \end{itemize}
 \end{enumerate}
 \end{frame}
 
@@ -1003,7 +1010,7 @@ modèles}
 
 Voir le
 \href{https://lbelzile.github.io/math60602/05-reglogistique.html\#s\%C3\%A9lection-de-variables-en-r\%C3\%A9gression-logistique}{code
-en ligne}.
+en ligne} dans les notes de cours.
 \end{frame}
 
 \begin{frame}{Objectif du ciblage marketing}
@@ -1013,10 +1020,12 @@ Déterminer si le revenu prévu justifie l'envoi du catalogue
 \[\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).\]
 
 On peut combiner un modèle de régression logistique avec la régression
-linéaire (ajustés simultanément avec un modèle Heckit).
+linéaire et les ajuster simultanément --- voir les notes de cours pour
+plus de détail.
 
-Ou simplement ignorer le montant d'achat et envoyer un catalogue si la
-probabilité d'achat excède notre point de coupure optimal.
+Plus simplement, on pourrait ignorer le montant d'achat et envoyer un
+catalogue si la probabilité d'achat excède notre point de coupure
+optimal.
 \end{frame}
 
 \begin{frame}{Stratégie de référence}
@@ -1030,7 +1039,8 @@ probabilité d'achat excède notre point de coupure optimal.
   Ces clients auraient généré des revenus de \(1 601 212\)\$.
 \item
   Si on enlève le coût des envois (\(100 000 \times 10\)\$), la
-  stratégie de référence permet un revenu net de \(601 212\)\$.
+  stratégie de référence permet d'obtenir un revenu net de
+  \(601 212\)\$.
 \end{itemize}
 \end{frame}
 
@@ -1075,7 +1085,7 @@ En résumé, la procédure numérique à réaliser est la suivante:
   \item
     \(-10\) si la personne n'achète pas
   \item
-    \(-10\) plus l'achat si la personne achète.
+    \(-10\) plus le montant d'achat sinon.
   \end{itemize}
 \end{itemize}
 
@@ -1087,10 +1097,10 @@ revenu résultant de cette stratégie.
 \protect\hypertarget{conclusion}{}
 Si on avait fait une bête recherche séquentielle et qu'on avait pris le
 modèle avec le plus petit BIC (8 variables explicatives), on aurait
-dégagé des revenus de \(978 226\)\$.
+dégagé des revenus net de \(978 226\)\$.
 
-C'est une énorme amélioration, de plus de \(56\)\%, par rapport à la
-stratégie de référence.
+C'est une énorme amélioration, de plus de \(62.7\)\%, par rapport à la
+stratégie de référence (soit envoyer un catalogue à tout le monde).
 \end{frame}
 
 \begin{frame}{Récapitulatif}

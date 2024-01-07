@@ -241,7 +241,7 @@ mod1 <- nnet::multinom(
   trace = FALSE)
 ```
 
-Le modèle a `r length(coef(mod))` coefficients, dont deux pour éducation et revenu et un pour sexe et age, par niveau.
+Le modèle a `r length(coef(mod1))` coefficients, dont deux pour éducation et revenu et un pour sexe et age, par niveau.
 
 Pour ajuster le modèle à cotes proportionnelles, il faut d'abord convertir la variable réponse en variable ordinale à l'aide de `ordered` si ce n'est pas déjà la classe de la variable. Cela permettra de spécifier l'ordre des modalités.
 

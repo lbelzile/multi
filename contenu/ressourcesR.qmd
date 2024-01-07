@@ -10,10 +10,9 @@ Il existe plusieurs ressources en ligne pour apprendre **R** et le `tidyverse`, 
 - le livret [**RYouWithMe** de R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/)
 - le livre [**R** for Data Science](https://r4ds.had.co.nz/index.html), qui adhère aux principes du `tidyverse`.
 - le paquet **R** [DoSStoolkit](https://dosstoolkit.com/), développé à l'université de Toronto
-- la documentation d'[`introverse`](https://spielmanlab.github.io/introverse/articles/introverse_online.html)
-- les feuilles d'aide mémoire de [RStudio](https://www.rstudio.com/resources/cheatsheets/), aussi disponibles depuis le menu Aide dans RStudio
+- la feuille d'aide mémoire de [RStudio](https://rstudio.github.io/cheatsheets/translations/french/rstudio-ide_fr.pdf) et celle de [`ggplot2`](https://rstudio.github.io/cheatsheets/translations/french/data-visualization_fr.pdf) en français. Les [aides-mémoires pour les paquets](https://posit.co/resources/cheatsheets/) sont disponibles depuis le menu Aide dans RStudio.
 
-Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés dans les notes de cours,à l'aide des commandes suivantes: 
+Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés dans les notes de cours, à l'aide des commandes suivantes: 
 
 ```{r, eval=FALSE, echo=TRUE}
 lib <- c("remotes", "psych", "glmnet", "caret", 

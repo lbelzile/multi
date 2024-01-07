@@ -34,8 +34,7 @@ donsmult <- dons |>
                    vpromesse,
                    nrefus,
                    nradiations)) |>
-  dplyr::relocate(mtdons)
-#mettre comme première colonne
+  dplyr::relocate(mtdons) #mettre comme première colonne
 
 
 #-------------------------------------------------
@@ -49,6 +48,10 @@ dm_std <- attr(donsmult_std, "scaled:scale")
 
 #------------------------------
 # K-MÉDOÏDES: PAM & CLARA
+# Complexité quadratique
+# Coût relativement élévé pour PAM
+# Ici, on utilise la version approximative avec CLARA
+# pour un sous-échantillon et on assigne au groupe le plus près
 kmedoide <- list()
 set.seed(60602)
 ngmax <- 10L # nb max de regroupements
@@ -68,58 +71,47 @@ for(k in seq_len(ngmax)){
 # Regarder utilitaires pour une méthode
 # Graphique des silhouettes pour K=4
 plot(factoextra::fviz_silhouette(kmedoide[[4]]))
-# Obtenir les prototypes (les médoïdes sont des observations), mais remettre à l'échelle originale
+# Obtenir les prototypes (les médoïdes sont des observations)
 donsmult[kmedoide[[4]]$i.med,]
 # Taille des regroupements
 kmedoide[[4]]$clusinfo
-
-#-------------------------------------------------
-# DBSCAN ET OPTICS
-
-# M=5 observations par groupe par défaut
-library(dbscan)
-# Distance des K-plus proches voisins (M-1 ici)
-kNNdistplot(donsmult_std, minPts = 10)
-# On voit eps=2 dans le graphique pour le coude
-db <- dbscan::dbscan(
-  x = donsmult_std,
-  eps = 2,
-  minPts = 10)
-# Ici, segmentation pas intéressante du tout
-# En cause, il y a un continuum et
-# aucune rupture dans les montants, durées, etc.
-# qui permette de séparer les groupes
-db
-# Étiquettes (0 pour bruit/aberrance)
-#db$cluster
-
+# Valeur du critère de la fonction objective
+sapply(kmedoide, function(x){x$objective})
+##################################################
 #-------------------------------------------------
 # MÉLANGES DE MODÈLES GAUSSIENS
+##################################################
 set.seed(60602)
 # Paquet mclust
 library(mclust)
 mmg <- Mclust(data = donsmult_std,
-       G = 2:10, #nombre de regroupements
+       G = 2:20, #nombre de regroupements
        # Ajouter composante uniforme
        #  pour bruit (aberrances)
        initialization = list(noise = TRUE))
 # Résumé de la segmentation
 summary(mmg)
 # Étiquettes (avec 0 pour bruit)
-mmg$classification
+head(mmg$classification)
 # Graphique de -BIC
+# le graphique montre le négatif tu BIC, donc on cherche la valeur maximale de -BIC
+# on remarque que le logiciel n'arrive pas à ajuster certains modèles. Qui est plus,
+# il y a énormément de différences côté ajustement
+mmg$BIC
+# Si le nombre de groupes suggéré est 10 avec VEV (même forme, corrélations et volume variables), ce n'est pas nécessairement optimal pour l'interprétation. Si on augmentait
+# le nombre maximal de groupe, le BIC continuerait de diminuer.
 plot(mmg, what = "BIC")
 # Nombre final de groupe choisi par BIC
 mmg$G
 # Paramètres
-mmg$parameters$pro #prob de chaque composante
+mmg$parameters$pro # probabilité de chaque composante
 
 # moyenne des segments
 mmg$parameters$mean*dm_std + dm_moy
 # (un groupe par colonne)
 # ATTENTION: ces paramètres ne correspondent pas
 # nécessairement aux estimés empiriques
-# des moyennes desregroupements
+# des moyennes des regroupements
 
 # Probabilité de chaque observation dans chaque groupe (n par K)
 # mmg$z
@@ -128,6 +120,8 @@ mmg$parameters$mean*dm_std + dm_moy
 # plot(mmg, what = "classification")
 reduc_dim_mmg <- MclustDR(mmg)
 # Diagramme avec réduction de la dimension
+# voir Scrucca (2010) DOI:10.1007/s11222-009-9138-7
+# analogie avec les composantes principales pour la réduction de la dimension
 par(mfrow = c(1,2))
 # Contour des ellipsoïdes sur projection
 plot(reduc_dim_mmg, what = "contour")
@@ -190,12 +184,15 @@ reg_genie <- gclust(d = donsmult_std,
                     gini_threshold = 0.3,
                     distance = "euclidean")
 # dendogramme
-plot(reg_genie,
-     labels = FALSE,
-     sub = NA,
-     xlab = NA,
-     ylab = "hauteur",
-     main = "Dendrogramme")
+plot(as.dendrogram(reg_genie),
+     sub = NA, # sous-titre
+     leaflab = "none", #retirer étiquettes des feuilles
+     xlab = "dissimilarité", # étiquette de l'axe des x
+     ylab = "", # étiquette de l'axe des y
+     horiz = TRUE, # graphique horizontal
+     main = "Dendrogramme", # titre
+     xlim = c(range(tail(reg_genie$height, 100))) # réduire l'arborescence
+     )
 # Conserver 5 regroupements
 # Élagage avec cutree
 genieh_etiquettes <- cutree(reg_genie, k = 5)
@@ -221,16 +218,22 @@ ggplot(
   data = data.frame(
     pc1 = acp$scores[,1],
     pc2 = acp$scores[,2],
-    etiquettes = genih_etiquettes),
+    etiquettes = as.factor(genieh_etiquettes)),
   mapping = aes(x = pc1,
                 y = pc2,
                 col = etiquettes,
-                pointype = etiquettes)) +
-  geom_point(alpha = 0.1)
+                pointtype = etiquettes)) +
+  geom_point(alpha = 0.2, size = 0.5) +
+  labs(x = "composante principale 1",
+       y = "composante principale 2",
+       color = "étiquette") +
+  viridis::scale_color_viridis(discrete = TRUE) + # palette de couleur discrète
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
 # Indice de Rand ajusté
 # Comparer deux partitions des données
 hecmulti::rand(x = genieh_etiquettes,
-                     y = mmg$classification)
+               y = mmg$classification)
 # Version généralisée avec pénalité
 # flexclust::randIndex
