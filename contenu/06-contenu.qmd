@@ -18,6 +18,7 @@ title: "Régression logistique"
 
 - {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos6.pdf)
 - {{< fa code >}} [Code](/code/MATH60602-diapos6.R)
+- {{< fa code >}} [Code pour la sélection de modèles](/code/MATH60602-selection-logistique.R)
 
 
 ## Objectifs d'apprentissage

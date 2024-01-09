@@ -51,10 +51,10 @@ ggplot(data = perfo1,
        aes(x = coupe,
            y = pcorrect)) +
   geom_line() +
-  geom_vline(xintercept = c, linetype = "dashed", alpha = 0.5) +
+  geom_vline(xintercept = coupe_opt, linetype = "dashed", alpha = 0.5) +
   labs(x = "point de coupure",
        y = "",
-       subtitle = "taux de mauvaise classification (pourcentage)") +
+       subtitle = "taux de bonne classification (pourcentage)") +
   scale_x_continuous(expand = c(0.01,0.01),
                      breaks = c(0,0.25,0.5,0.75,1),
                      labels = c("0","0.25","0.5","0.75","1")) +
