@@ -225,7 +225,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, frame hidden, enhanced, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, frame hidden, sharp corners, breakable]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Présentation des données}
 \protect\hypertarget{pruxe9sentation-des-donnuxe9es}{}
@@ -631,20 +631,21 @@ On peut plutôt opter pour un algorithme glouton:
 
 \begin{frame}{Digression}
 \protect\hypertarget{digression}{}
-Le modèle à \(K\) variables qui a la plus petite erreur moyenne
-quadratique a aussi
+Si on considère tous les modèles à \(K\) variables, celui qui a la plus
+petite erreur moyenne quadratique a aussi
 
 \begin{itemize}
 \tightlist
 \item
-  est aussi le meilleur (pour \(K\) variables) selon les critères
-  d'information
+  le plus grand coefficient de détermination, \(R^2\)
 \item
-  et selon le coefficient de régression \(R^2\)
+  le plus petit critère d'information parmi tous les modèles à \(K\)
+  variables (puisque le nombre de coefficients est le même, donc la
+  pénalité est identique).
 \end{itemize}
 
-Si on enlève ou on ajoute séquentiellement des variables, on peut
-traquer l'un ou l'autre avant de comparer avec le modèle précédent.
+On utilise donc les critères d'information pour départager des modèles
+avec des nombre de variables différents.
 \end{frame}
 
 \begin{frame}{Sélections ascendante et descendante}
@@ -916,19 +917,6 @@ l'erreur quadratique moyenne.
 \end{Shaded}
 
 \normalsize
-\end{frame}
-
-\begin{frame}{Motivation pour la moyenne de modèles}
-\protect\hypertarget{motivation-pour-la-moyenne-de-moduxe8les}{}
-Une seule base de données (un seul échantillon) à disposition!
-
-Peu d'hétérogénéité, hors cette dernière est présente
-
-\begin{itemize}
-\tightlist
-\item
-  (rappelez-vous l'incertitude de la validation croisée)
-\end{itemize}
 \end{frame}
 
 \begin{frame}{Évaluation de la performance}

@@ -368,12 +368,14 @@ On peut plutôt opter pour un algorithme glouton:
 
 # Digression
 
-Le modèle à $K$ variables qui a la plus petite erreur moyenne quadratique a aussi
+Si on considère tous les modèles à $K$ variables, celui qui a la plus petite erreur moyenne quadratique a aussi
 
-- est aussi le meilleur (pour $K$ variables) selon les critères d'information
-- et selon le coefficient de régression $R^2$
+- le plus grand coefficient de détermination, $R^2$
+- le plus petit critère d'information parmi tous les modèles à $K$ variables (puisque le nombre de coefficients est le même, donc la pénalité est identique).
 
-Si on enlève ou on ajoute séquentiellement des variables, on peut traquer l'un ou l'autre avant de comparer avec le modèle précédent.
+On utilise donc les critères d'information pour départager des modèles avec des nombre de variables différents.
+
+
 
 # Sélections ascendante et descendante
 
@@ -585,13 +587,16 @@ eqm_lasso <- mean((pred - dbm_v$ymontant)^2)
 
 \normalsize
 
+<!-- 
 # Motivation pour la moyenne de modèles
 
 Une seule base de données (un seul échantillon) à disposition!
 
-Peu d'hétérogénéité, hors cette dernière est présente 
+Peu d'hétérogénéité, or cette dernière est présente  si on change d'échantillon.
 
 - (rappelez-vous l'incertitude de la validation croisée)
+
+-->
 
 <!-- # Moyenne de modèles  -->
 
