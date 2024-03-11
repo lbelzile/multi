@@ -288,6 +288,7 @@ La fonction résumé (`summary`) renvoit l'estimation de la fonction de survie p
 
 # Tableau résumé (sortie tronqué)
 
+::: .small
 
 ```{r}
 #| label: tbl-survie1-tableau
@@ -306,9 +307,9 @@ km_tab <- with(summary(kapm),
                data.frame(time, n.risk, n.event, cumsum(n.event), surv, std.err))
 
 colnames(km_tab) <- c("temps", 
-                      "nb à risque",
-                      "nb échecs",
-                      "nb cumul.",
+                      "risque",
+                      "échecs",
+                      "éch. cumul.",
                       "survie",
                       "erreur-type")
 km_subtab <- with(km_tab, rbind(km_tab[temps <= 34,], 
@@ -322,6 +323,8 @@ knitr::kable(km_subtab,
                 row.names = FALSE) |>
   kableExtra::kable_styling(latex_options = 'scale_down')
 ```
+
+:::
 
 # Calcul du temps de survie
 
@@ -371,7 +374,7 @@ autoplot(kapm) +
 
 - Ordonner les temps (uniques) où il y a des échecs (temps où `censure = 1`), disons $t_{(1)} \leq \cdots \leq t_{(m)}$
 - À chaque temps $t_{(i)}$ $(i=1, \ldots m)$, on calcule le nombre de personnes à risque, $r_i$, et le nombre d'échecs, $d_i$.
-- Le risque empirique est $\widehat{h}_i = r_i/d_i$, la proportion d'échecs parmi les personnes à risque.
+- Le risque empirique est $\widehat{h}_i = d_i/r_i$, la proportion d'échecs parmi les personnes à risque.
 
 # Dérivation de Kaplan--Meier
 
@@ -668,7 +671,7 @@ knitr::kable(tab1,
   kableExtra::kable_styling(position = 'center')
 ```
 
-*Ceteris paribus*, le risque qu'une femme (`sexe = 1`) se désabonne est `r round(exp(coef(cox3)),3)[2]` fois plus petit que celui d'un homme (`sexe = 0`).
+*Ceteris paribus*, le risque qu'une femme (`sexe = 1`) se désabonne est `r round(exp(coef(cox3)),3)[2]` fois celui d'un homme (`sexe = 0`).
 
 # Tests du rapport de vraisemblance
 
@@ -849,7 +852,7 @@ plot(coxzph_out)
 Test du score de Grampsch et Therneau (1994) pour les coefficients constants dans le temps avec 
 
 - $\mathscr{H}_0$: $\beta(t)=c$ est constant (risques proportionnels)
-- $\mathscr{H}_a$: $\beta(t) \neq c$ (risques non proportionnels, coefficient variable).
+- $\mathscr{H}_a$: $\beta(t) \neq c$ (risques non prop., coef. variable).
 
 
 ```{r}

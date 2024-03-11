@@ -26,3 +26,9 @@ title: "Régression logistique"
 - Être capable de calculer la spécificité, la sensibilité, etc. d'une classification.
 - Déterminer la qualité d'un modèle de classification à l'aide de diagnostics graphiques.
 - Pouvoir effectuer une sélection de variable avec des données binaires
+
+
+## Exercices
+
+- {{< fa file >}} [Exercices 3](/exercices/03-exercice.html)
+
