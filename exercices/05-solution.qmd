@@ -49,11 +49,6 @@ Le critère des valeurs propres de Kaiser (variances des composantes principales
 
 Le diagramme d'éboulis indique un coude à partir de deux facteurs.
 
-```{r}
-cp_2 <- factocp(covmat = covdb, 
-                nfact = 2)
-print(cp_2, cutoff = 0.5)
-```
    
 ```{r}
 cp_2 <- factocp(x = db,
@@ -227,9 +222,9 @@ hecmulti::eboulis(spectral)
 print(afk, cutoff = 0.5)
 ```
 
-Le critère de Kaiser (valeurs propres supérieures à 1) avec la matrice de corrélation suggère deux facteurs. Le diagramme d'éboulis donne deux facteurs également avec la matrice de corrélation. 
+Le critère de Kaiser (valeurs propres supérieures à 1) avec la matrice de corrélation suggère deux facteurs. Le diagramme d'éboulis donne un ou deux facteurs également. 
 
-On peut constater en étudiant les chargements que le premier facteur est très corrélé avec plusieurs variables. En augmentant le point de coupure, on obtient un regroupement avec grosso-modo pour le facteur 1 (Q8-Q9 et Q14-Q17) les questions qui se réfèrent à la réputation sociale de l'entreprise et la balance pour le facteur 2 (Q10-Q13) pour la réputation sur le plan de la gestion. Seule la question Q15 semble un peu à part
+On peut constater en étudiant les chargements que le premier facteur est très corrélé avec plusieurs variables. En augmentant le point de coupure, on obtient un regroupement avec grosso-modo pour le facteur 1 (Q8-Q9 et Q14-Q17) les questions qui se réfèrent à la réputation sociale de l'entreprise et la balance pour le facteur 2 (Q10-Q13) pour la réputation sur le plan de la gestion. Seule la question Q15 semble un peu à part.
 
 
 **4. Répétez l'exercice, cette fois avec la méthode du maximum de vraisemblance**
