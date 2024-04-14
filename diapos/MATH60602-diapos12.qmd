@@ -117,11 +117,12 @@ dm_std <- attr(donsmult_std, "scaled:scale")
 
 L'algorithme CLARA, décrit dans Kaufman & Rousseeuw (1990), réduit le coût de calcul et de stockage.
 
-- Diviser l'échantillon en $S$ sous-échantillons de taille approximativement égale de taille $n_S$    
-    - typiquement $K \ll n_S < 1000$
-- Utiliser l'algorithme PAM sur chaque sous-échantillon. 
+On répète $S$ fois les instructions suivantes: 
 
-Une fois les médoïdes obtenus, le reste de toutes les observations de l'échantillon sont assignées au regroupement du médoïde le plus près.
+-  Tirer un sous-échantillon aléatoire de taille $n_S$    
+    - typiquement $K \ll n_S < 1000$
+- Utiliser l'algorithme PAM sur ce sous-échantillon pour obtenir les médoïdes.
+- Assigner le reste des observations de l'échantillon au regroupement du médoïde le plus près.
 
 Pour chacune des $S$ segmentations, on calcule la distance moyenne entre les médoïdes et les observations.
 
