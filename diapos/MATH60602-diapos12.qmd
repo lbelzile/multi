@@ -647,7 +647,7 @@ ggforce::geom_circle(
                      expand = c(0,0)) +
   labs(x = "", y = "") + 
   theme_classic() +
-  theme(legend.position = c(5,5))
+  theme(legend.position = "inside", legend.position.inside = c(5,5))
 g1
 ```
 

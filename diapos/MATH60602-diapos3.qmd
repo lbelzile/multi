@@ -381,7 +381,7 @@ ggplot(data = EQMdat, aes(x=ordre, y=EQM, color=echantillon)) +
   scale_x_continuous(breaks = 0:10,
                      labels = as.character(0:10)) +
   theme_classic() + 
-  theme(legend.position = c(0.8, 0.8))
+  theme(legend.position = "inside", legend.position.inside = c(0.8, 0.8))
 ```
 
 Plus le modèle est complexe, plus l’erreur quadratique moyenne de l’échantillon d’apprentissage est petite!
