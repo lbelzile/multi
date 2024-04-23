@@ -530,7 +530,7 @@ p
 On peut choisir $K$ à partir du pourcentage de variance expliquée, $R^2$ en calculant $$R^2_{(M)} = 1-\mathrm{SCD}_{(M)}/\mathrm{SCD}_{(1)},$$ où $\mathrm{SCD}_{(1)}$ est l'homogénéité globale avec un seul groupe.
 
 Le R-carré semi-partiel mesure la perte d'homogénéité d'une étape à l'autre, renormalisée par 
-$$R^2_{\text{sp}(M)} =\frac{\mathrm{SCD}_{(M)} - \mathrm{SCD}_{(M-1)}}{\mathrm{SCD}_{(1)}},$$
+$$R^2_{\text{sp}(M)} =\frac{\mathrm{SCD}_{(M-1)} - \mathrm{SCD}_{(M)}}{\mathrm{SCD}_{(1)}}, \quad M=2, \ldots, n.$$
 
 # Critères d'homogénéité (Ward)
 

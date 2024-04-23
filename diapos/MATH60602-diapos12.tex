@@ -240,7 +240,7 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, breakable, sharp corners, interior hidden, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, sharp corners, boxrule=0pt, interior hidden, enhanced, breakable, frame hidden]}{\end{tcolorbox}}\fi
 
 \begin{frame}{Algorithmes pour l'analyse de regroupements}
 \protect\hypertarget{algorithmes-pour-lanalyse-de-regroupements}{}
@@ -775,7 +775,7 @@ On peut choisir \(K\) à partir du pourcentage de variance expliquée,
 
 Le R-carré semi-partiel mesure la perte d'homogénéité d'une étape à
 l'autre, renormalisée par
-\[R^2_{\text{sp}(M)} =\frac{\mathrm{SCD}_{(M)} - \mathrm{SCD}_{(M-1)}}{\mathrm{SCD}_{(1)}},\]
+\[R^2_{\text{sp}(M)} =\frac{\mathrm{SCD}_{(M-1)} - \mathrm{SCD}_{(M)}}{\mathrm{SCD}_{(1)}}, \quad M=2, \ldots, n.\]
 \end{frame}
 
 \begin{frame}[fragile]{Critères d'homogénéité (Ward)}
