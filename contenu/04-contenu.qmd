@@ -4,9 +4,10 @@ title: "Sélection de variables"
 
 ## Contenu
 
-- Méthodes de sélection de variables: recherches exhaustives et procédures séquentielles
-- Modèle LASSO
-- Moyenne de modèles
+- Méthodes de sélection de variables: 
+  - recherche exhaustive
+  - procédures séquentielles
+  - pénalisation LASSO
 
 ## Lecture
 

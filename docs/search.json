@@ -639,7 +639,7 @@
     "href": "contenu/04-contenu.html",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
-    "text": "Méthodes de sélection de variables: recherches exhaustives et procédures séquentielles\nModèle LASSO\nMoyenne de modèles",
+    "text": "Méthodes de sélection de variables:\n\nrecherche exhaustive\nprocédures séquentielles\npénalisation LASSO",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",
@@ -651,7 +651,7 @@
     "href": "contenu/04-contenu.html#contenu",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
-    "text": "Méthodes de sélection de variables: recherches exhaustives et procédures séquentielles\nModèle LASSO\nMoyenne de modèles",
+    "text": "Méthodes de sélection de variables:\n\nrecherche exhaustive\nprocédures séquentielles\npénalisation LASSO",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",
@@ -963,7 +963,7 @@
     "href": "contenu/08-contenu.html#lecture",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Lecture",
-    "text": "Lecture\n\n Chapitre sur l’analyse de survie, Sections 1 à 5",
+    "text": "Lecture\n\n Chapitre sur l’analyse de survie, Sections 5.1 à 5.5.2 (inclusivement)",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",

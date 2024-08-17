@@ -12,7 +12,7 @@ title: "Analyse de survie"
 ## Lecture
 
 
-- {{< fa book >}} [Chapitre sur l'analyse de survie](https://lbelzile.github.io/math60602/survie.html), Sections 1 à 5
+- {{< fa book >}} [Chapitre sur l'analyse de survie](https://lbelzile.github.io/math60602/survie.html), Sections 5.1 à 5.5.2 (inclusivement)
 
 ## Diapositives 
 
