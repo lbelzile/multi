@@ -12,8 +12,6 @@ project:
     - "diapos/libs/"
     - "diapos/css/"
     - "diapos/*_files/"
-    - "evaluations/*.pdf"
-
 
 # See https://quarto.org/docs/projects/code-execution.html#freeze
 execute:
@@ -32,21 +30,12 @@ website:
     background: "$aquaf"
     foreground: "$blanc"
     right:
-      - text: "Syllabus"
-        file: syllabus.qmd
-      - text: "Horaire"
-        file: horaire.qmd
       - text: "Contenu"
         file: contenu/index.qmd
-      - text: "Évaluations"
-        file: evaluations/index.qmd
       - text: "Exercices"
         file: exercices/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/math60602"
-      - icon: comment
-        href: "https://piazza.com/hec.ca/fall2023/math60602/home"
-        aria-label: Piazza
       - icon: inbox-fill
         href: "https://lbelzile.github.io/hecmulti"
         aria-label: Données
@@ -90,21 +79,6 @@ website:
               file: contenu/11-contenu.qmd
             - text: "12: Analyse de regroupements"
               file: contenu/12-contenu.qmd
-    - title: "Devoirs"
-      style: "docked"
-      search: false
-      foreground: "$aquap"
-      contents:
-        - text: "Notation"
-          file: evaluations/index.qmd
-        - text: "Examens"
-          contents:
-            - evaluations/intra.qmd
-            - evaluations/final.qmd
-        - section: "Devoirs"
-          contents:
-            - evaluations/01-devoir.qmd
-            - evaluations/02-devoir.qmd
     - title: "Exercices"
       style: "docked"
       search: false
