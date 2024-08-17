@@ -1,0 +1,14 @@
+group,subgroup,title,content,exercice
+Contenu,Séance 1,Introduction,contenu/01-contenu,
+Contenu,Séance 2,Programmation,contenu/02-contenu,exercices/01-exercice
+Contenu,Séance 3,Sélection de variables,contenu/03-contenu,
+Contenu,Séance 4,Sélection de variables,contenu/04-contenu,exercices/02-exercice
+Contenu,Séance 5,Régression logistique : bases,contenu/05-contenu,
+Contenu,Séance 6,Régression logistique : prédiction et classification,contenu/06-contenu,exercices/03-exercice
+Contenu,Séance 7,Données multinomiales et valeurs manquantes,contenu/07-contenu,exercices/03-exercice
+Contenu,Relâche,Relâche,,
+Contenu,Séance 8,Analyse de survie,contenu/08-contenu,exercices/04-exercice
+Contenu,Séance 9,Analyse de survie,contenu/09-contenu,exercices/04-exercice
+Contenu,Séance 10,Réduction de la dimension,contenu/10-contenu,exercices/05-exercice
+Contenu,Séance 11,Analyse de regroupements,contenu/11-contenu,
+Contenu,Séance 12,Analyse de regroupements,contenu/12-contenu,exercices/06-exercice

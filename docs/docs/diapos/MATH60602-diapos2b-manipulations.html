@@ -1,0 +1,2256 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Manipuler des bases de données avec dplyr</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Andrew Heiss, Léo Belzile (adaptation et traduction)" />
+    <script src="libs/header-attrs-2.24/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon-1.4.1/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
+    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ath-slides.css" type="text/css" />
+    <link rel="stylesheet" href="css/ath-inferno-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+class: center middle main-title section-title-1
+
+# Manipuler des&lt;br&gt;bases de données&lt;br&gt;avec `dplyr`
+
+.class-info[
+&lt;figure&gt;
+  &lt;img src="img/04/dplyr.png" alt="dplyr" title="dplyr" width="15%"&gt;
+&lt;/figure&gt;
+]
+
+
+---
+
+layout: false
+class: title title-1 section-title-inv-1
+
+
+.small[
+
+```r
+gapminder
+```
+
+```
+##                    country continent year lifeExp       pop  gdpPercap
+## 1              Afghanistan      Asia 1952  28.801   8425333   779.4453
+## 2              Afghanistan      Asia 1957  30.332   9240934   820.8530
+## 3              Afghanistan      Asia 1962  31.997  10267083   853.1007
+## 4              Afghanistan      Asia 1967  34.020  11537966   836.1971
+## 5              Afghanistan      Asia 1972  36.088  13079460   739.9811
+## 6              Afghanistan      Asia 1977  38.438  14880372   786.1134
+## 7              Afghanistan      Asia 1982  39.854  12881816   978.0114
+## 8              Afghanistan      Asia 1987  40.822  13867957   852.3959
+## 9              Afghanistan      Asia 1992  41.674  16317921   649.3414
+## 10             Afghanistan      Asia 1997  41.763  22227415   635.3414
+## 11             Afghanistan      Asia 2002  42.129  25268405   726.7341
+## 12             Afghanistan      Asia 2007  43.828  31889923   974.5803
+## 13                 Albania    Europe 1952  55.230   1282697  1601.0561
+## 14                 Albania    Europe 1957  59.280   1476505  1942.2842
+## 15                 Albania    Europe 1962  64.820   1728137  2312.8890
+## 16                 Albania    Europe 1967  66.220   1984060  2760.1969
+## 17                 Albania    Europe 1972  67.690   2263554  3313.4222
+## 18                 Albania    Europe 1977  68.930   2509048  3533.0039
+## 19                 Albania    Europe 1982  70.420   2780097  3630.8807
+## 20                 Albania    Europe 1987  72.000   3075321  3738.9327
+## 21                 Albania    Europe 1992  71.581   3326498  2497.4379
+## 22                 Albania    Europe 1997  72.950   3428038  3193.0546
+## 23                 Albania    Europe 2002  75.651   3508512  4604.2117
+## 24                 Albania    Europe 2007  76.423   3600523  5937.0295
+## 25                 Algeria    Africa 1952  43.077   9279525  2449.0082
+## 26                 Algeria    Africa 1957  45.685  10270856  3013.9760
+## 27                 Algeria    Africa 1962  48.303  11000948  2550.8169
+## 28                 Algeria    Africa 1967  51.407  12760499  3246.9918
+## 29                 Algeria    Africa 1972  54.518  14760787  4182.6638
+## 30                 Algeria    Africa 1977  58.014  17152804  4910.4168
+## 31                 Algeria    Africa 1982  61.368  20033753  5745.1602
+## 32                 Algeria    Africa 1987  65.799  23254956  5681.3585
+## 33                 Algeria    Africa 1992  67.744  26298373  5023.2166
+## 34                 Algeria    Africa 1997  69.152  29072015  4797.2951
+## 35                 Algeria    Africa 2002  70.994  31287142  5288.0404
+## 36                 Algeria    Africa 2007  72.301  33333216  6223.3675
+## 37                  Angola    Africa 1952  30.015   4232095  3520.6103
+## 38                  Angola    Africa 1957  31.999   4561361  3827.9405
+## 39                  Angola    Africa 1962  34.000   4826015  4269.2767
+## 40                  Angola    Africa 1967  35.985   5247469  5522.7764
+## 41                  Angola    Africa 1972  37.928   5894858  5473.2880
+## 42                  Angola    Africa 1977  39.483   6162675  3008.6474
+## 43                  Angola    Africa 1982  39.942   7016384  2756.9537
+## 44                  Angola    Africa 1987  39.906   7874230  2430.2083
+## 45                  Angola    Africa 1992  40.647   8735988  2627.8457
+## 46                  Angola    Africa 1997  40.963   9875024  2277.1409
+## 47                  Angola    Africa 2002  41.003  10866106  2773.2873
+## 48                  Angola    Africa 2007  42.731  12420476  4797.2313
+## 49               Argentina  Americas 1952  62.485  17876956  5911.3151
+## 50               Argentina  Americas 1957  64.399  19610538  6856.8562
+## 51               Argentina  Americas 1962  65.142  21283783  7133.1660
+## 52               Argentina  Americas 1967  65.634  22934225  8052.9530
+## 53               Argentina  Americas 1972  67.065  24779799  9443.0385
+## 54               Argentina  Americas 1977  68.481  26983828 10079.0267
+## 55               Argentina  Americas 1982  69.942  29341374  8997.8974
+## 56               Argentina  Americas 1987  70.774  31620918  9139.6714
+## 57               Argentina  Americas 1992  71.868  33958947  9308.4187
+## 58               Argentina  Americas 1997  73.275  36203463 10967.2820
+## 59               Argentina  Americas 2002  74.340  38331121  8797.6407
+## 60               Argentina  Americas 2007  75.320  40301927 12779.3796
+## 61               Australia   Oceania 1952  69.120   8691212 10039.5956
+## 62               Australia   Oceania 1957  70.330   9712569 10949.6496
+## 63               Australia   Oceania 1962  70.930  10794968 12217.2269
+## 64               Australia   Oceania 1967  71.100  11872264 14526.1246
+## 65               Australia   Oceania 1972  71.930  13177000 16788.6295
+## 66               Australia   Oceania 1977  73.490  14074100 18334.1975
+## 67               Australia   Oceania 1982  74.740  15184200 19477.0093
+## 68               Australia   Oceania 1987  76.320  16257249 21888.8890
+## 69               Australia   Oceania 1992  77.560  17481977 23424.7668
+## 70               Australia   Oceania 1997  78.830  18565243 26997.9366
+## 71               Australia   Oceania 2002  80.370  19546792 30687.7547
+## 72               Australia   Oceania 2007  81.235  20434176 34435.3674
+## 73                 Austria    Europe 1952  66.800   6927772  6137.0765
+## 74                 Austria    Europe 1957  67.480   6965860  8842.5980
+## 75                 Austria    Europe 1962  69.540   7129864 10750.7211
+## 76                 Austria    Europe 1967  70.140   7376998 12834.6024
+## 77                 Austria    Europe 1972  70.630   7544201 16661.6256
+## 78                 Austria    Europe 1977  72.170   7568430 19749.4223
+## 79                 Austria    Europe 1982  73.180   7574613 21597.0836
+## 80                 Austria    Europe 1987  74.940   7578903 23687.8261
+## 81                 Austria    Europe 1992  76.040   7914969 27042.0187
+## 82                 Austria    Europe 1997  77.510   8069876 29095.9207
+## 83                 Austria    Europe 2002  78.980   8148312 32417.6077
+## 84                 Austria    Europe 2007  79.829   8199783 36126.4927
+## 85                 Bahrain      Asia 1952  50.939    120447  9867.0848
+## 86                 Bahrain      Asia 1957  53.832    138655 11635.7995
+## 87                 Bahrain      Asia 1962  56.923    171863 12753.2751
+## 88                 Bahrain      Asia 1967  59.923    202182 14804.6727
+## 89                 Bahrain      Asia 1972  63.300    230800 18268.6584
+## 90                 Bahrain      Asia 1977  65.593    297410 19340.1020
+## 91                 Bahrain      Asia 1982  69.052    377967 19211.1473
+## 92                 Bahrain      Asia 1987  70.750    454612 18524.0241
+## 93                 Bahrain      Asia 1992  72.601    529491 19035.5792
+## 94                 Bahrain      Asia 1997  73.925    598561 20292.0168
+## 95                 Bahrain      Asia 2002  74.795    656397 23403.5593
+## 96                 Bahrain      Asia 2007  75.635    708573 29796.0483
+## 97              Bangladesh      Asia 1952  37.484  46886859   684.2442
+## 98              Bangladesh      Asia 1957  39.348  51365468   661.6375
+## 99              Bangladesh      Asia 1962  41.216  56839289   686.3416
+## 100             Bangladesh      Asia 1967  43.453  62821884   721.1861
+## 101             Bangladesh      Asia 1972  45.252  70759295   630.2336
+## 102             Bangladesh      Asia 1977  46.923  80428306   659.8772
+## 103             Bangladesh      Asia 1982  50.009  93074406   676.9819
+## 104             Bangladesh      Asia 1987  52.819 103764241   751.9794
+## 105             Bangladesh      Asia 1992  56.018 113704579   837.8102
+## 106             Bangladesh      Asia 1997  59.412 123315288   972.7700
+## 107             Bangladesh      Asia 2002  62.013 135656790  1136.3904
+## 108             Bangladesh      Asia 2007  64.062 150448339  1391.2538
+## 109                Belgium    Europe 1952  68.000   8730405  8343.1051
+## 110                Belgium    Europe 1957  69.240   8989111  9714.9606
+## 111                Belgium    Europe 1962  70.250   9218400 10991.2068
+## 112                Belgium    Europe 1967  70.940   9556500 13149.0412
+## 113                Belgium    Europe 1972  71.440   9709100 16672.1436
+## 114                Belgium    Europe 1977  72.800   9821800 19117.9745
+## 115                Belgium    Europe 1982  73.930   9856303 20979.8459
+## 116                Belgium    Europe 1987  75.350   9870200 22525.5631
+## 117                Belgium    Europe 1992  76.460  10045622 25575.5707
+## 118                Belgium    Europe 1997  77.530  10199787 27561.1966
+## 119                Belgium    Europe 2002  78.320  10311970 30485.8838
+## 120                Belgium    Europe 2007  79.441  10392226 33692.6051
+## 121                  Benin    Africa 1952  38.223   1738315  1062.7522
+## 122                  Benin    Africa 1957  40.358   1925173   959.6011
+## 123                  Benin    Africa 1962  42.618   2151895   949.4991
+## 124                  Benin    Africa 1967  44.885   2427334  1035.8314
+## 125                  Benin    Africa 1972  47.014   2761407  1085.7969
+## 126                  Benin    Africa 1977  49.190   3168267  1029.1613
+## 127                  Benin    Africa 1982  50.904   3641603  1277.8976
+## 128                  Benin    Africa 1987  52.337   4243788  1225.8560
+## 129                  Benin    Africa 1992  53.919   4981671  1191.2077
+## 130                  Benin    Africa 1997  54.777   6066080  1232.9753
+## 131                  Benin    Africa 2002  54.406   7026113  1372.8779
+## 132                  Benin    Africa 2007  56.728   8078314  1441.2849
+## 133                Bolivia  Americas 1952  40.414   2883315  2677.3263
+## 134                Bolivia  Americas 1957  41.890   3211738  2127.6863
+## 135                Bolivia  Americas 1962  43.428   3593918  2180.9725
+## 136                Bolivia  Americas 1967  45.032   4040665  2586.8861
+## 137                Bolivia  Americas 1972  46.714   4565872  2980.3313
+## 138                Bolivia  Americas 1977  50.023   5079716  3548.0978
+## 139                Bolivia  Americas 1982  53.859   5642224  3156.5105
+## 140                Bolivia  Americas 1987  57.251   6156369  2753.6915
+## 141                Bolivia  Americas 1992  59.957   6893451  2961.6997
+## 142                Bolivia  Americas 1997  62.050   7693188  3326.1432
+## 143                Bolivia  Americas 2002  63.883   8445134  3413.2627
+## 144                Bolivia  Americas 2007  65.554   9119152  3822.1371
+## 145 Bosnia and Herzegovina    Europe 1952  53.820   2791000   973.5332
+## 146 Bosnia and Herzegovina    Europe 1957  58.450   3076000  1353.9892
+## 147 Bosnia and Herzegovina    Europe 1962  61.930   3349000  1709.6837
+## 148 Bosnia and Herzegovina    Europe 1967  64.790   3585000  2172.3524
+## 149 Bosnia and Herzegovina    Europe 1972  67.450   3819000  2860.1698
+## 150 Bosnia and Herzegovina    Europe 1977  69.860   4086000  3528.4813
+## 151 Bosnia and Herzegovina    Europe 1982  70.690   4172693  4126.6132
+## 152 Bosnia and Herzegovina    Europe 1987  71.140   4338977  4314.1148
+## 153 Bosnia and Herzegovina    Europe 1992  72.178   4256013  2546.7814
+## 154 Bosnia and Herzegovina    Europe 1997  73.244   3607000  4766.3559
+## 155 Bosnia and Herzegovina    Europe 2002  74.090   4165416  6018.9752
+## 156 Bosnia and Herzegovina    Europe 2007  74.852   4552198  7446.2988
+## 157               Botswana    Africa 1952  47.622    442308   851.2411
+## 158               Botswana    Africa 1957  49.618    474639   918.2325
+## 159               Botswana    Africa 1962  51.520    512764   983.6540
+## 160               Botswana    Africa 1967  53.298    553541  1214.7093
+## 161               Botswana    Africa 1972  56.024    619351  2263.6111
+## 162               Botswana    Africa 1977  59.319    781472  3214.8578
+## 163               Botswana    Africa 1982  61.484    970347  4551.1421
+## 164               Botswana    Africa 1987  63.622   1151184  6205.8839
+## 165               Botswana    Africa 1992  62.745   1342614  7954.1116
+## 166               Botswana    Africa 1997  52.556   1536536  8647.1423
+##  [ reached 'max' / getOption("max.print") -- omitted 1538 rows ]
+```
+]
+
+---
+
+class: title title-1
+
+# tidyverse
+
+&lt;figure&gt;
+  &lt;img src="img/02/tidyverse-language.png" alt="tidyverse and language" title="tidyverse and language" width="100%"&gt;
+&lt;/figure&gt;
+
+???
+
+From "Master the Tidyverse" by RStudio
+
+---
+
+class: title title-1
+
+# tidyverse
+
+.center[
+&lt;figure&gt;
+  &lt;img src="img/02/tidyverse.png" alt="The tidyverse" title="The tidyverse" width="50%"&gt;
+&lt;/figure&gt;
+]
+
+---
+
+class: title title-1
+
+# `dplyr`: verbes pour manipuler des données
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Extraire des lignes avec &lt;code&gt;filter()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/filter.png" alt="filter" title="filter" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Extraire des colonnes avec &lt;code&gt;select()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/select.png" alt="select" title="select" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Arranger/trier les lignes avec &lt;code&gt;arrange()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/arrange.png" alt="arrange" title="arrange" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Créer/modifier des colonnes avec &lt;code&gt;mutate()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/mutate.png" alt="mutate" title="mutate" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Résumer des sous-ensembles avec&lt;br&gt;&lt;code&gt;group_by() |&gt; summarize()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/summarize.png" alt="summarize" title="summarize" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+---
+
+class: center middle section-title section-title-1
+
+# `filter()`
+
+---
+
+layout: false
+class: title title-1
+
+# `filter()`
+
+.box-inv-1[Extraire des lignes selon une condition logique]
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;filter(.data = &lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;DATA&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;...&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+.pull-right[
+- &lt;b&gt;&lt;span style="background: #FFDFD1"&gt;`DATA`&lt;/span&gt;&lt;/b&gt; = tableau de données à transformer
+- &lt;b&gt;&lt;span style="background: #FFD0CF"&gt;`...`&lt;/span&gt;&lt;/b&gt; = Un ou plusieurs tests&lt;br&gt;.small[`filter()` retourne chaque ligne pour lequel le test retourne `TRUE`]
+]
+
+---
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(.data = &lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;country == "Denmark"&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1952 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1962 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1967 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1952 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1957 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1967 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1972 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1977 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1
+
+# `filter()`
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;filter(.data = &lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;country == "Denmark"&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+.pull-right[
+.box-inv-1[Un signe `=`&lt;br&gt; pour l'assignation d'un argument]
+
+.box-inv-1[Deux signes `==`&lt;br&gt;teste l'égalité entre objets&lt;br&gt;.small[(retourne TRUE ou FALSE)]]
+]
+
+---
+
+class: title title-1
+
+# Tests logiques
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th class="cell-center"&gt;Test&lt;/th&gt;
+    &lt;th class="cell-left"&gt;Signification&lt;/th&gt;
+    &lt;th class="cell-center"&gt;Test&lt;/th&gt;
+    &lt;th class="cell-left"&gt;Signification&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;x &lt; y&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;plus petit que&lt;/td&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;x %in% y&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;dans (élément d'un vecteur)&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;x &gt; y&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;plus grand que&lt;/td&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;is.na(x)&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;valeur manquante?&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;==&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;égale&lt;/td&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;!is.na(x)&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;valeurs non manquantes&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;x &lt;= y&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;plus petit ou égal à&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;x &gt;= y&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;plus grand ou égal à&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;x != y&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-left"&gt;différent de&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour #1: filtrer
+
+.box-1[Utilisez `filter()` et des tests logiques pour montrer…]
+
+1. Les données du Canada
+2. Toutes les données de pays situés en Océanie (Oceania)
+3. Lignes où l'espérance de vie est supérieure à 82 ans
+
+<div class="countdown" id="timer_fd6b1a5d" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+.medium[
+
+```r
+filter(gapminder, country == "Canada")
+```
+]
+
+--
+
+.medium[
+
+```r
+filter(gapminder, continent == "Oceania")
+```
+]
+
+--
+
+.medium[
+
+```r
+filter(gapminder, lifeExp &gt; 82)
+```
+]
+
+---
+
+class: title title-1
+
+# Erreur fréquente
+
+.pull-left[
+.box-inv-1[Utiliser `=` plutôt que `==`]
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;country &lt;b&gt;&lt;span style="color:#FF4136"&gt;=&lt;/span&gt;&lt;/b&gt; "Canada")&lt;/code&gt;
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;country &lt;b&gt;&lt;span style="color:#2ECC40"&gt;==&lt;/span&gt;&lt;/b&gt; "Canada")&lt;/code&gt;
+]
+
+--
+
+.pull-right[
+.box-inv-1[Mettre entre accolade]
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;country == &lt;b&gt;&lt;span style="color:#FF4136"&gt;Canada&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;country == &lt;b&gt;&lt;span style="color:#2ECC40"&gt;"Canada"&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+---
+
+class: title title-1
+
+# `filter()` avec des conditions multiples
+
+.box-inv-1[Extrait les lignes qui valident *tous* les énoncés]
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;country == "Denmark", year &gt; 2000&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+---
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;country == "Denmark", year &gt; 2000&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1952 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1962 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1967 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1
+
+# Opérateurs logiques
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th class="cell-center"&gt;Opérateur&lt;/th&gt;
+    &lt;th class="cell-center"&gt;Signification&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;a &amp; b&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-center"&gt;et&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;a | b&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-center"&gt;ou&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class="cell-center"&gt;&lt;code class="remark-inline-code"&gt;!a&lt;/code&gt;&lt;/td&gt;
+    &lt;td class="cell-center"&gt;pas&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+---
+
+class: title title-1
+
+# Par défaut, union ("et")
+
+.box-inv-1[Commandes équivalentes]
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;country == "Denmark", year &gt; 2000&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;country == "Denmark" &amp; year &gt; 2000&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour #2: filtrer
+
+.box-1[Utilisez `filter()` et les opérateurs logiques pour montrer…]
+
+1. Les données du Canada avant 1970
+2. Les pays où l'espérance de vie en 2007 est inférieure à 50
+3. Les pays hors d'Afrique où l'espérance de vie en 2007 est inférieur à 50
+
+<div class="countdown" id="timer_54964167" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+
+```r
+filter(gapminder, country == "Canada", year &lt; 1970)
+```
+
+--
+
+
+```r
+filter(gapminder, year == 2007, lifeExp &lt; 50)
+```
+
+--
+
+
+```r
+filter(gapminder, year == 2007, lifeExp &lt; 50, 
+       continent != "Africa")
+```
+
+---
+
+class: title title-1
+
+# Erreurs fréquentes
+
+.pull-left[
+.box-inv-1[Rassembler plusieurs conditions&lt;br&gt;en une seule]
+
+.small-code[
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;b&gt;&lt;span style="color:#FF4136"&gt;1960 &amp;lt; year &amp;lt; 1980&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+.small-code[
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="color:#2ECC40"&gt;year &gt; 1960, year &amp;lt; 1980&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+]
+
+--
+
+.pull-right[
+.box-inv-1[Utiliser plusieurs tests&lt;br&gt; plutôt que `%in%`]
+
+.small-code[
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="color:#FF4136"&gt;country == "Mexico", &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;country == "Canada", &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;country == "United States"&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+.small-code[
+
+&lt;code class ='r hljs remark-code'&gt;filter(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="color:#2ECC40"&gt;country %in% c("Mexico", "Canada", &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;"United States")&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+]
+
+---
+
+class: title title-1
+
+# Syntaxe commune
+
+.box-inv-1[Chaque verbe de `dplyr` a la même syntaxe]
+
+.box-inv-1[Base de données comme premier argument, retourne une base de données]
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#EFB3FF"&gt;VERB&lt;/span&gt;&lt;/b&gt;(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;DATA&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;...&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+.pull-right[
+- &lt;b&gt;&lt;span style="background: #EFB3FF"&gt;`VERB`&lt;/span&gt;&lt;/b&gt; = fonction `dplyr`/verbe
+- &lt;b&gt;&lt;span style="background: #FFDFD1"&gt;`DATA`&lt;/span&gt;&lt;/b&gt; = base de données à transformer
+- &lt;b&gt;&lt;span style="background: #FFD0CF"&gt;`...`&lt;/span&gt;&lt;/b&gt; = commandes pour le verbe
+]
+
+---
+
+class: title title-1
+
+# `mutate()`
+
+.box-inv-1[Créer de nouvelles colonnes]
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;mutate(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;.data&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;...&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+.pull-right[
+- &lt;b&gt;&lt;span style="background: #FFDFD1"&gt;`DATA`&lt;/span&gt;&lt;/b&gt; = base de données à transformer
+- &lt;b&gt;&lt;span style="background: #FFD0CF"&gt;`...`&lt;/span&gt;&lt;/b&gt; = colonnes à modifier/créer
+]
+
+---
+
+
+&lt;code class ='r hljs remark-code'&gt;mutate(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;gdp = gdpPercap * pop&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gdpPercap &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; pop &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 779.4453145 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8425333 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 820.8530296 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9240934 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 853.10071 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10267083 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1967 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 836.1971382 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 11537966 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 739.9811058 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13079460 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; … &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdp &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6567086330 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7585448670 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8758855797 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1967 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9648014150 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9678553274 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1977 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11697659231 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+
+&lt;code class ='r hljs remark-code'&gt;mutate(&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, &lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;gdp = gdpPercap * pop,&lt;/span&gt;&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;pop_mil = round(pop / 1000000)&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; gdpPercap &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; pop &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 779.4453145 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8425333 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 820.8530296 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9240934 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 853.10071 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10267083 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1967 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 836.1971382 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 11537966 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 739.9811058 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13079460 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; … &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop_mil &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6567086330 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7585448670 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8758855797 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1967 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9648014150 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9678553274 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1977 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11697659231 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1
+
+# `ifelse()`
+
+.box-inv-1[Effectuer des tests conditionnels]
+
+.pull-left[
+
+&lt;code class ='r hljs remark-code'&gt;ifelse(&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;TEST&lt;/span&gt;&lt;/b&gt;, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;VALEUR_SI_VRAI&lt;/span&gt;&lt;/b&gt;, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#CBB5FF"&gt;VALEUR_SI_FAUX&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+]
+
+.pull-right[
+- &lt;b&gt;&lt;span style="background: #FFC0DC"&gt;`TEST`&lt;/span&gt;&lt;/b&gt; = un test logique
+- &lt;b&gt;&lt;span style="background: #FFDFD1"&gt;`VALEUR_SI_VRAI`&lt;/span&gt;&lt;/b&gt; = valeur si vrai
+- &lt;b&gt;&lt;span style="background: #CBB5FF"&gt;`VALEUR_SI_FAUX`&lt;/span&gt;&lt;/b&gt; = valeur si faux
+]
+
+.box-inv-1[
+Vecteur en sortie de la même longueur que &lt;b&gt;`TEST`&lt;/b&gt;
+]
+
+---
+
+
+
+&lt;code class ='r hljs remark-code'&gt;mutate(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;after_1960 = &lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;year &gt; 1960&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+
+&lt;code class ='r hljs remark-code'&gt;mutate(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;after_1960 = ifelse(&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;year &gt; 1960&lt;/span&gt;&lt;/b&gt;, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;"After 1960"&lt;/span&gt;&lt;/b&gt;, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#CBB5FF"&gt;"Before 1960"&lt;/span&gt;&lt;/b&gt;))&lt;/code&gt;
+
+---
+
+
+&lt;code class ='r hljs remark-code'&gt;mutate(gapminder, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;after_1960 = &lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;year &gt; 1960&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+
+
+```
+##         country continent year lifeExp       pop  gdpPercap after_1960
+## 1   Afghanistan      Asia 1952  28.801   8425333   779.4453      FALSE
+## 2   Afghanistan      Asia 1957  30.332   9240934   820.8530      FALSE
+## 3   Afghanistan      Asia 1962  31.997  10267083   853.1007       TRUE
+## 4   Afghanistan      Asia 1967  34.020  11537966   836.1971       TRUE
+## 5   Afghanistan      Asia 1972  36.088  13079460   739.9811       TRUE
+## 6   Afghanistan      Asia 1977  38.438  14880372   786.1134       TRUE
+## 7   Afghanistan      Asia 1982  39.854  12881816   978.0114       TRUE
+## 8   Afghanistan      Asia 1987  40.822  13867957   852.3959       TRUE
+## 9   Afghanistan      Asia 1992  41.674  16317921   649.3414       TRUE
+## 10  Afghanistan      Asia 1997  41.763  22227415   635.3414       TRUE
+## 11  Afghanistan      Asia 2002  42.129  25268405   726.7341       TRUE
+## 12  Afghanistan      Asia 2007  43.828  31889923   974.5803       TRUE
+## 13      Albania    Europe 1952  55.230   1282697  1601.0561      FALSE
+## 14      Albania    Europe 1957  59.280   1476505  1942.2842      FALSE
+## 15      Albania    Europe 1962  64.820   1728137  2312.8890       TRUE
+## 16      Albania    Europe 1967  66.220   1984060  2760.1969       TRUE
+## 17      Albania    Europe 1972  67.690   2263554  3313.4222       TRUE
+## 18      Albania    Europe 1977  68.930   2509048  3533.0039       TRUE
+## 19      Albania    Europe 1982  70.420   2780097  3630.8807       TRUE
+## 20      Albania    Europe 1987  72.000   3075321  3738.9327       TRUE
+## 21      Albania    Europe 1992  71.581   3326498  2497.4379       TRUE
+## 22      Albania    Europe 1997  72.950   3428038  3193.0546       TRUE
+## 23      Albania    Europe 2002  75.651   3508512  4604.2117       TRUE
+## 24      Albania    Europe 2007  76.423   3600523  5937.0295       TRUE
+## 25      Algeria    Africa 1952  43.077   9279525  2449.0082      FALSE
+## 26      Algeria    Africa 1957  45.685  10270856  3013.9760      FALSE
+## 27      Algeria    Africa 1962  48.303  11000948  2550.8169       TRUE
+## 28      Algeria    Africa 1967  51.407  12760499  3246.9918       TRUE
+## 29      Algeria    Africa 1972  54.518  14760787  4182.6638       TRUE
+## 30      Algeria    Africa 1977  58.014  17152804  4910.4168       TRUE
+## 31      Algeria    Africa 1982  61.368  20033753  5745.1602       TRUE
+## 32      Algeria    Africa 1987  65.799  23254956  5681.3585       TRUE
+## 33      Algeria    Africa 1992  67.744  26298373  5023.2166       TRUE
+## 34      Algeria    Africa 1997  69.152  29072015  4797.2951       TRUE
+## 35      Algeria    Africa 2002  70.994  31287142  5288.0404       TRUE
+## 36      Algeria    Africa 2007  72.301  33333216  6223.3675       TRUE
+## 37       Angola    Africa 1952  30.015   4232095  3520.6103      FALSE
+## 38       Angola    Africa 1957  31.999   4561361  3827.9405      FALSE
+## 39       Angola    Africa 1962  34.000   4826015  4269.2767       TRUE
+## 40       Angola    Africa 1967  35.985   5247469  5522.7764       TRUE
+## 41       Angola    Africa 1972  37.928   5894858  5473.2880       TRUE
+## 42       Angola    Africa 1977  39.483   6162675  3008.6474       TRUE
+## 43       Angola    Africa 1982  39.942   7016384  2756.9537       TRUE
+## 44       Angola    Africa 1987  39.906   7874230  2430.2083       TRUE
+## 45       Angola    Africa 1992  40.647   8735988  2627.8457       TRUE
+## 46       Angola    Africa 1997  40.963   9875024  2277.1409       TRUE
+## 47       Angola    Africa 2002  41.003  10866106  2773.2873       TRUE
+## 48       Angola    Africa 2007  42.731  12420476  4797.2313       TRUE
+## 49    Argentina  Americas 1952  62.485  17876956  5911.3151      FALSE
+## 50    Argentina  Americas 1957  64.399  19610538  6856.8562      FALSE
+## 51    Argentina  Americas 1962  65.142  21283783  7133.1660       TRUE
+## 52    Argentina  Americas 1967  65.634  22934225  8052.9530       TRUE
+## 53    Argentina  Americas 1972  67.065  24779799  9443.0385       TRUE
+## 54    Argentina  Americas 1977  68.481  26983828 10079.0267       TRUE
+## 55    Argentina  Americas 1982  69.942  29341374  8997.8974       TRUE
+## 56    Argentina  Americas 1987  70.774  31620918  9139.6714       TRUE
+## 57    Argentina  Americas 1992  71.868  33958947  9308.4187       TRUE
+## 58    Argentina  Americas 1997  73.275  36203463 10967.2820       TRUE
+## 59    Argentina  Americas 2002  74.340  38331121  8797.6407       TRUE
+## 60    Argentina  Americas 2007  75.320  40301927 12779.3796       TRUE
+## 61    Australia   Oceania 1952  69.120   8691212 10039.5956      FALSE
+## 62    Australia   Oceania 1957  70.330   9712569 10949.6496      FALSE
+## 63    Australia   Oceania 1962  70.930  10794968 12217.2269       TRUE
+## 64    Australia   Oceania 1967  71.100  11872264 14526.1246       TRUE
+## 65    Australia   Oceania 1972  71.930  13177000 16788.6295       TRUE
+## 66    Australia   Oceania 1977  73.490  14074100 18334.1975       TRUE
+## 67    Australia   Oceania 1982  74.740  15184200 19477.0093       TRUE
+## 68    Australia   Oceania 1987  76.320  16257249 21888.8890       TRUE
+## 69    Australia   Oceania 1992  77.560  17481977 23424.7668       TRUE
+## 70    Australia   Oceania 1997  78.830  18565243 26997.9366       TRUE
+## 71    Australia   Oceania 2002  80.370  19546792 30687.7547       TRUE
+## 72    Australia   Oceania 2007  81.235  20434176 34435.3674       TRUE
+## 73      Austria    Europe 1952  66.800   6927772  6137.0765      FALSE
+## 74      Austria    Europe 1957  67.480   6965860  8842.5980      FALSE
+## 75      Austria    Europe 1962  69.540   7129864 10750.7211       TRUE
+## 76      Austria    Europe 1967  70.140   7376998 12834.6024       TRUE
+## 77      Austria    Europe 1972  70.630   7544201 16661.6256       TRUE
+## 78      Austria    Europe 1977  72.170   7568430 19749.4223       TRUE
+## 79      Austria    Europe 1982  73.180   7574613 21597.0836       TRUE
+## 80      Austria    Europe 1987  74.940   7578903 23687.8261       TRUE
+## 81      Austria    Europe 1992  76.040   7914969 27042.0187       TRUE
+## 82      Austria    Europe 1997  77.510   8069876 29095.9207       TRUE
+## 83      Austria    Europe 2002  78.980   8148312 32417.6077       TRUE
+## 84      Austria    Europe 2007  79.829   8199783 36126.4927       TRUE
+## 85      Bahrain      Asia 1952  50.939    120447  9867.0848      FALSE
+## 86      Bahrain      Asia 1957  53.832    138655 11635.7995      FALSE
+## 87      Bahrain      Asia 1962  56.923    171863 12753.2751       TRUE
+## 88      Bahrain      Asia 1967  59.923    202182 14804.6727       TRUE
+## 89      Bahrain      Asia 1972  63.300    230800 18268.6584       TRUE
+## 90      Bahrain      Asia 1977  65.593    297410 19340.1020       TRUE
+## 91      Bahrain      Asia 1982  69.052    377967 19211.1473       TRUE
+## 92      Bahrain      Asia 1987  70.750    454612 18524.0241       TRUE
+## 93      Bahrain      Asia 1992  72.601    529491 19035.5792       TRUE
+## 94      Bahrain      Asia 1997  73.925    598561 20292.0168       TRUE
+## 95      Bahrain      Asia 2002  74.795    656397 23403.5593       TRUE
+## 96      Bahrain      Asia 2007  75.635    708573 29796.0483       TRUE
+## 97   Bangladesh      Asia 1952  37.484  46886859   684.2442      FALSE
+## 98   Bangladesh      Asia 1957  39.348  51365468   661.6375      FALSE
+## 99   Bangladesh      Asia 1962  41.216  56839289   686.3416       TRUE
+## 100  Bangladesh      Asia 1967  43.453  62821884   721.1861       TRUE
+## 101  Bangladesh      Asia 1972  45.252  70759295   630.2336       TRUE
+## 102  Bangladesh      Asia 1977  46.923  80428306   659.8772       TRUE
+## 103  Bangladesh      Asia 1982  50.009  93074406   676.9819       TRUE
+## 104  Bangladesh      Asia 1987  52.819 103764241   751.9794       TRUE
+## 105  Bangladesh      Asia 1992  56.018 113704579   837.8102       TRUE
+## 106  Bangladesh      Asia 1997  59.412 123315288   972.7700       TRUE
+## 107  Bangladesh      Asia 2002  62.013 135656790  1136.3904       TRUE
+## 108  Bangladesh      Asia 2007  64.062 150448339  1391.2538       TRUE
+## 109     Belgium    Europe 1952  68.000   8730405  8343.1051      FALSE
+## 110     Belgium    Europe 1957  69.240   8989111  9714.9606      FALSE
+## 111     Belgium    Europe 1962  70.250   9218400 10991.2068       TRUE
+## 112     Belgium    Europe 1967  70.940   9556500 13149.0412       TRUE
+## 113     Belgium    Europe 1972  71.440   9709100 16672.1436       TRUE
+## 114     Belgium    Europe 1977  72.800   9821800 19117.9745       TRUE
+## 115     Belgium    Europe 1982  73.930   9856303 20979.8459       TRUE
+## 116     Belgium    Europe 1987  75.350   9870200 22525.5631       TRUE
+## 117     Belgium    Europe 1992  76.460  10045622 25575.5707       TRUE
+## 118     Belgium    Europe 1997  77.530  10199787 27561.1966       TRUE
+## 119     Belgium    Europe 2002  78.320  10311970 30485.8838       TRUE
+## 120     Belgium    Europe 2007  79.441  10392226 33692.6051       TRUE
+## 121       Benin    Africa 1952  38.223   1738315  1062.7522      FALSE
+## 122       Benin    Africa 1957  40.358   1925173   959.6011      FALSE
+## 123       Benin    Africa 1962  42.618   2151895   949.4991       TRUE
+## 124       Benin    Africa 1967  44.885   2427334  1035.8314       TRUE
+## 125       Benin    Africa 1972  47.014   2761407  1085.7969       TRUE
+## 126       Benin    Africa 1977  49.190   3168267  1029.1613       TRUE
+## 127       Benin    Africa 1982  50.904   3641603  1277.8976       TRUE
+## 128       Benin    Africa 1987  52.337   4243788  1225.8560       TRUE
+## 129       Benin    Africa 1992  53.919   4981671  1191.2077       TRUE
+## 130       Benin    Africa 1997  54.777   6066080  1232.9753       TRUE
+## 131       Benin    Africa 2002  54.406   7026113  1372.8779       TRUE
+## 132       Benin    Africa 2007  56.728   8078314  1441.2849       TRUE
+## 133     Bolivia  Americas 1952  40.414   2883315  2677.3263      FALSE
+## 134     Bolivia  Americas 1957  41.890   3211738  2127.6863      FALSE
+## 135     Bolivia  Americas 1962  43.428   3593918  2180.9725       TRUE
+## 136     Bolivia  Americas 1967  45.032   4040665  2586.8861       TRUE
+## 137     Bolivia  Americas 1972  46.714   4565872  2980.3313       TRUE
+## 138     Bolivia  Americas 1977  50.023   5079716  3548.0978       TRUE
+## 139     Bolivia  Americas 1982  53.859   5642224  3156.5105       TRUE
+## 140     Bolivia  Americas 1987  57.251   6156369  2753.6915       TRUE
+## 141     Bolivia  Americas 1992  59.957   6893451  2961.6997       TRUE
+## 142     Bolivia  Americas 1997  62.050   7693188  3326.1432       TRUE
+##  [ reached 'max' / getOption("max.print") -- omitted 1562 rows ]
+```
+
+---
+class: title title-1
+
+# `case_when()`
+
+.box-inv-1[Tests conditionnels vectorisés]
+
+
+```r
+case_when(CAS1_EST_VRAI ~ VALEUR1, 
+          CAS2_EST_VRAI ~ VALEUR2,
+          TRUE ~ VALEUR_AUTRE)
+```
+
+
+.box-inv-1[Énoncés évalués si les précédents ne sont pas vrais.]
+
+
+.box-inv-1[Retourne `NA` pour toute valeur restante si on omet le dernier énoncé]
+
+---
+
+
+
+
+```r
+mutate(gapminder, 
+       decennie = case_when(
+         year &lt; 1960 ~ "années 50",
+         year &gt;= 1960 &amp; year &lt; 1970 ~ "années 60",
+         year &gt;= 1970 &amp; year &lt; 1980 ~ "années 70",
+         year &gt;= 1980 &amp; year &lt; 1990 ~ "années 80",
+         year &gt;= 1990 &amp; year &lt; 2000 ~ "années 90",
+         TRUE ~ "millénaire")
+)
+```
+
+---
+
+
+
+```
+##         country continent year lifeExp       pop  gdpPercap   decennie
+## 1   Afghanistan      Asia 1952  28.801   8425333   779.4453  années 50
+## 2   Afghanistan      Asia 1957  30.332   9240934   820.8530  années 50
+## 3   Afghanistan      Asia 1962  31.997  10267083   853.1007  années 60
+## 4   Afghanistan      Asia 1967  34.020  11537966   836.1971  années 60
+## 5   Afghanistan      Asia 1972  36.088  13079460   739.9811  années 70
+## 6   Afghanistan      Asia 1977  38.438  14880372   786.1134  années 70
+## 7   Afghanistan      Asia 1982  39.854  12881816   978.0114  années 80
+## 8   Afghanistan      Asia 1987  40.822  13867957   852.3959  années 80
+## 9   Afghanistan      Asia 1992  41.674  16317921   649.3414  années 90
+## 10  Afghanistan      Asia 1997  41.763  22227415   635.3414  années 90
+## 11  Afghanistan      Asia 2002  42.129  25268405   726.7341 millénaire
+## 12  Afghanistan      Asia 2007  43.828  31889923   974.5803 millénaire
+## 13      Albania    Europe 1952  55.230   1282697  1601.0561  années 50
+## 14      Albania    Europe 1957  59.280   1476505  1942.2842  années 50
+## 15      Albania    Europe 1962  64.820   1728137  2312.8890  années 60
+## 16      Albania    Europe 1967  66.220   1984060  2760.1969  années 60
+## 17      Albania    Europe 1972  67.690   2263554  3313.4222  années 70
+## 18      Albania    Europe 1977  68.930   2509048  3533.0039  années 70
+## 19      Albania    Europe 1982  70.420   2780097  3630.8807  années 80
+## 20      Albania    Europe 1987  72.000   3075321  3738.9327  années 80
+## 21      Albania    Europe 1992  71.581   3326498  2497.4379  années 90
+## 22      Albania    Europe 1997  72.950   3428038  3193.0546  années 90
+## 23      Albania    Europe 2002  75.651   3508512  4604.2117 millénaire
+## 24      Albania    Europe 2007  76.423   3600523  5937.0295 millénaire
+## 25      Algeria    Africa 1952  43.077   9279525  2449.0082  années 50
+## 26      Algeria    Africa 1957  45.685  10270856  3013.9760  années 50
+## 27      Algeria    Africa 1962  48.303  11000948  2550.8169  années 60
+## 28      Algeria    Africa 1967  51.407  12760499  3246.9918  années 60
+## 29      Algeria    Africa 1972  54.518  14760787  4182.6638  années 70
+## 30      Algeria    Africa 1977  58.014  17152804  4910.4168  années 70
+## 31      Algeria    Africa 1982  61.368  20033753  5745.1602  années 80
+## 32      Algeria    Africa 1987  65.799  23254956  5681.3585  années 80
+## 33      Algeria    Africa 1992  67.744  26298373  5023.2166  années 90
+## 34      Algeria    Africa 1997  69.152  29072015  4797.2951  années 90
+## 35      Algeria    Africa 2002  70.994  31287142  5288.0404 millénaire
+## 36      Algeria    Africa 2007  72.301  33333216  6223.3675 millénaire
+## 37       Angola    Africa 1952  30.015   4232095  3520.6103  années 50
+## 38       Angola    Africa 1957  31.999   4561361  3827.9405  années 50
+## 39       Angola    Africa 1962  34.000   4826015  4269.2767  années 60
+## 40       Angola    Africa 1967  35.985   5247469  5522.7764  années 60
+## 41       Angola    Africa 1972  37.928   5894858  5473.2880  années 70
+## 42       Angola    Africa 1977  39.483   6162675  3008.6474  années 70
+## 43       Angola    Africa 1982  39.942   7016384  2756.9537  années 80
+## 44       Angola    Africa 1987  39.906   7874230  2430.2083  années 80
+## 45       Angola    Africa 1992  40.647   8735988  2627.8457  années 90
+## 46       Angola    Africa 1997  40.963   9875024  2277.1409  années 90
+## 47       Angola    Africa 2002  41.003  10866106  2773.2873 millénaire
+## 48       Angola    Africa 2007  42.731  12420476  4797.2313 millénaire
+## 49    Argentina  Americas 1952  62.485  17876956  5911.3151  années 50
+## 50    Argentina  Americas 1957  64.399  19610538  6856.8562  années 50
+## 51    Argentina  Americas 1962  65.142  21283783  7133.1660  années 60
+## 52    Argentina  Americas 1967  65.634  22934225  8052.9530  années 60
+## 53    Argentina  Americas 1972  67.065  24779799  9443.0385  années 70
+## 54    Argentina  Americas 1977  68.481  26983828 10079.0267  années 70
+## 55    Argentina  Americas 1982  69.942  29341374  8997.8974  années 80
+## 56    Argentina  Americas 1987  70.774  31620918  9139.6714  années 80
+## 57    Argentina  Americas 1992  71.868  33958947  9308.4187  années 90
+## 58    Argentina  Americas 1997  73.275  36203463 10967.2820  années 90
+## 59    Argentina  Americas 2002  74.340  38331121  8797.6407 millénaire
+## 60    Argentina  Americas 2007  75.320  40301927 12779.3796 millénaire
+## 61    Australia   Oceania 1952  69.120   8691212 10039.5956  années 50
+## 62    Australia   Oceania 1957  70.330   9712569 10949.6496  années 50
+## 63    Australia   Oceania 1962  70.930  10794968 12217.2269  années 60
+## 64    Australia   Oceania 1967  71.100  11872264 14526.1246  années 60
+## 65    Australia   Oceania 1972  71.930  13177000 16788.6295  années 70
+## 66    Australia   Oceania 1977  73.490  14074100 18334.1975  années 70
+## 67    Australia   Oceania 1982  74.740  15184200 19477.0093  années 80
+## 68    Australia   Oceania 1987  76.320  16257249 21888.8890  années 80
+## 69    Australia   Oceania 1992  77.560  17481977 23424.7668  années 90
+## 70    Australia   Oceania 1997  78.830  18565243 26997.9366  années 90
+## 71    Australia   Oceania 2002  80.370  19546792 30687.7547 millénaire
+## 72    Australia   Oceania 2007  81.235  20434176 34435.3674 millénaire
+## 73      Austria    Europe 1952  66.800   6927772  6137.0765  années 50
+## 74      Austria    Europe 1957  67.480   6965860  8842.5980  années 50
+## 75      Austria    Europe 1962  69.540   7129864 10750.7211  années 60
+## 76      Austria    Europe 1967  70.140   7376998 12834.6024  années 60
+## 77      Austria    Europe 1972  70.630   7544201 16661.6256  années 70
+## 78      Austria    Europe 1977  72.170   7568430 19749.4223  années 70
+## 79      Austria    Europe 1982  73.180   7574613 21597.0836  années 80
+## 80      Austria    Europe 1987  74.940   7578903 23687.8261  années 80
+## 81      Austria    Europe 1992  76.040   7914969 27042.0187  années 90
+## 82      Austria    Europe 1997  77.510   8069876 29095.9207  années 90
+## 83      Austria    Europe 2002  78.980   8148312 32417.6077 millénaire
+## 84      Austria    Europe 2007  79.829   8199783 36126.4927 millénaire
+## 85      Bahrain      Asia 1952  50.939    120447  9867.0848  années 50
+## 86      Bahrain      Asia 1957  53.832    138655 11635.7995  années 50
+## 87      Bahrain      Asia 1962  56.923    171863 12753.2751  années 60
+## 88      Bahrain      Asia 1967  59.923    202182 14804.6727  années 60
+## 89      Bahrain      Asia 1972  63.300    230800 18268.6584  années 70
+## 90      Bahrain      Asia 1977  65.593    297410 19340.1020  années 70
+## 91      Bahrain      Asia 1982  69.052    377967 19211.1473  années 80
+## 92      Bahrain      Asia 1987  70.750    454612 18524.0241  années 80
+## 93      Bahrain      Asia 1992  72.601    529491 19035.5792  années 90
+## 94      Bahrain      Asia 1997  73.925    598561 20292.0168  années 90
+## 95      Bahrain      Asia 2002  74.795    656397 23403.5593 millénaire
+## 96      Bahrain      Asia 2007  75.635    708573 29796.0483 millénaire
+## 97   Bangladesh      Asia 1952  37.484  46886859   684.2442  années 50
+## 98   Bangladesh      Asia 1957  39.348  51365468   661.6375  années 50
+## 99   Bangladesh      Asia 1962  41.216  56839289   686.3416  années 60
+## 100  Bangladesh      Asia 1967  43.453  62821884   721.1861  années 60
+## 101  Bangladesh      Asia 1972  45.252  70759295   630.2336  années 70
+## 102  Bangladesh      Asia 1977  46.923  80428306   659.8772  années 70
+## 103  Bangladesh      Asia 1982  50.009  93074406   676.9819  années 80
+## 104  Bangladesh      Asia 1987  52.819 103764241   751.9794  années 80
+## 105  Bangladesh      Asia 1992  56.018 113704579   837.8102  années 90
+## 106  Bangladesh      Asia 1997  59.412 123315288   972.7700  années 90
+## 107  Bangladesh      Asia 2002  62.013 135656790  1136.3904 millénaire
+## 108  Bangladesh      Asia 2007  64.062 150448339  1391.2538 millénaire
+## 109     Belgium    Europe 1952  68.000   8730405  8343.1051  années 50
+## 110     Belgium    Europe 1957  69.240   8989111  9714.9606  années 50
+## 111     Belgium    Europe 1962  70.250   9218400 10991.2068  années 60
+## 112     Belgium    Europe 1967  70.940   9556500 13149.0412  années 60
+## 113     Belgium    Europe 1972  71.440   9709100 16672.1436  années 70
+## 114     Belgium    Europe 1977  72.800   9821800 19117.9745  années 70
+## 115     Belgium    Europe 1982  73.930   9856303 20979.8459  années 80
+## 116     Belgium    Europe 1987  75.350   9870200 22525.5631  années 80
+## 117     Belgium    Europe 1992  76.460  10045622 25575.5707  années 90
+## 118     Belgium    Europe 1997  77.530  10199787 27561.1966  années 90
+## 119     Belgium    Europe 2002  78.320  10311970 30485.8838 millénaire
+## 120     Belgium    Europe 2007  79.441  10392226 33692.6051 millénaire
+## 121       Benin    Africa 1952  38.223   1738315  1062.7522  années 50
+## 122       Benin    Africa 1957  40.358   1925173   959.6011  années 50
+## 123       Benin    Africa 1962  42.618   2151895   949.4991  années 60
+## 124       Benin    Africa 1967  44.885   2427334  1035.8314  années 60
+## 125       Benin    Africa 1972  47.014   2761407  1085.7969  années 70
+## 126       Benin    Africa 1977  49.190   3168267  1029.1613  années 70
+## 127       Benin    Africa 1982  50.904   3641603  1277.8976  années 80
+## 128       Benin    Africa 1987  52.337   4243788  1225.8560  années 80
+## 129       Benin    Africa 1992  53.919   4981671  1191.2077  années 90
+## 130       Benin    Africa 1997  54.777   6066080  1232.9753  années 90
+## 131       Benin    Africa 2002  54.406   7026113  1372.8779 millénaire
+## 132       Benin    Africa 2007  56.728   8078314  1441.2849 millénaire
+## 133     Bolivia  Americas 1952  40.414   2883315  2677.3263  années 50
+## 134     Bolivia  Americas 1957  41.890   3211738  2127.6863  années 50
+## 135     Bolivia  Americas 1962  43.428   3593918  2180.9725  années 60
+## 136     Bolivia  Americas 1967  45.032   4040665  2586.8861  années 60
+## 137     Bolivia  Americas 1972  46.714   4565872  2980.3313  années 70
+## 138     Bolivia  Americas 1977  50.023   5079716  3548.0978  années 70
+## 139     Bolivia  Americas 1982  53.859   5642224  3156.5105  années 80
+## 140     Bolivia  Americas 1987  57.251   6156369  2753.6915  années 80
+## 141     Bolivia  Americas 1992  59.957   6893451  2961.6997  années 90
+## 142     Bolivia  Americas 1997  62.050   7693188  3326.1432  années 90
+##  [ reached 'max' / getOption("max.print") -- omitted 1562 rows ]
+```
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour #3: transformer
+
+.box-1[Utilisez `mutate()` pour ajouter les colonnes…]
+
+1. `africa`, qui est vrai (`TRUE`) si le pays est situé sur le continent africain
+2. `log_gdpPercap` pour le log PIB par capita (indice: utiliser `log()`)
+3. `africa_asia` avec comme valeur `"Afrique ou Asie"` si le pays est dans un des deux continents, sinon `"Autre continent"`
+
+<div class="countdown" id="timer_0193a30a" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+
+```r
+mutate(gapminder, 
+       africa = continent == "Africa")
+```
+
+--
+
+
+```r
+mutate(gapminder, 
+       log_gdpPercap = log(gdpPercap))
+```
+
+--
+
+
+```r
+mutate(gapminder, 
+       africa_asia = ifelse(continent %in% c("Africa", "Asia"),
+                            "Afrique ou Asie",
+                            "Autre continent"))
+```
+
+---
+
+class: title title-1
+
+# Comment procéder avec plusieurs verbes?
+
+.box-inv-1.sp-after[Créer un jeu de données pour 2002 *et* calculer le log PIB par capita]
+
+--
+
+.box-inv-1[Solution 1: variables auxiliaires]
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;gapminder_2002&lt;/span&gt;&lt;/b&gt; &lt;- filter(gapminder, year == 2002)&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;gapminder_2002&lt;/span&gt;&lt;/b&gt;_log &lt;- mutate(&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;gapminder_2002&lt;/span&gt;&lt;/b&gt;,&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;log_gdpPercap = log(gdpPercap))&lt;/code&gt;
+
+---
+
+class: title title-1
+
+# Comment procéder avec plusieurs verbes?
+
+
+.box-inv-1.sp-after[Créer un jeu de données pour 2002 *et* calculer le log PIB par capita]
+
+.box-inv-1[Solution 2: fonctions emboîtées]
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;filter(&lt;/span&gt;&lt;/b&gt;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;mutate(gapminder,&lt;/span&gt;&lt;/b&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;log_gdpPercap = log(gdpPercap))&lt;/span&gt;&lt;/b&gt;, &lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;year == 2002)&lt;/span&gt;&lt;/b&gt;&lt;/code&gt;
+
+---
+
+class: title title-1
+
+#  Comment procéder avec plusieurs verbes?
+
+.box-inv-1.sp-after[Créer un jeu de données pour 2002 *et* calculer le log PIB par capita]
+
+.box-inv-1[Solution 3: tuyaux!]
+
+.box-inv-1[L'opérateur tuyau, `|&gt;`, prend un objet à gauche&lt;br&gt;et l'assigne au premier argument de la fonction de droite]
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;gapminder&lt;/span&gt;&lt;/b&gt; |&gt; filter(&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;_____&lt;/span&gt;&lt;/b&gt;, country == "Canada")&lt;/code&gt;
+
+---
+
+class: title title-1
+
+# Comment procéder avec plusieurs verbes?
+
+.box-inv-1[Ces deux lignes donnent le même résultat]
+
+
+&lt;code class ='r hljs remark-code'&gt;filter(&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;gapminder&lt;/span&gt;&lt;/b&gt;, country == "Canada")&lt;/code&gt;
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFC0DC"&gt;gapminder&lt;/span&gt;&lt;/b&gt; |&gt; filter(country == "Canada")&lt;/code&gt;
+
+---
+
+class: title title-1
+
+# Comment procéder avec plusieurs verbes?
+
+.box-inv-1.sp-after[Créer un jeu de données pour 2002 *et* calculer le log PIB par capita]
+
+
+.box-inv-1[Solution 3: Tuyaux!]
+
+
+&lt;code class ='r hljs remark-code'&gt;gapminder |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;filter(year == 2002) |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;mutate(log_gdpPercap = log(gdpPercap))&lt;/code&gt;
+
+---
+
+class: title title-1
+
+# Améliorer la lisibilité du code avec `|&gt;`
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;leave_house&lt;/b&gt;(&lt;b&gt;get_dressed&lt;/b&gt;(&lt;b&gt;get_out_of_bed&lt;/b&gt;(&lt;b&gt;wake_up&lt;/b&gt;(&lt;span style="color:#E16462"&gt;me&lt;/span&gt;, &lt;span style="color:#0D0887"&gt;time&lt;/span&gt; = &lt;span style="color:#E16462"&gt;"8:00"&lt;/span&gt;), &lt;span style="color:#0D0887"&gt;side&lt;/span&gt; = &lt;span style="color:#E16462"&gt;"correct"&lt;/span&gt;), &lt;span style="color:#0D0887"&gt;pants&lt;/span&gt; = &lt;span style="color:#E16462"&gt;TRUE&lt;/span&gt;, &lt;span style="color:#0D0887"&gt;shirt&lt;/span&gt; = &lt;span style="color:#E16462"&gt;TRUE&lt;/span&gt;), &lt;span style="color:#0D0887"&gt;car&lt;/span&gt; = &lt;span style="color:#E16462"&gt;TRUE&lt;/span&gt;, &lt;span style="color:#0D0887"&gt;bike&lt;/span&gt; = &lt;span style="color:#E16462"&gt;FALSE&lt;/span&gt;)&lt;/code&gt;
+
+--
+
+
+&lt;code class ='r hljs remark-code'&gt;me |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;wake_up&lt;/b&gt;(&lt;span style="color:#0D0887"&gt;time&lt;/span&gt; = &lt;span style="color:#E16462"&gt;"8:00"&lt;/span&gt;) |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;get_out_of_bed&lt;/b&gt;(&lt;span style="color:#0D0887"&gt;side&lt;/span&gt; = &lt;span style="color:#E16462"&gt;"correct"&lt;/span&gt;) |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;get_dressed&lt;/b&gt;(&lt;span style="color:#0D0887"&gt;pants&lt;/span&gt; = &lt;span style="color:#E16462"&gt;TRUE&lt;/span&gt;, &lt;span style="color:#0D0887"&gt;shirt&lt;/span&gt; = &lt;span style="color:#E16462"&gt;TRUE&lt;/span&gt;) |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;leave_house&lt;/b&gt;(&lt;span style="color:#0D0887"&gt;car&lt;/span&gt; = &lt;span style="color:#E16462"&gt;TRUE&lt;/span&gt;, &lt;span style="color:#0D0887"&gt;bike&lt;/span&gt; = &lt;span style="color:#E16462"&gt;FALSE&lt;/span&gt;)&lt;/code&gt;
+
+---
+
+class: title title-1
+
+# `summarize()`
+
+.box-inv-1[Créer un tableau résumé]
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt; |&gt; summarize(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;mean_life = mean(lifeExp)&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; lifeExp &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 28.801 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 30.332 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31.997 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1967 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 34.02 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; mean_life &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 59.47444 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1
+
+# `summarize()`
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt; |&gt; summarize(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;mean_life = mean(lifeExp),&lt;/span&gt;&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;min_life = min(lifeExp)&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; lifeExp &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 28.801 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 30.332 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31.997 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1967 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 34.02 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 36.088 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; … &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; mean_life &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; min_life &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 59.47444 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 23.599 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour #4: résumer
+
+.box-1[Utilisez `summarize()` pour calculer…]
+
+1. La première année des mesures (minimum)
+2. La dernière année des mesures (maximum) 
+3. Le nombre de lignes dans la base de données (utilisez l'aide mémoire)
+4. Le nombre de pays distincts dans la base de données (utilisez l'aide mémoire)
+
+<div class="countdown" id="timer_2c9a59a3" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+
+```r
+gapminder |&gt; 
+  summarize(first = min(year),
+            last = max(year),
+            num_rows = n(),
+            num_unique = n_distinct(country))
+```
+
+.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; first &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; last &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; num_rows &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; num_unique &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1704 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 142 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour #5: résumer
+
+.box-1[Utilisez `filter()` et `summarize()` pour calculer]
+
+1. le nombre de pays
+2. l'espérance de vie médiane 
+
+pour le continent africain en 2007.
+
+<div class="countdown" id="timer_22e955c9" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+
+```r
+gapminder |&gt;
+  filter(continent == "Africa", year == 2007) |&gt;
+  summarise(n_countries = n_distinct(country), 
+            med_le = median(lifeExp))
+```
+
+.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; n_countries &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; med_le &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 52.9265 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1
+
+# `group_by()`
+
+.box-inv-1[Assembler les lignes en groupes selon les valeurs d'une colonne]
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;gapminder&lt;/span&gt;&lt;/b&gt; |&gt; group_by(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;continent&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+&amp;nbsp;
+
+--
+
+.box-inv-1[Rien n'apparaît!]
+
+--
+
+.box-inv-1[Outil puissant si combiné avec `summarize()`]
+
+---
+
+
+```r
+gapminder |&gt; 
+  group_by(continent) |&gt; 
+  summarize(n_countries = n_distinct(country)) 
+```
+
+--
+
+.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; n_countries &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Africa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Oceania &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;pollution&lt;/span&gt;&lt;/b&gt; |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;summarize(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;mean = mean(amount), sum = sum(amount), n = n()&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; city &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; particle_size &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; amount &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; New York &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 23 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; New York &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; London &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; London &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Beijing &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 121 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Beijing &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sum &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; n &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 252 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;pollution&lt;/span&gt;&lt;/b&gt; |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;city&lt;/span&gt;&lt;/b&gt;) |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;summarize(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;mean = mean(amount), sum = sum(amount), n = n()&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; city &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; particle_size &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; amount &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #B2B1F9 !important;"&gt; New York &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #B2B1F9 !important;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #B2B1F9 !important;"&gt; 23 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #B2B1F9 !important;"&gt; New York &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #B2B1F9 !important;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #B2B1F9 !important;"&gt; 14 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #EFB3FF !important;"&gt; London &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #EFB3FF !important;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #EFB3FF !important;"&gt; 22 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #EFB3FF !important;"&gt; London &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #EFB3FF !important;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #EFB3FF !important;"&gt; 16 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFD0CF !important;"&gt; Beijing &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFD0CF !important;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFD0CF !important;"&gt; 121 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFD0CF !important;"&gt; Beijing &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFD0CF !important;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFD0CF !important;"&gt; 56 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; city &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sum &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; n &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFD0CF !important;"&gt; Beijing &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFD0CF !important;"&gt; 88.5 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFD0CF !important;"&gt; 177 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFD0CF !important;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #EFB3FF !important;"&gt; London &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #EFB3FF !important;"&gt; 19.0 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #EFB3FF !important;"&gt; 38 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #EFB3FF !important;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #B2B1F9 !important;"&gt; New York &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #B2B1F9 !important;"&gt; 18.5 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #B2B1F9 !important;"&gt; 37 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #B2B1F9 !important;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+
+&lt;code class ='r hljs remark-code'&gt;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;pollution&lt;/span&gt;&lt;/b&gt; |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;group_by(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;particle_size&lt;/span&gt;&lt;/b&gt;) |&gt; &lt;br&gt;&amp;nbsp;&amp;nbsp;summarize(&lt;b&gt;&lt;span style="background-color:#FFD0CF"&gt;mean = mean(amount), sum = sum(amount), n = n()&lt;/span&gt;&lt;/b&gt;)&lt;/code&gt;
+
+.pull-left.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; city &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; particle_size &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; amount &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFDFD1 !important;"&gt; New York &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFDFD1 !important;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFDFD1 !important;"&gt; 23 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFF0D4 !important;"&gt; New York &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFF0D4 !important;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFF0D4 !important;"&gt; 14 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFDFD1 !important;"&gt; London &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFDFD1 !important;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFDFD1 !important;"&gt; 22 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFF0D4 !important;"&gt; London &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFF0D4 !important;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFF0D4 !important;"&gt; 16 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFDFD1 !important;"&gt; Beijing &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFDFD1 !important;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFDFD1 !important;"&gt; 121 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFF0D4 !important;"&gt; Beijing &lt;/td&gt;
+   &lt;td style="text-align:left;background-color: #FFF0D4 !important;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFF0D4 !important;"&gt; 56 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+.pull-right.small[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; particle_size &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sum &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; n &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFDFD1 !important;"&gt; Large &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFDFD1 !important;"&gt; 55.33333 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFDFD1 !important;"&gt; 166 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFDFD1 !important;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;background-color: #FFF0D4 !important;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFF0D4 !important;"&gt; 28.66667 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFF0D4 !important;"&gt; 86 &lt;/td&gt;
+   &lt;td style="text-align:right;background-color: #FFF0D4 !important;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour #6: grouper et résumer
+
+.box-1[Trouvez l'espérance de vie &lt;br&gt;minimum, maximum et médiane&lt;br&gt;par continent]
+
+.box-1[Trouvez l'espérance de vie &lt;br&gt;minimum, maximum et médiane&lt;br&gt;par continent pour 2007 uniquement]
+
+<div class="countdown" id="timer_2d45673d" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+
+```r
+gapminder |&gt; 
+  group_by(continent) |&gt; 
+  summarize(min_le = min(lifeExp),
+            max_le = max(lifeExp),
+            med_le = median(lifeExp))
+```
+
+--
+
+
+```r
+gapminder |&gt; 
+  filter(year == 2007) |&gt; 
+  group_by(continent) |&gt; 
+  summarize(min_le = min(lifeExp),
+            max_le = max(lifeExp),
+            med_le = median(lifeExp))
+```
+
+---
+
+class: title title-1
+
+# `dplyr`: verbes pour manipuler des données
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Extraire des lignes avec &lt;code&gt;filter()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/filter.png" alt="filter" title="filter" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Extraire des colonnes avec &lt;code&gt;select()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/select.png" alt="select" title="select" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Arranger/trier les lignes avec &lt;code&gt;arrange()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/arrange.png" alt="arrange" title="arrange" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Créer/modifier des colonnes avec &lt;code&gt;mutate()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/mutate.png" alt="mutate" title="mutate" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Résumer des sous-ensembles avec&lt;br&gt;&lt;code&gt;group_by() |&gt; summarize()&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src="img/04/summarize.png" alt="summarize" title="summarize" height="80px"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
