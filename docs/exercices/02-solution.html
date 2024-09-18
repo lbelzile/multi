@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.1">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -384,7 +384,7 @@ window.Quarto = {
 <p>On remarque en consultant la documentation de la base de données à l’aide de <code>?college</code> que le nombre de demandes d’admissions (<code>napplications</code>), le nombre d’admissions parmi ces applications <code>nadmission</code> et le nombre d’offres converties par les candidat.e.s, <code>ninscrits</code>, sont reliées et ne peuvent être employées.</p>
 <p>Plusieurs variables seront fortement corrélées parce qu’elles dépendent de la capacité d’accueil de l’établissement d’enseignement. Ainsi, on pourrait créer une variable qui représente le pourcentage de temps partiels pour les premiers cycles (plutôt que le décompte). Les variables <code>pourcentdoctorat</code> et <code>pourcentterminal</code>, sont fortement corrélées puisque la plupart des diplômes terminaux (incluant les titres professionnels, les doctorats de premier cycle en médecine, etc.) sont des PhD: le modèle choisira la variable la plus adéquate. Il n’y a pas de variables catégorielles hors variables binaires. Côté vérifications d’usage, on note que <code>tauxdiplom</code> et <code>pourcentdoctorat</code> sont supérieurs à 100%.</p>
 <p>On devra retirer la variable catégorielle <code>nom</code>, qui a une modalité différente pour chaque observation.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-1_ed93304068801c31bcab550f2cf743cc">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -492,7 +492,7 @@ window.Quarto = {
 </ul></li>
 </ol>
 <p>On peut désormais considérer une séparation en tiers. Pour ce faire, je vais échantillonner des variables logiques vrais et faux avec une cote de 2 pour 1 et ensuite sélectionner les lignes qui correspondent.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-2_38284de341e660a0830b3c2e55302ebc">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60602</span>)</span>
@@ -505,7 +505,7 @@ window.Quarto = {
 </details>
 </div>
 <p>Pour l’estimation, on pourrait simplement calculer l’erreur quadratique moyenne de validation pour tous les cinquante premiers modèles en considérant toutes les interactions d’ordre 2.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-3_c72b89afcb4e8e33f2b813340514f11b">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle avec interactions de toutes les variables</span></span>
@@ -520,7 +520,7 @@ window.Quarto = {
 </details>
 </div>
 <p>Si <code>regsubsets</code> permet de recouvrer les différents modèles, il n’y a pas d’utilitaire pour obtenir le résumé et les prédictions. Le paquet <code>hecmulti</code> inclut une fonction pour faire les prédictions d’un modèle donné. À des fins d’illustration, on considère celui qui a le plus petit critère BIC intra-échantillon d’apprentissage.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-4_b61304c31173813ac8913936be1af1f6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculer les BIC </span></span>
@@ -531,7 +531,7 @@ window.Quarto = {
 </details>
 </div>
 <p>Ici, on s’intéresse uniquement au calcul de l’erreur quadratique moyenne pour les modèles choisis par la procédure de recherche séquentielle. La fonction <code>eval_EQM_regsubsets</code> fait le calcul et nous retourne un vecteur avec toutes les mesures. On choisit le modèle qui minimise l’erreur.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-5_0746229159b6f08f5490f1651d9c6bf4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modèle avec la plus petite erreur </span></span>
@@ -552,7 +552,7 @@ window.Quarto = {
 </details>
 </div>
 <p>Une logique similaire s’appliquerait avec le LASSO, même si c’est loin d’être la norme (on utilise d’ordinaire la validation croisée). Ici, on ajusterait le modèle avec plusieurs valeurs de <span class="math inline">\(\lambda\)</span>, puis on calculerait l’erreur quadratique moyenne de validation. On prendra la valeur de la pénalisation <span class="math inline">\(\lambda\)</span> qui minimise cette dernière. Spécifier la séquence de valeurs de <span class="math inline">\(\lambda\)</span> à essayer nécessite un peu d’essai/erreur.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-6_00fc69b577debd9618bd8890bdd3f12a">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtenir X et y</span></span>
@@ -589,7 +589,7 @@ window.Quarto = {
 <li><em>Répétez la sélection, cette fois en prenant comme critère pour l’erreur moyenne quadratique évaluée par validation croisée (aléatoire) à cinq plis.</em></li>
 </ol>
 <p>On peut utiliser <code>boot::cv.glm</code> ou <code>caret::train</code> avec les différentes méthodes pour ajuster les modèles. Je fais varier le nombre maximal de variables pour retourner les différentes solutions. Comme le résultat de la validation croisée est aléatoire, on peut répéter cette étape pour réduire l’incertitude de prédiction et obtenir une meilleur valeur de l’écart-type.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-7_c1f33b740811e12dc54a7783b78b6938">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrice du modèle complet, moins ordonnée à l'origine</span></span>
@@ -627,7 +627,7 @@ window.Quarto = {
 </details>
 </div>
 <p>Les notes de cours donnent une approche pas à pas avec <code>glmnet</code> pour ajuster le LASSO en choisissant la valeur de <span class="math inline">\(\lambda\)</span> par validation croisée, mais on peut changer le type de model dans <code>caret</code> et utiliser les mêmes fonctionnalités.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-8_bb7020e5b59002a0725ab55bb52aeaac">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Autre approche que glmnet</span></span>
@@ -668,7 +668,7 @@ window.Quarto = {
 <li><em>Créez un tableau avec le nombre de coefficients non-nuls de votre modèle final et un estimé de l’erreur moyenne quadratique obtenu par validation externe ou croisée.</em></li>
 </ol>
 <p>Il suffit de colliger notre estimation de l’erreur et le nombre de coefficients.</p>
-<div class="cell">
+<div class="cell" data-hash="02-solution_cache/html/unnamed-chunk-9_61b5e2ed6d2870505a5aba62631fa8a0">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>resultats <span class="ot">&lt;-</span><span class="fu">data.frame</span>(</span>

@@ -62,8 +62,8 @@
 \useoutertheme{Flip}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
+    \setmainfont[]{VisbyCF-Medium}
+    \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -105,7 +105,7 @@
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -115,7 +115,7 @@
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -150,13 +150,9 @@
 \def\fps@figure{htbp}
 \makeatother
 
-\usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
+\newcommand{\theHtable}{\thetable}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -193,23 +189,17 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -217,6 +207,7 @@
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Sélection de variables}
 \subtitle{Analyse multidimensionnelle appliquée}
@@ -226,10 +217,10 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, frame hidden, enhanced]}{\end{tcolorbox}}\fi
+
 
 \begin{frame}{Modèles prédictifs}
-\protect\hypertarget{moduxe8les-pruxe9dictifs}{}
+\phantomsection\label{moduxe8les-pruxe9dictifs}
 \textbf{Objectif}: bâtir un modèle pour une variable réponse \(Y\) en
 fonction de variables explicatives
 \(\mathrm{X}_1, \ldots, \mathrm{X}_p\).
@@ -243,7 +234,7 @@ une fonction des variables explicatives.
 \end{frame}
 
 \begin{frame}{Rappels sur la régression linéaire}
-\protect\hypertarget{rappels-sur-la-ruxe9gression-linuxe9aire}{}
+\phantomsection\label{rappels-sur-la-ruxe9gression-linuxe9aire}
 On spécifie que la \textbf{moyenne} de la variable réponse \(Y\) est une
 fonction linéaire des variables explicatives
 \(\mathrm{X}_1, \ldots, \mathrm{X}_p\), soit
@@ -256,7 +247,7 @@ constant, \[\mathsf{Va}(Y \mid \mathbf{X}) = \sigma^2.\]
 \end{frame}
 
 \begin{frame}{Représentation alternative}
-\protect\hypertarget{repruxe9sentation-alternative}{}
+\phantomsection\label{repruxe9sentation-alternative}
 Pour la \(i\)e observation,
 
 \[\underset{\text{réponse}}{Y_i} = \underset{\text{prédicteur linéaire}}{\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}} + \underset{\text{aléa}}{\varepsilon_i}.\]
@@ -273,7 +264,7 @@ Pour la \(i\)e observation,
 \end{frame}
 
 \begin{frame}{Postulats}
-\protect\hypertarget{postulats}{}
+\phantomsection\label{postulats}
 \begin{itemize}
 \tightlist
 \item
@@ -290,7 +281,7 @@ Pour la \(i\)e observation,
 \end{frame}
 
 \begin{frame}{Régression linéaire en deux dimensions}
-\protect\hypertarget{ruxe9gression-linuxe9aire-en-deux-dimensions}{}
+\phantomsection\label{ruxe9gression-linuxe9aire-en-deux-dimensions}
 Si \(\mathsf{E}(Y)=\beta_0 + \beta_1 \mathrm{X}\), alors
 
 \begin{itemize}
@@ -302,19 +293,15 @@ Si \(\mathsf{E}(Y)=\beta_0 + \beta_1 \mathrm{X}\), alors
   \(\beta_1\) est la pente
 \end{itemize}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-1-1.pdf}
-
-}
-
-\end{figure}
+\begin{center}
+\includegraphics[width=0.75\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-1-1.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Résidus ordinaires}
-\protect\hypertarget{ruxe9sidus-ordinaires}{}
+\phantomsection\label{ruxe9sidus-ordinaires}
 L'estimation des paramètres
-\(\widehat{\beta}_0, \cdots, \widehat{\beta}_p\) nous donne
+\(\widehat{\beta}_0, \cdots,  \widehat{\beta}_p\) nous donne
 \[\underset{\text{prédiction}}{\widehat{Y}_i} = \widehat{\beta}_0 + \widehat{\beta}_1\mathrm{X}_{i1} \cdots + \widehat{\beta}_p\mathrm{X}_{ip}.\]
 
 On peut approximer l'aléa à l'aide du \textbf{résidu ordinaire}, soit
@@ -331,18 +318,14 @@ On peut approximer l'aléa à l'aide du \textbf{résidu ordinaire}, soit
 \end{frame}
 
 \begin{frame}{Illustration des résidus ordinaires}
-\protect\hypertarget{illustration-des-ruxe9sidus-ordinaires}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/distancevert-1.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{illustration-des-ruxe9sidus-ordinaires}
+\begin{center}
+\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/distancevert-1.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Erreur quadratique moyenne}
-\protect\hypertarget{erreur-quadratique-moyenne}{}
+\phantomsection\label{erreur-quadratique-moyenne}
 L'erreur quadratique moyenne théorique est
 
 \[\mathsf{E} \left[\left\{Y - \widehat{f}(\mathrm{X}_1, \ldots, \mathrm{X}_p)\right\}^2\right],\]
@@ -354,7 +337,7 @@ obtenue à partir d'un échantillon aléatoire.
 \end{frame}
 
 \begin{frame}{Estimation des paramètres}
-\protect\hypertarget{estimation-des-paramuxe8tres}{}
+\phantomsection\label{estimation-des-paramuxe8tres}
 Comment estimer les paramètres \(\beta_0, \ldots, \beta_p\)?
 
 \textbf{Optimisation}: trouver les valeurs qui minimisent l'erreur
@@ -367,7 +350,7 @@ Il existe une solution explicite au problème d'optimisation!
 \end{frame}
 
 \begin{frame}[fragile]{Estimation dans \textbf{R}}
-\protect\hypertarget{estimation-dans-r}{}
+\phantomsection\label{estimation-dans-r}
 La fonction \texttt{lm} calcule l'ajustement du modèle linéaire.
 
 Arguments:
@@ -392,7 +375,7 @@ Arguments:
 \end{frame}
 
 \begin{frame}[fragile]{Sortie de \texttt{summary}}
-\protect\hypertarget{sortie-de-summary}{}
+\phantomsection\label{sortie-de-summary}
 \footnotesize
 
 \begin{verbatim}
@@ -421,7 +404,7 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 \end{frame}
 
 \begin{frame}{Tableau de sortie}
-\protect\hypertarget{tableau-de-sortie}{}
+\phantomsection\label{tableau-de-sortie}
 \begin{itemize}
 \tightlist
 \item
@@ -467,7 +450,7 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 \end{frame}
 
 \begin{frame}[fragile]{Quelques méthodes pour \texttt{lm}}
-\protect\hypertarget{quelques-muxe9thodes-pour-lm}{}
+\phantomsection\label{quelques-muxe9thodes-pour-lm}
 \begin{itemize}
 \tightlist
 \item
@@ -489,7 +472,7 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 \end{frame}
 
 \begin{frame}[fragile]{Variables catégorielles}
-\protect\hypertarget{variables-catuxe9gorielles}{}
+\phantomsection\label{variables-catuxe9gorielles}
 \begin{itemize}
 \tightlist
 \item
@@ -505,7 +488,7 @@ F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 \end{frame}
 
 \begin{frame}[fragile]{Encodage des variables catégorielles}
-\protect\hypertarget{encodage-des-variables-catuxe9gorielles}{}
+\phantomsection\label{encodage-des-variables-catuxe9gorielles}
 Considérons une variable catégorielle \texttt{cat} avec niveaux
 \texttt{1}, \texttt{2}, et \texttt{3}.
 
@@ -525,7 +508,7 @@ La catégorie de référence est associée à l'ordonnée à l'origine (quand
 \end{frame}
 
 \begin{frame}[fragile]{Sélection de variables et de modèles}
-\protect\hypertarget{suxe9lection-de-variables-et-de-moduxe8les}{}
+\phantomsection\label{suxe9lection-de-variables-et-de-moduxe8les}
 \begin{itemize}
 \tightlist
 \item
@@ -549,7 +532,7 @@ objectifs de l'étude
 \end{frame}
 
 \begin{frame}{Prédiction vs inférence}
-\protect\hypertarget{pruxe9diction-vs-infuxe9rence}{}
+\phantomsection\label{pruxe9diction-vs-infuxe9rence}
 \textbf{Prédiction}: obtenir une estimation de \(\widehat{Y}\): on veut
 un modèle performant
 
@@ -562,9 +545,9 @@ tenir.
 \end{frame}
 
 \begin{frame}{Spécification adéquate d'un modèle}
-\protect\hypertarget{spuxe9cification-aduxe9quate-dun-moduxe8le}{}
+\phantomsection\label{spuxe9cification-aduxe9quate-dun-moduxe8le}
 \begin{block}{Démonstration \textbf{R}}
-\protect\hypertarget{duxe9monstration-r}{}
+\phantomsection\label{duxe9monstration-r}
 \begin{itemize}
 \tightlist
 \item
@@ -577,7 +560,7 @@ tenir.
 \end{frame}
 
 \begin{frame}{Évaluer la performance d'un modèle}
-\protect\hypertarget{uxe9valuer-la-performance-dun-moduxe8le}{}
+\phantomsection\label{uxe9valuer-la-performance-dun-moduxe8le}
 On peut calculer l'erreur quadratique moyenne (EQM) sur l'ensemble des
 données qui servent à ajuster le modèle.
 
@@ -585,7 +568,7 @@ Q: Est-ce que c'est un marqueur fiable de la performance du modèle?
 \end{frame}
 
 \begin{frame}[fragile]{Exemple avec la régression polynomiale}
-\protect\hypertarget{exemple-avec-la-ruxe9gression-polynomiale}{}
+\phantomsection\label{exemple-avec-la-ruxe9gression-polynomiale}
 On a simulé des observations d'un modèle polynomiale d'ordre \(K\), de
 la forme
 \[\mathsf{E}(Y \mid \mathbf{X}) = \beta_0 + \beta_1 \mathrm{X} + \cdots + \beta_K \mathrm{X}^K.\]
@@ -596,7 +579,7 @@ linéaires.
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(polynome, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\NormalTok{k }\OtherTok{\textless{}{-}}\NormalTok{ 4L }\CommentTok{\# degré du polynôme}
+\NormalTok{k }\OtherTok{\textless{}{-}} \DecValTok{4}\NormalTok{L }\CommentTok{\# degré du polynôme}
 \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =}\NormalTok{ k), }
    \AttributeTok{data =}\NormalTok{ polynome)}
 \end{Highlighting}
@@ -604,33 +587,25 @@ linéaires.
 \end{frame}
 
 \begin{frame}{Aperçu des données}
-\protect\hypertarget{aperuxe7u-des-donnuxe9es}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-5-1.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{aperuxe7u-des-donnuxe9es}
+\begin{center}
+\includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-6-1.pdf}
+\end{center}
 
 D'après vous, quelle est la vraie valeur de \(K\)?
 \end{frame}
 
 \begin{frame}{Ajustement de polynômes}
-\protect\hypertarget{ajustement-de-polynuxf4mes}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-6-1.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{ajustement-de-polynuxf4mes}
+\begin{center}
+\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-7-1.pdf}
+\end{center}
 
 Ajustement pour des polynômes de degré \(K=1, 4, 10\).
 \end{frame}
 
 \begin{frame}[fragile]{Évaluation de la performance}
-\protect\hypertarget{uxe9valuation-de-la-performance}{}
+\phantomsection\label{uxe9valuation-de-la-performance}
 Pour \(K=1, \ldots, 10\):
 
 \begin{itemize}
@@ -646,7 +621,7 @@ Pour \(K=1, \ldots, 10\):
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(polynome, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\NormalTok{eqm }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{length =}\NormalTok{ 10L, }\AttributeTok{mode =} \StringTok{"numeric"}\NormalTok{)}
+\NormalTok{eqm }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{length =} \DecValTok{10}\NormalTok{L, }\AttributeTok{mode =} \StringTok{"numeric"}\NormalTok{)}
 \ControlFlowTok{for}\NormalTok{(K }\ControlFlowTok{in} \FunctionTok{seq\_len}\NormalTok{(}\DecValTok{10}\NormalTok{))\{}
 \NormalTok{ mod }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}} \FunctionTok{poly}\NormalTok{(x, }\AttributeTok{degree =}\NormalTok{ K), }\AttributeTok{data =}\NormalTok{ polynome)}
 \NormalTok{ eqm[K] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{resid}\NormalTok{(mod)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
@@ -656,21 +631,17 @@ Pour \(K=1, \ldots, 10\):
 \end{frame}
 
 \begin{frame}{Estimation de l'erreur quadratique moyenne}
-\protect\hypertarget{estimation-de-lerreur-quadratique-moyenne}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-8-1.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{estimation-de-lerreur-quadratique-moyenne}
+\begin{center}
+\includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-9-1.pdf}
+\end{center}
 
 Plus le modèle est complexe, plus l'erreur quadratique moyenne de
 l'échantillon d'apprentissage est petite!
 \end{frame}
 
 \begin{frame}{Suroptimisme}
-\protect\hypertarget{suroptimisme}{}
+\phantomsection\label{suroptimisme}
 L'erreur quadratique moyenne décroît mécaniquement à chaque fois qu'on
 ajoute une variable au modèle de régression.
 
@@ -680,24 +651,20 @@ variables, autrement on va surestimer la performance
 \end{frame}
 
 \begin{frame}{Surajustement}
-\protect\hypertarget{surajustement}{}
+\phantomsection\label{surajustement}
 Un modèle plus complexe va toujours mieux s'ajuster aux données de
 l'échantillon.
 
 En revanche, il se \textbf{généralise} moins bien (notre objectif en
 prédiction).
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/overfitting-1.pdf}
-
-}
-
-\end{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/overfitting-1.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Morale de l'histoire}
-\protect\hypertarget{morale-de-lhistoire}{}
+\phantomsection\label{morale-de-lhistoire}
 Nous nous sommes rendus coupables d'un péché capital en utilisant deux
 fois les données
 
@@ -713,7 +680,7 @@ C'est comme tremper deux fois un biscuit dans le verre de lait\ldots{}
 \end{frame}
 
 \begin{frame}{Estimation fiable de la performance}
-\protect\hypertarget{estimation-fiable-de-la-performance}{}
+\phantomsection\label{estimation-fiable-de-la-performance}
 \begin{itemize}
 \tightlist
 \item
@@ -740,7 +707,7 @@ C'est comme tremper deux fois un biscuit dans le verre de lait\ldots{}
 \end{frame}
 
 \begin{frame}{Pénalisation}
-\protect\hypertarget{puxe9nalisation}{}
+\phantomsection\label{puxe9nalisation}
 Utiliser toutes les données (échantillon de validation), mais ajouter
 une pénalité.
 
@@ -749,7 +716,7 @@ alors on a accès aux critères d'information.
 \end{frame}
 
 \begin{frame}{Lien entre régression linéaire et vraisemblance}
-\protect\hypertarget{lien-entre-ruxe9gression-linuxe9aire-et-vraisemblance}{}
+\phantomsection\label{lien-entre-ruxe9gression-linuxe9aire-et-vraisemblance}
 Si on suppose que les aléas sont indépendants et suivent une loi normale
 de variance \(\sigma^2\) constante, alors la log-vraisemblance s'écrit
 
@@ -763,7 +730,7 @@ des coefficients.
 \end{frame}
 
 \begin{frame}{Critères d'information}
-\protect\hypertarget{crituxe8res-dinformation}{}
+\phantomsection\label{crituxe8res-dinformation}
 Valables uniquement pour les modèles ajustés par \textbf{maximum de
 vraisemblance}, ils sont de la forme
 
@@ -784,7 +751,7 @@ vraisemblance}, ils sont de la forme
 \end{frame}
 
 \begin{frame}{Critères d'information}
-\protect\hypertarget{crituxe8res-dinformation-1}{}
+\phantomsection\label{crituxe8res-dinformation-1}
 Pour la régression linéaire, on peut réécrire les critères d'information
 sous la forme \begin{align*}
 \mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +2\times \text{nb param}+ \text{constante},\\
@@ -802,7 +769,7 @@ sous la forme \begin{align*}
 \end{frame}
 
 \begin{frame}[fragile]{Utiliser les critères d'information}
-\protect\hypertarget{utiliser-les-crituxe8res-dinformation}{}
+\phantomsection\label{utiliser-les-crituxe8res-dinformation}
 \begin{itemize}
 \tightlist
 \item
@@ -820,23 +787,25 @@ sous la forme \begin{align*}
 \end{frame}
 
 \begin{frame}{Illustration}
-\protect\hypertarget{illustration}{}
+\phantomsection\label{illustration}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-polynome-ajustement-1.pdf}
+\centering{
+
+\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-polynome-ajustement-1.pdf}
 
 }
 
 \caption{\label{fig-polynome-ajustement}Critères d'information en
 fonction de l'ordre du polynôme.}
 
-\end{figure}
+\end{figure}%
 
 Les deux critères d'information retournent \(K=3\) comme choix optimal.
 \end{frame}
 
 \begin{frame}{Séparation des données}
-\protect\hypertarget{suxe9paration-des-donnuxe9es}{}
+\phantomsection\label{suxe9paration-des-donnuxe9es}
 Ne pas utiliser les données employés pour ajuster un modèle pour
 \textbf{prédire la performance}.
 
@@ -850,7 +819,7 @@ Ne pas utiliser les données employés pour ajuster un modèle pour
 \end{frame}
 
 \begin{frame}{Validation externe}
-\protect\hypertarget{validation-externe}{}
+\phantomsection\label{validation-externe}
 Séparer l'ensemble d'observations en plusieurs groupes
 
 \begin{itemize}
@@ -867,7 +836,7 @@ En pratique, il faut beaucoup d'observations!
 \end{frame}
 
 \begin{frame}{Avantages et inconvénients de la validation externe}
-\protect\hypertarget{avantages-et-inconvuxe9nients-de-la-validation-externe}{}
+\phantomsection\label{avantages-et-inconvuxe9nients-de-la-validation-externe}
 Applicable en toute généralité peu importe le type de modèle.
 
 Cette approche, qui compartimente les échantillons, n'est pas sans
@@ -886,7 +855,7 @@ faille.
 \end{frame}
 
 \begin{frame}{Validation croisée}
-\protect\hypertarget{validation-croisuxe9e}{}
+\phantomsection\label{validation-croisuxe9e}
 Une autre méthode de rééchantillonage
 
 Diviser l'échantillon en \(M\) groupes d'observations de taille moyenne
@@ -905,7 +874,7 @@ performance!
 \end{frame}
 
 \begin{frame}{Étapes de la validation croisée à \(M\) groupes}
-\protect\hypertarget{uxe9tapes-de-la-validation-croisuxe9e-uxe0-m-groupes}{}
+\phantomsection\label{uxe9tapes-de-la-validation-croisuxe9e-uxe0-m-groupes}
 \begin{enumerate}
 \tightlist
 \item
@@ -935,12 +904,12 @@ performance!
 \end{frame}
 
 \begin{frame}{Illustration de la validation croisée}
-\protect\hypertarget{illustration-de-la-validation-croisuxe9e}{}
+\phantomsection\label{illustration-de-la-validation-croisuxe9e}
 \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/validationcroiseeillust-1.pdf}
 \end{frame}
 
 \begin{frame}{Combien de groupes \(M\) pour la validation croisée?}
-\protect\hypertarget{combien-de-groupes-m-pour-la-validation-croisuxe9e}{}
+\phantomsection\label{combien-de-groupes-m-pour-la-validation-croisuxe9e}
 La validation croisée est plus coûteuse parce qu'on doit ajuster \(M\)
 fois le modèles
 
@@ -968,7 +937,7 @@ l'algorithme 6.5 pour une meilleure implémentation.
 \end{frame}
 
 \begin{frame}{Validation croisée = résultat aléatoire!}
-\protect\hypertarget{validation-croisuxe9e-ruxe9sultat-aluxe9atoire}{}
+\phantomsection\label{validation-croisuxe9e-ruxe9sultat-aluxe9atoire}
 Soit \(\widehat{\mathsf{EQM}}_{\text{VC}}\) l'estimation de l'erreur
 quadratique moyenne obtenue par validation croisée à \(M\) plis pour un
 modèle \(\mathcal{M}\) donné.
@@ -982,8 +951,8 @@ Si on a un nombre similaire d'observations dans chaque groupe:
   \(\widehat{\mathsf{EQM}}_{\text{VC}, m}\)
 \item
   si \(M\) est suffisamment grand (disons \(M \geq 10\)), on peut
-  estimer l'écart-type empirique de ces moyennes
-  \[ \mathsf{sd} = \frac{1}{M-1} \sum_{m=1}^{M} (\widehat{\mathsf{EQM}}_{\text{VC}, m}-\widehat{\mathsf{EQM}}_{\text{VC}})^2\]
+  estimer l'écart-type empirique de ces moyennes, où
+  \[ \mathsf{sd}^2 = \frac{1}{M-1} \sum_{m=1}^{M} (\widehat{\mathsf{EQM}}_{\text{VC}, m}-\widehat{\mathsf{EQM}}_{\text{VC}})^2\]
 \item
   Pour obtenir l'\textbf{erreur-type de la moyenne globale}, diviser par
   la racine de la taille du nombre de groupes, d'où
@@ -992,7 +961,7 @@ Si on a un nombre similaire d'observations dans chaque groupe:
 \end{frame}
 
 \begin{frame}{Règle d'une erreur-type}
-\protect\hypertarget{ruxe8gle-dune-erreur-type}{}
+\phantomsection\label{ruxe8gle-dune-erreur-type}
 Soit \(\mathcal{M}_{\text{opt}}\) le modèle avec la plus petite erreur
 quadratique moyenne de validation croisée.
 
@@ -1003,7 +972,7 @@ une erreur-type de la performance du modèle
 \end{frame}
 
 \begin{frame}{Illustration de la règle de une erreur-type}
-\protect\hypertarget{illustration-de-la-ruxe8gle-de-une-erreur-type}{}
+\phantomsection\label{illustration-de-la-ruxe8gle-de-une-erreur-type}
 \includegraphics{figures/fig-validationcroisee-une-erreur-type.pdf}
 
 La bande jaune donne une erreur-type du meilleur modèle. On choisirait
@@ -1011,7 +980,7 @@ le modèle avec \(M=2\), plutôt que \(M=4\)
 \end{frame}
 
 \begin{frame}[fragile]{Validation croisée en \textbf{R}}
-\protect\hypertarget{validation-croisuxe9e-en-r}{}
+\phantomsection\label{validation-croisuxe9e-en-r}
 Le paquet \texttt{caret} a une fonction pour faire la validation
 croisée.
 
@@ -1035,21 +1004,23 @@ les modèles linéaires généralisé.
 \end{frame}
 
 \begin{frame}{Résultats de la validation croisée}
-\protect\hypertarget{ruxe9sultats-de-la-validation-croisuxe9e}{}
+\phantomsection\label{ruxe9sultats-de-la-validation-croisuxe9e}
 \begin{figure}
 
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-plotcv-1.pdf}
+\centering{
+
+\includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-plotcv-1.pdf}
 
 }
 
 \caption{\label{fig-plotcv}Boîtes à moustaches des 100 estimations de
 l'erreur quadratique moyenne obtenues par validation croisée à 10 plis.}
 
-\end{figure}
+\end{figure}%
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
+\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -1070,7 +1041,7 @@ l'erreur quadratique moyenne obtenues par validation croisée à 10 plis.}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
+\phantomsection\label{ruxe9capitulatif-1}
 Si on estime la performance avec les mêmes données qui ont servi à
 l'ajustement, on surestime la performance
 
@@ -1085,7 +1056,7 @@ l'ajustement, on surestime la performance
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
+\phantomsection\label{ruxe9capitulatif-2}
 Trois méthodes pour estimer de manière plus objective la performance
 d'un modèle
 
@@ -1104,6 +1075,7 @@ d'un modèle
 Vous devez être en mesure de nommer les forces et faiblesses et
 d'expliquer le fonctionnement (avec du pseudocode).
 \end{frame}
+
 
 
 

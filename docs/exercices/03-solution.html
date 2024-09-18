@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.1">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -475,7 +475,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li><em>Calculez la sensibilité, la spécificité et le taux de bonne classification manuellement. Vérifiez vos réponses avec la sortie du tableau.</em></li>
 </ol></li>
 </ol>
-<div class="cell">
+<div class="cell" data-hash="03-solution_cache/html/unnamed-chunk-4_59f985420c43f9e67d3af12411821f56">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60602</span>)</span>
@@ -537,24 +537,24 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">48</td>
-<td style="text-align: right;">0.48</td>
-<td style="text-align: right;">265</td>
-<td style="text-align: right;">329</td>
-<td style="text-align: right;">192</td>
-<td style="text-align: right;">214</td>
-<td style="text-align: right;">59.4</td>
-<td style="text-align: right;">55.32</td>
-<td style="text-align: right;">63.15</td>
-<td style="text-align: right;">42.01</td>
-<td style="text-align: right;">39.41</td>
+<td style="text-align: left;">45</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">316</td>
+<td style="text-align: right;">281</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">163</td>
+<td style="text-align: right;">59.7</td>
+<td style="text-align: right;">65.97</td>
+<td style="text-align: right;">53.93</td>
+<td style="text-align: right;">43.17</td>
+<td style="text-align: right;">36.71</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <p>Ensuite, il suffit de passer les valeurs de la variable réponse et nos probabilités de succès prédites aux différentes fonctions.</p>
-<p>Si on considère des points de coupure de 0.01 à 0.99 en incréments de 0.01, on obtient un point de coupure optimal à 0.48. On note que le taux de bonne classification change assez peu au final.</p>
+<p>Si on considère des points de coupure de 0.01 à 0.99 en incréments de 0.01, on obtient un point de coupure optimal à 0.45. On note que le taux de bonne classification change assez peu au final.</p>
 <div class="cell">
 <div id="tbl-confusion" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -574,13 +574,13 @@ Tableau&nbsp;1: Matrice de confusion avec point de coupure optimal
 <tbody>
 <tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(\widehat{Y}=1\)</span></td>
-<td style="text-align: right;">265</td>
-<td style="text-align: right;">192</td>
+<td style="text-align: right;">316</td>
+<td style="text-align: right;">240</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><span class="math inline">\(\widehat{Y}=0\)</span></td>
-<td style="text-align: right;">214</td>
-<td style="text-align: right;">329</td>
+<td style="text-align: right;">163</td>
+<td style="text-align: right;">281</td>
 </tr>
 </tbody>
 </table>
@@ -591,9 +591,9 @@ Tableau&nbsp;1: Matrice de confusion avec point de coupure optimal
 </div>
 <p>Ainsi, si on fait les calculs à la main, on estime</p>
 <ul>
-<li>la sensibilité, <span class="math inline">\(\mathsf{VP}/(\mathsf{VP} + \mathsf{FN})\)</span>, soit 265 / (265 + 214) ou 0.553.</li>
-<li>la spécificité, <span class="math inline">\(\mathsf{VN}/(\mathsf{VN} + \mathsf{FP})\)</span>, soit 329 / (329 + 192) ou 0.631.</li>
-<li>le taux de bonne classification <span class="math inline">\(\mathsf{VN} + \mathsf{VP}/(\mathsf{VN} + \mathsf{VP} + \mathsf{FN} + \mathsf{FP})\)</span>, soit (265 + 329) / 1000 ou 0.594.</li>
+<li>la sensibilité, <span class="math inline">\(\mathsf{VP}/(\mathsf{VP} + \mathsf{FN})\)</span>, soit 316 / (316 + 163) ou 0.66.</li>
+<li>la spécificité, <span class="math inline">\(\mathsf{VN}/(\mathsf{VN} + \mathsf{FP})\)</span>, soit 281 / (281 + 240) ou 0.539.</li>
+<li>le taux de bonne classification <span class="math inline">\(\mathsf{VN} + \mathsf{VP}/(\mathsf{VN} + \mathsf{VP} + \mathsf{FN} + \mathsf{FP})\)</span>, soit (316 + 281) / 1000 ou 0.597.</li>
 </ul>
 <p>Ces valeurs coincident, à arrondi près, avec ce qui est reporté dans le tableau.</p>
 <ol start="5" type="1">
@@ -612,7 +612,7 @@ Tableau&nbsp;1: Matrice de confusion avec point de coupure optimal
 </div>
 </div>
 </div>
-<p>On obtient une estimation de l’aire sous la courbe de 0.619.</p>
+<p>On obtient une estimation de l’aire sous la courbe de 0.616.</p>
 <ol start="6" type="1">
 <li><em>Calculez la statistique de Spiegelhalter (1986) pour la calibration du modèle. Y a-t-il des preuves de surajustement?</em></li>
 </ol>
@@ -623,8 +623,8 @@ Tableau&nbsp;1: Matrice de confusion avec point de coupure optimal
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Test de calibration de Spiegelhalter (1986)
-Statistique de test: 0.48 
-valeur-p: 0.628</code></pre>
+Statistique de test: 0.55 
+valeur-p: 0.581</code></pre>
 </div>
 </div>
 <p>L’hypothèse nulle est que le modèle est calibré; ici, la valeur-<span class="math inline">\(p\)</span> est près de 0.5, donc on ne rejette pas l’hypothèse nulle et on conclut qu’il n’y a pas de preuve de surajustement.</p>

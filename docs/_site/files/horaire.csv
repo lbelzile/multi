@@ -1,0 +1,18 @@
+group,subgroup,date,date_end,title,deadline,content,exercice,evaluations
+Contenu,Séance 1,2023-08-30,2023-08-31,Introduction,,contenu/01-contenu,,
+Contenu,Séance 2,2023-09-06,2023-09-07,Programmation,,contenu/02-contenu,exercices/01-exercice,
+Contenu,Séance 3,2023-09-13,2023-09-14,Sélection de variables,,contenu/03-contenu,,
+Contenu,Séance 4,2023-09-20,2023-09-21,Sélection de variables,,contenu/04-contenu,exercices/02-exercice,
+Contenu,Séance 5,2023-09-27,2023-09-28,Régression logistique : bases,,contenu/05-contenu,,
+Contenu,Séance 6,2023-10-04,2023-10-05,Régression logistique : prédiction et classification,,contenu/06-contenu,exercices/03-exercice,
+Contenu,Séance 7,2023-10-11,2023-10-12,Données multinomiales et valeurs manquantes,,contenu/07-contenu,exercices/03-exercice,
+Contenu,Relâche,2023-10-20,,Devoir 1,,,,evaluations/01-devoir
+Contenu,Relâche,2023-10-18,2023-10-24,Relâche,,,,
+Contenu,Relâche,2023-10-28,,Examen intratrimestriel,,,,evaluations/intra
+Contenu,Séance 8,2023-11-01,2023-11-02,Analyse de survie,,contenu/08-contenu,exercices/04-exercice,
+Contenu,Séance 9,2023-11-08,2023-11-09,Analyse de survie,,contenu/09-contenu,exercices/04-exercice,
+Contenu,Séance 10,2023-11-15,2023-11-16,Réduction de la dimension,,contenu/10-contenu,exercices/05-exercice,
+Contenu,Séance 11,2023-11-22,2023-11-23,Analyse de regroupements,,contenu/11-contenu,,
+Contenu,Séance 12,2023-11-29,2023-11-30,Analyse de regroupements,,contenu/12-contenu,exercices/06-exercice,
+Contenu,Séance 12,2023-12-01,,Devoir 2,,,,evaluations/02-devoir
+Contenu,Examen,2023-12-14,,Examen final,,,,evaluations/final

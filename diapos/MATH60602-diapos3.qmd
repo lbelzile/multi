@@ -20,9 +20,9 @@ sansfont: 'Latin Modern Sans'
 keep-tex: true
 include-in-header: 
       text: |
-        \usepackage{tabu}
         \usepackage{mathtools}
         \usepackage{mathrsfs}
+        \newcommand{\theHtable}{\thetable}
 ---
 
 # Modèles prédictifs
@@ -222,11 +222,23 @@ summary(modlin)
 
 Considérons une variable catégorielle `cat` avec niveaux `1`, `2`, et `3`.
 
+
 | `cat` | `cat2` | `cat3` |
 |:----:|:-----:|:-----:|
 |   1  |   0   |   0   |
 |   2  |   1   |   0   |
 |   3  |   0   |   1   |
+
+```{r}
+#| eval: false
+#| echo: false
+knitr::kable(data.frame(
+  cat = c(1L,2L,3L),
+  cat2 = c(0L,1L,0L),
+  cat3 = c(0L,0L,1L)),
+booktabs = TRUE)
+```
+
 
 La catégorie de référence est associée à l'ordonnée à l'origine (quand `cat2=0` et `cat3=0`).
 
@@ -686,8 +698,8 @@ Soit $\widehat{\mathsf{EQM}}_{\text{VC}}$ l'estimation de l'erreur quadratique m
 Si on a un nombre similaire d'observations dans chaque groupe:
 
 - calculer l'erreur quadratique moyenne de chaque pli, $\widehat{\mathsf{EQM}}_{\text{VC}, m}$
-- si $M$ est suffisamment grand (disons $M \geq 10$), on peut estimer l'écart-type empirique de ces moyennes
-$$ \mathsf{sd} = \frac{1}{M-1} \sum_{m=1}^{M} (\widehat{\mathsf{EQM}}_{\text{VC}, m}-\widehat{\mathsf{EQM}}_{\text{VC}})^2$$
+- si $M$ est suffisamment grand (disons $M \geq 10$), on peut estimer l'écart-type empirique de ces moyennes, où
+$$ \mathsf{sd}^2 = \frac{1}{M-1} \sum_{m=1}^{M} (\widehat{\mathsf{EQM}}_{\text{VC}, m}-\widehat{\mathsf{EQM}}_{\text{VC}})^2$$
 - Pour obtenir l'**erreur-type de la moyenne globale**, diviser par la racine de la taille du nombre de groupes, d'où
 $$\mathsf{se}(\widehat{\mathsf{EQM}}_{\text{VC}}) = \mathsf{sd}/\sqrt{M}$$
 
