@@ -102,5 +102,6 @@ youtube_list(slide_details, playlist_id)
 
 ## Ressources complémentaires
 
+- [Explication de fonctions résumé avec `dplyr` (blog de Andrew Heiss](https://www.andrewheiss.com/blog/2024/04/04/group_by-summarize-ungroup-animations/)
 - [Matériel de cours d'Aurélie Labbe](/files/Intro_R.zip)
 - Chapitres [2](https://r4ds.hadley.nz/data-visualize) et [4](https://r4ds.hadley.nz/data-transform) de [***R** for Data Science*](https://r4ds.hadley.nz/)
