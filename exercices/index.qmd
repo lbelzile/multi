@@ -3,3 +3,10 @@ title: "Exercices"
 ---
 
 Cette section contient des exercices de pratique avec les solutions.
+
+- [Exercice 1 (analyse exploratoire)](01-exercice.qmd)
+- [Exercice 2 (sélection de variables)](02-exercice.qmd)
+- [Exercice 3 (régression logistique)](03-exercice.qmd)
+- [Exercice 4 (analyse de survie)](04-exercice.qmd)
+- [Exercice 5 (analyse factorielle)](05-exercice.qmd)
+- [Exercice 6 (analyse de regroupements)](06-exercice.qmd)

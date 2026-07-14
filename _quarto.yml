@@ -25,6 +25,7 @@ toc-title: "Table des matières"
 website:
   title: "Analyse multidimensionnelle appliquée"
   site-url: "https://lbelzile.github.io/multi"
+  page-navigation: true
   description: "Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l'aide de logiciels appropriés."
   navbar:
     pinned: true
@@ -43,7 +44,7 @@ website:
 
   sidebar:
     - title: "Contenu"
-      style: "docked"
+      style: "floating"
       search: false
       contents:
         - text: "Contenu"
@@ -81,7 +82,7 @@ website:
             - text: "12: Analyse de regroupements"
               file: contenu/12-contenu.qmd
     - title: "Exercices"
-      style: "docked"
+      style: "floating"
       search: false
       foreground: "aquap"
       contents:

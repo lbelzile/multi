@@ -15,3 +15,5 @@ projects/*.zip
 **/*_files/*
 **/*_cache/*
 .gitignore
+
+**/*.quarto_ipynb

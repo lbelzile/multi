@@ -2,6 +2,19 @@
 title: "Contenu"
 ---
 
-Cliquez sur les onglets de droite pour naviguer vers le contenu et le matériel pédagogique de chaque séance de cours. 
+Cliquez sur les onglets de gauche ou utilisez les hyperliens listés ci-dessous pour naviguer vers le contenu et le matériel pédagogique de chaque séance de cours. 
 
-Un guide d'installation pour **R** et RStudio et des ressources sont également mises à disposition.
+Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mises à disposition.
+
+- [Séance 1](01-contenu.qmd)
+- [Séance 2](02-contenu.qmd)
+- [Séance 3](03-contenu.qmd)
+- [Séance 4](04-contenu.qmd)
+- [Séance 5](05-contenu.qmd)
+- [Séance 6](06-contenu.qmd)
+- [Séance 7](07-contenu.qmd)
+- [Séance 8](08-contenu.qmd)
+- [Séance 9](09-contenu.qmd)
+- [Séance 10](10-contenu.qmd)
+- [Séance 11](11-contenu.qmd)
+- [Séance 12](12-contenu.qmd)

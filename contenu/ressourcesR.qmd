@@ -7,9 +7,7 @@ Il existe plusieurs ressources en ligne pour apprendre **R** et le `tidyverse`, 
 - [Les ressources didactiques listées sur le CRAN](https://cran.r-project.org/other-docs.html)
 - [Introduction to **R** and RStudio](http://openintrostat.github.io/oilabs-tidy/01_intro_to_r/intro_to_r.html) par Open Intro Stat
 - [Teacups, giraffes & statistics](https://tinystats.github.io/teacups-giraffes-and-statistics/index.html): révise les concepts statistiques et les bases de la programmation
-- le livret [**RYouWithMe** de R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/)
 - le livre [**R** for Data Science](https://r4ds.had.co.nz/index.html), qui adhère aux principes du `tidyverse`.
-- le paquet **R** [DoSStoolkit](https://dosstoolkit.com/), développé à l'université de Toronto
 - la feuille d'aide mémoire de [RStudio](https://rstudio.github.io/cheatsheets/translations/french/rstudio-ide_fr.pdf) et celle de [`ggplot2`](https://rstudio.github.io/cheatsheets/translations/french/data-visualization_fr.pdf) en français. Les [aides-mémoires pour les paquets](https://posit.co/resources/cheatsheets/) sont disponibles depuis le menu Aide dans RStudio.
 
 Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés dans les notes de cours, à l'aide des commandes suivantes: 
