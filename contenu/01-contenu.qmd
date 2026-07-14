@@ -52,6 +52,6 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 ## Ressources complémentaires
 
 - [Chapitre 7 de **R for Data Science** par Garrett Grolemund et Hadley Wickham](https://r4ds.had.co.nz/exploratory-data-analysis.html)
-- [Chapitre 1 de *Data Visualization: A practical introduction* par Kieran Healy](https://socviz.co/lookatdata.html#lookatdata)
+- [Chapitre 1 de *Data Visualization: A practical introduction* par Kieran Healy](https://socviz.co/01-look-at-data.html)
 - [Feuille aide-mémoire de DataViz](https://policyviz.com/2018/08/07/dataviz-cheatsheet/)
 
