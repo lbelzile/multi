@@ -2,7 +2,9 @@
 title: "Évaluations"
 ---
 
-En plus de l'examen intratrimestriel et de l'examen final, vous aurez deux devoirs à compléter en équipe. Chaque devoir est noté sur 15 points.
+En plus de l'examen intratrimestriel et de l'examen final, vous aurez deux devoirs à compléter en équipe. Les énoncés seront mis en ligne sur ZoneCours.
+
+Chaque devoir est noté sur 15 points.
 
 Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:
 
@@ -17,14 +19,6 @@ Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seron
 J'assignerai 0% pour un devoir non remis ou visiblement bâclé.
 
 
-<!--
-- 110%: Devoir 100% complété. Travail de qualité exceptionnelle démontrant un engagement soutenu avec le cours et une réflexion poussée. L'écriture du document soumis est claire, concise et le français est excellent. Je n'assignerai pas ces notes régulièrement.
-- 100%: Devoir 100% complété avec erreurs mineures.
-- 75%: Devoir majoritairement complété (plus de 70%), la plupart des réponses sont correctes.
-- 50%: Devoir complété à moins de 70% et/ou pour lequel la plupart des réponses sont incorrectes. Témoigne d'un besoin d'amélioration; j'espère ne pas assigner cette note fréquemment.
-- 0%: Devoir non remis, ou visiblement bâclé.
--->
 
-
-Tout travail remis hors délai sera pénalisé de 5% par jour de retard.
+Tout travail remis hors délai sera pénalisé de 10% par jour de retard.
 

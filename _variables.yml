@@ -3,10 +3,13 @@ course:
   number: "MATH 60602"
   github: "https://www.github.com/lbelzile/multi"
   copyright_year: "2020-2026"
+  location: "LGR Fonds-Cogeco"
+  semester: "Automne 2026"
 instructor:
   name: Dr. Léo Belzile
   name_no_title: Léo Belzile
   email: leo.belzile@hec.ca
+  office: LGR 4.850
   url: "https://www.lbelzile.bitbucket.io"
   github: lbelzile
 university:

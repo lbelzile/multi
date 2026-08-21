@@ -21,7 +21,7 @@ Pour commencer, on installe la *dernière* version de **R** (la machine qui fait
 ```{r, echo=FALSE, out.width="60%"}
 include_graphics("../files/img/install/install-r-links.png", error = FALSE)
 ```
-Si vous utilisez macOS, faites défiler le menu jusqu'au premier fichier `.pkg` de la liste et téléchargez-le.
+Si vous utilisez macOS, faites défiler le menu jusqu'au fichier `.pkg` de la liste correspondant à votre ordinateur et téléchargez-le.
     
 ```{r, echo=FALSE, out.width="100%"}
 include_graphics("../files/img/install/install-r-mac.png", error = FALSE)
@@ -39,21 +39,28 @@ include_graphics("../files/img/install/install-r-windows.png", error = FALSE)
 
 4b. Si vous utilisez Windows, téléchargez et installez [*Rtools*](https://cran.r-project.org/bin/windows/Rtools/)
 
-### Installer RStudio
+### Installation d'une interface utilisateur graphique
 
-Une fois **R** installée, nous installerons une interface utilisateur graphique, RStudio, pour interagir avec **R**.
+Une fois **R** installée, nous installerons soit RStudio, soit Positron, pour interagir avec **R**. Positron est un outil en développement, mais offre une interface plus moderne et vous permet d'intégrer Python et **R** directement.
 
-1. Naviguez jusqu'à la section de téléchargements gratuits du site de RStudio: <https://posit.co/download/rstudio-desktop/>
+1. Naviguez jusqu'à la section de téléchargements gratuits du site de Posit: 
+- RStudio: <https://docs.posit.co/ide/user/#rstudio-ide-oss-downloads>
+- Positron: <https://positron.posit.co/download.html>
 
-Naviguez vers le tableau et choisissez la version de RStudio Desktop adéquate.
+Naviguez vers le tableau et choisissez la version adéquate, pour RStudio
 
 ```{r, echo=FALSE, out.width="100%"}
 include_graphics("../files/img/install/posit-rstudio-desktop-install.png", error = FALSE)
 ```
 
-3. Double-cliquez sur le fichier de téléchargement (potentiellement caché dans votre dossier de Téléchargements). Installez comme n'importe lequel autre logiciel.
+et pour Positron:
 
-Double-cliquez sur l'icône RStudio pour lancer l'application.
+```{r, echo=FALSE, out.width="100%"}
+include_graphics("../files/img/install/posit-install.png", error = FALSE)
+```
+
+
+3. Double-cliquez sur le fichier de téléchargement (potentiellement caché dans votre dossier de Téléchargements). Installez comme n'importe lequel autre logiciel.
 
 
 ### Installer `tidyverse`

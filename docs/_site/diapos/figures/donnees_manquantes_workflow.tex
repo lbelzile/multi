@@ -1,0 +1,59 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{amsmath}
+\renewcommand{\familydefault}{\sfdefault}
+\usetikzlibrary{positioning}
+\begin{document}
+\tikzset{
+    > = stealth,
+    every node/.append style = {
+        draw = none,
+    },
+    every path/.append style = {
+        arrows = ->,
+    },
+    hidden/.style = {
+        shape = circle,
+        draw = black!80,
+        fill = white,
+        inner sep = 5pt,
+        text = white
+    }
+}
+\tikz{
+    \node (a) at (-4,0) [hidden]{};
+    \node (b) at (-1,2) [hidden] {};
+    \node (c) at (0.5,0) [inner sep = 35pt] {$\cdots$};
+    \node (d) at (-1,-2) [hidden] {};
+    \node (e) at (2, 2) [hidden] {};
+%     \node (f) at (1, 0) [hidden] {};
+    \node (g) at (2,-2) [hidden] {};
+    \node (h) at (5, 0) [hidden] {};
+    \node (i) at (-1,1) [hidden] {};
+    \node (j) at (-1,-1) [hidden] {};
+    \node (k) at (2,1) [hidden] {};
+    \node (l) at (2,-1) [hidden] {};
+    \path (a) edge (b);
+    \path (a) edge (c);
+    \path (a) edge (d);
+    \path (b) edge (e);
+    \path (c) edge (h);
+    \path (d) edge (g);
+    \path (e) edge (h);
+%     \path (f) edge (h);
+    \path (a) edge (i);
+    \path (a) edge (j);
+    \path (i) edge (k);
+    \path (j) edge (l);
+    \path (k) edge (h);
+    \path (l) edge (h);
+    \path (g) edge (h);
+    \node at (-4,-3) {données\vphantom{p}};
+     \node at (-4,-3.4) {incomplètes};
+     \node at (-1,-3) {imputation\vphantom{d}};
+     \node at (2,-3) {modélisation\vphantom{p}};
+     \node at (5,-3)  {combinaison\vphantom{p}};
+     \node at (5,-3.4)  {des résultats};
+}
+
+\end{document}

@@ -1,20 +1,94 @@
 ---
 title: "Contenu"
+sidebar: false
+toc: false
+page-layout: full
 ---
+
+::: {.schedule-page}
 
 Cliquez sur les onglets de gauche ou utilisez les hyperliens listés ci-dessous pour naviguer vers le contenu et le matériel pédagogique de chaque séance de cours. 
 
-Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mises à disposition.
+- [**Contenu**](/contenu/) ({{< fa book-open-reader >}}): Cette page contient la liste des lectures, activités et enregistrements pour cette semaine.
+- [**Exercices**](/exercices/) ({{< fa laptop-code >}}): Cette page contient des exercices pratiques en **R** avec solutionnaire. Ces derniers vous serviront de pratique en vue de la complétion des devoirs.
+- [**Évaluations**](/evaluations/) ({{< fa pen-ruler >}}): Cette page contient des instructions sur les examens et devoirs.
+ 
+```{r}
+#| label: build-table
+#| include: false
+library(tidyverse)
+library(glue)
+library(knitr)
+library(kableExtra)
+Sys.setlocale("LC_TIME", "fr_CA.UTF-8")
+schedule_file <- paste0(this.path::here() |> dirname(), "/files/horaire.csv")
 
-- [Séance 1](01-contenu.qmd)
-- [Séance 2](02-contenu.qmd)
-- [Séance 3](03-contenu.qmd)
-- [Séance 4](04-contenu.qmd)
-- [Séance 5](05-contenu.qmd)
-- [Séance 6](06-contenu.qmd)
-- [Séance 7](07-contenu.qmd)
-- [Séance 8](08-contenu.qmd)
-- [Séance 9](09-contenu.qmd)
-- [Séance 10](10-contenu.qmd)
-- [Séance 11](11-contenu.qmd)
-- [Séance 12](12-contenu.qmd)
+schedule_raw <- read_csv(schedule_file)
+
+schedule <- schedule_raw |> 
+  mutate(group = fct_inorder(group)) |> 
+  mutate(subgroup = fct_inorder(subgroup)) |> 
+  mutate(var_title = ifelse(!is.na(content), 
+                            glue('<span class="content-title">{title}</span>'),
+                            glue('{title}'))) |> 
+  # mutate(var_deadline = ifelse(!is.na(deadline),
+  #                              glue('&emsp;&emsp;<small>(heure limite {deadline})</small>'),
+  #                              "")) |>
+  mutate(var_content = ifelse(!is.na(content),
+                              glue('<a href="{content}.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>'),
+                              glue('<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>'))) |>
+  mutate(var_exercice = ifelse(!is.na(exercice),
+                              glue('<a href="{exercice}.qmd"><i class="fa-solid fa-laptop-code fa-lg"></i></a>'),
+                              glue('<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>'))) |>
+  mutate(var_evaluations = ifelse(!is.na(evaluations),
+                                 glue('<a href="{evaluations}.qmd"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>'),
+                                 glue('<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>'))) |>
+ # mutate(col_date = ifelse(is.na(date_end),
+ #                           glue('<strong>{format(date, "%e %B")}</strong>'),
+ #                           glue('<strong>{format(date, "%e %B")}</strong>–<strong>{format(date_end, "%e %B")}</strong>'))) |> 
+  # mutate(col_title = glue('{var_title}{var_deadline}')) |> 
+  mutate(col_title = var_title,
+         col_content = var_content,
+         col_exercice = var_exercice,
+         col_evaluations = var_evaluations)
+
+schedule_nested <- schedule |> 
+  select(group, subgroup, 
+         #` ` = col_date, 
+         Titre = col_title, 
+         Contenu = col_content, 
+         Exercice = col_exercice, 
+         Evaluation = col_evaluations) |> 
+  group_by(group) |> 
+  nest() |> 
+  mutate(subgroup_count = map(data, ~count(.x, subgroup)),
+         subgroup_index = map(subgroup_count, ~{
+           .x |> pull(n) |> set_names(.x$subgroup)
+         }))
+
+show_table <- function(group_id) {
+  # Add a heading
+  cat(as.character(paste("\n\n###", schedule_nested$group[[group_id]], "\n\n")))
+  
+  # Make the table
+  tbl <- schedule_nested$data[[group_id]] |> 
+    select(-subgroup) |> 
+    kbl(escape = FALSE, align = "rlccc", table.attr = 'class="schedule-table"') |> 
+    kable_styling() |> 
+    column_spec(1, width = "40%", extra_css = "padding-right: 20px;") |> 
+    column_spec(2:4, width = "15%") |>
+    pack_rows(index = schedule_nested$subgroup_index[[group_id]],
+              label_row_css = "border-bottom: 2px solid #000000;")
+  
+  cat(tbl)
+}
+```
+
+```{r show-table, echo=FALSE, results="asis"}
+walk(seq(1, nrow(schedule_nested)), ~show_table(.x))
+```
+
+:::
+
+
+Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mises à disposition.

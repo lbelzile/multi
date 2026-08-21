@@ -28,12 +28,12 @@ include-in-header:
 # Présentation des données
 
 
-Exemple de base de données marketing (par ex., organisme de charité). Cibler les clients pour l’envoi d’un catalogue.
+Exemple de base de données marketing. Cibler les clients pour l'envoi d'un échantillon promotionnel et d'un catalogue de produits.
 
 But: maximiser les levées de fonds
 
-1. Envoyer un échantillon de produits au coût de 10$ à un groupe échantillon.
-2. Construire un modèle de prédiction pour déterminer à qui envoyer le produit parmi tous les clients.
+1. Envoyer un échantillon de produits au coût de 10$ à un groupe pilote de 1000 personnes et regarder le montant d'achat suite à l'envoi.
+2. Construire un modèle de prédiction pour déterminer à qui envoyer le produit parmi tous les 100 000 clients résiduels.
 
 
 
@@ -64,7 +64,7 @@ Regroupements:
 - `x3`: variable catégorielle indiquant le revenu, soit moins de 35 000\$ (1), entre 35 000\$ et 75 000\$ (2) ou plus de 75 000$ (3);
 - `x4`: variable catégorielle indiquant la région où habite le client (de 1 à 5);
 - `x5`: couple : la personne est elle en couple (0=non, 1=oui);
-- `x6`: nombre d'année depuis que le client est avec la compagnie;
+- `x6`: nombre d'année du lien d'affaires;
 - `x7`: nombre de semaines depuis le dernier achat;
 - `x8`: montant (en dollars) du dernier achat;
 - `x9`: montant total (en dollars) dépensé depuis un an;
@@ -219,7 +219,7 @@ Le montant moyen dépensé s'écrit
 
 On bâtit un modèle de régression linéaire pour le montant moyen dépensé, $\mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1)$.
 
-Le modèle utilise les données des 210 personnes de l'échantillon d'apprentissage qui ont acheté suite à l'envoi du catalogue.
+Le modèle utilise les données des 210 personnes (sur 1000) de l'échantillon d'apprentissage qui ont acheté suite à l'envoi du catalogue.
 
 
 # Séparation de l'échantillon
@@ -285,7 +285,7 @@ mod_complet <- lm(formule, data = dbm_a)
 matmod <- model.matrix(mod_complet)
 ```
 
-Le modèle complet est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` variables.
+Le modèle complet est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` observations.
 
 # Fléau de la dimensionalité
 
@@ -294,7 +294,7 @@ Combien de modèles incluant les combinaisons de $p$ variables?
 Dans l'exemple, $p=14$ variables de base en incluant les indicatrices pour les variables catégorielles multiniveaux (revenu `x3` et région `x4`)
 
 
-Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles.
+Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles. Au total, $2^{14} = 16384.$
 
 ```{r}
 #| label: tbl-02-table3
@@ -317,8 +317,6 @@ knitr::kable(x = data.frame(p = p, npar = npar),
 
 Essayer **tous** les modèles et choisir le meilleur (si $p$ est petit).
 
-
-L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux.
 
 
 \footnotesize
@@ -344,6 +342,14 @@ rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
 
 \normalsize
 
+# Recherche efficace
+
+
+L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux.
+
+En **R**, consid/rez 
+
+
 # Mot d'ordre
 
 Quelques mantras pour la suite:
@@ -358,7 +364,7 @@ Quelques mantras pour la suite:
 
 Recherche exhaustive typiquement trop coûteuse.
 
-On peut plutôt opter pour un algorithme glouton: 
+On peut plutôt opter pour un algorithme glouton (greedy): 
 
 - à chaque étape, on maximise l'utilité (horizon d'optimisation limité) en retirant ou en ajoutant une seule variable.
 - au début, $p$ variables à regarder, puis il y a $p-1$ choix l'étape suivante, etc.
@@ -368,25 +374,27 @@ On peut plutôt opter pour un algorithme glouton:
 
 # Digression
 
-Si on considère tous les modèles à $K$ variables, celui qui a la plus petite erreur moyenne quadratique a aussi
+Si on ajuste tous les modèles à $K$ variables, celui qui a la plus petite erreur moyenne quadratique (EQM) a aussi le plus petit $R^2$, $\mathsf{AIC}$ et $\mathsf{BIC}$ parmi ces modèles (puisque le nombre de coefficients est le même).
 
-- le plus grand coefficient de détermination, $R^2$
-- le plus petit critère d'information parmi tous les modèles à $K$ variables (puisque le nombre de coefficients est le même, donc la pénalité est identique).
+Il suffit donc de rapporter le meilleur modèle avec $1,2,\ldots, m$ variables explicatives et choisir ensuite.
 
-On utilise donc les critères d'information pour départager des modèles avec des nombre de variables différents.
 
 
 
 # Sélections ascendante et descendante
 
-**Sélection ascendante**: à partir du modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle précédent la variable qui améliore le plus l’ajustement.
+On sélectionne un critère à minimiser (AIC/BIC) et une règle d'arrêt.
+
+**Sélection ascendante** (*forward selection*): à partir du modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle précédent la variable qui réduit le plus notre critère.
 
 
-**Sélection descendante**: éliminer du modèle complet la variable qui contribue le moins à l’ajustement.
+**Sélection descendante** (*backward selection*): à partir du modèle de départ (typiquement le modèle complet), enlever la variable qui mène à la plus grande réduction du critère
 
-Dans les deux cas, la procédure se termine quand on ne peut satisfaire le critère d'arrêt (par exemple, critère d'information)
+Dans les deux cas, la procédure se termine quand on ne peut plus réduire le critère
 
-# Sélection séquentielle
+On choisit le modèle final parmi ceux considérés avec le plus petit critère.
+
+# Sélection séquentielle (*stepwise*)
 
 À partir du modèle de base (d'ordinaire), 
 
@@ -405,14 +413,14 @@ Dans les deux cas, la procédure se termine quand on ne peut satisfaire le crit�
 #| eval: false
 #| echo: true
 # Cette procédure séquentielle retourne
-# la liste de modèles de 1 variables à
+# la liste de modèles de 1 variable à
 # nvmax variables.
 rec_seq <- 
   leaps::regsubsets(
     x = formule, 
     data = dbm_a,
     method = "seqrep", 
-    nvmax = length(coef(mod_complet)))
+    nvmax = length(coef(mod_complet))) # ici, 105
 which.min(summary(rec_seq)$bic)
 ```
 
@@ -421,7 +429,7 @@ which.min(summary(rec_seq)$bic)
 
 La procédure est plus longue à rouler (car les modèles linéaires sont ajustés).
 
-On ajoute ou retire la variable qui améliore le plus le critère de sélection  à chaque étape (comportement différent de **SAS**).
+On ajoute ou retire la variable qui améliore le plus le critère de sélection à chaque étape.
 
 ```{r}
 #| label: modele-sequentiel2
@@ -519,8 +527,8 @@ plot(cv_output)
 
 On choisit typiquement $\lambda$ par validation croisée, soit
 
-- le modèle avec la plus valeur de $\mathsf{EQM}_{\mathrm{VC}}$.
-- le modèle le plus parsimonieux à au plus un erreur-type de ce dernier (pénalité plus élevée, plus de coefficients nuls)
+- le modèle avec la plus petite valeur de $\mathsf{EQM}_{\mathrm{VC}}$.
+- le modèle le plus parsimonieux à au plus un erreur-type de ce dernier (pénalité plus élevée, plus grand nombre de coefficients nuls)
 
 ```{r, out.width = '80%', fig.align='center'}
 knitr::include_graphics("figures/fig-lassopath.pdf")
@@ -542,7 +550,7 @@ lasso_path <-
     y = dbm_a$ymontant,
     alpha = 1, 
     lambda = seq(from = 0.01, to = 10, by = 0.01))
-plot(lasso_path)
+plot(lasso_path, xlab = "valeur de la pénalité (norme L1)")
 ```
 
 
@@ -646,7 +654,7 @@ En incluant les termes de base, les carrés et les interactions d'ordre 2.
 | 104 | 19.63  | toutes les variables     |
 | 21  | 12     | séquentielle, choix selon $\mathsf{AIC}$ |
 | 15  | 12.31  | séquentielle, choix selon $\mathsf{BIC}$ |
-| 30  | 12     | LASSO, validation croisée avec 10 groupes |
+| 30  | 11.94     | LASSO, validation croisée avec 10 groupes |
 
 #  Récapitulatif
 

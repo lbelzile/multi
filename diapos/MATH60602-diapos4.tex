@@ -21,13 +21,13 @@
 }
 \setbeamertemplate{section page}{
   \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
     \usebeamerfont{section title}\insertsection\par
   \end{beamercolorbox}
 }
 \setbeamertemplate{subsection page}{
   \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
@@ -62,8 +62,8 @@
 \useoutertheme{Flip}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
+    \setmainfont[]{VisbyCF-Medium}
+    \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -105,7 +105,7 @@
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -115,7 +115,7 @@
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -138,24 +138,37 @@
 \makeatother
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabularx}
+\usepackage{xltabular}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage{tabu}
 \usepackage{mathtools}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -192,23 +205,14 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -216,6 +220,7 @@
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Sélection de variables}
 \subtitle{Analyse multidimensionnelle appliquée}
@@ -225,28 +230,28 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, frame hidden, sharp corners, breakable]}{\end{tcolorbox}}\fi
+
 
 \begin{frame}{Présentation des données}
-\protect\hypertarget{pruxe9sentation-des-donnuxe9es}{}
-Exemple de base de données marketing (par ex., organisme de charité).
-Cibler les clients pour l'envoi d'un catalogue.
+\phantomsection\label{pruxe9sentation-des-donnuxe9es}
+Exemple de base de données marketing. Cibler les clients pour l'envoi
+d'un échantillon promotionnel et d'un catalogue de produits.
 
 But: maximiser les levées de fonds
 
 \begin{enumerate}
 \tightlist
 \item
-  Envoyer un échantillon de produits au coût de 10\$ à un groupe
-  échantillon.
+  Envoyer un échantillon de produits au coût de 10\$ à un groupe pilote
+  de 1000 personnes et regarder le montant d'achat suite à l'envoi.
 \item
   Construire un modèle de prédiction pour déterminer à qui envoyer le
-  produit parmi tous les clients.
+  produit parmi tous les 100 000 clients résiduels.
 \end{enumerate}
 \end{frame}
 
 \begin{frame}{Population cible}
-\protect\hypertarget{population-cible}{}
+\phantomsection\label{population-cible}
 Clients qui ont
 
 \begin{itemize}
@@ -271,7 +276,7 @@ Regroupements:
 \end{frame}
 
 \begin{frame}[fragile]{Liste des variables}
-\protect\hypertarget{liste-des-variables}{}
+\phantomsection\label{liste-des-variables}
 \footnotesize
 
 \begin{itemize}
@@ -295,8 +300,7 @@ Regroupements:
 \item
   \texttt{x5}: couple : la personne est elle en couple (0=non, 1=oui);
 \item
-  \texttt{x6}: nombre d'année depuis que le client est avec la
-  compagnie;
+  \texttt{x6}: nombre d'année du lien d'affaires;
 \item
   \texttt{x7}: nombre de semaines depuis le dernier achat;
 \item
@@ -311,7 +315,7 @@ Regroupements:
 \end{frame}
 
 \begin{frame}[fragile]{Aperçu des données}
-\protect\hypertarget{aperuxe7u-des-donnuxe9es}{}
+\phantomsection\label{aperuxe7u-des-donnuxe9es}
 \footnotesize
 
 \begin{Shaded}
@@ -388,13 +392,13 @@ région & décompte\\
 \end{frame}
 
 \begin{frame}
-\includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/histogrammes-eda-dbm-fig-1.pdf}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos4_files/figure-beamer/histogrammes-eda-dbm-fig-1.pdf}
 \end{frame}
 
 \begin{frame}
 \footnotesize
 
-\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\begin{xltabular}{\linewidth}{>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}X>{\raggedleft\arraybackslash}X>{\raggedleft\arraybackslash}X>{\raggedleft\arraybackslash}X}
 \toprule
 variable & moyenne & écart-type & min & max\\
 \midrule
@@ -403,11 +407,12 @@ x6 & 6.01 & 2.92 & 1 & 11\\
 x7 & 9.97 & 9.34 & 1 & 52\\
 x8 & 48.41 & 28.27 & 20 & 252\\
 x9 & 229.27 & 173.97 & 22 & 1407\\
+\addlinespace
 x10 & 5.64 & 2.31 & 1 & 14\\
 \bottomrule
-\end{tabu}
+\end{xltabular}
 
-\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X}
+\begin{xltabular}{\linewidth}{>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
 \toprule
 variable & description\\
 \midrule
@@ -416,13 +421,14 @@ x6 & nombre d’année comme client\\
 x7 & nombre de semaines depuis le dernier achat\\
 x8 & montant du dernier achat\\
 x9 & montant total dépensé sur un an\\
+\addlinespace
 x10 & nombre d'achats différents sur un an\\
 \bottomrule
-\end{tabu}
+\end{xltabular}
 \end{frame}
 
 \begin{frame}{Prédire le montant \texttt{ymontant}}
-\protect\hypertarget{pruxe9dire-le-montant-ymontant}{}
+\phantomsection\label{pruxe9dire-le-montant-ymontant}
 Le montant moyen dépensé s'écrit
 
 \begin{align*}
@@ -432,12 +438,13 @@ Le montant moyen dépensé s'écrit
 On bâtit un modèle de régression linéaire pour le montant moyen dépensé,
 \(\mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1)\).
 
-Le modèle utilise les données des 210 personnes de l'échantillon
-d'apprentissage qui ont acheté suite à l'envoi du catalogue.
+Le modèle utilise les données des 210 personnes (sur 1000) de
+l'échantillon d'apprentissage qui ont acheté suite à l'envoi du
+catalogue.
 \end{frame}
 
 \begin{frame}[fragile]{Séparation de l'échantillon}
-\protect\hypertarget{suxe9paration-de-luxe9chantillon}{}
+\phantomsection\label{suxe9paration-de-luxe9chantillon}
 On conserve 100 000 observations test pour vérifier la performance
 
 \begin{itemize}
@@ -462,7 +469,7 @@ On conserve 100 000 observations test pour vérifier la performance
 \end{frame}
 
 \begin{frame}{Recherche d'un modèle}
-\protect\hypertarget{recherche-dun-moduxe8le}{}
+\phantomsection\label{recherche-dun-moduxe8le}
 Idée initiale:
 
 \begin{itemize}
@@ -478,7 +485,7 @@ Idée initiale:
 \end{frame}
 
 \begin{frame}[fragile]{Approximation}
-\protect\hypertarget{approximation}{}
+\phantomsection\label{approximation}
 On essaie d'estimer la moyenne de la variable cible \texttt{ymontant} de
 la manière le plus flexible possible.
 
@@ -497,7 +504,7 @@ quadratiques, et les interactions d'ordre 2:
 \end{frame}
 
 \begin{frame}[fragile]{Modèle complet et syntaxe \textbf{R}}
-\protect\hypertarget{moduxe8le-complet-et-syntaxe-r}{}
+\phantomsection\label{moduxe8le-complet-et-syntaxe-r}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# (...)\^{}2 crée toutes les interactions d\textquotesingle{}ordre deux}
@@ -515,11 +522,11 @@ quadratiques, et les interactions d'ordre 2:
 \end{Shaded}
 
 Le modèle complet est clairement \textbf{surajusté} avec 105
-coefficients pour 210 variables.
+coefficients pour 210 observations.
 \end{frame}
 
 \begin{frame}[fragile]{Fléau de la dimensionalité}
-\protect\hypertarget{fluxe9au-de-la-dimensionalituxe9}{}
+\phantomsection\label{fluxe9au-de-la-dimensionalituxe9}
 Combien de modèles incluant les combinaisons de \(p\) variables?
 
 Dans l'exemple, \(p=14\) variables de base en incluant les indicatrices
@@ -527,37 +534,36 @@ pour les variables catégorielles multiniveaux (revenu \texttt{x3} et
 région \texttt{x4})
 
 Chaque variable est incluse (ou pas): il y a
-\(2^p=2\times 2 \times \cdots \times 2\) (\(p\) fois) modèles.
+\(2^p=2\times 2 \times \cdots \times 2\) (\(p\) fois) modèles. Au total,
+\(2^{14} = 16384.\)
 
-\hypertarget{tbl-02-table3}{}
-\begin{table}
-\caption{\label{tbl-02-table3}Nombres de modèles en fonction du nombre de paramètres. }\tabularnewline
+\begin{longtable}[]{@{}rr@{}}
 
-\centering
-\begin{tabular}{rr}
-\toprule
-$p$ & nombre de paramètres\\
-\midrule
-5 & 32\\
-10 & 1024\\
-15 & 32768\\
-20 & 1048576\\
-25 & 33554432\\
-\addlinespace
-30 & 1073741824\\
-\bottomrule
-\end{tabular}
-\end{table}
+\caption{\label{tbl-02-table3}Nombres de modèles en fonction du nombre
+de paramètres.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\(p\) & nombre de paramètres \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+5 & 32 \\
+10 & 1024 \\
+15 & 32768 \\
+20 & 1048576 \\
+25 & 33554432 \\
+30 & 1073741824 \\
+
+\end{longtable}
 \end{frame}
 
 \begin{frame}[fragile]{Recherche exhaustive}
-\protect\hypertarget{recherche-exhaustive}{}
+\phantomsection\label{recherche-exhaustive}
 Essayer \textbf{tous} les modèles et choisir le meilleur (si \(p\) est
 petit).
-
-L'algorithme par séparation et évaluation (\emph{branch and bound})
-recherche de manière efficace sans essayer tous les modèles candidats et
-écarte d'office les modèles sous-optimaux.
 
 \footnotesize
 
@@ -566,7 +572,7 @@ recherche de manière efficace sans essayer tous les modèles candidats et
 \CommentTok{\# Recherche exhaustive avec variables de base}
 \NormalTok{rec\_ex }\OtherTok{\textless{}{-}}\NormalTok{ leaps}\SpecialCharTok{::}\FunctionTok{regsubsets}\NormalTok{(}
   \AttributeTok{x =}\NormalTok{ ymontant }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1}\SpecialCharTok{+}\NormalTok{x2}\SpecialCharTok{+}\NormalTok{x3}\SpecialCharTok{+}\NormalTok{x4}\SpecialCharTok{+}\NormalTok{x5}\SpecialCharTok{+}\NormalTok{x6}\SpecialCharTok{+}\NormalTok{x7}\SpecialCharTok{+}\NormalTok{x8}\SpecialCharTok{+}\NormalTok{x9}\SpecialCharTok{+}\NormalTok{x10, }
-  \AttributeTok{nvmax =}\NormalTok{ 13L,}
+  \AttributeTok{nvmax =} \DecValTok{13}\NormalTok{L,}
   \AttributeTok{method =} \StringTok{"exhaustive"}\NormalTok{,}
   \AttributeTok{data =}\NormalTok{ dbm\_a)}
 \NormalTok{resume\_rec\_ex }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(rec\_ex,}
@@ -586,8 +592,17 @@ recherche de manière efficace sans essayer tous les modèles candidats et
 \normalsize
 \end{frame}
 
+\begin{frame}{Recherche efficace}
+\phantomsection\label{recherche-efficace}
+L'algorithme par séparation et évaluation (\emph{branch and bound})
+recherche de manière efficace sans essayer tous les modèles candidats et
+écarte d'office les modèles sous-optimaux.
+
+En \textbf{R}, consid/rez
+\end{frame}
+
 \begin{frame}{Mot d'ordre}
-\protect\hypertarget{mot-dordre}{}
+\phantomsection\label{mot-dordre}
 Quelques mantras pour la suite:
 
 \begin{itemize}
@@ -611,10 +626,10 @@ Quelques mantras pour la suite:
 \end{frame}
 
 \begin{frame}{Méthodes de sélection séquentielles}
-\protect\hypertarget{muxe9thodes-de-suxe9lection-suxe9quentielles}{}
+\phantomsection\label{muxe9thodes-de-suxe9lection-suxe9quentielles}
 Recherche exhaustive typiquement trop coûteuse.
 
-On peut plutôt opter pour un algorithme glouton:
+On peut plutôt opter pour un algorithme glouton (greedy):
 
 \begin{itemize}
 \tightlist
@@ -630,39 +645,37 @@ On peut plutôt opter pour un algorithme glouton:
 \end{frame}
 
 \begin{frame}{Digression}
-\protect\hypertarget{digression}{}
-Si on considère tous les modèles à \(K\) variables, celui qui a la plus
-petite erreur moyenne quadratique a aussi
+\phantomsection\label{digression}
+Si on ajuste tous les modèles à \(K\) variables, celui qui a la plus
+petite erreur moyenne quadratique (EQM) a aussi le plus petit \(R^2\),
+\(\mathsf{AIC}\) et \(\mathsf{BIC}\) parmi ces modèles (puisque le
+nombre de coefficients est le même).
 
-\begin{itemize}
-\tightlist
-\item
-  le plus grand coefficient de détermination, \(R^2\)
-\item
-  le plus petit critère d'information parmi tous les modèles à \(K\)
-  variables (puisque le nombre de coefficients est le même, donc la
-  pénalité est identique).
-\end{itemize}
-
-On utilise donc les critères d'information pour départager des modèles
-avec des nombre de variables différents.
+Il suffit donc de rapporter le meilleur modèle avec \(1,2,\ldots, m\)
+variables explicatives et choisir ensuite.
 \end{frame}
 
 \begin{frame}{Sélections ascendante et descendante}
-\protect\hypertarget{suxe9lections-ascendante-et-descendante}{}
-\textbf{Sélection ascendante}: à partir du modèle de base (ordonnée à
-l'origine), ajouter à chaque étape au modèle précédent la variable qui
-améliore le plus l'ajustement.
+\phantomsection\label{suxe9lections-ascendante-et-descendante}
+On sélectionne un critère à minimiser (AIC/BIC) et une règle d'arrêt.
 
-\textbf{Sélection descendante}: éliminer du modèle complet la variable
-qui contribue le moins à l'ajustement.
+\textbf{Sélection ascendante} (\emph{forward selection}): à partir du
+modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle
+précédent la variable qui réduit le plus notre critère.
 
-Dans les deux cas, la procédure se termine quand on ne peut satisfaire
-le critère d'arrêt (par exemple, critère d'information)
+\textbf{Sélection descendante} (\emph{backward selection}): à partir du
+modèle de départ (typiquement le modèle complet), enlever la variable
+qui mène à la plus grande réduction du critère
+
+Dans les deux cas, la procédure se termine quand on ne peut plus réduire
+le critère
+
+On choisit le modèle final parmi ceux considérés avec le plus petit
+critère.
 \end{frame}
 
-\begin{frame}{Sélection séquentielle}
-\protect\hypertarget{suxe9lection-suxe9quentielle}{}
+\begin{frame}{Sélection séquentielle (\emph{stepwise})}
+\phantomsection\label{suxe9lection-suxe9quentielle-stepwise}
 À partir du modèle de base (d'ordinaire),
 
 \begin{itemize}
@@ -688,18 +701,18 @@ le critère d'arrêt (par exemple, critère d'information)
 \end{frame}
 
 \begin{frame}[fragile]{Code \textbf{R} avec \texttt{leaps}}
-\protect\hypertarget{code-r-avec-leaps}{}
+\phantomsection\label{code-r-avec-leaps}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Cette procédure séquentielle retourne}
-\CommentTok{\# la liste de modèles de 1 variables à}
+\CommentTok{\# la liste de modèles de 1 variable à}
 \CommentTok{\# nvmax variables.}
 \NormalTok{rec\_seq }\OtherTok{\textless{}{-}} 
 \NormalTok{  leaps}\SpecialCharTok{::}\FunctionTok{regsubsets}\NormalTok{(}
     \AttributeTok{x =}\NormalTok{ formule, }
     \AttributeTok{data =}\NormalTok{ dbm\_a,}
     \AttributeTok{method =} \StringTok{"seqrep"}\NormalTok{, }
-    \AttributeTok{nvmax =} \FunctionTok{length}\NormalTok{(}\FunctionTok{coef}\NormalTok{(mod\_complet)))}
+    \AttributeTok{nvmax =} \FunctionTok{length}\NormalTok{(}\FunctionTok{coef}\NormalTok{(mod\_complet))) }\CommentTok{\# ici, 105}
 \FunctionTok{which.min}\NormalTok{(}\FunctionTok{summary}\NormalTok{(rec\_seq)}\SpecialCharTok{$}\NormalTok{bic)}
 \end{Highlighting}
 \end{Shaded}
@@ -707,14 +720,14 @@ le critère d'arrêt (par exemple, critère d'information)
 
 \begin{frame}[fragile]{Sélection séquentielle avec critères
 d'information}
-\protect\hypertarget{suxe9lection-suxe9quentielle-avec-crituxe8res-dinformation}{}
+\phantomsection\label{suxe9lection-suxe9quentielle-avec-crituxe8res-dinformation}
 \footnotesize
 
 La procédure est plus longue à rouler (car les modèles linéaires sont
 ajustés).
 
 On ajoute ou retire la variable qui améliore le plus le critère de
-sélection à chaque étape (comportement différent de \textbf{SAS}).
+sélection à chaque étape.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -739,14 +752,10 @@ L'historique des étapes est disponible via \texttt{seq\_AIC\$anova}
 \end{frame}
 
 \begin{frame}{Performance en fonction de la complexité}
-\protect\hypertarget{performance-en-fonction-de-la-complexituxe9}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-perfo-sequentiel.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{performance-en-fonction-de-la-complexituxe9}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/fig-perfo-sequentiel.pdf}
+\end{center}
 
 \footnotesize
 
@@ -757,7 +766,7 @@ de termes inclus. Oracle: 100K données de validation (libellé externe)
 \end{frame}
 
 \begin{frame}{Méthodes de régularisation}
-\protect\hypertarget{muxe9thodes-de-ruxe9gularisation}{}
+\phantomsection\label{muxe9thodes-de-ruxe9gularisation}
 Objectif: prévenir le surajustement.
 
 L'erreur moyenne quadratique se décompose comme
@@ -769,7 +778,7 @@ des coefficients en pénalisant leur norme.
 \end{frame}
 
 \begin{frame}{Préalable à la régression avec régularisation}
-\protect\hypertarget{pruxe9alable-uxe0-la-ruxe9gression-avec-ruxe9gularisation}{}
+\phantomsection\label{pruxe9alable-uxe0-la-ruxe9gression-avec-ruxe9gularisation}
 Pénalisation la norme de \(\beta_1, \ldots, \beta_p\)
 
 \begin{itemize}
@@ -798,7 +807,7 @@ Pénalisation la norme de \(\beta_1, \ldots, \beta_p\)
 \end{frame}
 
 \begin{frame}{LASSO}
-\protect\hypertarget{lasso}{}
+\phantomsection\label{lasso}
 Pénalité avec norme \(l_1\) pour la valeur absolue des coefficients,
 \[ \min_{\boldsymbol{\beta}} \left\{ n\mathsf{EQM}(\boldsymbol{\beta}) + \lambda(|\beta_1| + \cdots + |\beta_p|)\right\}.\]
 Hyperparamètre \(\lambda>0\) qui détermine la force de la pénalisation.
@@ -808,18 +817,14 @@ sélection implicite de variable.
 \end{frame}
 
 \begin{frame}{Contrainte budgétaire et moindres carrés}
-\protect\hypertarget{contrainte-budguxe9taire-et-moindres-carruxe9s}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-lassopenalty.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{contrainte-budguxe9taire-et-moindres-carruxe9s}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/fig-lassopenalty.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Code \textbf{R} pour le LASSO}
-\protect\hypertarget{code-r-pour-le-lasso}{}
+\phantomsection\label{code-r-pour-le-lasso}
 Paramètre de pénalité déterminé par validation croisée à partir d'un
 vecteur de valeurs candidates.
 
@@ -838,43 +843,42 @@ vecteur de valeurs candidates.
 \end{frame}
 
 \begin{frame}{Trajectoire LASSO}
-\protect\hypertarget{trajectoire-lasso}{}
+\phantomsection\label{trajectoire-lasso}
 On choisit typiquement \(\lambda\) par validation croisée, soit
 
 \begin{itemize}
 \tightlist
 \item
-  le modèle avec la plus valeur de \(\mathsf{EQM}_{\mathrm{VC}}\).
+  le modèle avec la plus petite valeur de
+  \(\mathsf{EQM}_{\mathrm{VC}}\).
 \item
   le modèle le plus parsimonieux à au plus un erreur-type de ce dernier
-  (pénalité plus élevée, plus de coefficients nuls)
+  (pénalité plus élevée, plus grand nombre de coefficients nuls)
 \end{itemize}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/fig-lassopath.pdf}
-
-}
-
-\end{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/fig-lassopath.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Paramètres}
-\protect\hypertarget{paramuxe8tres}{}
+\phantomsection\label{paramuxe8tres}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos4_files/figure-beamer/fig-lassopath-1.pdf}
+\centering{
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos4_files/figure-beamer/fig-lassopath-1.pdf}
 
 }
 
 \caption{\label{fig-lassopath}Coefficients du modèle en fonction de la
 pénalité}
 
-\end{figure}
+\end{figure}%
 \end{frame}
 
 \begin{frame}[fragile]{Évaluation et prédiction}
-\protect\hypertarget{uxe9valuation-et-pruxe9diction}{}
+\phantomsection\label{uxe9valuation-et-pruxe9diction}
 Une fois la valeur de \(\lambda\) choisie, on réestime le modèle avec la
 pénalité.
 
@@ -893,7 +897,7 @@ pénalité.
 \end{frame}
 
 \begin{frame}[fragile]{Prédictions}
-\protect\hypertarget{pruxe9dictions}{}
+\phantomsection\label{pruxe9dictions}
 On crée une matrice avec les données de validation et on calcule
 l'erreur quadratique moyenne.
 
@@ -920,7 +924,7 @@ l'erreur quadratique moyenne.
 \end{frame}
 
 \begin{frame}{Évaluation de la performance}
-\protect\hypertarget{uxe9valuation-de-la-performance}{}
+\phantomsection\label{uxe9valuation-de-la-performance}
 En incluant uniquement les variables de base
 
 \begin{longtable}[]{@{}ccl@{}}
@@ -945,13 +949,13 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 104 & 19.63 & toutes les variables \\
 21 & 12 & séquentielle, choix selon \(\mathsf{AIC}\) \\
 15 & 12.31 & séquentielle, choix selon \(\mathsf{BIC}\) \\
-30 & 12 & LASSO, validation croisée avec 10 groupes \\
+30 & 11.94 & LASSO, validation croisée avec 10 groupes \\
 \bottomrule\noalign{}
 \end{longtable}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
+\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -970,7 +974,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
+\phantomsection\label{ruxe9capitulatif-1}
 \begin{itemize}
 \tightlist
 \item
@@ -987,7 +991,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
+\phantomsection\label{ruxe9capitulatif-2}
 \begin{itemize}
 \tightlist
 \item
@@ -1007,7 +1011,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-3}{}
+\phantomsection\label{ruxe9capitulatif-3}
 Certaines méthodes de pénalisation directe changent la fonction
 objective:
 
@@ -1030,7 +1034,7 @@ exactement nuls,
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-4}{}
+\phantomsection\label{ruxe9capitulatif-4}
 \begin{itemize}
 \tightlist
 \item
@@ -1041,6 +1045,7 @@ exactement nuls,
   pour retenir celui qui donne la meilleure performance.
 \end{itemize}
 \end{frame}
+
 
 
 
