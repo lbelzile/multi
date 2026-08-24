@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Réduction de la dimension – Analyse multidimensionnelle appliquée</title>
+<title>Installer R et RStudio – Analyse multidimensionnelle appliquée</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -29,8 +63,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../contenu/11-contenu.html" rel="next">
-<link href="../contenu/09-contenu.html" rel="prev">
+<link href="../contenu/01-contenu.html" rel="next">
+<link href="../contenu/ressourcesR.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -70,6 +104,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -122,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/ressourcesR.html">Ressources</a></li><li class="breadcrumb-item"><a href="../contenu/installation.html">Installer <strong>R</strong> et RStudio</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -157,7 +220,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/installation.html" class="sidebar-item-text sidebar-link">
+  <a href="../contenu/installation.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Installer <strong>R</strong> et RStudio</span></a>
   </div>
 </li>
@@ -228,7 +291,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link active">
+  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10: Réduction de la dimension</span></a>
   </div>
 </li>
@@ -256,60 +319,151 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table des matières</h2>
    
   <ul>
-  <li><a href="#contenu" id="toc-contenu" class="nav-link active" data-scroll-target="#contenu">Contenu</a></li>
-  <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture">Lecture</a></li>
-  <li><a href="#diapositives" id="toc-diapositives" class="nav-link" data-scroll-target="#diapositives">Diapositives</a></li>
-  <li><a href="#exercices" id="toc-exercices" class="nav-link" data-scroll-target="#exercices">Exercices</a></li>
-  <li><a href="#objectifs-dapprentissage" id="toc-objectifs-dapprentissage" class="nav-link" data-scroll-target="#objectifs-dapprentissage">Objectifs d’apprentissage</a></li>
+  <li><a href="#installer-r" id="toc-installer-r" class="nav-link active" data-scroll-target="#installer-r">Installer <strong>R</strong></a></li>
+  <li><a href="#installation-dune-interface-utilisateur-graphique" id="toc-installation-dune-interface-utilisateur-graphique" class="nav-link" data-scroll-target="#installation-dune-interface-utilisateur-graphique">Installation d’une interface utilisateur graphique</a></li>
+  <li><a href="#installer-tidyverse" id="toc-installer-tidyverse" class="nav-link" data-scroll-target="#installer-tidyverse">Installer <code>tidyverse</code></a></li>
+  <li><a href="#installer-quarto" id="toc-installer-quarto" class="nav-link" data-scroll-target="#installer-quarto">Installer Quarto</a></li>
+  <li><a href="#installer-latex-via-tinytex" id="toc-installer-latex-via-tinytex" class="nav-link" data-scroll-target="#installer-latex-via-tinytex">Installer LaTeX via <code>tinytex</code></a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/ressourcesR.html">Ressources</a></li><li class="breadcrumb-item"><a href="../contenu/installation.html">Installer <strong>R</strong> et RStudio</a></li></ol></nav></header>
 
 <header id="title-block-header">
-<h2 class="title anchored display-7">Réduction de la dimension</h2>
+<h2 class="title anchored display-7">Installer <strong>R</strong> et RStudio</h2>
 
 </header>
 
 
-<section id="contenu" class="level2">
-<h2 class="anchored" data-anchor-id="contenu">Contenu</h2>
-<ul>
-<li>Analyse en composantes principales</li>
-<li>Analyse factorielle exploratoire</li>
-</ul>
+<p>Nous utiliserons le langage de programmation libre-accès <a href="https://cran.r-project.org/"><strong>R</strong></a> et l’environnement de développement intégré <a href="https://www.rstudio.com/">RStudio</a> comme porte d’accès à <strong>R</strong>.</p>
+<section id="installer-r" class="level3">
+<h3 class="anchored" data-anchor-id="installer-r">Installer <strong>R</strong></h3>
+<p>Pour commencer, on installe la <em>dernière</em> version de <strong>R</strong> (la machine qui fait les calculs), actuellement 4.6.1 (Happy Hop).</p>
+<ol type="1">
+<li>Allez sur le site du <em>Comprehensive <strong>R</strong> Archive Network (CRAN)</em>: <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a></li>
+<li>Cliquez sur “Download <strong>R</strong> for <code>XXX</code>”, où <code>XXX</code> est Mac ou Windows:</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/install-r-links.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Si vous utilisez macOS, faites défiler le menu jusqu’au fichier <code>.pkg</code> de la liste correspondant à votre ordinateur et téléchargez-le.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/install-r-mac.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Si vous utilisez Windows, choisissez “base” (ou cliquez sur l’hyperlien en gras “install <strong>R</strong> for the first time”) et téléchargez le programme.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/install-r-windows.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Double cliquez sur le fichier de téléchargement. Approuvez toutes les requêtes, comme pour n’importe quel autre programme.</li>
+</ol>
+<p>4a. Si vous utilisez macOS, <a href="https://www.xquartz.org/">téléchargez et installez XQuartz</a>.</p>
+<p>4b. Si vous utilisez Windows, téléchargez et installez <a href="https://cran.r-project.org/bin/windows/Rtools/"><em>Rtools</em></a></p>
 </section>
-<section id="lecture" class="level2">
-<h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
+<section id="installation-dune-interface-utilisateur-graphique" class="level3">
+<h3 class="anchored" data-anchor-id="installation-dune-interface-utilisateur-graphique">Installation d’une interface utilisateur graphique</h3>
+<p>Une fois <strong>R</strong> installée, nous installerons soit RStudio, soit Positron, pour interagir avec <strong>R</strong>. Positron est un outil en développement, mais offre une interface plus moderne et vous permet d’intégrer Python et <strong>R</strong> directement.</p>
+<ol type="1">
+<li>Naviguez jusqu’à la section de téléchargements gratuits du site de Posit:</li>
+</ol>
 <ul>
-<li><i class="fa-solid fa-book" aria-hidden="true"></i> <a href="https://lbelzile.github.io/math60602/analysefactorielle.html">Chapitre sur la réduction de la dimension</a></li>
+<li>RStudio: <a href="https://docs.posit.co/ide/user/#rstudio-ide-oss-downloads" class="uri">https://docs.posit.co/ide/user/#rstudio-ide-oss-downloads</a></li>
+<li>Positron: <a href="https://positron.posit.co/download.html" class="uri">https://positron.posit.co/download.html</a></li>
 </ul>
+<p>Naviguez vers le tableau et choisissez la version adéquate, pour RStudio</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/posit-rstudio-desktop-install.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>et pour Positron:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/posit-install.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Double-cliquez sur le fichier de téléchargement (potentiellement caché dans votre dossier de Téléchargements). Installez comme n’importe lequel autre logiciel.</li>
+</ol>
 </section>
-<section id="diapositives" class="level2">
-<h2 class="anchored" data-anchor-id="diapositives">Diapositives</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../diapos/MATH60602-diapos10.pdf">Réduction de la dimension</a></li>
-<li><i class="fa-solid fa-code" aria-hidden="true"></i> <a href="../code/MATH60602-diapos10.R">Code</a></li>
-</ul>
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
+<section id="installer-tidyverse" class="level3">
+<h3 class="anchored" data-anchor-id="installer-tidyverse">Installer <code>tidyverse</code></h3>
+<p>Les paquets <strong>R</strong> sont faciles à installer avec l’interface graphique. Sélectionnez le panneau “packages”, cliquez sur “Install,” tapez le nom du paquet que vous voulez installer et appuyer sur la touche Retour.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/install-r-package-panel.png" class="img-fluid figure-img" style="width:40.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Le paquet <a href="https://www.tidyverse.org/"><code>tidyverse</code></a> est une collection d’une douzaine de paquets (incluant <code>ggplot2</code> et <code>dplyr</code>) qui fonctionnent ensemble selon une syntaxe commune. L’installer (ou charger le paquet) inclura automatiquement toutes les dépendances associées</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/install-r-tidyverse.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notez que RStudio génère le code <strong>R</strong> pour l’installation: <code>install.packages("tidyverse")</code>. Vous pourriez utiliser directement cette fonction et faire copier-coller dans la console pour installer les paquets du tidyverse.</p>
 </section>
-<section id="exercices" class="level2">
-<h2 class="anchored" data-anchor-id="exercices">Exercices</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../exercices/05-exercice.html">Exercices 5</a></li>
-</ul>
+<section id="installer-quarto" class="level3">
+<h3 class="anchored" data-anchor-id="installer-quarto">Installer Quarto</h3>
+<p><a href="https://quarto.org/">Quarto</a> est un système de publication de documents sous formats (Word, PDF, html) qui combine un bloc d’instructions définissant les paramètres du document (YAML), de même que des blocs codes (<strong>R</strong>, Python, Julia, …) et des blocs textes (<a href="https://www.markdownguide.org/">Markdown</a>, avec support pour <a href="https://www.latex-project.org/"><span class="math inline">\(\LaTeX\)</span></a> et <a href="https://typst.app/">Typst</a>).</p>
+<p>Quarto est automatiquement installé avec RStudio (depuis 2022) ou Positron. Si vous n’utilisez aucun de ces EDI, vous pous l’installer en visitant le site du projet et en téléchargeant les fichiers d’installation</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="../files/img/install/quarto-download.png" class="img-fluid figure-img" style="width:70.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Une fois l’utilitaire installé, installez le paquet <strong>R</strong> <code>quarto</code> via</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"quarto"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="objectifs-dapprentissage" class="level2">
-<h2 class="anchored" data-anchor-id="objectifs-dapprentissage">Objectifs d’apprentissage</h2>
-<ul>
-<li>Reconnaître les situations où la réduction de la dimension est utile</li>
-<li>Pouvoir déterminer le nombre adéquats de composantes principales ou de facteurs</li>
-<li>Pouvoir lister les avantages et inconvénients des méthodes d’estimation pour l’analyse factorielle</li>
-<li>Pouvoir calculer des échelles et vérifier leur cohérence interne.</li>
-</ul>
+<section id="installer-latex-via-tinytex" class="level3">
+<h3 class="anchored" data-anchor-id="installer-latex-via-tinytex">Installer LaTeX via <code>tinytex</code></h3>
+<p>Quand vous créez un fichier Rmarkdown (.Rmd) ou Quarto (.qmd) pour créer un document reproductible qui inclut calculs et texte et que vous tricotez ce dernier en PDF, <strong>R</strong> utilise le programme de typographie scientifique LaTeX. L’installation la plus aisée pour ce dernier, si votre machine n’a pas déjà de suite LaTeX, est d’installer le paquet <a href="https://yihui.org/tinytex/"><code>tinytex</code></a> pour obtenir une version minimale qui prend moins d’espace.</p>
+<p>Pour installer <strong>tinytex</strong>:</p>
+<ol type="1">
+<li>Utilisez l’onglet Packages dans le panneau RStudio pour installer <code>tinytex</code>, comme n’importe quel autre paquet. Sinon, tapez <code>install.packages("tinytex")</code> dans la console.</li>
+<li>Exécutez <code>tinytex::install_tinytex()</code> dans la console.</li>
+<li>Attendez que le téléchargement soit complété. Vous devriez ensuite être en mesure de tricoter des documents PDF.</li>
+</ol>
 
 
 </section>
@@ -734,13 +888,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../contenu/09-contenu.html" class="pagination-link" aria-label="9: Analyse de survie">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">9: Analyse de survie</span>
+      <a href="../contenu/ressourcesR.html" class="pagination-link" aria-label="Ressources **R**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ressources <strong>R</strong></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../contenu/11-contenu.html" class="pagination-link" aria-label="11: Analyse de regroupements">
-        <span class="nav-page-text">11: Analyse de regroupements</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../contenu/01-contenu.html" class="pagination-link" aria-label="1: Introduction">
+        <span class="nav-page-text">1: Introduction</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

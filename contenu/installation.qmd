@@ -82,9 +82,9 @@ Notez que RStudio  génère le code **R** pour l'installation: `install.packages
 
 ### Installer Quarto
 
-[Quarto](https://quarto.org/) est un système de publication de documents sous formats (Word, PDF, html) qui combine un bloc d'instructions définissant les paramètres du document (YAML), de même que des blocs codes (**R**, Python, Julia, ...) et des blocs textes ([Markdown](https://www.markdownguide.org/), avec support pour [$\LaTeX$](https://www.latex-project.org/)).
+[Quarto](https://quarto.org/) est un système de publication de documents sous formats (Word, PDF, html) qui combine un bloc d'instructions définissant les paramètres du document (YAML), de même que des blocs codes (**R**, Python, Julia, ...) et des blocs textes ([Markdown](https://www.markdownguide.org/), avec support pour [$\LaTeX$](https://www.latex-project.org/) et [Typst](https://typst.app/)).
 
-Vous pouvez installer Quarto en visitant le site du projet, en téléchargeant les fichiers d'installation
+Quarto est automatiquement installé avec RStudio (depuis 2022) ou Positron. Si vous n'utilisez aucun de ces EDI, vous pous l'installer en visitant le site du projet et en téléchargeant les fichiers d'installation
 
 ```{r, echo=FALSE, out.width="70%"}
 include_graphics("../files/img/install/quarto-download.png", error = FALSE)

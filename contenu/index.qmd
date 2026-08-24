@@ -1,6 +1,6 @@
 ---
 title: "Contenu"
-sidebar: false
+sidebar: true
 toc: false
 page-layout: full
 ---
@@ -11,8 +11,25 @@ Cliquez sur les onglets de gauche ou utilisez les hyperliens listés ci-dessous 
 
 - [**Contenu**](/contenu/) ({{< fa book-open-reader >}}): Cette page contient la liste des lectures, activités et enregistrements pour cette semaine.
 - [**Exercices**](/exercices/) ({{< fa laptop-code >}}): Cette page contient des exercices pratiques en **R** avec solutionnaire. Ces derniers vous serviront de pratique en vue de la complétion des devoirs.
-- [**Évaluations**](/evaluations/) ({{< fa pen-ruler >}}): Cette page contient des instructions sur les examens et devoirs.
- 
+- **Évaluations** ({{< fa pen-ruler >}}): Cette page contient des instructions sur les examens et devoirs.
+
+
+Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mises à disposition.
+
+- [Séance 1](01-contenu.qmd)
+- [Séance 2](02-contenu.qmd)
+- [Séance 3](03-contenu.qmd)
+- [Séance 4](04-contenu.qmd)
+- [Séance 5](05-contenu.qmd)
+- [Séance 6](06-contenu.qmd)
+- [Séance 7](07-contenu.qmd)
+- [Séance 8](08-contenu.qmd)
+- [Séance 9](09-contenu.qmd)
+- [Séance 10](10-contenu.qmd)
+- [Séance 11](11-contenu.qmd)
+- [Séance 12](12-contenu.qmd)
+
+<!-- 
 ```{r}
 #| label: build-table
 #| include: false
@@ -35,13 +52,13 @@ schedule <- schedule_raw |>
   #                              glue('&emsp;&emsp;<small>(heure limite {deadline})</small>'),
   #                              "")) |>
   mutate(var_content = ifelse(!is.na(content),
-                              glue('<a href="{content}.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>'),
+                              glue('<a href="../{content}.qmd"><i class="fa-solid fa-book-open-reader fa-lg"></i></a>'),
                               glue('<font color="#e9ecef"><i class="fa-solid fa-book-open-reader fa-lg"></i></font>'))) |>
   mutate(var_exercice = ifelse(!is.na(exercice),
-                              glue('<a href="{exercice}.qmd"><i class="fa-solid fa-laptop-code fa-lg"></i></a>'),
+                              glue('<a href="../{exercice}.qmd"><i class="fa-solid fa-laptop-code fa-lg"></i></a>'),
                               glue('<font color="#e9ecef"><i class="fa-solid fa-laptop-code fa-lg"></i></font>'))) |>
   mutate(var_evaluations = ifelse(!is.na(evaluations),
-                                 glue('<a href="{evaluations}.qmd"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>'),
+                                 glue('<a href="../{evaluations}.qmd"><i class="fa-solid fa-pen-ruler fa-lg"></i></a>'),
                                  glue('<font color="#e9ecef"><i class="fa-solid fa-pen-ruler fa-lg"></i></font>'))) |>
  # mutate(col_date = ifelse(is.na(date_end),
  #                           glue('<strong>{format(date, "%e %B")}</strong>'),
@@ -75,20 +92,23 @@ show_table <- function(group_id) {
     select(-subgroup) |> 
     kbl(escape = FALSE, align = "rlccc", table.attr = 'class="schedule-table"') |> 
     kable_styling() |> 
-    column_spec(1, width = "40%", extra_css = "padding-right: 20px;") |> 
-    column_spec(2:4, width = "15%") |>
-    pack_rows(index = schedule_nested$subgroup_index[[group_id]],
-              label_row_css = "border-bottom: 2px solid #000000;")
+    column_spec(1, width = "40%") |> 
+    column_spec(2:4, width = "10%") #|>
+  # pack_rows(index = schedule_nested$subgroup_index[[group_id]],
+  #            label_row_css = "border-bottom: 1px solid #000000;")
   
   cat(tbl)
 }
 ```
 
-```{r show-table, echo=FALSE, results="asis"}
+```{r}
+#| label: show-table
+#| echo: false
+#| results: 'asis'
 walk(seq(1, nrow(schedule_nested)), ~show_table(.x))
 ```
 
 :::
-
+-->
 
 Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mises à disposition.

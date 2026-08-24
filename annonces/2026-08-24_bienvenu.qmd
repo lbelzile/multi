@@ -1,0 +1,15 @@
+---
+title: "Bienvenue en classe"
+date: "2026-01-05T11:26"
+---
+
+Bienvenue à tous et toutes au cours MATH 60602,
+
+Bonne rentrée! 
+
+Avant la première séance, familiarisez-vous avec le [plan de cours](syllabus.qmd) et le contenu de la séance.
+
+
+ 
+
+Léo

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Réduction de la dimension – Analyse multidimensionnelle appliquée</title>
+<title>Évaluations – Analyse multidimensionnelle appliquée</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../contenu/11-contenu.html" rel="next">
-<link href="../contenu/09-contenu.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -73,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-sidebar floating nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -95,7 +93,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Syllabus</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../contenu/index.html" aria-current="page"> 
+    <a class="nav-link" href="../contenu/index.html"> 
 <span class="menu-text">Contenu</span></a>
   </li>  
   <li class="nav-item">
@@ -117,202 +115,66 @@ ul.task-list li input[type="checkbox"] {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Contenu</span></a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Ressources</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/ressourcesR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Ressources <strong>R</strong></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Installer <strong>R</strong> et RStudio</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Matériel pédagogique</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/01-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1: Introduction</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/02-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2: Programmation <strong>R</strong></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/03-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3: Sélection de variables</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/04-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4: Sélection de variables</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/05-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5: Régression logistique</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/06-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6: Classification</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/07-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7: Régression multinomiale</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/08-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8: Analyse de survie</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/09-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9: Analyse de survie</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">10: Réduction de la dimension</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/11-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">11: Analyse de regroupements</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/12-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">12: Analyse de regroupements</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table des matières</h2>
-   
-  <ul>
-  <li><a href="#contenu" id="toc-contenu" class="nav-link active" data-scroll-target="#contenu">Contenu</a></li>
-  <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture">Lecture</a></li>
-  <li><a href="#diapositives" id="toc-diapositives" class="nav-link" data-scroll-target="#diapositives">Diapositives</a></li>
-  <li><a href="#exercices" id="toc-exercices" class="nav-link" data-scroll-target="#exercices">Exercices</a></li>
-  <li><a href="#objectifs-dapprentissage" id="toc-objectifs-dapprentissage" class="nav-link" data-scroll-target="#objectifs-dapprentissage">Objectifs d’apprentissage</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 <header id="title-block-header">
-<h2 class="title anchored display-7">Réduction de la dimension</h2>
+<h2 class="title anchored display-7">Évaluations</h2>
 
 </header>
 
 
-<section id="contenu" class="level2">
-<h2 class="anchored" data-anchor-id="contenu">Contenu</h2>
-<ul>
-<li>Analyse en composantes principales</li>
-<li>Analyse factorielle exploratoire</li>
-</ul>
-</section>
-<section id="lecture" class="level2">
-<h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
-<ul>
-<li><i class="fa-solid fa-book" aria-hidden="true"></i> <a href="https://lbelzile.github.io/math60602/analysefactorielle.html">Chapitre sur la réduction de la dimension</a></li>
-</ul>
-</section>
-<section id="diapositives" class="level2">
-<h2 class="anchored" data-anchor-id="diapositives">Diapositives</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../diapos/MATH60602-diapos10.pdf">Réduction de la dimension</a></li>
-<li><i class="fa-solid fa-code" aria-hidden="true"></i> <a href="../code/MATH60602-diapos10.R">Code</a></li>
-</ul>
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
-</section>
-<section id="exercices" class="level2">
-<h2 class="anchored" data-anchor-id="exercices">Exercices</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../exercices/05-exercice.html">Exercices 5</a></li>
-</ul>
-</section>
-<section id="objectifs-dapprentissage" class="level2">
-<h2 class="anchored" data-anchor-id="objectifs-dapprentissage">Objectifs d’apprentissage</h2>
-<ul>
-<li>Reconnaître les situations où la réduction de la dimension est utile</li>
-<li>Pouvoir déterminer le nombre adéquats de composantes principales ou de facteurs</li>
-<li>Pouvoir lister les avantages et inconvénients des méthodes d’estimation pour l’analyse factorielle</li>
-<li>Pouvoir calculer des échelles et vérifier leur cohérence interne.</li>
-</ul>
+<p>En plus de l’examen intratrimestriel et de l’examen final, vous aurez deux devoirs à compléter en équipe. Les énoncés seront mis en ligne sur ZoneCours.</p>
+<p>Chaque devoir est noté sur 15 points.</p>
+<p>Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 24%">
+<col style="width: 21%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Clarté</th>
+<th style="text-align: left;">Contenu</th>
+<th style="text-align: left;">Rigueur</th>
+<th style="text-align: left;">Présentation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Énoncés sans jargon, explications claires et enchaînement logique des idées.</td>
+<td style="text-align: left;">Le contenu présenté est succinct et pertinent pour répondre aux questions.</td>
+<td style="text-align: left;">Réponses correctes, réflexion poussée</td>
+<td style="text-align: left;">Pas d’erreur d’orthographe, de grammaire ou de syntaxe. Références bibliographiques adéquates (le cas échéant). Règles de présentation respectées.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Énoncés généralement clairs. Explications majoritairement claires. Justification adéquate des arguments énoncés.</td>
+<td style="text-align: left;">Le contenu est présenté de manière adéquate, mais parfois superflu ou présentant quelques lacunes.</td>
+<td style="text-align: left;">La plupart des réponses sont correctes, réflexion soutenue</td>
+<td style="text-align: left;">Quelques fautes de français au plus. Références bibliographes présentes, mais inadéquatement citées. Organisation de la présentation globalement satisfaisante.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Formulation alambiquée ne répondant que partiellement aux questions.</td>
+<td style="text-align: left;">Le contenu présenté est parfois tangentiel, trop de détails inutiles sont présentés ou plusieurs éléments de réponse sont manquants.</td>
+<td style="text-align: left;">Plusieurs erreurs logiques, réflexion ténue et superficielle</td>
+<td style="text-align: left;">Plusieurs erreurs de français, absence de bibliographie ou de sources. Présentation déficiente non conformes au vade mecum.</td>
+</tr>
+</tbody>
+</table>
+<p>J’assignerai 0% pour un devoir non remis ou visiblement bâclé.</p>
+<p>Tout travail remis hors délai sera pénalisé de 10% par jour de retard.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -732,18 +594,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="../contenu/09-contenu.html" class="pagination-link" aria-label="9: Analyse de survie">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">9: Analyse de survie</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="../contenu/11-contenu.html" class="pagination-link" aria-label="11: Analyse de regroupements">
-        <span class="nav-page-text">11: Analyse de regroupements</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

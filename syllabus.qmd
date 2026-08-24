@@ -90,9 +90,9 @@ Votre note finale sera basée sur les évaluations suivantes
 
 Les devoirs seront à réaliser en équipe de deux à quatre personnes. 
 
-L'utilisation des outils d'IA générative est permise uniquement à des fins de révision orthographique lors des évaluations. Vous n'êtes pas autorisés à l'utiliser pour la rédaction du rapport. Vous devez également être en mesure de 
+L'utilisation des outils d'IA générative est permise uniquement à des fins de révision orthographique lors des évaluations. Vous n'êtes pas autorisés à l'utiliser pour la rédaction du rapport. En cas de doute, vous serez amenés à expliquer oralement votre code ou votre rapport.
 
-L'enseignant se réserve le droit, lors des examens intra et finaux, de valider votre apprentissage des devoirs. Si vous êtes incapables de démontrer une compréhension de 
+
 
 <!--
 **Dates de remise:**
@@ -103,7 +103,7 @@ L'enseignant se réserve le droit, lors des examens intra et finaux, de valider 
 -->
 
 
-Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et seront notés selon le barem suivant:
+Les devoirs sont à remettre au plus tard à 23h55 le jour de la remise et la portion écrite serat notée selon le barem suivant:
 
 <div class="centered-table">
 

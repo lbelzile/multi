@@ -12,7 +12,10 @@ format:
       - html/home/title-block.html
 ---
 
-```{r set-dependencies, include=FALSE}
+```{r}
+#| label: set-dependencies
+#| eval: false
+#| include: false
 withr::with_dir(here::here(), {
   targets::tar_load(project_zips)
   targets::tar_load(xaringan_slides)

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Réduction de la dimension – Analyse multidimensionnelle appliquée</title>
+<title>Ressources R – Analyse multidimensionnelle appliquée</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -29,8 +63,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../contenu/11-contenu.html" rel="next">
-<link href="../contenu/09-contenu.html" rel="prev">
+<link href="../contenu/installation.html" rel="next">
+<link href="../contenu/index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -122,7 +156,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/ressourcesR.html">Ressources</a></li><li class="breadcrumb-item"><a href="../contenu/ressourcesR.html">Ressources <strong>R</strong></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -151,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/ressourcesR.html" class="sidebar-item-text sidebar-link">
+  <a href="../contenu/ressourcesR.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Ressources <strong>R</strong></span></a>
   </div>
 </li>
@@ -228,7 +262,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link active">
+  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">10: Réduction de la dimension</span></a>
   </div>
 </li>
@@ -251,68 +285,44 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table des matières</h2>
-   
-  <ul>
-  <li><a href="#contenu" id="toc-contenu" class="nav-link active" data-scroll-target="#contenu">Contenu</a></li>
-  <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture">Lecture</a></li>
-  <li><a href="#diapositives" id="toc-diapositives" class="nav-link" data-scroll-target="#diapositives">Diapositives</a></li>
-  <li><a href="#exercices" id="toc-exercices" class="nav-link" data-scroll-target="#exercices">Exercices</a></li>
-  <li><a href="#objectifs-dapprentissage" id="toc-objectifs-dapprentissage" class="nav-link" data-scroll-target="#objectifs-dapprentissage">Objectifs d’apprentissage</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/ressourcesR.html">Ressources</a></li><li class="breadcrumb-item"><a href="../contenu/ressourcesR.html">Ressources <strong>R</strong></a></li></ol></nav></header>
 
 <header id="title-block-header">
-<h2 class="title anchored display-7">Réduction de la dimension</h2>
+<h2 class="title anchored display-7">Ressources <strong>R</strong></h2>
 
 </header>
 
 
-<section id="contenu" class="level2">
-<h2 class="anchored" data-anchor-id="contenu">Contenu</h2>
+<p>Il existe plusieurs ressources en ligne pour apprendre <strong>R</strong> et le <code>tidyverse</code>, notamment</p>
 <ul>
-<li>Analyse en composantes principales</li>
-<li>Analyse factorielle exploratoire</li>
+<li><a href="https://cran.r-project.org/other-docs.html">Les ressources didactiques listées sur le CRAN</a> — voir la section <em>French</em></li>
+<li><a href="https://openintrostat.github.io/oilabs-tidy/01_intro_to_r/intro_to_r.html">Introduction to <strong>R</strong> and RStudio</a> par Open Intro Stat</li>
+<li><a href="https://tinystats.github.io/teacups-giraffes-and-statistics/index.html">Teacups, giraffes &amp; statistics</a>: révise les concepts statistiques et les bases de la programmation</li>
+<li>la deuxième édition du livre <a href="https://r4ds.hadley.nz/"><strong>R</strong> for Data Science</a>, qui adhère aux principes du <code>tidyverse</code>.</li>
+<li>la feuille d’aide mémoire de <a href="https://rstudio.github.io/cheatsheets/translations/french/rstudio-ide_fr.pdf">RStudio</a> et celle de <a href="https://rstudio.github.io/cheatsheets/translations/french/data-visualization_fr.pdf"><code>ggplot2</code></a> en français. Les <a href="https://posit.co/resources/cheatsheets/">aides-mémoires pour les paquets</a> sont disponibles depuis le menu Aide dans RStudio.</li>
 </ul>
-</section>
-<section id="lecture" class="level2">
-<h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
-<ul>
-<li><i class="fa-solid fa-book" aria-hidden="true"></i> <a href="https://lbelzile.github.io/math60602/analysefactorielle.html">Chapitre sur la réduction de la dimension</a></li>
-</ul>
-</section>
-<section id="diapositives" class="level2">
-<h2 class="anchored" data-anchor-id="diapositives">Diapositives</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../diapos/MATH60602-diapos10.pdf">Réduction de la dimension</a></li>
-<li><i class="fa-solid fa-code" aria-hidden="true"></i> <a href="../code/MATH60602-diapos10.R">Code</a></li>
-</ul>
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
-</section>
-<section id="exercices" class="level2">
-<h2 class="anchored" data-anchor-id="exercices">Exercices</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../exercices/05-exercice.html">Exercices 5</a></li>
-</ul>
-</section>
-<section id="objectifs-dapprentissage" class="level2">
-<h2 class="anchored" data-anchor-id="objectifs-dapprentissage">Objectifs d’apprentissage</h2>
-<ul>
-<li>Reconnaître les situations où la réduction de la dimension est utile</li>
-<li>Pouvoir déterminer le nombre adéquats de composantes principales ou de facteurs</li>
-<li>Pouvoir lister les avantages et inconvénients des méthodes d’estimation pour l’analyse factorielle</li>
-<li>Pouvoir calculer des échelles et vérifier leur cohérence interne.</li>
-</ul>
+<p>Vous pouvez installer le paquet <code>hecmulti</code>, de même que les paquets employés dans les notes de cours, à l’aide des commandes suivantes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>lib <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"remotes"</span>, <span class="st">"psych"</span>, <span class="st">"glmnet"</span>, <span class="st">"caret"</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">"leaps"</span>, <span class="st">"car"</span>, <span class="st">"glmbb"</span>, <span class="st">"AER"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">"tidyverse"</span>, <span class="st">"nnet"</span>, <span class="st">"mice"</span>, <span class="st">"survminer"</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>     <span class="st">"survival"</span>, <span class="st">"patchwork"</span>, <span class="st">"Hmisc"</span>, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>         <span class="st">"factoextra"</span>, <span class="st">"energy"</span>, <span class="st">"dbscan"</span>, <span class="st">"kcca"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">"fastClust"</span>, <span class="st">"genieclust"</span>, <span class="st">"mclust"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(pack <span class="cf">in</span> lib){</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pack, <span class="at">quietly =</span> <span class="cn">TRUE</span>)){</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(pack)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"lbelzile/hecmulti"</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -734,13 +744,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../contenu/09-contenu.html" class="pagination-link" aria-label="9: Analyse de survie">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">9: Analyse de survie</span>
+      <a href="../contenu/index.html" class="pagination-link" aria-label="Contenu">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Contenu</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../contenu/11-contenu.html" class="pagination-link" aria-label="11: Analyse de regroupements">
-        <span class="nav-page-text">11: Analyse de regroupements</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../contenu/installation.html" class="pagination-link" aria-label="Installer **R** et RStudio">
+        <span class="nav-page-text">Installer <strong>R</strong> et RStudio</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Réduction de la dimension – Analyse multidimensionnelle appliquée</title>
+<title>Analyse exploratoire – Analyse multidimensionnelle appliquée</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../contenu/11-contenu.html" rel="next">
-<link href="../contenu/09-contenu.html" rel="prev">
+<link href="../exercices/01-solution.html" rel="next">
+<link href="../exercices/index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -95,11 +95,11 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Syllabus</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../contenu/index.html" aria-current="page"> 
+    <a class="nav-link" href="../contenu/index.html"> 
 <span class="menu-text">Contenu</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../exercices/index.html"> 
+    <a class="nav-link active" href="../exercices/index.html" aria-current="page"> 
 <span class="menu-text">Exercices</span></a>
   </li>  
   <li class="nav-item">
@@ -122,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercices/01-exercice.html">Analyse exploratoire</a></li><li class="breadcrumb-item"><a href="../exercices/01-exercice.html">Exercice 1</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -136,14 +136,14 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Contenu</span></a>
+  <a href="../exercices/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercices</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Ressources</span></a>
+ <span class="menu-text">Analyse exploratoire</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -151,14 +151,14 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/ressourcesR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Ressources <strong>R</strong></span></a>
+  <a href="../exercices/01-exercice.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Exercice 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Installer <strong>R</strong> et RStudio</span></a>
+  <a href="../exercices/01-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 1</span></a>
   </div>
 </li>
       </ul>
@@ -166,7 +166,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Matériel pédagogique</span></a>
+ <span class="menu-text">Sélection de variables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -174,74 +174,106 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/01-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1: Introduction</span></a>
+  <a href="../exercices/02-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/02-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2: Programmation <strong>R</strong></span></a>
+  <a href="../exercices/02-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 2</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Régression logistique</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/03-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/03-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3: Sélection de variables</span></a>
+  <a href="../exercices/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 3</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyse de survie</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/04-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/04-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4: Sélection de variables</span></a>
+  <a href="../exercices/04-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 4</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyse factorielle</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/05-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/05-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5: Régression logistique</span></a>
+  <a href="../exercices/05-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 5</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyse de regroupements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercices/06-exercice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../contenu/06-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6: Classification</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/07-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7: Régression multinomiale</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/08-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8: Analyse de survie</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/09-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9: Analyse de survie</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/10-contenu.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">10: Réduction de la dimension</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/11-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">11: Analyse de regroupements</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../contenu/12-contenu.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">12: Analyse de regroupements</span></a>
+  <a href="../exercices/06-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solutions 6</span></a>
   </div>
 </li>
       </ul>
@@ -256,60 +288,44 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table des matières</h2>
    
   <ul>
-  <li><a href="#contenu" id="toc-contenu" class="nav-link active" data-scroll-target="#contenu">Contenu</a></li>
-  <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture">Lecture</a></li>
-  <li><a href="#diapositives" id="toc-diapositives" class="nav-link" data-scroll-target="#diapositives">Diapositives</a></li>
-  <li><a href="#exercices" id="toc-exercices" class="nav-link" data-scroll-target="#exercices">Exercices</a></li>
-  <li><a href="#objectifs-dapprentissage" id="toc-objectifs-dapprentissage" class="nav-link" data-scroll-target="#objectifs-dapprentissage">Objectifs d’apprentissage</a></li>
+  <li><a href="#exercice-1.1" id="toc-exercice-1.1" class="nav-link active" data-scroll-target="#exercice-1.1">Exercice 1.1</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../contenu/01-contenu.html">Matériel pédagogique</a></li><li class="breadcrumb-item"><a href="../contenu/10-contenu.html">10: Réduction de la dimension</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header">
-<h2 class="title anchored display-7">Réduction de la dimension</h2>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercices/01-exercice.html">Analyse exploratoire</a></li><li class="breadcrumb-item"><a href="../exercices/01-exercice.html">Exercice 1</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Analyse exploratoire</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
 
 </header>
 
 
-<section id="contenu" class="level2">
-<h2 class="anchored" data-anchor-id="contenu">Contenu</h2>
-<ul>
-<li>Analyse en composantes principales</li>
-<li>Analyse factorielle exploratoire</li>
-</ul>
-</section>
-<section id="lecture" class="level2">
-<h2 class="anchored" data-anchor-id="lecture">Lecture</h2>
-<ul>
-<li><i class="fa-solid fa-book" aria-hidden="true"></i> <a href="https://lbelzile.github.io/math60602/analysefactorielle.html">Chapitre sur la réduction de la dimension</a></li>
-</ul>
-</section>
-<section id="diapositives" class="level2">
-<h2 class="anchored" data-anchor-id="diapositives">Diapositives</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../diapos/MATH60602-diapos10.pdf">Réduction de la dimension</a></li>
-<li><i class="fa-solid fa-code" aria-hidden="true"></i> <a href="../code/MATH60602-diapos10.R">Code</a></li>
-</ul>
-<!--
-<iframe width="600" height="338" src="http://docs.google.com/gview?url=https://lbelzile.github.io/multi/diapos/MATH60602-diapos3.pdf&embedded=true" frameborder="0"></iframe>
--->
-</section>
-<section id="exercices" class="level2">
-<h2 class="anchored" data-anchor-id="exercices">Exercices</h2>
-<ul>
-<li><i class="fa-solid fa-file" aria-hidden="true"></i> <a href="../exercices/05-exercice.html">Exercices 5</a></li>
-</ul>
-</section>
-<section id="objectifs-dapprentissage" class="level2">
-<h2 class="anchored" data-anchor-id="objectifs-dapprentissage">Objectifs d’apprentissage</h2>
-<ul>
-<li>Reconnaître les situations où la réduction de la dimension est utile</li>
-<li>Pouvoir déterminer le nombre adéquats de composantes principales ou de facteurs</li>
-<li>Pouvoir lister les avantages et inconvénients des méthodes d’estimation pour l’analyse factorielle</li>
-<li>Pouvoir calculer des échelles et vérifier leur cohérence interne.</li>
-</ul>
+<section id="exercice-1.1" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-1.1">Exercice 1.1</h2>
+<p>La base de données <code>aerien</code> du paquet <code>hecmulti</code> contient les résultats de sondages pour une compagnie aérienne non identifiée.</p>
+<p>Effectuez une analyse exploratoire des données <code>aerien</code>:</p>
+<ol type="1">
+<li>Formulez des questions en lien avec la description de la base de données préliminaires à l’analyse exploratoire.</li>
+<li>Examinez la base de données; identifiez le type de variable et leur nature.</li>
+<li>Y a-t-il des valeurs manquantes? Si oui, pour quelles variables? Serait-il logique de les imputer par leur moyenne, dans le cas présent?</li>
+<li>Calculez les statistiques descriptives pour les variables continues et produisez des tableaux de fréquence ou de contingence pour les variables catégorielles. Que remarquez-vous?</li>
+<li>Représentez graphiquement la distribution de quelques variables de la base de données selon les différents niveaux de <code>satisfaction</code>.</li>
+<li>Résumez les faits saillants de votre analyse exploratoire en cinq à 10 points.</li>
+</ol>
 
 
 </section>
@@ -734,13 +750,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../contenu/09-contenu.html" class="pagination-link" aria-label="9: Analyse de survie">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">9: Analyse de survie</span>
+      <a href="../exercices/index.html" class="pagination-link" aria-label="Exercices">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Exercices</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../contenu/11-contenu.html" class="pagination-link" aria-label="11: Analyse de regroupements">
-        <span class="nav-page-text">11: Analyse de regroupements</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../exercices/01-solution.html" class="pagination-link" aria-label="Solution 1">
+        <span class="nav-page-text">Solution 1</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

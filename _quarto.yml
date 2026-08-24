@@ -18,6 +18,14 @@ project:
 execute:
   freeze: auto  # Re-render only when source changes
 
+
+#  announcement:
+#    icon: calendar-check
+#    dismissable: true
+#    content: "**Rappel:** la date limite pour remettre le devoir sur ZoneCours est le ...**"
+#    type: danger
+#    position: below-navbar
+
 bibliography: files/bib/math60602.bib
 csl: files/bib/apa.csl
 
@@ -32,6 +40,8 @@ website:
     background: "$aquaf"
     foreground: "$blanc"
     right:
+      - text: "Syllabus"
+        file: syllabus.qmd
       - text: "Contenu"
         file: contenu/index.qmd
       - text: "Exercices"
@@ -124,7 +134,8 @@ website:
              file: exercices/06-exercice.qmd
            - text: "Solutions 6"
              file: exercices/06-solution.qmd
-
+    - title: "Annonces"
+      file: annonces.qmd
   page-footer:
     left: |
       Contenu {{< fa brands creative-commons >}} {{< var course.copyright_year >}} par [{{< var instructor.name_no_title >}}]({{< var instructor.url >}}); canevas du site par [Dr. Andrew Heiss](https://www.andrewheiss.com/) sous [licence MIT](https://mit-license.org/) <br>
