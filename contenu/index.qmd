@@ -5,6 +5,7 @@ toc: false
 page-layout: full
 ---
 
+<!--
 ::: {.schedule-page}
 
 Cliquez sur les onglets de gauche ou utilisez les hyperliens listés ci-dessous pour naviguer vers le contenu et le matériel pédagogique de chaque séance de cours. 
@@ -15,6 +16,8 @@ Cliquez sur les onglets de gauche ou utilisez les hyperliens listés ci-dessous 
 
 
 Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mises à disposition.
+
+-->
 
 - [Séance 1](01-contenu.qmd)
 - [Séance 2](02-contenu.qmd)
@@ -28,6 +31,10 @@ Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressourc
 - [Séance 10](10-contenu.qmd)
 - [Séance 11](11-contenu.qmd)
 - [Séance 12](12-contenu.qmd)
+
+
+Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mis à disposition.
+
 
 <!-- 
 ```{r}
@@ -110,5 +117,3 @@ walk(seq(1, nrow(schedule_nested)), ~show_table(.x))
 
 :::
 -->
-
-Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressources **R**](ressourcesR.qmd) sont également mises à disposition.
