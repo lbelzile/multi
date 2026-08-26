@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lbelzile.github.io/multi/syllabus.html</loc>
-    <lastmod>2026-08-24T22:12:25.269Z</lastmod>
+    <lastmod>2026-08-26T21:57:10.353Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/exercices/installation.html</loc>
@@ -69,16 +69,12 @@
     <lastmod>2026-08-20T18:22:20.656Z</lastmod>
   </url>
   <url>
-    <loc>https://lbelzile.github.io/multi/annonces/2026-08-24_bienvenu.html</loc>
-    <lastmod>2026-08-24T22:01:00.934Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lbelzile.github.io/multi/annonces.html</loc>
-    <lastmod>2026-08-24T19:28:04.494Z</lastmod>
+    <loc>https://lbelzile.github.io/multi/contenu/01-activite.html</loc>
+    <lastmod>2026-08-26T21:47:12.083Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/01-contenu.html</loc>
-    <lastmod>2026-08-26T21:45:46.827Z</lastmod>
+    <lastmod>2026-08-26T21:47:12.084Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/03-contenu.html</loc>
@@ -102,7 +98,7 @@
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/index.html</loc>
-    <lastmod>2026-08-25T02:13:59.234Z</lastmod>
+    <lastmod>2026-08-26T21:47:12.033Z</lastmod>
   </url>
   <url>
     <loc>https://lbelzile.github.io/multi/contenu/ressourcesR.html</loc>
@@ -143,9 +139,5 @@
   <url>
     <loc>https://lbelzile.github.io/multi/index.html</loc>
     <lastmod>2026-08-24T18:14:11.804Z</lastmod>
-  </url>
-  <url>
-    <loc>https://lbelzile.github.io/multi/contenu/01-activite.html</loc>
-    <lastmod>2026-08-26T19:15:40.038Z</lastmod>
   </url>
 </urlset>

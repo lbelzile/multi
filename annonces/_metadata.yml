@@ -1,9 +1,0 @@
-date-format: "dddd MMMM D, YYYY [à] h:mm A"
-
-language:
-  title-block-published: "Publié le"
-lang: fr 
-format:
-  html:
-    template-partials:
-      - ../html/news/title-block.html

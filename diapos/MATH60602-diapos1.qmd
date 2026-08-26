@@ -447,7 +447,7 @@ Pour aller plus loin:
 - [Chapitre 1 *Data Visalization* de _**R** for Data Science_ (2e edition) par Hadley Wickham, Mine Çetinkaya-Rundel et Garrett Grolemund](https://r4ds.hadley.nz/)
 
 
-# Étude de cas: IATA
+# Étude de cas
 
 L'[Association du transport aérien international (IATA)](https://www.iata.org/en/about/) est une regroupement de compagnies aériennes commerciales de passagers dont le siège social est situé à Montréal.
 

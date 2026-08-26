@@ -31,10 +31,10 @@ library(pander)
 
 ### Horaire des cours
 
-Les deux sections s'offrent dans la salle [Fonds Cogeco](https://www.hec.ca/campus/edifice-lise-et-giuseppe-racanelli/plan-1er-etage) (édifice Lise-et-Giuseppe-Racanelli sur Côte-Sainte-Catherine, secteur bleu).
+Les deux sections s'offrent à l'édifice Lise-et-Giuseppe-Racanelli sur Côte-Sainte-Catherine
 
-- Section J01: les jeudi à 12h00 
-- Section S01: les mercredi à 18h45
+- Section J01: les jeudi à 12h00 dans la salle [Fonds Cogeco](https://www.hec.ca/campus/edifice-lise-et-giuseppe-racanelli/plan-1er-etage), secteur bleu
+- Section S01: les mercredi à 18h45 dans la salle Accra (secteur jaune), sauf la séance du 23 septembre qui se déroulera à l'édifice Decelles, salle Matane (4e étage, secteur sud)
 
 Selon le règlement de l'École, la présence de l'étudiant aux activités du cours est présumée. Ainsi, l'enseignant n'est pas tenu de fournir de l'aide ou d'adapter le cours ou son évaluation en raison d'une absence.
 
