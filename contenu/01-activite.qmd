@@ -1,0 +1,54 @@
+---
+title: "Activité 1 - analyse exploratoire"
+format: html
+editor: visual
+---
+
+L'analyse exploratoire est essentielle pour faire des vérifications d'usage lors d'une analyse de données, s'assurer que ces dernières sont conformes à nos attentes, vérifier la présence de valeurs aberrantes, etc. et établir une stratégie pour l'analyse et la modélisation. Se renseigner sur la nature des données et l'échantillonnage est essentiel pour choisir des modèles adéquats.
+
+[Téléchargez les données](../files/data/MarathonBerlin2022.csv)
+
+## Marathon de Berlin
+
+Les données que nous analyserons ensemble sont les résultats du marathon de Berlin en 2022, épreuve officielle du *World Marathon Majors* et durant lequel le coureur  Eliud Kipchoge bas son propre record du monde en complétant le parcours en 2 heures, 1 minute et 9 secondes.
+
+Les données incluent les variables (en colonne) suivantes:
+
+- `position`: rang absolu
+- `position_gender`: rang par sexe
+- `country`: code à trois lettre pour indiquer la nationalité de l'athlète
+- `sex`: variable catégorielle, `M` pour homme et `F` pour femme
+- `division`: numéro de la divison
+- `bib`: numéro bib d'identifiant du participant
+- `starttime`: temps de départ au format HH:MM:SS de la vague
+- `start_raw_time`: temps de départ (chronomètre)
+- `half`: temps à mi-parcours (HH:MM:SS)
+- `5k`: temps à 5km du départ (HH:MM:SS)
+- `10k`: temps à 10km du départ (HH:MM:SS)
+- `15k`: temps à 15km du départ (HH:MM:SS)
+- `20k`: temps à 20km du départ (HH:MM:SS)
+- `25k`: temps à 25km du départ (HH:MM:SS)
+- `30k`: temps à 30km du départ (HH:MM:SS)
+- `35k`: temps à 35km du départ (HH:MM:SS)
+- `40k`: temps à 40km du départ (HH:MM:SS)
+- `grosstime`: temps brut de fin du parcours
+- `nettime`: temps net (calculé à partir du chronomètre)
+- `category`: catégorie (sexe et tranche d'âge)
+
+
+## Questions initiales
+
+Voici quelques questions pour démarrer votre analyse exploratoire
+
+- Est-ce qu'il y a des données manquantes? Si oui, décrivez sous quelle forme et le mécanisme en cause.
+- Est-ce que les participant(e)s des différentes vagues sont alloués aléatoirement à ces dernières?
+- Qu'est-ce qui est pris en compte pour le classement, le temps brut ou net?
+- Échantillonnage: quelles sont les conditions pour inclusion dans la base de données (temps maximaux à la ligne d'arrivée et à mi-temps, heure maximale) et pour courir le marathon en premier lieu?
+- Qu'est-ce qui distingue les champions des personnes ordinaires?
+- Quels sont les temps attendus dans les différentes catégories (entre sexe et pour les différentes tranches d'âge).
+- Est-ce que le classement des 10 plus rapides est demeuré constant au fil de la course?
+- Comment évolue la vitesse moyenne durant la course des coureurs d'élite (versus les autres)?
+
+## Remerciements
+
+Les données proviennent de Marcel Caraciolo [via Github](https://github.com/corriporai/runpandas-data/blob/master/races/berlin_marathon/berlin_marathon_2022.csv)

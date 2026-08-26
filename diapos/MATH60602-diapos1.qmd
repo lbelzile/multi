@@ -20,21 +20,6 @@ include-in-header:
         \usepackage{tabu}
 ---
 
-# Analyse de données
-
-
-```{r, out.width='100%', fig.cap="Allison Horst (CC BY 4.0)"}
-knitr::include_graphics("figures/tidydata_5.jpg")
-knitr::opts_chunk$set(
-                      fig.width = 6,  # generated images
-                      fig.pos = "t", 
-                      fig.retina = 2,
-                      fig.align = "center",
-                      out.width = "100%",
-                      dev = "png",
-                      dpi = 200)
-```
-
 # Organisation du travail
 
 ```{r}
@@ -76,7 +61,16 @@ knitr::include_graphics("figures/guardian-covid-excel.png")
 ```
 
 
-# Données en format "tidy"
+# Types de données
+
+Certains types de données méritent une attention particulière
+
+- Séries chronologiques ou longitudinales: corrélation
+- Données de sondage: pondération
+- Données de survie: information incomplète
+
+
+# Données en format "propre"
 
 - variables en colonnes
 - observations en lignes
@@ -88,26 +82,41 @@ knitr::include_graphics("figures/tidydata_1.jpg")
 
 # Exemple
 
-Est-ce que ces données de la Régie de l'Énergie sont en format 'tidy'?
+Quel est le format de ces données de la Régie de l'Énergie?
 
 ```{r, out.width='100%'}
 knitr::include_graphics("figures/regie-energie.png")
 ```
 
 
-# Types de variables numériques
+# Types de variables
 
-```{r, out.width='80%', fig.cap="Allison Horst (CC BY 4.0)"}
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+```{r}
+#| out-width: '100%'
 knitr::include_graphics("figures/continuous_discrete.png")
 ```
 
-# Types de variables catégorielles
+:::
 
-```{r, out.width='80%', fig.cap="Allison Horst (CC BY 4.0)"}
+
+
+::: {.column width="60%"}
+
+```{r}
+#| out-width: '100%'
+#| label: fig-variables
+#| fig-cap: "Allison Horst (CC BY 4.0)"
 knitr::include_graphics("figures/nominal_ordinal_binary.png")
 ```
 
+:::
 
+::::
 
 
 # Validation des données
@@ -122,6 +131,7 @@ Vérifier la présence de
 
 # Visualisation
 
+## Quel est l'avantage des graphiques? 
 
 > *Un simple graphique transmet plus d'information à l'analyste que n'importe quel autre option* 
 
@@ -138,7 +148,25 @@ Vérifier la présence de
 ::::
 
 
-# Qu'est ce qu'un bon graphique?
+## Pourquoi créer des graphiques?
+
+> *Les résumés numériques focalisent l'attention sur les valeurs attendues, les résumés graphiques sur les valeurs inattendues.* 
+
+:::: {.columns}
+
+::: {.column width="80%"}
+
+:::
+  
+::: {.column width="20%"}
+John Tukey
+:::
+
+::::
+
+# Choix graphiques
+
+## Qu'est ce qu'un bon graphique?
 
 > *communique des idées complexes avec clarté, précision et efficacité ... le graphique qui offre au lecteur le plus grand nombre d'idées le plus rapidement possible avec le moins d'encre et le plus petit espace possible*  
 
@@ -194,11 +222,36 @@ Pour une visualisation effective:
 2. soignez les apparences
 3. portez une attention particulière à la perception visuelle humaine
 
-# Règle 1: choix de graphiques avec une seule variable 
+# Règle 1: choix de graphiques
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Avec une variable:
+
 
 - continue: histogramme, densité
 - discrète: diagramme en bâton
 - catégorielle: diagramme en bâton (fréquence ou pourcentage)
+
+:::
+
+
+
+::: {.column width="50%"}
+
+Avec deux variables
+
+- continues: nuage de points
+- catégorielles: diagramme à bande (avec couleurs), carte thermique
+- continue $\times$ catégorielle: boîte à moustache, graphique violon
+
+
+:::
+
+::::
 
 ---
 
@@ -245,15 +298,13 @@ renfe |>
    theme_minimal()
 ```
 
+# Boîte à moustaches {.small}
 
-# Règle 1: choix de graphiques avec deux variables
+La boîte donne 
 
-- continues: nuage de points
-- catégorielles: diagramme à bande (avec couleurs), carte thermique
-- continue $\times$ catégorielle: boîte à moustache, graphique violon
-
-# Boîte à moustaches
-
+- les quartiles $q_1, q_2, q_3$ (50% des données dans la boîte),
+- les moustaches à 1.5 fois l'écart interquartile $q_3-q_1$,
+- les valeurs des observations au delà des moustaches.
 
 ```{r, out.width='100%'}
 knitr::include_graphics("figures/01-intro-boiteamoustache.png")
@@ -321,8 +372,7 @@ renfe |> subset(type != "REXPRESS") |>
 
 Certaines visualisations sont plus effectives/adéquates que d'autres
 
-
-- votre graphique doit être interprétable uniquement avec la légende.
+- votre graphique doit être interprétable uniquement avec la légende
 - inclure les noms de variables **et** les unités
 - ajouter une description dans le texte et faire une référence croisée
 
@@ -336,15 +386,15 @@ Certaines visualisations sont plus effectives/adéquates que d'autres
 
 # Règle 3: perception visuelle humaine
 
-+ ratio longueur/largeur
-+ taille de police suffisante pour lisibilité
++ attention au ratio longueur/largeur
++ le texte doit être lisible (taille de la police)
 + espace entre bandes
-+ étendu des axes (incluant ou pas zéro)
++ étendu des axes (inclure ou pas zéro)
 + choix de couleurs 
    - noir/blanc avec contraste
    - palettes pour daltoniens
 + comparaison d'aires/superficies (difficile)
-+ graphiques 3D / avec rotation superflue à éviter
++ graphiques 3D / avec rotation superflue à proscrire
 
 # Problèmes de perceptions
 
@@ -370,21 +420,6 @@ cowplot::ggdraw() +
 
 (Source [Achim Zeileis](https://www.zeileis.org/news/dorian_rainbow/))
 
-# Pourquoi créer des graphiques?
-
-> *Les résumés numériques focalisent l'attention sur les valeurs attendues, les résumés graphiques sur les valeurs inattendues.* 
-
-:::: {.columns}
-
-::: {.column width="80%"}
-
-:::
-  
-::: {.column width="20%"}
-John Tukey
-:::
-
-::::
 
 
 
@@ -403,17 +438,105 @@ John Tukey
 Écrire un résumé des trouvailles et des aspects **importants** uniquement.
 
 
-
-
-
 # Références complémentaires
 
 Pour aller plus loin: 
 
 - [Chapitre 1 de *Data Visualization: A practical introduction* par Kieran Healy](https://socviz.co/lookatdata.html#lookatdata)
 - [*Fundamentals of Data Visualization* par Claus O. Wilke](https://serialmentor.com/dataviz/)
-- [Chapitre 3 de _**R** for Data Science_ par Garrett Grolemund et Hadley Wickham](https://r4ds.had.co.nz/)
+- [Chapitre 1 *Data Visalization* de _**R** for Data Science_ (2e edition) par Hadley Wickham, Mine Çetinkaya-Rundel et Garrett Grolemund](https://r4ds.hadley.nz/)
+
+
+# Étude de cas: IATA
+
+L'[Association du transport aérien international (IATA)](https://www.iata.org/en/about/) est une regroupement de compagnies aériennes commerciales de passagers dont le siège social est situé à Montréal.
+
+Parmi leurs programmes, un vise à prédire la turbulence atmosphérique claire, une cause importante de coûts en raison de 
+
+- blessures lors de vol
+- consommation plus importante de carburant (déviation de trajectoire)
+- usure accrue des avions
+
+# Mesurer la turbulence
+
+Depuis une dizaine d'années, les avions sont dotés de senseurs qui permettent de mesurer l'intensité de la turbulence atmosphérique mesurée via le taux de dissipation des tourbillons, ou EDR (unités de mesure en $\mathrm{m}^{2/3}/\mathrm{s}$). 
+
+Les mesures sont basées sur un algorithme développé par le centre national de recherche atmosphérique (NCAR) décrit dans [ce rapport technique](https://opensky.ucar.edu/system/files/2024-08/technotes_580.pdf).
+
+# Plateforme *IATA Turbulence Aware*
+
+Depuis 2018, l'IATA a développé une [plateforme](https://www.iata.org/en/services/data/safety/turbulence-platform/) pour traquer en temps réel les zones de turbulence d'air propre, une des principales causes de blessures dans les avions.
+
+```{r}
+#| label: fig-iata
+#| fig-align: 'center'
+#| fig-cap: "Capture d'écran de l'interface du gadget Turbulence Aware (©IATA)"
+knitr::include_graphics("../files/img/IATA_turbulence.png")
+
+```
+
+# Données 
+
+Les avions mesurent toutes les minutes la moyenne et le maximum d'EDR, ainsi que
+
+- l'heure,
+- l'identifiant du vol,
+- la température, 
+- la direction et la force des vents,
+- la localisation 3D (longitude, latitude, altitude)
+
+Transmettre et stocker toutes ces données est coûteux, et la plupart des mesures d'EDR sont faibles ou nulles.
+
+# Échantillonnage préférentiel
+
+Les avions sauvegardent durant le vol les données à des intervalles réguliers (battement) de 15 ou 20 minutes, et pendant les périodes de turbulence
+
+- type 1: si le maximum dépasse $0.18\mathrm{m}^{2/3}/\mathrm{s}$ à temps $t$, les valeurs chaque minute entre $t-5$ minutes et $t+6$ minutes (12 mesures).
+- type 2: si le maximum dépasse $0.12\mathrm{m}^{2/3}/\mathrm{s}$ pour trois des six dernières minutes, les valeurs chaque minute entre $t-5$ minutes et $t+6$ minutes (12 mesures).
+- type 3: si la moyenne dépasse $0.06\mathrm{m}^{2/3}/\mathrm{s}$ pour quatre minutes des six dernières, on enregistre $t-5, \ldots, t$ (6 mesures)
+
+# Point de discussion
+
+- Comment l'échantillonnage (complexe) affecte les rapports?
+- Les aéroports (départ et arrivée) ne sont pas répartis uniformément sur le globe: comment ça peut affecter les résultats?
+
+# Données manquantes et incohérences:
+
+ Certaines mesures ne sont pas à des intervalles réguliers: exemple d'un avion à
+
+1:32, 1:34, 1:35, 1:36, 1:37, 1:45, 2:00, 2:08, 2:09, 2:11, 2:12, 2:13, 2:15, 2:45...
+
+Pouvez-vous deviner la fréquence des battements?
+
+# Données manquantes et valeurs aberrantes
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+Certaines valeurs de covariables (température) sont implausibles.
 
 
 
+Des valeurs manquantes de température sont exactement zéro (à de plus hautes altitudes).
 
+:::
+
+
+
+::: {.column width="60%"}
+```{r}
+knitr::include_graphics("figures/turbulence_temp_altitude.png")
+```
+
+:::
+
+::::
+
+
+# Résumé des sujets de la séance
+
+- Format des base de données
+- Types de variables (numériques, catégorielles) et nature des données
+- Première étape: nettoyage, validation des données et analyse exploratoire
+- Utilisation judicieuse de graphiques dans les rapports

@@ -34,7 +34,7 @@ Idéalement, je vous encourage à lire les notes de cours avant de venir en clas
 
 ## Activités
 
-Analyse exploratoire des données de marathon de Berlin
+- [Analyse exploratoire des données de marathon de Berlin](01-activite.qmd)
 
 <!-- 
 
@@ -51,13 +51,13 @@ Analyse exploratoire des données de marathon de Berlin
 ## Objectifs d'apprentissage
 
 - Réaliser une analyse exploratoire et formuler des questions en lien avec une base de données.
-- Décomposer un graphique en éléments et déterminer la représentation adéquate pour une question donnée.
+- Choisir adéquatement des graphiques pour répondre à une question et étayer un argument.
 
 
 
 ## Ressources complémentaires
 
-- [Chapitre 7 de **R for Data Science** par Garrett Grolemund et Hadley Wickham](https://r4ds.had.co.nz/exploratory-data-analysis.html)
+- [**R for Data Science** (2e) par Hadley Wickham, Mine Çetinkaya-Rundel et Garrett Grolemund](https://r4ds.hadley.nz/)
 - [Chapitre 1 de *Data Visualization: A practical introduction* par Kieran Healy](https://socviz.co/01-look-at-data.html)
 
 <!--

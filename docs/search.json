@@ -717,7 +717,7 @@
     "href": "contenu/01-contenu.html#activités",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Activités",
-    "text": "Activités\nAnalyse exploratoire des données de marathon de Berlin",
+    "text": "Activités\n\nAnalyse exploratoire des données de marathon de Berlin",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",
@@ -729,7 +729,7 @@
     "href": "contenu/01-contenu.html#objectifs-dapprentissage",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Objectifs d’apprentissage",
-    "text": "Objectifs d’apprentissage\n\nRéaliser une analyse exploratoire et formuler des questions en lien avec une base de données.\nDécomposer un graphique en éléments et déterminer la représentation adéquate pour une question donnée.",
+    "text": "Objectifs d’apprentissage\n\nRéaliser une analyse exploratoire et formuler des questions en lien avec une base de données.\nChoisir adéquatement des graphiques pour répondre à une question et étayer un argument.",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",
@@ -741,7 +741,7 @@
     "href": "contenu/01-contenu.html#ressources-complémentaires",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Ressources complémentaires",
-    "text": "Ressources complémentaires\n\nChapitre 7 de R for Data Science par Garrett Grolemund et Hadley Wickham\nChapitre 1 de Data Visualization: A practical introduction par Kieran Healy",
+    "text": "Ressources complémentaires\n\nR for Data Science (2e) par Hadley Wickham, Mine Çetinkaya-Rundel et Garrett Grolemund\nChapitre 1 de Data Visualization: A practical introduction par Kieran Healy",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",
@@ -1249,5 +1249,40 @@
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
     "text": "Analyse multidimensionnelle appliquée\n        \n        \n            Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l’aide de logiciels appropriés.\n        \n        \n            MATH 60602HEC Montréal"
+  },
+  {
+    "objectID": "contenu/01-activite.html",
+    "href": "contenu/01-activite.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "L’analyse exploratoire est essentielle pour faire des vérifications d’usage lors d’une analyse de données, s’assurer que ces dernières sont conformes à nos attentes, vérifier la présence de valeurs aberrantes, etc. et établir une stratégie pour l’analyse et la modélisation. Se renseigner sur la nature des données et l’échantillonnage est essentiel pour choisir des modèles adéquats.\nTéléchargez les données"
+  },
+  {
+    "objectID": "contenu/01-activite.html#marathon-de-berlin",
+    "href": "contenu/01-activite.html#marathon-de-berlin",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Marathon de Berlin",
+    "text": "Marathon de Berlin\nLes données que nous analyserons ensemble sont les résultats du marathon de Berlin en 2022, épreuve officielle du World Marathon Majors et durant lequel le coureur Eliud Kipchoge bas son propre record du monde en complétant le parcours en 2 heures, 1 minute et 9 secondes.\nLes données incluent les variables (en colonne) suivantes:\n\nposition: rang absolu\nposition_gender: rang par sexe\ncountry: code à trois lettre pour indiquer la nationalité de l’athlète\nsex: variable catégorielle, M pour homme et F pour femme\ndivision: numéro de la divison\nbib: numéro bib d’identifiant du participant\nstarttime: temps de départ au format HH:MM:SS de la vague\nstart_raw_time: temps de départ (chronomètre)\nhalf: temps à mi-parcours (HH:MM:SS)\n5k: temps à 5km du départ (HH:MM:SS)\n10k: temps à 10km du départ (HH:MM:SS)\n15k: temps à 15km du départ (HH:MM:SS)\n20k: temps à 20km du départ (HH:MM:SS)\n25k: temps à 25km du départ (HH:MM:SS)\n30k: temps à 30km du départ (HH:MM:SS)\n35k: temps à 35km du départ (HH:MM:SS)\n40k: temps à 40km du départ (HH:MM:SS)\ngrosstime: temps brut de fin du parcours\nnettime: temps net (calculé à partir du chronomètre)\ncategory: catégorie (sexe et tranche d’âge)"
+  },
+  {
+    "objectID": "contenu/01-activite.html#section",
+    "href": "contenu/01-activite.html#section",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Voici quelques questions pour démarrer votre analyse exploratoire\n\nEst-ce qu’il y a des données manquantes? Si oui, décrivez sous quelle forme et le mécanisme en cause.\nEst-ce que les participant(e)s des différentes vagues sont alloués aléatoirement à ces dernières?\nQu’est-ce qui est pris en compte pour le classement, le temps brut ou net?\nÉchantillonnage: quelles sont les conditions pour inclusion dans la base de données (temps maximaux à la ligne d’arrivée et à mi-temps, heure maximale) et pour courir le marathon en premier lieu?\nQu’est-ce qui distingue les champions des personnes ordinaires?\nQuels sont les temps attendus dans les différentes catégories (entre sexe et pour les différentes tranches d’âge).\nEst-ce que le classement des 10 plus rapides est demeuré constant au fil de la course?\nComment évolue la vitesse moyenne durant la course des coureurs d’élite (versus les autres)?"
+  },
+  {
+    "objectID": "contenu/01-activite.html#remerciements",
+    "href": "contenu/01-activite.html#remerciements",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Remerciements",
+    "text": "Remerciements\nLes données proviennent de Marcel Caraciolo via Github"
+  },
+  {
+    "objectID": "contenu/01-activite.html#questions-initiales",
+    "href": "contenu/01-activite.html#questions-initiales",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Questions initiales",
+    "text": "Questions initiales\nVoici quelques questions pour démarrer votre analyse exploratoire\n\nEst-ce qu’il y a des données manquantes? Si oui, décrivez sous quelle forme et le mécanisme en cause.\nEst-ce que les participant(e)s des différentes vagues sont alloués aléatoirement à ces dernières?\nQu’est-ce qui est pris en compte pour le classement, le temps brut ou net?\nÉchantillonnage: quelles sont les conditions pour inclusion dans la base de données (temps maximaux à la ligne d’arrivée et à mi-temps, heure maximale) et pour courir le marathon en premier lieu?\nQu’est-ce qui distingue les champions des personnes ordinaires?\nQuels sont les temps attendus dans les différentes catégories (entre sexe et pour les différentes tranches d’âge).\nEst-ce que le classement des 10 plus rapides est demeuré constant au fil de la course?\nComment évolue la vitesse moyenne durant la course des coureurs d’élite (versus les autres)?"
   }
 ]
