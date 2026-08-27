@@ -13,6 +13,8 @@ project:
     - "diapos/libs/"
     - "diapos/css/"
     - "diapos/*_files/"
+    - "diapos/hecmontreal.scss"
+    - "diapos/partials"
 
 # See https://quarto.org/docs/projects/code-execution.html#freeze
 execute:
