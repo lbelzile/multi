@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,300;0,400;0,600;0,900;1,300;1,400;1,600;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
+
+body, h1, h2, h3 {
+  font-family: 'Fira Sans Condensed', sans;
+}
+
+h1, h2, h3 {
+  font-weight: 500;
+}
+
+.remark-code, .remark-inline-code {
+  font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+}
+
+$presentation-title-slide-text-align: center;
+
+$presentation-h1-font-size: 1.4em;
+$presentation-h2-font-size: 1.2em;
+
+
+/* HEC color palette */
+$noir:  #000000 !default;
+$blanc:  #FFFFFF !default;
+$indigo:  #002855 !default;
+$grisf: #888b8d !default;
+$grisp: #d9d9d6 !default;
+$bleuf: #0072ce !default;
+$bleup: #92c1e9 !default;
+$aquaf: #00aec7 !default;
+$aquap: #88dbdf !default;
+$vertf: #26d07c !default;
+$vertp: #8fe2b0 !default;
+$rougef:  #ff585d !default;
+$rougep:  #ffb1bb !default;
+$rosef: #eb6fbd !default;
+$rosep: #eab8e4 !default;
+$jaunef: #f3d03e !default;
+$jaunep: #f2f0a1 !default;
+
+$font-size-base:              1rem !default;
+$headings-font-weight:        900 !default;
+$font-weight: bold;
+
+/*-- scss:rules --*/
+
+.box h1, h2 {
+  background-color: $rougef;
+  color: #ffffff !important;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.white h1 {
+  color: #ffffff !important;
+}
+
+.middle h2 {
+  text-align: center !important;
+}
+
+
+#title-slide {
+  .title, .subtitle {
+    opacity: 0.90;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: 700;
+    color: $blanc !important;
+   text-align: center;
+  }
+  .title {
+    font-size: 2.5em;
+  }
+
+  .subtitle {
+    font-size: 1.5em;
+  }
+  
+  .institute, .quarto-title-author, .quarto-author, .quarto-title, .date {
+    opacity: 0.50;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: 500;
+    font-size: 1.2em;
+    color: $blanc !important;
+    text-color: $blanc !important;
+    text-align: center;
+  }
+  
+  
+.center-x, .title-slide h1 {
+  text-align: center;
+ }
+}

@@ -10,7 +10,7 @@ L'analyse exploratoire est essentielle pour faire des vérifications d'usage lor
 
 ## Marathon de Berlin
 
-Les données que nous analyserons ensemble sont les résultats du marathon de Berlin en 2022, épreuve officielle du *World Marathon Majors* et durant lequel le coureur  Eliud Kipchoge bas son propre record du monde en complétant le parcours en 2 heures, 1 minute et 9 secondes.
+Les données que nous analyserons ensemble sont les résultats du marathon de Berlin en 2022, épreuve officielle du *World Marathon Majors* et durant lequel le coureur Eliud Kipchoge bas son propre record du monde en complétant le parcours en 2 heures, 1 minute et 9 secondes.
 
 Les données incluent les variables (en colonne) suivantes:
 
@@ -35,7 +35,6 @@ Les données incluent les variables (en colonne) suivantes:
 - `nettime`: temps net (calculé à partir du chronomètre)
 - `category`: catégorie (sexe et tranche d'âge)
 
-
 ## Questions initiales
 
 Voici quelques questions pour démarrer votre analyse exploratoire
@@ -48,6 +47,25 @@ Voici quelques questions pour démarrer votre analyse exploratoire
 - Quels sont les temps attendus dans les différentes catégories (entre sexe et pour les différentes tranches d'âge).
 - Est-ce que le classement des 10 plus rapides est demeuré constant au fil de la course?
 - Comment évolue la vitesse moyenne durant la course des coureurs d'élite (versus les autres)?
+- Quels sont les prérequis pour participer au marathon? Le site web mentionne le tirage au sort, des billets donnés à des organismes de charité, des tours opérateurs.
+
+## Conclusions du groupe 1
+
+1.  Pourquoi le nombre de position n'est pas égal au nombre d'observations? Réponse: il y a 727 abandons.
+2.  Est-ce que les codes `bib` correspondent uniquement à des femmes (`f`)? Réponse: il y a 202 codes qui commencent par `f`, tous associés à des participantes (mais une minorité d'entre elles, car elles représentent le tiers des inscriptions).
+3.  À quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3?
+4.  Est-ce que les personnes de sexe inconnu ou non-déclaré figurent au classement `position_gender`?
+5.  
+
+# Résumé
+
+- Tous les inscrits n'ont pas pris part à la compétition (certains temps manquants, soit pour absence au départ, abandon ou disqualification (absence de départ, abandon ou disqualification).
+
+- Certains temps intermédiaires sont manquants (même si la personne a complété la course et que le temps final est connu).
+
+- Sept personnes n'ont pas déclaré de sexe (valeur manquante) et donc ne sont pas dans une catégorie (sexe et âge, avec les lettres `W` et `M` pour les catégories féminin/masculin et des groupes d'âge de junior (`JU20` pour les juniors entre 18 et 29, `H` pour les seniors de plus de 80).
+
+Le temps de départ effectif est `starttime`, et le temps réel de complétion est `nettime`. La variable `start_raw_time` correspond au temps de départ des quatre vagues (9h15, 9h35, ...) — on pourrait transformer cette variable en variable catégorielle.
 
 ## Remerciements
 
