@@ -1,0 +1,274 @@
+\ProvidesPackage{HECbeamer}
+\usetheme[
+	bullet=circle,		% Other option: square
+% 	bigpagenumber,		% circled page number on lower right
+	topline=true,			% colored bar at the top of the frame 
+	shadow=false,			% Shading for beamer blocks
+	]{Flip}
+	
+
+
+%% Default font: lmodern, doesn't require fontspec % solves some default warnings
+\usepackage{lmodern}			
+\usepackage{sfmath}	
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+%   \usepackage{unicode-math}
+  \usepackage[no-math]{fontspec}		
+\defaultfontfeatures{Mapping=tex-text}	
+\setmainfont{D-DIN}		
+\setsansfont{D-DIN}		
+\setbeamerfont{title}{family=\fontspec{D-DIN}}
+% \newcommand{\handwriting}{\fontspec{augie}} 
+\newcommand{\forbold}{\fontspec{D-DIN}}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+	% Sans Serif Math, off by default
+
+%% Protects fonts from Beamer screwing with them
+%% http://tex.stackexchange.com/questions/10488/force-computer-modern-in-math-mode
+% \usefonttheme{professionalfonts}
+% \makeatletter
+% \@ifundefined{KOMAClassName}{% if non-KOMA class
+%   \IfFileExists{parskip.sty}{%
+%     \usepackage{parskip}
+%   }{% else
+%     \setlength{\parindent}{0pt}
+%     \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+% }{% if KOMA class
+%   \KOMAoptions{parskip=half}}
+% \makeatother
+
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+
+% \setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% \setcounter{secnumdepth}{-\maxdimen} %
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Usual LaTeX Packages %
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage[mathscr]{eucal}
+\DeclareMathAlphabet{\mathcrl}{U}{rsfs}{m}{n}
+
+\setbeamertemplate{itemize subitem}{$\bullet$}
+\usepackage[most]{tcolorbox}
+\usepackage{empheq}
+\newtcbox{\mymath}[1][]{%
+    nobeforeafter, math upper, tcbox raise base, colframe=heccyan,
+    colback=white, boxrule=1.5pt,
+    #1}
+
+
+% bullet points colour + shape
+% colour of enumerate lists
+% \setbeamercolor{local structure}{fg=darkred}
+% 
+% % text colour, can e.g. set to grey to have 'greyed out' text
+%  \setbeamercolor{normal text}{fg=black,bg=}
+%  \setbeamercolor{alerted text}{fg=black,bg=}
+
+\usepackage{xspace}
+\newcommand{\Rlang}{\textsf{R}\xspace}
+\newcommand{\SASlang}{\textsf{SAS}\xspace}
+
+
+
+% SOME COMMANDS THAT I FIND HANDY
+% \renewcommand{\tilde}{\widetilde} % dinky tildes look silly, dosn't work with fontspec
+% \renewcommand{\comment}[1]{\textcolor{comment}{\footnotesize{#1}\normalsize}} % comment mild
+\newcommand{\Comment}[1]{\textcolor{Comment}{\footnotesize{#1}\normalsize}} % comment bold
+\newcommand{\COMMENT}[1]{\textcolor{COMMENT}{\footnotesize{#1}\normalsize}} % comment crazy bold
+\renewcommand{\alert}[1]{\textcolor{heccyan}{#1}} % alert
+\newcommand{\Alert}[1]{\textcolor{Alert}{#1}} % louder alert
+\newcommand{\ALERT}[1]{\textcolor{ALERT}{#1}} % loudest alert
+
+%% "\alert" is already a beamer pre-defined
+
+%%% Personal macros
+
+\newcommand{\bs}[1]{\boldsymbol {#1}}    
+
+% Natural Numbers,  Integers,  etc.
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{{\mathbb N}}
+%\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\B}{\mathbb{B}}
+% Greek letters,  etc.
+\newcommand{\Del}{\nabla}
+\newcommand{\Rho}{\mathrm{P}}
+\newcommand{\alp}{\alpha}
+\newcommand{\bth}{{\boldsymbol{\theta}}}
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\hbb}{\widehat{\boldsymbol{\beta}}}
+\newcommand{\Hy}{\mathcrl{H}}
+\renewcommand{\hat}{\widehat}
+\newcommand{\all}{ \; \forall \;}
+\newcommand{\gam}{\gamma}
+\newcommand{\del}{\delta}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sig}{\sigma}
+\newcommand{\om}{\omega}
+\newcommand{\Om}{\Omega}
+% Basic Probability
+\newcommand{\e}{\mathsf E}
+\newcommand{\E}[2][]{{\mathsf E}_{#1}\left(#2\right)}
+\newcommand{\Va}[2][]{{\mathsf{Var}_{#1}}\left(#2\right)}
+\newcommand{\va}{\mathsf {Var}}
+\newcommand{\co}{\mathsf {Cov}}
+\newcommand{\Co}[2][]{{\mathsf{Cov}_{#1}}\left(#2\right)}
+\newcommand{\Cor}[2][]{{\mathsf{Corr}_{#1}}\left(#2\right)}
+\renewcommand{\P}[2][]{{\mathsf P}_{#1}\left(#2\right)}
+\newcommand{\cor}{\mathsf {Cor}}
+\newcommand{\sd}[2][]{{\mathsf{sd}_{#1}}\left(#2\right)}
+\newcommand{\p}{\mathsf P}
+\newcommand{\asni}{\xrightarrow{n \ra\infty}}
+\newcommand{\cp}{\xrightarrow{\mathsf{p}}}
+\newcommand{\cdi}{\rightsquigarrow}
+\newcommand{\cd}{\xrightarrow{d}}
+\newcommand{\cw}{\xrightarrow{w}}
+\newcommand{\cas}{\xrightarrow{\textnormal{a.s.}}}
+\newcommand{\I}[1]{{\mathbf 1}_{#1}}
+\newcommand{\Ind}[2][]{{\mathbf{I}_{#1}\left(#2\right)}}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+ % Analysis summation and misc
+\newcommand{\bydef}{\stackrel{\text{\tiny def}}{=}}
+\newcommand{\tri}{\trianglelefteq}
+\newcommand{\sumi}{\sum_{i=1}^n}
+\newcommand{\sumni}{\sum_{n=1}^{ \infty}}
+\newcommand{\nt}{\setminus}
+\newcommand{\IID}{\mathrm{IID}}
+%Sets
+%\newcommand{\Cb}{\mathcal{B}}
+\newcommand{\eqd}{\stackrel{\text{d}}{=}}
+\newcommand{\Ca}{\mathcal{A}}
+\newcommand{\Ce}{\mathcal{E}}
+\newcommand{\Ch}{\mathcal{H}}
+\newcommand{\Cu}{\mathcal{U}}
+\newcommand{\Cn}{\mathcal{N}}
+\newcommand{\Cb}{\mathscr{B}}
+\newcommand{\Cp}{\mathscr{P}}
+\newcommand{\Cm}{\mathcal{M}}
+\newcommand{\Cg}{\mathscr{G}}
+\newcommand{\Cf}{\mathcal{F}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Cgeo}{\mathcal{G}}
+\newcommand{\Ps}{\mathcal{P}}
+\newcommand{\wf}{\mathcal{W}}
+\newcommand{\xf}{\mathcal{X}}
+\newcommand{\yf}{\mathcal{Y}}
+\newcommand{\zf}{\mathcal{Z}}
+\newcommand{\bX}{{\boldsymbol{X}}}
+\newcommand{\bx}{{\boldsymbol{x}}}
+\newcommand{\by}{{\boldsymbol{y}}}
+\newcommand{\bY}{{\boldsymbol{Y}}}
+\newcommand{\bt}{{\boldsymbol{t}}}
+\newcommand{\mxn}{\bar{X}_n}
+\newcommand{\Cont}[1]{\mathpzc{C}^{#1}}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\tth}{^{\text{th}}}
+%Limits
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\limni}{\lim_{n \ra \infty}}
+\newcommand{\limsupni}{\limsup_{n \ra \infty}}
+\newcommand{\liminfni}{\liminf_{n \ra \infty}}
+\newcommand{\lxti}{\lim_{x \ra \infty}}
+\renewcommand{\iff}{\Leftrightarrow}
+\newcommand{\cqfd}{\qedhere}
+\newcommand{\La}{\Leftarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\intii}{\int_{-\infty}^{\infty}}
+\newcommand{\barX}{\overline{X}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\Lf}[1]{\mathscr{L}^{#1}}
+\newcommand{\approxsim}{\stackrel{\cdot}{\sim}}
+%end of package
+\renewcommand{\emph}[1]{\textbf{#1}}
+\renewcommand{\dotsc}{,  \ldots,  }
+\newcommand{\vc}{X_1 \dotsc X_n}
+\newcommand{\svc}{x_1 \dotsc x_n}
+\newcommand{\cif}{\text{ if }}
+\newcommand{\simiid}{\stackrel{\textnormal{iid}}{\sim}}
+\newcommand{\Perp}{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+%\newcommand{\Perp}{\perp \! \! \! \perp}
+\newcommand{\Span}{\text{span}}
+\newcommand{\ow}{\text{ otherwise }}
+\newcommand{\info}{\mathcal{I}}
+\newcommand{\Cl}{\mathcal{L}}
+\renewcommand{\t}{\theta}
+\renewcommand{\d}{\mathrm{d}}
+% \newcommand{\vp}{\varphi}
+\def\ssum{\mathop{\Sigma}}
+%\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\newcommand{\se}{\,\mathrm{se}}
+\newcommand{\ps}{\,\mathdis{ps}}
+\DeclareMathOperator{\logit}{logit}
+\newcommand{\expit}{\,\mathrm{expit}}
+\newcommand{\pfrac}[2]{\left(\frac{#1}{#2}\right)}
+
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{n}
+\DeclareMathAlphabet{\mathdis}{OT1}{pag}{s}{n}
+
+%%Redefine shortcuts for itemize and enumerate
+
+
+\usepackage{xifthen}% provides \isempty test
+
+\newcommand{\optarg}[1][]{%
+  
+}
+
+\newcommand{\bi}[1][]{
+\ifthenelse{\isempty{#1}}%
+    {\begin{itemize} \tightlist }% if #1 is empty
+    {\begin{itemize}[#1] \tightlist }% if #1 is not 
+}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}[1][]{
+\ifthenelse{\isempty{#1}}%
+    {\begin{enumerate} \tightlist }% if #1 is empty
+    {\begin{enumerate}[#1] \tightlist }% if #1 is not 
+}
+\newcommand{\ee}{\end{enumerate}}
+\usepackage{soul}
+% \usepackage[display,colorhighlight,coloremph]{texpower}
+% \usecolorset{whitebg}
+\newcommand{\bfi}{\begin{figure}[h!] \centering }
+\newcommand{\ifi}[1]{\begin{figure}[h!] \centering \includegraphics[width=0.9\textwidth]{#1} \end{figure}}
+\newcommand{\ific}[2]{\begin{figure}[h!] \centering \includegraphics[width=0.9\textwidth]{#1}\caption{#2} \end{figure}}
+\newcommand{\efi}{\end{figure}}
+% ==== document ================================================================
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\vp}{\vspace{0.1cm}}
+\def\imagetop#1{\vtop{\null\hbox{#1}}}
+% \def\AIC/{\ensuremath{\mathsf{AIC}}}
+% \def\BIC/{\ensuremath{\mathsf{BIC}}}
+
+\usepackage{xspace}
+\newcommand{\AIC}{\ensuremath{\mathsf{AIC}}\xspace}
+\newcommand{\BIC}{\ensuremath{\mathsf{BIC}}\xspace}
+

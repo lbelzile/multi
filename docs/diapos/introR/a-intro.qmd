@@ -1,0 +1,82 @@
+---
+title: "Démarrer avec R et RStudio"
+format: html
+---
+
+```{r}
+#| label: setup
+#| include: false
+# install.packages("tidyverse")
+library(tidyverse)
+data(mpg)
+```
+
+## Quarto
+
+Vous avez entre les mains un fichier [Quarto](https://quarto.org/) (extension `.qmd`). Quand vous exécutez le code dans le fichier, le résultat apparaît en dessous du bloc code. 
+
+Le code R doit être placé dans des **blocs de code**, séparés par trois accents graves. Essayez d'exécuter ce bloc en cliquant sur le triangle vert Démarrer (*Run*) ou en appuyant sur *Ctrl+Shift+Enter* (ou *Cmd+Shift+Enter* sur Mac). 
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = cty, 
+                           y = hwy), 
+             alpha = 0.2)
+```
+
+## Ajouter un nouveau bloc de code
+
+Ajouter un nouveau bloc de code en cliquant sur le bouton *Insert Chunk* dans la barre d'outils ou avec le raccourci *Cmd/Ctrl+Option+I*. 
+
+Ajoutez 2 + 2 dans votre bloc de code et compilez-le.
+
+INSÉRER LE BLOC CODE ICI
+
+
+## Tricoter un fichier R Markdown
+
+On utilise les fichiers R Markdown comme carnets de note pour écrire un texte, ajouter notre code et conserver les sorties.
+
+Les fichiers Quarto peuvent également servir à des publications. Utilisez le bouton Tricoter ("Knit") dans la barre d'outils. Tout le code R sera compilé de haut en bas et le fichier résultant inclura les blocs codes et la sortie dans un fichier HTML --- vous pouvez voir le résultat dans `a-intro.html` dans l'onglet Fichier (ou Viewer). C'est une bonne façon d'enregistrer vos manipulations et de partager votre travail (vous pouvez aussi produire des documents PDF ou Word).
+
+## Assignation de variables
+
+Quelle est la différence entre le code de ce bloc:
+
+```{r}
+filter(mtcars, cyl == 4)
+```
+
+Et celui là?
+
+```{r}
+four_cyls <- filter(mtcars, cyl == 4)
+```
+
+## Fonctions
+
+Ajouter un bloc de code qui utilise la fonction `seq()` pour créer un vecteur de nombres de 5 à 30, espacés par sauts de 5
+
+AJOUTEZ VOTRE CODE ICI
+
+
+## Syntaxe fautive
+
+Compilez chaque bloc code, lisez le message d'erreur et essayez de corriger le code.
+
+
+```{r}
+#| error: true
+data("starwars", package = dplyr)
+```
+
+```{r}
+#| error: true
+sd(starwars$mass
+```
+
+```{r}
+#| error: true
+mon_nom <- "Leo'
+```
+

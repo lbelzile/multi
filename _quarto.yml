@@ -6,17 +6,7 @@ project:
     - "!diapos/"
   resources:
     - "files/"
-    - "diapos/*.html"
-    - "diapos/*.pdf"
-    - "diapos/img/"
-    - "diapos/figures/"
-    - "diapos/libs/"
-    - "diapos/css/"
-    - "diapos/*_files/"
-    - "diapos/hecmontreal.scss"
-    - "diapos/partials"
-    - "diapos/MATH60602-diapos0_cache"
-    - "diapos/MATH60602-diapos0_files"
+    - "diapos/"
 
 # See https://quarto.org/docs/projects/code-execution.html#freeze
 execute:
