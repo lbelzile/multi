@@ -54,7 +54,7 @@ options(digits = 3, width = 75)
 - Acquisition, fidélisation et rétention de clientèle
 - Vente croisée et vente incitative
 - Segmentation, médecine personnalisée
-- Prévention de la fraude, automatisation de décisions de crédit, prévision de pertes oou de faillites
+- Prévention de la fraude, automatisation de décisions de crédit, prévision de pertes ou de faillites
 
 **Secteurs d'activité**: Toute entreprise accumulant une grande quantité de données, notamment
 

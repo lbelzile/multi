@@ -187,14 +187,15 @@ ul.task-list li input[type="checkbox"] {
 <li>Comment évolue la vitesse moyenne durant la course des coureurs d’élite (versus les autres)?</li>
 <li>Quels sont les prérequis pour participer au marathon? Le site web mentionne le tirage au sort, des billets donnés à des organismes de charité, des tours opérateurs.</li>
 </ul>
+<p>Quelques analyses intéressantes <a href="https://runningwithrock.com/berlin-2024/">sur ce blogue</a> pour les deux éditions suivantes montrent le genre de comparaisons possibles si on considérait plusieurs éditions. Une analyse exploratoire succincte est disponible <a href="https://www.race-insight.com/en/results/berlin-marathon-2022">ici</a>.</p>
 </section>
 <section id="conclusions-du-groupe-1" class="level2">
 <h2 class="anchored" data-anchor-id="conclusions-du-groupe-1">Conclusions du groupe 1</h2>
 <ol type="1">
 <li>Pourquoi le nombre de position n’est pas égal au nombre d’observations? Réponse: il y a 727 abandons.</li>
 <li>Est-ce que les codes <code>bib</code> correspondent uniquement à des femmes (<code>f</code>)? Réponse: il y a 202 codes qui commencent par <code>f</code>, tous associés à des participantes (mais une minorité d’entre elles, car elles représentent le tiers des inscriptions).</li>
-<li>À quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3?</li>
-<li>Est-ce que les personnes de sexe inconnu ou non-déclaré figurent au classement <code>position_gender</code>?</li>
+<li>À quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3? Réponse: certaines personnes ont déclaré des pays fantaisistes (souvent plus de trois caractères)</li>
+<li>Est-ce que les personnes de sexe inconnu ou non-déclaré figurent au classement <code>position_gender</code>? Réponse: Non</li>
 <li></li>
 </ol>
 </section>
@@ -203,9 +204,9 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><p>Tous les inscrits n’ont pas pris part à la compétition (certains temps manquants, soit pour absence au départ, abandon ou disqualification (absence de départ, abandon ou disqualification).</p></li>
 <li><p>Certains temps intermédiaires sont manquants (même si la personne a complété la course et que le temps final est connu).</p></li>
-<li><p>Sept personnes n’ont pas déclaré de sexe (valeur manquante) et donc ne sont pas dans une catégorie (sexe et âge, avec les lettres <code>W</code> et <code>M</code> pour les catégories féminin/masculin et des groupes d’âge de junior (<code>JU20</code> pour les juniors entre 18 et 29, <code>H</code> pour les seniors de plus de 80).</p></li>
+<li><p>Sept personnes n’ont pas déclaré de sexe (valeur manquante) et donc ne sont pas dans une catégorie (sexe et âge, avec les lettres <code>W</code> et <code>M</code> pour les catégories féminin/masculin et des groupes d’âge de junior (<code>JU20</code> pour les juniors entre 18 et 20 ans <em>Männliche Jugend U20</em>, <code>MH</code> et <code>WH</code> for <em>Männer Hauptklasse</em> et <em>Weiblich Hauptklasse</em> pour 20 à 29 ans).</p></li>
 </ul>
-<p>Le temps de départ effectif est <code>starttime</code>, et le temps réel de complétion est <code>nettime</code>. La variable <code>start_raw_time</code> correspond au temps de départ des quatre vagues (9h15, 9h35, …) — on pourrait transformer cette variable en variable catégorielle.</p>
+<p>Le temps de départ effectif est <code>starttime</code>, et le temps réel de complétion est <code>nettime</code>. La variable <code>start_raw_time</code> correspond au temps de départ des quatre vagues (9h15, 9h35, …) — on pourrait transformer cette variable en variable catégorielle avec quatre modalité pour les quatre vagues.</p>
 <section id="remerciements" class="level2">
 <h2 class="anchored" data-anchor-id="remerciements">Remerciements</h2>
 <p>Les données proviennent de Marcel Caraciolo <a href="https://github.com/corriporai/runpandas-data/blob/master/races/berlin_marathon/berlin_marathon_2022.csv">via Github</a></p>
