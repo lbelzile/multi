@@ -3,7 +3,20 @@ project:
   output-dir: docs
   render:
     - "*.qmd"
-    - "!diapos/"
+ #   - "!diapos/"
+    - "!diapos/MATH60602-diapos1.qmd"
+    - "!diapos/MATH60602-diapos2.qmd"
+    - "!diapos/MATH60602-diapos3.qmd"
+    - "!diapos/MATH60602-diapos4.qmd"
+    - "!diapos/MATH60602-diapos5.qmd"
+    - "!diapos/MATH60602-diapos6.qmd"
+    - "!diapos/MATH60602-diapos7.qmd"
+    - "!diapos/MATH60602-diapos8.qmd"
+    - "!diapos/MATH60602-diapos9.qmd"
+    - "!diapos/MATH60602-diapos10.qmd"
+    - "!diapos/MATH60602-diapos11.qmd"
+    - "!diapos/MATH60602-diapos12.qmd"
+    - "!diapos/MATH60602-diapos13.qmd"
   resources:
     - "files/"
     - "diapos/"
