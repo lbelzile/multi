@@ -141,8 +141,6 @@ website:
              file: exercices/06-exercice.qmd
            - text: "Solutions 6"
              file: exercices/06-solution.qmd
-    - title: "Annonces"
-      file: annonces.qmd
   page-footer:
     left: |
       Contenu {{< fa brands creative-commons >}} {{< var course.copyright_year >}} par [{{< var instructor.name_no_title >}}]({{< var instructor.url >}}); canevas du site par [Dr. Andrew Heiss](https://www.andrewheiss.com/) sous [licence MIT](https://mit-license.org/) <br>
