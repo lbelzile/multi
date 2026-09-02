@@ -687,7 +687,7 @@
     "href": "contenu/02-contenu.html#objectifs-dapprentissage",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Objectifs d’apprentissage",
-    "text": "Objectifs d’apprentissage\n\nPouvoir utiliser R à partir d’un environnement de développement intégré (EDI)\nÊtre en mesure de réaliser un graphique (histogramme, boîte à moustaches, nuage de points, diagramme à bande)\nIdentifier les éléments géométriques d’un graphique\nÊtre capable d’extraire des statistiques descriptives, manipuler, transformer, extraire des variables d’une base de données",
+    "text": "Objectifs d’apprentissage\n\nPouvoir utiliser R à partir d’un environnement de développement intégré (EDI)\nÊtre en mesure de réaliser un graphique (histogramme, boîte à moustaches, nuage de points, diagramme à bande)\nÊtre capable d’extraire des statistiques descriptives, manipuler, transformer, extraire des variables d’une base de données",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",
@@ -699,7 +699,7 @@
     "href": "contenu/02-contenu.html#ressources-complémentaires",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Ressources complémentaires",
-    "text": "Ressources complémentaires\n\nExplication de fonctions résumé avec dplyr (blog de Andrew Heiss\nMatériel de cours d’Aurélie Labbe\nChapitres 2 et 4 de R for Data Science",
+    "text": "Ressources complémentaires\n\nExplication de fonctions résumé avec dplyr (blog de Andrew Heiss)\nMatériel de cours d’Aurélie Labbe\nChapitres 1 et 3 de R for Data Science",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",
@@ -732,7 +732,7 @@
     "href": "contenu/01-activite.html#conclusions-du-groupe-1",
     "title": "Résumé",
     "section": "Conclusions du groupe 1",
-    "text": "Conclusions du groupe 1\n\nPourquoi le nombre de position n’est pas égal au nombre d’observations? Réponse: il y a 727 abandons.\nEst-ce que les codes bib correspondent uniquement à des femmes (f)? Réponse: il y a 202 codes qui commencent par f, tous associés à des participantes (mais une minorité d’entre elles, car elles représentent le tiers des inscriptions).\nÀ quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3? Réponse: certaines personnes ont déclaré des pays fantaisistes (souvent plus de trois caractères)\nEst-ce que les personnes de sexe inconnu ou non-déclaré figurent au classement position_gender? Réponse: Non"
+    "text": "Conclusions du groupe 1\n\nPourquoi le nombre de position n’est pas égal au nombre d’observations? Réponse: il y a 727 abandons.\nEst-ce que les codes bib correspondent uniquement à des femmes (f)? Réponse: il y a 202 codes qui commencent par f, tous associés à des participantes (mais une minorité d’entre elles, car elles représentent le tiers des inscriptions).\nÀ quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3? Réponse:non, plutôt ceux du Comité international olympique (CIO). Certaines personnes ont déclaré des pays fantaisistes (souvent plus de trois caractères, dont AKA JUSTIN, CINDY, NANNY et SUZY).\nEst-ce que les personnes de sexe inconnu ou non-déclaré figurent au classement position_gender? Réponse: Non"
   },
   {
     "objectID": "contenu/01-activite.html#remerciements",
@@ -1438,5 +1438,94 @@
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
     "text": "Analyse multidimensionnelle appliquée\n        \n        \n            Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l’aide de logiciels appropriés.\n        \n        \n            MATH 60602HEC Montréal"
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#domaines-dapplication",
+    "href": "diapos/MATH60602-diapos0.html#domaines-dapplication",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Domaines d’application",
+    "text": "Domaines d’application\n\nAcquisition, fidélisation et rétention de clientèle\nVente croisée et vente incitative\nSegmentation, médecine personnalisée\nPrévention de la fraude, automatisation de décisions de crédit, prévision de pertes ou de faillites\n\nSecteurs d’activité: Toute entreprise accumulant une grande quantité de données, notamment\n\nCommerce de détail\nTélécommunications\nInstitutions financières (banques et assureurs)"
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#modèles-de-prédiction",
+    "href": "diapos/MATH60602-diapos0.html#modèles-de-prédiction",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Modèles de prédiction",
+    "text": "Modèles de prédiction\nConstruire un modèle prédictif pour un objectif précis à l’aide d’un grand ensemble de variables explicatives (données transactionnelles, information sur le client, données externes, etc.)\nExemples:\n\nDétecter les faillites des clients (ou des entreprises)\nCibler les clients qui seront intéressés par une offre promotionnelle\nDétecter les fraudes (par carte de crédit ou dans les rapports de revenus)\nPrévoir d’avance si un client va nous quitter"
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#régression-logistique",
+    "href": "diapos/MATH60602-diapos0.html#régression-logistique",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Régression logistique",
+    "text": "Régression logistique\nModèle de régression pour variables réponses binaires (0/1) ou catégorielles.\n\naccepter ou refuser une offre promotionnelle\nquitter une enterprise (rétention de personnelle)\nvote lors d’une élection"
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#données-manquantes",
+    "href": "diapos/MATH60602-diapos0.html#données-manquantes",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Données manquantes",
+    "text": "Données manquantes\nUne agence de voyage aimerait faire la promotion d’un forfait tout inclus dans le sud pour la famille. Pour bien cibler son offre, l’agence doit envoyer la promotion à ses clients qui ont des enfants. Toutefois, cette information n’est pas toujours disponible."
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#analyse-de-survie",
+    "href": "diapos/MATH60602-diapos0.html#analyse-de-survie",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Analyse de survie",
+    "text": "Analyse de survie\nUne compagnie de télécommunication est intéressée au temps qu’un client demeure abonné au service de téléphonie mobile.\nAu moment de l’analyse, l’historique de la base de données indiquent le moment où certaines personnes se sont désabonnées, mais d’autres sont encore clients actifs.\n\nTemps avant le prochain achat d’un client.\nTemps avant la faillite d’une entreprise (ou d’un particulier)\nTemps qu’un employé demeure au service de la compagnie."
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#segmentation-et-analyse-de-regroupements",
+    "href": "diapos/MATH60602-diapos0.html#segmentation-et-analyse-de-regroupements",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Segmentation et analyse de regroupements",
+    "text": "Segmentation et analyse de regroupements\nUn organisme de charité aimerait classer ses donateurs dans des groupes selon leurs caractéristiques (âge, montant des dons, fréquence des dons, canal de communication, …)\nL’analyse de regroupements vise à créer des sous-groupes qui partagent de même caractéristiques.\n\nQuels sont les caractéristiques des donateurs et donatrices les plus généreux?\nCes derniers sont-ils représentatifs de la population québécoise?"
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#exemples-de-régression-logistique",
+    "href": "diapos/MATH60602-diapos0.html#exemples-de-régression-logistique",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Exemples de régression logistique",
+    "text": "Exemples de régression logistique\n\nUne compagnie de télécommunication veut déterminer parmi les détenteurs du produit A, ceux qui sont les plus propices à acheter le produit B (modèle de vente croisée).\nSuite à une campagne de commercialisation, une compagnie veut déterminer les caractéristiques qui distinguent les clients qui ont accepté l’offre de ceux qui l’ont refusée.\nUne banque veut déterminer si un client est à risque de cesser le remboursement de son prêt ou non.\nUne compagnie d’assurance veut estimer la probabilité pour ses clients de faire une réclamation dans la prochaine année."
+  },
+  {
+    "objectID": "diapos/MATH60602-diapos0.html#cause-des-données-manquantes",
+    "href": "diapos/MATH60602-diapos0.html#cause-des-données-manquantes",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Cause des données manquantes",
+    "text": "Cause des données manquantes\n\nRefus de répondre à une question d’un sondage.\nL’information sur les clients est incomplète.\nLe client ne détient pas d’information pour certaines caractéristiques (exemple : client qui n’a jamais eu de crédit).\n\nPar défaut, les logiciels suppriment les observations pour lesquelles une valeur est manquante. Ignorer ces personnes et faire l’analyse des cas complets mène à des estimations biaisés et invalide l’inférence statistique."
+  },
+  {
+    "objectID": "contenu/02-activite.html",
+    "href": "contenu/02-activite.html",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "",
+    "text": "Chargez les données\ndf &lt;- \"https://lbelzile.github.io/multi/files/data/MarathonBerlin2022.csv\"\nmarathon &lt;- read.csv(df, header = TRUE)"
+  },
+  {
+    "objectID": "contenu/02-activite.html#manipulations",
+    "href": "contenu/02-activite.html#manipulations",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Manipulations",
+    "text": "Manipulations\n\nTransformez les types de variables (temps, facteurs, entiers)\nObtenez les noms associés aux codes des pays (codes du CIO)\nTransformez en valeurs manquantes\n\nles valeurs de sexe non déclarées\nles classements des personnes qui n’ont pas complété la course, ou qui ont été disqualifiées 4 Retirez les variables starttime, grosstime et division\n\nCréez un facteur vague représentant le temps de la vague de départ (starttime)"
+  },
+  {
+    "objectID": "contenu/02-activite.html#graphiques",
+    "href": "contenu/02-activite.html#graphiques",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Graphiques",
+    "text": "Graphiques\n\nCréez un diagramme à bande du nombre de participants par pays (10 premiers)\nTracez un histogramme des temps de complétion du marathon en fonction du sexe de l’athlète\nCréez un diagramme spaghetti (ligne brisée) de la vitesse des 25 coureurs les plus rapides en fonction de la distance par intervalle de 5km (difficile)."
+  },
+  {
+    "objectID": "contenu/02-contenu.html#activités",
+    "href": "contenu/02-contenu.html#activités",
+    "title": "Analyse multidimensionnelle appliquée",
+    "section": "Activités",
+    "text": "Activités\n\nManipulation et visualisation des données de marathon de Berlin",
+    "crumbs": [
+      "Contenu",
+      "Matériel pédagogique",
+      "2: Programmation **R**"
+    ]
   }
 ]

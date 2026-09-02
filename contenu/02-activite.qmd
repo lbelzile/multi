@@ -1,0 +1,33 @@
+---
+title: "Activité 2 - Manipulations et graphiques"
+format: html
+---
+
+Chargez les données
+
+```{r}
+#| eval: false
+#| echo: true
+df <- "https://lbelzile.github.io/multi/files/data/MarathonBerlin2022.csv"
+marathon <- read.csv(df, header = TRUE)
+```
+
+## Manipulations
+
+1. Transformez les types de variables (temps, facteurs, entiers)
+2. Obtenez les noms associés aux codes des pays (codes du CIO)
+3. Transformez en valeurs manquantes
+   - les valeurs de sexe non déclarées
+   - les classements des personnes qui n'ont pas complété la course, ou qui ont été disqualifiées
+4 Retirez les variables `starttime`, `grosstime` et `division`
+5. Créez un facteur `vague` représentant le temps de la vague de départ (`starttime`)
+
+
+## Graphiques
+
+1. Créez un diagramme à bande du nombre de participants par pays (10 premiers)
+2. Tracez un histogramme des temps de complétion du marathon en fonction du sexe de l'athlète
+3. Créez un diagramme spaghetti (ligne brisée) de la vitesse des 25 coureurs les plus rapides en fonction de la distance par intervalle de 5km (*difficile*).
+
+
+

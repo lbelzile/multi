@@ -1,7 +1,6 @@
 ---
 title: "Activité 1 - analyse exploratoire"
 format: html
-editor: visual
 ---
 
 L'analyse exploratoire est essentielle pour faire des vérifications d'usage lors d'une analyse de données, s'assurer que ces dernières sont conformes à nos attentes, vérifier la présence de valeurs aberrantes, etc. et établir une stratégie pour l'analyse et la modélisation. Se renseigner sur la nature des données et l'échantillonnage est essentiel pour choisir des modèles adéquats.
@@ -54,14 +53,18 @@ Quelques analyses intéressantes [sur ce blogue](https://runningwithrock.com/ber
 ## Conclusions du groupe 1
 
 1.  Pourquoi le nombre de position n'est pas égal au nombre d'observations? Réponse: il y a 727 abandons.
+
 2.  Est-ce que les codes `bib` correspondent uniquement à des femmes (`f`)? Réponse: il y a 202 codes qui commencent par `f`, tous associés à des participantes (mais une minorité d'entre elles, car elles représentent le tiers des inscriptions).
-3.  À quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3? Réponse: certaines personnes ont déclaré des pays fantaisistes (souvent plus de trois caractères)
+
+3.  À quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3? Réponse:non, plutôt ceux du Comité international olympique (CIO). Certaines personnes ont déclaré des pays fantaisistes (souvent plus de trois caractères, dont `AKA JUSTIN`, `CINDY`, `NANNY` et `SUZY`).
+
 4.  Est-ce que les personnes de sexe inconnu ou non-déclaré figurent au classement `position_gender`? Réponse: Non
-5.  
 
 # Résumé
 
-- Tous les inscrits n'ont pas pris part à la compétition (certains temps manquants, soit pour absence au départ, abandon ou disqualification (absence de départ, abandon ou disqualification).
+- Tous les inscrits n'ont pas pris part à la compétition et certains temps sont manquants, soit pour absence au départ, abandon ou disqualification (absence de départ, abandon ou disqualification). La variable `position` prend la valeur `DNF` pour ceux qui n'ont pas complété, incluant les absences. La variable `position_gender` inclut 53 personnes disqualifiées (code `DSQ`). La variable `position` prend une valeur unique, mais pas `position_gender` pour laquelle il y a des doublons dans les temps.
+
+- Les pays de provenance des coureurs sont sans surprise l'Allemagne (11115), les États-Unis (6110), le Royaume-Uni (2109), le Mexique (1228), la France (1144). Les pays de l'hémisphère nord (Européens et nord-Américains) sont bien représentés. Les temps les plus rapides sont réalisés par des Africains, tout sexe confondu.
 
 - Certains temps intermédiaires sont manquants (même si la personne a complété la course et que le temps final est connu).
 

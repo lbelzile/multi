@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Activité 1 - analyse exploratoire – Analyse multidimensionnelle appliquée</title>
+<title>Activité 2 - Manipulations et graphiques – Analyse multidimensionnelle appliquée</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -125,13 +159,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table des matières</h2>
    
   <ul>
-  <li><a href="#marathon-de-berlin" id="toc-marathon-de-berlin" class="nav-link active" data-scroll-target="#marathon-de-berlin">Marathon de Berlin</a></li>
-  <li><a href="#questions-initiales" id="toc-questions-initiales" class="nav-link" data-scroll-target="#questions-initiales">Questions initiales</a></li>
-  <li><a href="#conclusions-du-groupe-1" id="toc-conclusions-du-groupe-1" class="nav-link" data-scroll-target="#conclusions-du-groupe-1">Conclusions du groupe 1</a></li>
-  <li><a href="#résumé" id="toc-résumé" class="nav-link" data-scroll-target="#résumé">Résumé</a>
-  <ul class="collapse">
-  <li><a href="#remerciements" id="toc-remerciements" class="nav-link" data-scroll-target="#remerciements">Remerciements</a></li>
-  </ul></li>
+  <li><a href="#manipulations" id="toc-manipulations" class="nav-link active" data-scroll-target="#manipulations">Manipulations</a></li>
+  <li><a href="#graphiques" id="toc-graphiques" class="nav-link" data-scroll-target="#graphiques">Graphiques</a></li>
   </ul>
 </nav>
     </div>
@@ -139,80 +168,38 @@ ul.task-list li input[type="checkbox"] {
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 <header id="title-block-header">
-<h2 class="title anchored display-7">Activité 1 - analyse exploratoire</h2>
+<h2 class="title anchored display-7">Activité 2 - Manipulations et graphiques</h2>
 
 </header>
 
 
-<p>L’analyse exploratoire est essentielle pour faire des vérifications d’usage lors d’une analyse de données, s’assurer que ces dernières sont conformes à nos attentes, vérifier la présence de valeurs aberrantes, etc. et établir une stratégie pour l’analyse et la modélisation. Se renseigner sur la nature des données et l’échantillonnage est essentiel pour choisir des modèles adéquats.</p>
-<p><a href="../files/data/MarathonBerlin2022.csv">Téléchargez les données</a></p>
-<section id="marathon-de-berlin" class="level2">
-<h2 class="anchored" data-anchor-id="marathon-de-berlin">Marathon de Berlin</h2>
-<p>Les données que nous analyserons ensemble sont les résultats du marathon de Berlin en 2022, épreuve officielle du <em>World Marathon Majors</em> et durant lequel le coureur Eliud Kipchoge bas son propre record du monde en complétant le parcours en 2 heures, 1 minute et 9 secondes.</p>
-<p>Les données incluent les variables (en colonne) suivantes:</p>
-<ul>
-<li><code>position</code>: rang absolu</li>
-<li><code>position_gender</code>: rang par sexe</li>
-<li><code>country</code>: code à trois lettre pour indiquer la nationalité de l’athlète</li>
-<li><code>sex</code>: variable catégorielle, <code>M</code> pour homme et <code>F</code> pour femme</li>
-<li><code>division</code>: numéro de la divison</li>
-<li><code>bib</code>: numéro bib d’identifiant du participant</li>
-<li><code>starttime</code>: temps de départ au format HH:MM:SS de la vague</li>
-<li><code>start_raw_time</code>: temps de départ (chronomètre)</li>
-<li><code>half</code>: temps à mi-parcours (HH:MM:SS)</li>
-<li><code>5k</code>: temps à 5km du départ (HH:MM:SS)</li>
-<li><code>10k</code>: temps à 10km du départ (HH:MM:SS)</li>
-<li><code>15k</code>: temps à 15km du départ (HH:MM:SS)</li>
-<li><code>20k</code>: temps à 20km du départ (HH:MM:SS)</li>
-<li><code>25k</code>: temps à 25km du départ (HH:MM:SS)</li>
-<li><code>30k</code>: temps à 30km du départ (HH:MM:SS)</li>
-<li><code>35k</code>: temps à 35km du départ (HH:MM:SS)</li>
-<li><code>40k</code>: temps à 40km du départ (HH:MM:SS)</li>
-<li><code>grosstime</code>: temps brut de fin du parcours</li>
-<li><code>nettime</code>: temps net (calculé à partir du chronomètre)</li>
-<li><code>category</code>: catégorie (sexe et tranche d’âge)</li>
-</ul>
-</section>
-<section id="questions-initiales" class="level2">
-<h2 class="anchored" data-anchor-id="questions-initiales">Questions initiales</h2>
-<p>Voici quelques questions pour démarrer votre analyse exploratoire</p>
-<ul>
-<li>Est-ce qu’il y a des données manquantes? Si oui, décrivez sous quelle forme et le mécanisme en cause.</li>
-<li>Est-ce que les participant(e)s des différentes vagues sont alloués aléatoirement à ces dernières?</li>
-<li>Qu’est-ce qui est pris en compte pour le classement, le temps brut ou net?</li>
-<li>Échantillonnage: quelles sont les conditions pour inclusion dans la base de données (temps maximaux à la ligne d’arrivée et à mi-temps, heure maximale) et pour courir le marathon en premier lieu?</li>
-<li>Qu’est-ce qui distingue les champions des personnes ordinaires?</li>
-<li>Quels sont les temps attendus dans les différentes catégories (entre sexe et pour les différentes tranches d’âge).</li>
-<li>Est-ce que le classement des 10 plus rapides est demeuré constant au fil de la course?</li>
-<li>Comment évolue la vitesse moyenne durant la course des coureurs d’élite (versus les autres)?</li>
-<li>Quels sont les prérequis pour participer au marathon? Le site web mentionne le tirage au sort, des billets donnés à des organismes de charité, des tours opérateurs.</li>
-</ul>
-<p>Quelques analyses intéressantes <a href="https://runningwithrock.com/berlin-2024/">sur ce blogue</a> pour les deux éditions suivantes montrent le genre de comparaisons possibles si on considérait plusieurs éditions. Une analyse exploratoire succincte est disponible <a href="https://www.race-insight.com/en/results/berlin-marathon-2022">ici</a>.</p>
-</section>
-<section id="conclusions-du-groupe-1" class="level2">
-<h2 class="anchored" data-anchor-id="conclusions-du-groupe-1">Conclusions du groupe 1</h2>
+<p>Chargez les données</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="st">"https://lbelzile.github.io/multi/files/data/MarathonBerlin2022.csv"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>marathon <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(df, <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="manipulations" class="level2">
+<h2 class="anchored" data-anchor-id="manipulations">Manipulations</h2>
 <ol type="1">
-<li><p>Pourquoi le nombre de position n’est pas égal au nombre d’observations? Réponse: il y a 727 abandons.</p></li>
-<li><p>Est-ce que les codes <code>bib</code> correspondent uniquement à des femmes (<code>f</code>)? Réponse: il y a 202 codes qui commencent par <code>f</code>, tous associés à des participantes (mais une minorité d’entre elles, car elles représentent le tiers des inscriptions).</p></li>
-<li><p>À quoi correspondent les trois lettres des codes des pays: est-ce au standard international ISO 3166-1 A-3? Réponse:non, plutôt ceux du Comité international olympique (CIO). Certaines personnes ont déclaré des pays fantaisistes (souvent plus de trois caractères, dont <code>AKA JUSTIN</code>, <code>CINDY</code>, <code>NANNY</code> et <code>SUZY</code>).</p></li>
-<li><p>Est-ce que les personnes de sexe inconnu ou non-déclaré figurent au classement <code>position_gender</code>? Réponse: Non</p></li>
+<li>Transformez les types de variables (temps, facteurs, entiers)</li>
+<li>Obtenez les noms associés aux codes des pays (codes du CIO)</li>
+<li>Transformez en valeurs manquantes
+<ul>
+<li>les valeurs de sexe non déclarées</li>
+<li>les classements des personnes qui n’ont pas complété la course, ou qui ont été disqualifiées 4 Retirez les variables <code>starttime</code>, <code>grosstime</code> et <code>division</code></li>
+</ul></li>
+<li>Créez un facteur <code>vague</code> représentant le temps de la vague de départ (<code>starttime</code>)</li>
 </ol>
 </section>
-<section id="résumé" class="level1">
-<h1>Résumé</h1>
-<ul>
-<li><p>Tous les inscrits n’ont pas pris part à la compétition et certains temps sont manquants, soit pour absence au départ, abandon ou disqualification (absence de départ, abandon ou disqualification). La variable <code>position</code> prend la valeur <code>DNF</code> pour ceux qui n’ont pas complété, incluant les absences. La variable <code>position_gender</code> inclut 53 personnes disqualifiées (code <code>DSQ</code>). La variable <code>position</code> prend une valeur unique, mais pas <code>position_gender</code> pour laquelle il y a des doublons dans les temps.</p></li>
-<li><p>Les pays de provenance des coureurs sont sans surprise l’Allemagne (11115), les États-Unis (6110), le Royaume-Uni (2109), le Mexique (1228), la France (1144). Les pays de l’hémisphère nord (Européens et nord-Américains) sont bien représentés. Les temps les plus rapides sont réalisés par des Africains, tout sexe confondu.</p></li>
-<li><p>Certains temps intermédiaires sont manquants (même si la personne a complété la course et que le temps final est connu).</p></li>
-<li><p>Sept personnes n’ont pas déclaré de sexe (valeur manquante) et donc ne sont pas dans une catégorie (sexe et âge, avec les lettres <code>W</code> et <code>M</code> pour les catégories féminin/masculin et des groupes d’âge de junior (<code>JU20</code> pour les juniors entre 18 et 20 ans <em>Männliche Jugend U20</em>, <code>MH</code> et <code>WH</code> for <em>Männer Hauptklasse</em> et <em>Weiblich Hauptklasse</em> pour 20 à 29 ans).</p></li>
-</ul>
-<p>Le temps de départ effectif est <code>starttime</code>, et le temps réel de complétion est <code>nettime</code>. La variable <code>start_raw_time</code> correspond au temps de départ des quatre vagues (9h15, 9h35, …) — on pourrait transformer cette variable en variable catégorielle avec quatre modalité pour les quatre vagues.</p>
-<section id="remerciements" class="level2">
-<h2 class="anchored" data-anchor-id="remerciements">Remerciements</h2>
-<p>Les données proviennent de Marcel Caraciolo <a href="https://github.com/corriporai/runpandas-data/blob/master/races/berlin_marathon/berlin_marathon_2022.csv">via Github</a></p>
+<section id="graphiques" class="level2">
+<h2 class="anchored" data-anchor-id="graphiques">Graphiques</h2>
+<ol type="1">
+<li>Créez un diagramme à bande du nombre de participants par pays (10 premiers)</li>
+<li>Tracez un histogramme des temps de complétion du marathon en fonction du sexe de l’athlète</li>
+<li>Créez un diagramme spaghetti (ligne brisée) de la vitesse des 25 coureurs les plus rapides en fonction de la distance par intervalle de 5km (<em>difficile</em>).</li>
+</ol>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

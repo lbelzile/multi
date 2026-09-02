@@ -48,7 +48,7 @@ knitr::opts_chunk$set(fig.retina = 3, collapse = TRUE)
 options(digits = 3, width = 75)
 ```
 
-# Domaines d'application
+## Domaines d'application
 
 
 - Acquisition, fidélisation et rétention de clientèle
@@ -62,7 +62,7 @@ options(digits = 3, width = 75)
 - Télécommunications
 - Institutions financières (banques et assureurs)
 
-# Modèles de prédiction
+## Modèles de prédiction
 
 Construire un modèle prédictif pour un objectif précis à l'aide d'un grand ensemble de variables explicatives (données transactionnelles, information sur le client, données externes, etc.)
 
@@ -73,7 +73,7 @@ Construire un modèle prédictif pour un objectif précis à l'aide d'un grand e
 - Détecter les fraudes (par carte de crédit ou dans les rapports de revenus)
 - Prévoir d'avance si un client va nous quitter
 
-# Régression logistique
+## Régression logistique
 
 Modèle de régression pour variables réponses binaires (0/1) ou catégorielles.
 
@@ -81,19 +81,19 @@ Modèle de régression pour variables réponses binaires (0/1) ou catégorielles
 - quitter une enterprise (rétention de personnelle)
 - vote lors d'une élection
 
-# Exemples de régression logistique 
+## Exemples de régression logistique 
 
 - Une compagnie de télécommunication veut déterminer parmi les détenteurs du produit A, ceux qui sont les plus propices à acheter le produit B (modèle de vente croisée).
 - Suite à une campagne de commercialisation, une compagnie veut déterminer les caractéristiques qui distinguent les clients qui ont accepté l'offre de ceux qui l'ont refusée.
 - Une banque veut déterminer si un client est à risque de cesser le remboursement de son prêt ou non.
 - Une compagnie d'assurance veut estimer la probabilité pour ses clients de faire une réclamation dans la prochaine année.
 
-# Données manquantes
+## Données manquantes
 
 Une agence de voyage aimerait faire la promotion d'un forfait tout inclus dans le sud
 pour la famille. Pour bien cibler son offre, l'agence doit envoyer la promotion à ses clients qui ont des enfants. Toutefois, cette information n'est pas toujours disponible.
 
-# Cause des données manquantes
+## Cause des données manquantes
 
 - Refus de répondre à une question d'un sondage.
 - L'information sur les clients est incomplète.
@@ -101,7 +101,7 @@ pour la famille. Pour bien cibler son offre, l'agence doit envoyer la promotion 
 
 Par défaut, les logiciels suppriment les observations pour lesquelles une valeur est manquante. Ignorer ces personnes et faire l'analyse des cas complets mène à des estimations biaisés et invalide l'inférence statistique.
 
-# Analyse de survie
+## Analyse de survie
 
 Une compagnie de télécommunication est intéressée au temps qu'un client
 demeure abonné au service de téléphonie mobile.
@@ -112,7 +112,7 @@ Au moment de l'analyse, l'historique de la base de données indiquent le moment 
 - Temps avant la faillite d'une entreprise (ou d'un particulier)
 - Temps qu'un employé demeure au service de la compagnie.
 
-# Segmentation et analyse de regroupements
+## Segmentation et analyse de regroupements
 
 Un organisme de charité aimerait classer ses donateurs dans des groupes selon leurs caractéristiques (âge, montant des dons, fréquence des dons, canal de communication, ...)
 
