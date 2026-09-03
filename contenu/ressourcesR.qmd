@@ -16,9 +16,9 @@ Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés d
 lib <- c("remotes", "psych", "glmnet", "caret", 
          "leaps", "car", "glmbb", "AER",
          "tidyverse", "nnet", "mice", "survminer", 
-	 "survival", "patchwork", "Hmisc", 
-         "factoextra", "energy", "dbscan", "kcca",
-         "fastClust", "genieclust", "mclust")
+         "patchwork", "Hmisc", "dbscan",
+         "factoextra", "energy", "flexclust",
+         "fastcluster", "genieclust", "mclust")
 for(pack in lib){
   if(!require(pack, quietly = TRUE)){
     install.packages(pack)
