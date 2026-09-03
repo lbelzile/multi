@@ -4,7 +4,7 @@
     <title>Visualisation avec ggplot2</title>
     <meta charset="utf-8" />
     <meta name="author" content="Andrew Heiss, Léo Belzile (adaptation et traduction)" />
-    <script src="libs/header-attrs-2.24/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.32/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.2.6/tile-view.js"></script>
@@ -16,8 +16,8 @@
     <script src="libs/shareon-1.4.1/shareon.min.js"></script>
     <link href="libs/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
-    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
-    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <link href="libs/countdown-0.6.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.6.0/countdown.js"></script>
     <link rel="stylesheet" href="css/ath-slides.css" type="text/css" />
     <link rel="stylesheet" href="css/ath-inferno-fonts.css" type="text/css" />
   </head>
@@ -65,28 +65,25 @@ class: title title-1 section-title-inv-1
 .box-1[Portez attention à l'orthographe, aux majuscules et aux parenthèses!]
 
 
-```r
+``` r
 library(ggplot2)
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, 
                            y = hwy))
 ```
 
-<div class="countdown" id="timer_0debb018" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
-<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
-</div>
+<countdown-timer class="countdown" id="timer_277f8522" minutes="2" seconds="0" update-every="1" play-sound="true" tabindex="0" style="right:0;bottom:0;--countdown-font-size:1.5em;"></countdown-timer>
 
 ---
 
 
-```r
+``` r
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, 
                            y = hwy))
 ```
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-3-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -122,7 +119,7 @@ class: title title-1
 
 # Les voitures avec une plus grande cylindrée parcourent plus de distance?
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-4-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -132,33 +129,33 @@ class: title title-1
 
 .box-inv-1.small[`color` (discrète)]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-color-discrete-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-color-discrete-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 
 .box-inv-1.small[`color` (continue)]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-color-continuous-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-color-continuous-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-middle-3[
 
 .box-inv-1.small[`size`]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-size-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-size-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 
 .box-inv-1.small[`fill`]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-fill-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-fill-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right-3[
 
 .box-inv-1.small[`shape`]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-shape-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-shape-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 
 .box-inv-1.small[`alpha`]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-alpha-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/aes-alpha-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -167,7 +164,7 @@ class: title title-1
 
 .small[
 
-```r
+``` r
 ggplot(mpg) + geom_point(aes(x = displ, y = hwy, color = class))
 ggplot(mpg) + geom_point(aes(x = displ, y = hwy, size = class))
 ggplot(mpg) + geom_point(aes(x = displ, y = hwy, shape = class))
@@ -180,12 +177,12 @@ ggplot(mpg) + geom_point(aes(x = displ, y = hwy, alpha = class))
 layout: false
 
 
-```r
+``` r
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy, color = class))
 ```
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-6-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -207,13 +204,13 @@ class: title title-1
 
 # Comment créer ce graphique?
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-7-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
 .left-code[
 
-```r
+``` r
 ggplot(mpg) +
   geom_point(aes(x = displ, 
                  y = hwy, 
@@ -229,7 +226,7 @@ ggplot(mpg) +
 
 .left-code[
 
-```r
+``` r
 ggplot(mpg) +
   geom_point(aes(x = displ, 
                  y = hwy), 
@@ -246,28 +243,28 @@ ggplot(mpg) +
 .pull-left[
 .small[
 
-```r
+``` r
 ggplot(mpg) +
   geom_point(aes(x = displ, 
                  y = hwy, 
                  color = "blue"))
 ```
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-8-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ]
 
 .pull-right[
 .small[
 
-```r
+``` r
 ggplot(mpg) +
   geom_point(aes(x = displ, 
                  y = hwy), 
              color = "blue")
 ```
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-9-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ]
 
@@ -281,11 +278,11 @@ class: title title-1
 # Similarités et différences?
 
 .pull-left[
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-10-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-11-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -293,7 +290,6 @@ class: title title-1
 # Géométries
 
 
-&lt;code class ='r hljs remark-code'&gt;ggplot(data = &lt;b&gt;&lt;span style="background-color:#CBB5FF"&gt;DONNÉES&lt;/span&gt;&lt;/b&gt;) +&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;&lt;span style="background-color:#FFDFD1"&gt;FONCTION_GEOM&lt;/span&gt;&lt;/b&gt;(mapping = aes(APPLICATION: VARIABLES &gt; COMPOSANTESESTHÉTIQUE ))&lt;/code&gt;
 
 ---
 
@@ -347,17 +343,14 @@ class: title title-1 section-title-inv-1
 .box-1[Remplacez le nuage de point par des boîtes à moustache. Utilisez l'aide mémoire.]
 
 .pull-left[
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-12-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-13-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
-<div class="countdown" id="timer_27c86eab" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
-<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
-</div>
+<countdown-timer class="countdown" id="timer_de91de59" minutes="1" seconds="30" update-every="1" tabindex="0" style="right:0;bottom:0;"></countdown-timer>
 
 ---
 
@@ -367,7 +360,7 @@ class: title title-1 section-title-inv-1
 
 .box-1[Produisez un histogramme de `hwy`. Utilisez l'aide mémoire.&lt;br&gt;Indice: ne pas fournir de variable `y`.]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-15-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-15-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -377,7 +370,7 @@ class: title title-1 section-title-inv-1
 
 .box-1[Colorez la densité de `hwy` par `class`.&lt;br&gt;Utilisez l'aide mémoire.&lt;br&gt; Indice: ne pas fournir de variable `y`.]
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-16-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -385,7 +378,7 @@ class: title title-1
 
 # Graphiques complexes!
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-17-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-17-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -396,16 +389,13 @@ class: title title-1 section-title-inv-1
 .box-1[Prédisez ce que le code produit, puis compilez.]
 
 
-```r
+``` r
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy)) +
   geom_smooth(mapping = aes(x = displ, y = hwy))
 ```
 
-<div class="countdown" id="timer_7ddc76d5" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
-<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
-</div>
+<countdown-timer class="countdown" id="timer_c14d8571" minutes="2" seconds="0" update-every="1" tabindex="0" style="right:0;bottom:0;"></countdown-timer>
 
 ---
 
@@ -417,13 +407,13 @@ class: title title-1
 
 .small[
 
-```r
+``` r
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point() +
   geom_smooth()
 ```
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-20-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-20-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -436,13 +426,13 @@ class: title title-1
 
 .small[
 
-```r
+``` r
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = drv)) +
   geom_smooth()
 ```
 
-&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-21-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="MATH60602-diapos2c-visualisation_files/figure-html/unnamed-chunk-21-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -478,7 +468,7 @@ layout: false
 .box-1[Données et composantes esthétiques globales]
 
 
-```r
+``` r
 *ggplot(data = mpg,
 *      mapping = aes(x = displ,
 *                    y = hwy,
@@ -496,7 +486,7 @@ layout: false
 .box-1[Ajouter une strate géométrique (nuage de points)]
 
 
-```r
+``` r
 ggplot(data = mpg,
        mapping = aes(x = displ,
                      y = hwy,
@@ -515,7 +505,7 @@ ggplot(data = mpg,
 .box-1[Ajouter une composante de lissage]
 
 
-```r
+``` r
 ggplot(data = mpg,
        mapping = aes(x = displ,
                      y = hwy,
@@ -535,7 +525,7 @@ ggplot(data = mpg,
 .box-1[Changer la droite de lissage par une régression linéaire]
 
 
-```r
+``` r
 ggplot(data = mpg,
        mapping = aes(x = displ,
                      y = hwy,
@@ -555,7 +545,7 @@ ggplot(data = mpg,
 .box-1[Choisir la palette de couleur]
 
 
-```r
+``` r
 ggplot(data = mpg,
        mapping = aes(x = displ,
                      y = hwy,
@@ -576,7 +566,7 @@ ggplot(data = mpg,
 .box-1[Séparer en panneaux]
 
 
-```r
+``` r
 ggplot(data = mpg,
        mapping = aes(x = displ,
                      y = hwy,
@@ -598,7 +588,7 @@ ggplot(data = mpg,
 .box-1[Ajouter des étiquettes]
 
 
-```r
+``` r
 ggplot(data = mpg,
        mapping = aes(x = displ,
                      y = hwy,
@@ -626,7 +616,7 @@ ggplot(data = mpg,
 .box-1[Ajouter un thème]
 
 
-```r
+``` r
 ggplot(data = mpg,
        mapping = aes(x = displ,
                      y = hwy,
@@ -655,7 +645,7 @@ ggplot(data = mpg,
 .box-1[Modifier le thème]
 
 
-```r
+``` r
 ggplot(data = mpg, 
        mapping = aes(x = displ,
                      y = hwy,
@@ -685,7 +675,7 @@ ggplot(data = mpg,
 .box-1[Terminé!]
 
 
-```r
+``` r
 ggplot(data = mpg, 
        mapping = aes(x = displ,
                      y = hwy,
@@ -712,13 +702,13 @@ ggplot(data = mpg,
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9",
-"navigation": {
-"scroll": false
-}
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9",
+  "navigation": {
+    "scroll": false
+  }
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

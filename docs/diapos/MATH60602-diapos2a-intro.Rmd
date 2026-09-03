@@ -44,14 +44,7 @@ xaringanExtra::use_share_again()
 
 class: center middle main-title section-title-1
 
-# Débuter avec<br>**R** et RStudio
-
-.class-info[
-<figure>
-  <img src="img/01/RStudio.png" alt="RStudio" title="RStudio" width="15%">
-</figure>
-]
-
+# Débuter avec **R**
 
 
 ---
@@ -68,7 +61,7 @@ class: middle
 
 .pull-right.center[
 <figure>
-  <img src="img/01/rstudio-logo.png" alt="Logo de RStudio" title="Logo de RStudio" width="100%">
+  <img src="img/01/positron.png" alt="Logo de Positron" title="Logo de Positron" width="100%">
 </figure>
 
 .box-inv-1[environnement de développement intégré]
@@ -78,13 +71,13 @@ class: middle
 
 class: middle section-title-inv-1
 
-.box-inv-1.large[Un panorama de RStudio]
+.box-inv-1.large[Un panorama de Positron]
 
 ---
 
 
 <figure>
-  <img src="img/01/rstudio-normal.png" alt="RStudio" title="RStudio" width="100%">
+  <img src="img/01/positron-normal.png" alt="Positron" title="Interface de Positron" width="100%">
 </figure>
 
 ---
@@ -95,14 +88,14 @@ class: title title-1
 
 .pull-left-wide[
 <figure>
-  <img src="img/01/rstudio-console.png" alt="Console dans RStudio" title="Console dans RStudio" width="100%">
+  <img src="img/01/positron-console.png" alt="Console dans Positron" title="Console dans Positron" width="100%">
 </figure>
 ]
 
 .pull-right-narrow[
 .box-inv-1[R est en attente de vos instructions]
 
-.box-inv-1[Tapez votre code, et appuyez sur Retour pour le compiler]
+.box-inv-1[Tapez votre code, et appuyez sur Retour/Entrée pour le compiler]
 ]
 
 ---
@@ -114,7 +107,7 @@ class: title title-1 section-title-inv-1
 
 .pull-left-wide[
 <figure>
-  <img src="img/01/rstudio-console.png" alt="RStudio console" title="RStudio console" width="100%">
+  <img src="img/01/positron-console.png" alt="Console dans Positron" title="Console dans Positron" width="100%">
 </figure>
 ]
 
@@ -154,10 +147,10 @@ Utiliser `getwd()` pour trouver l'emplacement
 
 
 class: title title-1
-# Projets dans RStudio
+# Dossiers dans Positron
 
 ```{r, out.width = '60%',echo=FALSE}
-knitr::include_graphics("img/01/rstudio-new-project.png")
+knitr::include_graphics("img/01/positron-dossier.png")
 ```
 
 
@@ -170,7 +163,7 @@ class: title title-1
 
 .pull-left-wide[
 <figure>
-  <img src="img/01/rstudio-files.png" alt="Panneau fichiers de RStudio" title="Panneau fichiers de RStudio" width="100%">
+  <img src="img/01/positron-dossier.png" alt="Panneau fichiers de Positron" title="Panneau fichiers de Positron" width="100%">
 </figure>
 ]
 
@@ -185,7 +178,7 @@ class: title title-1 section-title-inv-1
 
 .pull-left-wide[
 <figure>
-  <img src="img/01/rstudio-files.png" alt="RStudio files pane" title="RStudio files pane" width="100%">
+  <img src="img/01/positron-dossier.png" alt="Onglet fichiers de Positron" title="Onglet fichiers de Positron" width="100%">
 </figure>
 ]
 
@@ -204,7 +197,7 @@ class: title title-1
 
 .pull-left-wide.center[
 <figure>
-  <img src="img/01/rstudio-editor.png" alt="RStudio source panel" title="RStudio source panel" width="80%">
+  <img src="img/01/positron-source.png" alt="Panneau Source de Positron" title="Panneau Source de Positron" width="80%">
 </figure>
 ]
 
@@ -240,7 +233,8 @@ class: title title-1
 
 .pull-left[
 ```{r eval=FALSE}
-install.packages("nom")
+install.packages("nomdupaquet") 
+# Commentaire: sensible à la casse
 ```
 
 .box-inv-1[Télécharge les fonctionnalités<br>sur votre ordinateur.]
@@ -254,7 +248,7 @@ install.packages("nom")
 
 .pull-right[
 ```{r eval=FALSE}
-library(nom)
+library(nomdupaquet)
 ```
 
 .box-inv-1[Charge le paquet]
@@ -277,7 +271,7 @@ remotes::install_github("lbelzile/hecmulti")
 ```
 
 ```{r echo=FALSE}
-countdown(minutes = 2, play_sound = TRUE, font_size = "1.5em")
+countdown(minutes = 2, play_sound = FALSE, font_size = "1.5em")
 ```
 
 ---
@@ -317,24 +311,6 @@ From "Master the Tidyverse" by RStudio
 
 
 
-
-class: title title-1
-# Aides-mémoires
-
-.box-inv-1[Allez à Help > Cheatsheets pour<br>trouver des guides de référence sur certains différents paquets]
-
-.center[
-<figure>
-  <img src="img/01/rstudio-cheatsheet.png" alt="RStudio cheatsheet" title="RStudio cheatsheet" width="40%">
-</figure>
-]
-
-
-
-
----
-
-
 class: title title-1
 
 # Paquets et fonctionalités
@@ -346,14 +322,17 @@ class: title title-1
 
 ```
 > library(tidyverse)
-── Attaching packages ──────────────── tidyverse 1.3.2 ──
-✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-✔ tibble  3.1.7     ✔ stringr 1.4.0
-✔ tidyr   1.2.0     ✔ forcats 0.5.1
-✔ readr   2.1.2     
-── Conflicts ─────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
+── Attaching core tidyverse packages ──────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+✔ forcats 1.0.1     ✔ tibble  3.3.1
+✔ readr   2.2.0     
+── Conflicts ────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ nlme::collapse()      masks dplyr::collapse()
+✖ lubridate::duration() masks arrow::duration()
+✖ dplyr::filter()       masks stats::filter()
+✖ dplyr::lag()          masks stats::lag()
+✖ car::recode()         masks dplyr::recode()
+✖ car::some()           masks purrr::some()
+ℹ Use the conflicted package to force all conflicts to become errors
 ```
 
 ---
@@ -402,7 +381,7 @@ class: title title-1
 
 .pull-left.center[
 <figure>
-  <img src="img/01/quarto-penguins.png" alt="Posit Quarto document" title="Document Quarto" width="100%">
+  <img src="img/01/positron-quarto.png" alt="Posit Quarto document" title="Document Quarto" width="100%">
 </figure>
 ]
 
@@ -481,9 +460,9 @@ class: title title-1 section-title-inv-1
 .pull-right[
 .box-1[Lisez les instructions]
 
-.box-1[Compilez le bloc de code<br>avec le bouton `démarrer`]
+.box-1[Compilez le bloc de code<br>avec le bouton `Preview`]
 
-.box-1.sp-after-half[(icône avec triangle vert)]
+.box-1.sp-after-half[(Icône avec triangle, et Preview)]
 ]
 
 ---
@@ -507,7 +486,7 @@ class: title title-1
 
 .center[
 <figure>
-  <img src="img/01/quarto-render.png" alt="Quarto render" title="Compilation de document Quarto" width="70%">
+  <img src="img/01/quarto-preview.png" alt="Quarto render" title="Compilation de document Quarto" width="70%">
 </figure>
 ]
 
@@ -544,11 +523,11 @@ four_cyls <- filter(mtcars, cyl == 4)
 ---
 class: title title-1
 
-# Panneau environnement
+# Panneau variables
 
 .pull-left[
 <figure>
-  <img src="img/01/rstudio-environment.png" alt="RStudio environment pane" title="RStudio environment pane" width="100%">
+  <img src="img/01/positron-environment.png" alt="Panneau Environnement de Positron" title="Panneau Environnement de Positron" width="100%">
 </figure>
 ]
 
@@ -562,7 +541,7 @@ class: title title-1 section-title-inv-1
 
 # À votre tour
 
-.box-1[Trouvez `four_cyls` dans le panneau environnement.<br>Cliquez sur le nom `four_cyls`]
+.box-1[Trouvez `four_cyls` dans le panneau Variables<br>Cliquez sur le nom `four_cyls`]
 
 .box-1[Qu'est-ce qui arrive?]
 
@@ -574,12 +553,12 @@ class: title title-1
 
 .pull-left[
 <figure>
-  <img src="img/01/rstudio-data-viewer.png" alt="RStudio viewer" title="RStudio viewer" width="100%">
+  <img src="img/01/positron-data-viewer.png" alt="Positron viewer" title="Positron viewer" width="100%">
 </figure>
 ]
 
 .pull-right[
-.box-1[Cliquer sur un objet dans le panneau environnement l'ouvre dans un onglet de visualisation interactive.]
+.box-1[Cliquer sur un objet dans le panneau Variables l'ouvre dans un onglet de visualisation interactive.]
 ]
 
 
@@ -768,7 +747,7 @@ class: title title-1
 
 .pull-left[
 <figure>
-  <img src="img/01/rstudio-help.png" alt="RStudio help pane" title="RStudio help pane" width="100%">
+  <img src="img/01/positron-help.png" alt="Onglet help de Positron" title="Onglet help de Positron" width="100%">
 </figure>
 ]
 

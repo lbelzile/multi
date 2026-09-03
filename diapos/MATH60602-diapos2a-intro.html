@@ -4,7 +4,7 @@
     <title>Débuter avec R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Andrew Heiss, Léo Belzile (traduction et adaptation)" />
-    <script src="libs/header-attrs-2.24/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.32/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.2.6/tile-view.js"></script>
@@ -13,8 +13,8 @@
     <script src="libs/shareon-1.4.1/shareon.min.js"></script>
     <link href="libs/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
-    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
-    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <link href="libs/countdown-0.6.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.6.0/countdown.js"></script>
     <link rel="stylesheet" href="css/ath-slides.css" type="text/css" />
     <link rel="stylesheet" href="css/ath-inferno-fonts.css" type="text/css" />
   </head>
@@ -30,14 +30,7 @@
 
 class: center middle main-title section-title-1
 
-# Débuter avec&lt;br&gt;**R** et RStudio
-
-.class-info[
-&lt;figure&gt;
-  &lt;img src="img/01/RStudio.png" alt="RStudio" title="RStudio" width="15%"&gt;
-&lt;/figure&gt;
-]
-
+# Débuter avec **R**
 
 
 ---
@@ -54,7 +47,7 @@ class: middle
 
 .pull-right.center[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-logo.png" alt="Logo de RStudio" title="Logo de RStudio" width="100%"&gt;
+  &lt;img src="img/01/positron.png" alt="Logo de Positron" title="Logo de Positron" width="100%"&gt;
 &lt;/figure&gt;
 
 .box-inv-1[environnement de développement intégré]
@@ -64,13 +57,13 @@ class: middle
 
 class: middle section-title-inv-1
 
-.box-inv-1.large[Un panorama de RStudio]
+.box-inv-1.large[Un panorama de Positron]
 
 ---
 
 
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-normal.png" alt="RStudio" title="RStudio" width="100%"&gt;
+  &lt;img src="img/01/positron-normal.png" alt="Positron" title="Interface de Positron" width="100%"&gt;
 &lt;/figure&gt;
 
 ---
@@ -81,14 +74,14 @@ class: title title-1
 
 .pull-left-wide[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-console.png" alt="Console dans RStudio" title="Console dans RStudio" width="100%"&gt;
+  &lt;img src="img/01/positron-console.png" alt="Console dans Positron" title="Console dans Positron" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
 .pull-right-narrow[
 .box-inv-1[R est en attente de vos instructions]
 
-.box-inv-1[Tapez votre code, et appuyez sur Retour pour le compiler]
+.box-inv-1[Tapez votre code, et appuyez sur Retour/Entrée pour le compiler]
 ]
 
 ---
@@ -100,7 +93,7 @@ class: title title-1 section-title-inv-1
 
 .pull-left-wide[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-console.png" alt="RStudio console" title="RStudio console" width="100%"&gt;
+  &lt;img src="img/01/positron-console.png" alt="Console dans Positron" title="Console dans Positron" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -114,7 +107,7 @@ class: title title-1 section-title-inv-1
 
 
 
-```r
+``` r
 2 + 2
 ```
 
@@ -145,9 +138,9 @@ Utiliser `getwd()` pour trouver l'emplacement
 
 
 class: title title-1
-# Projets dans RStudio
+# Dossiers dans Positron
 
-&lt;img src="img/01/rstudio-new-project.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/01/positron-dossier.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -159,7 +152,7 @@ class: title title-1
 
 .pull-left-wide[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-files.png" alt="Panneau fichiers de RStudio" title="Panneau fichiers de RStudio" width="100%"&gt;
+  &lt;img src="img/01/positron-dossier.png" alt="Panneau fichiers de Positron" title="Panneau fichiers de Positron" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -174,7 +167,7 @@ class: title title-1 section-title-inv-1
 
 .pull-left-wide[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-files.png" alt="RStudio files pane" title="RStudio files pane" width="100%"&gt;
+  &lt;img src="img/01/positron-dossier.png" alt="Onglet fichiers de Positron" title="Onglet fichiers de Positron" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -193,7 +186,7 @@ class: title title-1
 
 .pull-left-wide.center[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-editor.png" alt="RStudio source panel" title="RStudio source panel" width="80%"&gt;
+  &lt;img src="img/01/positron-source.png" alt="Panneau Source de Positron" title="Panneau Source de Positron" width="80%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -229,8 +222,9 @@ class: title title-1
 
 .pull-left[
 
-```r
-install.packages("nom")
+``` r
+install.packages("nomdupaquet") 
+# Commentaire: sensible à la casse
 ```
 
 .box-inv-1[Télécharge les fonctionnalités&lt;br&gt;sur votre ordinateur.]
@@ -244,8 +238,8 @@ install.packages("nom")
 
 .pull-right[
 
-```r
-library(nom)
+``` r
+library(nomdupaquet)
 ```
 
 .box-inv-1[Charge le paquet]
@@ -264,14 +258,11 @@ class: title title-1  section-title-inv-1
 .box-1[Utilisez les commandes suivantes pour installer `hecmulti`:]
 
 
-```r
+``` r
 remotes::install_github("lbelzile/hecmulti")
 ```
 
-<div class="countdown" id="timer_814199fb" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
-<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
-</div>
+<countdown-timer class="countdown" id="timer_42909e36" minutes="2" seconds="0" update-every="1" tabindex="0" style="right:0;bottom:0;--countdown-font-size:1.5em;"></countdown-timer>
 
 ---
 
@@ -310,24 +301,6 @@ From "Master the Tidyverse" by RStudio
 
 
 
-
-class: title title-1
-# Aides-mémoires
-
-.box-inv-1[Allez à Help &gt; Cheatsheets pour&lt;br&gt;trouver des guides de référence sur certains différents paquets]
-
-.center[
-&lt;figure&gt;
-  &lt;img src="img/01/rstudio-cheatsheet.png" alt="RStudio cheatsheet" title="RStudio cheatsheet" width="40%"&gt;
-&lt;/figure&gt;
-]
-
-
-
-
----
-
-
 class: title title-1
 
 # Paquets et fonctionalités
@@ -339,14 +312,17 @@ class: title title-1
 
 ```
 &gt; library(tidyverse)
-── Attaching packages ──────────────── tidyverse 1.3.2 ──
-✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-✔ tibble  3.1.7     ✔ stringr 1.4.0
-✔ tidyr   1.2.0     ✔ forcats 0.5.1
-✔ readr   2.1.2     
-── Conflicts ─────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
+── Attaching core tidyverse packages ──────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+✔ forcats 1.0.1     ✔ tibble  3.3.1
+✔ readr   2.2.0     
+── Conflicts ────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ nlme::collapse()      masks dplyr::collapse()
+✖ lubridate::duration() masks arrow::duration()
+✖ dplyr::filter()       masks stats::filter()
+✖ dplyr::lag()          masks stats::lag()
+✖ car::recode()         masks dplyr::recode()
+✖ car::some()           masks purrr::some()
+ℹ Use the conflicted package to force all conflicts to become errors
 ```
 
 ---
@@ -359,14 +335,14 @@ class: title title-1
 .box-inv-1[Charger une base de données]
 
 
-```r
+``` r
 data(bd, package = "nomdupaquet")
 ```
 
 .box-inv-1[Utiliser directement une fonction sans charger un paquet]
 
 
-```r
+``` r
 paquet::fonction(...)
 ```
 
@@ -378,15 +354,12 @@ class: title title-1 section-title-inv-1
 
 .box-1[Chargez les données `renfe` du paquet `hecmulti`]
 
-<div class="countdown" id="timer_62b282ba" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
-<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
-</div>
+<countdown-timer class="countdown" id="timer_6c0e6a59" minutes="1" seconds="0" update-every="1" play-sound="true" tabindex="0" style="right:0;bottom:0;--countdown-font-size:1.5em;"></countdown-timer>
 
 --
 
 
-```r
+``` r
 data(renfe, package = 'hecmulti')
 renfe
 ```
@@ -399,7 +372,7 @@ class: title title-1
 
 .pull-left.center[
 &lt;figure&gt;
-  &lt;img src="img/01/quarto-penguins.png" alt="Posit Quarto document" title="Document Quarto" width="100%"&gt;
+  &lt;img src="img/01/positron-quarto.png" alt="Posit Quarto document" title="Document Quarto" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -478,9 +451,9 @@ class: title title-1 section-title-inv-1
 .pull-right[
 .box-1[Lisez les instructions]
 
-.box-1[Compilez le bloc de code&lt;br&gt;avec le bouton `démarrer`]
+.box-1[Compilez le bloc de code&lt;br&gt;avec le bouton `Preview`]
 
-.box-1.sp-after-half[(icône avec triangle vert)]
+.box-1.sp-after-half[(Icône avec triangle, et Preview)]
 ]
 
 ---
@@ -504,7 +477,7 @@ class: title title-1
 
 .center[
 &lt;figure&gt;
-  &lt;img src="img/01/quarto-render.png" alt="Quarto render" title="Compilation de document Quarto" width="70%"&gt;
+  &lt;img src="img/01/quarto-preview.png" alt="Quarto render" title="Compilation de document Quarto" width="70%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -517,12 +490,12 @@ class: title title-1 section-title-inv-1
 .box-1[Quelle est la différence entre:]
 
 
-```r
+``` r
 filter(mtcars, cyl == 4)
 ```
 
 
-```r
+``` r
 four_cyls &lt;- filter(mtcars, cyl == 4)
 ```
 
@@ -537,18 +510,18 @@ class: title title-1
 .box-inv-1[`&lt;-` assigne la sortie à droite à la variable de gauche]
 
 
-```r
+``` r
 four_cyls &lt;- filter(mtcars, cyl == 4)
 ```
 
 ---
 class: title title-1
 
-# Panneau environnement
+# Panneau variables
 
 .pull-left[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-environment.png" alt="RStudio environment pane" title="RStudio environment pane" width="100%"&gt;
+  &lt;img src="img/01/positron-environment.png" alt="Panneau Environnement de Positron" title="Panneau Environnement de Positron" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -562,7 +535,7 @@ class: title title-1 section-title-inv-1
 
 # À votre tour
 
-.box-1[Trouvez `four_cyls` dans le panneau environnement.&lt;br&gt;Cliquez sur le nom `four_cyls`]
+.box-1[Trouvez `four_cyls` dans le panneau Variables&lt;br&gt;Cliquez sur le nom `four_cyls`]
 
 .box-1[Qu'est-ce qui arrive?]
 
@@ -574,12 +547,12 @@ class: title title-1
 
 .pull-left[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-data-viewer.png" alt="RStudio viewer" title="RStudio viewer" width="100%"&gt;
+  &lt;img src="img/01/positron-data-viewer.png" alt="Positron viewer" title="Positron viewer" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
 .pull-right[
-.box-1[Cliquer sur un objet dans le panneau environnement l'ouvre dans un onglet de visualisation interactive.]
+.box-1[Cliquer sur un objet dans le panneau Variables l'ouvre dans un onglet de visualisation interactive.]
 ]
 
 
@@ -602,7 +575,7 @@ class: title title-1
 .box-inv-1[Concaténez avec `c()`:]
 
 
-```r
+``` r
 c(1, 4, 2, 5, 7)
 ```
 
@@ -614,7 +587,7 @@ class: title title-1
 .box-inv-1[Une liste est une collection d'objets]
 
 
-```r
+``` r
 maliste &lt;- list(elementun = 2:4, FALSE)
 maliste
 ```
@@ -637,7 +610,7 @@ class: title title-1
 .pull-left[
 .box-inv-1[Accéder à un élément&lt;br&gt;par nom avec `$`]
 
-```r
+``` r
 maliste$elementun
 ```
 ]
@@ -645,7 +618,7 @@ maliste$elementun
 .pull-right[
 .box-inv-1[Accéder à un élément&lt;br&gt;par position avec `[[ ]]`]
 
-```r
+``` r
 maliste[[1]]
 ```
 ]
@@ -706,7 +679,7 @@ Encodées comme entiers avec étiquettes&lt;br&gt; (étiquettes visible via `lev
 .box-inv-1.sp-after-half[Traitement spécial dans les modèles]
 
 
-```r
+``` r
 facteur &lt;- factor(x = c(1,2,1,3),
                   labels = c("petit", "moyen", "grand"))
 facteur #méthode print
@@ -717,7 +690,7 @@ facteur #méthode print
 ## Levels: petit moyen grand
 ```
 
-```r
+``` r
 levels(facteur)
 ```
 
@@ -772,7 +745,7 @@ class: title title-1
 
 .center[
 
-```r
+``` r
 ?nom_fonction
 # Fonction pas dans l'environnement ou chaîne de caractères
 ??"normal distribution"
@@ -789,7 +762,7 @@ class: title title-1
 
 .pull-left[
 &lt;figure&gt;
-  &lt;img src="img/01/rstudio-help.png" alt="RStudio help pane" title="RStudio help pane" width="100%"&gt;
+  &lt;img src="img/01/positron-help.png" alt="Onglet help de Positron" title="Onglet help de Positron" width="100%"&gt;
 &lt;/figure&gt;
 ]
 
@@ -809,15 +782,12 @@ class: title title-1  section-title-inv-1
 
 .box-1[Ajouter un bloc qui utilise `seq()` pour créer un&lt;br&gt;vecteur de nombres de 5 à 30, espacés par sauts de 5&lt;br&gt;.small[(5, 10, 15, 20, …)]]
 
-<div class="countdown" id="timer_d48c4f9d" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
-<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
-</div>
+<countdown-timer class="countdown" id="timer_b1fb7341" minutes="2" seconds="0" update-every="1" play-sound="true" tabindex="0" style="right:0;bottom:0;--countdown-font-size:1.5em;"></countdown-timer>
 
 ---
 
 
-```r
+``` r
 seq(from = 5, to = 30, by = 5)
 ```
 
@@ -835,12 +805,12 @@ class: title title-1
 .box-inv-1[Parenthèses ou accolades de fermeture manquante]
 
 
-```r
+``` r
 mean(mtcars
 ```
 
 
-```r
+``` r
 "Oops problème
 ```
 
@@ -853,13 +823,13 @@ class: title title-1
 .box-inv-1[Ajouter des accolades quand ce n'est pas adéquat (et vice versa)]
 
 
-```r
+``` r
 mean("mtcars")
 ```
 
 ```
-## Warning in mean.default("mtcars"): argument is not numeric or logical:
-## returning NA
+## Warning in mean.default("mtcars"): l'argument n'est ni numérique, ni logique :
+## renvoi de NA
 ```
 
 ```
@@ -875,12 +845,13 @@ class: title title-1
 .box-inv-1[Mauvais nom de fonction (**R** est sensible à la casse)]
 
 
-```r
+``` r
 MEAN(mtcars)
 ```
 
 ```
-## Error in MEAN(mtcars): could not find function "MEAN"
+## Error in `MEAN()`:
+## ! impossible de trouver la fonction "MEAN"
 ```
 
 ---
@@ -903,7 +874,7 @@ class: title title-1
 .box-inv-1[La classe d'un objet permet de définir&lt;br&gt; des  fonctions génériques (`methods`)]
 
 
-```r
+``` r
 methods(class = "lm")
 ```
 
@@ -956,14 +927,14 @@ class: title title-1
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9",
-"navigation": {
-"scroll": false
-},
-"editor_options": null
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9",
+  "navigation": {
+    "scroll": false
+  },
+  "editor_options": null
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
