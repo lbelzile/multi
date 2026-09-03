@@ -3,7 +3,7 @@ project:
   output-dir: docs
   render:
     - "*.qmd"
- #   - "!diapos/"
+    - "!diapos/introR/"
     - "!diapos/MATH60602-diapos1.qmd"
     - "!diapos/MATH60602-diapos2.qmd"
     - "!diapos/MATH60602-diapos3.qmd"

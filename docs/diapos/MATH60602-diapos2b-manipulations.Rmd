@@ -779,10 +779,11 @@ case_when(CAS1_EST_VRAI ~ VALEUR1,
 mutate(gapminder, 
        decennie = case_when(
          year < 1960 ~ "années 50",
-         year >= 1960 & year < 1970 ~ "années 60",
-         year >= 1970 & year < 1980 ~ "années 70",
-         year >= 1980 & year < 1990 ~ "années 80",
-         year >= 1990 & year < 2000 ~ "années 90",
+         # year >= 1960 & year < 1970 ~ "années 60",
+         year < 1970 ~ "années 60",
+         year < 1980 ~ "années 70",
+         year < 1990 ~ "années 80",
+         year < 2000 ~ "années 90",
          TRUE ~ "millénaire")
 )
 ```
