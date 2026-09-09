@@ -17,6 +17,10 @@ title: "Sélection de variables"
 - {{< fa book >}} [Chapitre sur la sélection de variables et de modèles](https://lbelzile.github.io/math60602/selectionmodeles.html), Sections 1 à 3
 
 
+## Ressources additionnelles
+
+- [Description de `tidymodels`](https://www.tidymodels.org/start/)
+
 ## Diapositives 
 
 - {{< fa file >}} [Sélection de variables](/diapos/MATH60602-diapos3.pdf)
