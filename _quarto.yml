@@ -88,6 +88,8 @@ website:
               file: contenu/06-contenu.qmd
             - text: "7: Régression multinomiale"
               file: contenu/07-contenu.qmd
+            - text: "Examen intra"
+              file: evaluations/intra.qmd
             - text: "8: Analyse de survie"
               file: contenu/08-contenu.qmd
             - text: "9: Analyse de survie"
@@ -98,6 +100,8 @@ website:
               file: contenu/11-contenu.qmd
             - text: "12: Analyse de regroupements"
               file: contenu/12-contenu.qmd
+            - text: "Examen final"
+              file: evaluations/final.qmd
     - title: "Exercices"
       style: "floating"
       search: false

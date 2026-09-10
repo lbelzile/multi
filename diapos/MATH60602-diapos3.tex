@@ -21,13 +21,13 @@
 }
 \setbeamertemplate{section page}{
   \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
     \usebeamerfont{section title}\insertsection\par
   \end{beamercolorbox}
 }
 \setbeamertemplate{subsection page}{
   \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
@@ -138,21 +138,23 @@
 \makeatother
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\newcommand{\theHtable}{\thetable}
+\renewcommand{\theHtable}{\thetable}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -195,9 +197,6 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -294,7 +293,7 @@ Si \(\mathsf{E}(Y)=\beta_0 + \beta_1 \mathrm{X}\), alors
 \end{itemize}
 
 \begin{center}
-\includegraphics[width=0.75\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-1-1.pdf}
+\includegraphics[width=0.75\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-1-1.pdf}
 \end{center}
 \end{frame}
 
@@ -320,7 +319,7 @@ On peut approximer l'aléa à l'aide du \textbf{résidu ordinaire}, soit
 \begin{frame}{Illustration des résidus ordinaires}
 \phantomsection\label{illustration-des-ruxe9sidus-ordinaires}
 \begin{center}
-\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/distancevert-1.pdf}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/distancevert-1.pdf}
 \end{center}
 \end{frame}
 
@@ -589,7 +588,7 @@ linéaires.
 \begin{frame}{Aperçu des données}
 \phantomsection\label{aperuxe7u-des-donnuxe9es}
 \begin{center}
-\includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-6-1.pdf}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-6-1.pdf}
 \end{center}
 
 D'après vous, quelle est la vraie valeur de \(K\)?
@@ -598,7 +597,7 @@ D'après vous, quelle est la vraie valeur de \(K\)?
 \begin{frame}{Ajustement de polynômes}
 \phantomsection\label{ajustement-de-polynuxf4mes}
 \begin{center}
-\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-7-1.pdf}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-7-1.pdf}
 \end{center}
 
 Ajustement pour des polynômes de degré \(K=1, 4, 10\).
@@ -633,7 +632,7 @@ Pour \(K=1, \ldots, 10\):
 \begin{frame}{Estimation de l'erreur quadratique moyenne}
 \phantomsection\label{estimation-de-lerreur-quadratique-moyenne}
 \begin{center}
-\includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-9-1.pdf}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/unnamed-chunk-9-1.pdf}
 \end{center}
 
 Plus le modèle est complexe, plus l'erreur quadratique moyenne de
@@ -659,7 +658,7 @@ En revanche, il se \textbf{généralise} moins bien (notre objectif en
 prédiction).
 
 \begin{center}
-\includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/overfitting-1.pdf}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/overfitting-1.pdf}
 \end{center}
 \end{frame}
 
@@ -755,7 +754,7 @@ vraisemblance}, ils sont de la forme
 Pour la régression linéaire, on peut réécrire les critères d'information
 sous la forme \begin{align*}
 \mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +2\times \text{nb param}+ \text{constante},\\
-\mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +\ln(n)\times \text{nb param}+ \text{constante},
+\mathsf{BIC} &=n \ln (\widehat{\mathsf{EQM}}) +\ln(n)\times \text{nb param}+ \text{constante},
 \end{align*}
 
 \begin{itemize}
@@ -792,7 +791,7 @@ sous la forme \begin{align*}
 
 \centering{
 
-\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-polynome-ajustement-1.pdf}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/fig-polynome-ajustement-1.pdf}
 
 }
 
@@ -905,7 +904,7 @@ performance!
 
 \begin{frame}{Illustration de la validation croisée}
 \phantomsection\label{illustration-de-la-validation-croisuxe9e}
-\includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/validationcroiseeillust-1.pdf}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/validationcroiseeillust-1.pdf}
 \end{frame}
 
 \begin{frame}{Combien de groupes \(M\) pour la validation croisée?}
@@ -973,10 +972,10 @@ une erreur-type de la performance du modèle
 
 \begin{frame}{Illustration de la règle de une erreur-type}
 \phantomsection\label{illustration-de-la-ruxe8gle-de-une-erreur-type}
-\includegraphics{figures/fig-validationcroisee-une-erreur-type.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{figures/fig-validationcroisee-une-erreur-type.pdf}}
 
 La bande jaune donne une erreur-type du meilleur modèle. On choisirait
-le modèle avec \(M=2\), plutôt que \(M=4\)
+le modèle avec \(K=2\), plutôt que \(K=4\)
 \end{frame}
 
 \begin{frame}[fragile]{Validation croisée en \textbf{R}}
@@ -1009,7 +1008,7 @@ les modèles linéaires généralisé.
 
 \centering{
 
-\includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos3_files/figure-beamer/fig-plotcv-1.pdf}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/fig-plotcv-1.pdf}
 
 }
 

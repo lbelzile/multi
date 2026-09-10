@@ -22,7 +22,7 @@ include-in-header:
       text: |
         \usepackage{mathtools}
         \usepackage{mathrsfs}
-        \newcommand{\theHtable}{\thetable}
+        \renewcommand{\theHtable}{\thetable}
 ---
 
 # Modèles prédictifs
@@ -488,7 +488,7 @@ Valables uniquement pour les modèles ajustés par **maximum de vraisemblance**,
 Pour la régression linéaire, on peut réécrire les critères d'information sous la forme
 \begin{align*}
 \mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +2\times \text{nb param}+ \text{constante},\\
-\mathsf{AIC} &=n \ln (\widehat{\mathsf{EQM}}) +\ln(n)\times \text{nb param}+ \text{constante},
+\mathsf{BIC} &=n \ln (\widehat{\mathsf{EQM}}) +\ln(n)\times \text{nb param}+ \text{constante},
 \end{align*}
 
 - Le critère d'Akaike ($\text{AIC}$) utilise une pénalité de 2, le critère bayésien ($\text{BIC}$) de $\ln(n)$.
@@ -716,7 +716,7 @@ Suivant Breiman, on choisit le modèle le plus simple qui soit à au plus une er
 ![](figures/fig-validationcroisee-une-erreur-type.pdf)
 
 
-La bande jaune donne une erreur-type du meilleur modèle. On choisirait le modèle avec $M=2$, plutôt que $M=4$
+La bande jaune donne une erreur-type du meilleur modèle. On choisirait le modèle avec $K=2$, plutôt que $K=4$
 
 
 # Validation croisée en **R**

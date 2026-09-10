@@ -269,21 +269,31 @@
     "href": "evaluations/intra.html",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
-    "text": "Examen intra\n\n\n\n\nL’examen intratrimestriel est d’une durée de 180 minutes. Aucune documentation écrite n’est permise.\nL’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non programmable est autorisée.\nTéléchargez le PDF de l’examen de pratique et le solutionnaire\nL’examen compte pour 30% de la note finale du cours."
+    "text": "Examen intra\n\n\n\n\nL’examen intratrimestriel est d’une durée de 180 minutes. Aucune documentation écrite n’est permise.\nL’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non programmable est autorisée.\nTéléchargez le PDF de l’examen de pratique et le solutionnaire\nL’examen compte pour 30% de la note finale du cours.",
+    "crumbs": [
+      "Contenu",
+      "Matériel pédagogique",
+      "Examen intra"
+    ]
   },
   {
     "objectID": "evaluations/final.html",
     "href": "evaluations/final.html",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
-    "text": "Examen final\n\n\n\n\nL’examen final est récapitulatif et d’une durée de 180 minutes. Aucune documentation écrite n’est permise.\nL’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non programmable est autorisée.\nTéléchargez le PDF de l’examen de pratique et le solutionnaire.\nL’examen compte pour 40% de la note finale du cours."
+    "text": "Examen final\n\n\n\n\nL’examen final est récapitulatif et d’une durée de 180 minutes. Aucune documentation écrite n’est permise.\nL’utilisation d’un ordinateur ou de tout autre matériel électronique est interdit. Une calculatrice non programmable est autorisée.\nTéléchargez le PDF de l’examen de pratique et le solutionnaire.\nL’examen compte pour 40% de la note finale du cours.",
+    "crumbs": [
+      "Contenu",
+      "Matériel pédagogique",
+      "Examen final"
+    ]
   },
   {
     "objectID": "contenu/ressourcesR.html",
     "href": "contenu/ressourcesR.html",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
-    "text": "Ressources R\n\n\n\n\nIl existe plusieurs ressources en ligne pour apprendre R et le tidyverse, notamment\n\nLes ressources didactiques listées sur le CRAN — voir la section French\nIntroduction to R and RStudio par Open Intro Stat\nTeacups, giraffes & statistics: révise les concepts statistiques et les bases de la programmation\nla deuxième édition du livre R for Data Science, qui adhère aux principes du tidyverse.\nla feuille d’aide mémoire de RStudio et celle de ggplot2 en français. Les aides-mémoires pour les paquets sont disponibles depuis le menu Aide dans RStudio.\n\nVous pouvez installer le paquet hecmulti, de même que les paquets employés dans les notes de cours, à l’aide des commandes suivantes:\n\nlib &lt;- c(\"remotes\", \"psych\", \"glmnet\", \"caret\", \n         \"leaps\", \"car\", \"glmbb\", \"AER\",\n         \"tidyverse\", \"nnet\", \"mice\", \"survminer\", \n         \"patchwork\", \"Hmisc\", \"dbscan\",\n         \"factoextra\", \"energy\", \"flexclust\",\n         \"fastcluster\", \"genieclust\", \"mclust\")\nfor(pack in lib){\n  if(!require(pack, quietly = TRUE)){\n    install.packages(pack)\n  }\n}\n\nremotes::install_github(\"lbelzile/hecmulti\")",
+    "text": "Ressources R\n\n\n\n\nIl existe plusieurs ressources en ligne pour apprendre R et le tidyverse, notamment\n\nLes ressources didactiques listées sur le CRAN — voir la section French\nIntroduction to R and RStudio par Open Intro Stat\nTeacups, giraffes & statistics: révise les concepts statistiques et les bases de la programmation\nla deuxième édition du livre R for Data Science, qui adhère aux principes du tidyverse.\nla feuille d’aide mémoire de RStudio et celle de ggplot2 en français. Les aides-mémoires pour les paquets sont disponibles depuis le menu Aide dans RStudio.\n\nVous pouvez installer le paquet hecmulti, de même que les paquets employés dans les notes de cours, à l’aide des commandes suivantes:\n\nlib &lt;- c(\"remotes\", \"psych\", \"glmnet\", \"caret\", \n         \"leaps\", \"car\", \"caret\", \"glmbb\", \"AER\",\n         \"tidyverse\", \"nnet\", \"mice\", \"survminer\", \n         \"patchwork\", \"Hmisc\", \"dbscan\",\n         \"factoextra\", \"energy\", \"flexclust\",\n         \"fastcluster\", \"genieclust\", \"mclust\")\nfor(pack in lib){\n  if(!require(pack, quietly = TRUE)){\n    install.packages(pack)\n  }\n}\n\nremotes::install_github(\"lbelzile/hecmulti\")",
     "crumbs": [
       "Contenu",
       "Ressources",

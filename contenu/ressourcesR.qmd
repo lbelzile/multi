@@ -14,7 +14,7 @@ Vous pouvez installer le paquet `hecmulti`, de même que les paquets employés d
 
 ```{r, eval=FALSE, echo=TRUE}
 lib <- c("remotes", "psych", "glmnet", "caret", 
-         "leaps", "car", "glmbb", "AER",
+         "leaps", "car", "caret", "glmbb", "AER",
          "tidyverse", "nnet", "mice", "survminer", 
          "patchwork", "Hmisc", "dbscan",
          "factoextra", "energy", "flexclust",
