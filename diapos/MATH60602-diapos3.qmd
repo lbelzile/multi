@@ -22,7 +22,7 @@ include-in-header:
       text: |
         \usepackage{mathtools}
         \usepackage{mathrsfs}
-        \renewcommand{\theHtable}{\thetable}
+        \newcommand{\theHtable}{\thetable}
 ---
 
 # Modèles prédictifs
@@ -255,7 +255,7 @@ Notre but sera de sélectionner un **bon** modèle, selon les objectifs de l'ét
 
 # Prédiction vs inférence
 
-**Prédiction**: obtenir une estimation de $\widehat{Y}$: on veut un modèle performant
+**Prédiction**: obtenir la prédiction de $\widehat{Y}$: on veut un modèle performant
 
 **Inférence**: estimer l'effet de variables explicatives, effectuer des tests d'hypothèses
 
@@ -474,14 +474,17 @@ Ainsi, l'estimateur des moindres carrés, $\widehat{\boldsymbol{\beta}}$, corres
 Valables uniquement pour les modèles ajustés par **maximum de vraisemblance**, ils sont de la forme
 
 \begin{align*}
-\mathsf{IC} &= -\text{ajustement} + \text{pénalité} \times\text{nb param} \\
+\mathsf{IC} &= \underset{\text{log-vraisemblance}}{-2 \ell(\widehat{\boldsymbol{\theta}})} + \text{pénalité} \times\text{nb param} \\
 \end{align*}
 
-- On veut maximiser l'ajustement, donc minimiser le premier terme.
+- On veut maximiser la log-vraisemblance $\ell(\widehat{\boldsymbol{\theta}})$ (qui indique la qualité de l'ajustement), donc minimiser le premier terme.
 - La pénalité vient contrebalancer l'amélioration mécanique de l'ajustement quand le modèle a plus de flexibilité.
-- Plus le critère d'information est petit, meilleur c'est.
 
+\footnotesize
 
+Les données de la variable réponse $y_1, \dots, y_n$ doivent être les mêmes pour que la comparaison tienne (donc pas de transformation, par ex. modéliser $\ln(y)$, sans inclure le Jacobien de la transformation le cas échéant). 
+
+\normalsize 
 
 # Critères d'information
 
@@ -492,8 +495,10 @@ Pour la régression linéaire, on peut réécrire les critères d'information so
 \end{align*}
 
 - Le critère d'Akaike ($\text{AIC}$) utilise une pénalité de 2, le critère bayésien ($\text{BIC}$) de $\ln(n)$.
-
+- La pénalité du $\mathsf{BIC}$ augmente avec la taille de l'échantillon: $\ln(100)\approx 4.6$, mais \ln(10 000) \approx 9.2.$
 - Le $\mathsf{BIC}$ (critère Bayésien de Schwarz) pénalise donc davantage que le $\mathsf{AIC}$ (critère d'Akaike).
+- Possible de comparer des modèles avec des familles différentes (loi normale, ou GLM), mais il faut alors garder les constantes! Ce n'est pas toujours le cas avec les logiciels.
+
 
 # Utiliser les critères d'information
 
@@ -501,6 +506,10 @@ Pour la régression linéaire, on peut réécrire les critères d'information so
 - La pénalité assure que les modèles plus complexes ne sont pas systématiquement retournés.
 - Le $\textsf{BIC}$ retourne toujours des modèles plus parcimonieux (c'est-à-dire avec moins de paramètres) que le $\textsf{AIC}$.
 - Génériques `AIC` et `BIC` en **R**
+
+# Mises en garde
+
+
 
 # Illustration
 
@@ -633,15 +642,6 @@ Diviser l'échantillon en $M$ groupes d'observations de taille moyenne égale
 
 Les regroupements sont aléatoires, tout comme la mesure finale de performance!
 
-# Étapes de la validation croisée à $M$ groupes
-
-1. Diviser l'échantillon au hasard en $M$ parties $P_1, P_2, \ldots, P_M$ contenant toutes à peu près le même nombre d'observations.
-2. Pour $j = 1$ à $M$,
-    i. Enlever la partie $j$.
-    ii. Estimer les paramètres du modèle en utilisant les observations des $M-1$ autres parties combinées.
-    iii. Calculer la mesure de performance (par exemple la somme du carré des erreurs $\{Y_i - \widehat{Y}_i\}^2$) de ce modèle pour le groupe $P_j$.
-3. Combiner les $M$ estimations de performance pour obtenir une mesure de performance finale.
-
 # Illustration de la validation croisée
 
 ```{r}
@@ -666,8 +666,8 @@ ggplot(df, aes(x, y)) +
         panel.background = element_blank(),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank()) +
-  scale_color_manual(values=MetBrewer::met.brewer("Hiroshige", 2)) +
-  scale_fill_manual(values=MetBrewer::met.brewer("Hiroshige", 2)) +
+  scale_color_manual(values=MetBrewer::met.brewer("Hiroshige", 2)[2:1]) +
+  scale_fill_manual(values=MetBrewer::met.brewer("Hiroshige", 2)[2:1]) +
   scale_y_continuous(
     breaks = 1:5,
     minor_breaks = NULL,
@@ -675,6 +675,15 @@ ggplot(df, aes(x, y)) +
     labels = 5:1)
 
 ```
+
+# Étapes de la validation croisée à $M$ groupes
+
+1. Diviser l'échantillon au hasard en $M$ parties $P_1, P_2, \ldots, P_M$ contenant toutes à peu près le même nombre d'observations.
+2. Pour $j = 1$ à $M$,
+    i. Enlever la partie $j$.
+    ii. Estimer les paramètres du modèle en utilisant les observations des $M-1$ autres parties combinées.
+    iii. Calculer la mesure de performance (par exemple la somme du carré des erreurs $\{Y_i - \widehat{Y}_i\}^2$) de ce modèle pour le groupe $P_j$.
+3. Combiner les $M$ estimations de performance pour obtenir une mesure de performance finale.
 
 # Combien de groupes $M$ pour la validation croisée?
 
