@@ -18,6 +18,7 @@ keep-tex: true
 include-in-header: 
       text: |
         \usepackage{tabu}
+        \renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 ---
 
 # Organisation du travail

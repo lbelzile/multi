@@ -21,21 +21,37 @@ sansfont: 'Latin Modern Sans'
 keep-tex: true
 include-in-header: 
       text: |
+        \usepackage{amsmath,amssymb,amsfonts}
         \usepackage{tabu}
         \usepackage{mathtools}
+        \usepackage{xltabular}
+        \renewcommand{\boldsymbol}[1]{\symbfit{#1}}
+
 ---
+
+# Étapes de la modélisation prédictive
+
+1. Préparation de la base de données (analyse exploratoire, nettoyage)
+2. Identification de la variable cible et des variables explicatives potentielles
+3. Séparation de la base de données
+4. Entraînement et estimation
+   a. Prétraitement des données
+   b. Choix du modèle
+   c. Choix des variables explicatives
+5. Prédictions
+6. Évaluation de la performance
+7. Sélection du modèle final, ré-estimation et prédiction
 
 # Présentation des données
 
-
-Exemple de base de données marketing. Cibler les clients pour l'envoi d'un échantillon promotionnel et d'un catalogue de produits.
+On considère une base de données marketing. L'objectif d'affaires est de cibler les clients à qui envoyer un échantillon promotionnel.
 
 But: maximiser les levées de fonds
 
-1. Envoyer un échantillon de produits au coût de 10$ à un groupe pilote de 1000 personnes et regarder le montant d'achat suite à l'envoi.
+1. Envoyer un échantillon de produits au coût de 10$ à un groupe pilote de 1000 personnes et mesurer le montant d'achat suite à l'envoi.
 2. Construire un modèle de prédiction pour déterminer à qui envoyer le produit parmi tous les 100 000 clients résiduels.
 
-
+On supposera que, au final, chaque client a reçu l'échantillon. Le but de l'exercice rétrospectif est de voir s'il aurait été possible de faire mieux en ne ciblant que ceux susceptibles de donner.
 
 # Population cible
 
@@ -48,7 +64,7 @@ Clients qui ont
 
 Regroupements:
 
-- 1K personnes dans l'échantillon d'apprentissage,
+- 1K personnes dans l'échantillon d'apprentissage (pilote),
 - 100K personnes pour l'ensemble des autres clients.
 
 # Liste des variables
@@ -57,7 +73,7 @@ Regroupements:
 \footnotesize 
 
 
-- `yachat`, une variable binaire qui indique si le client a acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon;
+- `yachat`, une variable binaire qui indique si le client a acheté quelque chose suite à l'envoi, égale à 1 si oui et 0 sinon;
 - `ymontant`, le montant de l'achat si le client a acheté quelque chose;
 - `x1`: sexe de l'individu, soit homme (0) ou femme (1);
 - `x2`: l'âge (en année);
@@ -203,7 +219,7 @@ tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
   kableExtra::kable_styling(full_width = TRUE)
 
 tibble::tibble(variable = c("x2","x6","x7","x8","x9","x10"),
-               description = c("âge", "nombre d’année comme client","nombre de semaines depuis le dernier achat","montant du dernier achat","montant total dépensé sur un an","nombre d'achats différents sur un an")) |>
+               description = c("âge", "nombre d'année comme client","nombre de semaines depuis le dernier achat","montant du dernier achat","montant total dépensé sur un an","nombre d'achats différents sur un an")) |>
   knitr::kable(booktabs = TRUE, linesep = "") |>
   kableExtra::kable_styling(full_width = TRUE)
 
@@ -219,16 +235,16 @@ Le montant moyen dépensé s'écrit
 
 On bâtit un modèle de régression linéaire pour le montant moyen dépensé, $\mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1)$.
 
-Le modèle utilise les données des 210 personnes (sur 1000) de l'échantillon d'apprentissage qui ont acheté suite à l'envoi du catalogue.
+Le modèle utilise les données des 210 personnes (sur 1000) de l'échantillon d'apprentissage qui ont acheté suite à l'envoi de l'échantillon.
 
 
 # Séparation de l'échantillon
 
 On conserve 100 000 observations test pour vérifier la performance
 
-- (oracle) réponses inconnues à toutes fins pratiques
+- (oracle): réponses inconnues à toutes fins pratiques en temps ordinaire.
 
-
+Nous utiliserons la pénalisation ou la validation croisée pour choisir notre modèle.
 
 \footnotesize
 
@@ -241,6 +257,8 @@ dbm_a <- dbm |>
   dplyr::filter(
     test == 0, #données d'entraînement
     !is.na(ymontant)) # personnes qui ont acheté
+
+with(dbm, table(yachat, test))
 ```
 
 \normalsize
@@ -259,7 +277,7 @@ Idée initiale:
 
 On essaie d'estimer la moyenne de la variable cible `ymontant` de la manière le plus flexible possible. 
 
-Pour ce faire, on pourrait aussi considérer tous les termes quadratiques, et les interactions d'ordre 2:
+Pour ce faire, on pourrait aussi considérer tous les termes quadratiques, et les interactions d'ordre deux:
 
 - on n'inclut pas le carré de variables indicatrices binaires (car $0^2=0, 1^2=1$).
 - idem pour les interactions entre indicateurs qui représentent des niveaux d'une même variable catégorielle.
@@ -302,7 +320,7 @@ Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times
 #| eval: true
 #| tbl-cap: "Nombres de modèles en fonction du nombre de paramètres."
 #| warning: false
-p <- c(5,10,15,20,25,30)
+p <- c(5,10,14,25)
 npar <- 2^p
 options(scipen=100)
 knitr::kable(x = data.frame(p = p, npar = npar),
@@ -345,9 +363,10 @@ rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
 # Recherche efficace
 
 
-L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux.
+L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux. 
 
-En **R**, consid/rez 
+
+Implémenté avec critères d'information dans le paquet `BranchGLM`.
 
 
 # Mot d'ordre
@@ -364,7 +383,7 @@ Quelques mantras pour la suite:
 
 Recherche exhaustive typiquement trop coûteuse.
 
-On peut plutôt opter pour un algorithme glouton (greedy): 
+On peut plutôt opter pour un algorithme heuristique: 
 
 - à chaque étape, on maximise l'utilité (horizon d'optimisation limité) en retirant ou en ajoutant une seule variable.
 - au début, $p$ variables à regarder, puis il y a $p-1$ choix l'étape suivante, etc.
@@ -385,12 +404,12 @@ Il suffit donc de rapporter le meilleur modèle avec $1,2,\ldots, m$ variables e
 
 On sélectionne un critère à minimiser (AIC/BIC) et une règle d'arrêt.
 
-**Sélection ascendante** (*forward selection*): à partir du modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle précédent la variable qui réduit le plus notre critère.
+**Sélection ascendante** (*forward selection*): à partir du modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle précédent la variable qui réduit le plus notre critère d'optimisation.
 
 
-**Sélection descendante** (*backward selection*): à partir du modèle de départ (typiquement le modèle complet), enlever la variable qui mène à la plus grande réduction du critère
+**Sélection descendante** (*backward selection*): à partir du modèle de départ (typiquement le modèle complet), enlever la variable qui mène à la plus grande réduction du critère d'optimisation.
 
-Dans les deux cas, la procédure se termine quand on ne peut plus réduire le critère
+Dans les deux cas, la procédure se termine quand on ne peut plus réduire le critère.
 
 On choisit le modèle final parmi ceux considérés avec le plus petit critère.
 
@@ -399,7 +418,7 @@ On choisit le modèle final parmi ceux considérés avec le plus petit critère.
 À partir du modèle de base (d'ordinaire), 
 
 - alterner sélection séquentielle ascendante et descendante.
-- on continue ainsi tant que le modèle retourné par l’algorithme n’est pas identique à celui de l’étape précédente.
+- on continue ainsi tant que le modèle retourné par l'algorithme n'est pas identique à celui de l'étape précédente.
 - une variable peut entrer dans le modèle et sortir plus tard dans le processus.
    - préférable aux procédures ascendantes et descendantes (car plus de modèles).
    - lui préférer la recherche exhaustive quand c'est possible
@@ -456,13 +475,13 @@ L'historique des étapes est disponible via `seq_AIC$anova`
 
 # Performance en fonction de la complexité 
 
-```{r, out.width = '80%', fig.align='center'}
+```{r, out.width = '100%', fig.align='center'}
 knitr::include_graphics("figures/fig-perfo-sequentiel.pdf")
 ```
 
 
 \footnotesize 
-40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. Oracle: 100K données de validation (libellé externe)
+Performance sur les 100K données de validation (oracle) des 40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. 
 
 \normalsize
 
@@ -483,9 +502,11 @@ Pénalisation la norme de $\beta_1, \ldots, \beta_p$
 - Modèles avec pénalités pas les mêmes selon l'échelle des données         
     - pas invariant aux transformations affines (par ex., conversion de Celcius en Farenheit)
 
-**Solution**: standardiser variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ **et** variable réponse $\boldsymbol{y}$ (moyenne zéro, écart-type unitaire).
+**Solution**: standardiser les variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ **et** la variable réponse $\boldsymbol{y}$ pour qu'elles soient toutes à la même échelle (par exemple, avec moyenne nulle et un écart-type unitaire).
 
-- vérifier selon le logiciel, cette étape peut-être effectuée implicitement
+- vérifier selon le logiciel, cette étape peut-être effectuée implicitement par votre fonction.
+
+
 
 
 # LASSO
@@ -540,7 +561,7 @@ knitr::include_graphics("figures/fig-lassopath.pdf")
 #| label: fig-lassopath
 #| eval: true
 #| echo: false
-#| fig.cap: "Coefficients du modèle en fonction de la pénalité"
+#| fig.cap: "Valeur des coefficients du modèle en fonction de la pénalité (avec nombre de coefficients non-nuls sur le dessus)."
 #| out.width: '80%'
 #| fig.width: 7
 #| fig.height: 5
@@ -550,13 +571,17 @@ lasso_path <-
     y = dbm_a$ymontant,
     alpha = 1, 
     lambda = seq(from = 0.01, to = 10, by = 0.01))
-plot(lasso_path, xlab = "valeur de la pénalité (norme L1)")
+plot(lasso_path, 
+     xvar = "lambda",
+     xlab = expression("valeur de la pénalité"~lambda),
+     #label = "nombre de coefficients non-nuls",
+     ylab = "valeur des coefficients")
 ```
 
 
 # Évaluation et prédiction
 
-Une fois la valeur de $\lambda$ choisie, on réestime le modèle avec la pénalité.
+Une fois la valeur de $\lambda$ choisie, on ré-estime le modèle avec la pénalité.
 
 ```{r}
 #| eval: false
@@ -595,40 +620,71 @@ eqm_lasso <- mean((pred - dbm_v$ymontant)^2)
 
 \normalsize
 
-<!-- 
+# Critères objectifs
+
+Il est important de distinguer entre la fonction objective (ou la fonction de coût) utilisée pour l'estimation des paramètres, comme 
+
+- l'erreur quadratique moyenne pour la régression linéaire
+- le négatif de la log vraisemblance pour les modèles linéaires généralisés.
+
+et le critère visant à choisir le meilleur modèle (le profit en entreprise).
+
+<!--
+# Régression quantile
+
+La régression quantile vise à obtenir les estimations $\widetilde{\boldsymbol{\beta}}$ $$\widehat{y}_i(\boldsymbol{\beta}) = \beta_0 + \beta_1x_1 + \cdots + \beta_p x_p$$ qui minimise la fonction quantile pour $\alpha \in (0,1)$
+\begin{align*}
+\rho_\alpha(\boldsymbol{\beta}) &= \{y_i-\widehat{y}_i(\boldsymbol{\beta})\}(\alpha-\mathsf{1}_{y_i < \widehat{y}_i(\boldsymbol{\beta})}) \\
+& = \begin{cases}
+\alpha \{y_i-\widehat{y}_i(\boldsymbol{\beta})\} & \text{ si } y_i \ge \widehat{y}_i(\boldsymbol{\beta}), \\
+(\alpha-1) \{y_i-\widehat{y}_i(\boldsymbol{\beta})\} & \text{ si } y_i < \widehat{y}_i(\boldsymbol{\beta}).
+\end{cases}
+\end{align*}
+
+
+
+Si le niveau du quantile est $\alpha=0.5,$ cela revient à minimiser l'erreur absolue moyenne.
+
+Si $\alpha > 0.5,$ la sous-estimation est plus pénalisée que la surestimation.
+
+-->
+
+<!--
+
 # Motivation pour la moyenne de modèles
 
 Une seule base de données (un seul échantillon) à disposition!
 
-Peu d'hétérogénéité, or cette dernière est présente  si on change d'échantillon.
+Peu d'hétérogénéité, or cette dernière existe!
 
 - (rappelez-vous l'incertitude de la validation croisée)
 
+
+
+# Moyenne de modèles
+
+**Solution**: générer nous-mêmes $B$ échantillons différents à partir de l'échantillon original.
+
+Autoamorçage nonparamétrique: échantillon choisi au hasard et avec remise dans l'échantillon original.
+
+- Une même observation peut être sélectionnée plus d'une fois tandis qu'une autre peut ne pas être sélectionnée du tout.
+
+**Défaut**: très coûteux en calcul
+
+# Moyennes de modèles en pseudocode
+
+1. Échantillonnage aléatoire simple avec remise de $B$ jeux de données
+
+Pour chaque jeu de données étiqueté $b=1, \ldots, B$:
+
+   2. Effectuer la sélection de variables
+   3. Sauvegarder les coefficients (0 si la variable est absente)
+
+Mettre en commun les résultats:
+
+4. Calculer la moyenne des coefficients
+5. Obtenir les prédictions
 -->
-
-<!-- # Moyenne de modèles  -->
-
-<!-- **Solution**: générer nous-mêmes $B$ échantillons différents à partir de l‘échantillon original. -->
-
-<!-- Autoamorçage nonparamétrique: échantillon choisi au hasard et avec remise dans l’échantillon original.  -->
-
-<!-- - Une même observation peut être sélectionnée plus d’une fois tandis qu’une autre peut ne pas être sélectionnée du tout. -->
-
-<!-- **Défaut**: très coûteux en calcul -->
-
-<!-- # Moyennes de modèles en pseudocode -->
-
-<!-- 1. Échantillonnage aléatoire simple avec remise de $B$ jeux de données  -->
-
-<!-- Pour chaque jeu de données étiqueté $b=1, \ldots, B$: -->
-
-<!--    2. Effectuer la sélection de variables -->
-<!--    3. Sauvegarder les coefficients (0 si la variable est absente) -->
-
-<!-- Mettre en commun les résultats: -->
-
-<!-- 4. Calculer la moyenne des coefficients -->
-<!-- 5. Obtenir les prédictions -->
 
 <!-- \footnotesize -->
 
@@ -661,21 +717,21 @@ En incluant les termes de base, les carrés et les interactions d'ordre 2.
 
 - Le nombre de modèles possibles augmente rapidement avec le nombre de prédicteurs.
  - Si un modèle est mal spécifié (variables importantes manquantes), alors les estimations sont biaisées. 
-- Si le modèle est surspécifié, les coefficients correspondants aux variables superflues incluses sont en moyenne nuls, mais contribuent à l’augmentation de la variance. 
+- Si le modèle est surspécifié, les coefficients correspondants aux variables superflues incluses sont en moyenne nuls, mais contribuent à l'augmentation de la variance. 
 - **Compromis biais/variance**.
 
 # Récapitulatif
 
-- La taille du modèle (le nombre de variables explicatives) est restreinte par le nombre d’observations disponibles.
-- En général, il faut s’assurer d’avoir suffisamment d’observations pour estimer de manière fiable les coefficients
+- La taille du modèle (le nombre de variables explicatives) est restreinte par le nombre d'observations disponibles.
+- En général, il faut s'assurer d'avoir suffisamment d'observations pour estimer de manière fiable les coefficients.
 - Porter une attention particulière aux variables binaires et aux interactions avec ces dernières: si les effectifs de certaines modalités sont faibles, il y a danger de surajustement.
 
 # Récapitulatif
 
 
 - Une recherche exhaustive garantie le survol du plus grand nombre de modèles possibles, mais est coûteuse
-- On peut effectuer une recherche exhaustive à l'aide d'algorithmes d'optimisation pour un nombre réduit de variables (max 50)
-- Sinon, on a l'option d'utiliser un algorithme glouton qui ne couvre qu'un sous-ensemble de tous les modèles
+- On peut effectuer une recherche exhaustive à l'aide d'algorithmes d'optimisation (séparation et évaluation) pour un nombre réduit de variables (max 50).
+- Sinon, on a l'option d'utiliser un algorithme heuristique qui ne couvre qu'un sous-ensemble de tous les modèles
 - Compromis coût de calcul vs nombre de modèles explorés
 - Possibilité de combiner des méthodes!
 

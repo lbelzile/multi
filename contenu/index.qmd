@@ -26,6 +26,7 @@ Un guide d'[installation de **R** et RStudio](installation.qmd) et des [ressourc
 - [Séance 5](05-contenu.qmd)
 - [Séance 6](06-contenu.qmd)
 - [Séance 7](07-contenu.qmd)
+- [Intra](../evaluations/intra.qmd)
 - [Séance 8](08-contenu.qmd)
 - [Séance 9](09-contenu.qmd)
 - [Séance 10](10-contenu.qmd)

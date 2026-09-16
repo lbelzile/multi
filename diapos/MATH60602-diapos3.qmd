@@ -23,6 +23,7 @@ include-in-header:
         \usepackage{mathtools}
         \usepackage{mathrsfs}
         \newcommand{\theHtable}{\thetable}
+        \renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 ---
 
 # Modèles prédictifs

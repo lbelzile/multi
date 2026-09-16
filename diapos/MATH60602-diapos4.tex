@@ -152,23 +152,11 @@
 \def\fps@figure{htbp}
 \makeatother
 
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabularx}
-\usepackage{xltabular}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{tabu}
 \usepackage{mathtools}
+\usepackage{xltabular}
+\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -232,10 +220,43 @@
 \frame{\titlepage}
 
 
+\begin{frame}{Étapes de la modélisation prédictive}
+\phantomsection\label{uxe9tapes-de-la-moduxe9lisation-pruxe9dictive}
+\begin{enumerate}
+\tightlist
+\item
+  Préparation de la base de données (analyse exploratoire, nettoyage)
+\item
+  Identification de la variable cible et des variables explicatives
+  potentielles
+\item
+  Séparation de la base de données
+\item
+  Entraînement et estimation
+
+  \begin{enumerate}
+  [a.]
+  \tightlist
+  \item
+    Prétraitement des données
+  \item
+    Choix du modèle
+  \item
+    Choix des variables explicatives
+  \end{enumerate}
+\item
+  Prédictions
+\item
+  Évaluation de la performance
+\item
+  Sélection du modèle final et prédiction
+\end{enumerate}
+\end{frame}
+
 \begin{frame}{Présentation des données}
 \phantomsection\label{pruxe9sentation-des-donnuxe9es}
-Exemple de base de données marketing. Cibler les clients pour l'envoi
-d'un échantillon promotionnel et d'un catalogue de produits.
+On considère une base de données marketing. L'objectif d'affaires est de
+cibler les clients à qui envoyer un échantillon promotionnel.
 
 But: maximiser les levées de fonds
 
@@ -243,11 +264,15 @@ But: maximiser les levées de fonds
 \tightlist
 \item
   Envoyer un échantillon de produits au coût de 10\$ à un groupe pilote
-  de 1000 personnes et regarder le montant d'achat suite à l'envoi.
+  de 1000 personnes et mesurer le montant d'achat suite à l'envoi.
 \item
   Construire un modèle de prédiction pour déterminer à qui envoyer le
   produit parmi tous les 100 000 clients résiduels.
 \end{enumerate}
+
+On supposera que, au final, chaque client a reçu l'échantillon. Le but
+de l'exercice rétrospectif est de voir s'il aurait été possible de faire
+mieux en ne ciblant que ceux susceptibles de donner.
 \end{frame}
 
 \begin{frame}{Population cible}
@@ -269,7 +294,7 @@ Regroupements:
 \begin{itemize}
 \tightlist
 \item
-  1K personnes dans l'échantillon d'apprentissage,
+  1K personnes dans l'échantillon d'apprentissage (pilote),
 \item
   100K personnes pour l'ensemble des autres clients.
 \end{itemize}
@@ -283,7 +308,7 @@ Regroupements:
 \tightlist
 \item
   \texttt{yachat}, une variable binaire qui indique si le client a
-  acheté quelque chose dans le catalogue égale à 1 si oui et 0 sinon;
+  acheté quelque chose suite à l'envoi, égale à 1 si oui et 0 sinon;
 \item
   \texttt{ymontant}, le montant de l'achat si le client a acheté quelque
   chose;
@@ -417,7 +442,7 @@ x10 & 5.64 & 2.31 & 1 & 14\\
 variable & description\\
 \midrule
 x2 & âge\\
-x6 & nombre d’année comme client\\
+x6 & nombre d'année comme client\\
 x7 & nombre de semaines depuis le dernier achat\\
 x8 & montant du dernier achat\\
 x9 & montant total dépensé sur un an\\
@@ -439,8 +464,8 @@ On bâtit un modèle de régression linéaire pour le montant moyen dépensé,
 \(\mathsf{E}(\texttt{ymontant} \mid \texttt{yachat}=1)\).
 
 Le modèle utilise les données des 210 personnes (sur 1000) de
-l'échantillon d'apprentissage qui ont acheté suite à l'envoi du
-catalogue.
+l'échantillon d'apprentissage qui ont acheté suite à l'envoi de
+l'échantillon.
 \end{frame}
 
 \begin{frame}[fragile]{Séparation de l'échantillon}
@@ -450,8 +475,12 @@ On conserve 100 000 observations test pour vérifier la performance
 \begin{itemize}
 \tightlist
 \item
-  (oracle) réponses inconnues à toutes fins pratiques
+  (oracle): réponses inconnues à toutes fins pratiques en temps
+  ordinaire.
 \end{itemize}
+
+Nous utiliserons la pénalisation ou la validation croisée pour choisir
+notre modèle.
 
 \footnotesize
 
@@ -462,8 +491,17 @@ On conserve 100 000 observations test pour vérifier la performance
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}
 \NormalTok{    test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\CommentTok{\#données d\textquotesingle{}entraînement}
     \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(ymontant)) }\CommentTok{\# personnes qui ont acheté}
+
+\FunctionTok{with}\NormalTok{(dbm, }\FunctionTok{table}\NormalTok{(yachat, test))}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+      test
+yachat     0     1
+     0   790 76821
+     1   210 23179
+\end{verbatim}
 
 \normalsize
 \end{frame}
@@ -490,7 +528,7 @@ On essaie d'estimer la moyenne de la variable cible \texttt{ymontant} de
 la manière le plus flexible possible.
 
 Pour ce faire, on pourrait aussi considérer tous les termes
-quadratiques, et les interactions d'ordre 2:
+quadratiques, et les interactions d'ordre deux:
 
 \begin{itemize}
 \tightlist
@@ -552,10 +590,8 @@ de paramètres.}
 \endlastfoot
 5 & 32 \\
 10 & 1024 \\
-15 & 32768 \\
-20 & 1048576 \\
+14 & 16384 \\
 25 & 33554432 \\
-30 & 1073741824 \\
 
 \end{longtable}
 \end{frame}
@@ -592,13 +628,14 @@ petit).
 \normalsize
 \end{frame}
 
-\begin{frame}{Recherche efficace}
+\begin{frame}[fragile]{Recherche efficace}
 \phantomsection\label{recherche-efficace}
 L'algorithme par séparation et évaluation (\emph{branch and bound})
 recherche de manière efficace sans essayer tous les modèles candidats et
 écarte d'office les modèles sous-optimaux.
 
-En \textbf{R}, consid/rez
+Implémenté avec critères d'information dans le paquet
+\texttt{BranchGLM}.
 \end{frame}
 
 \begin{frame}{Mot d'ordre}
@@ -629,7 +666,7 @@ Quelques mantras pour la suite:
 \phantomsection\label{muxe9thodes-de-suxe9lection-suxe9quentielles}
 Recherche exhaustive typiquement trop coûteuse.
 
-On peut plutôt opter pour un algorithme glouton (greedy):
+On peut plutôt opter pour un algorithme heuristique:
 
 \begin{itemize}
 \tightlist
@@ -661,14 +698,14 @@ On sélectionne un critère à minimiser (AIC/BIC) et une règle d'arrêt.
 
 \textbf{Sélection ascendante} (\emph{forward selection}): à partir du
 modèle de base (ordonnée à l'origine), ajouter à chaque étape au modèle
-précédent la variable qui réduit le plus notre critère.
+précédent la variable qui réduit le plus notre critère d'optimisation.
 
 \textbf{Sélection descendante} (\emph{backward selection}): à partir du
 modèle de départ (typiquement le modèle complet), enlever la variable
-qui mène à la plus grande réduction du critère
+qui mène à la plus grande réduction du critère d'optimisation.
 
 Dans les deux cas, la procédure se termine quand on ne peut plus réduire
-le critère
+le critère.
 
 On choisit le modèle final parmi ceux considérés avec le plus petit
 critère.
@@ -754,13 +791,14 @@ L'historique des étapes est disponible via \texttt{seq\_AIC\$anova}
 \begin{frame}{Performance en fonction de la complexité}
 \phantomsection\label{performance-en-fonction-de-la-complexituxe9}
 \begin{center}
-\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/fig-perfo-sequentiel.pdf}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{figures/fig-perfo-sequentiel.pdf}
 \end{center}
 
 \footnotesize
 
-40 premiers modèles de la procédure séquentielle en fonction du nombre
-de termes inclus. Oracle: 100K données de validation (libellé externe)
+Performance sur les 100K données de validation (oracle) des 40 premiers
+modèles de la procédure séquentielle en fonction du nombre de termes
+inclus.
 
 \normalsize
 \end{frame}
@@ -794,15 +832,16 @@ Pénalisation la norme de \(\beta_1, \ldots, \beta_p\)
   \end{itemize}
 \end{itemize}
 
-\textbf{Solution}: standardiser variables explicatives
-\(\mathrm{X}_1, \ldots, \mathrm{X}_p\) \textbf{et} variable réponse
-\(\boldsymbol{y}\) (moyenne zéro, écart-type unitaire).
+\textbf{Solution}: standardiser les variables explicatives
+\(\mathrm{X}_1, \ldots, \mathrm{X}_p\) \textbf{et} la variable réponse
+\(\boldsymbol{y}\) pour qu'elles soient toutes à la même échelle (par
+exemple, avec moyenne nulle et un écart-type unitaire).
 
 \begin{itemize}
 \tightlist
 \item
   vérifier selon le logiciel, cette étape peut-être effectuée
-  implicitement
+  implicitement par votre fonction.
 \end{itemize}
 \end{frame}
 
@@ -871,16 +910,17 @@ On choisit typiquement \(\lambda\) par validation croisée, soit
 
 }
 
-\caption{\label{fig-lassopath}Coefficients du modèle en fonction de la
-pénalité}
+\caption{\label{fig-lassopath}Valeur des coefficients du modèle en
+fonction de la pénalité (avec nombre de coefficients non-nuls sur le
+dessus).}
 
 \end{figure}%
 \end{frame}
 
 \begin{frame}[fragile]{Évaluation et prédiction}
 \phantomsection\label{uxe9valuation-et-pruxe9diction}
-Une fois la valeur de \(\lambda\) choisie, on réestime le modèle avec la
-pénalité.
+Une fois la valeur de \(\lambda\) choisie, on ré-estime le modèle avec
+la pénalité.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -921,6 +961,24 @@ l'erreur quadratique moyenne.
 \end{Shaded}
 
 \normalsize
+\end{frame}
+
+\begin{frame}{Critères objectifs}
+\phantomsection\label{crituxe8res-objectifs}
+Il est important de distinguer entre la fonction objective (ou la
+fonction de coût) utilisée pour l'estimation des paramètres, comme
+
+\begin{itemize}
+\tightlist
+\item
+  l'erreur quadratique moyenne pour la régression linéaire
+\item
+  le négatif de la log vraisemblance pour les modèles linéaires
+  généralisés.
+\end{itemize}
+
+et le critère visant à choisir le meilleur modèle (le profit en
+entreprise).
 \end{frame}
 
 \begin{frame}{Évaluation de la performance}
@@ -982,7 +1040,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
   restreinte par le nombre d'observations disponibles.
 \item
   En général, il faut s'assurer d'avoir suffisamment d'observations pour
-  estimer de manière fiable les coefficients
+  estimer de manière fiable les coefficients.
 \item
   Porter une attention particulière aux variables binaires et aux
   interactions avec ces dernières: si les effectifs de certaines
@@ -999,10 +1057,11 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
   modèles possibles, mais est coûteuse
 \item
   On peut effectuer une recherche exhaustive à l'aide d'algorithmes
-  d'optimisation pour un nombre réduit de variables (max 50)
+  d'optimisation (séparation et évaluation) pour un nombre réduit de
+  variables (max 50).
 \item
-  Sinon, on a l'option d'utiliser un algorithme glouton qui ne couvre
-  qu'un sous-ensemble de tous les modèles
+  Sinon, on a l'option d'utiliser un algorithme heuristique qui ne
+  couvre qu'un sous-ensemble de tous les modèles
 \item
   Compromis coût de calcul vs nombre de modèles explorés
 \item

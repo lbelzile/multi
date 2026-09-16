@@ -23,6 +23,7 @@ include-in-header:
         \usepackage{tabu}
         \usepackage{mathtools}
         \usepackage{mathrsfs}
+        \renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 ---
 
 # Données manquantes
