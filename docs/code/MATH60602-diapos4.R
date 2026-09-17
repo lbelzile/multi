@@ -137,6 +137,7 @@ matmod <- model.matrix(mod_complet)
 # nombre de coefficients
 ncol(matmod)
 
+library(leaps)
 # Recherche exhaustive, ici avec uniquement les variables de base
 rec_ex <- leaps::regsubsets(
   x = ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10,
@@ -146,6 +147,7 @@ rec_ex <- leaps::regsubsets(
   data = dbm_a
 ) # nom de la base de données
 
+library(BranchGLM)
 # Régression exhaustive avec algorithme de séparation et d'évaluation
 bb_selection <- BranchGLM::VariableSelection(
   ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10,
@@ -276,7 +278,7 @@ ggplot(
 ## Sélection de variable et régression LASSO
 
 # Créer une grille de pénalités
-lambda_seq <- seq(from = 0.01, to = 2, by = 0.01)
+lambda_seq <- seq(from = 0.01, to = 5, by = 0.01)
 # Ajuster le modèle pour toutes les valeurs de lambda_seq d'un coup
 cv_output <-
   # Attention: la fonction `glmnet` prend une matrice de modèle
@@ -287,8 +289,11 @@ cv_output <-
     alpha = 1, # garder cette valeur fixe à un pour le lasso
     lambda = lambda_seq
   )
-#
-plot(cv_output)
+# Graphique de l'erreur quadratique moyenne en fonction du log de la pénalité
+# Le nombre en haut du graphique indique le nombre de coefficients rétrécis non-nuls
+# À gauche, le modèle sans pénalité
+# à droite, le modèle avec uniquement l'ordonnée à l'origine
+plot(cv_output, sign.lambda = 1)
 
 
 ## ---------------------------------------------------------------------------------
@@ -302,7 +307,7 @@ lasso_path <-
     alpha = 1,
     lambda = seq(from = 0.01, to = 10, by = 0.01)
   )
-plot(lasso_path)
+plot(lasso_path, sign.lambda = 1)
 
 
 # Pénalité qui minimise l'EQM de validation croisée

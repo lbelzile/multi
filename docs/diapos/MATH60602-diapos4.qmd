@@ -51,7 +51,7 @@ But: maximiser les levées de fonds
 1. Envoyer un échantillon de produits au coût de 10$ à un groupe pilote de 1000 personnes et mesurer le montant d'achat suite à l'envoi.
 2. Construire un modèle de prédiction pour déterminer à qui envoyer le produit parmi tous les 100 000 clients résiduels.
 
-On supposera que, au final, chaque client a reçu l'échantillon. Le but de l'exercice rétrospectif est de voir s'il aurait été possible de faire mieux en ne ciblant que ceux susceptibles de donner.
+On supposera que, au final, chaque client a reçu l'échantillon. Le but de l'exercice rétrospectif est de voir s'il aurait été possible de faire mieux en ne ciblant que ceux susceptibles d'acheter.
 
 # Population cible
 
@@ -244,7 +244,7 @@ On conserve 100 000 observations test pour vérifier la performance
 
 - (oracle): réponses inconnues à toutes fins pratiques en temps ordinaire.
 
-Nous utiliserons la pénalisation ou la validation croisée pour choisir notre modèle.
+Nous utiliserons la pénalisation ou la validation croisée pour choisir notre modèle, en nous basant uniquement sur les 1000 observations du projet pilote.
 
 \footnotesize
 
@@ -257,8 +257,6 @@ dbm_a <- dbm |>
   dplyr::filter(
     test == 0, #données d'entraînement
     !is.na(ymontant)) # personnes qui ont acheté
-
-with(dbm, table(yachat, test))
 ```
 
 \normalsize
@@ -277,7 +275,7 @@ Idée initiale:
 
 On essaie d'estimer la moyenne de la variable cible `ymontant` de la manière le plus flexible possible. 
 
-Pour ce faire, on pourrait aussi considérer tous les termes quadratiques, et les interactions d'ordre deux:
+Pour ce faire, on pourrait aussi considérer tous les termes quadratiques, et les interactions d'ordre deux, pour obtenir plus de flexibilité:
 
 - on n'inclut pas le carré de variables indicatrices binaires (car $0^2=0, 1^2=1$).
 - idem pour les interactions entre indicateurs qui représentent des niveaux d'une même variable catégorielle.
@@ -290,6 +288,7 @@ Pour ce faire, on pourrait aussi considérer tous les termes quadratiques, et le
 #| eval: true
 #| echo: true
 #| cache: true
+# Dans R, x1:x2 crée une interaction entre deux variables
 # (...)^2 crée toutes les interactions d'ordre deux
 # I(x^2) permet de créer les termes quadratiques
 formule <- 
@@ -320,13 +319,13 @@ Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times
 #| eval: true
 #| tbl-cap: "Nombres de modèles en fonction du nombre de paramètres."
 #| warning: false
-p <- c(5,10,14,25)
+p <- c(5,10,15,20,25)
 npar <- 2^p
 options(scipen=100)
 knitr::kable(x = data.frame(p = p, npar = npar),
              digits = 0,
              col.names = c("$p$",
-                          "nombre de paramètres"),
+                          "nombre de modèles"),
             escape = FALSE,
              booktabs = TRUE)
 ```
@@ -481,7 +480,7 @@ knitr::include_graphics("figures/fig-perfo-sequentiel.pdf")
 
 
 \footnotesize 
-Performance sur les 100K données de validation (oracle) des 40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. 
+Performance des 40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. La méthode externe donne la vrai performance sur les 100K données de validation (oracle). 
 
 \normalsize
 
@@ -710,7 +709,8 @@ En incluant les termes de base, les carrés et les interactions d'ordre 2.
 | 104 | 19.63  | toutes les variables     |
 | 21  | 12     | séquentielle, choix selon $\mathsf{AIC}$ |
 | 15  | 12.31  | séquentielle, choix selon $\mathsf{BIC}$ |
-| 30  | 11.94     | LASSO, validation croisée avec 10 groupes |
+| 15  | 13.64  |  ridge, validation croisée avec 10 groupes |
+| 30  | 11.94 | LASSO, validation croisée avec 10 groupes |
 
 #  Récapitulatif
 

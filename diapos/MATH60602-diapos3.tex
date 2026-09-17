@@ -154,7 +154,7 @@
 
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\renewcommand{\theHtable}{\thetable}
+\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -532,7 +532,7 @@ objectifs de l'étude
 
 \begin{frame}{Prédiction vs inférence}
 \phantomsection\label{pruxe9diction-vs-infuxe9rence}
-\textbf{Prédiction}: obtenir une estimation de \(\widehat{Y}\): on veut
+\textbf{Prédiction}: obtenir la prédiction de \(\widehat{Y}\): on veut
 un modèle performant
 
 \textbf{Inférence}: estimer l'effet de variables explicatives, effectuer
@@ -734,19 +734,21 @@ Valables uniquement pour les modèles ajustés par \textbf{maximum de
 vraisemblance}, ils sont de la forme
 
 \begin{align*}
-\mathsf{IC} &= -\text{ajustement} + \text{pénalité} \times\text{nb param} \\
+\mathsf{IC} &= \underset{-2 \times\text{log-vraisemblance}}{-2 \ell(\widehat{\boldsymbol{\theta}})} + \text{pénalité} \times\text{nb param} \\
 \end{align*}
 
 \begin{itemize}
 \tightlist
 \item
-  On veut maximiser l'ajustement, donc minimiser le premier terme.
+  On veut maximiser la log-vraisemblance
+  \(\ell(\widehat{\boldsymbol{\theta}})\) (qui indique la qualité de
+  l'ajustement), donc minimiser le premier terme.
 \item
   La pénalité vient contrebalancer l'amélioration mécanique de
   l'ajustement quand le modèle a plus de flexibilité.
-\item
-  Plus le critère d'information est petit, meilleur c'est.
 \end{itemize}
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Critères d'information}
@@ -758,12 +760,21 @@ sous la forme \begin{align*}
 \end{align*}
 
 \begin{itemize}
+\tightlist
 \item
   Le critère d'Akaike (\(\text{AIC}\)) utilise une pénalité de 2, le
   critère bayésien (\(\text{BIC}\)) de \(\ln(n)\).
 \item
+  La pénalité du \(\mathsf{BIC}\) augmente avec la taille de
+  l'échantillon: \(\ln(100)\approx 4.6\), mais
+  \(\ln(10 000) \approx 9.2.\)
+\item
   Le \(\mathsf{BIC}\) (critère Bayésien de Schwarz) pénalise donc
   davantage que le \(\mathsf{AIC}\) (critère d'Akaike).
+\item
+  Possible de comparer des modèles avec des familles différentes (loi
+  normale, ou GLM), mais il faut alors garder les constantes! Ce n'est
+  pas toujours le cas avec les logiciels.
 \end{itemize}
 \end{frame}
 
@@ -783,6 +794,36 @@ sous la forme \begin{align*}
 \item
   Génériques \texttt{AIC} et \texttt{BIC} en \textbf{R}
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Mises en garde}
+\phantomsection\label{mises-en-garde}
+Les fonctions \textbf{R} (ou dans d'autres langages de programmations)
+omettent souvent le terme constant.
+
+\begin{itemize}
+\tightlist
+\item
+  Ce n'est pas grave si on utilise un même modèle (par ex., régression
+  linéaire) pour différentes combinaisons de variables explicatives, car
+  cette constante est la même.
+\item
+  C'est en revanche un problème si on compare des familles différentes
+  (par exemple, modèle de Poisson vs régression linéaire): il faut
+  conserver les constantes pour que la comparaison soit valide.
+\end{itemize}
+
+La comparaison n'est pas non plus valide si on oublie d'ajuster pour
+toute transformation de la variable réponse, par exemple si on compare
+un modèle avec \(\ln(y)\) vs un pour \(y\)!
+
+\footnotesize
+
+Technique: dans ce dernier cas, la fonction de densité inclut le
+Jacobien de la transformation et cette dernière est incluse dans la
+log-vraisemblance.
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Illustration}
@@ -872,6 +913,13 @@ Les regroupements sont aléatoires, tout comme la mesure finale de
 performance!
 \end{frame}
 
+\begin{frame}{Illustration de la validation croisée}
+\phantomsection\label{illustration-de-la-validation-croisuxe9e}
+\begin{center}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/validationcroiseeillust-1.pdf}
+\end{center}
+\end{frame}
+
 \begin{frame}{Étapes de la validation croisée à \(M\) groupes}
 \phantomsection\label{uxe9tapes-de-la-validation-croisuxe9e-uxe0-m-groupes}
 \begin{enumerate}
@@ -900,11 +948,6 @@ performance!
   Combiner les \(M\) estimations de performance pour obtenir une mesure
   de performance finale.
 \end{enumerate}
-\end{frame}
-
-\begin{frame}{Illustration de la validation croisée}
-\phantomsection\label{illustration-de-la-validation-croisuxe9e}
-\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/validationcroiseeillust-1.pdf}
 \end{frame}
 
 \begin{frame}{Combien de groupes \(M\) pour la validation croisée?}
@@ -1008,7 +1051,7 @@ les modèles linéaires généralisé.
 
 \centering{
 
-\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/fig-plotcv-1.pdf}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos3_files/figure-beamer/fig-plotcv-1.pdf}
 
 }
 
@@ -1016,6 +1059,37 @@ les modèles linéaires généralisé.
 l'erreur quadratique moyenne obtenues par validation croisée à 10 plis.}
 
 \end{figure}%
+\end{frame}
+
+\begin{frame}{Une note sur le coefficient de détermination}
+\phantomsection\label{une-note-sur-le-coefficient-de-duxe9termination}
+Le modèle de base avec uniquement l'ordonnée à l'origine \(\beta_0\)
+retourne la même prédiction pour toutes les observations: la moyenne
+\(\overline{y}.\) On dénote
+\[\mathsf{EMQ}_0=\frac{\{(y_1-\overline{y})^2 + \cdots (y_n - \overline{y})^2\}}{n} = \frac{1}{n}\sum_{i=1}^n (y_i - \overline{y})^2\]
+pour l'erreur quadratique moyenne du modèle de référence.
+
+La performance relative d'un modèle par rapport à la référence es
+
+\[R^2 = 1 - \frac{\mathsf{EMQ}}{\mathsf{EMQ}_0}.\]
+\end{frame}
+
+\begin{frame}{Relation entre \(R^2\) et erreur quadratique moyenne}
+\phantomsection\label{relation-entre-r2-et-erreur-quadratique-moyenne}
+Si on minimise l'erreur quadratique moyenne, on maximise le score
+relatif.
+
+Un meilleur modèle a ainsi un score \(R^2\) qui approche de \(1,\)
+tandis qu'un modèle avec une valeur de \(0\) fait aussi bien que le
+modèle de référence. Une valeur négative indique une performance pire
+que ce dernier.
+
+Comme pour l'erreur quadratique moyenne, ce critère n'est fiable que
+s'il est évalué sur des prédictions d'observations qui n'ont pas servi à
+l'estimation des paramètres.
+
+Pour une comparaison adéquate, les données qui servent à estimer la
+référence \(\mathsf{EMQ}_0\) doivent être les mêmes.
 \end{frame}
 
 \begin{frame}{Récapitulatif}

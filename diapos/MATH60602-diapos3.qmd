@@ -22,7 +22,6 @@ include-in-header:
       text: |
         \usepackage{mathtools}
         \usepackage{mathrsfs}
-        \newcommand{\theHtable}{\thetable}
         \renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 ---
 
@@ -469,21 +468,17 @@ Si on suppose que les aléas sont indépendants et suivent une loi normale de va
 Ainsi, l'estimateur des moindres carrés, $\widehat{\boldsymbol{\beta}}$, correspond au maximum de vraisemblance des coefficients.
 
 
-
 # Critères d'information
 
 Valables uniquement pour les modèles ajustés par **maximum de vraisemblance**, ils sont de la forme
 
 \begin{align*}
-\mathsf{IC} &= \underset{\text{log-vraisemblance}}{-2 \ell(\widehat{\boldsymbol{\theta}})} + \text{pénalité} \times\text{nb param} \\
+\mathsf{IC} &= \underset{-2 \times\text{log-vraisemblance}}{-2 \ell(\widehat{\boldsymbol{\theta}})} + \text{pénalité} \times\text{nb param} \\
 \end{align*}
 
 - On veut maximiser la log-vraisemblance $\ell(\widehat{\boldsymbol{\theta}})$ (qui indique la qualité de l'ajustement), donc minimiser le premier terme.
 - La pénalité vient contrebalancer l'amélioration mécanique de l'ajustement quand le modèle a plus de flexibilité.
 
-\footnotesize
-
-Les données de la variable réponse $y_1, \dots, y_n$ doivent être les mêmes pour que la comparaison tienne (donc pas de transformation, par ex. modéliser $\ln(y)$, sans inclure le Jacobien de la transformation le cas échéant). 
 
 \normalsize 
 
@@ -496,7 +491,7 @@ Pour la régression linéaire, on peut réécrire les critères d'information so
 \end{align*}
 
 - Le critère d'Akaike ($\text{AIC}$) utilise une pénalité de 2, le critère bayésien ($\text{BIC}$) de $\ln(n)$.
-- La pénalité du $\mathsf{BIC}$ augmente avec la taille de l'échantillon: $\ln(100)\approx 4.6$, mais \ln(10 000) \approx 9.2.$
+- La pénalité du $\mathsf{BIC}$ augmente avec la taille de l'échantillon: $\ln(100)\approx 4.6$, mais $\ln(10 000) \approx 9.2.$
 - Le $\mathsf{BIC}$ (critère Bayésien de Schwarz) pénalise donc davantage que le $\mathsf{AIC}$ (critère d'Akaike).
 - Possible de comparer des modèles avec des familles différentes (loi normale, ou GLM), mais il faut alors garder les constantes! Ce n'est pas toujours le cas avec les logiciels.
 
@@ -510,7 +505,18 @@ Pour la régression linéaire, on peut réécrire les critères d'information so
 
 # Mises en garde
 
+Les fonctions **R** (ou dans d'autres langages de programmations) omettent souvent le terme constant. 
 
+- Ce n'est pas grave si on utilise un même modèle (par ex., régression linéaire) pour différentes combinaisons de variables explicatives, car cette constante est la même.
+- C'est en revanche un problème si on compare des familles différentes (par exemple, modèle de Poisson vs régression linéaire): il faut conserver les constantes pour que la comparaison soit valide.
+
+La comparaison n'est pas non plus valide si on oublie d'ajuster pour toute transformation de la variable réponse, par exemple si on compare un modèle avec $\ln(y)$ vs un pour $y$!
+
+\footnotesize
+
+Technique: dans ce dernier cas, la fonction de densité inclut le Jacobien de la transformation et cette dernière est incluse dans la log-vraisemblance.
+
+\normalsize
 
 # Illustration
 
@@ -594,7 +600,7 @@ ggplot(data = EQM_graph,
   labs(x = "ordre du polynôme",
        y = "",
        subtitle = "") +
-  scale_color_manual(values=MetBrewer::met.brewer("Hiroshige", 2)) +
+  scale_color_manual(values=MetBrewer::met.brewer("OKeeffe1", 2)) +
   scale_x_continuous(breaks = 0:10,
                      labels = as.character(0:10)) +
   theme_classic() +
@@ -649,7 +655,10 @@ Les regroupements sont aléatoires, tout comme la mesure finale de performance!
 #| label: validationcroiseeillust
 #| eval: true
 #| echo: false
-#| out-width: '80%'
+#| fig-height: 4
+#| fig-width: 7
+#| fig-align: 'center'
+#| out-width: '100%'
 
 col <- rep(1, 25)
 col[(0:4)*5+1:5] <- 2
@@ -755,7 +764,7 @@ Aussi `boot::cv.glm()` qui inclut une correction de biais pour les modèles lin�
 ```{r}
 #| label: fig-plotcv
 #| echo: false
-#| out-width: '100%'
+#| out-width: '90%'
 #| fig-width: 6
 #| fig-height: 4
 #| fig-align: 'center'
@@ -779,12 +788,32 @@ ggplot(data = EQMdat, aes(x=ordre, y=EQM)) +
   theme_classic() + 
   theme(legend.position="bottom",
         legend.title=element_blank()) +
-  scale_color_manual(values=c("#E69F00", "#56B4E9")) +
+  scale_color_manual(values=c("#56B4E9","#E69F00")) +
   scale_x_continuous(breaks = 0:10,
                      labels = as.character(0:10))
 
 ```
 
+
+# Une note sur le coefficient de détermination
+
+
+Le modèle de base avec uniquement l'ordonnée à l'origine $\beta_0$ retourne la même prédiction pour toutes les observations: la moyenne $\overline{y}.$ On dénote $$\mathsf{EMQ}_0=\frac{\{(y_1-\overline{y})^2 + \cdots (y_n - \overline{y})^2\}}{n} = \frac{1}{n}\sum_{i=1}^n (y_i - \overline{y})^2$$
+pour l'erreur quadratique moyenne du modèle de référence.
+
+La performance relative d'un modèle par rapport à la référence es
+
+$$R^2 = 1 - \frac{\mathsf{EMQ}}{\mathsf{EMQ}_0}.$$
+
+# Relation entre $R^2$ et erreur quadratique moyenne
+
+Si on minimise l'erreur quadratique moyenne, on maximise le score relatif.
+
+Un meilleur modèle a ainsi un score $R^2$ qui approche de $1,$ tandis qu'un modèle avec une valeur de $0$ fait aussi bien que le modèle de référence. Une valeur négative indique une performance pire que ce dernier.
+
+Comme pour l'erreur quadratique moyenne, ce critère n'est fiable que s'il est évalué sur des prédictions d'observations qui n'ont pas servi à l'estimation des paramètres.
+
+Pour une comparaison adéquate, les données qui servent à estimer la référence $\mathsf{EMQ}_0$ doivent être les mêmes.
 
 # Récapitulatif
 

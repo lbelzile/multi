@@ -249,7 +249,7 @@
 \item
   Évaluation de la performance
 \item
-  Sélection du modèle final et prédiction
+  Sélection du modèle final, ré-estimation et prédiction
 \end{enumerate}
 \end{frame}
 
@@ -272,7 +272,7 @@ But: maximiser les levées de fonds
 
 On supposera que, au final, chaque client a reçu l'échantillon. Le but
 de l'exercice rétrospectif est de voir s'il aurait été possible de faire
-mieux en ne ciblant que ceux susceptibles de donner.
+mieux en ne ciblant que ceux susceptibles d'acheter.
 \end{frame}
 
 \begin{frame}{Population cible}
@@ -480,7 +480,8 @@ On conserve 100 000 observations test pour vérifier la performance
 \end{itemize}
 
 Nous utiliserons la pénalisation ou la validation croisée pour choisir
-notre modèle.
+notre modèle, en nous basant uniquement sur les 1000 observations du
+projet pilote.
 
 \footnotesize
 
@@ -491,17 +492,8 @@ notre modèle.
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}
 \NormalTok{    test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\CommentTok{\#données d\textquotesingle{}entraînement}
     \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(ymontant)) }\CommentTok{\# personnes qui ont acheté}
-
-\FunctionTok{with}\NormalTok{(dbm, }\FunctionTok{table}\NormalTok{(yachat, test))}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-      test
-yachat     0     1
-     0   790 76821
-     1   210 23179
-\end{verbatim}
 
 \normalsize
 \end{frame}
@@ -528,7 +520,8 @@ On essaie d'estimer la moyenne de la variable cible \texttt{ymontant} de
 la manière le plus flexible possible.
 
 Pour ce faire, on pourrait aussi considérer tous les termes
-quadratiques, et les interactions d'ordre deux:
+quadratiques, et les interactions d'ordre deux, pour obtenir plus de
+flexibilité:
 
 \begin{itemize}
 \tightlist
@@ -545,6 +538,7 @@ quadratiques, et les interactions d'ordre deux:
 \phantomsection\label{moduxe8le-complet-et-syntaxe-r}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
+\CommentTok{\# Dans R, x1:x2 crée une interaction entre deux variables}
 \CommentTok{\# (...)\^{}2 crée toutes les interactions d\textquotesingle{}ordre deux}
 \CommentTok{\# I(x\^{}2) permet de créer les termes quadratiques}
 \NormalTok{formule }\OtherTok{\textless{}{-}} 
@@ -583,14 +577,15 @@ de paramètres.}
 \tabularnewline
 
 \toprule\noalign{}
-\(p\) & nombre de paramètres \\
+\(p\) & nombre de modèles \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
 5 & 32 \\
 10 & 1024 \\
-14 & 16384 \\
+15 & 32768 \\
+20 & 1048576 \\
 25 & 33554432 \\
 
 \end{longtable}
@@ -796,9 +791,9 @@ L'historique des étapes est disponible via \texttt{seq\_AIC\$anova}
 
 \footnotesize
 
-Performance sur les 100K données de validation (oracle) des 40 premiers
-modèles de la procédure séquentielle en fonction du nombre de termes
-inclus.
+Performance des 40 premiers modèles de la procédure séquentielle en
+fonction du nombre de termes inclus. La méthode externe donne la vrai
+performance sur les 100K données de validation (oracle).
 
 \normalsize
 \end{frame}
@@ -1007,6 +1002,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 104 & 19.63 & toutes les variables \\
 21 & 12 & séquentielle, choix selon \(\mathsf{AIC}\) \\
 15 & 12.31 & séquentielle, choix selon \(\mathsf{BIC}\) \\
+15 & 13.64 & ridge, validation croisée avec 10 groupes \\
 30 & 11.94 & LASSO, validation croisée avec 10 groupes \\
 \bottomrule\noalign{}
 \end{longtable}
