@@ -21,13 +21,13 @@
 }
 \setbeamertemplate{section page}{
   \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
     \usebeamerfont{section title}\insertsection\par
   \end{beamercolorbox}
 }
 \setbeamertemplate{subsection page}{
   \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
@@ -62,8 +62,8 @@
 \useoutertheme{Flip}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
+    \setmainfont[]{VisbyCF-Medium}
+    \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -105,7 +105,7 @@
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -115,7 +115,7 @@
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -138,25 +138,24 @@
 \makeatother
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
+\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -193,23 +192,14 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -217,6 +207,7 @@
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Classification}
 \subtitle{Analyse multidimensionnelle appliquée}
@@ -226,17 +217,17 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, breakable, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
+
 
 \begin{frame}{Rappel}
-\protect\hypertarget{rappel}{}
+\phantomsection\label{rappel}
 La régression logistique spécifie un modèle pour la probabilité de
 succès \[p = \Pr(Y=1 \mid \mathbf{X}) = \frac{1}{1+\exp(-\eta)}\] où
 \(\eta = \beta_0 + \cdots + \beta_p \mathrm{X}_p\).
 \end{frame}
 
 \begin{frame}{Prédiction}
-\protect\hypertarget{pruxe9diction}{}
+\phantomsection\label{pruxe9diction}
 En substituant l'estimation
 \(\widehat{\beta}_0, \ldots, \widehat{\beta}_p\), on calcule
 
@@ -252,7 +243,7 @@ pour chaque observation de la base de données.
 \end{frame}
 
 \begin{frame}{Classification de base}
-\protect\hypertarget{classification-de-base}{}
+\phantomsection\label{classification-de-base}
 Choisir un point de coupure \(c\):
 
 \begin{itemize}
@@ -270,7 +261,7 @@ Qu'arrive t'il si \(c=0\) ou \(c=1\)? \textbf{Exemple au tableau}
 \end{frame}
 
 \begin{frame}{Qualité de l'ajustement}
-\protect\hypertarget{qualituxe9-de-lajustement}{}
+\phantomsection\label{qualituxe9-de-lajustement}
 Considérons une prédiction \(\widehat{Y} \in \{0,1\}\).
 
 L'erreur quadratique pour un problème de classification est
@@ -284,8 +275,19 @@ Plus le taux de mauvaise classification est petit, meilleure est la
 capacité prédictive du modèle.
 \end{frame}
 
+\begin{frame}{Score de Brier}
+\phantomsection\label{score-de-brier}
+Le score propre de Brier pour la prédiction \(\widehat{p}_i\) de la
+probabilité de succès avec des variables binaires \(y_i \in \{0, 1\}\)
+\begin{align*}
+\mathsf{SB} = \frac{1}{n} \sum_{i=1}^n (\widehat{p}_i - y_i)^2.
+\end{align*} Une petite valeur implique une meilleure performance.
+
+Ce score prend en compte l'aspect probabiliste de la prédiction.
+\end{frame}
+
 \begin{frame}[fragile]{Base de données marketing}
-\protect\hypertarget{base-de-donnuxe9es-marketing}{}
+\phantomsection\label{base-de-donnuxe9es-marketing}
 On considère un modèle pour la variable binaire \texttt{yachat}, qui
 vaut \(1\) si une personne achète suite à l'envoi d'un catalogue et
 \(0\) sinon.
@@ -305,7 +307,7 @@ vaut \(1\) si une personne achète suite à l'envoi d'un catalogue et
 \end{frame}
 
 \begin{frame}[fragile]{Estimation de la performance du modèle}
-\protect\hypertarget{estimation-de-la-performance-du-moduxe8le}{}
+\phantomsection\label{estimation-de-la-performance-du-moduxe8le}
 Utiliser les mêmes données pour l'ajustement et l'estimation de la
 performance n'est (toujours) pas recommandé.
 
@@ -333,14 +335,10 @@ calcule la moyenne des 10 probabilités prédites pour chaque observation.
 \end{frame}
 
 \begin{frame}{Prédictions}
-\protect\hypertarget{pruxe9dictions}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/figclassification0-1.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{pruxe9dictions}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos6_files/figure-beamer/figclassification0-1.pdf}
+\end{center}
 
 \footnotesize
 
@@ -350,24 +348,20 @@ Répartition des probabilités de succès prédites par validation croisée.
 \end{frame}
 
 \begin{frame}{Choix d'un point de coupure.}
-\protect\hypertarget{choix-dun-point-de-coupure.}{}
+\phantomsection\label{choix-dun-point-de-coupure.}
 On peut faire varier le point de coupure et choisir celui qui maximise
 le taux de bonne classification, \(\widehat{\Pr}(Y = \widehat{Y})\).
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-4-1.pdf}
-
-}
-
-\end{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-3-1.pdf}
+\end{center}
 
 Avec \(c=0.63\), on obtient un taux de mauvaise classification de
 \(84.9\)\%.
 \end{frame}
 
 \begin{frame}[fragile]{Performance et classification}
-\protect\hypertarget{performance-et-classification}{}
+\phantomsection\label{performance-et-classification}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{classif }\OtherTok{\textless{}{-}}\NormalTok{ appr}\SpecialCharTok{$}\NormalTok{yachat}
@@ -380,16 +374,18 @@ Avec \(c=0.63\), on obtient un taux de mauvaise classification de
 \end{frame}
 
 \begin{frame}{Matrice de confusion}
-\protect\hypertarget{matrice-de-confusion}{}
+\phantomsection\label{matrice-de-confusion}
 On peut classifier les observations dans un tableau pour un point de
 coupure donné.
 
-\hypertarget{tbl-confumat}{}
 \begin{table}
-\caption{\label{tbl-confumat}Matrice de confusion avec point de coupure optimal. Les entrées donnent
-le décompte du nombre d'observation par combinaison \((Y, \widehat{Y})\) }\tabularnewline
 
-\centering
+\caption{\label{tbl-confumat}Matrice de confusion avec point de coupure
+optimal. Les entrées donnent le décompte du nombre d'observation par
+combinaison \((Y, \widehat{Y})\)}
+
+\centering{
+
 \begin{tabular}{lrr}
 \toprule
   & \(Y=1\) & \(Y=0\)\\
@@ -398,11 +394,14 @@ le décompte du nombre d'observation par combinaison \((Y, \widehat{Y})\) }\tabu
 \(\widehat{Y}=0\) & 132 & 771\\
 \bottomrule
 \end{tabular}
-\end{table}
+
+}
+
+\end{table}%
 \end{frame}
 
 \begin{frame}{Classification et mesures de performance}
-\protect\hypertarget{classification-et-mesures-de-performance}{}
+\phantomsection\label{classification-et-mesures-de-performance}
 \footnotesize
 
 Les estimés empiriques sont simplement obtenus en calculant les rapports
@@ -450,16 +449,17 @@ du nombre d'observations dans chaque classe.
 \end{frame}
 
 \begin{frame}{Matrice de gain}
-\protect\hypertarget{matrice-de-gain}{}
+\phantomsection\label{matrice-de-gain}
 Il est également possible d'assigner un poids différent à chaque
 événement selon le scénario et chercher à maximiser le gain.
 
-\hypertarget{tbl-tableconfumat4}{}
 \begin{table}
-\caption{\label{tbl-tableconfumat4}Pondération des entrées de la matrice de confusion pour le calcul du
-gain. }\tabularnewline
 
-\centering
+\caption{\label{tbl-tableconfumat4}Pondération des entrées de la matrice
+de confusion pour le calcul du gain.}
+
+\centering{
+
 \begin{tabular}{lrr}
 \toprule
   & \(Y=1\) & \(Y=0\)\\
@@ -468,23 +468,27 @@ gain. }\tabularnewline
 \(\widehat{Y}=0\) & $c_{01}$ & $c_{00}$\\
 \bottomrule
 \end{tabular}
-\end{table}
+
+}
+
+\end{table}%
 
 On calcule le gain en faisant la somme des entrées fois les poids, soit
 \[\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.\]
 \end{frame}
 
 \begin{frame}{Gain pour taux de bonne classification}
-\protect\hypertarget{gain-pour-taux-de-bonne-classification}{}
+\phantomsection\label{gain-pour-taux-de-bonne-classification}
 Si on cherche à maximiser le taux de bonne classification, cela revient
 à assigner les poids suivants.
 
-\hypertarget{tbl-tableconfumat3}{}
 \begin{table}
-\caption{\label{tbl-tableconfumat3}Pondération des entrées de la matrice de confusion pour le calcul du
-taux de bonne classification. }\tabularnewline
 
-\centering
+\caption{\label{tbl-tableconfumat3}Pondération des entrées de la matrice
+de confusion pour le calcul du taux de bonne classification.}
+
+\centering{
+
 \begin{tabular}{lrr}
 \toprule
   & \(Y=1\) & \(Y=0\)\\
@@ -493,11 +497,14 @@ taux de bonne classification. }\tabularnewline
 \(\widehat{Y}=0\) & $0$ & $1$\\
 \bottomrule
 \end{tabular}
-\end{table}
+
+}
+
+\end{table}%
 \end{frame}
 
 \begin{frame}{Coûts et bénéfices du ciblage marketing}
-\protect\hypertarget{couxfbts-et-buxe9nuxe9fices-du-ciblage-marketing}{}
+\phantomsection\label{couxfbts-et-buxe9nuxe9fices-du-ciblage-marketing}
 \begin{itemize}
 \tightlist
 \item
@@ -516,30 +523,33 @@ taux de bonne classification. }\tabularnewline
   \end{itemize}
 \end{itemize}
 
-\hypertarget{tbl-dbm-ymontant-apprentissage}{}
 \begin{longtable}[]{@{}rrrrr@{}}
+
 \caption{\label{tbl-dbm-ymontant-apprentissage}Statistiques descriptives
-des montants d'achats.}\tabularnewline
-\toprule\noalign{}
-n & moyenne & écart-type & minimum & maximum \\
-\midrule\noalign{}
-\endfirsthead
+des montants d'achats.}
+
+\tabularnewline
+
 \toprule\noalign{}
 n & moyenne & écart-type & minimum & maximum \\
 \midrule\noalign{}
 \endhead
-210 & 67.29 & 13.24 & 25 & 109 \\
 \bottomrule\noalign{}
+\endlastfoot
+210 & 67.29 & 13.24 & 25 & 109 \\
+
 \end{longtable}
 \end{frame}
 
 \begin{frame}{Matrice de gain pour ciblage marketing}
-\protect\hypertarget{matrice-de-gain-pour-ciblage-marketing}{}
-\hypertarget{tbl-tableconfumat5}{}
+\phantomsection\label{matrice-de-gain-pour-ciblage-marketing}
 \begin{table}
-\caption{\label{tbl-tableconfumat5}Matrice de gain pour ciblage marketing. }\tabularnewline
 
-\centering
+\caption{\label{tbl-tableconfumat5}Matrice de gain pour ciblage
+marketing.}
+
+\centering{
+
 \begin{tabular}{lrr}
 \toprule
   & \(Y=1\) & \(Y=0\)\\
@@ -548,11 +558,14 @@ n & moyenne & écart-type & minimum & maximum \\
 \(\widehat{Y}=0\) & $0$ & $0$\\
 \bottomrule
 \end{tabular}
-\end{table}
+
+}
+
+\end{table}%
 \end{frame}
 
 \begin{frame}[fragile]{Point de coupure avec gain}
-\protect\hypertarget{point-de-coupure-avec-gain}{}
+\phantomsection\label{point-de-coupure-avec-gain}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{60602}\NormalTok{)}
@@ -576,21 +589,23 @@ avec \texttt{ncv} groupes, répétée \texttt{nrep} fois.
 \end{frame}
 
 \begin{frame}{Calcul du gain}
-\protect\hypertarget{calcul-du-gain}{}
+\phantomsection\label{calcul-du-gain}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/fig-coupure-pondere-1.pdf}
+\centering{
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos6_files/figure-beamer/fig-coupure-pondere-1.pdf}
 
 }
 
 \caption{\label{fig-coupure-pondere}Estimation du gain moyen en fonction
 du point de coupure pour l'exemple de base de données marketing.}
 
-\end{figure}
+\end{figure}%
 \end{frame}
 
 \begin{frame}{Point de coupure optimal et explication}
-\protect\hypertarget{point-de-coupure-optimal-et-explication}{}
+\phantomsection\label{point-de-coupure-optimal-et-explication}
 Dans l'exemple, le point de coupure qui maximise le gain est 0.12. Avec
 ce point de coupure, on estime que
 
@@ -610,7 +625,7 @@ d'entre eux n'achètent rien.
 \end{frame}
 
 \begin{frame}[fragile]{Fonction d'efficacité du récepteur}
-\protect\hypertarget{fonction-defficacituxe9-du-ruxe9cepteur}{}
+\phantomsection\label{fonction-defficacituxe9-du-ruxe9cepteur}
 Graphique de la sensibilité en fonction de un moins la spécificité, en
 faisant varier le point de coupure, souvent appelé courbe ROC (de
 l'anglais \emph{receiver operating characteristic}).
@@ -631,18 +646,14 @@ de calculer l'aire sous la courbe.
 \end{frame}
 
 \begin{frame}{Courbe ROC}
-\protect\hypertarget{courbe-roc}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-15-1.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{courbe-roc}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-6-1.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Aire sous la courbe}
-\protect\hypertarget{aire-sous-la-courbe}{}
+\phantomsection\label{aire-sous-la-courbe}
 \begin{itemize}
 \tightlist
 \item
@@ -658,7 +669,7 @@ de calculer l'aire sous la courbe.
 \end{frame}
 
 \begin{frame}{Courbe lift}
-\protect\hypertarget{courbe-lift}{}
+\phantomsection\label{courbe-lift}
 À quelle point notre modèle est-il meilleur qu'une assignation
 aléatoire?
 
@@ -679,10 +690,18 @@ Pour calculer le nombre de succès prédit par le modèle, on va
 \item
   Calculer le nombre total de succès parmi ces observations.
 \end{itemize}
+
+\small
+
+Généralement, le lift est calculé en fonction du budget (par exemple, si
+on a 10 000 clients et qu'on a du budget pour envoyer une offre
+uniquement à 1000 clients, on prendrait \(x\)\%\(=0.1\).
+
+\normalsize
 \end{frame}
 
 \begin{frame}[fragile]{Code pour produire la courbe lift}
-\protect\hypertarget{code-pour-produire-la-courbe-lift}{}
+\phantomsection\label{code-pour-produire-la-courbe-lift}
 La courbe lift donne le rapport nombre de succès du modèle versus ceux
 détectés au hasard. La référence est la ligne diagonale, qui correspond
 à une détection aléatoire.
@@ -699,12 +718,13 @@ détectés au hasard. La référence est la ligne diagonale, qui correspond
 \end{frame}
 
 \begin{frame}{Tableau du lift}
-\protect\hypertarget{tableau-du-lift}{}
-\hypertarget{tbl-lift}{}
+\phantomsection\label{tableau-du-lift}
 \begin{table}
-\caption{\label{tbl-lift}Tableau du lift (déciles). }\tabularnewline
 
-\centering
+\caption{\label{tbl-lift}Tableau du lift (déciles).}
+
+\centering{
+
 \begin{tabular}{lrrr}
 \toprule
   & hasard & modèle & lift\\
@@ -721,11 +741,14 @@ détectés au hasard. La référence est la ligne diagonale, qui correspond
 90\% & 189 & 210 & 1.11\\
 \bottomrule
 \end{tabular}
-\end{table}
+
+}
+
+\end{table}%
 \end{frame}
 
 \begin{frame}{Calcul du lift}
-\protect\hypertarget{calcul-du-lift}{}
+\phantomsection\label{calcul-du-lift}
 Si on classifiait comme acheteurs les \(10\)\% qui ont la plus forte
 probabilité estimée d'achat, on détecterait \(79\) des \(210\) clients.
 
@@ -741,22 +764,17 @@ des clients, on peut utiliser le lift pour comparer notre métrique.
 \end{frame}
 
 \begin{frame}{Courbe lift}
-\protect\hypertarget{courbe-lift-1}{}
-\includegraphics{MATH60602-diapos6_files/figure-beamer/figcourbe-lift-pr-1.pdf}
+\phantomsection\label{courbe-lift-1}
+\pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos6_files/figure-beamer/figcourbe-lift-pr-1.pdf}}
 \end{frame}
 
 \begin{frame}{Calibration du modèle}
-\protect\hypertarget{calibration-du-moduxe8le}{}
+\phantomsection\label{calibration-du-moduxe8le}
 Certains modèles sont trop confiants dans leurs prédictions
-(surajustement).
-
-Une statistique simple proposée par
-\href{https://doi.org/10.1002/sim.4780050506}{Spiegelhalter (1986)} peut
-vérifier ce fait.
-
-Pour une variable binaire \(Y \in \{0,1\}\), l'erreur quadratique
-moyenne s'écrit \begin{align*}
-\overline{B} &= \underset{\text{erreur quadratique moyenne}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
+(surajustement). Pour une variable réponse binaire \(Y \in \{0,1\}\), le
+score de Brier (l'erreur quadratique moyenne) est décomposé comme suit:
+\begin{align*}
+\mathsf{BS} &= \underset{\text{score de Brier}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
 \\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
 \end{align*}
 
@@ -765,7 +783,7 @@ Si notre modèle était parfaitement calibré, \(\mathsf{E}_0(Y_i)=p_i\) et
 \end{frame}
 
 \begin{frame}[fragile]{Test de Spiegelhalter}
-\protect\hypertarget{test-de-spiegelhalter}{}
+\phantomsection\label{test-de-spiegelhalter}
 On peut construire une statistique de test
 \href{https://doi.org/10.1002/sim.4780050506}{(Spiegelhalter, 1986)}
 pour l'hypothèse nulle de calibration parfaite.
@@ -794,7 +812,7 @@ Il n'y a pas de preuve ici que le modèle est mal calibré.
 \end{frame}
 
 \begin{frame}[fragile]{Problèmes avec la régression logistique}
-\protect\hypertarget{probluxe8mes-avec-la-ruxe9gression-logistique}{}
+\phantomsection\label{probluxe8mes-avec-la-ruxe9gression-logistique}
 Il arrive que, lors de l'ajustement d'une régression logistique, on
 obtienne un message d'avertissement:
 
@@ -812,7 +830,7 @@ obtienne un message d'avertissement:
 \end{frame}
 
 \begin{frame}[fragile]{Quasi-séparation de variables}
-\protect\hypertarget{quasi-suxe9paration-de-variables}{}
+\phantomsection\label{quasi-suxe9paration-de-variables}
 Le deuxième message d'erreur survient quand une combinaison linéaire de
 variables explicatives permet de prédire exactement la réponse: nos
 probabilités prédites sont \(0\) ou \(1\).
@@ -842,14 +860,10 @@ probabilités prédites sont \(0\) ou \(1\).
 \end{frame}
 
 \begin{frame}{Illustration de la séparation de variables}
-\protect\hypertarget{illustration-de-la-suxe9paration-de-variables}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-22-1.pdf}
-
-}
-
-\end{figure}
+\phantomsection\label{illustration-de-la-suxe9paration-de-variables}
+\begin{center}
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-9-1.pdf}
+\end{center}
 
 \footnotesize
 
@@ -862,33 +876,34 @@ probabilité de succès de \(\widehat{p}=0\) à \(\widehat{p}=1\) à
 \end{frame}
 
 \begin{frame}[fragile]{Coefficients avec séparation de variable}
-\protect\hypertarget{coefficients-avec-suxe9paration-de-variable}{}
+\phantomsection\label{coefficients-avec-suxe9paration-de-variable}
 Les valeurs élevées des coefficients et erreurs-type sont une autre
 indication de quasi-séparation de variables.
 
 Avec des variables standardisées, un coefficient \(|\beta_j| > 10\) est
 suspect.
 
-\hypertarget{tbl-quasisep}{}
 \begin{longtable}[]{@{}lrr@{}}
+
 \caption{\label{tbl-quasisep}Modèle logistique pour \texttt{yachat} en
-fonction de \texttt{ymontant} (variable standardisée).}\tabularnewline
-\toprule\noalign{}
-& coef. & erreur-type \\
-\midrule\noalign{}
-\endfirsthead
+fonction de \texttt{ymontant} (variable standardisée).}
+
+\tabularnewline
+
 \toprule\noalign{}
 & coef. & erreur-type \\
 \midrule\noalign{}
 \endhead
+\bottomrule\noalign{}
+\endlastfoot
 cst & \(-0.3\) & \(6547.6\) \\
 ymontant & \(50.7\) & \(14441.8\) \\
-\bottomrule\noalign{}
+
 \end{longtable}
 \end{frame}
 
 \begin{frame}{Causes de la quasi-séparation de variables}
-\protect\hypertarget{causes-de-la-quasi-suxe9paration-de-variables}{}
+\phantomsection\label{causes-de-la-quasi-suxe9paration-de-variables}
 Typiquement, le problème survient parce que
 
 \begin{itemize}
@@ -908,7 +923,7 @@ interprétations ne sont plus valides\ldots{}
 \end{frame}
 
 \begin{frame}{Solutions pour la quasi séparation de variables}
-\protect\hypertarget{solutions-pour-la-quasi-suxe9paration-de-variables}{}
+\phantomsection\label{solutions-pour-la-quasi-suxe9paration-de-variables}
 \begin{enumerate}
 \tightlist
 \item
@@ -931,7 +946,7 @@ interprétations ne sont plus valides\ldots{}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
+\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -948,7 +963,7 @@ interprétations ne sont plus valides\ldots{}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
+\phantomsection\label{ruxe9capitulatif-1}
 \begin{itemize}
 \tightlist
 \item
@@ -972,7 +987,7 @@ interprétations ne sont plus valides\ldots{}
 \end{frame}
 
 \begin{frame}{Sélection de variables en régression logistique}
-\protect\hypertarget{suxe9lection-de-variables-en-ruxe9gression-logistique}{}
+\phantomsection\label{suxe9lection-de-variables-en-ruxe9gression-logistique}
 \begin{itemize}
 \tightlist
 \item
@@ -989,7 +1004,7 @@ interprétations ne sont plus valides\ldots{}
 
 \begin{frame}[fragile]{Fonctions \textbf{R} pour la sélection de
 modèles}
-\protect\hypertarget{fonctions-r-pour-la-suxe9lection-de-moduxe8les}{}
+\phantomsection\label{fonctions-r-pour-la-suxe9lection-de-moduxe8les}
 \begin{itemize}
 \tightlist
 \item
@@ -1014,7 +1029,7 @@ en ligne} dans les notes de cours.
 \end{frame}
 
 \begin{frame}{Objectif du ciblage marketing}
-\protect\hypertarget{objectif-du-ciblage-marketing}{}
+\phantomsection\label{objectif-du-ciblage-marketing}
 Déterminer si le revenu prévu justifie l'envoi du catalogue
 
 \[\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).\]
@@ -1029,7 +1044,7 @@ optimal.
 \end{frame}
 
 \begin{frame}{Stratégie de référence}
-\protect\hypertarget{stratuxe9gie-de-ruxe9fuxe9rence}{}
+\phantomsection\label{stratuxe9gie-de-ruxe9fuxe9rence}
 \begin{itemize}
 \tightlist
 \item
@@ -1045,7 +1060,7 @@ optimal.
 \end{frame}
 
 \begin{frame}{Stratégie d'ajustement}
-\protect\hypertarget{stratuxe9gie-dajustement}{}
+\phantomsection\label{stratuxe9gie-dajustement}
 En résumé, la procédure numérique à réaliser est la suivante:
 
 \begin{itemize}
@@ -1067,7 +1082,7 @@ En résumé, la procédure numérique à réaliser est la suivante:
 \end{frame}
 
 \begin{frame}{Prédiction et envoi}
-\protect\hypertarget{pruxe9diction-et-envoi}{}
+\phantomsection\label{pruxe9diction-et-envoi}
 \begin{itemize}
 \tightlist
 \item
@@ -1094,17 +1109,17 @@ revenu résultant de cette stratégie.
 \end{frame}
 
 \begin{frame}{Conclusion}
-\protect\hypertarget{conclusion}{}
+\phantomsection\label{conclusion}
 Si on avait fait une bête recherche séquentielle et qu'on avait pris le
 modèle avec le plus petit BIC (8 variables explicatives), on aurait
-dégagé des revenus net de \(978 226\)\$.
+dégagé des revenus nets de \(978 226\)\$.
 
 C'est une énorme amélioration, de plus de \(62.7\)\%, par rapport à la
 stratégie de référence (soit envoyer un catalogue à tout le monde).
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
+\phantomsection\label{ruxe9capitulatif-2}
 \begin{itemize}
 \tightlist
 \item
@@ -1124,6 +1139,7 @@ stratégie de référence (soit envoyer un catalogue à tout le monde).
   classification, etc.) sont envisageables pour la classification.
 \end{itemize}
 \end{frame}
+
 
 
 

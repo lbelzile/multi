@@ -771,6 +771,116 @@ ggplot(dat, aes(x, y)) +
   
 ```
 
+# Problèmes avec la régression logistique
+
+Il arrive que, lors de l'ajustement d'une régression logistique, on obtienne un message d'avertissement: 
+
+\footnotesize
+
+```{r}
+#| echo: true
+#| eval: false
+Warning messages:
+1: glm.fit: algorithm did not converge 
+2: glm.fit: fitted probabilities numerically 0 or 1 occurred 
+```
+
+\normalsize
+
+# Quasi-séparation de variables
+
+Le deuxième message d'erreur survient quand une combinaison linéaire de variables explicatives permet de prédire exactement la réponse: nos probabilités prédites sont $0$ ou $1$.
+
+- par exemple, si on ajuste un modèle pour `yachat` en fonction de `ymontant`.
+
+\footnotesize
+
+```{r}
+#| eval: false
+#| echo: true
+quasisep <- appr |>  
+  # remplacer les valeurs manquantes par des zéros et standardiser
+  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
+# Régression logistique pour l'achat (0 ou 1) en fonction du montant
+modele_qs <- glm(yachat ~ ymontant, 
+              family = binomial, 
+              data = quasisep)
+```
+
+\normalsize
+
+# Illustration de la séparation de variables
+
+```{r}
+#| echo: false
+#| eval: true
+#| out-width: '60%'
+#| fig-width: 8
+#| fig-height: 5
+#| fig-align: center
+set.seed(1234)
+x <- sort(rexp(20, rate = 0.2))
+y <- as.integer(x>9)
+m1 <- glm(y~ x, family=binomial)
+fittedsepmod <- function(x){1/(1+exp(-coef(m1)[1] - x*coef(m1)[2]))}
+library(ggplot2)
+ggplot(data.frame(x, y), aes(x=x,y=y)) +
+  geom_point() +
+  geom_function(fun = fittedsepmod, n = 1001L, linewidth = 1.1) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25), labels = c("0","0.25","0.5","0.75","1")) +
+  labs(y = "", x = "x") +
+  theme_classic()
+```
+
+\footnotesize 
+
+Quasi-séparation de variable: les estimations des paramètres sont presques infinies pour permettre une transition abrupte de la probabilité de succès de $\widehat{p}=0$ à $\widehat{p}=1$ à $x=9$.
+
+\normalsize
+
+# Coefficients avec séparation de variable
+
+Les valeurs élevées des coefficients et erreurs-type sont une autre indication de quasi-séparation de variables.
+
+Avec des variables standardisées, un coefficient $|\beta_j| > 10$ est suspect.
+
+```{r quasisepvar}
+#| echo: false
+#| eval: true
+#| label: tbl-quasisep
+#| tbl-cap: "Modèle logistique pour `yachat` en fonction de `ymontant` (variable standardisée)."
+#| warning: false
+#| message: false
+quasisep <- appr |>  
+  # remplacer les valeurs manquantes par des zéros et standardiser
+  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
+# Régression logistique pour l'achat (0 ou 1) en fonction du montant
+m1 <- glm(yachat ~ ymontant, 
+              family = binomial, 
+              data = quasisep)
+tab1 <- data.frame(estimate = as.numeric(m1$coefficients), "std.error" = as.numeric(sqrt(diag(vcov(m1)))))
+colnames(tab1) <- c("coef.", "erreur-type")
+tab1 <- apply(tab1, 1:2, function(x){paste0("$", sprintf(x, fmt = "%.1f"), "$")})
+rownames(tab1) <- c("cst","ymontant")
+knitr::kable(x = tab1, align = "rrr", booktabs = TRUE, escape = FALSE)
+```
+
+
+# Causes de la quasi-séparation de variables
+
+Typiquement, le problème survient parce que
+
+- on a ajouté un dérivé de la variable réponse comme variable explicative
+- on a un modèle surajusté, souvent une variable catégorielle pour laquelle toutes les observations d'un niveau donné ont la même réponse, soit $0$ ou $1$.
+
+Ce n'est pas nécessairement un enjeu pour la prédiction, mais c'est souvent indicateur de problèmes plus importants. Les coefficients et interprétations ne sont plus valides...
+
+# Solutions pour la quasi séparation de variables
+
+1. Regarder quelles probabilités sont presque $0$ ou $1$ pour identifier les observations problématiques et s'assurer que l'échantillon que l'on emploie est adéquat.
+   - Par exemple, les femmes ne peuvent pas avoir un cancer de la prostate, donc la probabilité prédite pour ces dernières est $0$. On pourrait simplement enlever les femmes et prédire zéro manuellement.
+2. Déterminer si une variable explicative cause du surajustement en étudiant les coefficients dont la valeur absolue est très élevée.
+
 
 # Récapitulatif
 
