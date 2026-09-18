@@ -21,6 +21,10 @@ library(patchwork)
 # (Ré)-installer la base de données si elle n'a pas été modifié
 remotes::install_github("lbelzile/hecmulti")
 library(hecmulti)
+library(caret, warn.conflicts = FALSE)
+library(leaps)
+library(BranchGLM)
+library(tidymodels)
 # Charger les données
 data(dbm, package = "hecmulti")
 # Imprimer une description succincte
@@ -94,6 +98,20 @@ dbm_sub_c <- dbm_sub |>
 dbm_sub_c |>
   knitr::kable(digits = 2, booktabs = TRUE, linesep = "")
 
+# Analyse exploratoire
+# Vérifier avec la description de la base de données
+with(
+  dbm_sub,
+  isTRUE(all(
+    x2 >= 18, # adultes
+    x7 >= 0, # dernière année
+    x7 <= 52, # dans la dernière année
+    x10 >= 1, # au moins un achat
+    x8 <= x9, # montant du dernier achat < montant de l'achat
+    x8[x10 == 1] == x9[x10 == 1] #montant total = montant du dernier achat (un seul achat)
+  ))
+)
+
 #Créer les bases de données d'entraînement (dbm_a) et de validation (dbm_v)
 dbm_a <- dbm_sub |>
   dplyr::filter(!is.na(ymontant)) |> # personnes qui ont acheté
@@ -102,11 +120,15 @@ dbm_v <- dbm |>
   dplyr::filter(test == 1, !is.na(ymontant)) |>
   dplyr::select(!c(test, yachat)) # conserver toutes les variables sauf test et yachat
 
-# On peut considérer le modèle avc toutes les variables explicatives
+######## MODÈLE ADDITIF DE BASE #######
+
+form_add <- formula(ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10)
+# On peut considérer le modèle avec toutes les variables explicatives
 mod_additif <- lm(
-  ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10,
+  form_add,
   data = dbm_a
 )
+
 # Nombre de coefficients
 length(coef(mod_additif))
 # Calculer la vraie erreur de prédiction théorique sur la population
@@ -116,6 +138,116 @@ pred_additif <- predict(
   newdata = dbm_v
 ) #bd sur laquelle calculer les prédictions
 mean((dbm_v$ymontant - pred_additif)^2)
+
+# Approximons l'erreur quadratique moyenne par validation croisée
+## APPROCHE 1 - avec tidymodels
+# Interface pour calculer l'EQM avec la validation croisée - version tidyverse
+set.seed(60602)
+plis <- vfold_cv(dbm_a, v = 10)
+perfo_additif <-
+  workflow() |> # indiquer le flux de travail
+  add_model(linear_reg()) |> # choisir le modèle (ici "lm")
+  add_formula(form_add) |> # sélectionner la formule
+  fit_resamples(plis) # Ajuster séparément sur chaque pli
+collect_metrics(perfo_additif) # obtenir le résumé
+
+## APPROCHE 2 - avec caret
+eqm_mod_additif <- caret::train(
+  form = mod_additif$terms,
+  data = dbm_a,
+  method = "lm", # type de modèle, ici régression linéaire
+  trControl = caret::trainControl(
+    method = "cv", # validation croisée
+    number = 10 # nombre de plis
+  )
+)
+# La sortie contient plusieurs critères (erreur moyenne absolue, R-carré, etc.)
+# et leurs erreurs-types
+eqm_mod_additif$resample # Résultats dans chaque pli
+eqm_mod_additif$results # Résultats agrégés
+
+
+### RECHERCHE EXHAUSTIVE AVEC LES VARIBLES DE BASE
+# Recherche exhaustive, ici avec uniquement les variables de base
+
+# OPTION 1 - avec BranchGLM
+# Régression exhaustive avec algorithme de séparation et d'évaluation
+# Retourne ici les 10 meilleurs modèles (sur 2^10 choix possibles)
+# BranchGLM considère les variables catégorielles avec toutes leurs modalités
+bb_selection <- BranchGLM::VariableSelection(
+  ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10,
+  data = dbm_a,
+  family = "gaussian",
+  link = "identity",
+  bestmodels = 10,
+  metric = "BIC",
+  type = "switch branch and bound"
+)
+# Graphique du BIC des 10 meilleurs modèles
+plot(bb_selection, type = "b")
+# Coefficients estimés (incluant zéros pour variables omises)
+coef(bb_selection)
+
+# OPTION 2 - avec "leaps" (note: sépare les variables catégorielles en indicateurs)
+# Sélection et retourne le meilleur modèle pour chaque nombre de variables
+# sans avoir à ajuster les modèles
+rec_ex <- leaps::regsubsets(
+  x = ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10,
+  nvmax = 15L, # nombre maximum de termes à inclure
+  # avec les variables catégorielles, plusieurs coefficients
+  method = "exhaustive", # choix de la méthode
+  data = dbm_a
+) # nom de la base de données
+# Cette fonction de "leaps" retourne les meilleurs modèles avec 1, 2, ... 13 variables
+
+# Imprimer un résumé de la sélection et des meilleurs modèles
+resume_rec_ex <- summary(rec_ex, matrix.logical = TRUE)
+# La même chose, mais sous format graphique
+# Variables incluses (oui/non) avec valeurs du BIC
+plot(rec_ex)
+
+# Calcul du AIC avec générique hecmulti "AIC"
+AIC(rec_ex)
+BIC(rec_ex)
+
+# Trouver le modèle avec le plus petit BIC
+min_BIC_mod <- resume_rec_ex$which[which.min(resume_rec_ex$bic), ]
+# Nom des variables dans le modèle retenu
+var_bic_exhaust <- rec_ex$xnames[min_BIC_mod]
+
+# Maintenant, approximons l'EQM par validation croisée
+
+data_full_add <- data.frame(cbind(
+  ymontant = dbm_a$ymontant,
+  model.matrix(mod_additif)[, min_BIC_mod][, -1]
+))
+
+set.seed(60602)
+eqm_mod_exhaustif_additif <- caret::train(
+  form = ymontant ~ .,
+  data = data_full_add,
+  method = "lm",
+  trControl = caret::trainControl(
+    method = "cv",
+    number = 10
+  )
+)
+eqm_mod_exhaustif_additif$results
+
+# Calculer l'erreur quadratique moyenne pour des données de validation
+# avec une fonction maison
+mod_BIC_additif <- eval_EQM_regsubsets(
+  model = rec_ex,
+  select = "BIC",
+  formula = formula(
+    ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10
+  ),
+  data = dbm_a,
+  newdata = dbm_v
+)^2 # la fonction retourne la racine de l'EQM
+
+
+######## MODÈLE COMPLET AVEC TERMES QUADRATIQUES ET INTERACTIONS #######
 
 ## Créer une formule avec tous les coefficients de régression possibles considérés
 # (...)^2 crée toutes les interactions d'ordre deux
@@ -132,63 +264,11 @@ formule <-
         I(x10^2)
   )
 mod_complet <- lm(formule, data = dbm_a)
-# Matrice du modèle avec toutes les variables obtenues par transformation (produit et termes quadratiques)
+# Matrice du modèle avec toutes les variables obtenues par transformation
+# (produit pour les variables catégorielles, et termes quadratiques pour les variables continues)
 matmod <- model.matrix(mod_complet)
 # nombre de coefficients
 ncol(matmod)
-
-library(leaps)
-# Recherche exhaustive, ici avec uniquement les variables de base
-rec_ex <- leaps::regsubsets(
-  x = ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10,
-  nvmax = 13L, # nombre maximum de termes à inclure
-  # avec les variables catégorielles, plusieurs coefficients
-  method = "exhaustive", # choix de la méthode
-  data = dbm_a
-) # nom de la base de données
-
-library(BranchGLM)
-# Régression exhaustive avec algorithme de séparation et d'évaluation
-bb_selection <- BranchGLM::VariableSelection(
-  ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10,
-  data = dbm_a,
-  family = "gaussian",
-  link = "identity",
-  bestmodels = 10,
-  metric = "BIC",
-  type = "switch branch and bound"
-)
-# Graphique du BIC
-plot(bb_selection, type = "b")
-# Coefficients estimés (incluant zéros pour variables omises)
-coef(bb_selection)
-
-# Imprimer un résumé de la sélection et des meilleurs modèles
-resume_rec_ex <- summary(rec_ex, matrix.logical = TRUE)
-# La même chose, mais sous format graphique
-# Variables incluses (oui/non) avec valeurs du BIC
-plot(rec_ex)
-
-# Calcul du AIC avec générique hecmulti "AIC"
-AIC(rec_ex)
-BIC(rec_ex)
-
-# Trouver le modèle avec le plus petit BIC
-min_BIC <- which.min(resume_rec_ex$bic)
-# Nom des variables dans le modèle retenu
-rec_ex$xnames[resume_rec_ex$which[min_BIC, ]]
-
-# Calculer l'erreur quadratique moyenne pour des données de validation
-# avec une fonction maison
-mod_BIC <- eval_EQM_regsubsets(
-  model = rec_ex,
-  select = "BIC",
-  formula = formula(
-    ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10
-  ),
-  data = dbm_a,
-  newdata = dbm_v
-)^2 # la fonction retourne la racine de l'EQM
 
 
 ## Méthode de sélection séquentielle avec AIC
@@ -273,7 +353,7 @@ ggplot(
   ) +
   theme_classic()
 # notez l'absence de monotonicité dans la courbe -
-# problème avec certaines variables catégorielles?
+# Dû au retrait de certaines variables catégorielles?
 
 ## Sélection de variable et régression LASSO
 
@@ -294,9 +374,6 @@ cv_output <-
 # À gauche, le modèle sans pénalité
 # à droite, le modèle avec uniquement l'ordonnée à l'origine
 plot(cv_output, sign.lambda = 1)
-
-
-## ---------------------------------------------------------------------------------
 
 # Ajuster le modèle plusieurs fois et tracer un diagramme
 # avec les valeurs des coefficients

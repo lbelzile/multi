@@ -37,7 +37,7 @@ include-in-header:
 4. Entraînement et estimation
    a. Prétraitement des données
    b. Choix du modèle
-   c. Choix des variables explicatives
+   c. Choix des variables explicatives ou des hyperparamètres
 5. Prédictions
 6. Évaluation de la performance
 7. Sélection du modèle final, ré-estimation et prédiction
@@ -266,8 +266,97 @@ dbm_a <- dbm |>
 Idée initiale: 
 
 - essayer tous les modèles possibles,
-- estimer pour chacun la performance (erreur quadratique moyenne) avec validation croisée ou critères d'information,
-- déterminer le meilleur modèle parmi l'ensemble de modèles.
+- estimer pour chacun la performance (par ex., l'erreur quadratique moyenne) par validation croisée,
+- déterminer le meilleur modèle selon ce critère parmi les modèles candidats.
+
+# Digression sur les variables catégorielles
+
+Les algorithmes que l'on va utiliser ont parfois des comportements différents face aux variables catégorielles (facteurs) avec $K > 2$ catégories, qui définit un ensemble de $K-1$ variables binaires.
+
+Soit le modèle considère l'ajout ou l'exclusion 
+
+- de chacune des $K-1$ variables binaires créées,
+- de l'ensemble des modalités simultanément.
+
+La première option permet plus de flexibilité, mais comme les catégories retirées sont assimilées à l'ordonnée à l'origin, la catégorie de référence n'est plus arbitraire.
+
+
+
+# Fléau de la dimensionalité
+
+Combien de modèles incluant les combinaisons de $p$ variables? 
+Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles.
+
+Dans l'exemple, on a $p=14$ variables de base en incluant les indicatrices pour les variables catégorielles multi-niveaux (revenu `x3` et région `x4`), donc $2^{14} = 16384$ modèles.
+
+
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+p <- c(5,10,15,20,25)
+npar <- 2^p
+options(scipen=100)
+knitr::kable(x = data.frame(p = p, npar = npar),
+             digits = 0,
+             col.names = c("$p$",
+                          "nombre de modèles"),
+            escape = FALSE,
+             booktabs = TRUE)
+```
+
+
+# Recherche exhaustive
+
+Heureusement, il n'est pas nécessaire d'ajuster tous les modèles: certains peuvent être éliminés d'emblée.
+
+L'algorithme par séparation et évaluation (*branch and bound*) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux. 
+
+
+Implémenté avec critères d'information dans le paquet `BranchGLM`.
+
+# Recherche exhaustive dans **R**
+
+Essayer **tous** les modèles et choisir le meilleur (si $p$ est petit).
+
+
+
+\footnotesize
+
+```{r}
+#| echo: true
+#| eval: true
+#| cache: true
+# Recherche exhaustive avec variables de base
+rec_ex <- leaps::regsubsets(
+  x = ymontant ~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10, 
+  nvmax = 13L,
+  method = "exhaustive",
+  data = dbm_a)
+resume_rec_ex <- summary(rec_ex,
+                         matrix.logical = TRUE)
+# Trouver le modèle avec le plus petit BIC
+min_BIC <- which.min(resume_rec_ex$bic)
+# Nom des variables dans le modèle retenu
+rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
+```
+
+
+\normalsize
+
+
+
+# Mot d'ordre
+
+Quelques mantras pour la suite:
+
+- préférer la flexibilité (réduire biais potentiel)
+- être conscient de notre budget (surajustement)
+- porter une attention particulière aux interactions entre variables catégorielles
+    - estimations correspondent à des `moyennes de groupe'
+    - impact élevé potentiel des valeurs aberrantes et des extrêmes
+
 
 
 
@@ -279,6 +368,7 @@ Pour ce faire, on pourrait aussi considérer tous les termes quadratiques, et le
 
 - on n'inclut pas le carré de variables indicatrices binaires (car $0^2=0, 1^2=1$).
 - idem pour les interactions entre indicateurs qui représentent des niveaux d'une même variable catégorielle.
+
 
 # Modèle complet et syntaxe **R**
 
@@ -303,80 +393,6 @@ matmod <- model.matrix(mod_complet)
 ```
 
 Le modèle complet est clairement **surajusté** avec `r length(coef(mod_complet))` coefficients pour `r nrow(dbm_a)` observations.
-
-# Fléau de la dimensionalité
-
-Combien de modèles incluant les combinaisons de $p$ variables?
-
-Dans l'exemple, $p=14$ variables de base en incluant les indicatrices pour les variables catégorielles multiniveaux (revenu `x3` et région `x4`)
-
-
-Chaque variable est incluse (ou pas): il y a $2^p=2\times 2 \times \cdots \times 2$ ($p$ fois) modèles. Au total, $2^{14} = 16384.$
-
-```{r}
-#| label: tbl-02-table3
-#| echo: false
-#| eval: true
-#| tbl-cap: "Nombres de modèles en fonction du nombre de paramètres."
-#| warning: false
-p <- c(5,10,15,20,25)
-npar <- 2^p
-options(scipen=100)
-knitr::kable(x = data.frame(p = p, npar = npar),
-             digits = 0,
-             col.names = c("$p$",
-                          "nombre de modèles"),
-            escape = FALSE,
-             booktabs = TRUE)
-```
-
-# Recherche exhaustive
-
-Essayer **tous** les modèles et choisir le meilleur (si $p$ est petit).
-
-
-
-\footnotesize
-
-```{r}
-#| echo: true
-#| eval: true
-#| cache: true
-# Recherche exhaustive avec variables de base
-rec_ex <- leaps::regsubsets(
-  x = ymontant ~ x1+x2+x3+x4+x5+x6+x7+x8+x9+x10, 
-  nvmax = 13L,
-  method = "exhaustive",
-  data = dbm_a)
-resume_rec_ex <- summary(rec_ex,
-                         matrix.logical = TRUE)
-# Trouver le modèle avec le plus petit BIC
-min_BIC <- which.min(resume_rec_ex$bic)
-# Nom des variables dans le modèle retenu
-rec_ex$xnames[resume_rec_ex$which[min_BIC,]]
-```
-
-
-\normalsize
-
-# Recherche efficace
-
-
-L'algorithme par séparation et évaluation (_branch and bound_) recherche de manière efficace sans essayer tous les modèles candidats et écarte d'office les modèles sous-optimaux. 
-
-
-Implémenté avec critères d'information dans le paquet `BranchGLM`.
-
-
-# Mot d'ordre
-
-Quelques mantras pour la suite:
-
-- préférer la flexibilité (réduire biais potentiel)
-- être conscient de notre budget (surajustement)
-- porter une attention particulière aux interactions entre variables catégorielles
-    - estimations correspondent à des `moyennes de groupe'
-    - impact élevé potentiel des valeurs aberrantes et des extrêmes
 
 # Méthodes de sélection séquentielles
 
@@ -474,13 +490,15 @@ L'historique des étapes est disponible via `seq_AIC$anova`
 
 # Performance en fonction de la complexité 
 
-```{r, out.width = '100%', fig.align='center'}
+```{r}
+#| out-width: '90%'
+#| fig-align: 'center'
 knitr::include_graphics("figures/fig-perfo-sequentiel.pdf")
 ```
 
 
 \footnotesize 
-Performance des 40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. La méthode externe donne la vrai performance sur les 100K données de validation (oracle). 
+Performance des 40 premiers modèles de la procédure séquentielle en fonction du nombre de termes inclus. La méthode externe donne la performance sur les 100K données de validation (oracle). 
 
 \normalsize
 
@@ -488,22 +506,177 @@ Performance des 40 premiers modèles de la procédure séquentielle en fonction 
 
 Objectif: prévenir le surajustement.
 
-L'erreur moyenne quadratique se décompose comme 
+Si $Y$ est l'observation, $\widehat{Y}$ la prédiction et $\mathsf{E}(Y)$ la vraie moyenne, l'erreur moyenne quadratique se décompose 
 
-$$ \text{biais carré} + \text{variabilité}$$
+$$\underset{\mathsf{EQM}}{\mathsf{E}\left[(Y-\widehat{Y})^2\right]} =  \underset{\text{biais carré}}{\mathsf{E}\left[\{\widehat{Y}-\mathsf{E}(Y)\}^2\right]} + \underset{\text{variabilité}}{\mathsf{E}\left[\{Y-\mathsf{E}(Y)\}^2\right]}$$
 
 Les méthodes de régularisation introduisent du biais dans l'estimation des coefficients en pénalisant leur norme.
 
+# Compromis biais et variance
+
+```{r}
+#| eval: true
+#| echo: false
+library(ggplot2)
+set.seed(60602)
+circles <- data.frame(
+  x0 = rep(0, 5),
+  y0 = rep(0, 5),
+  r = seq(0.1, 1, length.out = 5)
+)
+
+c0 <- ggplot() +
+  ggforce::geom_circle(
+    data = circles,
+    mapping = aes(x0 = x0, y0 = y0, r = r),
+    fill = "grey10",
+    alpha = 0.1
+  ) +
+  coord_fixed(ratio = 1) +
+  theme_void() +
+  theme(axis.title.x = element_text(), axis.title.y = element_text())
+c1 <- c0 +
+  geom_point(
+    data = data.frame(x = runif(10), y = runif(10)),
+    mapping = aes(x = x, y = y),
+    shape = 19,
+    size = 3,
+    col = "red"
+  ) +
+  labs(x = "", y = "variance élevée")
+c2 <- c0 +
+  geom_point(
+    data = data.frame(
+      x = runif(10, min = -0.8, max = 0.8),
+      y = runif(10, min = -0.8, max = 0.8)
+    ),
+    mapping = aes(x = x, y = y),
+    shape = 19,
+    size = 3,
+    col = "red"
+  ) +
+  labs(x = "", y = "")
+c3 <- c0 +
+  geom_point(
+    data = data.frame(
+      x = runif(10, min = -0.3, max = 0),
+      y = runif(10, min = -0.3, max = 0)
+    ),
+    mapping = aes(x = x, y = y),
+    shape = 19,
+    size = 3,
+    col = "red"
+  ) +
+  labs(x = "biaisé", y = "faible variance")
+c4 <- c0 +
+  geom_point(
+    data = data.frame(
+      x = runif(10, min = -0.1, max = 0.1),
+      y = runif(10, min = -0.1, max = 0.1)
+    ),
+    mapping = aes(x = x, y = y),
+    shape = 19,
+    size = 3,
+    col = "red"
+  ) +
+  labs(x = "sans biais", y = "")
+patchwork::wrap_plots((c1 + c2) / (c3 + c4))
+```
+
+# Compromis biais variance
+
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-surajustement
+#| cache: true
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: '80%'
+#| fig-cap: "Illustration du compromis biais (gauche) et variance (droite). À mesure que l'on complexifie le modèle, l'ajustement s'améliore, mais le bruit finit par dominer."
+fx <- function(x){ 
+  0.1 * cos(2 * pi * x * 3) - 0.4 * cos(2 * pi * x * 2) - 0.2 * (x-0.8)^4 + (x-0.2)^3
+}
+nobs <- 50
+newdata <- data.frame(x = ppoints(100))
+res_df0 <- numeric(100)
+for(i in 1:100){
+ set.seed(i)
+  x <- c(runif(nobs, max = 0.3), runif(20, min = 0.3))
+  y <- fx(x) + rnorm(length(x), sd = 0.1)
+  res_df0[i] <- mean(y)
+  mod1 <- mgcv::gam(y ~ s(x))
+  mod2 <- lm(y ~ splines::ns(x, df = length(x)-2),
+             data = data.frame(y = y, x = x))
+  if(i == 1L){
+  res1_df <- data.frame(x = newdata$x, 
+                  yhat = predict(mod1, newdata = newdata),
+                  fold = i)
+  res2_df <- data.frame(x = newdata$x, 
+                  yhat = predict(mod2, newdata = newdata),
+                  fold = i)
+  } else{
+  res1_df <- rbind(res1_df, data.frame(x = newdata$x, 
+                  yhat = predict(mod1, newdata = newdata),
+                  fold = i))
+  res2_df <- rbind(res2_df, data.frame(x = newdata$x, 
+                  yhat = predict(mod2, newdata = newdata),
+                  fold = i))
+  }
+}
+res1_df$fold <- factor(res1_df$fold)
+res2_df$fold <- factor(res2_df$fold)
+
+g0 <- ggplot() +
+  geom_hline(yintercept = res_df0, alpha = 0.1) + 
+  stat_function(fun = fx, xlim = c(0,1), n = 1001, colour = 4) +
+  scale_y_continuous(limits = c(-2,2)) +
+  theme_void()
+
+g1 <- ggplot() +
+  geom_line(data = res1_df, 
+  mapping = aes(x = x, y = yhat, group = fold),
+  alpha = 0.1) + 
+  stat_function(fun = fx, xlim = c(0,1), n = 1001, colour = 4) +
+  scale_y_continuous(limits = c(-2,2)) +
+  theme_void()
+
+g2 <- ggplot() +
+  geom_line(
+  data = res2_df, 
+  mapping = aes(x = x, y = yhat, group = fold),
+  alpha = 0.1) +  
+  stat_function(fun = fx, xlim = c(0,1), n = 1001, colour = 4) +
+  scale_y_continuous(limits = c(-2,2)) +
+  theme_void()
+patchwork::wrap_plots(g0 + g1 + g2)
+```
+
+# Invariance des coefficients
+
+Le modèle linéaire est invariant aux transformations affines.
+
+
+Considérons un modèle dans lequel on changerait l'unité de la variable $\mathsf{x}_1$ 
+
+Si le coefficient estimé $\widehat{\beta}_1=0.1$ quand $\mathsf{x}_1$ est la distance en km, alors on aura $\widehat{\beta}^\star_1=100 \times \widehat{\beta}_1 = 10$ si on remplace cette variable par $\mathsf{x}^{\star}_1 = \mathsf{x}_1 / 100$ pour la distance exprimée en tranche de 100km.
+
+La prédiction ne change pas car $\widehat{\beta}_1\mathsf{x}_1=\widehat{\beta}^\star_1\mathsf{x}^{\star}_1$.
+
 # Préalable à la régression avec régularisation
 
-Pénalisation la norme de $\beta_1, \ldots, \beta_p$
+On pénalise la norme de $\beta_1, \ldots, \beta_p$ (l'ordonnée à l'origine n'est pas incluse).
 
-- Modèles avec pénalités pas les mêmes selon l'échelle des données         
-    - pas invariant aux transformations affines (par ex., conversion de Celcius en Farenheit)
+Pour éviter que les échelles des variables (transformations affines) mènent à des changements, on standardise préalablement les variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ **et** la variable réponse $\boldsymbol{y}$ pour qu'elles soient toutes à la même échelle (par exemple, avec moyenne nulle et un écart-type unitaire).
 
-**Solution**: standardiser les variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$ **et** la variable réponse $\boldsymbol{y}$ pour qu'elles soient toutes à la même échelle (par exemple, avec moyenne nulle et un écart-type unitaire).
+```{r}
+#| eval: false
+#| echo: true
+scale(dbm_a)
+```
 
-- vérifier selon le logiciel, cette étape peut-être effectuée implicitement par votre fonction.
+Cette étape peut-être effectuée implicitement par votre fonction ou logiciel (c'est le cas avec `glmnet` dans **R**).
 
 
 
@@ -512,16 +685,57 @@ Pénalisation la norme de $\beta_1, \ldots, \beta_p$
 
 Pénalité avec norme $l_1$ pour la valeur absolue des coefficients,
 $$ \min_{\boldsymbol{\beta}} \left\{ n\mathsf{EQM}(\boldsymbol{\beta}) + \lambda(|\beta_1| + \cdots + |\beta_p|)\right\}.$$
-Hyperparamètre $\lambda>0$ qui détermine la force de la pénalisation.
+L'hyperparamètre $\lambda>0$ détermine la force de la pénalisation.
 
-Rétrécissement de certains coefficients **exactement** à zéro: sélection implicite de variable.
+- Si $\lambda=\infty$, la solution est de prendre $\beta_1 = \cdots = \beta_p=0$ et on recouvre le modèle pour la moyenne globale, qui contient uniquement l'ordonnée à l'origine.
+- Si $\lambda=0$, on obtient le même résultat que le modèle linéaire avec les $p$ variables explicatives.
+
+Le LASSO rétrécit de certains coefficients **exactement** à zéro: sélection implicite de variable.
 
 
 
 # Contrainte budgétaire et moindres carrés
 
 ```{r, out.width = '80%', fig.align='center'}
-knitr::include_graphics("figures/fig-lassopenalty.pdf")
+set.seed(1234)
+n <- 100L
+X <- scale(cbind(rpois(n, 2), runif(n)))
+y <- scale(X[,1] + 0.5*X[,2] + rnorm(n, sd = 0.4))
+fit <- lm(y ~ X - 1)
+points <- data.frame(x = c(0, fit$coefficients[1]), y = c(0, fit$coefficients[2]), z = c("(0,0)", "SCE"))
+
+beta1 <- seq(-0.5, 1.5, length.out = 101)
+beta2 <- seq(-0.5, 1.5, length.out = 101)
+df <- expand.grid(beta1 = beta1, beta2 = beta2)
+
+b <- as.matrix(df)
+df$sse <- rep(t(y) %*% y, length(beta1)*length(beta2)) - 2 * b %*% t(X) %*% y + diag(b %*% t(X) %*% X %*% t(b))
+
+diamond <- function(side_length, center) {
+  base <- matrix(c(1, 0, 0, 1, -1, 0, 0, -1), nrow = 2) * sqrt(2) / 2
+  trans <- (base * side_length) + center
+  as.data.frame(t(trans))
+}
+
+a <- glmnet::glmnet(x = X, y = y, lambda = seq(0, 1, by = 0.05))
+
+ggplot(df)  +
+  stat_contour(aes(beta1, beta2, z = sse),
+               breaks = round(quantile(df$sse, seq(0, 0.9, 0.05)), 0),
+               linewidth = 0.5, color = "grey", alpha = 0.8
+  ) +
+  geom_polygon(data = diamond(0.1, c(0, 0)), mapping = aes(x = V1, y = V2), fill = "cadetblue", alpha = 0.5) +
+  geom_polygon(data = diamond(0.5, c(0, 0)), mapping = aes(x = V1, y = V2), fill = "cadetblue", alpha = 0.2) +
+  geom_polygon(data = diamond(0.7, c(0, 0)), mapping = aes(x = V1, y = V2), fill = "cadetblue", alpha = 0.2) +
+  geom_polygon(data = diamond(0.9, c(0, 0)), mapping = aes(x = V1, y = V2), fill = "cadetblue", alpha = 0.2) +
+    geom_polygon(data = diamond(1.1, c(0, 0)), mapping = aes(x = V1, y = V2), fill = "cadetblue", alpha = 0.2) +
+  geom_polygon(data = diamond(1.3, c(0, 0)), mapping = aes(x = V1, y = V2), fill = "cadetblue", alpha = 0.2) +
+    geom_polygon(data = diamond(1.5, c(0, 0)), mapping = aes(x = V1, y = V2), fill = "cadetblue", alpha = 0.2) +
+  geom_point(data = data.frame(t(as.matrix(a$beta))), aes(x = V1, y = V2)) +
+  scale_x_continuous(limits = c(-0.5, 1.5), oob = scales::oob_keep) +
+  scale_y_continuous(limits = c(-0.5, 1.5), oob = scales::oob_keep) +
+  labs(x = expression(beta[1]), y = expression(beta[2])) +
+ theme_classic()
 ```
 
 # Code **R** pour le LASSO
@@ -626,7 +840,9 @@ Il est important de distinguer entre la fonction objective (ou la fonction de co
 - l'erreur quadratique moyenne pour la régression linéaire
 - le négatif de la log vraisemblance pour les modèles linéaires généralisés.
 
-et le critère visant à choisir le meilleur modèle (le profit en entreprise).
+et le critère visant à choisir le meilleur modèle (par ex., le profit).
+
+
 
 <!--
 # Régression quantile
@@ -739,17 +955,17 @@ En incluant les termes de base, les carrés et les interactions d'ordre 2.
 
 Certaines méthodes de pénalisation directe changent la fonction objective:
 
-   - introduction de biais pour les coefficients.
-   - idée globale: échanger biais contre variabilité moindre.
+   - introduction de biais pour les coefficients (vers zéro) pour réduire la variabilité des estimations.
+   - contrairement aux critères d'information (qui pénalisent l'ajustement a posteriori), les estimations des coefficients changent.
    
-   
-Une pénalité particulière (LASSO) contraint certains paramètres à être exactement nuls,
+Une pénalité particulière (LASSO) contraint certains paramètres à être exactement nuls.
 
-- correspond implicitement à une sélection de variables.
+- Cela correspond implicitement à une sélection de variables, bien que les estimations sont néanmoins différentes de celle des moindres carrés (régression linéaire) pour les mêmes variables explicatives.
 
 # Récapitulatif
 
 - En pratique, on cherche à essayer le plus possible de bons modèles pour trouver le choix optimal de variables.
-- On applique le critère de sélection sur la liste de modèles candidats pour retenir celui qui donne la meilleure performance.
+- Faire un tri permet d'isoler certains candidats, pour lesquels on peut calculer notre critère de sélection. 
+- On retient alors celui qui donne la meilleure performance.
 <!-- - Pour éviter une sélection rigide, on peut perturber les données et répéter la procédure pour calculer une moyenne de modèles.  -->
 <!-- - Cette approche est très coûteuse en calcul. -->
