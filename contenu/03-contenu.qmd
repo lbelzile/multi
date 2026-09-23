@@ -24,7 +24,7 @@ title: "Sélection de variables"
 ## Diapositives 
 
 - {{< fa file >}} [Sélection de variables](/diapos/MATH60602-diapos3.pdf)
-- {{< fa code >}} [Code](/code/MATH60602-diapos3.R) ([page web](/code/MATH60602-diapos3.qmd))
+- {{< fa code >}} [Code](/code/MATH60602-diapos3.R) ([page web](/code/MATH60602-code3.qmd))
 
 
 ## Objectifs d'apprentissage

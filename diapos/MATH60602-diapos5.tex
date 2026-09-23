@@ -21,13 +21,13 @@
 }
 \setbeamertemplate{section page}{
   \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
     \usebeamerfont{section title}\insertsection\par
   \end{beamercolorbox}
 }
 \setbeamertemplate{subsection page}{
   \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
@@ -62,8 +62,8 @@
 \useoutertheme{Flip}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
+    \setmainfont[]{VisbyCF-Medium}
+    \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -105,7 +105,7 @@
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -115,7 +115,7 @@
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -138,28 +138,31 @@
 \makeatother
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{longtable}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{anyfontsize}
+\usepackage{multirow}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
+\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -196,23 +199,14 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -220,6 +214,7 @@
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Régression logistique}
 \subtitle{Analyse multidimensionnelle appliquée}
@@ -229,174 +224,54 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, breakable, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
 
-\begin{frame}{\emph{Professional Rodeo Cowboys Association}}
-\protect\hypertarget{cowboy}{}
-L'exemple suivant est inspiré de l'article
-
-\begin{quote}
-Daneshvary, R. et Schwer, R. K. (2000) The Association Endorsement and
-Consumers' Intention to Purchase. \emph{Journal of Consumer Marketing}
-\textbf{17}, 203-213.
-\end{quote}
-
-\textbf{Objectif}: Les auteurs cherchent à voir si le fait qu'un produit
-soit recommandé par le \emph{Professional Rodeo Cowboys Association}
-(PRCA) a un effet sur les intentions d'achats.
-\end{frame}
-
-\begin{frame}[fragile]{Données du PRCA}
-\protect\hypertarget{donnuxe9es-du-prca}{}
-On dispose de 500 observations sur les variables suivantes dans la base
-de données \texttt{logit1}: \footnotesize 
-
-\begin{itemize}
-\tightlist
-\item
-  \(Y\): seriez-vous intéressé à acheter un produit recommandé par le
-  PRCA
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{0}\): non
-  \item
-    \(\texttt{1}\): oui
-  \end{itemize}
-\item
-  \(\mathrm{X}_1\): quel genre d'emploi occupez-vous?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{1}\): à la maison
-  \item
-    \(\texttt{2}\): employé
-  \item
-    \(\texttt{3}\): ventes/services
-  \item
-    \(\texttt{4}\): professionnel
-  \item
-    \(\texttt{5}\): agriculture/ferme
-  \end{itemize}
-\item
-  \(\mathrm{X}_2\): revenu familial annuel
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{1}\): moins de 25 000
-  \item
-    \(\texttt{2}\): 25 000 à 39 999
-  \item
-    \(\texttt{3}\): 40 000 à 59 999
-  \item
-    \(\texttt{4}\): 60 000 à 79 999
-  \item
-    \(\texttt{5}\): 80 000 et plus
-  \end{itemize}
-\end{itemize}
-
-\normalsize
-\end{frame}
-
-\begin{frame}{Données du PRCA}
-\protect\hypertarget{donnuxe9es-du-prca-1}{}
-\footnotesize
-
-\begin{itemize}
-\tightlist
-\item
-  \(\mathrm{X}_3\): sexe
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{0}\): homme
-  \item
-    \(\texttt{1}\): femme
-  \end{itemize}
-\item
-  \(\mathrm{X}_4\): avez-vous déjà fréquenté une université?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{0}\): non
-  \item
-    \(\texttt{1}\): oui
-  \end{itemize}
-\item
-  \(\mathrm{X}_5\): âge (en années)
-\item
-  \(\mathrm{X}_6\): combien de fois avez-vous assisté à un rodéo au
-  cours de la dernière année?
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \(\texttt{1}\): 10 fois ou plus
-  \item
-    \(\texttt{2}\): entre six et neuf fois
-  \item
-    \(\texttt{3}\): cinq fois ou moins
-  \end{itemize}
-\end{itemize}
-
-\normalsize
-\end{frame}
 
 \begin{frame}{Régression logistique}
-\protect\hypertarget{ruxe9gression-logistique}{}
+\phantomsection\label{ruxe9gression-logistique}
 Expliquer le comportement de la \textbf{moyenne} d'une variable binaire
 \(Y\in\{0,1\}\) en utilisant un modèle de régression avec \(p\)
 variables explicatives \(\mathrm{X}_1, \ldots, \mathrm{X}_p\).
 
 \[\underset{\text{moyenne théorique}}{\mathsf{E}(Y=1 \mid \mathbf{X})} = \underset{\text{probabilité de succès}}{\Pr(Y=1 \mid \mathbf{X})}=p\]
+
+Par convention, les zéros représentent des échecs et les uns des succès
+(même si \(Y=1\) signifie mourir).
 \end{frame}
 
-\begin{frame}{Objectif de la régression}
-\protect\hypertarget{objectif-de-la-ruxe9gression}{}
-\begin{enumerate}
-[1)]
-\tightlist
-\item
-  \textbf{Inférence} : comprendre comment et dans quelles mesures les
-  variables \(\mathbf{X}\) influencent la probabilité que \(Y=1\).
-\item
-  \textbf{Prédiction} : développer un modèle pour prévoir des valeurs de
-  \(Y\) ou la probabilité de succès à partir des \(\mathbf{X}\).
-\end{enumerate}
+\begin{frame}{Variables réponses binaires}
+\phantomsection\label{variables-ruxe9ponses-binaires}
+Si la variable réponse \(Y\) vaut soit \(0\), soit \(1\), on peut
+postuler une loi Bernoulli pour \(Y\), soit \begin{align*}
+\Pr(Y=y) = p^y (1-p)^{1-y}, \quad y=0, 1.
+\end{align*}
+
+Il en découle que \(\mathsf{E}(Y)=p\) et \(\mathsf{Va}(Y)=p(1-p)\).
+
+La variabilité est complètement déterminée par la moyenne.
 \end{frame}
 
-\begin{frame}{Exemples}
-\protect\hypertarget{exemples}{}
+\begin{frame}{Exemples de questions de recherches}
+\phantomsection\label{exemples-de-questions-de-recherches}
+Questions comprenant une variable réponse binaire:
+
 \begin{itemize}
 \tightlist
 \item
-  Est-ce qu'un client potentiel va répondre favorablement à une offre
+  est-ce qu'un client potentiel a répondu favorablement à une offre
   promotionnelle?
 \item
-  Est-ce qu'un client est satisfait du service après-vente?
+  est-ce qu'un client est satisfait du service après-vente?
 \item
-  Est-ce qu'un client va faire faillite ou non au cours des trois
-  prochaines années.
+  est-ce qu'une firme va faire faillite au cours des trois prochaines
+  années?
+\item
+  est-ce qu'un participant à une étude réussit une tâche?
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Inférence et interprétation}
-\protect\hypertarget{infuxe9rence-et-interpruxe9tation}{}
-Ce cours est consacré à l'estimation et l'interprétation des paramètres
-du modèle dans le cas binaire.
-
-Par convention, on désigne le résultat « \(1\) » par un succès et «
-\(0\) » par un échec.
-\end{frame}
-
-\begin{frame}{Modéliser une probabilité avec une régression linéaire?}
-\protect\hypertarget{moduxe9liser-une-probabilituxe9-avec-une-ruxe9gression-linuxe9aire}{}
-Mauvaise idée!
+\begin{frame}{Pourquoi pas une régression linéaire?}
+\phantomsection\label{pourquoi-pas-une-ruxe9gression-linuxe9aire}
+Les modèles linéaires ne sont pas adéquats pour les variables binaires.
 
 \begin{itemize}
 \tightlist
@@ -404,112 +279,81 @@ Mauvaise idée!
   Sans contrainte, on peut obtenir des probabilités négatives ou
   supérieures à 1!
 \item
-  les données binaires ne respectent pas le postulat d'égalité des
+  Les données binaires ne respectent pas le postulat d'égalité des
   variances
 
   \begin{itemize}
   \tightlist
   \item
-    invalide les résultats des tests d'hypothèse pour les coefficients.
+    Plus la probabilité de succès est près de 0.5, plus la variabilité
+    est élevée.
+  \item
+    Cette hétérogénéité invalide les résultats des tests d'hypothèse
+    pour les coefficients.
   \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Illustration: linéaire vs logistique}
-\protect\hypertarget{illustration-linuxe9aire-vs-logistique}{}
-\begin{figure}
+\begin{frame}{Modèle linéaire vs logistique}
+\phantomsection\label{moduxe8le-linuxe9aire-vs-logistique}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos5_files/figure-beamer/unnamed-chunk-1-1.pdf}
+\end{frame}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos5_files/figure-beamer/fig-demandecredit-1.pdf}
+\begin{frame}{Prédicteur linéaire}
+\phantomsection\label{pruxe9dicteur-linuxe9aire}
+On considère une fonction pour la moyenne
+\(\mathsf{E}(Y_i \mid \mathbf{X}_i)\) en fonction des variables
+explicatives.
 
-}
+Dans une régression linéaire, le prédicteur linéaire
 
-\caption{\label{fig-demandecredit}Données de la réserve de Boston sur
-l'approbation de prêts hypothécaires (1990); données tirées de Stock et
-Watson (2007).}
+\[\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p\]
+représente la moyenne de la variable réponse.
 
-\end{figure}
+Or, la probabilité doit être dans \([0,1]\), et
+\(\eta \in \mathbb{R} = (-\infty, \infty)\).
 \end{frame}
 
 \begin{frame}{Fonction de liaison}
-\protect\hypertarget{fonction-de-liaison}{}
-Idée: appliquer une transformation au \textbf{prédicteur linéaire}
+\phantomsection\label{fonction-de-liaison}
+On peut appliquer une transformation au \textbf{prédicteur linéaire}
 \[\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p\]
 pour que la prédiction soit entre zéro et un.
 
-On considère \begin{align*}
+On considère la \textbf{fonction sigmoïde} (expit), \begin{align*}
  p &= \textrm{expit}(\eta) = \frac{\exp(\eta)}{1+\exp(\eta)}
 = \frac{1}{1+\exp(-\eta)}.
 \end{align*}
 \end{frame}
 
 \begin{frame}{Courbe sigmoïde}
-\protect\hypertarget{courbe-sigmouxefde}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos5_files/figure-beamer/fig-logitplot-1.pdf}
-
-}
-
-\caption{\label{fig-logitplot}Valeurs ajustées du modèle de régression
-logistique en fonction du prédicteur linéaire \(\eta\).}
-
-\end{figure}
+\phantomsection\label{courbe-sigmouxefde}
+\begin{center}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos5_files/figure-beamer/unnamed-chunk-2-1.pdf}
+\end{center}
 \end{frame}
 
-\begin{frame}[fragile]{Ajustement du modèle}
-\protect\hypertarget{ajustement-du-moduxe8le}{}
-La fonction \texttt{glm} dans \textbf{R} ajuste un modèle linéaire
-généralisé (par défaut, Gaussien pour régression linéaire).
+\begin{frame}{Fonction de répartition logistique}
+\phantomsection\label{fonction-de-ruxe9partition-logistique}
+On voit que \(p\) est une \textbf{fonction croissante} de
+\(\eta=\beta_0 + \cdots + \beta_p \mathrm{X}_{p}\).
 
 \begin{itemize}
 \tightlist
 \item
-  L'argument \texttt{family=binomial(link="logit")} permet de spécifier
-  que l'on ajuste un modèle logistique.
+  Si \(\beta_j\) est positif et \(\mathrm{X}_{j}\) augmente,
+  \(\Pr(Y=1)\) augmente aussi.\\
+\item
+  Si \(\beta_j\) est négatif et \(\mathrm{X}_{j}\) augmente,
+  \(\Pr(Y=1)\) diminue.
+\item
+  La relation entre \(\Pr(Y=1)\) et \(\eta\) (et donc aussi
+  \(\mathrm{X}_{j}\)) est \emph{nonlinéaire}.
 \end{itemize}
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{data}\NormalTok{(logit1, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\CommentTok{\# Ajustement du modèle avec toutes}
-\CommentTok{\# les variables explicatives}
-\NormalTok{modele1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
-            \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{),}
-            \AttributeTok{data =}\NormalTok{ logit1)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}[fragile]{Sortie}
-\protect\hypertarget{sortie}{}
-Tableau résumé avec les coefficients (\texttt{summary})
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{summary}\NormalTok{(modele1)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Interprétation}
-\protect\hypertarget{interpruxe9tation}{}
-Par défaut, pour des variables \(0/1\), le modèle décrit la probabilité
-de succès.
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos5_files/figure-beamer/logitplot2-1.pdf}
-
-}
-
-\end{figure}
-
-Si le coefficient \(\beta_j\) de la variable \(\mathrm{X}_j\) est
-positif, alors plus la variable augmente, plus \(\Pr(Y=1)\) augmente.
 \end{frame}
 
 \begin{frame}{Rappel exponentiels et logarithme}
-\protect\hypertarget{rappel-exponentiels-et-logarithme}{}
+\phantomsection\label{rappel-exponentiels-et-logarithme}
 Quelques propriétés de la fonction exponentielle:
 
 \begin{itemize}
@@ -536,7 +380,7 @@ Quelques propriétés de la fonction logarithmique
 \end{frame}
 
 \begin{frame}{Cote}
-\protect\hypertarget{cote}{}
+\phantomsection\label{cote}
 Si on applique la transformation inverse, on obtient
 
 \[\ln\left(\frac{p}{1-p} \right) = \eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p.\]
@@ -551,16 +395,17 @@ ou, en prenant l'exponentielle de chaque côté,
 \end{frame}
 
 \begin{frame}{Cote et probabilité}
-\protect\hypertarget{cote-et-probabilituxe9}{}
+\phantomsection\label{cote-et-probabilituxe9}
 La cote est utilisée dans les paris sportifs \begin{align*}
  \mathsf{cote}(p) = \frac{p}{1-p} = \frac{\Pr(Y=1 \mid \mathbf{X})}{\Pr(Y=0 \mid \mathbf{X})}.
 \end{align*}
 
-\hypertarget{tbl-cotes}{}
 \begin{table}
-\caption{\label{tbl-cotes}Cote et probabilité de succès }\tabularnewline
 
-\centering
+\caption{\label{tbl-cotes}Cote et probabilité de succès}
+
+\centering{
+
 \begin{tabular}{lccccccccc}
 \toprule
 \(p\) & 0.1 & 0.2 & 0.3 & 0.4 & 0.5 & 0.6 & 0.7 & 0.8 & 0.9\\
@@ -568,65 +413,85 @@ La cote est utilisée dans les paris sportifs \begin{align*}
 cote & \(\frac{1}{9}\) & \(\frac{1}{4}\) & \(\frac{3}{7}\) & \(\frac{2}{3}\) & \(1\) & \(\frac{3}{2}\) & \(\frac{7}{3}\) & \(4\) & \(9\)\\
 \bottomrule
 \end{tabular}
-\end{table}
+
+}
+
+\end{table}%
 \end{frame}
 
-\begin{frame}{Interprétation avec données du PRCA}
-\protect\hypertarget{interpruxe9tation-avec-donnuxe9es-du-prca}{}
-Le modèle ajusté en termes de cote est \begin{align*}
- \frac{\Pr(Y=1 \mid \mathrm{X}_5=x_5)}{\Pr(Y=0 \mid \mathrm{X}_5=x_5)} = \exp(-3.05)\exp(0.0749x_5).
-\end{align*}
+\begin{frame}{Interprétation de l'ordonnée à l'origine en termes de
+cote}
+\phantomsection\label{interpruxe9tation-de-lordonnuxe9e-uxe0-lorigine-en-termes-de-cote}
+Si \(\mathrm{X}_1=\cdots = \mathrm{X}_p=0\), il est clair que
+\begin{align*}
+\mathrm{cote}(Y\mid \mathbf{X}=\boldsymbol{0}_p) = \exp(\beta_0)
+\end{align*} et \begin{align*}
+\Pr\left(Y=1\mid  \mathbf{X}=\boldsymbol{0}_p\right) = \frac{\exp({\beta_0})}{1+\exp({\beta_0})}
+\end{align*} représente la probabilité que \(Y=1\) quand
+\(\mathbf{X}=\boldsymbol{0}_p\).
 
-\small
+Comme pour la régression linéaire,
+\(\mathrm{X}_1=\cdots =\mathrm{X}_p=0\) peut être impossible; dans ce
+cas, \(\beta_0\) ne s'interprète pas.
+\end{frame}
+
+\begin{frame}{Interprétation en terme de rapport de cote}
+\phantomsection\label{interpruxe9tation-en-terme-de-rapport-de-cote}
+Dans le modèle logistique,le \textbf{rapport de cotes} quand
+\(\mathrm{X}_k=x_k+1\) versus \(\mathrm{X}_k=x_k\) quand
+\(\mathrm{X}_j=x_j\) \((j=1, \ldots, p, j \neq k)\) est
+
+\begin{align*}
+\MoveEqLeft\frac{\mathrm{cote}(Y \mid  \mathrm{X}_k=x_k+1, \mathrm{X}_j=x_j, j\neq k)}{\mathrm{cote}(Y \mid \mathrm{X}_k=x_k, \mathrm{X}_j=x_j, j \neq k)}\\&=\frac{\exp\left(\beta_0+ \sum_{j=1}^p\beta_j x_j + \beta_k \right)}{\exp\left(\beta_0+ \sum_{j=1}^p\beta_j x_j \right)}\\
+&= \exp(\beta_k).
+\end{align*}
+\end{frame}
+
+\begin{frame}{Explication}
+\phantomsection\label{explication}
+Quand \(\mathrm{X}_k\) augmente d'une unité \emph{et que la valeur de
+toutes les autres covariables est constante}, la cote de \(Y\) est
+multipliée par \(\exp(\beta_k)\).
 
 \begin{itemize}
 \tightlist
 \item
-  Lorsque \(\mathrm{X}_5\) augmente d'une année, la cote est multipliée
-  par \(\exp(0.0749) = 1.078\) peut importe la valeur de \(x_5\).
+  La cote augmente si \(\exp(\beta_k) >1\), c'est-à-dire si
+  \(\beta_k>0\).
 \item
-  Pour deux personnes dont la différence d'âge
-
-  \begin{itemize}
-  \tightlist
-  \item
-    est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
-  \item
-    est de 10 ans, la cote de la personne plus âgée est 112\% plus
-    élevée (cote multipliée par
-    \(\exp(10 \times 0.0749)=1.078^{10} = 2.12\))
-  \end{itemize}
+  La cote diminue si \(\exp(\beta_k) < 1\), c'est-à-dire si
+  \(\beta_k<0\).
 \end{itemize}
-
-\normalsize
 \end{frame}
 
-\begin{frame}[fragile]{Modèle complet}
-\protect\hypertarget{moduxe8le-complet}{}
-On considère le modèle avec toutes les variables explicatives:
+\begin{frame}[fragile]{Ajustement du modèle}
+\phantomsection\label{ajustement-du-moduxe8le}
+La fonction \texttt{glm} dans \textbf{R} ajuste un modèle linéaire
+généralisé (par défaut, linéaire avec \texttt{family\ =\ gaussian}).
+
+\begin{itemize}
+\tightlist
+\item
+  L'argument \texttt{family=binomial(link="logit")} permet de spécifier
+  que l'on ajuste un modèle logistique.
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{modele2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}
-  \AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
-  \AttributeTok{data =}\NormalTok{ logit1,}
-  \AttributeTok{family =}\NormalTok{ binomial)}
-\FunctionTok{exp}\NormalTok{(}\FunctionTok{coef}\NormalTok{(modele2))}
+\FunctionTok{data}\NormalTok{(formatvente, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\CommentTok{\# Données de l\textquotesingle{}expérience 3 de Duke et Amir (2023)}
+\NormalTok{modele1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ achat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ format }\SpecialCharTok{+}\NormalTok{ marque,}
+            \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{),}
+            \AttributeTok{data =}\NormalTok{ formatvente)}
+\FunctionTok{summary}\NormalTok{(modele1)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-(Intercept)         x12         x13         x14         x15         x22 
-      0.062       0.438       0.512       0.509       0.699       0.833 
-        x23         x24         x25          x3          x4          x5 
-      0.572       0.087       0.264       3.854       6.236       1.116 
-        x62         x63 
-      0.255       0.090 
-\end{verbatim}
+On obtient un tableau résumé avec les coefficients (\texttt{summary})
 \end{frame}
 
 \begin{frame}{Interprétation des coefficients}
-\protect\hypertarget{interpruxe9tation-des-coefficients}{}
+\phantomsection\label{interpruxe9tation-des-coefficients}
 Si on a plusieurs variables explicatives, les coefficients sont
 interprétés en modifiant une variable à la fois.
 
@@ -641,88 +506,8 @@ On compare deux profils identiques, sauf pour la variable en question
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Interprétation des coefficients}
-\protect\hypertarget{interpruxe9tation-des-coefficients-1}{}
-\textbf{Variable continue}:
-
-\begin{itemize}
-\tightlist
-\item
-  La cote de la personne plus âgée d'un an est 1.116 fois celle de la
-  personne plus jeune, \emph{ceteris paribus}, une augmentation de
-  11,6\%
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Variable binaire}
-\protect\hypertarget{variable-binaire}{}
-Le rapport de cote pour les femmes (\texttt{x3=1}) versus les hommes
-(\texttt{x3=0}) est de \(\exp(\widehat{\beta}_{\mathrm{X}_3}) = 3.854\):
-
-\begin{itemize}
-\tightlist
-\item
-  les femmes sont plus susceptibles de suivre les recommendations
-  d'achat toute chose étant égale par ailleurs,
-\item
-  Inversement, le rapport de cote homme/femme est de 1/3.854=0.259,
-\end{itemize}
-
-On peut donc conclure que:
-
-\begin{itemize}
-\tightlist
-\item
-  la cote des femmes est 285.4\% plus élevée que celle des hommes.
-\item
-  la cote des hommes est 74.1\% inférieure à celle des femmes.
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Variable catégorielle}
-\protect\hypertarget{variable-catuxe9gorielle}{}
-Toutes les comparaisons sont effectuées avec la catégorie de référence.
-
-Pour \texttt{x1}, c'est à la maison. Le rapport de cote est
-\[\frac{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=2 (\text{employé}), \ldots\}}{\mathsf{cote}\{Y \mid \mathrm{X}_{1}=1 (\text{maison}), \ldots\}} = \exp(\widehat{\beta}_{\mathrm{X}_{1}=2}) = 0.438\]
-
-Le coefficient pour \(\mathrm{X}_{1}=1\) est zéro, d'où
-\(\exp(\widehat{\beta}_{\mathrm{X}_{1}=1})=1\) (absent du tableau).
-
-On peut ordonner les type d'emploi selon la probabilité de succès à
-l'aide des coefficients: \emph{ceteris paribus} on obtient le classement
-
-\begin{itemize}
-\tightlist
-\item
-  employé \textless{} professionnel \textless{} ventes/service
-  \textless{} agriculture \textless{} maison.
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Invariance}
-\protect\hypertarget{invariance}{}
-Si on voulait le rapport de cote professionnel vs employé, inutile de
-réajuster le modèle.
-
-On peut calculer
-
-\[ 
-\dfrac{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=4, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}}{\dfrac{\mathsf{cote}(Y \mid \mathrm{X}_{1}=2, \ldots)}{\mathsf{cote}(Y \mid \mathrm{X}_{1}=1, \ldots)}} = \frac{\exp(\widehat{\beta}_{\mathrm{X}_{1}=4})}{\exp(\widehat{\beta}_{\mathrm{X}_{1}=2})} =1.162746
-\]
-
-plutôt que de changer la catégorie de référence via
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{logit2 }\OtherTok{\textless{}{-}}\NormalTok{ logit1 }\SpecialCharTok{|\textgreater{}} 
-   \FunctionTok{mutate}\NormalTok{(}\AttributeTok{x1 =} \FunctionTok{relevel}\NormalTok{(x1, }\AttributeTok{ref =} \DecValTok{2}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
 \begin{frame}{Vraisemblance et estimation du modèle}
-\protect\hypertarget{vraisemblance-et-estimation-du-moduxe8le}{}
+\phantomsection\label{vraisemblance-et-estimation-du-moduxe8le}
 Pour un modèle probabiliste donné, on peut calculer la « probabilité »
 d'avoir obtenu les données de l'échantillon.
 
@@ -741,7 +526,7 @@ la fonction de vraisemblance.
 \end{frame}
 
 \begin{frame}{Vraisemblance d'une observation}
-\protect\hypertarget{vraisemblance-dune-observation}{}
+\phantomsection\label{vraisemblance-dune-observation}
 La vraisemblance d'une observation \(Y_i \in \{0,1\}\) (loi
 Bernoulli/binomiale) est
 
@@ -755,7 +540,7 @@ p_i & y_i = 1 (\text{succès})\\
 \end{frame}
 
 \begin{frame}{Probabilité conjointe d'événements binaires}
-\protect\hypertarget{probabilituxe9-conjointe-duxe9vuxe9nements-binaires}{}
+\phantomsection\label{probabilituxe9-conjointe-duxe9vuxe9nements-binaires}
 \begin{itemize}
 \tightlist
 \item
@@ -770,7 +555,7 @@ p_i & y_i = 1 (\text{succès})\\
 \end{frame}
 
 \begin{frame}{Log vraisemblance}
-\protect\hypertarget{log-vraisemblance}{}
+\phantomsection\label{log-vraisemblance}
 \begin{itemize}
 \tightlist
 \item
@@ -788,27 +573,23 @@ p_i & y_i = 1 (\text{succès})\\
 \end{frame}
 
 \begin{frame}{Prédiction des probabilités de succès}
-\protect\hypertarget{pruxe9diction-des-probabilituxe9s-de-succuxe8s}{}
+\phantomsection\label{pruxe9diction-des-probabilituxe9s-de-succuxe8s}
 Des estimés des coefficients \(\widehat{\beta}\) découlent une
 estimation de \(\Pr(Y=1)\) pour les valeurs
 \(\mathrm{X}_1=x_1, \ldots, \mathrm{X}_p=x_p\) d'un individu donné,
 \begin{align*}
  \widehat{p} = \textrm{expit}(\widehat{\beta}_0 + \cdots + \widehat{\beta}_px_p).
 \end{align*}
-\end{frame}
 
-\begin{frame}{Modèle nul}
-\protect\hypertarget{moduxe8le-nul}{}
 Un modèle avec uniquement l'ordonnée à l'origine retournera
-\(\widehat{p}\), la proportion empirique de succès.
-
-Comme pour la régression linéaire, c'est la moyenne des observations.
+\(\widehat{p}\), la proportion empirique de succès. Comme pour la
+régression linéaire, c'est la moyenne des observations.
 \end{frame}
 
 \begin{frame}[fragile]{Test du rapport de vraisemblance}
-\protect\hypertarget{test-du-rapport-de-vraisemblance}{}
+\phantomsection\label{test-du-rapport-de-vraisemblance}
 \begin{columns}[T]
-\begin{column}{0.6\textwidth}
+\begin{column}{0.6\linewidth}
 Pour les modèles ajustés par maximum de vraisemblance.
 
 Comparaison de modèles \textbf{emboîtés}
@@ -823,101 +604,86 @@ Comparaison de modèles \textbf{emboîtés}
 \end{itemize}
 \end{column}
 
-\begin{column}{0.4\textwidth}
-\includegraphics[width=1\textwidth,height=\textheight]{figures/poupeesrusses.jpg}
+\begin{column}{0.4\linewidth}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{figures/poupeesrusses.jpg}
 \end{column}
 \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Exemple}
-\protect\hypertarget{exemple}{}
-Comparons un modèle avec et sans \(X_6\).
+\phantomsection\label{exemple}
+Comparons un modèle avec et sans marque.
 
-Variable catégorielle à trois niveaux (deux coefficients associés à
-\(\mathrm{I}(\mathrm{X}_{6}=2)\) et \(\mathrm{I}(\mathrm{X}_{6}=3)\).
+Variable catégorielle à deux niveaux (un coefficient associé).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{modele2 }\OtherTok{\textless{}{-}}  \FunctionTok{glm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+}\NormalTok{ x6,}
-                 \AttributeTok{data =}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{logit1,}
-                 \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{))}
-\NormalTok{modele3 }\OtherTok{\textless{}{-}}  \FunctionTok{glm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4 }\SpecialCharTok{+}\NormalTok{ x5,}
-                 \AttributeTok{data =}\NormalTok{ hecmulti}\SpecialCharTok{::}\NormalTok{logit1,}
-                 \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{)) }
+\NormalTok{modele2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ achat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ format,}
+            \AttributeTok{family =} \FunctionTok{binomial}\NormalTok{(}\AttributeTok{link =} \StringTok{"logit"}\NormalTok{),}
+            \AttributeTok{data =}\NormalTok{ formatvente)}
 \end{Highlighting}
 \end{Shaded}
-\end{frame}
 
-\begin{frame}{Test d'hypothèse}
-\protect\hypertarget{test-dhypothuxe8se}{}
-On teste l'hypothèse nulle
-\(\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0\)
-(soit \(k=2\) restrictions).
-
-L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
-
-Si la valeur \(p\) est inférieure au seuil de signification, typiquement
-\(\alpha = 0.05\), on rejette l'hypothèse nulle.
-
-\begin{itemize}
-\tightlist
-\item
-  on conclut que la variable explicative \(\mathrm{X}_6\) améliore
-  significativement l'ajustement du modèle.
-\end{itemize}
+On teste l'hypothèse nulle \(\mathscr{H}_0: \beta_{2} = 0,\) où
+\(\mathsf{X}_2 = \mathsf{I}_{\mathrm{marque}=\text{for your beauty}}\).
+L'hypothèse alternative est que le coefficient est non-nul.
 \end{frame}
 
 \begin{frame}{Rapport de vraisemblance}
-\protect\hypertarget{rapport-de-vraisemblance}{}
+\phantomsection\label{rapport-de-vraisemblance}
 Le test est basé sur la statistique \begin{align*}
  D = -2\{\ell(\widehat{\boldsymbol{\beta}}_0)-\ell(\widehat{\boldsymbol{\beta}})\}.
 \end{align*}
 
 Cette différence \(D\), lorsque l'hypothèse \(\mathscr{H}_0\) est vraie,
 suit approximativement une loi khi-deux \(\chi^2_k\).
+
+Si la valeur \(p\) est inférieure au seuil de signification, typiquement
+\(\alpha = 0.05\), on rejette l'hypothèse nulle.
 \end{frame}
 
 \begin{frame}[fragile]{Exemple de test}
-\protect\hypertarget{exemple-de-test}{}
+\phantomsection\label{exemple-de-test}
 \footnotesize
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\CommentTok{\# modèle 2 (alternative), modèle 3 (nulle)}
-\FunctionTok{anova}\NormalTok{(modele3, modele2, }\AttributeTok{test =} \StringTok{"LR"}\NormalTok{)}
+\CommentTok{\# modèle 1 (alternative), modèle 2 (H0)}
+\FunctionTok{anova}\NormalTok{(modele2, modele1, }\AttributeTok{test =} \StringTok{"LR"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 Analysis of Deviance Table
 
-Model 1: y ~ x1 + x2 + x3 + x4 + x5
-Model 2: y ~ x1 + x2 + x3 + x4 + x5 + x6
-  Resid. Df Resid. Dev Df Deviance  Pr(>Chi)    
-1       488     566.45                          
-2       486     516.20  2   50.251 1.225e-11 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Model 1: achat ~ format
+Model 2: achat ~ format + marque
+  Resid. Df Resid. Dev Df Deviance Pr(>Chi)
+1       397     487.07                     
+2       396     486.22  1  0.85229   0.3559
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \DocumentationTok{\#\# Deviance = {-}2*log vraisemblance}
-\NormalTok{rvrais }\OtherTok{\textless{}{-}}\NormalTok{ modele3}\SpecialCharTok{$}\NormalTok{deviance }\SpecialCharTok{{-}}\NormalTok{ modele2}\SpecialCharTok{$}\NormalTok{deviance}
-\FunctionTok{pchisq}\NormalTok{(rvrais, }\AttributeTok{df =} \DecValTok{2}\NormalTok{, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{) }\CommentTok{\# valeur{-}p}
+\NormalTok{rvrais }\OtherTok{\textless{}{-}}\NormalTok{ modele2}\SpecialCharTok{$}\NormalTok{deviance }\SpecialCharTok{{-}}\NormalTok{ modele1}\SpecialCharTok{$}\NormalTok{deviance}
+\FunctionTok{pchisq}\NormalTok{(rvrais, }\AttributeTok{df =} \DecValTok{1}\NormalTok{, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{) }\CommentTok{\# valeur{-}p}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-[1] 1.225046e-11
+[1] 0.3559062
 \end{verbatim}
 
 \normalsize
+
+On conclut que la variable explicative \(\mathrm{X}_2\) améliore
+significativement l'ajustement du modèle.
 \end{frame}
 
 \begin{frame}[fragile]{Tester la significativité des variables}
-\protect\hypertarget{tester-la-significativituxe9-des-variables}{}
-Si un paramètre n'est pas significativement différent de 0, cela veut
+\phantomsection\label{tester-la-significativituxe9-des-variables}
+Si un paramètre n'est pas significativement différent de zéro, cela veut
 dire qu'il n'y a pas de lien significatif entre la variable et la
 réponse \emph{une fois que les autres variables} sont dans le modèle.
 
@@ -925,21 +691,17 @@ réponse \emph{une fois que les autres variables} sont dans le modèle.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{car}\SpecialCharTok{::}\FunctionTok{Anova}\NormalTok{(modele2, }\AttributeTok{type =} \StringTok{"3"}\NormalTok{)}
+\NormalTok{car}\SpecialCharTok{::}\FunctionTok{Anova}\NormalTok{(modele1, }\AttributeTok{type =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-Analysis of Deviance Table (Type III tests)
+Analysis of Deviance Table (Type II tests)
 
-Response: y
-   LR Chisq Df Pr(>Chisq)    
-x1    4.291  4     0.3681    
-x2   32.912  4  1.245e-06 ***
-x3   29.878  1  4.601e-08 ***
-x4   42.957  1  5.597e-11 ***
-x5   36.731  1  1.356e-09 ***
-x6   50.251  2  1.225e-11 ***
+Response: achat
+       LR Chisq Df Pr(>Chisq)  
+format   4.2738  1     0.0387 *
+marque   0.8523  1     0.3559  
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
@@ -948,7 +710,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{frame}
 
 \begin{frame}[fragile]{Intervalles de confiance pour coefficients}
-\protect\hypertarget{intervalles-de-confiance-pour-coefficients}{}
+\phantomsection\label{intervalles-de-confiance-pour-coefficients}
 On peut aussi considérer des intervalles de confiance pour les
 coefficients individuels.
 
@@ -957,8 +719,8 @@ de confiance de vraisemblance profilée}.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\FunctionTok{confint}\NormalTok{(modele2)      }\CommentTok{\# IC pour beta}
-\FunctionTok{exp}\NormalTok{(}\FunctionTok{confint}\NormalTok{(modele2)) }\CommentTok{\# IC pour exp(beta)}
+\FunctionTok{confint}\NormalTok{(modele1)      }\CommentTok{\# IC pour beta}
+\FunctionTok{exp}\NormalTok{(}\FunctionTok{confint}\NormalTok{(modele1)) }\CommentTok{\# IC pour exp(beta)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -968,10 +730,12 @@ pour \(\exp(\beta)\) est simplement \([\exp(b_i), \exp(b_s)]\).
 \end{frame}
 
 \begin{frame}{Intervalles de confiance}
-\protect\hypertarget{intervalles-de-confiance}{}
+\phantomsection\label{intervalles-de-confiance}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos5_files/figure-beamer/fig-confint-modele2-logist-1.pdf}
+\centering{
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos5_files/figure-beamer/fig-confint-modele2-logist-1.pdf}
 
 }
 
@@ -979,11 +743,11 @@ pour \(\exp(\beta)\) est simplement \([\exp(b_i), \exp(b_s)]\).
 profilés de niveau 95\% pour les coefficients du modèle logistique
 (échelle exponentielle).}
 
-\end{figure}
+\end{figure}%
 \end{frame}
 
 \begin{frame}{Tests et intervalles de confiances}
-\protect\hypertarget{tests-et-intervalles-de-confiances}{}
+\phantomsection\label{tests-et-intervalles-de-confiances}
 Comme \(\exp(\cdot)\) est une transformation monotone croissante,
 \[\beta>0 \quad \iff \quad \exp(\beta)>1.\]
 
@@ -993,103 +757,76 @@ Si la valeur postulée, par exemple \(\mathscr{H}_0: \beta_j=0\) ou
 \end{frame}
 
 \begin{frame}{Coefficients pour données complètes}
-\protect\hypertarget{coefficients-pour-donnuxe9es-compluxe8tes}{}
+\phantomsection\label{coefficients-pour-donnuxe9es-compluxe8tes}
 \footnotesize
 
-\hypertarget{tbl-logit1-complet}{}
-\setlength{\LTpost}{0mm}
-\begin{longtable}{lccc}
-\caption{\label{tbl-logit1-complet}Modèle logistique avec toutes les variables catégorielles. }\tabularnewline
+\begin{table}
 
+\centering{
+
+\fontsize{12.0pt}{14.0pt}\selectfont
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}lccc}
 \toprule
-variables & cote\textsuperscript{\textit{1}} & IC 95\%\textsuperscript{\textit{1}} & valeur-p \\ 
-\midrule
-x1 &  &  & 0.4 \\ 
-    1 & — & — &  \\ 
-    2 & 0.44 & 0.18, 1.06 &  \\ 
-    3 & 0.51 & 0.21, 1.21 &  \\ 
-    4 & 0.51 & 0.21, 1.25 &  \\ 
-    5 & 0.70 & 0.27, 1.80 &  \\ 
-x2 &  &  & <0.001 \\ 
-    1 & — & — &  \\ 
-    2 & 0.83 & 0.38, 1.82 &  \\ 
-    3 & 0.57 & 0.25, 1.31 &  \\ 
-    4 & 0.09 & 0.03, 0.25 &  \\ 
-    5 & 0.26 & 0.08, 0.84 &  \\ 
-x3 &  &  & <0.001 \\ 
-    0 & — & — &  \\ 
-    1 & 3.85 & 2.34, 6.50 &  \\ 
+variables & cote & \textbf{95\% CI} & valeur-p \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries format} &  &  & 0.039 \\ 
+    intégré & — & — &  \\ 
+    séquentiel & 0.64 & 0.41, 0.98 &  \\ 
+{\bfseries marque} &  &  & 0.4 \\ 
+    beauty care & — & — &  \\ 
+    for your beauty & 0.82 & 0.53, 1.25 &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
+ &  &  &  \\ 
 \bottomrule
-\end{longtable}
+\end{tabular*}
 \begin{minipage}{\linewidth}
-\textsuperscript{\textit{1}}cote = rapport de cote, IC = intervalle de confiance\\
+\vspace{.05em}
+Abbreviations: CI = Confidence Interval, OR = Odds Ratio\\
 \end{minipage}
+
+}
+
+\caption{\label{tbl-logit1-complet}Modèle logistique avec toutes les
+variables catégorielles.}
+
+\end{table}%
 
 \normalsize
 \end{frame}
 
-\begin{frame}{Coefficients pour données complètes}
-\protect\hypertarget{coefficients-pour-donnuxe9es-compluxe8tes-1}{}
-\footnotesize
-
-\hypertarget{tbl-logit1-complet2}{}
-\setlength{\LTpost}{0mm}
-\begin{longtable}{lccc}
-\caption{\label{tbl-logit1-complet2}Modèle logistique avec toutes les variables catégorielles. }\tabularnewline
-
-\toprule
-variables & cote\textsuperscript{\textit{1}} & IC 95\%\textsuperscript{\textit{1}} & valeur-p \\ 
-\midrule
-x4 &  &  & <0.001 \\ 
-    0 & — & — &  \\ 
-    1 & 6.24 & 3.53, 11.4 &  \\ 
-x5 & 1.12 & 1.08, 1.16 & <0.001 \\ 
-x6 &  &  & <0.001 \\ 
-    1 & — & — &  \\ 
-    2 & 0.25 & 0.13, 0.49 &  \\ 
-    3 & 0.09 & 0.04, 0.18 &  \\ 
-\bottomrule
-\end{longtable}
-\begin{minipage}{\linewidth}
-\textsuperscript{\textit{1}}cote = rapport de cote, IC = intervalle de confiance\\
-\end{minipage}
-\end{frame}
-
-\begin{frame}{Multicolinéarité}
-\protect\hypertarget{multicolinuxe9arituxe9}{}
+\begin{frame}[fragile]{Multicolinéarité}
+\phantomsection\label{multicolinuxe9arituxe9}
 Il est difficile de départager l'effet individuel d'une variable
 explicative lorsqu'elle est fortement corrélée avec d'autres.
 
 La multicollinéarité ne dépend pas de la variable réponse \(Y\), mais de
-la matrice \(\mathbf{X}\) du modèle.
-\end{frame}
-
-\begin{frame}[fragile]{Multicolinéarité pour PRCA}
-\protect\hypertarget{multicolinuxe9arituxe9-pour-prca}{}
-Mêmes diagnostics qu'en régression linéaire: considérer les facteurs
+la matrice \(\mathbf{X}\) du modèle. Ce sont donc les mêmes diagnostics
+qu'en régression linéaire (MATH 60619): considérer les facteurs
 d'inflation de la variance (\texttt{car::vif}).
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
-\NormalTok{car}\SpecialCharTok{::}\FunctionTok{vif}\NormalTok{(modele2)}
+\NormalTok{car}\SpecialCharTok{::}\FunctionTok{vif}\NormalTok{(modele1)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-       GVIF Df GVIF^(1/(2*Df))
-x1 1.698464  4        1.068457
-x2 1.852841  4        1.080139
-x3 1.450100  1        1.204201
-x4 1.491202  1        1.221148
-x5 1.219334  1        1.104234
-x6 1.179133  2        1.042055
+  format   marque 
+1.000292 1.000292 
 \end{verbatim}
 
 Pas d'inquiétude ici, coefficients faibles (inférieurs à 5)
 \end{frame}
 
 \begin{frame}{Dichotomiser des variables continues}
-\protect\hypertarget{dichotomiser-des-variables-continues}{}
+\phantomsection\label{dichotomiser-des-variables-continues}
 Si \(Y\) est continue et qu'on cherche à estimer
 \(\Pr(Y> c \mid \mathbf{X})\) pour une valeur \(c\) donnée, il n'est
 \textbf{pas} recommandé de dichotomiser \(Y\) via
@@ -1107,7 +844,7 @@ Pourquoi? \textbf{On perd de l'information}.
 \end{frame}
 
 \begin{frame}[fragile]{Probabilité de dépassement}
-\protect\hypertarget{probabilituxe9-de-duxe9passement}{}
+\phantomsection\label{probabilituxe9-de-duxe9passement}
 On peut estimer plutôt une régression linéaire et prendre
 \[\Pr(Y > c \mid \mathbf{X}) = \Phi\left(\frac{\widehat{\mu}-c}{\widehat{\sigma}}\right),\]
 
@@ -1116,8 +853,8 @@ où
 \begin{itemize}
 \tightlist
 \item
-  \(\widehat{\mu}=\widehat{\beta}_0 + \cdots + \beta_p\mathrm{X}_p\) est
-  la moyenne prédite pour le profil donné,
+  \(\widehat{\mu}=\widehat{\beta}_0 +  \cdots + \beta_p\mathrm{X}_p\)
+  est la moyenne prédite pour le profil donné,
 \item
   \(\widehat{\sigma}\) est l'estimation de l'écart-type
 \item
@@ -1127,21 +864,229 @@ où
 \end{frame}
 
 \begin{frame}{Modèle linéaire et probabilité d'excès}
-\protect\hypertarget{moduxe8le-linuxe9aire-et-probabilituxe9-dexcuxe8s}{}
+\phantomsection\label{moduxe8le-linuxe9aire-et-probabilituxe9-dexcuxe8s}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos5_files/figure-beamer/fig-density-normalcurves-1.pdf}
+\centering{
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos5_files/figure-beamer/fig-density-normalcurves-1.pdf}
 
 }
 
 \caption{\label{fig-density-normalcurves}Régression linéaire simple et
 densité normale à différentes valeurs de \(x\).}
 
-\end{figure}
+\end{figure}%
+\end{frame}
+
+\begin{frame}[fragile]{Problèmes avec la régression logistique}
+\phantomsection\label{probluxe8mes-avec-la-ruxe9gression-logistique}
+Il arrive que, lors de l'ajustement d'une régression logistique, on
+obtienne un message d'avertissement:
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{Warning messages}\SpecialCharTok{:}
+\DecValTok{1}\SpecialCharTok{:}\NormalTok{ glm.fit}\SpecialCharTok{:}\NormalTok{ algorithm did not converge }
+\DecValTok{2}\SpecialCharTok{:}\NormalTok{ glm.fit}\SpecialCharTok{:}\NormalTok{ fitted probabilities numerically }\DecValTok{0}\NormalTok{ or }\DecValTok{1}\NormalTok{ occurred }
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Quasi-séparation de variables}
+\phantomsection\label{quasi-suxe9paration-de-variables}
+Le deuxième message d'erreur survient quand une combinaison linéaire de
+variables explicatives permet de prédire exactement la réponse: nos
+probabilités prédites sont \(0\) ou \(1\).
+
+\begin{itemize}
+\tightlist
+\item
+  par exemple, si on ajuste un modèle pour \texttt{yachat} en fonction
+  de \texttt{ymontant}.
+\end{itemize}
+
+\footnotesize
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(dbm, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
+\NormalTok{quasisep }\OtherTok{\textless{}{-}}\NormalTok{ dbm }\SpecialCharTok{|\textgreater{}}  
+  \CommentTok{\# remplacer les valeurs manquantes par des zéros et standardiser}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{ymontant =} \FunctionTok{scale}\NormalTok{(}\FunctionTok{ifelse}\NormalTok{(yachat }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, ymontant)))}
+\CommentTok{\# Régression logistique pour l\textquotesingle{}achat (0 ou 1) en fonction du montant}
+\NormalTok{modele\_qs }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(yachat }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ymontant, }
+              \AttributeTok{family =}\NormalTok{ binomial, }
+              \AttributeTok{data =}\NormalTok{ quasisep)}
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Illustration de la séparation de variables}
+\phantomsection\label{illustration-de-la-suxe9paration-de-variables}
+\begin{center}
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos5_files/figure-beamer/unnamed-chunk-15-1.pdf}
+\end{center}
+
+\footnotesize
+
+Quasi-séparation de variable: les estimations des paramètres sont
+presques infinies pour permettre une transition abrupte de la
+probabilité de succès de \(\widehat{p}=0\) à \(\widehat{p}=1\) à
+\(x=9\).
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Coefficients avec séparation de variable}
+\phantomsection\label{coefficients-avec-suxe9paration-de-variable}
+Les valeurs élevées des coefficients et erreurs-type sont une autre
+indication de quasi-séparation de variables.
+
+Avec des variables standardisées, un coefficient \(|\beta_j| > 10\) est
+suspect.
+
+\begin{longtable}[]{@{}lrr@{}}
+
+\caption{\label{tbl-quasisep}Modèle logistique pour \texttt{yachat} en
+fonction de \texttt{ymontant} (variable standardisée).}
+
+\tabularnewline
+
+\toprule\noalign{}
+& coef. & erreur-type \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+cst & \(6.1\) & \(563.1\) \\
+ymontant & \(59.0\) & \(1495.6\) \\
+
+\end{longtable}
+\end{frame}
+
+\begin{frame}{Causes de la quasi-séparation de variables}
+\phantomsection\label{causes-de-la-quasi-suxe9paration-de-variables}
+Typiquement, le problème survient parce que
+
+\begin{itemize}
+\tightlist
+\item
+  on a ajouté un dérivé de la variable réponse comme variable
+  explicative
+\item
+  on a un modèle surajusté, souvent une variable catégorielle pour
+  laquelle toutes les observations d'un niveau donné ont la même
+  réponse, soit \(0\) ou \(1\).
+\end{itemize}
+
+Ce n'est pas nécessairement un enjeu pour la prédiction, mais c'est
+souvent indicateur de problèmes plus importants. Les coefficients et
+interprétations ne sont plus valides\ldots{}
+\end{frame}
+
+\begin{frame}{Solutions pour la quasi séparation de variables}
+\phantomsection\label{solutions-pour-la-quasi-suxe9paration-de-variables}
+\begin{enumerate}
+\tightlist
+\item
+  Regarder quelles probabilités sont presque \(0\) ou \(1\) pour
+  identifier les observations problématiques et s'assurer que
+  l'échantillon que l'on emploie est adéquat.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Par exemple, les femmes ne peuvent pas avoir un cancer de la
+    prostate, donc la probabilité prédite pour ces dernières est \(0\).
+    On pourrait simplement enlever les femmes et prédire zéro
+    manuellement.
+  \end{itemize}
+\item
+  Déterminer si une variable explicative cause du surajustement en
+  étudiant les coefficients dont la valeur absolue est très élevée.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Régression logistique pour des proportions}
+\phantomsection\label{ruxe9gression-logistique-pour-des-proportions}
+\begin{itemize}
+\tightlist
+\item
+  Souvent, seules les données aggrégées sont disponibles et on a accès
+  au nombre de réussites (sur \(m\) essais).
+\item
+  On peut utiliser la loi binomiale pour le modèle logistique en
+  ajoutant le nombre d'essais au modèle.
+\item
+  L'interprétation des paramètres reste identique.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Variables réponses binaires cumulées}
+\phantomsection\label{variables-ruxe9ponses-binaires-cumuluxe9es}
+Si les données représentent la somme d'événements Bernoulli
+indépendants, la loi du nombre de réussites \(Y \in \{0, \ldots, m\}\)
+sur le nombre d'essais \(m\) est binomiale avec fonction de masse
+\begin{align*}
+\Pr(Y=y) = \binom{m}{y}p^y (1-p)^{m-y}, \quad y=0, 1.
+\end{align*}
+
+La vraisemblance pour un échantillon \(\mathsf{Bin}(m, p)\) est à
+constante près la même que pour un échantillon aléatoire de \(m\)
+variables Bernoulli indépendantes.
+
+L'espérance (moyenne théorique) est \(\mathsf{E}(Y)=mp\) et la variance
+\(\mathsf{Va}(Y)=mp(1-p)\).
+\end{frame}
+
+\begin{frame}{Exemple: succès pour les examens de conduite}
+\phantomsection\label{exemple-succuxe8s-pour-les-examens-de-conduite}
+On considère le taux de succès dans 346 centres pour examens de conduite
+pratique en Grande-Bretagne; les
+\href{https://www.gov.uk/government/statistical-data-sets/driving-test-statistics-drt}{données}
+datent de 2018.
+
+\begin{center}
+\includegraphics[width=2.92in,height=\textheight,keepaspectratio]{figures/Guardian_UK_driving.png}
+\end{center}
+\end{frame}
+
+\begin{frame}{Résumé de l'article}
+\phantomsection\label{ruxe9sumuxe9-de-larticle}
+761 750 personnes on réussi l'examen pratique, pour 1 663 897 essais.
+
+\begin{itemize}
+\tightlist
+\item
+  Un
+  \href{https://www.theguardian.com/world/2019/aug/23/an-easy-ride-scottish-village-fuels-debate-driving-test-pass-rates}{article
+  du journal \emph{The Guardian}} a suggéré que le taux de réussite
+  était significativement plus élevé dans la campagne écossaise.
+\end{itemize}
+
+Puisque nous n'avons pas de classification des centres de test
+ruraux/urbains, on utilise le nombre d'examens passés comme proxy.
+
+Les autres variables explicatives sont le sexe de l'individu et la
+région en Angleterre; toutes les subdivisions d'Écosse et du Pays de
+Galles sont regroupées par royaume.
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/Guardian_UK_driving2.png}
+\end{center}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
+\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -1154,7 +1099,7 @@ densité normale à différentes valeurs de \(x\).}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
+\phantomsection\label{ruxe9capitulatif-1}
 Le modèle est interprétable à l'échelle de la cote
 
 \begin{itemize}
@@ -1178,7 +1123,7 @@ Le modèle est interprétable à l'échelle de la cote
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
+\phantomsection\label{ruxe9capitulatif-2}
 \begin{itemize}
 \tightlist
 \item
@@ -1203,6 +1148,7 @@ Le modèle est interprétable à l'échelle de la cote
   \end{itemize}
 \end{itemize}
 \end{frame}
+
 
 
 

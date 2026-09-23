@@ -27,106 +27,64 @@ include-in-header:
         \renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 ---
 
-
-# _Professional Rodeo Cowboys Association_ {#cowboy}
-
-L'exemple suivant est inspiré de l'article
-
-> Daneshvary, R. et Schwer, R. K. (2000) The Association Endorsement and Consumers' Intention to Purchase. _Journal of Consumer Marketing_ **17**, 203-213.
-
-**Objectif**: Les auteurs cherchent à voir si le fait qu'un produit soit recommandé par le _Professional Rodeo Cowboys Association_ (PRCA) a un effet sur les intentions d'achats. 
-
-
-
-# Données du PRCA
-
-On dispose de 500 observations sur les variables suivantes dans la base de données `logit1`:
-\footnotesize 
-
-- $Y$: seriez-vous intéressé à acheter un produit recommandé par le PRCA
-    - $\texttt{0}$: non
-    - $\texttt{1}$: oui
-- $\mathrm{X}_1$: quel genre d'emploi occupez-vous?
-    - $\texttt{1}$: à la maison
-    - $\texttt{2}$: employé
-    - $\texttt{3}$: ventes/services
-    - $\texttt{4}$: professionnel
-    - $\texttt{5}$: agriculture/ferme
-- $\mathrm{X}_2$: revenu familial annuel
-    - $\texttt{1}$: moins de 25 000
-    - $\texttt{2}$: 25 000 à 39 999
-    - $\texttt{3}$: 40 000 à 59 999
-    - $\texttt{4}$: 60 000 à 79 999
-    - $\texttt{5}$: 80 000 et plus
-
-\normalsize
-
-# Données du PRCA    
-    
-\footnotesize
-
-- $\mathrm{X}_3$: sexe
-    - $\texttt{0}$: homme
-    - $\texttt{1}$: femme
-- $\mathrm{X}_4$: avez-vous déjà fréquenté une université?
-    - $\texttt{0}$: non
-    - $\texttt{1}$: oui
-- $\mathrm{X}_5$: âge (en années)
-- $\mathrm{X}_6$: combien de fois avez-vous assisté à un rodéo au cours de la dernière année?
-    - $\texttt{1}$: 10 fois ou plus
-    - $\texttt{2}$: entre six et neuf fois
-    - $\texttt{3}$: cinq fois ou moins
-
-\normalsize
-
-
 # Régression logistique
 
 Expliquer le comportement de la **moyenne** d'une variable binaire $Y\in\{0,1\}$ en utilisant un modèle de régression avec $p$ variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$.
 
 $$\underset{\text{moyenne théorique}}{\mathsf{E}(Y=1 \mid \mathbf{X})} = \underset{\text{probabilité de succès}}{\Pr(Y=1 \mid \mathbf{X})}=p$$
 
-# Objectif de la régression
 
-1) **Inférence** : comprendre comment et dans quelles mesures les variables $\mathbf{X}$ influencent la probabilité que $Y=1$.
-2) **Prédiction** : développer un modèle pour prévoir des valeurs de $Y$ ou la probabilité de succès à partir des $\mathbf{X}$.
-
-# Exemples
-
-- Est-ce qu'un client potentiel va répondre favorablement à une offre promotionnelle?
-- Est-ce qu'un client est satisfait du service après-vente?
-- Est-ce qu'un client va faire faillite ou non au cours des trois prochaines années.
-
-# Inférence et interprétation
-
-Ce cours est consacré à l'estimation et l'interprétation des paramètres du modèle dans le cas binaire.
+Par convention, les zéros représentent des échecs et les uns des succès (même si $Y=1$ signifie mourir).
 
 
+# Variables réponses binaires
 
-Par convention, on désigne le résultat « $1$ » par un succès et « $0$ » par un échec.
+Si la variable réponse $Y$ vaut soit $0$, soit $1$, on peut postuler une loi Bernoulli pour $Y$, soit
+\begin{align*}
+\Pr(Y=y) = p^y (1-p)^{1-y}, \quad y=0, 1.
+\end{align*}
 
-# Modéliser une probabilité avec une régression linéaire?
+Il en découle que $\mathsf{E}(Y)=p$ et $\mathsf{Va}(Y)=p(1-p)$.
 
-Mauvaise idée!
+La variabilité est complètement déterminée par la moyenne.
+
+
+
+# Exemples de questions de recherches
+
+
+Questions comprenant une variable réponse binaire:
+
+- est-ce qu'un client potentiel a répondu favorablement à une offre
+promotionnelle?
+- est-ce qu'un client est satisfait du service après-vente?
+- est-ce qu'une firme va faire faillite au cours des trois prochaines années?
+- est-ce qu'un participant à une étude réussit une tâche?
+
+
+# Pourquoi pas une régression linéaire?
+
+Les modèles linéaires ne sont pas adéquats pour les variables binaires.
 
 - Sans contrainte, on peut obtenir des probabilités négatives ou supérieures à 1!
-- les données binaires ne respectent pas le postulat d'égalité des variances
-    - invalide les résultats des tests d'hypothèse pour les coefficients.
+- Les données binaires ne respectent pas le postulat d'égalité des variances
+    - Plus la probabilité de succès est près de 0.5, plus la variabilité est élevée.
+    - Cette hétérogénéité invalide les résultats des tests d'hypothèse pour les coefficients.
  
-# Illustration: linéaire vs logistique
+
+
+# Modèle linéaire vs logistique
 
 
 
 ```{r}
-#| label: fig-demandecredit
 #| eval: true
 #| echo: false
 #| cache: true
-#| fig-cap: "Données de la réserve de Boston sur l'approbation de prêts hypothécaires (1990); données tirées de Stock et Watson (2007)."
 #| message: false
 #| warning: false
-#| out.width: '80%'
-#| fig.width: 7
+#| out.width: '100%'
+#| fig.width: 6
 #| fig.height: 4
 library(ggplot2)
 data(HMDA, package = "AER")
@@ -145,9 +103,9 @@ ggplot(data = HMDA[which(HMDA$pirat < 1 & HMDA$afam == "yes"),],
               se = FALSE,
               fullrange = TRUE,
               method.args = list(family = "binomial"), col = 2) +
-  labs(subtitle = "demande d'approbation pour crédit hypothécaire", 
+  labs(subtitle = "", 
        y = "",
-       x = "ratio paiements sur revenus") +
+       x = "x") +
   scale_y_continuous(breaks=c(0L,1L), 
                      limits = c(0,1)) + 
   scale_x_continuous(breaks = seq(0,1, by = 0.25), 
@@ -157,19 +115,33 @@ ggplot(data = HMDA[which(HMDA$pirat < 1 & HMDA$afam == "yes"),],
   geom_text(data = tibble::tibble(
     x = c(1,0.05), 
     y = c(0.1,0.9), 
-    label = c("refusée", "acceptée")), 
+    label = c("échec", "succès")), 
    aes(x = x, y = y, label = label),
    hjust = "inward") +
     theme_classic()
 ```
+ 
+ 
+# Prédicteur linéaire
 
+On considère une fonction pour la moyenne $\mathsf{E}(Y_i \mid \mathbf{X}_i)$ en fonction des variables explicatives.
+
+Dans une régression linéaire, le prédicteur linéaire 
+
+$$\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p$$
+représente la moyenne de la variable réponse. 
+
+
+Or, la probabilité doit être dans $[0,1]$, et $\eta \in \mathbb{R} = (-\infty, \infty)$.
+
+ 
 # Fonction de liaison
 
-Idée: appliquer une transformation au **prédicteur linéaire**
+On peut appliquer une transformation au **prédicteur linéaire**
 $$\eta = \beta_0 + \beta_1 \mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p$$
 pour que la prédiction soit entre zéro et un.
 
-On considère
+On considère la **fonction sigmoïde** (expit),
 \begin{align*}
  p &= \textrm{expit}(\eta) = \frac{\exp(\eta)}{1+\exp(\eta)}
 = \frac{1}{1+\exp(-\eta)}.
@@ -178,15 +150,32 @@ On considère
 # Courbe sigmoïde
 
 
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: 'center'
+#| out-width: '100%'
+#| fig-width: 6
+#| fig-height: 3
+library(ggplot2)
+ggplot() +
+  stat_function(fun = plogis, xlim = c(-5,5)) +
+  labs(x = expression(eta), subtitle = "fonction sigmoïde", y = "probabilité de succès") +
+  scale_x_continuous(labels = scales::label_number(drop0trailing = TRUE)) +
+  scale_y_continuous(labels = scales::label_number(drop0trailing = TRUE),
+                     limits = c(0,1),
+                     expand = expansion()) +
+  theme_classic()
+```
 
 ```{r}
 #| label: fig-logitplot
 #| echo: false
 #| out-width: '90%'
-#| fig.height: 6
-#| fig.width: 10
-#| fig.cap: "Valeurs ajustées du modèle de régression logistique en fonction du prédicteur linéaire $\\eta$."
-#| eval: true
+#| fig.height: 3
+#| fig.width: 5
+#| fig.cap: "Moyennes prédites en fonction du prédicteur linéaire $\\eta$."
+#| eval: false
 #| fig.align: 'center'
 logit <- function(x){log(x/(1-x))}
 expit <- function(x){1/(1+exp(-x))}
@@ -194,68 +183,67 @@ par(mar = c(4,4,1,0.1), bty = "l")
 curve(expit, 
     ylim = c(0,1),
     yaxs="i",
-    from = -3.5, 
-    to = 3.5, 
+    from = -5, 
+    to = 5, 
     xlab = expression(eta), 
     ylab = expression(p))
 
 ```
 
-# Ajustement du modèle
-
-La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, Gaussien pour régression linéaire).
-
-- L'argument `family=binomial(link="logit")` permet de spécifier que l'on ajuste un modèle logistique.
+<!--
+# Modèles linéaires généralisés pour données binaires
 
 
-```{r}
-#| label: logistique-init
-#| eval: false
-#| echo: true
-#| message: false
-data(logit1, package = "hecmulti")
-# Ajustement du modèle avec toutes
-# les variables explicatives
-modele1 <- glm(formula = y ~ .,
-            family = binomial(link = "logit"),
-            data = logit1)
-```
+Si notre variable réponse est binaire, on peut supposer que $Y_i$ suit une loi Bernoulli de paramètre $p_i$, $Y_i\sim \mathsf{Bin}(p_i)$, où
+\begin{align*}
+p_i= \Pr\left(Y_i=1 \mid \mathbf{X}_i\right)=\mathsf{E}(Y_i \mid \mathbf{X}_i).
+\end{align*}
 
-# Sortie
-
-Tableau résumé avec les coefficients (`summary`)
-
-```{r}
-#| eval: false
-#| echo: true
-summary(modele1)
-```
-
-# Interprétation
-
-Par défaut, pour des variables $0/1$, le modèle décrit la probabilité de succès.
+La fonction de liaison relie le prédicteur linéaire à la probabilité, typiquement à l'aide de la fonction logit 
+\begin{align*}
+g(z)\coloneqq\mathrm{logit}(z)=\ln\left(\frac{z}{1-z}\right).
+\end{align*}
+soit la **fonction quantile de la loi logistique** qui ici relie $\mathsf{E}(Y_i\mid \mathbf{X}_i)=p_i(\mathbf{X}_i)$ et $\eta_i$.
 
 
-```{r}
-#| label: logitplot2
-#| echo: false
-#| eval: true
-#| out.width: '70%'
-#| fig.align: 'center'
-#| fig.width: 7
-#| fig.height: 3 
-par(mar = c(4,4,1,0.1), bty = "l")
-curve(expit(-3.05 + 0.0749 * x), 
-    ylim = c(0,1),
-    yaxs = "i",
-    from = 18, 
-    to = 59, 
-    xlab = "âge (en années)", 
-    ylab = "p")
 
-```
 
-Si le coefficient $\beta_j$ de la variable $\mathrm{X}_j$ est positif, alors plus la variable augmente, plus $\Pr(Y=1)$ augmente.
+# Fonction de liaison logistique
+
+Le modèle logistique spécifie
+\begin{align*}
+\eta_i=\ln\left(\frac{p_i}{1-p_i}\right)=\beta_0+ \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip}.
+\end{align*}
+
+Ce modèle peut être exprimé sur l'échelle de la moyenne à l'aide de la fonction sigmoïde (inverse de logit), 
+\begin{align*}
+\mathsf{E}(Y_i \mid \mathbf{X}_i)=p_i=\frac{\exp(\beta_0+ \beta_1  \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip})}{1+\exp(\beta_0+ \beta_1  \mathrm{X}_{i1} + \cdots + \beta_p \mathrm{X}_{ip})}.
+\end{align*}
+
+-->
+
+<!-- 
+# Interprétation du modèle
+
+
+Cela donne une expression pour la moyenne $p_i=\mathsf{E}(Y_i\mid \mathbf{X}_i)$ en fonction des variables explicatives $\mathbf{X}_i$, mais...
+
+ 
+-  à quoi ressemble cette fonction?
+-  que nous apprend-elle sur la relation entre $p_i$ et $\eta_i$ (et donc $\mathbf{X}_{i}$)?
+
+-->
+
+
+
+# Fonction de répartition logistique
+
+
+On voit que $p$ est une **fonction croissante** de $\eta=\beta_0 + \cdots + \beta_p \mathrm{X}_{p}$.
+ 
+-  Si $\beta_j$ est positif et $\mathrm{X}_{j}$ augmente, $\Pr(Y=1)$ augmente aussi.  
+-  Si $\beta_j$ est négatif et  $\mathrm{X}_{j}$ augmente, $\Pr(Y=1)$ diminue. 
+-  La relation entre $\Pr(Y=1)$ et $\eta$ (et donc aussi $\mathrm{X}_{j}$) est *nonlinéaire*.
 
 
 # Rappel exponentiels et logarithme
@@ -271,6 +259,24 @@ Quelques propriétés de la fonction logarithmique
 - $\ln(1)=0$,
 - $\ln(\exp(x))=x$ (fonction inverse)
 - $\ln(ab) = \ln(a) + \ln(b)$
+
+<!--
+
+# Interprétation des paramètres de la régression logistique
+
+L'effet des coefficients est en terme de **cote** et de **rapports de cote**.
+
+-  Soit $p=\Pr\left(Y=1\mid \mathrm{X}_1, \ldots, \mathrm{X}_p\right)$ et le modèle de régression
+\begin{align*}
+\ln\left(\frac{p}{1-p}\right)=\beta_0+ \beta_1 \mathrm{X}_1 + \cdots + \beta_p\mathrm{X}_p.
+\end{align*}
+Si on prend l'exponentielle de chaque côté de l'équation précédente, 
+\begin{align*}
+\mathrm{cote}(Y\mid \mathbf{X}) = \frac{p}{1-p}=\exp(\beta_0+ \beta_1 \mathrm{X}_1 + \cdots + \beta_p\mathrm{X}_p),
+\end{align*}
+où $p/(1-p)$ est la cote $\Pr\left(Y=1 \mid \mathbf{X}\right)/\Pr\left(Y=0 \mid\mathbf{X}\right)$.
+
+-->
 
 
 # Cote
@@ -314,6 +320,160 @@ knitr::kable(datf[-1, , drop = FALSE],
 ```
 
 
+
+# Interprétation de l'ordonnée à l'origine en termes de cote
+
+Si $\mathrm{X}_1=\cdots = \mathrm{X}_p=0$, il est clair que
+\begin{align*}
+\mathrm{cote}(Y\mid \mathbf{X}=\boldsymbol{0}_p) = \exp(\beta_0)
+\end{align*}
+et
+\begin{align*}
+\Pr\left(Y=1\mid  \mathbf{X}=\boldsymbol{0}_p\right) = \frac{\exp({\beta_0})}{1+\exp({\beta_0})}
+\end{align*}
+représente la probabilité que $Y=1$ quand $\mathbf{X}=\boldsymbol{0}_p$.
+
+Comme pour la régression linéaire, $\mathrm{X}_1=\cdots =\mathrm{X}_p=0$ peut être impossible; dans ce cas, $\beta_0$ ne s'interprète pas.
+
+# Interprétation en terme de rapport de cote
+
+Dans le modèle logistique,le **rapport de cotes** quand $\mathrm{X}_k=x_k+1$ versus $\mathrm{X}_k=x_k$ quand $\mathrm{X}_j=x_j$ $(j=1, \ldots, p, j \neq k)$ est
+
+\begin{align*}
+\MoveEqLeft\frac{\mathrm{cote}(Y \mid  \mathrm{X}_k=x_k+1, \mathrm{X}_j=x_j, j\neq k)}{\mathrm{cote}(Y \mid \mathrm{X}_k=x_k, \mathrm{X}_j=x_j, j \neq k)}\\&=\frac{\exp\left(\beta_0+ \sum_{j=1}^p\beta_j x_j + \beta_k \right)}{\exp\left(\beta_0+ \sum_{j=1}^p\beta_j x_j \right)}\\
+&= \exp(\beta_k).
+\end{align*}
+
+# Explication
+
+
+Quand $\mathrm{X}_k$ augmente d'une unité *et que la valeur de toutes les autres covariables est constante*, la cote de $Y$ est multipliée par $\exp(\beta_k)$.
+
+-  La cote augmente si $\exp(\beta_k) >1$, c'est-à-dire si $\beta_k>0$.
+-  La cote diminue si $\exp(\beta_k) < 1$,  c'est-à-dire si $\beta_k<0$.
+
+
+
+<!--
+# Réduflation
+
+On considère des données tirées de l'article
+
+> [Evangelidis (2024)](https://doi.org/10.1287/mksc.2023.0269). Frontiers: Shrinkflation Aversion: When and Why Product Size Decreases Are Seen as More Unfair than Equivalent Price Increases. Marketing Science, 43(2), 280–288.
+
+-->
+
+
+<!--
+
+# Données du PRCA
+
+On dispose de 500 observations sur les variables suivantes dans la base de données `logit1`:
+\footnotesize 
+
+- $Y$: seriez-vous intéressé à acheter un produit recommandé par le PRCA
+    - $\texttt{0}$: non
+    - $\texttt{1}$: oui
+- $\mathrm{X}_1$: quel genre d'emploi occupez-vous?
+    - $\texttt{1}$: à la maison
+    - $\texttt{2}$: employé
+    - $\texttt{3}$: ventes/services
+    - $\texttt{4}$: professionnel
+    - $\texttt{5}$: agriculture/ferme
+- $\mathrm{X}_2$: revenu familial annuel
+    - $\texttt{1}$: moins de 25 000
+    - $\texttt{2}$: 25 000 à 39 999
+    - $\texttt{3}$: 40 000 à 59 999
+    - $\texttt{4}$: 60 000 à 79 999
+    - $\texttt{5}$: 80 000 et plus
+
+\normalsize
+
+# Données du PRCA    
+    
+\footnotesize
+
+- $\mathrm{X}_3$: sexe
+    - $\texttt{0}$: homme
+    - $\texttt{1}$: femme
+- $\mathrm{X}_4$: avez-vous déjà fréquenté une université?
+    - $\texttt{0}$: non
+    - $\texttt{1}$: oui
+- $\mathrm{X}_5$: âge (en années)
+- $\mathrm{X}_6$: combien de fois avez-vous assisté à un rodéo au cours de la dernière année?
+    - $\texttt{1}$: 10 fois ou plus
+    - $\texttt{2}$: entre six et neuf fois
+    - $\texttt{3}$: cinq fois ou moins
+
+\normalsize
+
+-->
+<!--
+# Objectif de la régression
+
+1) **Inférence** : comprendre comment et dans quelles mesures les variables $\mathbf{X}$ influencent la probabilité que $Y=1$.
+2) **Prédiction** : développer un modèle pour prévoir des valeurs de $Y$ ou la probabilité de succès à partir des $\mathbf{X}$.
+
+# Exemples
+
+- Est-ce qu'un client potentiel va répondre favorablement à une offre promotionnelle?
+- Est-ce qu'un client est satisfait du service après-vente?
+- Est-ce qu'un client va faire faillite ou non au cours des trois prochaines années.
+
+-->
+
+# Ajustement du modèle
+
+La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, linéaire avec `family = gaussian`).
+
+- L'argument `family=binomial(link="logit")` permet de spécifier que l'on ajuste un modèle logistique.
+
+
+```{r}
+#| label: logistique-init
+#| eval: false
+#| echo: true
+#| message: false
+data(formatvente, package = "hecmulti")
+# Données de l'expérience 3 de Duke et Amir (2023)
+modele1 <- glm(formula = achat ~ format + marque,
+            family = binomial(link = "logit"),
+            data = formatvente)
+summary(modele1)
+```
+
+On obtient un tableau résumé avec les coefficients (`summary`)
+
+
+<!--
+# Interprétation
+
+Par défaut, pour des variables $0/1$, le modèle décrit la probabilité de succès.
+
+
+```{r}
+#| label: logitplot2
+#| echo: false
+#| eval: true
+#| out.width: '70%'
+#| fig.align: 'center'
+#| fig.width: 7
+#| fig.height: 3 
+par(mar = c(4,4,1,0.1), bty = "l")
+curve(expit(-3.05 + 0.0749 * x), 
+    ylim = c(0,1),
+    yaxs = "i",
+    from = 18, 
+    to = 59, 
+    xlab = "âge (en années)", 
+    ylab = "p")
+
+```
+
+Si le coefficient $\beta_j$ de la variable $\mathrm{X}_j$ est positif, alors plus la variable augmente, plus $\Pr(Y=1)$ augmente.
+
+-->
+<!--
 # Interprétation avec données du PRCA
 
 Le modèle ajusté en termes de cote est
@@ -353,6 +513,9 @@ modele2 <- glm(
   family = binomial)
 round(exp(coef(modele2)), 3)
 ```
+
+-->
+
 # Interprétation des coefficients
 
 Si on a plusieurs variables explicatives, les coefficients sont interprétés en modifiant une variable à la fois.
@@ -361,6 +524,8 @@ On compare deux profils identiques, sauf pour la variable en question
 
 - toute chose étant égale par ailleurs
 - *ceteris paribus*
+
+<!--
 
 # Interprétation des coefficients
 
@@ -380,6 +545,8 @@ On peut donc conclure que:
 - la cote des femmes est 285.4% plus élevée que celle des hommes. 
 - la cote des hommes est 74.1% inférieure à celle des femmes.
 
+-->
+<!--
 # Variable catégorielle
 
 Toutes les comparaisons sont effectuées avec la catégorie de référence.
@@ -411,6 +578,8 @@ plutôt que de changer la catégorie de référence via
 logit2 <- logit1 |> 
    mutate(x1 = relevel(x1, ref = 2))
 ```
+
+-->
 
 # Vraisemblance et estimation du modèle
 
@@ -458,10 +627,7 @@ Des estimés des coefficients $\widehat{\beta}$ découlent une estimation de $\P
 
 
 
-# Modèle nul
-
 Un modèle avec uniquement l'ordonnée à l'origine retournera $\widehat{p}$, la proportion empirique de succès.
-
 Comme pour la régression linéaire, c'est la moyenne des observations.
 
 
@@ -500,30 +666,28 @@ knitr::include_graphics("figures/poupeesrusses.jpg")
 
 # Exemple
 
-Comparons un modèle avec et sans $X_6$.
+Comparons un modèle avec et sans marque.
 
-Variable catégorielle à trois niveaux (deux coefficients associés à $\mathrm{I}(\mathrm{X}_{6}=2)$ et $\mathrm{I}(\mathrm{X}_{6}=3)$.
+Variable catégorielle à deux niveaux (un coefficient associé).
 
 ```{r}
 #| eval: true
+#| echo: false
+data(formatvente, package = "hecmulti")
+# Données de l'expérience 3 de Duke et Amir (2023)
+modele1 <- glm(formula = achat ~ format + marque,
+            family = binomial(link = "logit"),
+            data = formatvente)
+```
+```{r}
+#| eval: true
 #| echo: true
-modele2 <-  glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
-                 data = hecmulti::logit1,
-                 family = binomial(link = "logit"))
-modele3 <-  glm(y ~ x1 + x2 + x3 + x4 + x5,
-                 data = hecmulti::logit1,
-                 family = binomial(link = "logit")) 
+modele2 <- glm(formula = achat ~ format,
+            family = binomial(link = "logit"),
+            data = formatvente)
 ```
 
-# Test d'hypothèse
-
-On teste l'hypothèse nulle  $\mathscr{H}_0: \beta_{\mathrm{X}_6=2} = \beta_{\mathrm{X}_6=3} = 0$ (soit $k=2$ restrictions).
-
-L'hypothèse alternative est qu'au moins un des coefficients est non-nul.
-
-Si la valeur $p$ est inférieure au seuil de signification, typiquement $\alpha = 0.05$, on rejette l'hypothèse nulle.
-
- - on conclut que la variable explicative $\mathrm{X}_6$ améliore significativement l'ajustement du modèle.
+On teste l'hypothèse nulle  $\mathscr{H}_0: \beta_{2} = 0,$ où $\mathsf{X}_2 = \mathsf{I}_{\mathrm{marque}=\text{for your beauty}}$. L'hypothèse alternative est que le coefficient est non-nul.
 
 
 
@@ -536,6 +700,8 @@ Le test est basé sur la statistique
 
 Cette différence $D$, lorsque l'hypothèse $\mathscr{H}_0$ est vraie, suit approximativement une loi khi-deux $\chi^2_k$.
 
+Si la valeur $p$ est inférieure au seuil de signification, typiquement $\alpha = 0.05$, on rejette l'hypothèse nulle.
+
 # Exemple de test
 
 \footnotesize
@@ -543,25 +709,27 @@ Cette différence $D$, lorsque l'hypothèse $\mathscr{H}_0$ est vraie, suit appr
 ```{r}
 #| eval: true
 #| echo: true
-# modèle 2 (alternative), modèle 3 (nulle)
-anova(modele3, modele2, test = "LR")
+# modèle 1 (alternative), modèle 2 (H0)
+anova(modele2, modele1, test = "LR")
 ## Deviance = -2*log vraisemblance
-rvrais <- modele3$deviance - modele2$deviance
-pchisq(rvrais, df = 2, lower.tail = FALSE) # valeur-p
+rvrais <- modele2$deviance - modele1$deviance
+pchisq(rvrais, df = 1, lower.tail = FALSE) # valeur-p
 ```
 
 \normalsize
 
+On conclut que la variable explicative $\mathrm{X}_2$ améliore significativement l'ajustement du modèle.
+
 # Tester la significativité des variables
 
-Si un paramètre n'est pas significativement différent de 0, cela veut dire qu'il n'y a pas de lien significatif entre la variable et la réponse *une fois que les autres variables* sont dans le modèle.
+Si un paramètre n'est pas significativement différent de zéro, cela veut dire qu'il n'y a pas de lien significatif entre la variable et la réponse *une fois que les autres variables* sont dans le modèle.
 
 \footnotesize
 
 ```{r}
 #| eval: true
 #| echo: true
-car::Anova(modele2, type = "3")
+car::Anova(modele1, type = 2)
 ```
 
 \normalsize
@@ -576,8 +744,8 @@ Ceux obtenus par défaut dans **R** sont appelés *intervalles de confiance de v
 ```{r}
 #| eval: false
 #| echo: true
-confint(modele2)      # IC pour beta
-exp(confint(modele2)) # IC pour exp(beta)
+confint(modele1)      # IC pour beta
+exp(confint(modele1)) # IC pour exp(beta)
 ```
 
 Ces intervalles sont invariants aux reparamétrisation: si $[b_i, b_s]$ est l'intervalle de vraisemblance profilée pour $\beta$, l'intervalle pour $\exp(\beta)$ est simplement $[\exp(b_i), \exp(b_s)]$.
@@ -592,13 +760,7 @@ Ces intervalles sont invariants aux reparamétrisation: si $[b_i, b_s]$ est l'in
 #| fig-width: 10
 #| fit-height: 4
 #| fig-cap: "Intervalles de confiance profilés de niveau 95\\% pour les coefficients du modèle logistique (échelle exponentielle)."
-data(logit1, package = "hecmulti")
-modele2 <- glm(
-  y ~ x1 + x2 + x3 + x4 + x5 + x6,
-  data = logit1,
-  family = binomial(link = "logit")
-)
-modelsummary::modelplot(modele2, 
+modelsummary::modelplot(modele1, 
                         exponentiate = TRUE,
        coef_omit = 'Interc') + 
   ggplot2::labs(x = paste0("exp(", expression(beta),")")) +
@@ -626,15 +788,7 @@ Si la valeur postulée, par exemple $\mathscr{H}_0: \beta_j=0$ ou $\exp(\beta_j)
 #| cache: true
 #| tbl-cap-location: bottom
 #| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
-data(logit1, package = "hecmulti")
-logit1 <- logit1 |> 
-  dplyr::mutate(y = factor(y),
-               x3 = factor(x3),
-               x4 = factor(x4))
-m1 <- glm(y ~ x1 + x2 + x3 + x4 + x5 + x6, 
-          family = binomial(link = "logit"),
-          data = logit1)
-tbl <- m1 |>
+tbl <- modele1 |>
   gtsummary::tbl_regression(
   exponentiate = TRUE,
   intercept = FALSE) |>
@@ -654,50 +808,18 @@ tbl |>
 
 \normalsize
 
-# Coefficients pour données complètes
-
-\footnotesize
-
-```{r}
-#| label: tbl-logit1-complet2
-#| eval: true
-#| echo: false
-#| cache: true
-#| tbl-cap-location: bottom
-#| tbl-cap: "Modèle logistique avec toutes les variables catégorielles."
-tbl <- m1 |>
-  gtsummary::tbl_regression(
-  exponentiate = TRUE,
-  intercept = FALSE) |>
-  gtsummary::add_global_p() |>
-  gtsummary::bold_labels()
-tbl$table_styling$header$label[c(12,20,26,27)] <- c("variables","cote", "IC 95%","valeur-p")
-tbl$table_body <- tbl$table_body[-(1:15),]
-# tbl$table_body$label[1] <- "cst"
-tbl$table_styling$footnote_abbrev$footnote <- 
-  c("cote = rapport de cote",
-    "IC = intervalle de confiance",
-    "ET = erreur-type")
-tbl |> 
-   gtsummary::as_gt()  |>
-   gt::tab_options(table.width = gt::pct(100))
-```
 
 # Multicolinéarité
 
 Il est difficile de départager l'effet individuel d'une variable explicative lorsqu'elle est fortement corrélée avec d'autres.
 
 
-La multicollinéarité ne dépend pas de la variable réponse $Y$, mais de la matrice $\mathbf{X}$ du modèle.
-
-# Multicolinéarité pour PRCA
-
-Mêmes diagnostics qu'en régression linéaire: considérer les facteurs d'inflation de la variance (`car::vif`).
+La multicollinéarité ne dépend pas de la variable réponse $Y$, mais de la matrice $\mathbf{X}$ du modèle. Ce sont donc les mêmes diagnostics qu'en régression linéaire (MATH 60619): considérer les facteurs d'inflation de la variance (`car::vif`).
 
 ```{r}
 #| eval: true
 #| echo: true
-car::vif(modele2)
+car::vif(modele1)
 ```
 
 Pas d'inquiétude ici, coefficients faibles (inférieurs à 5)
@@ -771,6 +893,172 @@ ggplot(dat, aes(x, y)) +
   
 ```
 
+# Problèmes avec la régression logistique
+
+Il arrive que, lors de l'ajustement d'une régression logistique, on obtienne un message d'avertissement: 
+
+\footnotesize
+
+```{r}
+#| echo: true
+#| eval: false
+Warning messages:
+1: glm.fit: algorithm did not converge 
+2: glm.fit: fitted probabilities numerically 0 or 1 occurred 
+```
+
+\normalsize
+
+# Quasi-séparation de variables
+
+Le deuxième message d'erreur survient quand une combinaison linéaire de variables explicatives permet de prédire exactement la réponse: nos probabilités prédites sont $0$ ou $1$.
+
+- par exemple, si on ajuste un modèle pour `yachat` en fonction de `ymontant`.
+
+\footnotesize
+
+```{r}
+#| eval: false
+#| echo: true
+data(dbm, package = "hecmulti")
+quasisep <- dbm |>  
+  # remplacer les valeurs manquantes par des zéros et standardiser
+  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
+# Régression logistique pour l'achat (0 ou 1) en fonction du montant
+modele_qs <- glm(yachat ~ ymontant, 
+              family = binomial, 
+              data = quasisep)
+```
+
+\normalsize
+
+# Illustration de la séparation de variables
+
+```{r}
+#| echo: false
+#| eval: true
+#| out-width: '60%'
+#| fig-width: 8
+#| fig-height: 5
+#| fig-align: center
+set.seed(1234)
+x <- sort(rexp(20, rate = 0.2))
+y <- as.integer(x>9)
+m1 <- glm(y~ x, family=binomial)
+fittedsepmod <- function(x){1/(1+exp(-coef(m1)[1] - x*coef(m1)[2]))}
+library(ggplot2)
+ggplot(data.frame(x, y), aes(x=x,y=y)) +
+  geom_point() +
+  geom_function(fun = fittedsepmod, n = 1001L, linewidth = 1.1) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25), labels = c("0","0.25","0.5","0.75","1")) +
+  labs(y = "", x = "x") +
+  theme_classic()
+```
+
+\footnotesize 
+
+Quasi-séparation de variable: les estimations des paramètres sont presques infinies pour permettre une transition abrupte de la probabilité de succès de $\widehat{p}=0$ à $\widehat{p}=1$ à $x=9$.
+
+\normalsize
+
+# Coefficients avec séparation de variable
+
+Les valeurs élevées des coefficients et erreurs-type sont une autre indication de quasi-séparation de variables.
+
+Avec des variables standardisées, un coefficient $|\beta_j| > 10$ est suspect.
+
+```{r quasisepvar}
+#| echo: false
+#| eval: true
+#| label: tbl-quasisep
+#| tbl-cap: "Modèle logistique pour `yachat` en fonction de `ymontant` (variable standardisée)."
+#| warning: false
+#| message: false
+data(dbm, package = "hecmulti")
+quasisep <- dbm |>  
+  # remplacer les valeurs manquantes par des zéros et standardiser
+  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
+# Régression logistique pour l'achat (0 ou 1) en fonction du montant
+m1 <- glm(yachat ~ ymontant, 
+              family = binomial, 
+              data = quasisep)
+tab1 <- data.frame(estimate = as.numeric(m1$coefficients), "std.error" = as.numeric(sqrt(diag(vcov(m1)))))
+colnames(tab1) <- c("coef.", "erreur-type")
+tab1 <- apply(tab1, 1:2, function(x){paste0("$", sprintf(x, fmt = "%.1f"), "$")})
+rownames(tab1) <- c("cst","ymontant")
+knitr::kable(x = tab1, align = "rrr", booktabs = TRUE, escape = FALSE)
+```
+
+
+# Causes de la quasi-séparation de variables
+
+Typiquement, le problème survient parce que
+
+- on a ajouté un dérivé de la variable réponse comme variable explicative
+- on a un modèle surajusté, souvent une variable catégorielle pour laquelle toutes les observations d'un niveau donné ont la même réponse, soit $0$ ou $1$.
+
+Ce n'est pas nécessairement un enjeu pour la prédiction, mais c'est souvent indicateur de problèmes plus importants. Les coefficients et interprétations ne sont plus valides...
+
+# Solutions pour la quasi séparation de variables
+
+1. Regarder quelles probabilités sont presque $0$ ou $1$ pour identifier les observations problématiques et s'assurer que l'échantillon que l'on emploie est adéquat.
+   - Par exemple, les femmes ne peuvent pas avoir un cancer de la prostate, donc la probabilité prédite pour ces dernières est $0$. On pourrait simplement enlever les femmes et prédire zéro manuellement.
+2. Déterminer si une variable explicative cause du surajustement en étudiant les coefficients dont la valeur absolue est très élevée.
+
+
+
+# Régression logistique pour des proportions
+ 
+- Souvent, seules les données aggrégées sont disponibles et on a accès au nombre de réussites (sur $m$ essais).
+- On peut utiliser la loi binomiale pour le modèle logistique en ajoutant le nombre d'essais au modèle.
+- L'interprétation des paramètres reste identique.
+
+
+# Variables réponses binaires cumulées
+
+Si les données représentent la somme d'événements Bernoulli indépendants, la loi du nombre de réussites $Y \in \{0, \ldots, m\}$ sur le nombre d'essais $m$ est binomiale avec fonction de masse
+\begin{align*}
+\Pr(Y=y) = \binom{m}{y}p^y (1-p)^{m-y}, \quad y=0, 1.
+\end{align*}
+
+La vraisemblance pour un échantillon $\mathsf{Bin}(m, p)$  est à constante près la même que pour un échantillon aléatoire de $m$ variables Bernoulli indépendantes.
+
+L'espérance (moyenne théorique) est $\mathsf{E}(Y)=mp$ et la variance $\mathsf{Va}(Y)=mp(1-p)$. 
+
+
+
+# Exemple: succès pour les examens de conduite
+
+On considère le taux de succès dans 346 centres pour examens de conduite pratique en Grande-Bretagne; les [données](https://www.gov.uk/government/statistical-data-sets/driving-test-statistics-drt) datent de 2018.
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+knitr::include_graphics("figures/Guardian_UK_driving.png")
+```
+
+# Résumé de l'article
+
+761 750 personnes on réussi l'examen pratique, pour 1 663 897 essais.
+
+- Un [article du journal *The Guardian*](https://www.theguardian.com/world/2019/aug/23/an-easy-ride-scottish-village-fuels-debate-driving-test-pass-rates) a suggéré que le taux de réussite était significativement plus élevé dans la campagne écossaise. 
+
+Puisque nous n'avons pas de classification des centres de test ruraux/urbains, on utilise le nombre d'examens passés comme proxy.
+
+Les autres variables explicatives sont le sexe de l'individu et la région en Angleterre; toutes les subdivisions d'Écosse et du Pays de Galles sont regroupées par royaume.
+
+---
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+knitr::include_graphics("figures/Guardian_UK_driving2.png")
+```
+
+---
 
 # Récapitulatif
 

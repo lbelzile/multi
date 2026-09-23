@@ -1,0 +1,128 @@
+---
+title: "Séance 5"
+format: html
+---
+
+# Ajustement d'un modèle de régression logistique
+
+On considère l'étude 3 de @Liu.Haubl.Castelo:2026, dont les données sont disponibles via la base de données `evaluation` dans le paquet `hecmulti`.
+
+Les participants ont pris part à un jeu en ligne dans lequel ils devaient trouver des fruits parmi un ensemble de trois boîtes, et obtenaient un score lorsqu’ils identifiaient correctement la boîte contenant le fruit. À leur insu, le jeu était truqué et leurs scores déterminés à l'avance. On leur communiquait, en plus de leur score final, une mesure des performances des autres participants, afin de leur indiquer s’ils avaient obtenu de meilleurs ou de moins bons résultats que les autres (`force`). La moitié des participants était censée recevoir un bonus en fonction de leurs bonnes performances, évaluées par des juges algorithmiques et humains: ils devaient choisir entre les deux (`choix`). Le médiateur est une mesure de la préférence relative pour leur choix de juge (`mediateur`).
+
+
+Nous considérons un modèle logistique additif avec deux variables explicatives pour la variable réponse `choix`: `mediateur` est une variable entière sur 0-10 et `force` qui est catégorielle binaire.
+
+```{r}
+#| warning: false
+#| message: false
+data(evaluation, package = "hecmulti")
+mod0 <- glm(choix ~ force, 
+           data = evaluation, 
+           family = binomial)
+```
+
+On peut considérer les probabilités tirées du modèle simple `mod0` avec une seule variable explicative (`force`): il prédit simplement la proportion empirique de choix pour `humain` (ici la catégorie de référence) pour chaque groupe expérimental (score `fort` ou `faible`).
+
+```{r}
+predict(mod0, 
+        newdata = data.frame(force = c("fort","faible")),
+        type = "response")
+# Comparaison avec la proportion empirique
+evaluation |> 
+  dplyr::group_by(force) |>
+  dplyr::summarize(proportion = mean(choix == "humain"))
+```
+
+On peut également entraîner un modèle plus complexe qui ajuste pour la force de conviction envers le choix de l'agent: une valeur de 10 indique une forte préférence, 0 une absence de préférence marquée.
+
+
+```{r}
+mod1 <- glm(choix ~ mediateur + force, 
+           data = evaluation, 
+           family = binomial)
+summary(mod1)
+```
+
+On peut obtenir les estimations des coefficients, des erreurs-types et les valeurs-_p_ des tests de Wald dans le tableau avec le générique S3 `summary`. Puisque le modèle est multiplicatif, le rapport de cote donne une
+augmentation ou diminution de `exp(beta)`.
+
+
+```{r}
+summary(mod1) # tableau résumé du modèle
+exp(coef(mod1)) # estimations de la cote
+exp(confint(mod1)) # intervalles de confiance pour la cote
+```
+
+On peut vérifier directement si les coefficients sont significatifs, mais il est parfois
+utile pour l'inférence de faire un test de rapport de vraisemblance pour comparer des modèles entre eux (dans le cas de variables explicatives avec plusieurs coefficients, si on a une variable catégorielle à $K>2$ modalités. Le générique `anova` fait ce test avec une séquence de modèles allant du plus simple au plus complexe.
+
+Par défaut, si on ne met qu'un seul modèle, la décomposition de la déviance (égal à moins deux fois la log-vraisemblance, $-2\ell$) se fait en respectant l'ordre dans lequel les variables sont entrés dans la formule: vous pouvez toujours en cas de doute plutôt ajuster explicitement les modèles à comparer.
+La plupart des logiciels utilisent une décomposition de type III, qui compare le modèle si on exclut une variable ou une interaction, versus le modèle complet. Ça ne respecte pas la hiérarchie effets principaux et interactions.
+
+```{r}
+mod2 <- glm(choix ~ mediateur * force, 
+           data = evaluation, 
+           family = binomial)
+anova(mod1, mod2, test = "LR") # test de rapport de vraisemblance
+car::Anova(mod1, type = 2)
+```
+On voit au résultat que le médiateur explique à lui seul la majeure partie de la réponse.
+
+Comme pour la régression linéaire, la présence de variables explicatives très fortement corrélées peut impacter l'interprétabilité. On peut vérifier la colinéarité à l'aide des facteurs d'inflation de la variance généralisés. De fortes valeurs (le point de référence est 1 pour l'absence de collinéarité) sont indicatrices de colinéarité, ce qui n'est pas le cas ici.
+
+```{r}
+car::vif(mod1)
+```
+
+
+# Modèle logistique pour proportions
+
+On considère une régression logistique pour données binomiales, qui vise à modéliser le taux de succès aux examens pratique de conduite en Grande-Bretagne en fonction de la région et de la taille du centre (ici coupée en catégories pour simplifier). On commence par créer un facteur qui représente la taille du centre, et on met comme référence la région urbaine de la capitale, Londres.
+
+```{r}
+data(gbconduite, package = "hecmodstat")
+gbconduite <- gbconduite |>
+  dplyr::mutate(taille = factor(
+  cut(gbconduite$total, c(0, 500, 1000, Inf)),
+  labels = c("petit", "moyen", "grand")),
+  region = relevel(factor(region), ref = "London")
+)
+```
+
+Évidemment, il y a une grande corrélation entre région et nombre d'examens. On peut regarder le décompte de la taille des centres par régions. On note que les régions urbaines n'ont pas de petit centres: cela nous empêchera d'ajuster une interaction. La plupart des petits centres (moins de 500 examens par année) sont situés en Écosse.
+
+```{r}
+with(gbconduite, table(taille))
+with(gbconduite, table(region, taille))
+```
+
+On considère le taux de réussite. Dans la fonction `glm`, il faudra mettre comme variable réponse à gauche du `~` une matrice à deux colonnes, avec chacune le nombre de succès (colonne 1) et d'échecs (colonne 2).
+
+```{r}
+mod_gbconduite <- glm(
+  cbind(reussite, total - reussite) ~ sexe + region + taille,
+  data = gbconduite,
+  family = binomial(link = "logit")
+)
+summary(mod_gbconduite)
+exp(cbind(coef(mod_gbconduite), confint(mod_gbconduite)))
+```
+
+Pour les prédictions, on travaille comme d'ordinaire avec les probabilités de succès (défaut du générique `fitted`): il faut cependant considérer que, pour obtenir les effectifs prédits, il faut multiplier cette dernière par le nombre d'essais au centre de conduite.
+
+
+
+
+
+On peut procéder à l'interprétation des paramètres pour les examens de conduite britanniques: toute autre chose étant égale par ailleurs,
+
+- la cote des hommes pour la réussite de l'examen est $33\%$ plus élevée que celle des femmes;
+- Londres est la région avec le plus faible taux de succès, même en prenant en compte le volume des centres de test; 
+- la cote pour la réussite est $50\%$ plus élevée en Angleterre du Nord-Est (versus la référence Londres) et $44.7\%$ plus élevée au Pays de Galles qu'à Londres, etc.
+- la cote du taux de réussite est $63\%$ plus grande dans les petits centres que dans les grands ($1/0.614$).
+
+Tous les paramètres sont statistiquement significatifs. Ce n'est pas une surprise vu la taille énorme de l'échantillon.
+
+```{r}
+predlogistique <- fitted(mod_gbconduite) * gbconduite$total
+```

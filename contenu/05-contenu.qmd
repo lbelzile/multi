@@ -47,7 +47,7 @@ youtube_list(slide_details, playlist_id)
 ## Diapositives 
 
 - {{< fa file >}} [Régression logistique](/diapos/MATH60602-diapos5.pdf)
-- {{< fa code >}} [Code](/code/MATH60602-diapos5.R)
+- {{< fa code >}} [Code](/code/MATH60602-code5.qmd)
 
 
 ## Objectifs d'apprentissage
