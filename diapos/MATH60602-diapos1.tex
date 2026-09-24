@@ -1,18 +1,18 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
   ignorenonframetext,
 ]{beamer}
+\newif\ifbibliography
 \usepackage{pgfpages}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
 \setbeamercolor{caption name}{fg=normal text.fg}
 \beamertemplatenavigationsymbolsempty
-% Prevent slide breaks in the middle of a paragraph
-\widowpenalties 1 10000
-\raggedbottom
+% remove section numbering
 \setbeamertemplate{part page}{
   \centering
   \begin{beamercolorbox}[sep=16pt,center]{part title}
@@ -31,6 +31,9 @@
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
 \AtBeginPart{
   \frame{\partpage}
 }
@@ -43,26 +46,25 @@
 \AtBeginSubsection{
   \frame{\subsectionpage}
 }
-
-\usepackage{amsmath,amssymb}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\usecolortheme{Flip}
+
+\usecolortheme[]{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
-\useinnertheme{Flip}
-\useoutertheme{Flip}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
-    \setmainfont[]{VisbyCF-Medium}
+\useinnertheme[]{Flip}
+\useoutertheme[]{Flip}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{VisbyCF-Medium}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -80,14 +82,10 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\newif\ifbibliography
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
 \usepackage{calc} % for calculating minipage widths
 \usepackage{caption}
 % Make caption package work with longtable
@@ -110,7 +108,22 @@
 \def\fps@figure{htbp}
 \makeatother
 
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
 \usepackage{tabu}
+\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -154,9 +167,8 @@
 \makeatother
 
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Analyse exploratoire},
   pdfauthor={Léo Belzile},
@@ -164,8 +176,9 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Analyse exploratoire}
-\subtitle{Analyse multidimensionnelle appliquée}
+\title{\texorpdfstring{Analyse exploratoire}{Analyse exploratoire}}
+\subtitle{\texorpdfstring{Analyse multidimensionnelle
+appliquée}{Analyse multidimensionnelle appliquée}}
 \author{Léo Belzile}
 \date{}
 \institute{HEC Montréal}
@@ -175,7 +188,7 @@
 
 
 \begin{frame}{Organisation du travail}
-\phantomsection\label{organisation-du-travail}
+\protect\phantomsection\label{organisation-du-travail}
 \begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{figures/r4ds_data-science_fr.png}
@@ -189,7 +202,7 @@ Grolemund}
 \end{frame}
 
 \begin{frame}{Organisation des données}
-\phantomsection\label{organisation-des-donnuxe9es}
+\protect\phantomsection\label{organisation-des-donnuxe9es}
 \textbf{Quelques bonnes pratiques}
 
 \pandocbounded{\includegraphics[keepaspectratio]{figures/DataOrganizationinSpreadsheets.png}}
@@ -202,7 +215,7 @@ The American Statistician, 72:1, 2-10, DOI:
 \end{frame}
 
 \begin{frame}{Nettoyage des données}
-\phantomsection\label{nettoyage-des-donnuxe9es}
+\protect\phantomsection\label{nettoyage-des-donnuxe9es}
 \begin{itemize}
 \tightlist
 \item
@@ -217,7 +230,7 @@ Ne jamais ouvrir et modifier/sauvegarder les données dans Excel!
 \end{frame}
 
 \begin{frame}{Histoires d'horreur}
-\phantomsection\label{histoires-dhorreur}
+\protect\phantomsection\label{histoires-dhorreur}
 \begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{figures/guardian-covid-excel.png}
@@ -230,7 +243,7 @@ Ne jamais ouvrir et modifier/sauvegarder les données dans Excel!
 \end{frame}
 
 \begin{frame}{Types de données}
-\phantomsection\label{types-de-donnuxe9es}
+\protect\phantomsection\label{types-de-donnuxe9es}
 Certains types de données méritent une attention particulière
 
 \begin{itemize}
@@ -245,7 +258,7 @@ Certains types de données méritent une attention particulière
 \end{frame}
 
 \begin{frame}{Données en format ``propre''}
-\phantomsection\label{donnuxe9es-en-format-propre}
+\protect\phantomsection\label{donnuxe9es-en-format-propre}
 \begin{itemize}
 \tightlist
 \item
@@ -256,26 +269,20 @@ Certains types de données méritent une attention particulière
   une seule mesure par cellule
 \end{itemize}
 
-\begin{figure}[H]
-
-{\centering \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{figures/tidydata_1.jpg}
-
-}
-
-\caption{Allison Horst (CC BY 4.0)}
-
-\end{figure}%
+\begin{center}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{figures/tidy-data-sub.png}
+\end{center}
 \end{frame}
 
 \begin{frame}{Exemple}
-\phantomsection\label{exemple}
+\protect\phantomsection\label{exemple}
 Quel est le format de ces données de la Régie de l'Énergie?
 
 \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{figures/regie-energie.png}
 \end{frame}
 
 \begin{frame}{Types de variables}
-\phantomsection\label{types-de-variables}
+\protect\phantomsection\label{types-de-variables}
 \begin{columns}[T]
 \begin{column}{0.4\linewidth}
 \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{figures/continuous_discrete.png}
@@ -298,7 +305,9 @@ Quel est le format de ces données de la Régie de l'Énergie?
 \end{frame}
 
 \begin{frame}[fragile]{Validation des données}
-\phantomsection\label{validation-des-donnuxe9es}
+\protect\phantomsection\label{validation-des-donnuxe9es}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
 Vérifier la présence de
 
 \begin{itemize}
@@ -319,12 +328,18 @@ Vérifier la présence de
     chaînes de caractère
   \end{itemize}
 \end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{figures/999-missing-values.jpg}
+\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}{Visualisation}
-\phantomsection\label{visualisation}
+\protect\phantomsection\label{visualisation}
 \begin{block}{Quel est l'avantage des graphiques?}
-\phantomsection\label{quel-est-lavantage-des-graphiques}
+\protect\phantomsection\label{quel-est-lavantage-des-graphiques}
 \begin{quote}
 \emph{Un simple graphique transmet plus d'information à l'analyste que
 n'importe quel autre option}
@@ -341,7 +356,7 @@ John Tukey
 \end{block}
 
 \begin{block}{Pourquoi créer des graphiques?}
-\phantomsection\label{pourquoi-cruxe9er-des-graphiques}
+\protect\phantomsection\label{pourquoi-cruxe9er-des-graphiques}
 \begin{quote}
 \emph{Les résumés numériques focalisent l'attention sur les valeurs
 attendues, les résumés graphiques sur les valeurs inattendues.}
@@ -359,9 +374,9 @@ John Tukey
 \end{frame}
 
 \begin{frame}{Choix graphiques}
-\phantomsection\label{choix-graphiques}
+\protect\phantomsection\label{choix-graphiques}
 \begin{block}{Qu'est ce qu'un bon graphique?}
-\phantomsection\label{quest-ce-quun-bon-graphique}
+\protect\phantomsection\label{quest-ce-quun-bon-graphique}
 \begin{quote}
 \emph{communique des idées complexes avec clarté, précision et
 efficacité \ldots{} le graphique qui offre au lecteur le plus grand
@@ -381,7 +396,7 @@ Edward Tufte, 1983
 \end{frame}
 
 \begin{frame}{Grammaire des graphiques}
-\phantomsection\label{grammaire-des-graphiques}
+\protect\phantomsection\label{grammaire-des-graphiques}
 \begin{columns}[T]
 \begin{column}{0.4\linewidth}
 \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{img/03/gg-book.jpg}
@@ -416,7 +431,7 @@ Edward Tufte, 1983
 \end{frame}
 
 \begin{frame}{Règles d'or}
-\phantomsection\label{ruxe8gles-dor}
+\protect\phantomsection\label{ruxe8gles-dor}
 Pour une visualisation effective:
 
 \begin{enumerate}
@@ -431,7 +446,7 @@ Pour une visualisation effective:
 \end{frame}
 
 \begin{frame}{Règle 1: choix de graphiques}
-\phantomsection\label{ruxe8gle-1-choix-de-graphiques}
+\protect\phantomsection\label{ruxe8gle-1-choix-de-graphiques}
 \begin{columns}[T]
 \begin{column}{0.5\linewidth}
 Avec une variable:
@@ -476,7 +491,7 @@ Avec deux variables
 \end{frame}
 
 \begin{frame}{Boîte à moustaches}
-\phantomsection\label{bouxeete-uxe0-moustaches}
+\protect\phantomsection\label{bouxeete-uxe0-moustaches}
 La boîte donne
 
 \begin{itemize}
@@ -513,7 +528,7 @@ La boîte donne
 \end{frame}
 
 \begin{frame}{Règle 2: soignez les apparences}
-\phantomsection\label{ruxe8gle-2-soignez-les-apparences}
+\protect\phantomsection\label{ruxe8gle-2-soignez-les-apparences}
 Certaines visualisations sont plus effectives/adéquates que d'autres
 
 \begin{itemize}
@@ -528,7 +543,7 @@ Certaines visualisations sont plus effectives/adéquates que d'autres
 \end{frame}
 
 \begin{frame}{Éléments graphiques clés}
-\phantomsection\label{uxe9luxe9ments-graphiques-cluxe9s}
+\protect\phantomsection\label{uxe9luxe9ments-graphiques-cluxe9s}
 \begin{itemize}
 \tightlist
 \item
@@ -544,7 +559,7 @@ Certaines visualisations sont plus effectives/adéquates que d'autres
 \end{frame}
 
 \begin{frame}{Règle 3: perception visuelle humaine}
-\phantomsection\label{ruxe8gle-3-perception-visuelle-humaine}
+\protect\phantomsection\label{ruxe8gle-3-perception-visuelle-humaine}
 \begin{itemize}
 \tightlist
 \item
@@ -573,12 +588,12 @@ Certaines visualisations sont plus effectives/adéquates que d'autres
 \end{frame}
 
 \begin{frame}{Problèmes de perceptions}
-\phantomsection\label{probluxe8mes-de-perceptions}
-\pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-9-1.pdf}}
+\protect\phantomsection\label{probluxe8mes-de-perceptions}
+\pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-11-1.pdf}}
 \end{frame}
 
 \begin{frame}{Mauvaise palette de couleur}
-\phantomsection\label{mauvaise-palette-de-couleur}
+\protect\phantomsection\label{mauvaise-palette-de-couleur}
 \begin{itemize}
 \item
   Gauche: Carte originale de la NOAA en niveaux de gris: on voit
@@ -587,14 +602,14 @@ Certaines visualisations sont plus effectives/adéquates que d'autres
   Droite: solution potentielle avec palette de couleurs différente.
 \end{itemize}
 
-\pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-10-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos1_files/figure-beamer/unnamed-chunk-12-1.pdf}}
 
 (Source \href{https://www.zeileis.org/news/dorian_rainbow/}{Achim
 Zeileis})
 \end{frame}
 
 \begin{frame}{Étapes de l'analyse exploratoire}
-\phantomsection\label{uxe9tapes-de-lanalyse-exploratoire}
+\protect\phantomsection\label{uxe9tapes-de-lanalyse-exploratoire}
 \begin{enumerate}
 \tightlist
 \item
@@ -624,7 +639,7 @@ uniquement.
 \end{frame}
 
 \begin{frame}{Références complémentaires}
-\phantomsection\label{ruxe9fuxe9rences-compluxe9mentaires}
+\protect\phantomsection\label{ruxe9fuxe9rences-compluxe9mentaires}
 Pour aller plus loin:
 
 \begin{itemize}
@@ -643,7 +658,7 @@ Pour aller plus loin:
 \end{frame}
 
 \begin{frame}{Étude de cas}
-\phantomsection\label{uxe9tude-de-cas}
+\protect\phantomsection\label{uxe9tude-de-cas}
 L'\href{https://www.iata.org/en/about/}{Association du transport aérien
 international (IATA)} est une regroupement de compagnies aériennes
 commerciales de passagers dont le siège social est situé à Montréal.
@@ -663,7 +678,7 @@ claire, une cause importante de coûts en raison de
 \end{frame}
 
 \begin{frame}{Mesurer la turbulence}
-\phantomsection\label{mesurer-la-turbulence}
+\protect\phantomsection\label{mesurer-la-turbulence}
 Depuis une dizaine d'années, les avions sont dotés de senseurs qui
 permettent de mesurer l'intensité de la turbulence atmosphérique mesurée
 via le taux de dissipation des tourbillons, ou EDR (unités de mesure en
@@ -676,7 +691,7 @@ rapport technique}.
 \end{frame}
 
 \begin{frame}{Plateforme \emph{IATA Turbulence Aware}}
-\phantomsection\label{plateforme-iata-turbulence-aware}
+\protect\phantomsection\label{plateforme-iata-turbulence-aware}
 Depuis 2018, l'IATA a développé une
 \href{https://www.iata.org/en/services/data/safety/turbulence-platform/}{plateforme}
 pour traquer en temps réel les zones de turbulence d'air propre, une des
@@ -697,7 +712,7 @@ Turbulence Aware (©IATA)}
 \end{frame}
 
 \begin{frame}{Données}
-\phantomsection\label{donnuxe9es}
+\protect\phantomsection\label{donnuxe9es}
 Les avions mesurent toutes les minutes la moyenne et le maximum d'EDR,
 ainsi que
 
@@ -720,7 +735,7 @@ mesures d'EDR sont faibles ou nulles.
 \end{frame}
 
 \begin{frame}{Échantillonnage préférentiel}
-\phantomsection\label{uxe9chantillonnage-pruxe9fuxe9rentiel}
+\protect\phantomsection\label{uxe9chantillonnage-pruxe9fuxe9rentiel}
 Les avions sauvegardent durant le vol les données à des intervalles
 réguliers (battement) de 15 ou 20 minutes, et pendant les périodes de
 turbulence
@@ -743,7 +758,7 @@ turbulence
 \end{frame}
 
 \begin{frame}{Point de discussion}
-\phantomsection\label{point-de-discussion}
+\protect\phantomsection\label{point-de-discussion}
 \begin{itemize}
 \tightlist
 \item
@@ -755,7 +770,7 @@ turbulence
 \end{frame}
 
 \begin{frame}{Données manquantes et incohérences:}
-\phantomsection\label{donnuxe9es-manquantes-et-incohuxe9rences}
+\protect\phantomsection\label{donnuxe9es-manquantes-et-incohuxe9rences}
 Certaines mesures ne sont pas à des intervalles réguliers: exemple d'un
 avion à
 
@@ -766,7 +781,7 @@ Pouvez-vous deviner la fréquence des battements?
 \end{frame}
 
 \begin{frame}{Données manquantes et valeurs aberrantes}
-\phantomsection\label{donnuxe9es-manquantes-et-valeurs-aberrantes}
+\protect\phantomsection\label{donnuxe9es-manquantes-et-valeurs-aberrantes}
 \begin{columns}[T]
 \begin{column}{0.4\linewidth}
 Certaines valeurs de covariables (température) sont implausibles.
@@ -782,7 +797,7 @@ hautes altitudes).
 \end{frame}
 
 \begin{frame}{Résumé des sujets de la séance}
-\phantomsection\label{ruxe9sumuxe9-des-sujets-de-la-suxe9ance}
+\protect\phantomsection\label{ruxe9sumuxe9-des-sujets-de-la-suxe9ance}
 \begin{itemize}
 \tightlist
 \item

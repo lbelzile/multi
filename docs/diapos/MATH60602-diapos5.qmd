@@ -239,11 +239,11 @@ Cela donne une expression pour la moyenne $p_i=\mathsf{E}(Y_i\mid \mathbf{X}_i)$
 # Fonction de répartition logistique
 
 
-On voit que $p$ est une **fonction croissante** de $\eta=\beta_0 + \cdots + \beta_p \mathrm{X}_{p}$.
+On voit que $p$ est une **fonction nonlinéaire croissante** de $\eta=\beta_0 + \cdots + \beta_p \mathrm{X}_{p}$.
  
 -  Si $\beta_j$ est positif et $\mathrm{X}_{j}$ augmente, $\Pr(Y=1)$ augmente aussi.  
 -  Si $\beta_j$ est négatif et  $\mathrm{X}_{j}$ augmente, $\Pr(Y=1)$ diminue. 
--  La relation entre $\Pr(Y=1)$ et $\eta$ (et donc aussi $\mathrm{X}_{j}$) est *nonlinéaire*.
+-  
 
 
 # Rappel exponentiels et logarithme
@@ -319,7 +319,15 @@ knitr::kable(datf[-1, , drop = FALSE],
              format = "latex") 
 ```
 
+# Cote dans les journaux
 
+```{r}
+#| echo: false
+#| eval: true
+#| out.width: '80%'
+#| fig-align: "center"
+knitr::include_graphics("figures/cote.png")
+```
 
 # Interprétation de l'ordonnée à l'origine en termes de cote
 
@@ -422,6 +430,39 @@ On dispose de 500 observations sur les variables suivantes dans la base de donn�
 
 -->
 
+# Format de vente
+
+\small 
+Une étude de [Duke et Amir (2023)](doi:10.1287/mksc.2022.1364) dans *Marketing Science* considère l'utilisation d'un format de vente 
+- `intégré` (choisir directement d'acheter et la quantité en une seule étape, versus 
+- `séquentiel`, le standard actuel (séquentiel), qui revient à choisir d'acheter (oui ou non), puis sélectionner la quantité.
+
+```{r}
+#| echo: false
+#| eval: true
+#| out.width: '100%'
+#| fig-align: 'center'
+knitr::include_graphics("figures/DukeAmir.png")
+```
+\normalsize
+
+# Base de données `formatvente`
+
+Les données de l'expérience 3 contiennent 399 observations des variables suivantes
+
+- `format`: variable expérimental, soit `intégré` ou `séquentiel`
+- `achat`: variable binaire, $1$ pour achat
+- `quantite`: quantité en cas d'achat ($0$, $1$ ou $2$)
+- `marque`:  nom de la première marque (pour un item vs deux), soit `for your beauty` ou `beauty care`, contrebalancé
+- `genre`: genre, `masculin` ou `féminin` (4 valeurs manquantes)
+- `age`: âge du répondant
+
+# Données expérimentales
+
+Comme les participants sont assignés de manière aléatoire à chaque sous-groupe de `format`, seule cette variable et l'ordre de la `marque` peuvent avoir une incidence.
+
+Les variables sociodémographiques `genre` et `age` sont uniquement collectées pour vérifier la représentativité de l'échantillon et la généralisabilité des conclusions.
+
 # Ajustement du modèle
 
 La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par défaut, linéaire avec `family = gaussian`).
@@ -431,17 +472,20 @@ La fonction `glm` dans **R** ajuste un modèle linéaire généralisé (par déf
 
 ```{r}
 #| label: logistique-init
-#| eval: false
+#| eval: true
 #| echo: true
 #| message: false
 data(formatvente, package = "hecmulti")
 # Données de l'expérience 3 de Duke et Amir (2023)
-modele1 <- glm(formula = achat ~ format + marque,
+modele1 <- glm(formula = achat ~ format,
             family = binomial(link = "logit"),
             data = formatvente)
+```
+```{r}
+#| eval: false
+#| echo: true
 summary(modele1)
 ```
-
 On obtient un tableau résumé avec les coefficients (`summary`)
 
 
@@ -454,7 +498,7 @@ Par défaut, pour des variables $0/1$, le modèle décrit la probabilité de suc
 ```{r}
 #| label: logitplot2
 #| echo: false
-#| eval: true
+#| eval: false
 #| out.width: '70%'
 #| fig.align: 'center'
 #| fig.width: 7
@@ -473,17 +517,8 @@ curve(expit(-3.05 + 0.0749 * x),
 Si le coefficient $\beta_j$ de la variable $\mathrm{X}_j$ est positif, alors plus la variable augmente, plus $\Pr(Y=1)$ augmente.
 
 -->
+
 <!--
-# Interprétation avec données du PRCA
-
-Le modèle ajusté en termes de cote est
-\begin{align*}
- \frac{\Pr(Y=1 \mid \mathrm{X}_5=x_5)}{\Pr(Y=0 \mid \mathrm{X}_5=x_5)} = \exp(-3.05)\exp(0.0749x_5).
-\end{align*}
-
-\small
-
-- Lorsque $\mathrm{X}_5$ augmente d'une année, la cote est multipliée par $\exp(0.0749) = 1.078$ peut importe la valeur de $x_5$. 
 - Pour deux personnes dont la différence d'âge
     - est d'un an, la cote de la personne plus âgée est 7.8\% plus élevée
     - est de 10 ans, la cote de la personne plus âgée est 112\% plus élevée (cote multipliée par $\exp(10 \times 0.0749)=1.078^{10} = 2.12$)
@@ -581,6 +616,27 @@ logit2 <- logit1 |>
 
 -->
 
+
+# Interprétation avec données de format de vente
+
+La variable catégorielle
+$$\mathrm{X}_1 = \mathsf{I}_{\text{format = séquentiel}}= \begin{cases} 1, & \text{format = séquentiel} \\ 0, & \text{format = intégré (réf.)}\end{cases}$$
+
+Le modèle ajusté en terme de cote est
+\begin{align*}
+ \frac{\Pr(Y=1 \mid \mathrm{X}_1=1)}{\Pr(Y=0 \mid \mathrm{X}_1=x_1)} = \exp(`r round(as.numeric(coef(modele1)[1]), 3)`)\exp(`r round(as.numeric(coef(modele1)[2]),3)`).
+\end{align*}
+
+\small
+
+- Lorsque qu'on passe d'un format intégré à un format séquentiel, la cote est multipliée par $\exp(`r round(as.numeric(coef(modele1)[2]),3)`) = `r round(exp(as.numeric(coef(modele1)[2])),3)`.$ C'est une diminution de la cote de $`r 100*(1-round(exp(as.numeric(coef(modele1)[2])),3))`$%. La probabilité d'achat est plus faible pour le format séquentiel que le format intégré.
+
+
+# Variables explicatives continues
+
+
+
+
 # Vraisemblance et estimation du modèle
 
 Pour un modèle probabiliste donné, on peut calculer la « probabilité » d'avoir obtenu les données de l'échantillon.
@@ -588,9 +644,7 @@ Pour un modèle probabiliste donné, on peut calculer la « probabilité » d'av
 Si on traite cette « probabilité » comme une fonction des paramètres, on l'appelle **vraisemblance**.
 
 
-**Maximum de vraisemblance**: valeurs des paramètres qui maximisent la fonction de vraisemblance.
-
-- on cherche les valeurs des paramètres qui rendent les données les plus plausibles
+L'estimateur du **maximum de vraisemblance** est la valeur du vecteur de paramètres qui maximise la fonction de vraisemblance. Ce sont les valeurs qui rendent les données les plus plausibles.
    
 
 # Vraisemblance d'une observation
@@ -913,21 +967,17 @@ Warning messages:
 
 Le deuxième message d'erreur survient quand une combinaison linéaire de variables explicatives permet de prédire exactement la réponse: nos probabilités prédites sont $0$ ou $1$.
 
-- par exemple, si on ajuste un modèle pour `yachat` en fonction de `ymontant`.
+- par exemple, si on ajuste un modèle pour `achat` en fonction de `quantite`.
 
 \footnotesize
 
 ```{r}
 #| eval: false
 #| echo: true
-data(dbm, package = "hecmulti")
-quasisep <- dbm |>  
-  # remplacer les valeurs manquantes par des zéros et standardiser
-  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
-# Régression logistique pour l'achat (0 ou 1) en fonction du montant
-modele_qs <- glm(yachat ~ ymontant, 
-              family = binomial, 
-              data = quasisep)
+modele_qs <- glm(
+  achat ~ quantite, 
+  data = formatvente, 
+  family = binomial)
 ```
 
 \normalsize
@@ -940,14 +990,20 @@ modele_qs <- glm(yachat ~ ymontant,
 #| out-width: '60%'
 #| fig-width: 8
 #| fig-height: 5
-#| fig-align: center
-set.seed(1234)
-x <- sort(rexp(20, rate = 0.2))
-y <- as.integer(x>9)
-m1 <- glm(y~ x, family=binomial)
-fittedsepmod <- function(x){1/(1+exp(-coef(m1)[1] - x*coef(m1)[2]))}
+#| fig-align: 'center'
+data(formatvente, package = "hecmulti")
+x <- seq(0, 2, length.out = 100)
+modele_qs <- glm(
+  achat ~ quantite, 
+  data = formatvente, 
+  family = binomial)
+fittedsepmod <- function(x){
+  beta <- as.numeric(coef(modele_qs))
+ plogis(beta[1] +  beta[2] * x)
+}
 library(ggplot2)
-ggplot(data.frame(x, y), aes(x=x,y=y)) +
+ggplot(data = formatvente, 
+       mapping = aes(x = quantite, y = achat)) +
   geom_point() +
   geom_function(fun = fittedsepmod, n = 1001L, linewidth = 1.1) +
   scale_y_continuous(breaks = seq(0, 1, by = 0.25), labels = c("0","0.25","0.5","0.75","1")) +
@@ -957,7 +1013,7 @@ ggplot(data.frame(x, y), aes(x=x,y=y)) +
 
 \footnotesize 
 
-Quasi-séparation de variable: les estimations des paramètres sont presques infinies pour permettre une transition abrupte de la probabilité de succès de $\widehat{p}=0$ à $\widehat{p}=1$ à $x=9$.
+Quasi-séparation de variable: les estimations des paramètres sont presques infinies pour permettre une transition abrupte de la probabilité de succès de $\widehat{p}=0$ à $\widehat{p}=1$ à $x=0.5$.
 
 \normalsize
 
@@ -971,21 +1027,14 @@ Avec des variables standardisées, un coefficient $|\beta_j| > 10$ est suspect.
 #| echo: false
 #| eval: true
 #| label: tbl-quasisep
-#| tbl-cap: "Modèle logistique pour `yachat` en fonction de `ymontant` (variable standardisée)."
+#| tbl-cap: "Modèle logistique pour `achat` en fonction de `quantite`."
 #| warning: false
 #| message: false
-data(dbm, package = "hecmulti")
-quasisep <- dbm |>  
-  # remplacer les valeurs manquantes par des zéros et standardiser
-  dplyr::mutate(ymontant = scale(ifelse(yachat == 0, 0, ymontant)))
-# Régression logistique pour l'achat (0 ou 1) en fonction du montant
-m1 <- glm(yachat ~ ymontant, 
-              family = binomial, 
-              data = quasisep)
-tab1 <- data.frame(estimate = as.numeric(m1$coefficients), "std.error" = as.numeric(sqrt(diag(vcov(m1)))))
+
+tab1 <- data.frame(estimate = as.numeric(modele_qs$coefficients), "std.error" = as.numeric(sqrt(diag(vcov(modele_qs)))))
 colnames(tab1) <- c("coef.", "erreur-type")
 tab1 <- apply(tab1, 1:2, function(x){paste0("$", sprintf(x, fmt = "%.1f"), "$")})
-rownames(tab1) <- c("cst","ymontant")
+rownames(tab1) <- c("cst","quantite")
 knitr::kable(x = tab1, align = "rrr", booktabs = TRUE, escape = FALSE)
 ```
 
@@ -1076,10 +1125,6 @@ Le modèle est interprétable à l'échelle de la cote
 
 # Récapitulatif
 
-- Estimation par maximum de vraisemblance
-- Tests d'hypothèse comparent modèles emboîtés 
-   - loi nulle asymptotique $\chi^2$
-   - degrés de liberté égal au nombre de restrictions
-- Intervalles de confiance de vraisemblance profilée
-   - invariants aux reparamétrisations
+- L'estimation par maximum de vraisemblance permet l'usage des tests d'hypothèse basés sur la déviance.
+- Si on teste un seul paramètre, on peut également effectuer le test en regardant si la valeur postulée pour $\beta$ se trouve dans l'intervalle de confiance de vraisemblance profilée, qui est invariant aux reparamétrisations.
 

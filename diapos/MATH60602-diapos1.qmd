@@ -78,8 +78,19 @@ Certains types de données méritent une attention particulière
 - une seule mesure par cellule
 
 ```{r, out.width='70%', fig.cap="Allison Horst (CC BY 4.0)"}
+#| eval: false
+#| echO: false
 knitr::include_graphics("figures/tidydata_1.jpg")
 ```
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '70%'
+#| fig-align: 'center'
+knitr::include_graphics("figures/tidy-data-sub.png")
+```
+
 
 # Exemple
 
@@ -122,6 +133,10 @@ knitr::include_graphics("figures/nominal_ordinal_binary.png")
 
 # Validation des données
 
+
+:::: {.columns}
+
+::: {.column width="60%"}
 Vérifier la présence de
 
 - valeurs manquantes (`NA`, points, cellules vides, 999, -1, etc.)
@@ -129,6 +144,22 @@ Vérifier la présence de
 - variables catégorielles non déclarées
    - valeur entière (par ex., jours de la semaine)
    - chaînes de caractère
+
+:::
+
+
+::: {.column width="40%"}
+
+
+```{r}
+#| out-width: '100%'
+knitr::include_graphics("figures/999-missing-values.jpg")
+```
+
+:::
+
+::::
+
 
 # Visualisation
 
