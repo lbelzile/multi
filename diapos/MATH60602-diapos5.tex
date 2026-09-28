@@ -429,13 +429,6 @@ cote & \(\frac{1}{9}\) & \(\frac{1}{4}\) & \(\frac{3}{7}\) & \(\frac{2}{3}\) & \
 \end{table}%
 \end{frame}
 
-\begin{frame}{Cote dans les journaux}
-\protect\phantomsection\label{cote-dans-les-journaux}
-\begin{center}
-\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/cote.png}
-\end{center}
-\end{frame}
-
 \begin{frame}{Interprétation de l'ordonnée à l'origine en termes de
 cote}
 \protect\phantomsection\label{interpruxe9tation-de-lordonnuxe9e-uxe0-lorigine-en-termes-de-cote}
@@ -604,10 +597,6 @@ Le modèle ajusté en terme de cote est \begin{align*}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Variables explicatives continues}
-\protect\phantomsection\label{variables-explicatives-continues}
-\end{frame}
-
 \begin{frame}{Vraisemblance et estimation du modèle}
 \protect\phantomsection\label{vraisemblance-et-estimation-du-moduxe8le}
 Pour un modèle probabiliste donné, on peut calculer la « probabilité »
@@ -697,6 +686,9 @@ Comparaison de modèles \textbf{emboîtés}
 \item
   Modèle restreint (sous l'hypothèse nulle) sur lequel on impose
   \(k\leq p\) restrictions.
+\item
+  Par exemple, retirer une variable catégorielle à \(K\) niveaux revient
+  à enlever \(k=K-1\) coefficients.
 \end{itemize}
 \end{column}
 
@@ -773,8 +765,8 @@ Model 2: achat ~ format + marque
 
 \normalsize
 
-On conclut que la variable explicative \(\mathrm{X}_2\) améliore
-significativement l'ajustement du modèle.
+On conclut que la variable explicative \(\mathrm{X}_2\) (ordre de la
+marque) n'est pas statistiquement significative.
 \end{frame}
 
 \begin{frame}[fragile]{Tester la significativité des variables}
@@ -1023,7 +1015,7 @@ probabilités prédites sont \(0\) ou \(1\).
 \begin{frame}{Illustration de la séparation de variables}
 \protect\phantomsection\label{illustration-de-la-suxe9paration-de-variables}
 \begin{center}
-\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos5_files/figure-beamer/unnamed-chunk-18-1.pdf}
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos5_files/figure-beamer/unnamed-chunk-17-1.pdf}
 \end{center}
 
 \footnotesize
@@ -1140,6 +1132,35 @@ variables Bernoulli indépendantes.
 
 L'espérance (moyenne théorique) est \(\mathsf{E}(Y)=mp\) et la variance
 \(\mathsf{Va}(Y)=mp(1-p)\).
+\end{frame}
+
+\begin{frame}[fragile]{Formulation dans \textbf{R}}
+\protect\phantomsection\label{formulation-dans-r}
+Pour les données agrégées, on doit spécifier comme variable réponse
+(l'argument de gauche avant le \texttt{\textasciitilde{}} dans la
+formule) une matrice avec deux colonnes, contenant
+
+\begin{itemize}
+\tightlist
+\item
+  les \(y\) succès
+\item
+  les \(m-y\) échecs.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{formatvente\_agg }\OtherTok{\textless{}{-}}\NormalTok{ formatvente }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(format) }\SpecialCharTok{|\textgreater{}}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{succes =} \FunctionTok{sum}\NormalTok{(achat),}
+                   \AttributeTok{echec =} \FunctionTok{sum}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{achat))}
+\NormalTok{modele1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(}
+  \FunctionTok{cbind}\NormalTok{(succes, echec) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ format, }
+  \AttributeTok{family =}\NormalTok{ binomial,}
+  \AttributeTok{data =}\NormalTok{ formatvente\_agg)}
+\FunctionTok{anova}\NormalTok{(modele1)}
+\end{Highlighting}
+\end{Shaded}
 \end{frame}
 
 \begin{frame}{Exemple: succès pour les examens de conduite}
