@@ -759,14 +759,26 @@ plot(cv_output)
 
 # Trajectoire LASSO
 
-On choisit typiquement $\lambda$ par validation croisée, soit
-
-- le modèle avec la plus petite valeur de $\mathsf{EQM}_{\mathrm{VC}}$.
-- le modèle le plus parsimonieux à au plus un erreur-type de ce dernier (pénalité plus élevée, plus grand nombre de coefficients nuls)
 
 ```{r, out.width = '80%', fig.align='center'}
 knitr::include_graphics("figures/fig-lassopath.pdf")
 ```
+\small
+
+La courbe montre l'estimation de l'erreur quadratique moyenne (EQM) par validation croisée (avec $\pm$ un erreur-type) pour plusieurs valeurs de $\lambda$.
+
+Plus la pénalité est élevée (droite), plus le nombre de coefficients non-nuls (en haut) diminue.
+
+\normalsize
+
+# Choix de l'hyperparamètre
+
+
+On choisit typiquement $\lambda$ par validation croisée, soit
+
+- le modèle avec la plus petite valeur de $\mathsf{EQM}_{\mathrm{VC}}$.
+- le modèle le plus parsimonieux à au plus un erreur-type de ce dernier (pénalité plus élevée, plus grand nombre de coefficients nuls).
+
 
 # Paramètres
 
@@ -785,6 +797,7 @@ lasso_path <-
     alpha = 1, 
     lambda = seq(from = 0.01, to = 10, by = 0.01))
 plot(lasso_path, 
+     sign.lambda = 1,
      xvar = "lambda",
      xlab = expression("valeur de la pénalité"~lambda),
      #label = "nombre de coefficients non-nuls",

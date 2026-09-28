@@ -1,18 +1,18 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
   ignorenonframetext,
 ]{beamer}
+\newif\ifbibliography
 \usepackage{pgfpages}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
 \setbeamercolor{caption name}{fg=normal text.fg}
 \beamertemplatenavigationsymbolsempty
-% Prevent slide breaks in the middle of a paragraph
-\widowpenalties 1 10000
-\raggedbottom
+% remove section numbering
 \setbeamertemplate{part page}{
   \centering
   \begin{beamercolorbox}[sep=16pt,center]{part title}
@@ -31,6 +31,9 @@
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
 \AtBeginPart{
   \frame{\partpage}
 }
@@ -43,27 +46,26 @@
 \AtBeginSubsection{
   \frame{\subsectionpage}
 }
-
-\usepackage{amsmath,amssymb}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\usecolortheme{Flip}
+
+\usecolortheme[]{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
-\useinnertheme{Flip}
-\useoutertheme{Flip}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
-    \setmainfont[]{VisbyCF-Medium}
-    \setsansfont[]{Latin Modern Sans}
+\useinnertheme[]{Flip}
+\useoutertheme[]{Flip}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{VisbyCF-Medium}
+  \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -82,10 +84,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\newif\ifbibliography
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -128,8 +126,8 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
 \usepackage{calc} % for calculating minipage widths
 \usepackage{caption}
 % Make caption package work with longtable
@@ -151,6 +149,20 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{tabu}
@@ -200,9 +212,8 @@
 \makeatother
 
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Sélection de variables},
   pdfauthor={Léo Belzile},
@@ -210,8 +221,9 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Sélection de variables}
-\subtitle{Analyse multidimensionnelle appliquée}
+\title{\texorpdfstring{Sélection de variables}{Sélection de variables}}
+\subtitle{\texorpdfstring{Analyse multidimensionnelle
+appliquée}{Analyse multidimensionnelle appliquée}}
 \author{Léo Belzile}
 \date{}
 \institute{HEC Montréal}
@@ -221,7 +233,7 @@
 
 
 \begin{frame}{Étapes de la modélisation prédictive}
-\phantomsection\label{uxe9tapes-de-la-moduxe9lisation-pruxe9dictive}
+\protect\phantomsection\label{uxe9tapes-de-la-moduxe9lisation-pruxe9dictive}
 \begin{enumerate}
 \tightlist
 \item
@@ -254,7 +266,7 @@
 \end{frame}
 
 \begin{frame}{Présentation des données}
-\phantomsection\label{pruxe9sentation-des-donnuxe9es}
+\protect\phantomsection\label{pruxe9sentation-des-donnuxe9es}
 On considère une base de données marketing. L'objectif d'affaires est de
 cibler les clients à qui envoyer un échantillon promotionnel.
 
@@ -276,7 +288,7 @@ mieux en ne ciblant que ceux susceptibles d'acheter.
 \end{frame}
 
 \begin{frame}{Population cible}
-\phantomsection\label{population-cible}
+\protect\phantomsection\label{population-cible}
 Clients qui ont
 
 \begin{itemize}
@@ -301,7 +313,7 @@ Regroupements:
 \end{frame}
 
 \begin{frame}[fragile]{Liste des variables}
-\phantomsection\label{liste-des-variables}
+\protect\phantomsection\label{liste-des-variables}
 \footnotesize
 
 \begin{itemize}
@@ -340,7 +352,7 @@ Regroupements:
 \end{frame}
 
 \begin{frame}[fragile]{Aperçu des données}
-\phantomsection\label{aperuxe7u-des-donnuxe9es}
+\protect\phantomsection\label{aperuxe7u-des-donnuxe9es}
 \footnotesize
 
 \begin{Shaded}
@@ -351,19 +363,19 @@ Regroupements:
 \end{Shaded}
 
 \begin{verbatim}
-tibble [101,000 x 13] (S3: tbl_df/tbl/data.frame)
- $ x1      : int [1:101000] 1 1 0 0 1 1 0 0 0 1 ...
- $ x2      : num [1:101000] 42 59 52 32 38 63 35 32 26 32 ...
+Classes 'tbl_df', 'tbl' and 'data.frame':   101000 obs. of  13 variables:
+ $ x1      : int  1 1 0 0 1 1 0 0 0 1 ...
+ $ x2      : num  42 59 52 32 38 63 35 32 26 32 ...
  $ x3      : Factor w/ 3 levels "1","2","3": 1 2 3 1 2 2 2 1 3 1 ...
  $ x4      : Factor w/ 5 levels "1","2","3","4",..: 3 3 5 1 5 5 1 3 1 5 ...
- $ x5      : int [1:101000] 1 1 1 0 0 1 1 0 0 0 ...
- $ x6      : num [1:101000] 8.6 8.6 1.4 10.7 9.1 9.4 10.6 4.8 4 10.3 ...
- $ x7      : num [1:101000] 8 9 9 42 5 1 6 5 48 9 ...
- $ x8      : num [1:101000] 49 70 120 31 30 28 59 70 73 55 ...
- $ x9      : num [1:101000] 159 123 434 110 55 102 593 298 83 90 ...
- $ x10     : num [1:101000] 5 5 8 3 3 8 10 6 2 3 ...
- $ yachat  : int [1:101000] 0 0 0 0 0 0 0 1 1 1 ...
- $ ymontant: num [1:101000] NA NA NA NA NA NA NA 52 79 77 ...
+ $ x5      : int  1 1 1 0 0 1 1 0 0 0 ...
+ $ x6      : num  8.6 8.6 1.4 10.7 9.1 9.4 10.6 4.8 4 10.3 ...
+ $ x7      : num  8 9 9 42 5 1 6 5 48 9 ...
+ $ x8      : num  49 70 120 31 30 28 59 70 73 55 ...
+ $ x9      : num  159 123 434 110 55 102 593 298 83 90 ...
+ $ x10     : num  5 5 8 3 3 8 10 6 2 3 ...
+ $ yachat  : int  0 0 0 0 0 0 0 1 1 1 ...
+ $ ymontant: num  NA NA NA NA NA NA NA 52 79 77 ...
  $ test    : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 1 ...
 \end{verbatim}
 
@@ -453,7 +465,7 @@ x10 & nombre d'achats différents sur un an\\
 \end{frame}
 
 \begin{frame}{Prédire le montant \texttt{ymontant}}
-\phantomsection\label{pruxe9dire-le-montant-ymontant}
+\protect\phantomsection\label{pruxe9dire-le-montant-ymontant}
 Le montant moyen dépensé s'écrit
 
 \begin{align*}
@@ -469,7 +481,7 @@ l'échantillon.
 \end{frame}
 
 \begin{frame}[fragile]{Séparation de l'échantillon}
-\phantomsection\label{suxe9paration-de-luxe9chantillon}
+\protect\phantomsection\label{suxe9paration-de-luxe9chantillon}
 On conserve 100 000 observations test pour vérifier la performance
 
 \begin{itemize}
@@ -499,7 +511,7 @@ projet pilote.
 \end{frame}
 
 \begin{frame}{Recherche d'un modèle}
-\phantomsection\label{recherche-dun-moduxe8le}
+\protect\phantomsection\label{recherche-dun-moduxe8le}
 Idée initiale:
 
 \begin{itemize}
@@ -516,7 +528,7 @@ Idée initiale:
 \end{frame}
 
 \begin{frame}{Digression sur les variables catégorielles}
-\phantomsection\label{digression-sur-les-variables-catuxe9gorielles}
+\protect\phantomsection\label{digression-sur-les-variables-catuxe9gorielles}
 Les algorithmes que l'on va utiliser ont parfois des comportements
 différents face aux variables catégorielles (facteurs) avec \(K > 2\)
 catégories, qui définit un ensemble de \(K-1\) variables binaires.
@@ -537,7 +549,7 @@ référence n'est plus arbitraire.
 \end{frame}
 
 \begin{frame}[fragile]{Fléau de la dimensionalité}
-\phantomsection\label{fluxe9au-de-la-dimensionalituxe9}
+\protect\phantomsection\label{fluxe9au-de-la-dimensionalituxe9}
 Combien de modèles incluant les combinaisons de \(p\) variables? Chaque
 variable est incluse (ou pas): il y a
 \(2^p=2\times 2 \times \cdots \times 2\) (\(p\) fois) modèles.
@@ -546,6 +558,7 @@ Dans l'exemple, on a \(p=14\) variables de base en incluant les
 indicatrices pour les variables catégorielles multi-niveaux (revenu
 \texttt{x3} et région \texttt{x4}), donc \(2^{14} = 16384\) modèles.
 
+{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}rr@{}}
 \toprule\noalign{}
 \(p\) & nombre de modèles \\
@@ -558,10 +571,11 @@ indicatrices pour les variables catégorielles multi-niveaux (revenu
 25 & 33554432 \\
 \bottomrule\noalign{}
 \end{longtable}
+}
 \end{frame}
 
 \begin{frame}[fragile]{Recherche exhaustive}
-\phantomsection\label{recherche-exhaustive}
+\protect\phantomsection\label{recherche-exhaustive}
 Heureusement, il n'est pas nécessaire d'ajuster tous les modèles:
 certains peuvent être éliminés d'emblée.
 
@@ -574,7 +588,7 @@ Implémenté avec critères d'information dans le paquet
 \end{frame}
 
 \begin{frame}[fragile]{Recherche exhaustive dans \textbf{R}}
-\phantomsection\label{recherche-exhaustive-dans-r}
+\protect\phantomsection\label{recherche-exhaustive-dans-r}
 Essayer \textbf{tous} les modèles et choisir le meilleur (si \(p\) est
 petit).
 
@@ -606,7 +620,7 @@ petit).
 \end{frame}
 
 \begin{frame}{Mot d'ordre}
-\phantomsection\label{mot-dordre}
+\protect\phantomsection\label{mot-dordre}
 Quelques mantras pour la suite:
 
 \begin{itemize}
@@ -630,7 +644,7 @@ Quelques mantras pour la suite:
 \end{frame}
 
 \begin{frame}[fragile]{Approximation}
-\phantomsection\label{approximation}
+\protect\phantomsection\label{approximation}
 On essaie d'estimer la moyenne de la variable cible \texttt{ymontant} de
 la manière le plus flexible possible.
 
@@ -650,7 +664,7 @@ flexibilité:
 \end{frame}
 
 \begin{frame}[fragile]{Modèle complet et syntaxe \textbf{R}}
-\phantomsection\label{moduxe8le-complet-et-syntaxe-r}
+\protect\phantomsection\label{moduxe8le-complet-et-syntaxe-r}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Dans R, x1:x2 crée une interaction entre deux variables}
@@ -673,7 +687,7 @@ coefficients pour 210 observations.
 \end{frame}
 
 \begin{frame}{Méthodes de sélection séquentielles}
-\phantomsection\label{muxe9thodes-de-suxe9lection-suxe9quentielles}
+\protect\phantomsection\label{muxe9thodes-de-suxe9lection-suxe9quentielles}
 Recherche exhaustive typiquement trop coûteuse.
 
 On peut plutôt opter pour un algorithme heuristique:
@@ -692,7 +706,7 @@ On peut plutôt opter pour un algorithme heuristique:
 \end{frame}
 
 \begin{frame}{Digression}
-\phantomsection\label{digression}
+\protect\phantomsection\label{digression}
 Si on ajuste tous les modèles à \(K\) variables, celui qui a la plus
 petite erreur moyenne quadratique (EQM) a aussi le plus petit \(R^2\),
 \(\mathsf{AIC}\) et \(\mathsf{BIC}\) parmi ces modèles (puisque le
@@ -703,7 +717,7 @@ variables explicatives et choisir ensuite.
 \end{frame}
 
 \begin{frame}{Sélections ascendante et descendante}
-\phantomsection\label{suxe9lections-ascendante-et-descendante}
+\protect\phantomsection\label{suxe9lections-ascendante-et-descendante}
 On sélectionne un critère à minimiser (AIC/BIC) et une règle d'arrêt.
 
 \textbf{Sélection ascendante} (\emph{forward selection}): à partir du
@@ -722,7 +736,7 @@ critère.
 \end{frame}
 
 \begin{frame}{Sélection séquentielle (\emph{stepwise})}
-\phantomsection\label{suxe9lection-suxe9quentielle-stepwise}
+\protect\phantomsection\label{suxe9lection-suxe9quentielle-stepwise}
 À partir du modèle de base (d'ordinaire),
 
 \begin{itemize}
@@ -748,7 +762,7 @@ critère.
 \end{frame}
 
 \begin{frame}[fragile]{Code \textbf{R} avec \texttt{leaps}}
-\phantomsection\label{code-r-avec-leaps}
+\protect\phantomsection\label{code-r-avec-leaps}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Cette procédure séquentielle retourne}
@@ -767,7 +781,7 @@ critère.
 
 \begin{frame}[fragile]{Sélection séquentielle avec critères
 d'information}
-\phantomsection\label{suxe9lection-suxe9quentielle-avec-crituxe8res-dinformation}
+\protect\phantomsection\label{suxe9lection-suxe9quentielle-avec-crituxe8res-dinformation}
 \footnotesize
 
 La procédure est plus longue à rouler (car les modèles linéaires sont
@@ -799,7 +813,7 @@ L'historique des étapes est disponible via \texttt{seq\_AIC\$anova}
 \end{frame}
 
 \begin{frame}{Performance en fonction de la complexité}
-\phantomsection\label{performance-en-fonction-de-la-complexituxe9}
+\protect\phantomsection\label{performance-en-fonction-de-la-complexituxe9}
 \begin{center}
 \includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{figures/fig-perfo-sequentiel.pdf}
 \end{center}
@@ -814,7 +828,7 @@ performance sur les 100K données de validation (oracle).
 \end{frame}
 
 \begin{frame}{Méthodes de régularisation}
-\phantomsection\label{muxe9thodes-de-ruxe9gularisation}
+\protect\phantomsection\label{muxe9thodes-de-ruxe9gularisation}
 Objectif: prévenir le surajustement.
 
 Si \(Y\) est l'observation, \(\widehat{Y}\) la prédiction et
@@ -828,12 +842,12 @@ des coefficients en pénalisant leur norme.
 \end{frame}
 
 \begin{frame}{Compromis biais et variance}
-\phantomsection\label{compromis-biais-et-variance}
+\protect\phantomsection\label{compromis-biais-et-variance}
 \pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-5-1.pdf}}
 \end{frame}
 
 \begin{frame}{Compromis biais variance}
-\phantomsection\label{compromis-biais-variance}
+\protect\phantomsection\label{compromis-biais-variance}
 \begin{figure}
 
 \centering{
@@ -850,7 +864,7 @@ l'ajustement s'améliore, mais le bruit finit par dominer.}
 \end{frame}
 
 \begin{frame}{Invariance des coefficients}
-\phantomsection\label{invariance-des-coefficients}
+\protect\phantomsection\label{invariance-des-coefficients}
 Le modèle linéaire est invariant aux transformations affines.
 
 Considérons un modèle dans lequel on changerait l'unité de la variable
@@ -868,7 +882,7 @@ La prédiction ne change pas car
 \end{frame}
 
 \begin{frame}[fragile]{Préalable à la régression avec régularisation}
-\phantomsection\label{pruxe9alable-uxe0-la-ruxe9gression-avec-ruxe9gularisation}
+\protect\phantomsection\label{pruxe9alable-uxe0-la-ruxe9gression-avec-ruxe9gularisation}
 On pénalise la norme de \(\beta_1, \ldots, \beta_p\) (l'ordonnée à
 l'origine n'est pas incluse).
 
@@ -890,7 +904,7 @@ logiciel (c'est le cas avec \texttt{glmnet} dans \textbf{R}).
 \end{frame}
 
 \begin{frame}{LASSO}
-\phantomsection\label{lasso}
+\protect\phantomsection\label{lasso}
 Pénalité avec norme \(l_1\) pour la valeur absolue des coefficients,
 \[ \min_{\boldsymbol{\beta}} \left\{ n\mathsf{EQM}(\boldsymbol{\beta}) + \lambda(|\beta_1| + \cdots + |\beta_p|)\right\}.\]
 L'hyperparamètre \(\lambda>0\) détermine la force de la pénalisation.
@@ -911,14 +925,14 @@ sélection implicite de variable.
 \end{frame}
 
 \begin{frame}{Contrainte budgétaire et moindres carrés}
-\phantomsection\label{contrainte-budguxe9taire-et-moindres-carruxe9s}
+\protect\phantomsection\label{contrainte-budguxe9taire-et-moindres-carruxe9s}
 \begin{center}
 \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos4_files/figure-beamer/unnamed-chunk-7-1.pdf}
 \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Code \textbf{R} pour le LASSO}
-\phantomsection\label{code-r-pour-le-lasso}
+\protect\phantomsection\label{code-r-pour-le-lasso}
 Paramètre de pénalité déterminé par validation croisée à partir d'un
 vecteur de valeurs candidates.
 
@@ -937,7 +951,25 @@ vecteur de valeurs candidates.
 \end{frame}
 
 \begin{frame}{Trajectoire LASSO}
-\phantomsection\label{trajectoire-lasso}
+\protect\phantomsection\label{trajectoire-lasso}
+\begin{center}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/fig-lassopath.pdf}
+\end{center}
+
+\small
+
+La courbe montre l'estimation de l'erreur quadratique moyenne (EQM) par
+validation croisée (avec \(\pm\) un erreur-type) pour plusieurs valeurs
+de \(\lambda\).
+
+Plus la pénalité est élevée (droite), plus le nombre de coefficients
+non-nuls (en haut) diminue.
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Choix de l'hyperparamètre}
+\protect\phantomsection\label{choix-de-lhyperparamuxe8tre}
 On choisit typiquement \(\lambda\) par validation croisée, soit
 
 \begin{itemize}
@@ -947,16 +979,12 @@ On choisit typiquement \(\lambda\) par validation croisée, soit
   \(\mathsf{EQM}_{\mathrm{VC}}\).
 \item
   le modèle le plus parsimonieux à au plus un erreur-type de ce dernier
-  (pénalité plus élevée, plus grand nombre de coefficients nuls)
+  (pénalité plus élevée, plus grand nombre de coefficients nuls).
 \end{itemize}
-
-\begin{center}
-\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{figures/fig-lassopath.pdf}
-\end{center}
 \end{frame}
 
 \begin{frame}{Paramètres}
-\phantomsection\label{paramuxe8tres}
+\protect\phantomsection\label{paramuxe8tres}
 \begin{figure}
 
 \centering{
@@ -973,7 +1001,7 @@ dessus).}
 \end{frame}
 
 \begin{frame}[fragile]{Évaluation et prédiction}
-\phantomsection\label{uxe9valuation-et-pruxe9diction}
+\protect\phantomsection\label{uxe9valuation-et-pruxe9diction}
 Une fois la valeur de \(\lambda\) choisie, on ré-estime le modèle avec
 la pénalité.
 
@@ -992,7 +1020,7 @@ la pénalité.
 \end{frame}
 
 \begin{frame}[fragile]{Prédictions}
-\phantomsection\label{pruxe9dictions}
+\protect\phantomsection\label{pruxe9dictions}
 On crée une matrice avec les données de validation et on calcule
 l'erreur quadratique moyenne.
 
@@ -1019,7 +1047,7 @@ l'erreur quadratique moyenne.
 \end{frame}
 
 \begin{frame}{Critères objectifs}
-\phantomsection\label{crituxe8res-objectifs}
+\protect\phantomsection\label{crituxe8res-objectifs}
 Il est important de distinguer entre la fonction objective (ou la
 fonction de coût) utilisée pour l'estimation des paramètres, comme
 
@@ -1036,9 +1064,10 @@ et le critère visant à choisir le meilleur modèle (par ex., le profit).
 \end{frame}
 
 \begin{frame}{Évaluation de la performance}
-\phantomsection\label{uxe9valuation-de-la-performance}
+\protect\phantomsection\label{uxe9valuation-de-la-performance}
 En incluant uniquement les variables de base
 
+{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ccl@{}}
 \toprule\noalign{}
 nb variables & \(\mathsf{EQM}\) & méthode \\
@@ -1049,10 +1078,12 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 10 & 25.04 & exhaustive - \(\mathsf{BIC}\) \\
 \bottomrule\noalign{}
 \end{longtable}
+}
 
 En incluant les termes de base, les carrés et les interactions d'ordre
 2.
 
+{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}cll@{}}
 \toprule\noalign{}
 nb variables & \(\mathsf{EQM}\) & méthode \\
@@ -1065,10 +1096,11 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 30 & 11.94 & LASSO, validation croisée avec 10 groupes \\
 \bottomrule\noalign{}
 \end{longtable}
+}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif}
+\protect\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -1087,7 +1119,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-1}
+\protect\phantomsection\label{ruxe9capitulatif-1}
 \begin{itemize}
 \tightlist
 \item
@@ -1104,7 +1136,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-2}
+\protect\phantomsection\label{ruxe9capitulatif-2}
 \begin{itemize}
 \tightlist
 \item
@@ -1125,7 +1157,7 @@ nb variables & \(\mathsf{EQM}\) & méthode \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-3}
+\protect\phantomsection\label{ruxe9capitulatif-3}
 Certaines méthodes de pénalisation directe changent la fonction
 objective:
 
@@ -1152,7 +1184,7 @@ exactement nuls.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-4}
+\protect\phantomsection\label{ruxe9capitulatif-4}
 \begin{itemize}
 \tightlist
 \item
