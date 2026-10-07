@@ -12,10 +12,9 @@ outertheme: Flip
 themeoptions: "bullet=circle, topline=true, shadow=false"
 beamerarticle: false
 pdf-engine: lualatex
-cache: true
 code-line-numbers: true
 fig-align: 'center'
-mainfont: "VisbyCF-Medium"
+mainfont: "VisbyCF"
 mathfont: 'Latin Modern Math'
 sansfont: 'Latin Modern Sans'
 keep-tex: true
@@ -66,7 +65,7 @@ et donc on obtient le **taux de mauvaise classification** si on calcule la moyen
 \frac{1}{n} \sum_{i=1}^n (y_i - \widehat{y}_i)^2.
 \end{align*}
 
-Plus le taux de mauvaise classification est petit, meilleure est la capacité prédictive du modèle.
+On veut minimiser le taux de mauvaise classification, afin d'obtenir une meilleure capacité prédictive du modèle.
 
 # Score de Brier
 
@@ -80,7 +79,7 @@ Ce score prend en compte l'aspect probabiliste de la prédiction.
 
 # Base de données marketing
 
-On considère un modèle pour la variable binaire `yachat`, qui vaut $1$ si une personne achète suite à l'envoi d'un catalogue et $0$ sinon.
+On considère un modèle pour la variable binaire `yachat`, qui vaut $1$ si une personne achète suite à l'envoi d'un échantillon promotionnel et $0$ sinon.
 
 ```{r}
 #| echo: true
@@ -127,8 +126,8 @@ La fonction `predvc` ajuste le modèle sur chaque 9/10 des données et prédit l
 #| echo: false
 #| eval: true
 #| cache: true
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 6
+#| fig-height: 3
 #| out-width: '80%'
 #| fig-align: 'center'
 # Transformer les variables catégorielles en facteurs
@@ -146,7 +145,12 @@ ggplot(data = data.frame(x = cv_prob),
   geom_histogram(bins = 30) + 
   labs(x = "probabilité d'achat prédite", 
        y = "") +
-  theme_minimal()
+  scale_y_continuous(limits = c(0, NA),
+                     expand = expansion()) +
+  scale_x_continuous(expand = c(0.01,0.01),
+                     breaks = c(0,0.25,0.5,0.75,1),
+                     labels = c("0","0.25","0.5","0.75","1")) + 
+  theme_classic()
 #  Modèle complet et valeurs prédites
 appr_prob <- fitted(glm(data = appr, 
                          formula = form, 
@@ -184,9 +188,11 @@ perfo <- function(prob, resp, plot = FALSE){
           panel.first = abline(a=0,b=1), 
           ylim = c(0,1), xlim = c(0,1), yaxs = "i", xaxs = "i")
    }
-   invisible(list(cut = tab[which.max(tab$pcorrect),"coupe"],
-        confusion = matrix(tab[which.max(tab$pcorrect), c(2,5,4,3)], nrow = 2, ncol = 2),
-        table = tab))
+   invisible(list(
+     cut = tab[which.max(tab$pcorrect),"coupe"],
+     confusion = matrix(tab[which.max(tab$pcorrect),c("c0","i0",  "i1","c1")], nrow = 2, ncol = 2),
+     table = tab)
+    )
    
 }
 # Performance du modèle avec données d'apprentissage
@@ -205,8 +211,8 @@ Répartition des probabilités de succès prédites par validation croisée.
 On peut faire varier le point de coupure et choisir celui qui maximise le taux de bonne classification, $\widehat{\Pr}(Y = \widehat{Y})$.
 
 ```{r}
-#| fig-width: 8
-#| fig-height: 4
+#| fig-width: 6
+#| fig-height: 3
 #| out-width: '80%'
 #| fig-align: 'center'
 library(ggplot2)
@@ -217,14 +223,19 @@ ggplot(data = perfo1$table,
   geom_vline(xintercept = perfo1$cut, linetype = "dashed", alpha = 0.5) + 
   labs(x = "point de coupure",
        y = "",
-       subtitle = "taux de bonne classification (pourcentage)") +
-  scale_x_continuous(expand = c(0.01,0.01),
+       subtitle = "taux de bonne classification") +
+    scale_y_continuous(
+      limits = c(0,100),
+      expand = c(0.01,0.01),
+                     breaks = c(0,25,50,75,100),
+                     labels = c("0%","25%","50%","75%","100%")) + 
+  scale_x_continuous(expand = expansion(),
                      breaks = c(0,0.25,0.5,0.75,1),
                      labels = c("0","0.25","0.5","0.75","1")) + 
   theme_classic()
 ```
 
-Avec $c=`r perfo1$cut`$, on obtient un taux de mauvaise classification de $`r perfo1$table$pcorrect[which.max(perfo1$table$pcorrect)]`$\%.
+Avec $c=`r perfo1$cut`$, on obtient un taux de **bonne** classification de $`r perfo1$table$pcorrect[which.max(perfo1$table$pcorrect)]`$\%.
 
 # Performance et classification
 
@@ -250,8 +261,8 @@ On peut classifier les observations dans un tableau pour un point de coupure don
 #| echo: false
 #| tbl-cap: "Matrice de confusion avec point de coupure optimal. Les entrées donnent le décompte du nombre d'observation par combinaison $(Y, \\widehat{Y})$"
 confumat <- perfo1$confusion
-rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
-colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
+rownames(confumat) <- c("\\(\\widehat{Y}=0\\)","\\(\\widehat{Y}=1\\)")
+colnames(confumat) <- c("\\(Y=0\\)","\\(Y=1\\)")
 knitr::kable(x = confumat, 
                 align = "r",
                 escape = FALSE,
@@ -273,10 +284,10 @@ Les estimés empiriques sont simplement obtenus en calculant les rapports du nom
 #| eval: true
 #| echo: false
 confumat <- perfo1$confusion
-rownames(confumat) <- c("\\(\\widehat{Y}=1\\)","\\(\\widehat{Y}=0\\)")
-colnames(confumat) <- c("\\(Y=1\\)","\\(Y=0\\)")
+rownames(confumat) <- c("\\(\\widehat{Y}=0\\)","\\(\\widehat{Y}=1\\)")
+colnames(confumat) <- c("\\(Y=0\\)","\\(Y=1\\)")
 confumat_th <- confumat
-confumat_th[1:4] <- c("VP","FN","FP","VN")
+confumat_th[1:4] <- c("VN","FP","FN","VP")
 tab1 <- knitr::kable(x = confumat,
                 align = "r",
                 escape = FALSE,
@@ -296,8 +307,8 @@ knitr::kables(list(tab1, tab2))
 - La **sensibilité** est le taux de succès correctement classés, $\Pr(\widehat{Y}=1 \mid Y=1)$, soit $\mathsf{VP}/(\mathsf{VP}+\mathsf{FN}).$
 - La **spécificité** est le taux d'échecs correctement classés, $\Pr(\widehat{Y}=0 \mid Y=0)$, soit $\mathsf{VN}/(\mathsf{VN}+\mathsf{FP}).$
 - La **précision** est $\Pr(Y=1 \mid \widehat{Y}=1),$ soit $\mathsf{VP}/(\mathsf{VP} + \mathsf{FP}).$
-- Le taux de **faux positifs** est $\Pr(Y=0, \mid \widehat{Y}=1).$
- - Le taux de **faux négatifs** est $\Pr(Y=1, \mid \widehat{Y}=0).$
+- Le taux de **faux positifs** est $\Pr(Y=0 \mid \widehat{Y}=1).$
+ - Le taux de **faux négatifs** est $\Pr(Y=1 \mid \widehat{Y}=0).$
 
 \normalsize
 
@@ -312,7 +323,7 @@ Il est également possible d'assigner un poids différent à chaque événement 
 #| echo: false
 #| tbl-cap: "Pondération des entrées de la matrice de confusion pour le calcul du gain."
 confumat_tbclassif <- confumat
-confumat_tbclassif[1:4] <- c("$c_{11}$","$c_{01}$","$c_{10}$","$c_{00}$")
+confumat_tbclassif[1:4] <- c("$c_{00}$","$c_{10}$","$c_{01}$","$c_{11}$")
 tab1 <- knitr::kable(x = confumat_tbclassif,
                 align = "r",
                 escape = FALSE,
@@ -324,7 +335,7 @@ tab1
 
 
 
-On calcule le gain en faisant la somme des entrées fois les poids, soit $$\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.$$
+On calcule le gain en faisant la somme des entrées fois les poids, $$\textsf{gain} = c_{11}\mathsf{VP} + c_{10}\mathsf{FP} + c_{01}\mathsf{FN} + c_{00}\mathsf{VN}.$$
 
 # Gain pour taux de bonne classification
 
@@ -384,7 +395,7 @@ knitr::kable(booktabs = TRUE)
 #| echo: false
 #| tbl-cap: "Matrice de gain pour ciblage marketing."
 confumat_tbclassif <- confumat
-confumat_tbclassif[1:4] <- c("$57$","$0$","$-10$","$0$")
+confumat_tbclassif[1:4] <- c("$0$","$-10$", "$0$","$57$")
 knitr::kable(x = confumat_tbclassif,
              align = "r",
              escape = FALSE,
@@ -446,8 +457,8 @@ coupe <- hecmulti::select_pcoupe(
 
 Dans l'exemple, le point de coupure qui maximise le gain est `r coupe$optim`. Avec ce point de coupure, on estime que 
 
-- le taux de bonne classification est de `r round(perfo1$table[24,"pcorrect"], 2)` 
-- la sensibilité est de `r round(perfo1$table[24,"sensi"], 2)`. 
+- le taux de bonne classification est de `r round(perfo1$table[24,"pcorrect"], 2)`%
+- la sensibilité est de `r round(perfo1$table[24,"sensi"], 2)`%. 
 
 Ainsi, on va détecter environ `r round(perfo1$table[24,"sensi"],2)`\% des clients qui achètent. 
 
@@ -496,7 +507,7 @@ roc <- hecmulti::courbe_roc(
 # Courbe lift
 
 
-À quelle point notre modèle est-il meilleur qu'une assignation aléatoire?
+À quelle point notre modèle est-il meilleur qu'un modèle sans variable explicative (probabilité de succès égale pour toutes les observations)?
 
 Le nombre de vrais positifs sur le nombre de succès donne le taux de succès d'une détection aléatoire (si on sélectionnait au hasard des observations).
 
@@ -512,7 +523,7 @@ Pour calculer le nombre de succès prédit par le modèle, on va
 
 Généralement, le lift est calculé en fonction du budget.
 
-Par exemple, si on a 10 000 clients et qu'on a du budget pour envoyer une offre uniquement à 1000 clients, on prendrait $x$%$=0.1$.
+Par exemple, si on a $10$K clients et qu'on a du budget pour envoyer une offre uniquement à $1$K clients, on prendrait $x$$=10$%.
 
 
 # Code pour produire la courbe lift 
@@ -582,7 +593,24 @@ tab_lift <- hecmulti::courbe_lift(
 # Courbe précision-rappel
 
 Dans le cas de catégories rares, l'aire sous la courbe précision-rappel permet de mieux estimer la performance. 
+
+
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '80%'
+#| fig-align: 'center'
+courbepr <- hecmulti::courbe_pr(
+  prob = cv_prob,
+  resp = classif, 
+  plot = TRUE)
+```
+
+\small 
 Elle donne le même classement que la courbe d'efficacité du récepteur.
+
+\normalsize
 
 
 # Score $F_1$
@@ -603,8 +631,6 @@ F_1 &= 2\frac{\text{précision} \times \text{rappel}}{\text{précision} + \text{
 &= 2 \frac{\mathsf{VP}^2}{(\mathsf{VP} + \mathsf{FN})(\mathsf{VP} + \mathsf{FP})}.
 \end{align*}
 
-On vise à maximiser ce score
-
 # Code pour la courbe précision-rappel
 
 ```{r}
@@ -617,22 +643,8 @@ courbepr <- hecmulti::courbe_pr(
 # Pt de coupure maximisant le score F1
 with(courbepr, coupure[which.max(f1)])
 ```
-# Courbe précision-rappel
 
-```{r}
-#| eval: true
-#| echo: false
-#| out-width: '80%'
-#| fig-align: 'center'
-courbepr <- hecmulti::courbe_pr(
-  prob = cv_prob,
-  resp = classif, 
-  plot = TRUE)
-```
-
-\small 
-
-Le point de coupure optimal pour le score $F_1$ est $`r round(with(courbepr, coupure[which.max(f1)]), 3)`$.
+On vise à maximiser le score $F_1$. Le point de coupure optimal pour le score $F_1$ est $`r round(with(courbepr, coupure[which.max(f1)]), 3)`$.
 
 \normalsize
 
@@ -643,17 +655,17 @@ Certains modèles sont trop confiants dans leurs prédictions (surajustement). P
 \mathsf{BS} &= \underset{\text{score de Brier}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
 \\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
 \end{align*}
-Si notre modèle était parfaitement calibré, $\mathsf{E}_0(Y_i)=p_i$ et $\mathsf{Va}_0(Y_i) = p_i(1-p_i)$.
+
 
 # Test de Spiegelhalter
 
-<!--  $$Z = \frac{\mathsf{BS}-\mathsf{E}_0(\mathsf{BS})}{\mathsf{sd}_0(\mathsf{BS})}$$  -->
+Si notre modèle était parfaitement calibré, la moyenne et l'erreur-type du score de Brier sous l'hypothèse nulle seraient respectivement $\mathsf{E}_0(Y_i)=p_i$ et $\mathsf{sd}_0(Y_i) = \sqrt{p_i(1-p_i)}$.
 
-<!-- Sous l'hypothèse nulle, $Z \sim \mathsf{No}(0,1)$ en grand échantillon.  -->
+On peut construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506) pour l'hypothèse nulle  de calibration parfaite
+$$Z = \frac{\mathsf{BS}-\mathsf{E}_0(\mathsf{BS})}{\mathsf{sd}_0(\mathsf{BS})}$$ 
+Sous l'hypothèse nulle $\mathcal{H}_0$, les probabilités sont exactes et $Z$ suit approximativement une loi standard normale en grand échantillon. 
 
-On peut construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506) pour l'hypothèse nulle  de calibration parfaite.
-
-Sous l'hypothèse nulle $\mathcal{H}_0$, le modèle est adéquat (correctement calibré). 
+# Résultat du test pour notre modèle
 
 Une petite valeur-$p$ mène au rejet de $\mathcal{H}_0$ et à conclure que le modèle est surajusté.
 
@@ -708,15 +720,15 @@ Déterminer si le revenu prévu justifie l'envoi du catalogue
 
 $$\mathsf{E}(\textsf{ymontant}_i) = \mathsf{E}(\textsf{ymontant}_i \mid \textsf{yachat}_i = 1)\Pr(\textsf{yachat}_i = 1).$$
 
-On peut combiner un modèle de régression logistique avec la régression linéaire et les ajuster simultanément --- voir les notes de cours pour plus de détail.
+On peut combiner un modèle de régression logistique avec la régression linéaire et les ajuster simultanément --- voir les notes de cours pour plus de détails.
 
 Plus simplement, on pourrait ignorer le montant d'achat et envoyer un catalogue si la probabilité d'achat excède notre point de coupure optimal.
 
 # Stratégie de référence
 
-- Parmi les $100$K clients, $23 179$ auraient acheté si on leur avait envoyé le catalogue
-- Ces clients auraient généré des revenus de $1 601 212$\$.
-- Si on enlève le coût des envois ($100 000 \times 10$\$), la stratégie de référence permet d'obtenir un revenu net de $601 212$\$.
+- Parmi les $100$K clients, $23~179$ auraient acheté si on leur avait envoyé le catalogue
+- Ces clients auraient généré des revenus de $1~601~212$\$.
+- Si on enlève le coût des envois ($100~000 \times 10$\$), la stratégie de référence permet d'obtenir un revenu net de $601~212$\$.
 
 
 # Stratégie d'ajustement

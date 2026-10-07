@@ -15,7 +15,7 @@ pdf-engine: lualatex
 cache: true
 code-line-numbers: true
 fig-align: 'center'
-mainfont: "VisbyCF-Medium"
+mainfont: "VisbyCF"
 mathfont: 'Latin Modern Math'
 sansfont: 'Latin Modern Sans'
 keep-tex: true
@@ -27,6 +27,17 @@ include-in-header:
         \renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 ---
 
+# Données manquantes
+
+Plusieurs champs d'une base de données peuvent être manquants 
+
+- non-réponse
+- valeurs erronées (erreurs d'encodage)
+- perte de suivi et censure
+- plusieurs versions de formulaires (question optionnelles)
+
+
+
 <!--
 # Données manquantes et inférence
 
@@ -36,15 +47,6 @@ include-in-header:
 - On considère des méthodes d'imputation qui remplacent les valeurs manquantes.
 
 -->
-
-# Données manquantes
-
-Plusieurs champs d'une base de donnée peuvent être manquants 
-
-- non-réponse
-- valeurs erronées (erreur d'encodage)
-- perte de suivi et censure
-- plusieurs versions de formulaires (question optionnelles)
 
 # Pourquoi s'en préoccuper?
 
@@ -60,7 +62,7 @@ Sans traitement adéquat, les estimations seront **biaisées**.
 - Little, R. et D. Rubin (2019). *Statistical Analysis with Missing Data*, Wiley, 3e édition
 - Schafer, J. L. (1997). *Analysis of Incomplete Multivariate Data*. Chapman & Hall / CRC.
 
-Les valeurs manquantes dans un contexte de prédictions sont couvertes dans le cours MATH 60600.
+Les valeurs manquantes dans un contexte de prédiction sont couvertes dans le cours MATH 60600.
 
 # Classification des données manquantes (MCAR)
 
@@ -207,7 +209,7 @@ Les cases grises représentent des valeurs manquantes. Illustration adapté de l
 
 Retirer les observations avec données manquantes pour conserver les cas complets.
 
-- Valide uniquement pour complètement aléatoire.
+- Valide uniquement pour les données complètement aléatoires.
 - On perd de la précision en utilisant moins d'observations.
 
 Méthode par défaut dans les logiciels.
@@ -222,10 +224,11 @@ Imputation: remplacer les valeurs manquantes par une valeur judicieuse pour *com
 
 On distinguera 
 
-- l'imputation déterministe (par exemple, remplacer les valeurs manquantes par la moyenne) versus aléatoire 
+- l'imputation déterministe versus l'imputation aléatoire 
 - l'imputation simple (une copie) versus multiple (plusieurs imputations)
 
-# Imputation par la moyenne
+
+# Imputation déterministe par la moyenne
 
 Dilution de la relation (corrélation) entre variables explicatives. Réduction de la variabilité.
 
@@ -489,6 +492,8 @@ summary(fit)
 - L'imputation multiple donne $n=500$ observations et prend correctement en compte l'incertitude.
 - L'imputation simple sous-estime l'incertitude des coefficients.
 
+\small
+
 ```{r}
 #| label: tbl-manquantsres
 #| eval: true
@@ -538,6 +543,7 @@ tab |>
   tab_spanner(
     label = "imputation simple",
     columns = 5:6)|>
+  tab_options(table.font.size = '50%') |>
   as_latex()
 # fit_df_mi <- tibble::as_tibble(summary(fit))
 # fit_df_mi$p.value <- format.pval(fit_df$p.value,
@@ -549,6 +555,8 @@ tab |>
 #              linesep = "") |>
 #   kableExtra::kable_styling()
 ```
+
+\normalsize
 
 # Récapitulatif
 
@@ -568,13 +576,24 @@ L'imputation multiple est préférée à l'imputation simple car elle permet d'e
 
 Traitement spécial pour erreurs-type, degrés de liberté, valeurs-$p$ et intervalles de confiance.
 
+# Régression multinomiale logistique
 
+La régression multinomiale logistique est un modèle de régression pour **variable réponse catégorielle** avec $Y \in \{1, \ldots, K\}$ pour ($K \ge 2$) nominale ou ordinale.
+
+\small 
+
+- Destination de vacances l'année dernière (Québec, États-Unis, ailleurs).
+- Si des élections générales avaient lieu aujourd'’'hui au Québec, pour quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
+- Combien de fois êtes-vous allé au cinéma l’année dernière: moins de cinq fois (`1`), entre cinq et 10 fois (`2`) ou plus de 10 fois (`3`).
+- Quelle importance accordez-vous au service après-vente? Un parmi "pas important" (`1`), "peu important" (`2`), "moyennement important" (`3`), "assez important" (`4`) et "très important" (`5`).
+
+\normalsize
 
 # Taux de participation lors des élections américaines
 
 Les [données](https://github.com/fivethirtyeight/data/tree/master/non-voters) de cet exemple sont tirées d'un sondage Ipsos réalisé pour le site de nouvelles *FiveThirtyEight*. 
 
-La base de données `vote` contient 5837 observations avec les pondérations associées.
+La base de données `vote` contient 5837 observations. Les données ont été couplées à des registres du recensement et pondérées pour refléter la composition globale de la population américaine.
 
 Nous allons modéliser l'intention de vote, `catvote` à l'aide d'une régression logistique multinomiale. Il y a trois modalités possible (rarement ou jamais, occasionnellement et toujours).
 
@@ -728,25 +747,26 @@ ggplot(data = data.frame(age = rep(newage, 3L*nb),
                      expand = c(0,0),
                      labels = scales::percent) + 
   labs(color = "catégorie de vote",
-       x = "âge)",
-       y = "",
-       subtitle = "Proportion par catégorie de vote (lissage)") +
+       x = "âge",
+       y = "pourcentage",
+       title = "Catégorie de vote estimée selon l'âge",
+       subtitle = "régression logistique multinomiale avec lissage") +
   viridis::scale_color_viridis(discrete = TRUE) + 
   theme_classic() +
   theme(legend.position = "bottom")
 ```
 
 
-# Analyse exploratoire  (`age`)
+# Analyse exploratoire
 
 ```{r}
 #| label: fig-vote-age
 #| eval: true
 #| echo: false
-#| fig-width: 6
+#| fig-width: 8
 #| fig-height: 4
-#| out-width: '70%'
-#| fig-cap: "Fréquence de vote selon l'âge."
+#| out-width: '100%'
+#| fig-cap: "Densité de l'âge selon la catégorie de vote."
 ggplot(data = vote, 
        aes(x = age, fill = catvote)) +
   geom_density(alpha = 0.2) + 
@@ -757,7 +777,7 @@ ggplot(data = vote,
   theme_minimal()
 ```
 
-Notez le comportement des jeunes voteurs (bimodal). Ces personnes n'ont souvent eu qu'une seule occasion de voter...
+Les jeunes n'ont souvent eu qu'une seule occasion de voter...
 
 
 # Régression pour données multinomiale
@@ -768,7 +788,7 @@ On considère une variable réponse catégorielle avec $K \ge 2$ modalités.
 
 Soit la probabilité d'appartenir à la modalité $k$, $$p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).$$ 
 
-La somme des probabilités, $p_{i0} + \cdots + p_{iK}$, vaut 1.
+La somme des probabilités, $p_{i1} + \cdots + p_{iK}$, vaut 1.
 
 # Modèle multinomial logistique 
 
@@ -779,7 +799,7 @@ Comme avec la régression logistique, on fixe une catégorie de référence (dis
 
 - Avec $K$ modalités et $p$ variables explicatives, on obtiendra $(K-1)\times (p+1)$ paramètres à estimer, en incluant l'ordonnée à l'origine.
 
-L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut y aller équation par équation.
+L'interprétation des paramètres se fait comme en régression logistique sauf qu'il faut le faire équation par équation.
 
 # Modèle logistique multinomial et probabilités
 
@@ -799,7 +819,8 @@ La fonction `multinom` du paquet `nnet` ajuste le modèle multinomial logistique
 #| eval: true
 #| echo: true
 data(vote, package = "hecmulti")
-levels(vote$catvote)
+class(vote$catvote) # facteur ordonné
+levels(vote$catvote) # modalités
 # Modèle multinomial
 multi1 <- nnet::multinom(
   catvote ~ age + sexe + race + revenu + 
@@ -833,7 +854,7 @@ predict(multi1, type = "class")
 # Comparaison de modèles emboîtés
 
 Le modèle avec uniquement l'ordonnée à l'origine possède $K-1$ paramètres.
-Il retourne comme probabilité prédite la proportion empirique de chaque catégorie.
+
 
 ```{r}
 #| eval: true
@@ -847,6 +868,19 @@ multi_cst <- nnet::multinom(
 head(predict(multi_cst, type = "probs"), n = 3)
 ```
 
+# Probabilité Empirique
+
+Le modèle précédent retourne comme probabilité prédite la proportion empirique (pondérée) de chaque catégorie.
+
+```{r}
+#| eval: true
+#| echo: true
+library(dplyr)
+vote_adulte <- vote |>  filter(age > 30)
+vote_adulte |> 
+  summarize(n = sum(poids), .by = catvote) |>
+  mutate(prop = n / sum(n))
+```
 
 # Tests de rapport de vraisemblance
 
@@ -854,6 +888,7 @@ On peut comparer des modèles emboîtés avec la fonction `anova`: ici, on compa
 
 ```{r}
 #| eval: false
+#| echo: true
 multi0 <- nnet::multinom(
   catvote ~ age + race + revenu + educ + affiliation,
   weights = poids,
@@ -863,6 +898,8 @@ multi0 <- nnet::multinom(
 # Test de rapport de vraisemblance
 anova(multi0, multi1)
 ```
+
+# Résultat du test
 
 ```{r}
 #| eval: true
@@ -882,7 +919,7 @@ knitr::kable(
   digits = 2)
 ```
 
-La différence est significative à niveau 5%, l'effet de `sexe` est non null.
+La différence est significative à niveau 5%, le sexe a un impact sur la catégorie de vote (les coefficients associés sont non-nuls).
 
 # Prédictions
 
@@ -892,7 +929,7 @@ Pour un profil $\mathbf{X}_i$ donné, on peut
 - écrire $p_{ik} = p_{i1}\exp(\widehat{\eta}_{ik})$ (formule de la cote)
 - substituer cette mesure dans l'équation $p_{i1} + \cdots + p_{iK}=1$
 - isoler la prédiction numérique pour $p_{i1}$.
-- en déduire les probabilités de succès de chaque modalité de $Y$.
+- en déduire les probabilités de chaque modalité de $Y$.
 
 **Exemple au tableau**
 
@@ -905,12 +942,12 @@ La prédiction du modèle est une probabilité pour chacune des $K$ modalités.
 On peut toujours classifier les événements 
 
 - avec $K-1$ points de coupure...
-- ou assigner à la modalité la plus probable
+- ou assigner à la modalité la plus probable.
 
 Avec les prédictions, on peut comparer les observations et les prédictions à l'aide d'une matrice de confusion $K \times K$.
 
-- Le taux de bonne classification est toujours valide
-- Il existe des extensions multidimensionnelles de l'aire sous la courbe
+- Le taux de bonne classification est toujours valide.
+- Il existe des extensions multidimensionnelles de l'aire sous la courbe.
 
 # Matrice de confusion
 

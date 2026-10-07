@@ -21,13 +21,13 @@
 }
 \setbeamertemplate{section page}{
   \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
     \usebeamerfont{section title}\insertsection\par
   \end{beamercolorbox}
 }
 \setbeamertemplate{subsection page}{
   \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
@@ -62,8 +62,8 @@
 \useoutertheme{Flip}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[]{VisbyCF-Medium}
-  \setsansfont[]{Latin Modern Sans}
+    \setmainfont[]{VisbyCF}
+    \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -105,7 +105,7 @@
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -115,7 +115,7 @@
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -138,15 +138,17 @@
 \makeatother
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
@@ -155,23 +157,12 @@
 \usepackage{longtable}
 \usepackage{colortbl}
 \usepackage{array}
+\usepackage{anyfontsize}
 \usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
+\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -208,23 +199,14 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -232,6 +214,7 @@
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Données manquantes et régression multinomiale}
 \subtitle{Analyse multidimensionnelle appliquée}
@@ -241,21 +224,18 @@
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden, boxrule=0pt, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
 
-\begin{frame}
-\end{frame}
 
 \begin{frame}{Données manquantes}
-\protect\hypertarget{donnuxe9es-manquantes}{}
-Plusieurs champs d'une base de donnée peuvent être manquants
+\phantomsection\label{donnuxe9es-manquantes}
+Plusieurs champs d'une base de données peuvent être manquants
 
 \begin{itemize}
 \tightlist
 \item
   non-réponse
 \item
-  valeurs erronées (erreur d'encodage)
+  valeurs erronées (erreurs d'encodage)
 \item
   perte de suivi et censure
 \item
@@ -264,7 +244,7 @@ Plusieurs champs d'une base de donnée peuvent être manquants
 \end{frame}
 
 \begin{frame}{Pourquoi s'en préoccuper?}
-\protect\hypertarget{pourquoi-sen-pruxe9occuper}{}
+\phantomsection\label{pourquoi-sen-pruxe9occuper}
 La plupart des procédures ne gèrent que les cas complets (toute
 observation avec des valeurs manquantes est éliminée).
 
@@ -274,7 +254,7 @@ Sans traitement adéquat, les estimations seront \textbf{biaisées}.
 \end{frame}
 
 \begin{frame}{Références}
-\protect\hypertarget{ruxe9fuxe9rences}{}
+\phantomsection\label{ruxe9fuxe9rences}
 \begin{itemize}
 \tightlist
 \item
@@ -289,12 +269,12 @@ Sans traitement adéquat, les estimations seront \textbf{biaisées}.
   Data}. Chapman \& Hall / CRC.
 \end{itemize}
 
-Les valeurs manquantes dans un contexte de prédictions sont couvertes
+Les valeurs manquantes dans un contexte de prédiction sont couvertes
 dans le cours MATH 60600.
 \end{frame}
 
 \begin{frame}{Classification des données manquantes (MCAR)}
-\protect\hypertarget{classification-des-donnuxe9es-manquantes-mcar}{}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mcar}
 Cas 1: Données manquantes de façon complètement aléatoire (\emph{missing
 completely at random})
 
@@ -308,7 +288,7 @@ Hypothèse souvent irréaliste en pratique.
 \end{frame}
 
 \begin{frame}{Classification des données manquantes (MAR)}
-\protect\hypertarget{classification-des-donnuxe9es-manquantes-mar}{}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mar}
 Cas 2: données manquantes de façon aléatoire (\emph{missing at random}):
 la probabilité que la valeur soit manquante ne dépend pas de la valeur
 \emph{une fois qu'on a contrôlé pour les autres variables}.
@@ -318,7 +298,7 @@ leur âge que les femmes.
 \end{frame}
 
 \begin{frame}{Classification des données manquantes (MNAR)}
-\protect\hypertarget{classification-des-donnuxe9es-manquantes-mnar}{}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mnar}
 Cas 3: données manquantes de façon non-aléatoire (\emph{missing not at
 random}): la probabilité que la mesure soit manquante dépend de la
 valeur elle-même, pas déterminable avec d'autres variables
@@ -329,7 +309,7 @@ rattache au genre ou à l'identité sexuelle.
 \end{frame}
 
 \begin{frame}{Type de données manquantes}
-\protect\hypertarget{type-de-donnuxe9es-manquantes}{}
+\phantomsection\label{type-de-donnuxe9es-manquantes}
 Comment déterminer le type de données manquantes?
 
 Par exemple, si une personne ne divulgue pas son salaire, est ce qu les
@@ -340,7 +320,7 @@ auxiliaires disponibles.
 \end{frame}
 
 \begin{frame}{Valeur logique}
-\protect\hypertarget{valeur-logique}{}
+\phantomsection\label{valeur-logique}
 Les données manquantes ont souvent une valeur logique:
 
 \begin{itemize}
@@ -354,10 +334,10 @@ de la base de données.
 \end{frame}
 
 \begin{frame}{Types de schémas de données manquantes}
-\protect\hypertarget{types-de-schuxe9mas-de-donnuxe9es-manquantes}{}
+\phantomsection\label{types-de-schuxe9mas-de-donnuxe9es-manquantes}
 Matrice \(n \times p\) (observations en lignes, variables en colonnes).
 
-\includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-1-1.pdf}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-1-1.pdf}
 
 \footnotesize
 
@@ -366,14 +346,14 @@ adapté de la Figure 4.1 de van Buuren (2022)
 \end{frame}
 
 \begin{frame}{Analyse des cas complet}
-\protect\hypertarget{analyse-des-cas-complet}{}
+\phantomsection\label{analyse-des-cas-complet}
 Retirer les observations avec données manquantes pour conserver les cas
 complets.
 
 \begin{itemize}
 \tightlist
 \item
-  Valide uniquement pour complètement aléatoire.
+  Valide uniquement pour les données complètement aléatoires.
 \item
   On perd de la précision en utilisant moins d'observations.
 \end{itemize}
@@ -382,7 +362,7 @@ Méthode par défaut dans les logiciels.
 \end{frame}
 
 \begin{frame}{Méthodes d'imputation}
-\protect\hypertarget{muxe9thodes-dimputation}{}
+\phantomsection\label{muxe9thodes-dimputation}
 Imputation: remplacer les valeurs manquantes par une valeur judicieuse
 pour \emph{combler les trous}.
 
@@ -396,30 +376,25 @@ On distinguera
 \begin{itemize}
 \tightlist
 \item
-  l'imputation déterministe (par exemple, remplacer les valeurs
-  manquantes par la moyenne) versus aléatoire
+  l'imputation déterministe versus l'imputation aléatoire
 \item
   l'imputation simple (une copie) versus multiple (plusieurs
   imputations)
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Imputation par la moyenne}
-\protect\hypertarget{imputation-par-la-moyenne}{}
+\begin{frame}{Imputation déterministe par la moyenne}
+\phantomsection\label{imputation-duxe9terministe-par-la-moyenne}
 Dilution de la relation (corrélation) entre variables explicatives.
 Réduction de la variabilité.
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-2-1.pdf}
-
-}
-
-\end{figure}
+\begin{center}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-2-1.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Imputation aléatoire}
-\protect\hypertarget{imputation-aluxe9atoire}{}
+\phantomsection\label{imputation-aluxe9atoire}
 Considérons le cas d'une régression logistique pour une variable
 explicative binaire.
 
@@ -435,12 +410,12 @@ aléatoire simule une variable 0/1 avec probabilité
 \end{Shaded}
 
 \begin{verbatim}
- [1] 0 0 0 1 0 0 1 0 0 0 0 1 1 0 0
+ [1] 0 0 0 0 0 0 0 1 1 0 0 0 0 1 0
 \end{verbatim}
 \end{frame}
 
 \begin{frame}{Faut-il toujours imputer?}
-\protect\hypertarget{faut-il-toujours-imputer}{}
+\phantomsection\label{faut-il-toujours-imputer}
 Il faut utiliser son jugement.
 
 Une observation imputée ne remplacera jamais une vraie observation.
@@ -459,7 +434,7 @@ Une observation imputée ne remplacera jamais une vraie observation.
 \end{frame}
 
 \begin{frame}{Problèmes de l'imputation simple}
-\protect\hypertarget{probluxe8mes-de-limputation-simple}{}
+\phantomsection\label{probluxe8mes-de-limputation-simple}
 On ne tient pas compte du fait que des valeurs ont été remplacées (on
 fait comme si c'était de vraies observations).
 
@@ -473,7 +448,7 @@ On sous-évalue encore une fois la \textbf{variabilité} des données
 \end{frame}
 
 \begin{frame}[fragile]{Inspection des valeurs manquantes}
-\protect\hypertarget{inspection-des-valeurs-manquantes}{}
+\phantomsection\label{inspection-des-valeurs-manquantes}
 Il est donc nécessaire d'examiner la configuration des valeurs
 manquantes avant de faire quoi que ce soit.
 
@@ -488,27 +463,30 @@ manquantes avant de faire quoi que ce soit.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{tbl-manquantes-univ}{}
-\begin{table}
-\caption{\label{tbl-manquantes-univ}Nombre et pourcentage de valeurs manquantes par variable. }\tabularnewline
+\begin{longtable}[t]{llllllll}
 
-\centering
-\begin{tabular}{llllllll}
+\caption{\label{tbl-manquantes-univ}Nombre et pourcentage de valeurs
+manquantes par variable.}
+
+\tabularnewline
+
 \toprule
-  & x1 & x2 & x3 & x4 & x5 & x6 & y\\
+ & x1 & x2 & x3 & x4 & x5 & x6 & y\\
 \midrule
 nombre & 192 & 49 & 0 & 184 & 0 & 0 & 0\\
 pourcentage & 38.4 & 9.8 & 0 & 36.8 & 0 & 0 & 0\\
 \bottomrule
-\end{tabular}
-\end{table}
+
+\end{longtable}
 \end{frame}
 
 \begin{frame}{Configuration des valeurs manquantes}
-\protect\hypertarget{configuration-des-valeurs-manquantes}{}
+\phantomsection\label{configuration-des-valeurs-manquantes}
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/fig-manquantes2-1.pdf}
+\centering{
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/fig-manquantes2-1.pdf}
 
 }
 
@@ -518,11 +496,11 @@ le nombre d'observations pour chaque configuration de valeurs manquantes
 à gauche et le nombre de variables avec des valeurs manquantes par
 configuration à droitef.}
 
-\end{figure}
+\end{figure}%
 \end{frame}
 
 \begin{frame}[fragile]{Imputation multiple}
-\protect\hypertarget{imputation-multiple}{}
+\phantomsection\label{imputation-multiple}
 Valides pour les données manquantes de manière aléatoire et complètement
 aléatoires (MAR et MCAR).
 
@@ -537,17 +515,13 @@ aléatoires (MAR et MCAR).
   Combiner les résultats obtenus (\texttt{pool} et \texttt{summary})
 \end{enumerate}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/donnees_manquantes_workflow.pdf}
-
-}
-
-\end{figure}
+\begin{center}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{figures/donnees_manquantes_workflow.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Combinaison des résultats}
-\protect\hypertarget{combinaison-des-ruxe9sultats}{}
+\phantomsection\label{combinaison-des-ruxe9sultats}
 Considérons un seul paramètre \(\theta\) (ex: coefficient d'une
 régression) et supposons qu'on procède à \(K\) imputations.
 
@@ -566,7 +540,7 @@ ensembles de données imputés, disons
 \end{frame}
 
 \begin{frame}{Estimations}
-\protect\hypertarget{estimations}{}
+\phantomsection\label{estimations}
 L'estimation finale de \(\theta\), dénotée \(\widehat{\theta}\), est
 obtenue tout simplement en faisant la moyenne des estimations de tous
 les modèles.
@@ -590,7 +564,7 @@ rapport à l'imputation simple
 \end{frame}
 
 \begin{frame}{Imputation multiple par équations chaînées (MICE)}
-\protect\hypertarget{imputation-multiple-par-uxe9quations-chauxeenuxe9es-mice}{}
+\phantomsection\label{imputation-multiple-par-uxe9quations-chauxeenuxe9es-mice}
 Avec \(p\) variables \(X_1, \ldots, X_p\), spécifier un ensemble de
 modèles \textbf{conditionnels} pour chaque variable \(X_j\) en fonction
 de
@@ -630,7 +604,7 @@ de
 \end{frame}
 
 \begin{frame}[fragile]{Imputation multiple avec \texttt{mice}}
-\protect\hypertarget{imputation-multiple-avec-mice}{}
+\phantomsection\label{imputation-multiple-avec-mice}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{library}\NormalTok{(mice)}
@@ -651,7 +625,7 @@ de
 \end{frame}
 
 \begin{frame}[fragile]{Estimation et combinaison avec \texttt{mice}}
-\protect\hypertarget{estimation-et-combinaison-avec-mice}{}
+\phantomsection\label{estimation-et-combinaison-avec-mice}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# ajuste le modèle avec les données imputées}
@@ -667,7 +641,7 @@ de
 \end{frame}
 
 \begin{frame}{Résultats}
-\protect\hypertarget{ruxe9sultats}{}
+\phantomsection\label{ruxe9sultats}
 \begin{itemize}
 \tightlist
 \item
@@ -681,27 +655,39 @@ de
   L'imputation simple sous-estime l'incertitude des coefficients.
 \end{itemize}
 
-\hypertarget{tbl-manquantsres}{}
-\begin{longtable}{rrrrrr}
-\caption{\label{tbl-manquantsres}Estimation des coefficients et erreurs type pour quelques paramètres du
-modèle. }\tabularnewline
+\small
 
+\begin{table}
+
+\caption{\label{tbl-manquantsres}Estimation des coefficients et erreurs
+type pour quelques paramètres du modèle.}
+
+\centering{
+
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrrrrr}
 \toprule
-\multicolumn{2}{c}{données complètes} & \multicolumn{2}{c}{imputation multiple} & \multicolumn{2}{c}{imputation simple} \\ 
+\multicolumn{2}{c}{{données complètes}} & \multicolumn{2}{c}{{imputation multiple}} & \multicolumn{2}{c}{{imputation simple}} \\ 
 \cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
 coef. & err. type & coef. & err. type & coef. & err. type \\ 
 \midrule\addlinespace[2.5pt]
-$-0.48$ & $0.76$ & $-0.90$ & $0.58$ & $-1.61$ & $0.47$ \\ 
-$-0.38$ & $0.77$ & $-0.53$ & $0.59$ & $-0.95$ & $0.46$ \\ 
-$-0.84$ & $0.80$ & $-0.76$ & $0.55$ & $-0.89$ & $0.46$ \\ 
-$0.09$ & $0.85$ & $-0.58$ & $0.64$ & $-1.15$ & $0.50$ \\ 
-$1.19$ & $0.76$ & $-0.03$ & $0.44$ & $-0.16$ & $0.42$ \\ 
+-0.48 & 0.76 & -0.90 & 0.58 & -1.61 & 0.47 \\ 
+-0.38 & 0.77 & -0.53 & 0.59 & -0.95 & 0.46 \\ 
+-0.84 & 0.80 & -0.76 & 0.55 & -0.89 & 0.46 \\ 
+0.09 & 0.85 & -0.58 & 0.64 & -1.15 & 0.50 \\ 
+1.19 & 0.76 & -0.03 & 0.44 & -0.16 & 0.42 \\ 
 \bottomrule
-\end{longtable}
+\end{tabular*}
+
+}
+
+\end{table}%
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
+\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -722,7 +708,7 @@ $1.19$ & $0.76$ & $-0.03$ & $0.44$ & $-0.16$ & $0.42$ \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
+\phantomsection\label{ruxe9capitulatif-1}
 L'imputation multiple est préférée à l'imputation simple car elle permet
 d'estimer l'incertitude sous-jacente en raison des données manquantes.
 
@@ -743,16 +729,47 @@ Traitement spécial pour erreurs-type, degrés de liberté, valeurs-\(p\)
 et intervalles de confiance.
 \end{frame}
 
+\begin{frame}[fragile]{Régression multinomiale logistique}
+\phantomsection\label{ruxe9gression-multinomiale-logistique}
+La régression multinomiale logistique est un modèle de régression pour
+\textbf{variable réponse catégorielle} avec \(Y \in \{1, \ldots, K\}\)
+pour (\(K \ge 2\)) nominale ou ordinale.
+
+\small
+
+\begin{itemize}
+\tightlist
+\item
+  Destination de vacances l'année dernière (Québec, États-Unis,
+  ailleurs).
+\item
+  Si des élections générales avaient lieu aujourd'\,'\,'hui au Québec,
+  pour quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
+\item
+  Combien de fois êtes-vous allé au cinéma l'année dernière: moins de
+  cinq fois (\texttt{1}), entre cinq et 10 fois (\texttt{2}) ou plus de
+  10 fois (\texttt{3}).
+\item
+  Quelle importance accordez-vous au service après-vente? Un parmi ``pas
+  important'' (\texttt{1}), ``peu important'' (\texttt{2}),
+  ``moyennement important'' (\texttt{3}), ``assez important''
+  (\texttt{4}) et ``très important'' (\texttt{5}).
+\end{itemize}
+
+\normalsize
+\end{frame}
+
 \begin{frame}[fragile]{Taux de participation lors des élections
 américaines}
-\protect\hypertarget{taux-de-participation-lors-des-uxe9lections-amuxe9ricaines}{}
+\phantomsection\label{taux-de-participation-lors-des-uxe9lections-amuxe9ricaines}
 Les
 \href{https://github.com/fivethirtyeight/data/tree/master/non-voters}{données}
 de cet exemple sont tirées d'un sondage Ipsos réalisé pour le site de
 nouvelles \emph{FiveThirtyEight}.
 
-La base de données \texttt{vote} contient 5837 observations avec les
-pondérations associées.
+La base de données \texttt{vote} contient 5837 observations. Les données
+ont été couplées à des registres du recensement et pondérées pour
+refléter la composition globale de la population américaine.
 
 Nous allons modéliser l'intention de vote, \texttt{catvote} à l'aide
 d'une régression logistique multinomiale. Il y a trois modalités
@@ -760,42 +777,46 @@ possible (rarement ou jamais, occasionnellement et toujours).
 \end{frame}
 
 \begin{frame}{Analyse exploratoire}
-\protect\hypertarget{analyse-exploratoire}{}
+\phantomsection\label{analyse-exploratoire}
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/fig-multinom_means-Ipsos-1.pdf}
+\centering{
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/fig-multinom_means-Ipsos-1.pdf}
 
 }
 
 \caption{\label{fig-multinom_means-Ipsos}Proportion des modalités des
 variables sociodémographiques des données de participation électorale.}
 
-\end{figure}
+\end{figure}%
 \end{frame}
 
 \begin{frame}{Analyse exploratoire}
-\protect\hypertarget{analyse-exploratoire-1}{}
-\includegraphics{MATH60602-diapos7_files/figure-beamer/figure-age-1.pdf}
+\phantomsection\label{analyse-exploratoire-1}
+\pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos7_files/figure-beamer/figure-age-1.pdf}}
 \end{frame}
 
-\begin{frame}{Analyse exploratoire (\texttt{age})}
-\protect\hypertarget{analyse-exploratoire-age}{}
+\begin{frame}{Analyse exploratoire}
+\phantomsection\label{analyse-exploratoire-2}
 \begin{figure}
 
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{MATH60602-diapos7_files/figure-beamer/fig-vote-age-1.pdf}
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/fig-vote-age-1.pdf}
 
 }
 
-\caption{\label{fig-vote-age}Fréquence de vote selon l'âge.}
+\caption{\label{fig-vote-age}Densité de l'âge selon la catégorie de
+vote.}
 
-\end{figure}
+\end{figure}%
 
-Notez le comportement des jeunes voteurs (bimodal). Ces personnes n'ont
-souvent eu qu'une seule occasion de voter\ldots{}
+Les jeunes n'ont souvent eu qu'une seule occasion de voter\ldots{}
 \end{frame}
 
 \begin{frame}{Régression pour données multinomiale}
-\protect\hypertarget{ruxe9gression-pour-donnuxe9es-multinomiale}{}
+\phantomsection\label{ruxe9gression-pour-donnuxe9es-multinomiale}
 On considère une variable réponse catégorielle avec \(K \ge 2\)
 modalités.
 
@@ -805,11 +826,11 @@ variable réponse.
 Soit la probabilité d'appartenir à la modalité \(k\),
 \[p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).\]
 
-La somme des probabilités, \(p_{i0} + \cdots + p_{iK}\), vaut 1.
+La somme des probabilités, \(p_{i1} + \cdots + p_{iK}\), vaut 1.
 \end{frame}
 
 \begin{frame}{Modèle multinomial logistique}
-\protect\hypertarget{moduxe8le-multinomial-logistique}{}
+\phantomsection\label{moduxe8le-multinomial-logistique}
 Comme avec la régression logistique, on fixe une catégorie de référence
 (disons \(1\)) et on modélise le log de la cote de chacune des autres
 catégories par rapport à cette référence, \begin{align*}
@@ -825,11 +846,11 @@ catégories par rapport à cette référence, \begin{align*}
 \end{itemize}
 
 L'interprétation des paramètres se fait comme en régression logistique
-sauf qu'il faut y aller équation par équation.
+sauf qu'il faut le faire équation par équation.
 \end{frame}
 
 \begin{frame}{Modèle logistique multinomial et probabilités}
-\protect\hypertarget{moduxe8le-logistique-multinomial-et-probabilituxe9s}{}
+\phantomsection\label{moduxe8le-logistique-multinomial-et-probabilituxe9s}
 On peut aussi exprimer le modèle en termes des probabilités,
 \begin{align*}
  p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
@@ -839,14 +860,24 @@ On fixe \(\eta_{i1}=0\).
 \end{frame}
 
 \begin{frame}[fragile]{Ajustement du modèle}
-\protect\hypertarget{ajustement-du-moduxe8le}{}
+\phantomsection\label{ajustement-du-moduxe8le}
 La fonction \texttt{multinom} du paquet \texttt{nnet} ajuste le modèle
 multinomial logistique.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(vote, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\FunctionTok{levels}\NormalTok{(vote}\SpecialCharTok{$}\NormalTok{catvote)}
+\FunctionTok{class}\NormalTok{(vote}\SpecialCharTok{$}\NormalTok{catvote) }\CommentTok{\# facteur ordonné}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "ordered" "factor" 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{levels}\NormalTok{(vote}\SpecialCharTok{$}\NormalTok{catvote) }\CommentTok{\# modalités}
 \end{Highlighting}
 \end{Shaded}
 
@@ -869,7 +900,7 @@ multinomial logistique.
 \end{frame}
 
 \begin{frame}[fragile]{Méthodes \textbf{R} pour l'analyse}
-\protect\hypertarget{muxe9thodes-r-pour-lanalyse}{}
+\phantomsection\label{muxe9thodes-r-pour-lanalyse}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Tableau résumé de l\textquotesingle{}ajustement}
@@ -890,10 +921,9 @@ multinomial logistique.
 \end{frame}
 
 \begin{frame}[fragile]{Comparaison de modèles emboîtés}
-\protect\hypertarget{comparaison-de-moduxe8les-embouxeetuxe9s}{}
+\phantomsection\label{comparaison-de-moduxe8les-embouxeetuxe9s}
 Le modèle avec uniquement l'ordonnée à l'origine possède \(K-1\)
-paramètres. Il retourne comme probabilité prédite la proportion
-empirique de chaque catégorie.
+paramètres.
 
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
@@ -915,12 +945,53 @@ empirique de chaque catégorie.
 \end{verbatim}
 \end{frame}
 
+\begin{frame}[fragile]{Probabilité Empirique}
+\phantomsection\label{probabilituxe9-empirique}
+Le modèle précédent retourne comme probabilité prédite la proportion
+empirique (pondérée) de chaque catégorie.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\NormalTok{vote\_adulte }\OtherTok{\textless{}{-}}\NormalTok{ vote }\SpecialCharTok{|\textgreater{}}  \FunctionTok{filter}\NormalTok{(age }\SpecialCharTok{\textgreater{}} \DecValTok{30}\NormalTok{)}
+\NormalTok{vote\_adulte }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{n =} \FunctionTok{sum}\NormalTok{(poids), }\AttributeTok{.by =}\NormalTok{ catvote) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prop =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 3 x 3
+  catvote               n  prop
+  <ord>             <dbl> <dbl>
+1 toujours          1316. 0.281
+2 occasionnellement 2302. 0.491
+3 rarement/jamais   1070. 0.228
+\end{verbatim}
+\end{frame}
+
 \begin{frame}[fragile]{Tests de rapport de vraisemblance}
-\protect\hypertarget{tests-de-rapport-de-vraisemblance}{}
+\phantomsection\label{tests-de-rapport-de-vraisemblance}
 On peut comparer des modèles emboîtés avec la fonction \texttt{anova}:
 ici, on compare le modèle complet au même modèle, moins la variable
 \texttt{sexe}.
 
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{multi0 }\OtherTok{\textless{}{-}}\NormalTok{ nnet}\SpecialCharTok{::}\FunctionTok{multinom}\NormalTok{(}
+\NormalTok{  catvote }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ race }\SpecialCharTok{+}\NormalTok{ revenu }\SpecialCharTok{+}\NormalTok{ educ }\SpecialCharTok{+}\NormalTok{ affiliation,}
+  \AttributeTok{weights =}\NormalTok{ poids,}
+  \AttributeTok{subset =}\NormalTok{ age }\SpecialCharTok{\textgreater{}} \DecValTok{30}\NormalTok{,}
+  \AttributeTok{data =}\NormalTok{ vote,}
+  \AttributeTok{trace =} \ConstantTok{FALSE}\NormalTok{)}
+\CommentTok{\# Test de rapport de vraisemblance}
+\FunctionTok{anova}\NormalTok{(multi0, multi1)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Résultat du test}
+\phantomsection\label{ruxe9sultat-du-test}
 \begin{longtable}[]{@{}rrrrr@{}}
 \toprule\noalign{}
 ddl resid & deviance & ddl & stat & valeur-p \\
@@ -931,12 +1002,12 @@ ddl resid & deviance & ddl & stat & valeur-p \\
 \bottomrule\noalign{}
 \end{longtable}
 
-La différence est significative à niveau 5\%, l'effet de \texttt{sexe}
-est non null.
+La différence est significative à niveau 5\%, le sexe a un impact sur la
+catégorie de vote (les coefficients associés sont non-nuls).
 \end{frame}
 
 \begin{frame}{Prédictions}
-\protect\hypertarget{pruxe9dictions}{}
+\phantomsection\label{pruxe9dictions}
 Pour un profil \(\mathbf{X}_i\) donné, on peut
 
 \begin{itemize}
@@ -952,14 +1023,14 @@ Pour un profil \(\mathbf{X}_i\) donné, on peut
 \item
   isoler la prédiction numérique pour \(p_{i1}\).
 \item
-  en déduire les probabilités de succès de chaque modalité de \(Y\).
+  en déduire les probabilités de chaque modalité de \(Y\).
 \end{itemize}
 
 \textbf{Exemple au tableau}
 \end{frame}
 
 \begin{frame}{Classification}
-\protect\hypertarget{classification}{}
+\phantomsection\label{classification}
 La prédiction du modèle est une probabilité pour chacune des \(K\)
 modalités.
 
@@ -970,7 +1041,7 @@ On peut toujours classifier les événements
 \item
   avec \(K-1\) points de coupure\ldots{}
 \item
-  ou assigner à la modalité la plus probable
+  ou assigner à la modalité la plus probable.
 \end{itemize}
 
 Avec les prédictions, on peut comparer les observations et les
@@ -979,38 +1050,40 @@ prédictions à l'aide d'une matrice de confusion \(K \times K\).
 \begin{itemize}
 \tightlist
 \item
-  Le taux de bonne classification est toujours valide
+  Le taux de bonne classification est toujours valide.
 \item
-  Il existe des extensions multidimensionnelles de l'aire sous la courbe
+  Il existe des extensions multidimensionnelles de l'aire sous la
+  courbe.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Matrice de confusion}
-\protect\hypertarget{matrice-de-confusion}{}
-\hypertarget{tbl-confusmat}{}
+\phantomsection\label{matrice-de-confusion}
 \begin{longtable}[]{@{}lrrr@{}}
+
 \caption{\label{tbl-confusmat}Prédictions (lignes) versus observations
 (colonnes) pour le résultat du sondage pour les personnes âgées de plus
-de 30 ans.}\tabularnewline
-\toprule\noalign{}
-& rare & occas. & toujours \\
-\midrule\noalign{}
-\endfirsthead
+de 30 ans.}
+
+\tabularnewline
+
 \toprule\noalign{}
 & rare & occas. & toujours \\
 \midrule\noalign{}
 \endhead
+\bottomrule\noalign{}
+\endlastfoot
 rare & 264 & 159 & 19 \\
 occas. & 640 & 1820 & 843 \\
 toujours & 76 & 421 & 605 \\
-\bottomrule\noalign{}
+
 \end{longtable}
 
 Le taux de bonne classification est 2689/4847=0.55.
 \end{frame}
 
 \begin{frame}{Commentaires}
-\protect\hypertarget{commentaires}{}
+\phantomsection\label{commentaires}
 \begin{itemize}
 \tightlist
 \item
@@ -1026,7 +1099,7 @@ Le taux de bonne classification est 2689/4847=0.55.
 \end{frame}
 
 \begin{frame}{Données ordinales}
-\protect\hypertarget{donnuxe9es-ordinales}{}
+\phantomsection\label{donnuxe9es-ordinales}
 Outre la régression multinomiale logistique, on peut également
 considérer la \emph{régression logistique cumulative à cotes
 proportionnelles}.
@@ -1043,7 +1116,7 @@ Voir les notes de cours pour plus de détails.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
+\phantomsection\label{ruxe9capitulatif-2}
 \begin{itemize}
 \tightlist
 \item
@@ -1065,7 +1138,7 @@ Voir les notes de cours pour plus de détails.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-3}{}
+\phantomsection\label{ruxe9capitulatif-3}
 On met beaucoup l'accent sur l'interprétation des coefficients à
 l'échelle de la cote.
 
@@ -1082,7 +1155,7 @@ l'échelle de la cote.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-4}{}
+\phantomsection\label{ruxe9capitulatif-4}
 Les outils usuels d'inférence pour les modèles estimés par maximum de
 vraisemblance sont applicables.
 
@@ -1098,7 +1171,7 @@ vraisemblance sont applicables.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-5}{}
+\phantomsection\label{ruxe9capitulatif-5}
 Côté classification, on va règle générale assigner à la classe la plus
 probable.
 
@@ -1114,6 +1187,7 @@ probable.
   d'équivalent.
 \end{itemize}
 \end{frame}
+
 
 
 

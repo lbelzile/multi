@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Débuter avec R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Andrew Heiss, Léo Belzile (traduction et adaptation)" />
+    <script src="libs/header-attrs-2.24/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="libs/shareon-1.4.1/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon-1.4.1/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain-0.2.6/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain-0.2.6/shareagain.js"></script>
+    <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.4.0/countdown.js"></script>
+    <link rel="stylesheet" href="css/ath-slides.css" type="text/css" />
+    <link rel="stylesheet" href="css/ath-inferno-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+class: center middle main-title section-title-1
+
+# Débuter avec&lt;br&gt;**R** et RStudio
+
+.class-info[
+&lt;figure&gt;
+  &lt;img src="img/01/RStudio.png" alt="RStudio" title="RStudio" width="15%"&gt;
+&lt;/figure&gt;
+]
+
+
+
+---
+
+class: middle
+
+.pull-left.center[
+&lt;figure&gt;
+  &lt;img src="img/01/Rlogo.png" alt="Logo de R" title="Logo de **R**" width="80%"&gt;
+&lt;/figure&gt;
+
+.box-inv-1[langage de programmation]
+]
+
+.pull-right.center[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-logo.png" alt="Logo de RStudio" title="Logo de RStudio" width="100%"&gt;
+&lt;/figure&gt;
+
+.box-inv-1[environnement de développement intégré]
+]
+
+---
+
+class: middle section-title-inv-1
+
+.box-inv-1.large[Un panorama de RStudio]
+
+---
+
+
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-normal.png" alt="RStudio" title="RStudio" width="100%"&gt;
+&lt;/figure&gt;
+
+---
+
+
+class: title title-1
+# Console 
+
+.pull-left-wide[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-console.png" alt="Console dans RStudio" title="Console dans RStudio" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right-narrow[
+.box-inv-1[R est en attente de vos instructions]
+
+.box-inv-1[Tapez votre code, et appuyez sur Retour pour le compiler]
+]
+
+---
+
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.pull-left-wide[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-console.png" alt="RStudio console" title="RStudio console" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right-narrow[
+.box-1[Tapez `2 + 2` dans la console]
+
+.box-1[Appuyez sur Retour]
+]
+
+---
+
+
+
+```r
+2 + 2
+```
+
+```
+## [1] 4
+```
+
+.box-1[Ce calcul est éphémère.&lt;br&gt;Pour recompiler, il faudra retaper les instructions.]
+
+.box-1[On va plutôt enregistrer le code dans un document **R**]
+
+.box-1[On peut aussi assigner le résultat à une variable&lt;br&gt; pour l'utiliser subséquemment]
+
+---
+class: title title-1
+
+# Arborescence et fichiers
+
+.box-inv-1.medium.sp-after[**R** pointe vers un répertoire local]
+
+.box-inv-1.medium.sp-after[
+Utiliser `getwd()` pour trouver l'emplacement
+]
+
+.box-inv-1.medium[Travailler avec chemin relatif]
+
+---
+
+
+class: title title-1
+# Projets dans RStudio
+
+&lt;img src="img/01/rstudio-new-project.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+class: title title-1
+
+# Panneau avec fichiers
+
+.pull-left-wide[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-files.png" alt="Panneau fichiers de RStudio" title="Panneau fichiers de RStudio" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right-narrow[
+.box-inv-1[Tous les fichiers dans votre répertoire de travail]
+]
+
+---
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.pull-left-wide[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-files.png" alt="RStudio files pane" title="RStudio files pane" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right-narrow[
+.box-1[Trouvez `a-intro.qmd`]
+
+.box-1[Cliquez sur le nom pour ouvrir le fichier]
+]
+
+---
+
+
+
+class: title title-1
+# Panneau source
+
+.pull-left-wide.center[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-editor.png" alt="RStudio source panel" title="RStudio source panel" width="80%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right-narrow[
+.box-inv-1[Les documents&lt;br&gt;s'ouvrent ici]
+]
+
+
+---
+
+class: middle section-title-inv-1
+
+.box-inv-1.large[Paquets]
+
+---
+
+&lt;figure&gt;
+  &lt;img src="img/02/packages-base.png" alt="R packages, base" title="paquets **R** de base" width="100%"&gt;
+&lt;/figure&gt;
+
+---
+
+&lt;figure&gt;
+  &lt;img src="img/02/packages-packages.png" alt="R packages, other" title="autres paquets **R**" width="100%"&gt;
+&lt;/figure&gt;
+
+---
+
+
+
+class: title title-1
+# Utiliser des paquets
+
+.pull-left[
+
+```r
+install.packages("nom")
+```
+
+.box-inv-1[Télécharge les fonctionnalités&lt;br&gt;sur votre ordinateur.]
+
+.box-inv-1[Une fois par ordinateur.]
+
+.box-inv-1[Fichiers téléchargés via le [CRAN](https://cran.r-project.org/web/packages/available_packages_by_name.html).]
+]
+
+--
+
+.pull-right[
+
+```r
+library(nom)
+```
+
+.box-inv-1[Charge le paquet]
+
+.box-inv-1[Effectuer une fois par session]
+]
+---
+
+class: title title-1  section-title-inv-1
+
+# À votre tour
+
+
+.box-1[Installez le paquet `remotes`]
+
+.box-1[Utilisez les commandes suivantes pour installer `hecmulti`:]
+
+
+```r
+remotes::install_github("lbelzile/hecmulti")
+```
+
+<div class="countdown" id="timer_814199fb" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+
+
+class: title title-1
+
+# `tidyverse`
+
+.pull-left[
+.box-inv-1.small[« Le `tidyverse` est une collection de paquets **R** conçus par des programmeurs opiniâtre pour la science des données. Tous les paquets partagent la même philosophie de conception, et ont une grammaire et une structure commune. »
+]
+]
+
+.pull-right[
+&lt;figure&gt;
+  &lt;img src="img/02/tidyverse.png" alt="Le tidyverse" title="Le `tidyverse`" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+---
+
+class: title title-1
+
+# `tidyverse`
+
+&lt;figure&gt;
+  &lt;img src="img/02/tidyverse-language.png" alt="`tidyverse` et langage" title="`tidyverse` et langage" width="100%"&gt;
+&lt;/figure&gt;
+
+???
+
+From "Master the Tidyverse" by RStudio
+
+---
+
+
+
+
+class: title title-1
+# Aides-mémoires
+
+.box-inv-1[Allez à Help &gt; Cheatsheets pour&lt;br&gt;trouver des guides de référence sur certains différents paquets]
+
+.center[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-cheatsheet.png" alt="RStudio cheatsheet" title="RStudio cheatsheet" width="40%"&gt;
+&lt;/figure&gt;
+]
+
+
+
+
+---
+
+
+class: title title-1
+
+# Paquets et fonctionalités
+
+
+.box-inv-1[Charger un paquet ajoute à l'environnement&lt;br&gt; toutes ses fonctions et bases de données.]
+
+.box-inv-1[Peut masquer des fonctions homonymes!]
+
+```
+&gt; library(tidyverse)
+── Attaching packages ──────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+✔ tibble  3.1.7     ✔ stringr 1.4.0
+✔ tidyr   1.2.0     ✔ forcats 0.5.1
+✔ readr   2.1.2     
+── Conflicts ─────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+```
+
+---
+
+class: title title-1
+
+# Fonctionalités
+
+
+.box-inv-1[Charger une base de données]
+
+
+```r
+data(bd, package = "nomdupaquet")
+```
+
+.box-inv-1[Utiliser directement une fonction sans charger un paquet]
+
+
+```r
+paquet::fonction(...)
+```
+
+---
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+
+.box-1[Chargez les données `renfe` du paquet `hecmulti`]
+
+<div class="countdown" id="timer_62b282ba" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+--
+
+
+```r
+data(renfe, package = 'hecmulti')
+renfe
+```
+
+---
+
+class: title title-1
+
+# Quarto
+
+.pull-left.center[
+&lt;figure&gt;
+  &lt;img src="img/01/quarto-penguins.png" alt="Posit Quarto document" title="Document Quarto" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1[Format de document&lt;br&gt;qui combine texte et code]
+
+.box-inv-1[Un livret&lt;br&gt;pour votre analyse]
+]
+
+---
+
+class: title title-1
+
+# Quarto
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/quarto-text.png" alt="Document Quarto, bloc de texte (Markdown)" title="Quarto (texte)" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+]
+
+---
+
+
+class: title title-1
+# Quarto
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/quarto-code.png" alt="Document Quarto, bloc de code" title="Quarto (code)" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+
+.box-inv-1.medium[Code]
+]
+
+---
+
+
+class: title title-1
+# Quarto
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/quarto-sortie.png" alt="Quarto (sortie)" title="Quarto (sortie)" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-inv-1.medium[Texte]
+
+.box-inv-1.medium[Code]
+
+.box-inv-1.medium[Sortie]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/quarto-code.png" alt="Quarto code" title="Quarto code" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-1[Lisez les instructions]
+
+.box-1[Compilez le bloc de code&lt;br&gt;avec le bouton `démarrer`]
+
+.box-1.sp-after-half[(icône avec triangle vert)]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Ajoutez un nouveau bloc]
+
+.box-1[Inscrivez `2 + 2` et compilez]
+
+---
+
+
+class: title title-1
+
+# Compilation
+
+.box-inv-1[Compiler un document Quarto]
+
+.center[
+&lt;figure&gt;
+  &lt;img src="img/01/quarto-render.png" alt="Quarto render" title="Compilation de document Quarto" width="70%"&gt;
+&lt;/figure&gt;
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Quelle est la différence entre:]
+
+
+```r
+filter(mtcars, cyl == 4)
+```
+
+
+```r
+four_cyls &lt;- filter(mtcars, cyl == 4)
+```
+
+.box-1[Trouvez ces instructions dans votre carnet et compilez ce dernier. &lt;br&gt;Quelle est la différence en sortie?]
+
+---
+
+
+class: title title-1
+# Assignation
+
+.box-inv-1[`&lt;-` assigne la sortie à droite à la variable de gauche]
+
+
+```r
+four_cyls &lt;- filter(mtcars, cyl == 4)
+```
+
+---
+class: title title-1
+
+# Panneau environnement
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-environment.png" alt="RStudio environment pane" title="RStudio environment pane" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-1[Liste de toutes les&lt;br&gt;variables existantes]
+]
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Trouvez `four_cyls` dans le panneau environnement.&lt;br&gt;Cliquez sur le nom `four_cyls`]
+
+.box-1[Qu'est-ce qui arrive?]
+
+---
+
+class: title title-1
+
+# Visualisation
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-data-viewer.png" alt="RStudio viewer" title="RStudio viewer" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-1[Cliquer sur un objet dans le panneau environnement l'ouvre dans un onglet de visualisation interactive.]
+]
+
+
+---
+
+class: middle section-title-inv-1
+
+.box-inv-1.large[Objets, classes et types]
+
+---
+
+
+class: title title-1
+# Vecteurs
+
+.box-inv-1[Objet de base dans **R**]
+
+.box-inv-1[Un vecteur est une liste ordonnée de valeurs de même type&lt;br&gt;(texte, nombres, etc.)]
+
+.box-inv-1[Concaténez avec `c()`:]
+
+
+```r
+c(1, 4, 2, 5, 7)
+```
+
+---
+
+class: title title-1
+# Listes
+
+.box-inv-1[Une liste est une collection d'objets]
+
+
+```r
+maliste &lt;- list(elementun = 2:4, FALSE)
+maliste
+```
+
+```
+## $elementun
+## [1] 2 3 4
+## 
+## [[2]]
+## [1] FALSE
+```
+
+.box-inv-1[Format de sortie fréquent pour les fonctions!]
+
+---
+class: title title-1
+
+# Éléments d'une liste
+
+.pull-left[
+.box-inv-1[Accéder à un élément&lt;br&gt;par nom avec `$`]
+
+```r
+maliste$elementun
+```
+]
+
+.pull-right[
+.box-inv-1[Accéder à un élément&lt;br&gt;par position avec `[[ ]]`]
+
+```r
+maliste[[1]]
+```
+]
+
+---
+class: title title-1
+# Base de données (`data.frame`)
+
+.box-inv-1.sp-after[Une liste avec dimensions]
+
+.box-inv-1.sp-after[Chaque colonne est un vecteur]
+
+.box-inv-1.sp-after[Variables de types potentiellement différents]
+
+
+.box-inv-1.sp-after[Mais de même longueur]
+
+.box-1[tibble (`tbl`): version `tidyverse`, plus sophistiquée]
+
+---
+class: title title-1
+# Types de données de base
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Entier (&lt;i&gt;integer&lt;/i&gt;)&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Nombre entier&lt;/td&gt;
+    &lt;td&gt;&lt;code class="remark-inline-code"&gt;c(1L, 2L, 3L, 4L); 1:4&lt;/code&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Double&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Nombres&lt;/td&gt;
+    &lt;td&gt;&lt;code class="remark-inline-code"&gt;c(1, 2.4, 3.14, 4)&lt;/code&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Caractère (&lt;i&gt;character&lt;/i&gt;)&lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Texte&lt;/td&gt;
+    &lt;td&gt;&lt;code class="remark-inline-code"&gt;c("1", "bleu", "plaisir", "monstre")&lt;/code&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;b&gt;Logique (&lt;i&gt;logical&lt;/i&gt;) &lt;/b&gt;&lt;/td&gt;
+    &lt;td&gt;Vrai ou faux&lt;/td&gt;
+    &lt;td&gt;&lt;code class="remark-inline-code"&gt;c(TRUE, FALSE, TRUE, FALSE)&lt;/code&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+ 
+&lt;/table&gt;
+
+.box-inv-1.sp-after-half[Utiliser la fonction `typeof()`&lt;br&gt; pour déterminer le type d'un vecteur.]
+
+---
+class: title title-1
+# Facteurs (`factor`, `&lt;fct&gt;`)
+
+.box-inv-1.sp-after-half[Vecteurs de variables catégorielles]
+.box-inv-1.sp-after-half[
+Encodées comme entiers avec étiquettes&lt;br&gt; (étiquettes visible via `levels`)
+]
+.box-inv-1.sp-after-half[Traitement spécial dans les modèles]
+
+
+```r
+facteur &lt;- factor(x = c(1,2,1,3),
+                  labels = c("petit", "moyen", "grand"))
+facteur #méthode print
+```
+
+```
+## [1] petit moyen petit grand
+## Levels: petit moyen grand
+```
+
+```r
+levels(facteur)
+```
+
+```
+## [1] "petit" "moyen" "grand"
+```
+
+---
+class: title title-1
+
+# Valeurs manquantes
+
+.box-inv-1.sp-after-half[
+`NA`, `NaN`, `NA\_integer_`, etc.
+]
+.box-inv-1.sp-after-half[`is.na()` pour détecter]
+.box-inv-1.sp-after-half[`summary()` sur `data.frame`&lt;br&gt; pour décompte par variable]
+???
+
+Par exemple, la fonction `summary` retourne le décompte des modalités du facteur plutôt que des statistiques descriptives.
+
+Encodée comme un entier, mais avec `labels`
+---
+
+
+class: title title-1
+
+# Fonctions
+
+.center[
+
+]
+
+.box-inv-1.large[Fonctions égal actions]
+
+--
+
+.box-inv-1[Arguments en intrant, résultats en sortie]
+
+--
+
+.box-inv-1[Spécifier les arguments avec `nomarg = `,  sinon en ordre]
+
+
+---
+
+
+class: title title-1
+# Aide
+
+.box-inv-1[Pour voir la page d'aide sur une fonction **R**,&lt;br&gt;tapez dans la console:]
+
+.center[
+
+```r
+?nom_fonction
+# Fonction pas dans l'environnement ou chaîne de caractères
+??"normal distribution"
+```
+]
+
+.box-1[(ou utilisez un moteur de recherche!)]
+
+---
+
+class: title title-1
+
+# Panneau d'aide
+
+.pull-left[
+&lt;figure&gt;
+  &lt;img src="img/01/rstudio-help.png" alt="RStudio help pane" title="RStudio help pane" width="100%"&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+.box-1[Ces fichiers contiennent notamment des détails sur les arguments des fonctions]
+
+.box-1[Il y a souvent des&lt;br&gt;exemples à la fin]
+]
+
+---
+
+class: title title-1  section-title-inv-1
+
+# À votre tour
+
+.box-1[Lisez l'aide pour la fonction `seq`]
+
+.box-1[Ajouter un bloc qui utilise `seq()` pour créer un&lt;br&gt;vecteur de nombres de 5 à 30, espacés par sauts de 5&lt;br&gt;.small[(5, 10, 15, 20, …)]]
+
+<div class="countdown" id="timer_d48c4f9d" data-update-every="1" data-play-sound="true" tabindex="0" style="right:0;bottom:0;font-size:1.5em;">
+<div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+
+```r
+seq(from = 5, to = 30, by = 5)
+```
+
+```
+## [1]  5 10 15 20 25 30
+```
+
+
+---
+
+class: title title-1
+
+# Problèmes fréquents de syntaxe #1
+
+.box-inv-1[Parenthèses ou accolades de fermeture manquante]
+
+
+```r
+mean(mtcars
+```
+
+
+```r
+"Oops problème
+```
+
+---
+
+class: title title-1
+
+# Problèmes fréquents de syntaxe #2
+
+.box-inv-1[Ajouter des accolades quand ce n'est pas adéquat (et vice versa)]
+
+
+```r
+mean("mtcars")
+```
+
+```
+## Warning in mean.default("mtcars"): argument is not numeric or logical:
+## returning NA
+```
+
+```
+## [1] NA
+```
+
+---
+
+class: title title-1
+
+# Problèmes fréquents de syntaxe #3
+
+.box-inv-1[Mauvais nom de fonction (**R** est sensible à la casse)]
+
+
+```r
+MEAN(mtcars)
+```
+
+```
+## Error in MEAN(mtcars): could not find function "MEAN"
+```
+
+---
+
+class: title title-1 section-title-inv-1
+
+# À votre tour
+
+.box-1[Il y a trois blocs sous "Syntaxe fautive"]
+
+.box-1[Compilez chacune, lisez le message d'erreur et essayez de corriger le code]
+
+---
+
+
+class: title title-1
+
+# Classes et méthodes
+
+.box-inv-1[La classe d'un objet permet de définir&lt;br&gt; des  fonctions génériques (`methods`)]
+
+
+```r
+methods(class = "lm")
+```
+
+.box-inv-1[Autrement dit, le résultat dépend de la classe.]
+
+.box-1[Méthodes fréquentes]
+.pull-left-3[
+.box-inv-1[impression&lt;br&gt;(`print`)]
+]
+.pull-middle-3[
+.box-inv-1[récapitulatif&lt;br&gt;(`summary`)]
+
+]
+.pull-right-3[
+.box-inv-1[graphique&lt;br&gt;(`plot`)]
+]
+
+
+---
+
+class: middle section-title-inv-1
+
+.box-inv-1.large[Importer des données]
+
+---
+
+class: title title-1
+
+# Paquets pour l'importation de données
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;img src="img/02/readr.png" alt="readr" title="readr" width="130px"&gt;&lt;/td&gt;
+    &lt;td&gt;Données texte brutes&lt;/td&gt;
+    &lt;td&gt;&lt;code class="remark-inline-code"&gt;my_data &lt;- read_csv("file.csv")&lt;/code&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;img src="img/02/readxl.png" alt="readxl" title="readxl" width="130px"&gt;&lt;/td&gt;
+    &lt;td&gt;Chiffriers Excel&lt;/td&gt;
+    &lt;td&gt;&lt;code class="remark-inline-code"&gt;my_data &lt;- read_excel("file.xlsx")&lt;/code&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;img src="img/02/haven.png" alt="haven" title="haven" width="130px"&gt;&lt;/td&gt;
+    &lt;td&gt;Données Stata, SPSS, et SAS&lt;/td&gt;
+    &lt;td&gt;&lt;code class="remark-inline-code"&gt;my_data &lt;- read_stata("file.dta")&lt;/code&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+},
+"editor_options": null
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
