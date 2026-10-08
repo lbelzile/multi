@@ -257,7 +257,7 @@ Choisir un point de coupure \(c\):
 Un point de coupure de \(c=0.5\) revient à assigner l'observation à la
 classe (catégorie) la plus probable.
 
-Qu'arrive t'il si \(c=0\) ou \(c=1\)? \textbf{Exemple au tableau}
+Qu'arrive t'il si \(c=0\) ou \(c=1\)?
 \end{frame}
 
 \begin{frame}{Qualité de l'ajustement}
@@ -275,17 +275,6 @@ On veut minimiser le taux de mauvaise classification, afin d'obtenir une
 meilleure capacité prédictive du modèle.
 \end{frame}
 
-\begin{frame}{Score de Brier}
-\phantomsection\label{score-de-brier}
-Le score propre de Brier pour la prédiction \(\widehat{p}_i\) de la
-probabilité de succès avec des variables binaires \(y_i \in \{0, 1\}\)
-\begin{align*}
-\mathsf{SB} = \frac{1}{n} \sum_{i=1}^n (\widehat{p}_i - y_i)^2.
-\end{align*} Une petite valeur implique une meilleure performance.
-
-Ce score prend en compte l'aspect probabiliste de la prédiction.
-\end{frame}
-
 \begin{frame}[fragile]{Base de données marketing}
 \phantomsection\label{base-de-donnuxe9es-marketing}
 On considère un modèle pour la variable binaire \texttt{yachat}, qui
@@ -299,6 +288,7 @@ promotionnel et \(0\) sinon.
 \NormalTok{appr }\OtherTok{\textless{}{-}}\NormalTok{ dbm[dbm}\SpecialCharTok{$}\NormalTok{test }\SpecialCharTok{==} \DecValTok{0}\NormalTok{,]}
 \NormalTok{formule }\OtherTok{\textless{}{-}} \FunctionTok{formula}\NormalTok{(}\StringTok{"yachat \textasciitilde{} x1 + x2 + x3 +}
 \StringTok{                x4 + x5 + x6 + x7 + x8 + x9 + x10"}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ appr}\SpecialCharTok{$}\NormalTok{yachat}
 \NormalTok{modele }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(formule,}
               \AttributeTok{data =}\NormalTok{ appr, }
               \AttributeTok{family =}\NormalTok{ binomial)}
@@ -320,8 +310,9 @@ l'échantillon.
 \NormalTok{cv\_prob }\OtherTok{\textless{}{-}}\NormalTok{ hecmulti}\SpecialCharTok{::}\FunctionTok{predvc}\NormalTok{(}
   \AttributeTok{modele =}\NormalTok{ modele,  }
   \AttributeTok{K =} \DecValTok{10}\NormalTok{, }\CommentTok{\# nb de plis pour la valid. croisée}
-  \AttributeTok{nrep =} \DecValTok{10}\NormalTok{, }\CommentTok{\# nb de répétitions de la valid. croisée}
+  \AttributeTok{nrep =} \DecValTok{1}\NormalTok{, }\CommentTok{\# nb de répétitions de la valid. croisée}
   \AttributeTok{data =}\NormalTok{ appr)}
+\NormalTok{score\_brier }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{((y }\SpecialCharTok{{-}}\NormalTok{ cv\_prob)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -362,6 +353,12 @@ Avec \(c=0.63\), on obtient un taux de \textbf{bonne} classification de
 
 \begin{frame}[fragile]{Performance et classification}
 \phantomsection\label{performance-et-classification}
+Dans un échantillon, la classification ne change que pour les valeurs de
+\(c\) qui correspondent aux valeurs uniques des prédictions
+\(\widehat{p}_1, \ldots, \widehat{p}_n\).
+
+Le point de coupure optimal n'est donc pas unique.
+
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \NormalTok{classif }\OtherTok{\textless{}{-}}\NormalTok{ appr}\SpecialCharTok{$}\NormalTok{yachat}
@@ -513,9 +510,9 @@ de confusion pour le calcul du taux de bonne classification.}
 \begin{itemize}
 \tightlist
 \item
-  Si on n'envoie pas de catalogue, notre gain est nul.
+  Si on n'envoie pas d'article promotionnel, notre gain est nul.
 \item
-  Si on envoie le catalogue
+  Si on envoie l'article promotionnel,
 
   \begin{itemize}
   \tightlist
@@ -625,8 +622,8 @@ ce point de coupure, on estime que
 Ainsi, on va détecter environ 75.71\% des clients qui achètent.
 
 Il est coûteux de rater un client potentiel, donc la stratégie optimale
-est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs
-d'entre eux n'achètent rien.
+est d'envoyer l'article promotionnel à plus de clients quitte à ce que
+plusieurs d'entre eux n'achètent rien.
 \end{frame}
 
 \begin{frame}[fragile]{Fonction d'efficacité du récepteur}
@@ -737,14 +734,14 @@ détectés au hasard. La référence est la ligne diagonale, qui correspond
 \toprule
   & hasard & modèle & lift\\
 \midrule
-10\% & 21 & 79 & 3.76\\
-20\% & 42 & 122 & 2.90\\
-30\% & 63 & 155 & 2.46\\
+10\% & 21 & 78 & 3.71\\
+20\% & 42 & 120 & 2.86\\
+30\% & 63 & 154 & 2.44\\
 40\% & 84 & 179 & 2.13\\
-50\% & 105 & 194 & 1.85\\
+50\% & 105 & 192 & 1.83\\
 \addlinespace
 60\% & 126 & 201 & 1.60\\
-70\% & 147 & 209 & 1.42\\
+70\% & 147 & 207 & 1.41\\
 80\% & 168 & 210 & 1.25\\
 90\% & 189 & 210 & 1.11\\
 \bottomrule
@@ -758,7 +755,7 @@ détectés au hasard. La référence est la ligne diagonale, qui correspond
 \begin{frame}{Calcul du lift}
 \phantomsection\label{calcul-du-lift-1}
 Si on classifiait comme acheteurs les \(10\)\% qui ont la plus forte
-probabilité estimée d'achat, on détecterait \(79\) des \(210\) clients.
+probabilité estimée d'achat, on détecterait \(78\) des \(210\) clients.
 
 Si on prend \(10\)\% des clients au hasard et que \(21\)\% des
 observations correspondent à des achats, on détecterait en moyenne
@@ -778,8 +775,8 @@ des clients, on peut utiliser le lift pour comparer notre métrique.
 
 \begin{frame}{Courbe précision-rappel}
 \phantomsection\label{courbe-pruxe9cision-rappel}
-Dans le cas de catégories rares, l'aire sous la courbe précision-rappel
-permet de mieux estimer la performance.
+Dans le cas de succès rares (\(Y=1\)), l'aire sous la courbe
+précision-rappel permet de mieux estimer la performance.
 
 \begin{center}
 \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos6_files/figure-beamer/unnamed-chunk-7-1.pdf}
@@ -831,57 +828,9 @@ F_1 &= 2\frac{\text{précision} \times \text{rappel}}{\text{précision} + \text{
 \end{Shaded}
 
 On vise à maximiser le score \(F_1\). Le point de coupure optimal pour
-le score \(F_1\) est \(0.239\).
+le score \(F_1\) est \(0.293\).
 
 \normalsize
-\end{frame}
-
-\begin{frame}{Calibration du modèle}
-\phantomsection\label{calibration-du-moduxe8le}
-Certains modèles sont trop confiants dans leurs prédictions
-(surajustement). Pour une variable réponse binaire \(Y \in \{0,1\}\), le
-score de Brier (l'erreur quadratique moyenne) est décomposé comme suit:
-\begin{align*}
-\mathsf{BS} &= \underset{\text{score de Brier}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
-\\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
-\end{align*}
-\end{frame}
-
-\begin{frame}{Test de Spiegelhalter}
-\phantomsection\label{test-de-spiegelhalter}
-Si notre modèle était parfaitement calibré, la moyenne et l'erreur-type
-du score de Brier sous l'hypothèse nulle seraient respectivement
-\(\mathsf{E}_0(Y_i)=p_i\) et \(\mathsf{sd}_0(Y_i) = \sqrt{p_i(1-p_i)}\).
-
-On peut construire une statistique de test
-\href{https://doi.org/10.1002/sim.4780050506}{(Spiegelhalter, 1986)}
-pour l'hypothèse nulle de calibration parfaite
-\[Z = \frac{\mathsf{BS}-\mathsf{E}_0(\mathsf{BS})}{\mathsf{sd}_0(\mathsf{BS})}\]
-Sous l'hypothèse nulle \(\mathcal{H}_0\), les probabilités sont exactes
-et \(Z\) suit approximativement une loi standard normale en grand
-échantillon.
-\end{frame}
-
-\begin{frame}[fragile]{Résultat du test pour notre modèle}
-\phantomsection\label{ruxe9sultat-du-test-pour-notre-moduxe8le}
-Une petite valeur-\(p\) mène au rejet de \(\mathcal{H}_0\) et à conclure
-que le modèle est surajusté.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{calibration}\NormalTok{(}
-   \AttributeTok{prob =}\NormalTok{ cv\_prob, }
-   \AttributeTok{resp =}\NormalTok{ classif)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Test de calibration de Spiegelhalter (1986)
-Statistique de test: 1.22 
-valeur-p: 0.222
-\end{verbatim}
-
-Il n'y a pas de preuve ici que le modèle est mal calibré.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
@@ -915,13 +864,16 @@ Il n'y a pas de preuve ici que le modèle est mal calibré.
   \item
     la sensibilité (proportion de succès correctement classifiés)
   \item
+    la précision
+  \item
     le taux de bonne classification
   \item
     le taux de faux positifs ou faux négatifs
   \end{itemize}
 \item
   L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe
-  ROC) et le lift donnent une mesure de la qualité des prédictions.
+  ROC) ou de la courbe précision-rappel, et le lift donnent une mesure
+  de la qualité des prédictions.
 \end{itemize}
 \end{frame}
 
@@ -939,6 +891,74 @@ Il n'y a pas de preuve ici que le modèle est mal calibré.
 \item
   Pour la classification, le point de coupure est à déterminer.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Score de Brier}
+\phantomsection\label{score-de-brier}
+Le score propre de Brier pour la prédiction \(\widehat{p}_i\) de la
+probabilité de succès avec des variables binaires \(y_i \in \{0, 1\}\)
+\begin{align*}
+\mathsf{SB} = \frac{1}{n} \sum_{i=1}^n (y_i - \widehat{p}_i)^2.
+\end{align*} Une petite valeur implique une meilleure performance.
+
+Ce score prend en compte l'aspect probabiliste de la prédiction.
+\end{frame}
+
+\begin{frame}{Calibration du modèle}
+\phantomsection\label{calibration-du-moduxe8le}
+Certains modèles sont trop confiants dans leurs prédictions
+(surajustement). Pour une variable réponse binaire \(Y \in \{0,1\}\), le
+score de Brier (l'erreur quadratique moyenne) est décomposé comme suit:
+\begin{align*}
+\mathsf{BS} &= \underset{\text{score de Brier}}{\frac{1}{n} \sum_{i=1}^n (Y_i-p_i)^2}
+\\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
+\end{align*}
+\end{frame}
+
+\begin{frame}{Score de Brier avec calibration parfaite}
+\phantomsection\label{score-de-brier-avec-calibration-parfaite}
+Si notre modèle était parfaitement calibré, la moyenne et la variance de
+l'observation \(Y_i\) sous l'hypothèse nulle seraient respectivement de
+\(\mathsf{E}_0(Y_i)=p_i\) et \(\mathsf{Var}_0(Y_i) = p_i(1-p_i)\).
+
+Sous l'hypothèse nulle, le modèle est parfaitement calibré et
+\[\mathsf{E}_0(\mathsf{BS}) = \frac{1}{n} \sum_{i=1}^n p_i(1-p_i)\] avec
+une variance de \[
+\mathsf{Var}_0(\mathsf{BS})=\frac{1}{n^2}\sum_{i=1}^n (1-2p_i)^2p_i(1-p_i).
+\]
+\end{frame}
+
+\begin{frame}{Test \(Z\) de Spiegelhalter}
+\phantomsection\label{test-z-de-spiegelhalter}
+On peut construire une statistique de test
+\href{https://doi.org/10.1002/sim.4780050506}{(Spiegelhalter, 1986)}
+pour l'hypothèse nulle de calibration parfaite
+\[Z = \frac{\mathsf{BS}-\mathsf{E}_0(\mathsf{BS})}{\sqrt{\mathsf{Var}_0(\mathsf{BS})}}\]
+Sous l'hypothèse nulle \(\mathcal{H}_0\), les probabilités sont exactes
+et \(Z\) suit approximativement une loi standard normale en grand
+échantillon.
+\end{frame}
+
+\begin{frame}[fragile]{Résultat du test pour notre modèle}
+\phantomsection\label{ruxe9sultat-du-test-pour-notre-moduxe8le}
+Une petite valeur-\(p\) mène au rejet de \(\mathcal{H}_0\) et à conclure
+que le modèle est surajusté.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{hecmulti}\SpecialCharTok{::}\FunctionTok{calibration}\NormalTok{(}
+   \AttributeTok{prob =}\NormalTok{ cv\_prob, }
+   \AttributeTok{resp =}\NormalTok{ classif)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Test de calibration de Spiegelhalter (1986)
+Statistique de test: 1.39 
+valeur-p: 0.163
+\end{verbatim}
+
+Il n'y a pas de preuve ici que le modèle est mal calibré.
 \end{frame}
 
 \begin{frame}[fragile]{Fonctions \textbf{R} pour la sélection de
@@ -975,7 +995,7 @@ Déterminer si le revenu prévu justifie l'envoi du catalogue
 
 On peut combiner un modèle de régression logistique avec la régression
 linéaire et les ajuster simultanément --- voir les notes de cours pour
-plus de détail.
+plus de détails.
 
 Plus simplement, on pourrait ignorer le montant d'achat et envoyer un
 catalogue si la probabilité d'achat excède notre point de coupure
@@ -1025,17 +1045,17 @@ En résumé, la procédure numérique à réaliser est la suivante:
 \begin{itemize}
 \tightlist
 \item
-  Prédire les \(100 000\) observations de l'échantillon test.
+  Prédire les \(100~000\) observations de l'échantillon test.
 \item
-  Envoyer un catalogue si la probabilité d'achat excède le point de
-  coupure.
+  Envoyer un échantillon promotionnel si la probabilité d'achat excède
+  le point de coupure.
 \item
   Calculer le revenu résultant:
 
   \begin{itemize}
   \tightlist
   \item
-    zéro si on n'envoie pas de catalogue
+    zéro si on n'envoie pas d'échantillon promotionnel
   \item
     \(-10\) si la personne n'achète pas
   \item
@@ -1051,7 +1071,7 @@ revenu résultant de cette stratégie.
 \phantomsection\label{conclusion}
 Si on avait fait une bête recherche séquentielle et qu'on avait pris le
 modèle avec le plus petit BIC (8 variables explicatives), on aurait
-dégagé des revenus nets de \(978 226\)\$.
+dégagé des revenus nets de \(978~226\)\$.
 
 C'est une énorme amélioration, de plus de \(62.7\)\%, par rapport à la
 stratégie de référence (soit envoyer un catalogue à tout le monde).

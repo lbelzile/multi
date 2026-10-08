@@ -281,7 +281,7 @@ C'est parmi les stratégies optimales. On pourrait combiner n'importe lequel des
 
 
 ```{r}
-#| eval: false
+#| eval: true
 #| echo: false
 classif <- rbind(
   c(table(base_pred, valid$yachat)),
@@ -298,7 +298,7 @@ tauxbonneclassif <- c(
 )
 
 datf <- data.frame(
-  modele = paste0("(", letters[1:7], ")"),
+  modele = paste0("(", letters[1:6], ")"),
   ncoef = c(
     NA,
     length(coef(base)),
@@ -327,6 +327,8 @@ datf <- data.frame(
     exgen_perfo
   )
 )
+library(knitr)
+options(knitr.kable.NA = '')
 # Imprimer le tableau
 knitr::kable(
   datf,

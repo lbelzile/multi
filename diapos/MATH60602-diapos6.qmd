@@ -51,7 +51,9 @@ Choisir un point de coupure $c$:
 
 Un point de coupure de $c=0.5$ revient à assigner l'observation à la classe (catégorie) la plus probable.
 
-Qu'arrive t'il si $c=0$ ou $c=1$? **Exemple au tableau**
+
+
+Qu'arrive t'il si $c=0$ ou $c=1$? 
 
 # Qualité de l'ajustement
 
@@ -67,16 +69,6 @@ et donc on obtient le **taux de mauvaise classification** si on calcule la moyen
 
 On veut minimiser le taux de mauvaise classification, afin d'obtenir une meilleure capacité prédictive du modèle.
 
-# Score de Brier
-
-Le score propre de Brier pour la prédiction $\widehat{p}_i$ de la probabilité de succès avec des variables binaires $y_i \in \{0, 1\}$
-\begin{align*}
-\mathsf{SB} = \frac{1}{n} \sum_{i=1}^n (\widehat{p}_i - y_i)^2.
-\end{align*}
-Une petite valeur implique une meilleure performance.
-
-Ce score prend en compte l'aspect probabiliste de la prédiction.
-
 # Base de données marketing
 
 On considère un modèle pour la variable binaire `yachat`, qui vaut $1$ si une personne achète suite à l'envoi d'un échantillon promotionnel et $0$ sinon.
@@ -89,6 +81,7 @@ data(dbm, package = "hecmulti")
 appr <- dbm[dbm$test == 0,]
 formule <- formula("yachat ~ x1 + x2 + x3 +
                 x4 + x5 + x6 + x7 + x8 + x9 + x10")
+y <- appr$yachat
 modele <- glm(formule,
               data = appr, 
               family = binomial)
@@ -108,8 +101,9 @@ set.seed(60602)
 cv_prob <- hecmulti::predvc(
   modele = modele,  
   K = 10, # nb de plis pour la valid. croisée
-  nrep = 10, # nb de répétitions de la valid. croisée
+  nrep = 1, # nb de répétitions de la valid. croisée
   data = appr)
+score_brier <- mean((y - cv_prob)^2)
 ```
 
 \footnotesize
@@ -239,7 +233,9 @@ Avec $c=`r perfo1$cut`$, on obtient un taux de **bonne** classification de $`r p
 
 # Performance et classification
 
+Dans un échantillon, la classification ne change que pour les valeurs de $c$ qui correspondent aux valeurs uniques des prédictions $\widehat{p}_1, \ldots, \widehat{p}_n$. 
 
+Le point de coupure optimal n'est donc pas unique.
 
 ```{r}
 #| eval: false
@@ -363,8 +359,8 @@ tab1
 
 
 
-- Si on n'envoie pas de catalogue, notre gain est nul. 
-- Si on envoie le catalogue 
+- Si on n'envoie pas d'article promotionnel, notre gain est nul. 
+- Si on envoie l'article promotionnel,
    - à un client qui n'achète pas, on perd $10$\$ (le coût de l'envoi). 
    - à un client qui achète, notre revenu net est de $57$\$ (revenu moyen moins coût de l'envoi, arrondi à l'entier près pour simplifier).
 
@@ -462,7 +458,7 @@ Dans l'exemple, le point de coupure qui maximise le gain est `r coupe$optim`. Av
 
 Ainsi, on va détecter environ `r round(perfo1$table[24,"sensi"],2)`\% des clients qui achètent. 
 
-Il est coûteux de rater un client potentiel, donc la stratégie optimale est d'envoyer le catalogue à plus de clients quitte à ce que plusieurs d'entre eux n'achètent rien. 
+Il est coûteux de rater un client potentiel, donc la stratégie optimale est d'envoyer l'article promotionnel à plus de clients quitte à ce que plusieurs d'entre eux n'achètent rien. 
 
 
 # Fonction d'efficacité du récepteur
@@ -592,7 +588,7 @@ tab_lift <- hecmulti::courbe_lift(
 
 # Courbe précision-rappel
 
-Dans le cas de catégories rares, l'aire sous la courbe précision-rappel permet de mieux estimer la performance. 
+Dans le cas de succès rares ($Y=1$), l'aire sous la courbe précision-rappel permet de mieux estimer la performance. 
 
 
 
@@ -648,6 +644,44 @@ On vise à maximiser le score $F_1$. Le point de coupure optimal pour le score $
 
 \normalsize
 
+# Récapitulatif
+
+- La classification est une forme d'apprentissage supervisée.
+- On peut assigner l'observation à la classe la plus plausible, ou déterminer un point de coupure.
+- Si on a un objectif particulier (fonction de gain), on peut optimiser les profits en assignant une importance différente à chaque scénario.
+- On peut catégoriser les observations dans une matrice de confusion.
+
+# Récapitulatif
+
+- On s'intéresse à
+   - la spécificité (proportion d'échecs correctement classifiés) 
+   - la sensibilité (proportion de succès correctement classifiés)
+   - la précision
+   - le taux de bonne classification
+   - le taux de faux positifs ou faux négatifs
+- L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe ROC) ou de la courbe précision-rappel, et le lift donnent une mesure de la qualité des prédictions.
+
+
+
+# Sélection de variables en régression logistique
+
+- On applique les mêmes principes que précédemment.
+- Notre mesure d'ajustement (gain, taux de bonne classification, log-vraisemblance) peut différer selon l'objectif.
+- Les modèles de régression logistique sont plus coûteux à estimer.
+- Pour la classification, le point de coupure est à déterminer.
+
+
+# Score de Brier
+
+Le score propre de Brier pour la prédiction $\widehat{p}_i$ de la probabilité de succès avec des variables binaires $y_i \in \{0, 1\}$
+\begin{align*}
+\mathsf{SB} = \frac{1}{n} \sum_{i=1}^n (y_i - \widehat{p}_i)^2.
+\end{align*}
+Une petite valeur implique une meilleure performance.
+
+Ce score prend en compte l'aspect probabiliste de la prédiction.
+
+
 # Calibration du modèle
 
 Certains modèles sont trop confiants dans leurs prédictions (surajustement). Pour une variable réponse binaire $Y \in \{0,1\}$, le score de Brier (l'erreur quadratique moyenne) est décomposé comme suit:
@@ -656,13 +690,22 @@ Certains modèles sont trop confiants dans leurs prédictions (surajustement). P
 \\&=\underset{\text{manque de calibration}}{\frac{1}{n} \sum_{i=1}^n(Y_i-p_i)(1-2p_i)} + \underset{\text{variabilité}}{\frac{1}{n} \sum_{i=1}^n p_i(1-p_i)}.
 \end{align*}
 
+# Score de Brier avec calibration parfaite
 
-# Test de Spiegelhalter
 
-Si notre modèle était parfaitement calibré, la moyenne et l'erreur-type du score de Brier sous l'hypothèse nulle seraient respectivement $\mathsf{E}_0(Y_i)=p_i$ et $\mathsf{sd}_0(Y_i) = \sqrt{p_i(1-p_i)}$.
+Si notre modèle était parfaitement calibré, la moyenne et la variance de l'observation $Y_i$ sous l'hypothèse nulle seraient respectivement de $\mathsf{E}_0(Y_i)=p_i$ et $\mathsf{Var}_0(Y_i) = p_i(1-p_i)$.
+
+Sous l'hypothèse nulle, le modèle est parfaitement calibré et 
+$$\mathsf{E}_0(\mathsf{BS}) = \frac{1}{n} \sum_{i=1}^n p_i(1-p_i)$$
+avec une variance de
+$$
+\mathsf{Var}_0(\mathsf{BS})=\frac{1}{n^2}\sum_{i=1}^n (1-2p_i)^2p_i(1-p_i).
+$$
+
+# Test $Z$ de Spiegelhalter
 
 On peut construire une statistique de test [(Spiegelhalter, 1986)]( https://doi.org/10.1002/sim.4780050506) pour l'hypothèse nulle  de calibration parfaite
-$$Z = \frac{\mathsf{BS}-\mathsf{E}_0(\mathsf{BS})}{\mathsf{sd}_0(\mathsf{BS})}$$ 
+$$Z = \frac{\mathsf{BS}-\mathsf{E}_0(\mathsf{BS})}{\sqrt{\mathsf{Var}_0(\mathsf{BS})}}$$ 
 Sous l'hypothèse nulle $\mathcal{H}_0$, les probabilités sont exactes et $Z$ suit approximativement une loi standard normale en grand échantillon. 
 
 # Résultat du test pour notre modèle
@@ -680,30 +723,6 @@ hecmulti::calibration(
 
 Il n'y a pas de preuve ici que le modèle est mal calibré.
 
-# Récapitulatif
-
-- La classification est une forme d'apprentissage supervisée.
-- On peut assigner l'observation à la classe la plus plausible, ou déterminer un point de coupure.
-- Si on a un objectif particulier (fonction de gain), on peut optimiser les profits en assignant une importance différente à chaque scénario.
-- On peut catégoriser les observations dans une matrice de confusion.
-
-# Récapitulatif
-
-- On s'intéresse à
-   - la spécificité (proportion d'échecs correctement classifiés) 
-   - la sensibilité (proportion de succès correctement classifiés)
-   - le taux de bonne classification
-   - le taux de faux positifs ou faux négatifs
-- L'aire sous la courbe de la fonction d'efficacité du récepteur (courbe ROC) et le lift donnent une mesure de la qualité des prédictions.
-
-
-
-# Sélection de variables en régression logistique
-
-- On applique les mêmes principes que précédemment.
-- Notre mesure d'ajustement (gain, taux de bonne classification, log-vraisemblance) peut différer selon l'objectif.
-- Les modèles de régression logistique sont plus coûteux à estimer.
-- Pour la classification, le point de coupure est à déterminer.
 
 # Fonctions **R** pour la sélection de modèles
 
@@ -744,10 +763,10 @@ En résumé, la procédure numérique à réaliser est la suivante:
 
 # Prédiction et envoi
 
-- Prédire les $100 000$ observations de l'échantillon test.
-- Envoyer un catalogue si la probabilité d'achat excède le point de coupure.
+- Prédire les $100~000$ observations de l'échantillon test.
+- Envoyer un échantillon promotionnel si la probabilité d'achat excède le point de coupure.
 - Calculer le revenu résultant:
-    - zéro si on n'envoie pas de catalogue
+    - zéro si on n'envoie pas d'échantillon promotionnel
     - $-10$ si la personne n'achète pas
     - $-10$ plus le montant d'achat sinon.
 
@@ -756,9 +775,9 @@ En résumé, la procédure numérique à réaliser est la suivante:
 # Conclusion
 
 
-Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus nets de $978 226$\$.
+Si on avait fait une bête recherche séquentielle et qu'on avait pris le modèle avec le plus petit BIC (8 variables explicatives), on aurait dégagé des revenus nets de $978~226$\$.
 
-C’est une énorme amélioration, de plus de $`r round(978226/601212*100,1)-100`$%, par rapport à la stratégie de référence (soit envoyer un catalogue à tout le monde).
+C'est une énorme amélioration, de plus de $`r round(978226/601212*100,1)-100`$%, par rapport à la stratégie de référence (soit envoyer un catalogue à tout le monde).
 
 
 # Récapitulatif
