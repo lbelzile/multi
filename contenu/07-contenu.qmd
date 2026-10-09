@@ -24,7 +24,7 @@ title: "Régression multinomiale"
 - Classifier les données manquantes (complètement aléatoire, aléatoire, non aléatoire) selon le contexte.
 - Pouvoir utiliser l'imputation multiple avec les modèles de régression.
 - À l'aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification.
-- Être capable d'interpréter les coefficients d'un modèle multinomial logistique ou d'un modèle cumulatif à cotes proportionnelles.
+- Être capable d'interpréter les coefficients d'un modèle multinomial logistique.
 - Être en mesure de calculer les prédictions d'un modèle multinomial logistique.
 
 
