@@ -447,7 +447,7 @@
     "href": "contenu/07-contenu.html#objectifs-dapprentissage",
     "title": "Analyse multidimensionnelle appliquée",
     "section": "Objectifs d’apprentissage",
-    "text": "Objectifs d’apprentissage\n\nPouvoir calculer le taux de cas manquants\nClassifier les données manquantes (complètement aléatoire, aléatoire, non aléatoire) selon le contexte\nPouvoir utiliser l’imputation multiple avec les modèles de régression\nÀ l’aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification\nÊtre en mesure d’expliquer le ciblage et d’offrir des stratégies pour la prédiction.\nÊtre capable d’interpréter les coefficients d’un modèle multinomial logistique ou d’un modèle cumulatif à cotes proportionnelles\nPouvoir effectuer un test du postulat de cotes proportionnelles\nÊtre en mesure de calculer les prédictions d’un modèle multinomial logistique simple",
+    "text": "Objectifs d’apprentissage\n\nPouvoir calculer le taux de cas manquants.\nClassifier les données manquantes (complètement aléatoire, aléatoire, non aléatoire) selon le contexte.\nPouvoir utiliser l’imputation multiple avec les modèles de régression.\nÀ l’aide de logiciel, pouvoir proposer des modèles de régression logistique pour la prédiction et la classification.\nÊtre capable d’interpréter les coefficients d’un modèle multinomial logistique ou d’un modèle cumulatif à cotes proportionnelles.\nÊtre en mesure de calculer les prédictions d’un modèle multinomial logistique.",
     "crumbs": [
       "Contenu",
       "Matériel pédagogique",

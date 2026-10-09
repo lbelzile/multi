@@ -36,7 +36,7 @@ La régression multinomiale logistique est un modèle de régression pour **vari
 \small 
 
 - Destination de vacances l'année dernière (Québec, États-Unis, ailleurs).
-- Si des élections générales avaient lieu aujourd'’'hui au Québec, pour quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
+- Si des élections générales avaient lieu aujourd'hui au Québec, pour quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
 - Combien de fois êtes-vous allé au cinéma l’année dernière: moins de cinq fois (`1`), entre cinq et 10 fois (`2`) ou plus de 10 fois (`3`).
 - Quelle importance accordez-vous au service après-vente? Un parmi "pas important" (`1`), "peu important" (`2`), "moyennement important" (`3`), "assez important" (`4`) et "très important" (`5`).
 
@@ -239,7 +239,7 @@ On considère une variable réponse catégorielle avec $K \ge 2$ modalités.
 
 **Objectif**: modéliser la probabilité de chaque catégorie de la variable réponse.
 
-Soit la probabilité d'appartenir à la modalité $k$, $$p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).$$ 
+Soit la probabilité d'appartenir à la modalité $k$, $$p_{ik} = \Pr(Y_i=k \mid \mathbf{X}_i), \qquad (k=1, \ldots, K).$$ 
 
 La somme des probabilités, $p_{i1} + \cdots + p_{iK}$, vaut 1.
 
@@ -258,7 +258,7 @@ L'interprétation des paramètres se fait comme en régression logistique sauf q
 
 On peut aussi exprimer le modèle en termes des probabilités, 
 \begin{align*}
- p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k=1, \ldots, K.
 \end{align*}
 où $\eta_{ij}$ est le prédicteur linéaire de l'individu $i$ pour le log de la cote de $Y_i=j$ versus la référence $Y_i=1$. On fixe $\eta_{i1}=0$.
 
@@ -940,7 +940,9 @@ g1 + g2 + g3 + g4 + plot_layout(nrow = 1, byrow = FALSE)
 
 \footnotesize
 
-Les cases grises représentent des valeurs manquantes. Illustration adapté de la Figure 4.1 de van Buuren (2022)
+Les cases grises représentent des valeurs manquantes. Illustration adapté de la Figure 4.1 de van Buuren (2022). Dans le cas monotone, on fait l'imputation séquentiellement.
+
+\normalsize
 
 # Analyse des cas complet
 
@@ -1107,15 +1109,26 @@ knitr::kable(manq,
 # Configuration des valeurs manquantes
 
 ```{r}
-#| label: fig-manquantes2
 #| echo: false
 #| eval: true
-#| out-width: '50%'
-#| fig-cap: "Les noms des variables sont indiquées au dessus, le nombre total de valeurs manquantes par variable en dessous, le nombre d’observations pour chaque configuration de valeurs manquantes à gauche et le nombre de variables avec des valeurs manquantes par configuration à droitef."
+#| out-width: '90%'
+#| fig-align: "center"
+#| fig-width: 6
+#| fig-height: 4
 puzle <- mice::md.pattern(hecmulti::manquantes[,1:6], 
                           plot = TRUE)
 ```
 
+\tiny
+
+
+- **Haut**: noms des variables. 
+- **Bas**: nombre total de valeurs manquantes par variable
+- **Gauche**: nombre d'observations pour chaque configuration de valeurs manquantes 
+- **Droite**: nombre de variables avec des valeurs manquantes par configuration
+
+
+\normalsize
 
 
 
@@ -1136,25 +1149,74 @@ Valides pour les données manquantes de manière aléatoire et complètement al�
 knitr::include_graphics("figures/donnees_manquantes_workflow.pdf")
 ```
 
+
+# Imputation
+
+Avec $p$ variables $X_1, \ldots, X_p$, spécifier un ensemble de modèles **conditionnels** pour chaque variable $X_j$ en fonction de
+
+- toutes les autres variables, $\boldsymbol{X}_{-j}$
+- les valeurs observées pour cette variable, $X_{j, \text{obs}}$
+
+
+Chaque variable a un modèle de régression, par ex.: 
+
+- logistique multinomial pour les variables catégorielles
+- moyenne imputée aléatoire / régression linéaire pour les données continues. 
+
+
+Dans le cadre du cours, vous pouvez les traiter comme une boîte noire.
+
+# Imputation multiple par équations chaînées (MICE)
+
+
+
+- Initialisation: on remplit les trous avec des données au hasard parmi $X_{j, \text{obs}}$ pour $X_{j, \text{man}}$
+- Pour chaque variable $j$ à tour de rôle, on construit un modèle de régression à partir des $X_{j, \text{obs}}$ à partir des données complètes des autres variables explicatives, à l'itération actuelle.
+- On fait un tirage des paramètres du modèle, et des réalisations des $X_{j, \text{man}}$
+- On répète ces étapes plusieurs fois et on retourne à la fin les valeurs imputées.
+
+L'imputation des valeurs manquantes est faite avec un échantillonneur de Gibbs (modèle de régression bayésiens), mais le nombre d'itérations est généralement faible (10-15 en pratique).
+
+<!--
+
+2. À l'itération $t$, pour chaque variable $j=1, \ldots, p$, à tour de rôle:
+   a) tirage aléatoire des paramètres $\phi_j^{(t)}$ du modèle pour $X_{j,\text{man}}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
+   b) échantillonnage de nouvelles observations $X^{(t)}_{j,\text{man}}$ du modèle avec paramètres $\phi_j^{(t)}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
+3. Répéter le cycle $N$ fois et retourner les valeurs des observations manquantes.
+
+-->
+
+
 # Combinaison des résultats
 
-Considérons un seul paramètre $\theta$ (ex: coefficient d'une régression) et supposons qu'on procède à $K$ imputations.
+Considérons  un modèle de régression avec coefficients $\boldsymbol{\beta} = (\beta_0, \ldots, \beta_p) \in \mathbb{R}^{p+1}$ et supposons qu'on procède à $K$ imputations.
 
 On estime les paramètres du modèle séparément pour chacun des $K$ ensembles de données imputés, disons 
 
-- $\widehat{\theta}_k$ pour l'estimation du paramètre $\theta$ dans l'échantillon $k$ et
-- $\widehat{\sigma}_k^2=\mathsf{Va}(\widehat{\theta}_k)$ pour l'estimation de la variance de $\widehat{\theta}_k$. 
+- $\widehat{\boldsymbol{\beta}}^{(k)}$ pour l'estimation du vecteur $\boldsymbol{\beta}$ dans l'échantillon $k$ (`coef`) et
+- $\widehat{\boldsymbol{\Sigma}}^{(k)}=\mathsf{Va}(\widehat{\boldsymbol{\beta}}^{(k)})$ pour l'estimation de la variance de $\widehat{\boldsymbol{\beta}}^{(k)}$ (`vcov`). 
 
-# Estimations
+# Estimations des coefficients
 
-L'estimation finale de $\theta$, dénotée $\widehat{\theta}$, est obtenue tout simplement en faisant la moyenne des estimations de tous les modèles.
+L'estimation finale de $\boldsymbol{\beta}$, dénotée $$\widehat{\boldsymbol{\beta}} = K^{-1}\sum_{k=1}^K \widehat{\boldsymbol{\beta}}^{(k)},$$ est obtenue tout simplement en faisant la moyenne des estimations de tous les modèles.
 
-Pour la variance de $\widehat{\theta}$, on calcule la somme de
+# Estimation de l'incertitude
 
-- la moyenne des $K$ variances pour chaque imputation, $\widehat{\sigma}_1^2, \ldots, \widehat{\sigma}_K^2$, appelée variance intra-groupe.
-- la variance des estimations moyennes, $\widehat{\theta}_1, \ldots, \widehat{\theta}_K$, appelée variance inter-groupe.
+Pour la variance de l'estimation, on calcule la somme de 
 
-En combinant ces deux sources variabilités, on enfle la variance par rapport à l'imputation simple
+- la variance intra-groupe, la moyenne des $K$ variances pour chaque imputation: $$\mathsf{Var}_{\text{intra}}(\widehat{\boldsymbol{\beta}}) = K^{-1}\sum_{k=1}^K\widehat{\boldsymbol{\Sigma}}^{(k)}$$
+- la variance inter-groupe, soit la variance des estimations moyennes, 
+$$\mathsf{Var}_{\text{inter}}(\widehat{\boldsymbol{\beta}}) = \frac{1}{K-1}\sum_{k=1}^K \left(
+\widehat{\boldsymbol{\beta}}^{(k)} - \widehat{\boldsymbol{\beta}}\right)^2.$$
+
+La variance totale est 
+$\mathsf{Var}_{\text{intra}}(\widehat{\boldsymbol{\beta}}) + \left(1+K^{-1}\right)\mathsf{Var}_{\text{inter}}(\widehat{\boldsymbol{\beta}}).$
+
+# Inflation de la variance
+
+Si on procédait à une seule imputation (même en ajoutant une part d'aléatoire pour essayer de reproduire la variabilité des données), on ne serait pas en mesure d'estimer la variance inter-groupe de l'estimateur. 
+
+On peut calculer la proportion de variance due aux données manquantes via 
 
 <!-- 
 
@@ -1162,25 +1224,11 @@ En combinant ces deux sources variabilités, on enfle la variance par rapport à
 
 Des formules analogues existent pour les degrés de liberté, les valeurs-$p$, etc. ainsi que pour la cas multidimensionnel (plusieurs paramètres).
 
-Si on procédait à une seule imputation (même en ajoutant une part d'aléatoire pour essayer de reproduire la variabilité des données), on ne serait pas en mesure d'estimer la variance inter-groupe de l'estimateur. 
+
 
 On peut estimer la fraction de l'information manquante sur $\theta$ avec $(1+1/K)B/\mathsf{Va}(\hat{\theta})$. 
 
 -->
-
-
-# Imputation multiple par équations chaînées (MICE)
-
-Avec $p$ variables $X_1, \ldots, X_p$, spécifier un ensemble de modèles **conditionnels** pour chaque variable $X_j$ en fonction de
-
-- toutes les autres variables, $\boldsymbol{X}_{-j}$
-- les valeurs observées pour cette variable, $X_{j, \text{obs}}$
-
-1. Initialisation: remplir les trous avec des données au hasard parmi $X_{j, \text{obs}}$ pour $X_{j, \text{man}}$
-2. À l'itération $t$, pour chaque variable $j=1, \ldots, p$, à tour de rôle:
-   a) tirage aléatoire des paramètres $\phi_j^{(t)}$ du modèle pour $X_{j,\text{man}}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
-   b) échantillonnage de nouvelles observations $X^{(t)}_{j,\text{man}}$ du modèle avec paramètres $\phi_j^{(t)}$ conditionnel à $\boldsymbol{X}_{-j}^{(t-1)}$ et  $X_{j, \text{obs}}$
-3. Répéter le cycle
 
 
 
@@ -1300,7 +1348,7 @@ tab |>
 - Les données manquantes réduisent la quantité d'information disponible et augmentent l'incertitude.
 - On ne peut **pas** les ignorer (étude des cas complets) sans biaiser les interprétations et réduire la quantité d'information disponible.
 - Pour bien capturer l'**incertitude** et ne pas modifier les relations entre variables, il faut utiliser une méthode **aléatoire**.
-- Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque variable à tour de rôle
+- Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque variable.
 
 # Récapitulatif
 

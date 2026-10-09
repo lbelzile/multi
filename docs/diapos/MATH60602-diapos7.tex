@@ -226,509 +226,6 @@
 \frame{\titlepage}
 
 
-\begin{frame}{Données manquantes}
-\phantomsection\label{donnuxe9es-manquantes}
-Plusieurs champs d'une base de données peuvent être manquants
-
-\begin{itemize}
-\tightlist
-\item
-  non-réponse
-\item
-  valeurs erronées (erreurs d'encodage)
-\item
-  perte de suivi et censure
-\item
-  plusieurs versions de formulaires (question optionnelles)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Pourquoi s'en préoccuper?}
-\phantomsection\label{pourquoi-sen-pruxe9occuper}
-La plupart des procédures ne gèrent que les cas complets (toute
-observation avec des valeurs manquantes est éliminée).
-
-Les données manquantes réduisent l'information disponible.
-
-Sans traitement adéquat, les estimations seront \textbf{biaisées}.
-\end{frame}
-
-\begin{frame}{Références}
-\phantomsection\label{ruxe9fuxe9rences}
-\begin{itemize}
-\tightlist
-\item
-  van Buuren, S. (2018).
-  \href{https://stefvanbuuren.name/fimd/}{\emph{Flexible imputation of
-  missing data}}, CRC Press, 2e édition.
-\item
-  Little, R. et D. Rubin (2019). \emph{Statistical Analysis with Missing
-  Data}, Wiley, 3e édition
-\item
-  Schafer, J. L. (1997). \emph{Analysis of Incomplete Multivariate
-  Data}. Chapman \& Hall / CRC.
-\end{itemize}
-
-Les valeurs manquantes dans un contexte de prédiction sont couvertes
-dans le cours MATH 60600.
-\end{frame}
-
-\begin{frame}{Classification des données manquantes (MCAR)}
-\phantomsection\label{classification-des-donnuxe9es-manquantes-mcar}
-Cas 1: Données manquantes de façon complètement aléatoire (\emph{missing
-completely at random})
-
-La probabilité que la valeur soit manquante ne dépend ni de la valeur,
-ni de celles des autres variables.
-
-Exemple: questionnaire trop long, la personne ne répond pas à tout (sans
-lien avec les questions posées).
-
-Hypothèse souvent irréaliste en pratique.
-\end{frame}
-
-\begin{frame}{Classification des données manquantes (MAR)}
-\phantomsection\label{classification-des-donnuxe9es-manquantes-mar}
-Cas 2: données manquantes de façon aléatoire (\emph{missing at random}):
-la probabilité que la valeur soit manquante ne dépend pas de la valeur
-\emph{une fois qu'on a contrôlé pour les autres variables}.
-
-Exemple: les hommes sont plus susceptibles dans l'ensemble de divulguer
-leur âge que les femmes.
-\end{frame}
-
-\begin{frame}{Classification des données manquantes (MNAR)}
-\phantomsection\label{classification-des-donnuxe9es-manquantes-mnar}
-Cas 3: données manquantes de façon non-aléatoire (\emph{missing not at
-random}): la probabilité que la mesure soit manquante dépend de la
-valeur elle-même, pas déterminable avec d'autres variables
-
-Exemple: une personne transgenre ne répond pas à la question genre (si
-seulement deux choix, homme/femme) et aucune autre question ne se
-rattache au genre ou à l'identité sexuelle.
-\end{frame}
-
-\begin{frame}{Type de données manquantes}
-\phantomsection\label{type-de-donnuxe9es-manquantes}
-Comment déterminer le type de données manquantes?
-
-Par exemple, si une personne ne divulgue pas son salaire, est ce qu les
-données sont manquantes de manière aléatoire ou non aléatoire?
-
-L'hypothèse pas testable, la réponse dépend du contexte et des variables
-auxiliaires disponibles.
-\end{frame}
-
-\begin{frame}{Valeur logique}
-\phantomsection\label{valeur-logique}
-Les données manquantes ont souvent une valeur logique:
-
-\begin{itemize}
-\tightlist
-\item
-  un client qui n'a pas de carte de crédit a un solde de 0!
-\end{itemize}
-
-D'où l'importance des validations d'usage et du nettoyage préliminaire
-de la base de données.
-\end{frame}
-
-\begin{frame}{Types de schémas de données manquantes}
-\phantomsection\label{types-de-schuxe9mas-de-donnuxe9es-manquantes}
-Matrice \(n \times p\) (observations en lignes, variables en colonnes).
-
-\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-1-1.pdf}
-
-\footnotesize
-
-Les cases grises représentent des valeurs manquantes. Illustration
-adapté de la Figure 4.1 de van Buuren (2022)
-\end{frame}
-
-\begin{frame}{Analyse des cas complet}
-\phantomsection\label{analyse-des-cas-complet}
-Retirer les observations avec données manquantes pour conserver les cas
-complets.
-
-\begin{itemize}
-\tightlist
-\item
-  Valide uniquement pour les données complètement aléatoires.
-\item
-  On perd de la précision en utilisant moins d'observations.
-\end{itemize}
-
-Méthode par défaut dans les logiciels.
-\end{frame}
-
-\begin{frame}{Méthodes d'imputation}
-\phantomsection\label{muxe9thodes-dimputation}
-Imputation: remplacer les valeurs manquantes par une valeur judicieuse
-pour \emph{combler les trous}.
-
-\begin{quote}
-\emph{Le concept d'imputation est à la fois séduisant et dangereux}.
-(Dempster et Rubin, 1983)
-\end{quote}
-
-On distinguera
-
-\begin{itemize}
-\tightlist
-\item
-  l'imputation déterministe versus l'imputation aléatoire
-\item
-  l'imputation simple (une copie) versus multiple (plusieurs
-  imputations)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Imputation déterministe par la moyenne}
-\phantomsection\label{imputation-duxe9terministe-par-la-moyenne}
-Dilution de la relation (corrélation) entre variables explicatives.
-Réduction de la variabilité.
-
-\begin{center}
-\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-2-1.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}[fragile]{Imputation aléatoire}
-\phantomsection\label{imputation-aluxe9atoire}
-Considérons le cas d'une régression logistique pour une variable
-explicative binaire.
-
-Plutôt que d'assigner à la classe la plus probable, une prédiction
-aléatoire simule une variable 0/1 avec probabilité
-\((1-\widehat{p}_i, \widehat{p}_i)\).
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\NormalTok{pred }\OtherTok{\textless{}{-}} \FloatTok{0.3} \CommentTok{\#probabilité de succès}
-\FunctionTok{rbinom}\NormalTok{(}\AttributeTok{n =} \DecValTok{15}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{, }\AttributeTok{prob =}\NormalTok{ pred)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
- [1] 0 0 0 0 0 0 0 1 1 0 0 0 0 1 0
-\end{verbatim}
-\end{frame}
-
-\begin{frame}{Faut-il toujours imputer?}
-\phantomsection\label{faut-il-toujours-imputer}
-Il faut utiliser son jugement.
-
-Une observation imputée ne remplacera jamais une vraie observation.
-
-\begin{itemize}
-\tightlist
-\item
-  Si la proportion d'observations manquantes est petite (moins de 5\%),
-  on pourrait faire une analyse avec les cas complets (et valider au
-  besoin en utilisant l'imputation multiple).
-\item
-  Si la proportion de valeurs manquantes est 30\% et que cette
-  proportion baisse à 3\% lorsque vous éliminez quelques variables peu
-  importantes pour votre étude, alors procédez à leur élimination.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Problèmes de l'imputation simple}
-\phantomsection\label{probluxe8mes-de-limputation-simple}
-On ne tient pas compte du fait que des valeurs ont été remplacées (on
-fait comme si c'était de vraies observations).
-
-On sous-évalue encore une fois la \textbf{variabilité} des données
-
-\begin{itemize}
-\tightlist
-\item
-  les écarts-type des estimations sont trop petits.
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Inspection des valeurs manquantes}
-\phantomsection\label{inspection-des-valeurs-manquantes}
-Il est donc nécessaire d'examiner la configuration des valeurs
-manquantes avant de faire quoi que ce soit.
-
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{data}\NormalTok{(manquantes, }\AttributeTok{package =} \StringTok{\textquotesingle{}hecmulti\textquotesingle{}}\NormalTok{)}
-\FunctionTok{summary}\NormalTok{(manquantes)}
-\CommentTok{\# Pourcentage de valeurs manquantes}
-\FunctionTok{apply}\NormalTok{(manquantes, }\DecValTok{2}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{mean}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))\})}
-\CommentTok{\# Voir les configurations de valeurs manquantes}
-\FunctionTok{md.pattern}\NormalTok{(manquantes) }\CommentTok{\# graphique diapo suivante}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{longtable}[t]{llllllll}
-
-\caption{\label{tbl-manquantes-univ}Nombre et pourcentage de valeurs
-manquantes par variable.}
-
-\tabularnewline
-
-\toprule
- & x1 & x2 & x3 & x4 & x5 & x6 & y\\
-\midrule
-nombre & 192 & 49 & 0 & 184 & 0 & 0 & 0\\
-pourcentage & 38.4 & 9.8 & 0 & 36.8 & 0 & 0 & 0\\
-\bottomrule
-
-\end{longtable}
-\end{frame}
-
-\begin{frame}{Configuration des valeurs manquantes}
-\phantomsection\label{configuration-des-valeurs-manquantes}
-\begin{figure}
-
-\centering{
-
-\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/fig-manquantes2-1.pdf}
-
-}
-
-\caption{\label{fig-manquantes2}Les noms des variables sont indiquées au
-dessus, le nombre total de valeurs manquantes par variable en dessous,
-le nombre d'observations pour chaque configuration de valeurs manquantes
-à gauche et le nombre de variables avec des valeurs manquantes par
-configuration à droitef.}
-
-\end{figure}%
-\end{frame}
-
-\begin{frame}[fragile]{Imputation multiple}
-\phantomsection\label{imputation-multiple}
-Valides pour les données manquantes de manière aléatoire et complètement
-aléatoires (MAR et MCAR).
-
-\begin{enumerate}
-\tightlist
-\item
-  Procéder à plusieurs imputations \textbf{aléatoires} pour obtenir un
-  échantillon complet (\texttt{mice})
-\item
-  Ajuster le modèle d'intérêt avec chaque échantillon (\texttt{with}).
-\item
-  Combiner les résultats obtenus (\texttt{pool} et \texttt{summary})
-\end{enumerate}
-
-\begin{center}
-\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{figures/donnees_manquantes_workflow.pdf}
-\end{center}
-\end{frame}
-
-\begin{frame}{Combinaison des résultats}
-\phantomsection\label{combinaison-des-ruxe9sultats}
-Considérons un seul paramètre \(\theta\) (ex: coefficient d'une
-régression) et supposons qu'on procède à \(K\) imputations.
-
-On estime les paramètres du modèle séparément pour chacun des \(K\)
-ensembles de données imputés, disons
-
-\begin{itemize}
-\tightlist
-\item
-  \(\widehat{\theta}_k\) pour l'estimation du paramètre \(\theta\) dans
-  l'échantillon \(k\) et
-\item
-  \(\widehat{\sigma}_k^2=\mathsf{Va}(\widehat{\theta}_k)\) pour
-  l'estimation de la variance de \(\widehat{\theta}_k\).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Estimations}
-\phantomsection\label{estimations}
-L'estimation finale de \(\theta\), dénotée \(\widehat{\theta}\), est
-obtenue tout simplement en faisant la moyenne des estimations de tous
-les modèles.
-
-Pour la variance de \(\widehat{\theta}\), on calcule la somme de
-
-\begin{itemize}
-\tightlist
-\item
-  la moyenne des \(K\) variances pour chaque imputation,
-  \(\widehat{\sigma}_1^2, \ldots, \widehat{\sigma}_K^2\), appelée
-  variance intra-groupe.
-\item
-  la variance des estimations moyennes,
-  \(\widehat{\theta}_1, \ldots, \widehat{\theta}_K\), appelée variance
-  inter-groupe.
-\end{itemize}
-
-En combinant ces deux sources variabilités, on enfle la variance par
-rapport à l'imputation simple
-\end{frame}
-
-\begin{frame}{Imputation multiple par équations chaînées (MICE)}
-\phantomsection\label{imputation-multiple-par-uxe9quations-chauxeenuxe9es-mice}
-Avec \(p\) variables \(X_1, \ldots, X_p\), spécifier un ensemble de
-modèles \textbf{conditionnels} pour chaque variable \(X_j\) en fonction
-de
-
-\begin{itemize}
-\tightlist
-\item
-  toutes les autres variables, \(\boldsymbol{X}_{-j}\)
-\item
-  les valeurs observées pour cette variable, \(X_{j, \text{obs}}\)
-\end{itemize}
-
-\begin{enumerate}
-\tightlist
-\item
-  Initialisation: remplir les trous avec des données au hasard parmi
-  \(X_{j, \text{obs}}\) pour \(X_{j, \text{man}}\)
-\item
-  À l'itération \(t\), pour chaque variable \(j=1, \ldots, p\), à tour
-  de rôle:
-
-  \begin{enumerate}
-  [a)]
-  \tightlist
-  \item
-    tirage aléatoire des paramètres \(\phi_j^{(t)}\) du modèle pour
-    \(X_{j,\text{man}}\) conditionnel à \(\boldsymbol{X}_{-j}^{(t-1)}\)
-    et \(X_{j, \text{obs}}\)
-  \item
-    échantillonnage de nouvelles observations \(X^{(t)}_{j,\text{man}}\)
-    du modèle avec paramètres \(\phi_j^{(t)}\) conditionnel à
-    \(\boldsymbol{X}_{-j}^{(t-1)}\) et \(X_{j, \text{obs}}\)
-  \end{enumerate}
-\item
-  Répéter le cycle
-\end{enumerate}
-\end{frame}
-
-\begin{frame}[fragile]{Imputation multiple avec \texttt{mice}}
-\phantomsection\label{imputation-multiple-avec-mice}
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\FunctionTok{library}\NormalTok{(mice)}
-\CommentTok{\# Intensif en calcul, réduire "m" si nécessaire}
-\NormalTok{impdata }\OtherTok{\textless{}{-}} \FunctionTok{mice}\NormalTok{(}
-   \AttributeTok{data =}\NormalTok{ manquantes,}
-   \CommentTok{\# argument "method" pour le modèle}
-   \CommentTok{\# dépend du type des variables, par ex.}
-   \CommentTok{\# régression logistique pour données binaires}
-   \AttributeTok{m =} \DecValTok{50}\NormalTok{, }\CommentTok{\# nombre d\textquotesingle{}imputations}
-   \AttributeTok{seed =} \DecValTok{60602}\NormalTok{, }\CommentTok{\# germe aléatoire}
-   \AttributeTok{printFlag =} \ConstantTok{FALSE}\NormalTok{)}
-\CommentTok{\# Extraite une copie (m=1,..., 50) imputée }
-\FunctionTok{complete}\NormalTok{(}\AttributeTok{data =}\NormalTok{ impdata, }
-         \AttributeTok{action =} \DecValTok{1}\NormalTok{) }\CommentTok{\#no de la copie}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}[fragile]{Estimation et combinaison avec \texttt{mice}}
-\phantomsection\label{estimation-et-combinaison-avec-mice}
-\begin{Shaded}
-\begin{Highlighting}[numbers=left,,]
-\CommentTok{\# ajuste le modèle avec les données imputées}
-\NormalTok{adj\_im }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(}
-  \AttributeTok{data =}\NormalTok{ impdata,}
-  \AttributeTok{expr =} \FunctionTok{glm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+}\NormalTok{ x6,}
-             \AttributeTok{family =}\NormalTok{ binomial))}
-\CommentTok{\# combinaison des résultats }
-\NormalTok{fit }\OtherTok{\textless{}{-}} \FunctionTok{pool}\NormalTok{(adj\_im)}
-\FunctionTok{summary}\NormalTok{(fit)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}{Résultats}
-\phantomsection\label{ruxe9sultats}
-\begin{itemize}
-\tightlist
-\item
-  Les estimations avec les données complètes ont la plus grande
-  incertitude, parce qu'elles utilisent uniquement \(n=180\)
-  observations.
-\item
-  L'imputation multiple donne \(n=500\) observations et prend
-  correctement en compte l'incertitude.
-\item
-  L'imputation simple sous-estime l'incertitude des coefficients.
-\end{itemize}
-
-\small
-
-\begin{table}
-
-\caption{\label{tbl-manquantsres}Estimation des coefficients et erreurs
-type pour quelques paramètres du modèle.}
-
-\centering{
-
-\fontsize{8.0pt}{10.0pt}\selectfont
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrrrrr}
-\toprule
-\multicolumn{2}{c}{{données complètes}} & \multicolumn{2}{c}{{imputation multiple}} & \multicolumn{2}{c}{{imputation simple}} \\ 
-\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
-coef. & err. type & coef. & err. type & coef. & err. type \\ 
-\midrule\addlinespace[2.5pt]
--0.48 & 0.76 & -0.90 & 0.58 & -1.61 & 0.47 \\ 
--0.38 & 0.77 & -0.53 & 0.59 & -0.95 & 0.46 \\ 
--0.84 & 0.80 & -0.76 & 0.55 & -0.89 & 0.46 \\ 
-0.09 & 0.85 & -0.58 & 0.64 & -1.15 & 0.50 \\ 
-1.19 & 0.76 & -0.03 & 0.44 & -0.16 & 0.42 \\ 
-\bottomrule
-\end{tabular*}
-
-}
-
-\end{table}%
-
-\normalsize
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif}
-\begin{itemize}
-\tightlist
-\item
-  Les données manquantes réduisent la quantité d'information disponible
-  et augmentent l'incertitude.
-\item
-  On ne peut \textbf{pas} les ignorer (étude des cas complets) sans
-  biaiser les interprétations et réduire la quantité d'information
-  disponible.
-\item
-  Pour bien capturer l'\textbf{incertitude} et ne pas modifier les
-  relations entre variables, il faut utiliser une méthode
-  \textbf{aléatoire}.
-\item
-  Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque
-  variable à tour de rôle
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-1}
-L'imputation multiple est préférée à l'imputation simple car elle permet
-d'estimer l'incertitude sous-jacente en raison des données manquantes.
-
-\begin{itemize}
-\tightlist
-\item
-  On procède à l'imputation plusieurs fois (avec un modèle conditionel,
-  prédictions différentes chaque fois)
-\item
-  on crée plusieurs copies
-\item
-  ajuste le modèle sur chacune et
-\item
-  combine les résultats
-\end{itemize}
-
-Traitement spécial pour erreurs-type, degrés de liberté, valeurs-\(p\)
-et intervalles de confiance.
-\end{frame}
-
 \begin{frame}[fragile]{Régression multinomiale logistique}
 \phantomsection\label{ruxe9gression-multinomiale-logistique}
 La régression multinomiale logistique est un modèle de régression pour
@@ -743,8 +240,8 @@ pour (\(K \ge 2\)) nominale ou ordinale.
   Destination de vacances l'année dernière (Québec, États-Unis,
   ailleurs).
 \item
-  Si des élections générales avaient lieu aujourd'\,'\,'hui au Québec,
-  pour quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
+  Si des élections générales avaient lieu aujourd'hui au Québec, pour
+  quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
 \item
   Combien de fois êtes-vous allé au cinéma l'année dernière: moins de
   cinq fois (\texttt{1}), entre cinq et 10 fois (\texttt{2}) ou plus de
@@ -824,7 +321,7 @@ modalités.
 variable réponse.
 
 Soit la probabilité d'appartenir à la modalité \(k\),
-\[p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).\]
+\[p_{ik} = \Pr(Y_i=k \mid \mathbf{X}_i), \qquad (k=1, \ldots, K).\]
 
 La somme des probabilités, \(p_{i1} + \cdots + p_{iK}\), vaut 1.
 \end{frame}
@@ -853,7 +350,7 @@ sauf qu'il faut le faire équation par équation.
 \phantomsection\label{moduxe8le-logistique-multinomial-et-probabilituxe9s}
 On peut aussi exprimer le modèle en termes des probabilités,
 \begin{align*}
- p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k=1, \ldots, K.
 \end{align*} où \(\eta_{ij}\) est le prédicteur linéaire de l'individu
 \(i\) pour le log de la cote de \(Y_i=j\) versus la référence \(Y_i=1\).
 On fixe \(\eta_{i1}=0\).
@@ -945,8 +442,8 @@ paramètres.
 \end{verbatim}
 \end{frame}
 
-\begin{frame}[fragile]{Probabilité Empirique}
-\phantomsection\label{probabilituxe9-empirique}
+\begin{frame}[fragile]{Proportion empirique}
+\phantomsection\label{proportion-empirique}
 Le modèle précédent retourne comme probabilité prédite la proportion
 empirique (pondérée) de chaque catégorie.
 
@@ -1116,7 +613,7 @@ Voir les notes de cours pour plus de détails.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-2}
+\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -1138,7 +635,7 @@ Voir les notes de cours pour plus de détails.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-3}
+\phantomsection\label{ruxe9capitulatif-1}
 On met beaucoup l'accent sur l'interprétation des coefficients à
 l'échelle de la cote.
 
@@ -1155,7 +652,7 @@ l'échelle de la cote.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-4}
+\phantomsection\label{ruxe9capitulatif-2}
 Les outils usuels d'inférence pour les modèles estimés par maximum de
 vraisemblance sont applicables.
 
@@ -1171,7 +668,7 @@ vraisemblance sont applicables.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\phantomsection\label{ruxe9capitulatif-5}
+\phantomsection\label{ruxe9capitulatif-3}
 Côté classification, on va règle générale assigner à la classe la plus
 probable.
 
@@ -1186,6 +683,547 @@ probable.
   récepteur) ne sont en revanche pas applicables ou n'ont pas
   d'équivalent.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Données manquantes}
+\phantomsection\label{donnuxe9es-manquantes}
+Plusieurs champs d'une base de données peuvent être manquants
+
+\begin{itemize}
+\tightlist
+\item
+  non-réponse
+\item
+  valeurs erronées (erreurs d'encodage)
+\item
+  perte de suivi et censure
+\item
+  plusieurs versions de formulaires (question optionnelles)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pourquoi s'en préoccuper?}
+\phantomsection\label{pourquoi-sen-pruxe9occuper}
+La plupart des procédures ne gèrent que les cas complets (toute
+observation avec des valeurs manquantes est éliminée).
+
+Les données manquantes réduisent l'information disponible.
+
+Sans traitement adéquat, les estimations seront \textbf{biaisées}.
+\end{frame}
+
+\begin{frame}{Références}
+\phantomsection\label{ruxe9fuxe9rences}
+\begin{itemize}
+\tightlist
+\item
+  van Buuren, S. (2018).
+  \href{https://stefvanbuuren.name/fimd/}{\emph{Flexible imputation of
+  missing data}}, CRC Press, 2e édition.
+\item
+  Little, R. et D. Rubin (2019). \emph{Statistical Analysis with Missing
+  Data}, Wiley, 3e édition
+\item
+  Schafer, J. L. (1997). \emph{Analysis of Incomplete Multivariate
+  Data}. Chapman \& Hall / CRC.
+\end{itemize}
+
+Les valeurs manquantes dans un contexte de prédiction sont couvertes
+dans le cours MATH 60600.
+\end{frame}
+
+\begin{frame}{Classification des données manquantes (MCAR)}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mcar}
+Cas 1: Données manquantes de façon complètement aléatoire (\emph{missing
+completely at random})
+
+La probabilité que la valeur soit manquante ne dépend ni de la valeur,
+ni de celles des autres variables.
+
+Exemple: questionnaire trop long, la personne ne répond pas à tout (sans
+lien avec les questions posées).
+
+Hypothèse souvent irréaliste en pratique.
+\end{frame}
+
+\begin{frame}{Classification des données manquantes (MAR)}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mar}
+Cas 2: données manquantes de façon aléatoire (\emph{missing at random}):
+la probabilité que la valeur soit manquante ne dépend pas de la valeur
+\emph{une fois qu'on a contrôlé pour les autres variables}.
+
+Exemple: les hommes sont plus susceptibles dans l'ensemble de divulguer
+leur âge que les femmes.
+\end{frame}
+
+\begin{frame}{Classification des données manquantes (MNAR)}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mnar}
+Cas 3: données manquantes de façon non-aléatoire (\emph{missing not at
+random}): la probabilité que la mesure soit manquante dépend de la
+valeur elle-même, pas déterminable avec d'autres variables
+
+Exemple: une personne transgenre ne répond pas à la question genre (si
+seulement deux choix, homme/femme) et aucune autre question ne se
+rattache au genre ou à l'identité sexuelle.
+\end{frame}
+
+\begin{frame}{Type de données manquantes}
+\phantomsection\label{type-de-donnuxe9es-manquantes}
+Comment déterminer le type de données manquantes?
+
+Par exemple, si une personne ne divulgue pas son salaire, est ce qu les
+données sont manquantes de manière aléatoire ou non aléatoire?
+
+L'hypothèse pas testable, la réponse dépend du contexte et des variables
+auxiliaires disponibles.
+\end{frame}
+
+\begin{frame}{Valeur logique}
+\phantomsection\label{valeur-logique}
+Les données manquantes ont souvent une valeur logique:
+
+\begin{itemize}
+\tightlist
+\item
+  un client qui n'a pas de carte de crédit a un solde de 0!
+\end{itemize}
+
+D'où l'importance des validations d'usage et du nettoyage préliminaire
+de la base de données.
+\end{frame}
+
+\begin{frame}{Types de schémas de données manquantes}
+\phantomsection\label{types-de-schuxe9mas-de-donnuxe9es-manquantes}
+Matrice \(n \times p\) (observations en lignes, variables en colonnes).
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-11-1.pdf}
+
+\footnotesize
+
+Les cases grises représentent des valeurs manquantes. Illustration
+adapté de la Figure 4.1 de van Buuren (2022). Dans le cas monotone, on
+fait l'imputation séquentiellement.
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Analyse des cas complet}
+\phantomsection\label{analyse-des-cas-complet}
+Retirer les observations avec données manquantes pour conserver les cas
+complets.
+
+\begin{itemize}
+\tightlist
+\item
+  Valide uniquement pour les données complètement aléatoires.
+\item
+  On perd de la précision en utilisant moins d'observations.
+\end{itemize}
+
+Méthode par défaut dans les logiciels.
+\end{frame}
+
+\begin{frame}{Méthodes d'imputation}
+\phantomsection\label{muxe9thodes-dimputation}
+Imputation: remplacer les valeurs manquantes par une valeur judicieuse
+pour \emph{combler les trous}.
+
+\begin{quote}
+\emph{Le concept d'imputation est à la fois séduisant et dangereux}.
+(Dempster et Rubin, 1983)
+\end{quote}
+
+On distinguera
+
+\begin{itemize}
+\tightlist
+\item
+  l'imputation déterministe versus l'imputation aléatoire
+\item
+  l'imputation simple (une copie) versus multiple (plusieurs
+  imputations)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Imputation déterministe par la moyenne}
+\phantomsection\label{imputation-duxe9terministe-par-la-moyenne}
+Dilution de la relation (corrélation) entre variables explicatives.
+Réduction de la variabilité.
+
+\begin{center}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-12-1.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Imputation aléatoire}
+\phantomsection\label{imputation-aluxe9atoire}
+Considérons le cas d'une régression logistique pour une variable
+explicative binaire.
+
+Plutôt que d'assigner à la classe la plus probable, une prédiction
+aléatoire simule une variable 0/1 avec probabilité
+\((1-\widehat{p}_i, \widehat{p}_i)\).
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FloatTok{0.3} \CommentTok{\#probabilité de succès}
+\FunctionTok{rbinom}\NormalTok{(}\AttributeTok{n =} \DecValTok{15}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{, }\AttributeTok{prob =}\NormalTok{ pred)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] 0 0 0 0 0 0 0 1 1 0 0 0 0 1 0
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Faut-il toujours imputer?}
+\phantomsection\label{faut-il-toujours-imputer}
+Il faut utiliser son jugement.
+
+Une observation imputée ne remplacera jamais une vraie observation.
+
+\begin{itemize}
+\tightlist
+\item
+  Si la proportion d'observations manquantes est petite (moins de 5\%),
+  on pourrait faire une analyse avec les cas complets (et valider au
+  besoin en utilisant l'imputation multiple).
+\item
+  Si la proportion de valeurs manquantes est 30\% et que cette
+  proportion baisse à 3\% lorsque vous éliminez quelques variables peu
+  importantes pour votre étude, alors procédez à leur élimination.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problèmes de l'imputation simple}
+\phantomsection\label{probluxe8mes-de-limputation-simple}
+On ne tient pas compte du fait que des valeurs ont été remplacées (on
+fait comme si c'était de vraies observations).
+
+On sous-évalue encore une fois la \textbf{variabilité} des données
+
+\begin{itemize}
+\tightlist
+\item
+  les écarts-type des estimations sont trop petits.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Inspection des valeurs manquantes}
+\phantomsection\label{inspection-des-valeurs-manquantes}
+Il est donc nécessaire d'examiner la configuration des valeurs
+manquantes avant de faire quoi que ce soit.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{data}\NormalTok{(manquantes, }\AttributeTok{package =} \StringTok{\textquotesingle{}hecmulti\textquotesingle{}}\NormalTok{)}
+\FunctionTok{summary}\NormalTok{(manquantes)}
+\CommentTok{\# Pourcentage de valeurs manquantes}
+\FunctionTok{apply}\NormalTok{(manquantes, }\DecValTok{2}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{mean}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(x))\})}
+\CommentTok{\# Voir les configurations de valeurs manquantes}
+\FunctionTok{md.pattern}\NormalTok{(manquantes) }\CommentTok{\# graphique diapo suivante}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[t]{llllllll}
+
+\caption{\label{tbl-manquantes-univ}Nombre et pourcentage de valeurs
+manquantes par variable.}
+
+\tabularnewline
+
+\toprule
+ & x1 & x2 & x3 & x4 & x5 & x6 & y\\
+\midrule
+nombre & 192 & 49 & 0 & 184 & 0 & 0 & 0\\
+pourcentage & 38.4 & 9.8 & 0 & 36.8 & 0 & 0 & 0\\
+\bottomrule
+
+\end{longtable}
+\end{frame}
+
+\begin{frame}{Configuration des valeurs manquantes}
+\phantomsection\label{configuration-des-valeurs-manquantes}
+\begin{center}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-14-1.pdf}
+\end{center}
+
+\tiny
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Haut}: noms des variables.
+\item
+  \textbf{Bas}: nombre total de valeurs manquantes par variable
+\item
+  \textbf{Gauche}: nombre d'observations pour chaque configuration de
+  valeurs manquantes
+\item
+  \textbf{Droite}: nombre de variables avec des valeurs manquantes par
+  configuration
+\end{itemize}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]{Imputation multiple}
+\phantomsection\label{imputation-multiple}
+Valides pour les données manquantes de manière aléatoire et complètement
+aléatoires (MAR et MCAR).
+
+\begin{enumerate}
+\tightlist
+\item
+  Procéder à plusieurs imputations \textbf{aléatoires} pour obtenir un
+  échantillon complet (\texttt{mice})
+\item
+  Ajuster le modèle d'intérêt avec chaque échantillon (\texttt{with}).
+\item
+  Combiner les résultats obtenus (\texttt{pool} et \texttt{summary})
+\end{enumerate}
+
+\begin{center}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{figures/donnees_manquantes_workflow.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}{Imputation}
+\phantomsection\label{imputation}
+Avec \(p\) variables \(X_1, \ldots, X_p\), spécifier un ensemble de
+modèles \textbf{conditionnels} pour chaque variable \(X_j\) en fonction
+de
+
+\begin{itemize}
+\tightlist
+\item
+  toutes les autres variables, \(\boldsymbol{X}_{-j}\)
+\item
+  les valeurs observées pour cette variable, \(X_{j, \text{obs}}\)
+\end{itemize}
+
+Chaque variable a un modèle de régression, par ex.:
+
+\begin{itemize}
+\tightlist
+\item
+  logistique multinomial pour les variables catégorielles
+\item
+  moyenne imputée aléatoire / régression linéaire pour les données
+  continues.
+\end{itemize}
+
+Dans le cadre du cours, vous pouvez les traiter comme une boîte noire.
+\end{frame}
+
+\begin{frame}{Imputation multiple par équations chaînées (MICE)}
+\phantomsection\label{imputation-multiple-par-uxe9quations-chauxeenuxe9es-mice}
+\begin{itemize}
+\tightlist
+\item
+  Initialisation: on remplit les trous avec des données au hasard parmi
+  \(X_{j, \text{obs}}\) pour \(X_{j, \text{man}}\)
+\item
+  Pour chaque variable \(j\) à tour de rôle, on construit un modèle de
+  régression à partir des \(X_{j, \text{obs}}\) à partir des données
+  complètes des autres variables explicatives, à l'itération actuelle.
+\item
+  On fait un tirage des paramètres du modèle, et des réalisations des
+  \(X_{j, \text{man}}\)
+\item
+  On répète ces étapes plusieurs fois et on retourne à la fin les
+  valeurs imputées.
+\end{itemize}
+
+L'imputation des valeurs manquantes est faite avec un échantillonneur de
+Gibbs (modèle de régression bayésiens), mais le nombre d'itérations est
+généralement faible (10-15 en pratique).
+\end{frame}
+
+\begin{frame}[fragile]{Combinaison des résultats}
+\phantomsection\label{combinaison-des-ruxe9sultats}
+Considérons un modèle de régression avec coefficients
+\(\boldsymbol{\beta} = (\beta_0, \ldots, \beta_p) \in \mathbb{R}^{p+1}\)
+et supposons qu'on procède à \(K\) imputations.
+
+On estime les paramètres du modèle séparément pour chacun des \(K\)
+ensembles de données imputés, disons
+
+\begin{itemize}
+\tightlist
+\item
+  \(\widehat{\boldsymbol{\beta}}^{(k)}\) pour l'estimation du vecteur
+  \(\boldsymbol{\beta}\) dans l'échantillon \(k\) (\texttt{coef}) et
+\item
+  \(\widehat{\boldsymbol{\Sigma}}^{(k)}=\mathsf{Va}(\widehat{\boldsymbol{\beta}}^{(k)})\)
+  pour l'estimation de la variance de
+  \(\widehat{\boldsymbol{\beta}}^{(k)}\) (\texttt{vcov}).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Estimations des coefficients}
+\phantomsection\label{estimations-des-coefficients}
+L'estimation finale de \(\boldsymbol{\beta}\), dénotée
+\[\widehat{\boldsymbol{\beta}} = K^{-1}\sum_{k=1}^K \widehat{\boldsymbol{\beta}}^{(k)},\]
+est obtenue tout simplement en faisant la moyenne des estimations de
+tous les modèles.
+\end{frame}
+
+\begin{frame}{Estimation de l'incertitude}
+\phantomsection\label{estimation-de-lincertitude}
+Pour la variance de l'estimation, on calcule la somme de
+
+\begin{itemize}
+\tightlist
+\item
+  la variance intra-groupe, la moyenne des \(K\) variances pour chaque
+  imputation:
+  \[\mathsf{Var}_{\text{intra}}(\widehat{\boldsymbol{\beta}}) = K^{-1}\sum_{k=1}^K\widehat{\boldsymbol{\Sigma}}^{(k)}\]
+\item
+  la variance inter-groupe, soit la variance des estimations moyennes,
+  \[\mathsf{Var}_{\text{inter}}(\widehat{\boldsymbol{\beta}}) = \frac{1}{K-1}\sum_{k=1}^K \left(
+  \widehat{\boldsymbol{\beta}}^{(k)} - \widehat{\boldsymbol{\beta}}\right)^2.\]
+\end{itemize}
+
+La variance totale est
+\(\mathsf{Var}_{\text{intra}}(\widehat{\boldsymbol{\beta}}) + \left(1+K^{-1}\right)\mathsf{Var}_{\text{inter}}(\widehat{\boldsymbol{\beta}}).\)
+\end{frame}
+
+\begin{frame}{Inflation de la variance}
+\phantomsection\label{inflation-de-la-variance}
+Si on procédait à une seule imputation (même en ajoutant une part
+d'aléatoire pour essayer de reproduire la variabilité des données), on
+ne serait pas en mesure d'estimer la variance inter-groupe de
+l'estimateur.
+
+On peut calculer la proportion de variance due aux données manquantes
+via
+\end{frame}
+
+\begin{frame}[fragile]{Imputation multiple avec \texttt{mice}}
+\phantomsection\label{imputation-multiple-avec-mice}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\FunctionTok{library}\NormalTok{(mice)}
+\CommentTok{\# Intensif en calcul, réduire "m" si nécessaire}
+\NormalTok{impdata }\OtherTok{\textless{}{-}} \FunctionTok{mice}\NormalTok{(}
+   \AttributeTok{data =}\NormalTok{ manquantes,}
+   \CommentTok{\# argument "method" pour le modèle}
+   \CommentTok{\# dépend du type des variables, par ex.}
+   \CommentTok{\# régression logistique pour données binaires}
+   \AttributeTok{m =} \DecValTok{50}\NormalTok{, }\CommentTok{\# nombre d\textquotesingle{}imputations}
+   \AttributeTok{seed =} \DecValTok{60602}\NormalTok{, }\CommentTok{\# germe aléatoire}
+   \AttributeTok{printFlag =} \ConstantTok{FALSE}\NormalTok{)}
+\CommentTok{\# Extraite une copie (m=1,..., 50) imputée }
+\FunctionTok{complete}\NormalTok{(}\AttributeTok{data =}\NormalTok{ impdata, }
+         \AttributeTok{action =} \DecValTok{1}\NormalTok{) }\CommentTok{\#no de la copie}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}[fragile]{Estimation et combinaison avec \texttt{mice}}
+\phantomsection\label{estimation-et-combinaison-avec-mice}
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\CommentTok{\# ajuste le modèle avec les données imputées}
+\NormalTok{adj\_im }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(}
+  \AttributeTok{data =}\NormalTok{ impdata,}
+  \AttributeTok{expr =} \FunctionTok{glm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\SpecialCharTok{+}\NormalTok{ x3 }\SpecialCharTok{+}\NormalTok{ x4 }\SpecialCharTok{+}\NormalTok{ x5 }\SpecialCharTok{+}\NormalTok{ x6,}
+             \AttributeTok{family =}\NormalTok{ binomial))}
+\CommentTok{\# combinaison des résultats }
+\NormalTok{fit }\OtherTok{\textless{}{-}} \FunctionTok{pool}\NormalTok{(adj\_im)}
+\FunctionTok{summary}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+\end{frame}
+
+\begin{frame}{Résultats}
+\phantomsection\label{ruxe9sultats}
+\begin{itemize}
+\tightlist
+\item
+  Les estimations avec les données complètes ont la plus grande
+  incertitude, parce qu'elles utilisent uniquement \(n=180\)
+  observations.
+\item
+  L'imputation multiple donne \(n=500\) observations et prend
+  correctement en compte l'incertitude.
+\item
+  L'imputation simple sous-estime l'incertitude des coefficients.
+\end{itemize}
+
+\small
+
+\begin{table}
+
+\caption{\label{tbl-manquantsres}Estimation des coefficients et erreurs
+type pour quelques paramètres du modèle.}
+
+\centering{
+
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrrrrr}
+\toprule
+\multicolumn{2}{c}{{données complètes}} & \multicolumn{2}{c}{{imputation multiple}} & \multicolumn{2}{c}{{imputation simple}} \\ 
+\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
+coef. & err. type & coef. & err. type & coef. & err. type \\ 
+\midrule\addlinespace[2.5pt]
+-0.48 & 0.76 & -0.90 & 0.58 & -1.61 & 0.47 \\ 
+-0.38 & 0.77 & -0.53 & 0.59 & -0.95 & 0.46 \\ 
+-0.84 & 0.80 & -0.76 & 0.55 & -0.89 & 0.46 \\ 
+0.09 & 0.85 & -0.58 & 0.64 & -1.15 & 0.50 \\ 
+1.19 & 0.76 & -0.03 & 0.44 & -0.16 & 0.42 \\ 
+\bottomrule
+\end{tabular*}
+
+}
+
+\end{table}%
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\phantomsection\label{ruxe9capitulatif-4}
+\begin{itemize}
+\tightlist
+\item
+  Les données manquantes réduisent la quantité d'information disponible
+  et augmentent l'incertitude.
+\item
+  On ne peut \textbf{pas} les ignorer (étude des cas complets) sans
+  biaiser les interprétations et réduire la quantité d'information
+  disponible.
+\item
+  Pour bien capturer l'\textbf{incertitude} et ne pas modifier les
+  relations entre variables, il faut utiliser une méthode
+  \textbf{aléatoire}.
+\item
+  Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque
+  variable.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
+\phantomsection\label{ruxe9capitulatif-5}
+L'imputation multiple est préférée à l'imputation simple car elle permet
+d'estimer l'incertitude sous-jacente en raison des données manquantes.
+
+\begin{itemize}
+\tightlist
+\item
+  On procède à l'imputation plusieurs fois (avec un modèle conditionel,
+  prédictions différentes chaque fois)
+\item
+  on crée plusieurs copies
+\item
+  ajuste le modèle sur chacune et
+\item
+  combine les résultats
+\end{itemize}
+
+Traitement spécial pour erreurs-type, degrés de liberté, valeurs-\(p\)
+et intervalles de confiance.
 \end{frame}
 
 

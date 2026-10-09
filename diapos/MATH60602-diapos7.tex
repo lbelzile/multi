@@ -1,18 +1,18 @@
 % Options for packages loaded elsewhere
-% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
   ignorenonframetext,
 ]{beamer}
-\newif\ifbibliography
 \usepackage{pgfpages}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
 \setbeamercolor{caption name}{fg=normal text.fg}
 \beamertemplatenavigationsymbolsempty
-% remove section numbering
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
 \setbeamertemplate{part page}{
   \centering
   \begin{beamercolorbox}[sep=16pt,center]{part title}
@@ -31,9 +31,6 @@
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
-% Prevent slide breaks in the middle of a paragraph
-\widowpenalties 1 10000
-\raggedbottom
 \AtBeginPart{
   \frame{\partpage}
 }
@@ -46,26 +43,27 @@
 \AtBeginSubsection{
   \frame{\subsectionpage}
 }
+
+\usepackage{amsmath,amssymb}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math} % this also loads fontspec
+  \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-
-\usecolortheme[]{Flip}
+\usecolortheme{Flip}
 \usefonttheme{serif} % use mainfont rather than sansfont for slide text
-\useinnertheme[]{Flip}
-\useoutertheme[]{Flip}
-\ifPDFTeX\else
-  % xetex/luatex font selection
-  \setmainfont[]{VisbyCF}
-  \setsansfont[]{Latin Modern Sans}
+\useinnertheme{Flip}
+\useoutertheme{Flip}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+    \setmainfont[]{VisbyCF}
+    \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -84,6 +82,10 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -126,8 +128,8 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\usepackage{longtable,booktabs,array}
-\newcounter{none} % for unnumbered tables
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 \usepackage{caption}
 % Make caption package work with longtable
@@ -149,20 +151,6 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
-
-
-
-
-
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
-
- 
-
 
 \usepackage{booktabs}
 \usepackage{caption}
@@ -218,8 +206,9 @@
 \makeatother
 
 \usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same}
+\urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   pdftitle={Données manquantes et régression multinomiale},
   pdfauthor={Léo Belzile},
@@ -227,10 +216,8 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{\texorpdfstring{Données manquantes et régression
-multinomiale}{Données manquantes et régression multinomiale}}
-\subtitle{\texorpdfstring{Analyse multidimensionnelle
-appliquée}{Analyse multidimensionnelle appliquée}}
+\title{Données manquantes et régression multinomiale}
+\subtitle{Analyse multidimensionnelle appliquée}
 \author{Léo Belzile}
 \date{}
 \institute{HEC Montréal}
@@ -240,7 +227,7 @@ appliquée}{Analyse multidimensionnelle appliquée}}
 
 
 \begin{frame}[fragile]{Régression multinomiale logistique}
-\protect\phantomsection\label{ruxe9gression-multinomiale-logistique}
+\phantomsection\label{ruxe9gression-multinomiale-logistique}
 La régression multinomiale logistique est un modèle de régression pour
 \textbf{variable réponse catégorielle} avec \(Y \in \{1, \ldots, K\}\)
 pour (\(K \ge 2\)) nominale ou ordinale.
@@ -253,8 +240,8 @@ pour (\(K \ge 2\)) nominale ou ordinale.
   Destination de vacances l'année dernière (Québec, États-Unis,
   ailleurs).
 \item
-  Si des élections générales avaient lieu aujourd'\,'\,'hui au Québec,
-  pour quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
+  Si des élections générales avaient lieu aujourd'hui au Québec, pour
+  quel parti voteriez-vous (CAQ, PLQ, PQ, QS, PCQ).
 \item
   Combien de fois êtes-vous allé au cinéma l'année dernière: moins de
   cinq fois (\texttt{1}), entre cinq et 10 fois (\texttt{2}) ou plus de
@@ -271,7 +258,7 @@ pour (\(K \ge 2\)) nominale ou ordinale.
 
 \begin{frame}[fragile]{Taux de participation lors des élections
 américaines}
-\protect\phantomsection\label{taux-de-participation-lors-des-uxe9lections-amuxe9ricaines}
+\phantomsection\label{taux-de-participation-lors-des-uxe9lections-amuxe9ricaines}
 Les
 \href{https://github.com/fivethirtyeight/data/tree/master/non-voters}{données}
 de cet exemple sont tirées d'un sondage Ipsos réalisé pour le site de
@@ -287,7 +274,7 @@ possible (rarement ou jamais, occasionnellement et toujours).
 \end{frame}
 
 \begin{frame}{Analyse exploratoire}
-\protect\phantomsection\label{analyse-exploratoire}
+\phantomsection\label{analyse-exploratoire}
 \begin{figure}
 
 \centering{
@@ -303,12 +290,12 @@ variables sociodémographiques des données de participation électorale.}
 \end{frame}
 
 \begin{frame}{Analyse exploratoire}
-\protect\phantomsection\label{analyse-exploratoire-1}
+\phantomsection\label{analyse-exploratoire-1}
 \pandocbounded{\includegraphics[keepaspectratio]{MATH60602-diapos7_files/figure-beamer/figure-age-1.pdf}}
 \end{frame}
 
 \begin{frame}{Analyse exploratoire}
-\protect\phantomsection\label{analyse-exploratoire-2}
+\phantomsection\label{analyse-exploratoire-2}
 \begin{figure}
 
 \centering{
@@ -326,7 +313,7 @@ Les jeunes n'ont souvent eu qu'une seule occasion de voter\ldots{}
 \end{frame}
 
 \begin{frame}{Régression pour données multinomiale}
-\protect\phantomsection\label{ruxe9gression-pour-donnuxe9es-multinomiale}
+\phantomsection\label{ruxe9gression-pour-donnuxe9es-multinomiale}
 On considère une variable réponse catégorielle avec \(K \ge 2\)
 modalités.
 
@@ -334,13 +321,13 @@ modalités.
 variable réponse.
 
 Soit la probabilité d'appartenir à la modalité \(k\),
-\[p_{ik} = \Pr(Y_i=k \mid \mathrm{X}_i), \qquad (k=1, \ldots, K).\]
+\[p_{ik} = \Pr(Y_i=k \mid \mathbf{X}_i), \qquad (k=1, \ldots, K).\]
 
 La somme des probabilités, \(p_{i1} + \cdots + p_{iK}\), vaut 1.
 \end{frame}
 
 \begin{frame}{Modèle multinomial logistique}
-\protect\phantomsection\label{moduxe8le-multinomial-logistique}
+\phantomsection\label{moduxe8le-multinomial-logistique}
 Comme avec la régression logistique, on fixe une catégorie de référence
 (disons \(1\)) et on modélise le log de la cote de chacune des autres
 catégories par rapport à cette référence, \begin{align*}
@@ -360,17 +347,17 @@ sauf qu'il faut le faire équation par équation.
 \end{frame}
 
 \begin{frame}{Modèle logistique multinomial et probabilités}
-\protect\phantomsection\label{moduxe8le-logistique-multinomial-et-probabilituxe9s}
+\phantomsection\label{moduxe8le-logistique-multinomial-et-probabilituxe9s}
 On peut aussi exprimer le modèle en termes des probabilités,
 \begin{align*}
- p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k =1, \ldots, K.
+ p_{ik} &= \Pr(Y_i=k \mid \mathbf{X}_i) \\&= \frac{\exp(\eta_{ik})}{1+ \exp(\eta_{i2}) + \cdots + \exp(\eta_{iK})}, \qquad k=1, \ldots, K.
 \end{align*} où \(\eta_{ij}\) est le prédicteur linéaire de l'individu
 \(i\) pour le log de la cote de \(Y_i=j\) versus la référence \(Y_i=1\).
 On fixe \(\eta_{i1}=0\).
 \end{frame}
 
 \begin{frame}[fragile]{Ajustement du modèle}
-\protect\phantomsection\label{ajustement-du-moduxe8le}
+\phantomsection\label{ajustement-du-moduxe8le}
 La fonction \texttt{multinom} du paquet \texttt{nnet} ajuste le modèle
 multinomial logistique.
 
@@ -410,7 +397,7 @@ multinomial logistique.
 \end{frame}
 
 \begin{frame}[fragile]{Méthodes \textbf{R} pour l'analyse}
-\protect\phantomsection\label{muxe9thodes-r-pour-lanalyse}
+\phantomsection\label{muxe9thodes-r-pour-lanalyse}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Tableau résumé de l\textquotesingle{}ajustement}
@@ -431,7 +418,7 @@ multinomial logistique.
 \end{frame}
 
 \begin{frame}[fragile]{Comparaison de modèles emboîtés}
-\protect\phantomsection\label{comparaison-de-moduxe8les-embouxeetuxe9s}
+\phantomsection\label{comparaison-de-moduxe8les-embouxeetuxe9s}
 Le modèle avec uniquement l'ordonnée à l'origine possède \(K-1\)
 paramètres.
 
@@ -456,7 +443,7 @@ paramètres.
 \end{frame}
 
 \begin{frame}[fragile]{Proportion empirique}
-\protect\phantomsection\label{proportion-empirique}
+\phantomsection\label{proportion-empirique}
 Le modèle précédent retourne comme probabilité prédite la proportion
 empirique (pondérée) de chaque catégorie.
 
@@ -481,7 +468,7 @@ empirique (pondérée) de chaque catégorie.
 \end{frame}
 
 \begin{frame}[fragile]{Tests de rapport de vraisemblance}
-\protect\phantomsection\label{tests-de-rapport-de-vraisemblance}
+\phantomsection\label{tests-de-rapport-de-vraisemblance}
 On peut comparer des modèles emboîtés avec la fonction \texttt{anova}:
 ici, on compare le modèle complet au même modèle, moins la variable
 \texttt{sexe}.
@@ -501,8 +488,7 @@ ici, on compare le modèle complet au même modèle, moins la variable
 \end{frame}
 
 \begin{frame}{Résultat du test}
-\protect\phantomsection\label{ruxe9sultat-du-test}
-{\def\LTcaptype{none} % do not increment counter
+\phantomsection\label{ruxe9sultat-du-test}
 \begin{longtable}[]{@{}rrrrr@{}}
 \toprule\noalign{}
 ddl resid & deviance & ddl & stat & valeur-p \\
@@ -512,14 +498,13 @@ ddl resid & deviance & ddl & stat & valeur-p \\
 9668 & 8504.74 & 2 & 9.8 & 0.01 \\
 \bottomrule\noalign{}
 \end{longtable}
-}
 
 La différence est significative à niveau 5\%, le sexe a un impact sur la
 catégorie de vote (les coefficients associés sont non-nuls).
 \end{frame}
 
 \begin{frame}{Prédictions}
-\protect\phantomsection\label{pruxe9dictions}
+\phantomsection\label{pruxe9dictions}
 Pour un profil \(\mathbf{X}_i\) donné, on peut
 
 \begin{itemize}
@@ -542,7 +527,7 @@ Pour un profil \(\mathbf{X}_i\) donné, on peut
 \end{frame}
 
 \begin{frame}{Classification}
-\protect\phantomsection\label{classification}
+\phantomsection\label{classification}
 La prédiction du modèle est une probabilité pour chacune des \(K\)
 modalités.
 
@@ -570,9 +555,7 @@ prédictions à l'aide d'une matrice de confusion \(K \times K\).
 \end{frame}
 
 \begin{frame}{Matrice de confusion}
-\protect\phantomsection\label{matrice-de-confusion}
-{
-
+\phantomsection\label{matrice-de-confusion}
 \begin{longtable}[]{@{}lrrr@{}}
 
 \caption{\label{tbl-confusmat}Prédictions (lignes) versus observations
@@ -593,13 +576,11 @@ toujours & 76 & 421 & 605 \\
 
 \end{longtable}
 
-}
-
 Le taux de bonne classification est 2689/4847=0.55.
 \end{frame}
 
 \begin{frame}{Commentaires}
-\protect\phantomsection\label{commentaires}
+\phantomsection\label{commentaires}
 \begin{itemize}
 \tightlist
 \item
@@ -615,7 +596,7 @@ Le taux de bonne classification est 2689/4847=0.55.
 \end{frame}
 
 \begin{frame}{Données ordinales}
-\protect\phantomsection\label{donnuxe9es-ordinales}
+\phantomsection\label{donnuxe9es-ordinales}
 Outre la régression multinomiale logistique, on peut également
 considérer la \emph{régression logistique cumulative à cotes
 proportionnelles}.
@@ -632,7 +613,7 @@ Voir les notes de cours pour plus de détails.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif}
+\phantomsection\label{ruxe9capitulatif}
 \begin{itemize}
 \tightlist
 \item
@@ -654,7 +635,7 @@ Voir les notes de cours pour plus de détails.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-1}
+\phantomsection\label{ruxe9capitulatif-1}
 On met beaucoup l'accent sur l'interprétation des coefficients à
 l'échelle de la cote.
 
@@ -671,7 +652,7 @@ l'échelle de la cote.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-2}
+\phantomsection\label{ruxe9capitulatif-2}
 Les outils usuels d'inférence pour les modèles estimés par maximum de
 vraisemblance sont applicables.
 
@@ -687,7 +668,7 @@ vraisemblance sont applicables.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-3}
+\phantomsection\label{ruxe9capitulatif-3}
 Côté classification, on va règle générale assigner à la classe la plus
 probable.
 
@@ -705,7 +686,7 @@ probable.
 \end{frame}
 
 \begin{frame}{Données manquantes}
-\protect\phantomsection\label{donnuxe9es-manquantes}
+\phantomsection\label{donnuxe9es-manquantes}
 Plusieurs champs d'une base de données peuvent être manquants
 
 \begin{itemize}
@@ -722,7 +703,7 @@ Plusieurs champs d'une base de données peuvent être manquants
 \end{frame}
 
 \begin{frame}{Pourquoi s'en préoccuper?}
-\protect\phantomsection\label{pourquoi-sen-pruxe9occuper}
+\phantomsection\label{pourquoi-sen-pruxe9occuper}
 La plupart des procédures ne gèrent que les cas complets (toute
 observation avec des valeurs manquantes est éliminée).
 
@@ -732,7 +713,7 @@ Sans traitement adéquat, les estimations seront \textbf{biaisées}.
 \end{frame}
 
 \begin{frame}{Références}
-\protect\phantomsection\label{ruxe9fuxe9rences}
+\phantomsection\label{ruxe9fuxe9rences}
 \begin{itemize}
 \tightlist
 \item
@@ -752,7 +733,7 @@ dans le cours MATH 60600.
 \end{frame}
 
 \begin{frame}{Classification des données manquantes (MCAR)}
-\protect\phantomsection\label{classification-des-donnuxe9es-manquantes-mcar}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mcar}
 Cas 1: Données manquantes de façon complètement aléatoire (\emph{missing
 completely at random})
 
@@ -766,7 +747,7 @@ Hypothèse souvent irréaliste en pratique.
 \end{frame}
 
 \begin{frame}{Classification des données manquantes (MAR)}
-\protect\phantomsection\label{classification-des-donnuxe9es-manquantes-mar}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mar}
 Cas 2: données manquantes de façon aléatoire (\emph{missing at random}):
 la probabilité que la valeur soit manquante ne dépend pas de la valeur
 \emph{une fois qu'on a contrôlé pour les autres variables}.
@@ -776,7 +757,7 @@ leur âge que les femmes.
 \end{frame}
 
 \begin{frame}{Classification des données manquantes (MNAR)}
-\protect\phantomsection\label{classification-des-donnuxe9es-manquantes-mnar}
+\phantomsection\label{classification-des-donnuxe9es-manquantes-mnar}
 Cas 3: données manquantes de façon non-aléatoire (\emph{missing not at
 random}): la probabilité que la mesure soit manquante dépend de la
 valeur elle-même, pas déterminable avec d'autres variables
@@ -787,7 +768,7 @@ rattache au genre ou à l'identité sexuelle.
 \end{frame}
 
 \begin{frame}{Type de données manquantes}
-\protect\phantomsection\label{type-de-donnuxe9es-manquantes}
+\phantomsection\label{type-de-donnuxe9es-manquantes}
 Comment déterminer le type de données manquantes?
 
 Par exemple, si une personne ne divulgue pas son salaire, est ce qu les
@@ -798,7 +779,7 @@ auxiliaires disponibles.
 \end{frame}
 
 \begin{frame}{Valeur logique}
-\protect\phantomsection\label{valeur-logique}
+\phantomsection\label{valeur-logique}
 Les données manquantes ont souvent une valeur logique:
 
 \begin{itemize}
@@ -812,7 +793,7 @@ de la base de données.
 \end{frame}
 
 \begin{frame}{Types de schémas de données manquantes}
-\protect\phantomsection\label{types-de-schuxe9mas-de-donnuxe9es-manquantes}
+\phantomsection\label{types-de-schuxe9mas-de-donnuxe9es-manquantes}
 Matrice \(n \times p\) (observations en lignes, variables en colonnes).
 
 \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-11-1.pdf}
@@ -820,11 +801,14 @@ Matrice \(n \times p\) (observations en lignes, variables en colonnes).
 \footnotesize
 
 Les cases grises représentent des valeurs manquantes. Illustration
-adapté de la Figure 4.1 de van Buuren (2022)
+adapté de la Figure 4.1 de van Buuren (2022). Dans le cas monotone, on
+fait l'imputation séquentiellement.
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Analyse des cas complet}
-\protect\phantomsection\label{analyse-des-cas-complet}
+\phantomsection\label{analyse-des-cas-complet}
 Retirer les observations avec données manquantes pour conserver les cas
 complets.
 
@@ -840,7 +824,7 @@ Méthode par défaut dans les logiciels.
 \end{frame}
 
 \begin{frame}{Méthodes d'imputation}
-\protect\phantomsection\label{muxe9thodes-dimputation}
+\phantomsection\label{muxe9thodes-dimputation}
 Imputation: remplacer les valeurs manquantes par une valeur judicieuse
 pour \emph{combler les trous}.
 
@@ -862,7 +846,7 @@ On distinguera
 \end{frame}
 
 \begin{frame}{Imputation déterministe par la moyenne}
-\protect\phantomsection\label{imputation-duxe9terministe-par-la-moyenne}
+\phantomsection\label{imputation-duxe9terministe-par-la-moyenne}
 Dilution de la relation (corrélation) entre variables explicatives.
 Réduction de la variabilité.
 
@@ -872,7 +856,7 @@ Réduction de la variabilité.
 \end{frame}
 
 \begin{frame}[fragile]{Imputation aléatoire}
-\protect\phantomsection\label{imputation-aluxe9atoire}
+\phantomsection\label{imputation-aluxe9atoire}
 Considérons le cas d'une régression logistique pour une variable
 explicative binaire.
 
@@ -893,7 +877,7 @@ aléatoire simule une variable 0/1 avec probabilité
 \end{frame}
 
 \begin{frame}{Faut-il toujours imputer?}
-\protect\phantomsection\label{faut-il-toujours-imputer}
+\phantomsection\label{faut-il-toujours-imputer}
 Il faut utiliser son jugement.
 
 Une observation imputée ne remplacera jamais une vraie observation.
@@ -912,7 +896,7 @@ Une observation imputée ne remplacera jamais une vraie observation.
 \end{frame}
 
 \begin{frame}{Problèmes de l'imputation simple}
-\protect\phantomsection\label{probluxe8mes-de-limputation-simple}
+\phantomsection\label{probluxe8mes-de-limputation-simple}
 On ne tient pas compte du fait que des valeurs ont été remplacées (on
 fait comme si c'était de vraies observations).
 
@@ -926,7 +910,7 @@ On sous-évalue encore une fois la \textbf{variabilité} des données
 \end{frame}
 
 \begin{frame}[fragile]{Inspection des valeurs manquantes}
-\protect\phantomsection\label{inspection-des-valeurs-manquantes}
+\phantomsection\label{inspection-des-valeurs-manquantes}
 Il est donc nécessaire d'examiner la configuration des valeurs
 manquantes avant de faire quoi que ce soit.
 
@@ -959,26 +943,32 @@ pourcentage & 38.4 & 9.8 & 0 & 36.8 & 0 & 0 & 0\\
 \end{frame}
 
 \begin{frame}{Configuration des valeurs manquantes}
-\protect\phantomsection\label{configuration-des-valeurs-manquantes}
-\begin{figure}
+\phantomsection\label{configuration-des-valeurs-manquantes}
+\begin{center}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/unnamed-chunk-14-1.pdf}
+\end{center}
 
-\centering{
+\tiny
 
-\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos7_files/figure-beamer/fig-manquantes2-1.pdf}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Haut}: noms des variables.
+\item
+  \textbf{Bas}: nombre total de valeurs manquantes par variable
+\item
+  \textbf{Gauche}: nombre d'observations pour chaque configuration de
+  valeurs manquantes
+\item
+  \textbf{Droite}: nombre de variables avec des valeurs manquantes par
+  configuration
+\end{itemize}
 
-}
-
-\caption{\label{fig-manquantes2}Les noms des variables sont indiquées au
-dessus, le nombre total de valeurs manquantes par variable en dessous,
-le nombre d'observations pour chaque configuration de valeurs manquantes
-à gauche et le nombre de variables avec des valeurs manquantes par
-configuration à droitef.}
-
-\end{figure}%
+\normalsize
 \end{frame}
 
 \begin{frame}[fragile]{Imputation multiple}
-\protect\phantomsection\label{imputation-multiple}
+\phantomsection\label{imputation-multiple}
 Valides pour les données manquantes de manière aléatoire et complètement
 aléatoires (MAR et MCAR).
 
@@ -998,51 +988,8 @@ aléatoires (MAR et MCAR).
 \end{center}
 \end{frame}
 
-\begin{frame}{Combinaison des résultats}
-\protect\phantomsection\label{combinaison-des-ruxe9sultats}
-Considérons un seul paramètre \(\theta\) (ex: coefficient d'une
-régression) et supposons qu'on procède à \(K\) imputations.
-
-On estime les paramètres du modèle séparément pour chacun des \(K\)
-ensembles de données imputés, disons
-
-\begin{itemize}
-\tightlist
-\item
-  \(\widehat{\theta}_k\) pour l'estimation du paramètre \(\theta\) dans
-  l'échantillon \(k\) et
-\item
-  \(\widehat{\sigma}_k^2=\mathsf{Va}(\widehat{\theta}_k)\) pour
-  l'estimation de la variance de \(\widehat{\theta}_k\).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Estimations}
-\protect\phantomsection\label{estimations}
-L'estimation finale de \(\theta\), dénotée \(\widehat{\theta}\), est
-obtenue tout simplement en faisant la moyenne des estimations de tous
-les modèles.
-
-Pour la variance de \(\widehat{\theta}\), on calcule la somme de
-
-\begin{itemize}
-\tightlist
-\item
-  la moyenne des \(K\) variances pour chaque imputation,
-  \(\widehat{\sigma}_1^2, \ldots, \widehat{\sigma}_K^2\), appelée
-  variance intra-groupe.
-\item
-  la variance des estimations moyennes,
-  \(\widehat{\theta}_1, \ldots, \widehat{\theta}_K\), appelée variance
-  inter-groupe.
-\end{itemize}
-
-En combinant ces deux sources variabilités, on enfle la variance par
-rapport à l'imputation simple
-\end{frame}
-
-\begin{frame}{Imputation multiple par équations chaînées (MICE)}
-\protect\phantomsection\label{imputation-multiple-par-uxe9quations-chauxeenuxe9es-mice}
+\begin{frame}{Imputation}
+\phantomsection\label{imputation}
 Avec \(p\) variables \(X_1, \ldots, X_p\), spécifier un ensemble de
 modèles \textbf{conditionnels} pour chaque variable \(X_j\) en fonction
 de
@@ -1055,34 +1002,106 @@ de
   les valeurs observées pour cette variable, \(X_{j, \text{obs}}\)
 \end{itemize}
 
-\begin{enumerate}
+Chaque variable a un modèle de régression, par ex.:
+
+\begin{itemize}
 \tightlist
 \item
-  Initialisation: remplir les trous avec des données au hasard parmi
+  logistique multinomial pour les variables catégorielles
+\item
+  moyenne imputée aléatoire / régression linéaire pour les données
+  continues.
+\end{itemize}
+
+Dans le cadre du cours, vous pouvez les traiter comme une boîte noire.
+\end{frame}
+
+\begin{frame}{Imputation multiple par équations chaînées (MICE)}
+\phantomsection\label{imputation-multiple-par-uxe9quations-chauxeenuxe9es-mice}
+\begin{itemize}
+\tightlist
+\item
+  Initialisation: on remplit les trous avec des données au hasard parmi
   \(X_{j, \text{obs}}\) pour \(X_{j, \text{man}}\)
 \item
-  À l'itération \(t\), pour chaque variable \(j=1, \ldots, p\), à tour
-  de rôle:
-
-  \begin{enumerate}
-  [a)]
-  \tightlist
-  \item
-    tirage aléatoire des paramètres \(\phi_j^{(t)}\) du modèle pour
-    \(X_{j,\text{man}}\) conditionnel à \(\boldsymbol{X}_{-j}^{(t-1)}\)
-    et \(X_{j, \text{obs}}\)
-  \item
-    échantillonnage de nouvelles observations \(X^{(t)}_{j,\text{man}}\)
-    du modèle avec paramètres \(\phi_j^{(t)}\) conditionnel à
-    \(\boldsymbol{X}_{-j}^{(t-1)}\) et \(X_{j, \text{obs}}\)
-  \end{enumerate}
+  Pour chaque variable \(j\) à tour de rôle, on construit un modèle de
+  régression à partir des \(X_{j, \text{obs}}\) à partir des données
+  complètes des autres variables explicatives, à l'itération actuelle.
 \item
-  Répéter le cycle
-\end{enumerate}
+  On fait un tirage des paramètres du modèle, et des réalisations des
+  \(X_{j, \text{man}}\)
+\item
+  On répète ces étapes plusieurs fois et on retourne à la fin les
+  valeurs imputées.
+\end{itemize}
+
+L'imputation des valeurs manquantes est faite avec un échantillonneur de
+Gibbs (modèle de régression bayésiens), mais le nombre d'itérations est
+généralement faible (10-15 en pratique).
+\end{frame}
+
+\begin{frame}[fragile]{Combinaison des résultats}
+\phantomsection\label{combinaison-des-ruxe9sultats}
+Considérons un modèle de régression avec coefficients
+\(\boldsymbol{\beta} = (\beta_0, \ldots, \beta_p) \in \mathbb{R}^{p+1}\)
+et supposons qu'on procède à \(K\) imputations.
+
+On estime les paramètres du modèle séparément pour chacun des \(K\)
+ensembles de données imputés, disons
+
+\begin{itemize}
+\tightlist
+\item
+  \(\widehat{\boldsymbol{\beta}}^{(k)}\) pour l'estimation du vecteur
+  \(\boldsymbol{\beta}\) dans l'échantillon \(k\) (\texttt{coef}) et
+\item
+  \(\widehat{\boldsymbol{\Sigma}}^{(k)}=\mathsf{Va}(\widehat{\boldsymbol{\beta}}^{(k)})\)
+  pour l'estimation de la variance de
+  \(\widehat{\boldsymbol{\beta}}^{(k)}\) (\texttt{vcov}).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Estimations des coefficients}
+\phantomsection\label{estimations-des-coefficients}
+L'estimation finale de \(\boldsymbol{\beta}\), dénotée
+\[\widehat{\boldsymbol{\beta}} = K^{-1}\sum_{k=1}^K \widehat{\boldsymbol{\beta}}^{(k)},\]
+est obtenue tout simplement en faisant la moyenne des estimations de
+tous les modèles.
+\end{frame}
+
+\begin{frame}{Estimation de l'incertitude}
+\phantomsection\label{estimation-de-lincertitude}
+Pour la variance de l'estimation, on calcule la somme de
+
+\begin{itemize}
+\tightlist
+\item
+  la variance intra-groupe, la moyenne des \(K\) variances pour chaque
+  imputation:
+  \[\mathsf{Var}_{\text{intra}}(\widehat{\boldsymbol{\beta}}) = K^{-1}\sum_{k=1}^K\widehat{\boldsymbol{\Sigma}}^{(k)}\]
+\item
+  la variance inter-groupe, soit la variance des estimations moyennes,
+  \[\mathsf{Var}_{\text{inter}}(\widehat{\boldsymbol{\beta}}) = \frac{1}{K-1}\sum_{k=1}^K \left(
+  \widehat{\boldsymbol{\beta}}^{(k)} - \widehat{\boldsymbol{\beta}}\right)^2.\]
+\end{itemize}
+
+La variance totale est
+\(\mathsf{Var}_{\text{intra}}(\widehat{\boldsymbol{\beta}}) + \left(1+K^{-1}\right)\mathsf{Var}_{\text{inter}}(\widehat{\boldsymbol{\beta}}).\)
+\end{frame}
+
+\begin{frame}{Inflation de la variance}
+\phantomsection\label{inflation-de-la-variance}
+Si on procédait à une seule imputation (même en ajoutant une part
+d'aléatoire pour essayer de reproduire la variabilité des données), on
+ne serait pas en mesure d'estimer la variance inter-groupe de
+l'estimateur.
+
+On peut calculer la proportion de variance due aux données manquantes
+via
 \end{frame}
 
 \begin{frame}[fragile]{Imputation multiple avec \texttt{mice}}
-\protect\phantomsection\label{imputation-multiple-avec-mice}
+\phantomsection\label{imputation-multiple-avec-mice}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{library}\NormalTok{(mice)}
@@ -1103,7 +1122,7 @@ de
 \end{frame}
 
 \begin{frame}[fragile]{Estimation et combinaison avec \texttt{mice}}
-\protect\phantomsection\label{estimation-et-combinaison-avec-mice}
+\phantomsection\label{estimation-et-combinaison-avec-mice}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# ajuste le modèle avec les données imputées}
@@ -1119,7 +1138,7 @@ de
 \end{frame}
 
 \begin{frame}{Résultats}
-\protect\phantomsection\label{ruxe9sultats}
+\phantomsection\label{ruxe9sultats}
 \begin{itemize}
 \tightlist
 \item
@@ -1165,7 +1184,7 @@ coef. & err. type & coef. & err. type & coef. & err. type \\
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-4}
+\phantomsection\label{ruxe9capitulatif-4}
 \begin{itemize}
 \tightlist
 \item
@@ -1181,12 +1200,12 @@ coef. & err. type & coef. & err. type & coef. & err. type \\
   \textbf{aléatoire}.
 \item
   Avec l'algorithme MICE, on utilise un modèle conditionnel pour chaque
-  variable à tour de rôle
+  variable.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-5}
+\phantomsection\label{ruxe9capitulatif-5}
 L'imputation multiple est préférée à l'imputation simple car elle permet
 d'estimer l'incertitude sous-jacente en raison des données manquantes.
 

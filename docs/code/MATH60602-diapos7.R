@@ -4,40 +4,9 @@ library(patchwork) # combiner les graphiques
 library(MASS) # modèles de régression multinomiale
 library(mice) # données manquantes
 
-data(manquantes, package = 'hecmulti')
-summary(manquantes)
-# Pourcentage de valeurs manquantes
-# Fonction apply: appliquer une fonction
-# 2 signifie qu'on veut conserver les colonnes
-# Ici, on calcule la proportion de valeurs manquantes
-# variables par variables
-apply(manquantes, 2, function(x) {
-  mean(is.na(x))
-})
-# Voir les configurations de valeurs manquantes
-md.pattern(manquantes)
-
-# Intensif en calcul, réduire "m" si nécessaire
-impdata <- mice(
-  data = manquantes,
-  # argument method pour le type de modèles
-  # selon les variables
-  m = 50,
-  # nombre d'imputations
-  seed = 60602,
-  # germe aléatoire
-  printFlag = FALSE
-) # ne pas imprimer le suivi
-# Chaque copie est disponible (1, ..., 50)
-complete(impdata, action = 1)
-# ajuste le modèle avec les données imputées
-adj_im <- with(data = impdata,
-               expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6,
-                          family = binomial))
-# combinaison des résultats
-fit <- pool(adj_im)
-# Tableau résumé avec valeurs-p, degrés de liberté et erreur-types corrigées
-summary(fit)
+################################################################
+##########   Régression multinomiale logistique  ###############
+################################################################
 
 ## -----------------------------------------------------------------------------
 data(vote, package = "hecmulti")
@@ -52,7 +21,7 @@ multi1 <- nnet::multinom(
   weights = poids,
   # poids de sondage
   trace = FALSE
-)     # infos sur convergence
+) # infos sur convergence
 
 
 # Tableau résumé de l'ajustement
@@ -162,12 +131,8 @@ pval <- pchisq(
 # calcul des prédictions à l'échelle des probabilités pour chaque modèle
 xpred <- seq(30, 95, by = 0.1) - mean(vote$age)
 nobs <- length(xpred)
-pred1 <- predict(multi3b,
-                 newdata = data.frame(age = xpred),
-                 type = "prob")
-pred2 <- predict(multi3a,
-                 newdata = data.frame(age = xpred),
-                 type = "prob")
+pred1 <- predict(multi3b, newdata = data.frame(age = xpred), type = "prob")
+pred2 <- predict(multi3a, newdata = data.frame(age = xpred), type = "prob")
 
 
 # Graphiques dans les diapositives
@@ -178,11 +143,8 @@ library(patchwork)
 data(vote, package = "hecmulti")
 g1 <- vote |>
   dplyr::count(revenu, catvote, wt = poids) |>
-  ggplot(aes(fill = catvote,
-             x = n,
-             y = revenu)) +
-  ggplot2::geom_bar(position = "fill",
-                    stat = "identity") +
+  ggplot(aes(fill = catvote, x = n, y = revenu)) +
+  ggplot2::geom_bar(position = "fill", stat = "identity") +
   scale_x_continuous(
     name = NULL,
     position = "top",
@@ -200,11 +162,8 @@ g1 <- vote |>
   theme_classic()
 g2 <- vote |>
   dplyr::count(sexe, catvote, wt = poids) |>
-  ggplot(aes(fill = catvote,
-             x = n,
-             y = sexe)) +
-  ggplot2::geom_bar(position = "fill",
-                    stat = "identity") +
+  ggplot(aes(fill = catvote, x = n, y = sexe)) +
+  ggplot2::geom_bar(position = "fill", stat = "identity") +
   scale_x_continuous(
     name = NULL,
     position = "top",
@@ -222,11 +181,8 @@ g2 <- vote |>
   theme_classic()
 g3 <- vote |>
   dplyr::count(race, catvote, wt = poids) |>
-  ggplot(aes(fill = catvote,
-             x = n,
-             y = race)) +
-  ggplot2::geom_bar(position = "fill",
-                    stat = "identity") +
+  ggplot(aes(fill = catvote, x = n, y = race)) +
+  ggplot2::geom_bar(position = "fill", stat = "identity") +
   scale_x_continuous(
     name = NULL,
     position = "top",
@@ -244,11 +200,8 @@ g3 <- vote |>
   theme_classic()
 g4 <- vote |>
   dplyr::count(educ, catvote, wt = poids) |>
-  ggplot(aes(fill = catvote,
-             x = n,
-             y = educ)) +
-  ggplot2::geom_bar(position = "fill",
-                    stat = "identity") +
+  ggplot(aes(fill = catvote, x = n, y = educ)) +
+  ggplot2::geom_bar(position = "fill", stat = "identity") +
   scale_x_continuous(
     name = NULL,
     position = "top",
@@ -266,11 +219,8 @@ g4 <- vote |>
   theme_classic()
 g5 <- vote |>
   dplyr::count(affiliation, catvote, wt = poids) |>
-  ggplot(aes(fill = catvote,
-             x = n,
-             y = affiliation)) +
-  ggplot2::geom_bar(position = "fill",
-                    stat = "identity") +
+  ggplot(aes(fill = catvote, x = n, y = affiliation)) +
+  ggplot2::geom_bar(position = "fill", stat = "identity") +
   scale_x_continuous(
     name = NULL,
     position = "top",
@@ -287,14 +237,10 @@ g5 <- vote |>
   ) +
   theme_classic()
 g6 <- vote |>
-  mutate(agecat = with(vote, cut(age, c(20, 40, 60,
-                                        100)))) |>
+  mutate(agecat = with(vote, cut(age, c(20, 40, 60, 100)))) |>
   dplyr::count(agecat, catvote, wt = poids) |>
-  ggplot(aes(fill = catvote,
-             x = n,
-             y = agecat)) +
-  ggplot2::geom_bar(position = "fill",
-                    stat = "identity") +
+  ggplot(aes(fill = catvote, x = n, y = agecat)) +
+  ggplot2::geom_bar(position = "fill", stat = "identity") +
   scale_x_continuous(
     name = NULL,
     position = "top",
@@ -311,7 +257,10 @@ g6 <- vote |>
   ) +
   theme_classic()
 # Combinaison de graphiques avec "patchwork"
-(g1 + g2) / (g3 + g4) / (g5 + g6) + plot_layout(guides = "collect") &
+(g1 + g2) /
+  (g3 + g4) /
+  (g5 + g6) +
+  plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 
 
@@ -321,8 +270,7 @@ g6 <- vote |>
 # via modèle généralisé additif (utilisé ici à des fins exploratoires)
 votecat <- as.integer(factor(vote$catvote, ordered = FALSE)) - 1L
 mod <- mgcv::gam(
-  formula = list(votecat ~ s(age, bs = "cr"),
-                 ~ s(age, bs = "cr")),
+  formula = list(votecat ~ s(age, bs = "cr"), ~ s(age, bs = "cr")),
   weights = poids,
   family = mgcv::multinom(K = 2),
   data = vote
@@ -330,13 +278,16 @@ mod <- mgcv::gam(
 
 newage <- 20:90
 nb <- length(newage)
-pred <- c(predict(mod,
-                  newdata = data.frame(age = newage),
-                  type = "response"))
+pred <- c(predict(mod, newdata = data.frame(age = newage), type = "response"))
 cat <-
-  factor(rep(c(
-    "rarement/jamais", "occasionnellement", "toujours"
-  ), each = nb))
+  factor(rep(
+    c(
+      "rarement/jamais",
+      "occasionnellement",
+      "toujours"
+    ),
+    each = nb
+  ))
 cat <- relevel(cat, ref = "rarement/jamais")
 ggplot(
   data = data.frame(
@@ -367,11 +318,89 @@ ggplot(
   theme_classic() +
   theme(legend.position = "bottom")
 
-ggplot(data = vote,
-       aes(x = age, fill = catvote)) +
+ggplot(data = vote, aes(x = age, fill = catvote)) +
   geom_density(alpha = 0.2) +
-  labs(fill = "vote",
-       x = "âge (années)",
-       y = "densité") +
+  labs(fill = "vote", x = "âge (années)", y = "densité") +
   theme(legend.position = "bottom") +
   theme_minimal()
+
+################################################################
+############        Données manquantes        ##################
+################################################################
+
+data(manquantes, package = 'hecmulti')
+summary(manquantes)
+# Pourcentage de valeurs manquantes
+# Fonction apply: appliquer une fonction
+# 2 signifie qu'on veut conserver les colonnes
+# Ici, on calcule la proportion de valeurs manquantes
+# variables par variables
+apply(manquantes, 2, function(x) {
+  mean(is.na(x))
+})
+# Voir les configurations de valeurs manquantes
+md.pattern(manquantes)
+
+# Nombre de copies
+K <- 50
+# Intensif en calcul, réduire "m" si nécessaire
+impdata <- mice(
+  data = manquantes,
+  # argument method pour le type de modèles
+  # selon les variables
+  m = K,
+  # nombre d'imputations
+  seed = 60602,
+  # germe aléatoire
+  printFlag = FALSE
+) # ne pas imprimer le suivi
+# Chaque copie est disponible (action = 1, ..., K)
+complete(impdata, action = 1)
+# ajuste le modèle avec les données imputées
+adj_im <- with(
+  data = impdata,
+  expr = glm(y ~ x1 + x2 + x3 + x4 + x5 + x6, family = binomial)
+)
+# combinaison des résultats
+fit <- pool(adj_im)
+# Tableau résumé avec valeurs-p, degrés de liberté et erreur-types corrigées
+summary(fit)
+
+## Calcul manuel des estimations dans "summary"
+## https://stefvanbuuren.name/fimd/sec-whyandwhen.html
+# Nombre de coefficients
+nbetas <- nrow(summary(fit))
+coefs <- matrix(ncol = nbetas, nrow = K)
+vcovs <- array(dim = c(nbetas, nbetas, K))
+for (k in seq_len(K)) {
+  mod_k <- glm(
+    y ~ x1 + x2 + x3 + x4 + x5 + x6,
+    family = binomial,
+    data = complete(impdata, action = k)
+  )
+  # Estimation des paramètres et de leur incertitude
+  coefs[k, ] <- coef(mod_k)
+  vcovs[,, k] <- vcov(mod_k)
+}
+# Estimation des coefficients - moyenne des estimations
+beta_est <- colMeans(coefs)
+# Variance = variance intra + variance inter + correction (1/m variance inter)
+var_intra <- apply(vcovs, 1:2, mean)
+var_inter <- var(coefs)
+var_tot <- var_intra + (1 + 1 / K) * var_inter
+# Estimation de l'erreur-type des coefficients
+errtype_est <- sqrt(diag(var_tot))
+
+# Proportion de variance due à la non-réponse (scalaire)
+lambda <- (1 + 1 / K) * diag(var_inter) / diag(var_tot)
+r <- lambda / (1 - lambda) # augmentation relative de la variance due à la non-réponse
+# Degrés de liberté
+nu_R <- (K - 1) / lambda^2 # formule de Rubin, potentiellement plus grand que n!
+nu_com <- nrow(manquantes) - length(beta_est) # ddl pour données complètes (sans valeurs manquantes)
+# Estimation de Barnard et Rubin
+nu_obs <- (nu_com + 1) / (nu_com + 3) * nu_com * (1 - lambda)
+nu <- nu_R * nu_obs / (nu_R + nu_obs)
+# Tests d'hypothèse
+stat_wald <- beta_est / errtype_est
+# Valeur-p
+pval <- 2 * pt(abs(stat_wald), df = nu, lower.tail = FALSE)
