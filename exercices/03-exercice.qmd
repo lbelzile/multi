@@ -84,12 +84,31 @@ est `Anaheim_Ducks`, qui n'apparaît pas dans les sorties.
 On s’intéresse à la satisfaction de clients par rapport à un produit. Cette dernière est mesurée à l’aide d’une échelle de Likert, allant de très insatisfait (`1`) à très satisfait (`5`). Les 1000 observations se trouvent dans la base de données `multinom` du paquet `hecmulti`.
 
 
-Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu. 
+Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’éducation, du sexe et du niveau de revenu. Ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence pour la satisfaction, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.
 
-1. Est-ce que le modèle de régression multinomiale ordinale à cote proportionnelles est une simplification adéquate du modèle de régression multinomiale logistique? Si oui, utilisez ce modèle pour la suite. Si non, ajustez le modèle de régression multinomiale logistique avec `1` comme catégorie de référence pour la satisfaction, `1` pour revenu et `sec` pour éducation^[Utilisez la fonction `relevel` pour changer la catégorie de référence, avec `relevel(educ, ref = 'sec')`.] et utilisez ce dernier pour répondre aux autres questions.
-2.  Interprétez l’effet des variables éducation et sexe pour la catégorie 2 par rapport à 1.
-3. Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?
-4. Est-ce que l'effet de la variable âge est globalement significatif?
-5. Fournissez un intervalle de confiance à niveau 95% pour l'effet multiplicatif d'une augmentation d'une unité de la variable âge pour chacune des cote par rapport à très insatisfait (`1`). Que concluez-vous sur l'effet de âge pour les réponses 2 à 5 par rapport à 1?
-6. Écrivez l'équation de la cote ajustée pour satisfait (`4`) par rapport à très insatisfait (`1`).
-7. Prédisez la probabilité qu'un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?
+
+1.  Interprétez l’effet des variables éducation et sexe pour la catégorie 2 par rapport à 1.
+2. Est-ce que le modèle avec une probabilité constante pour chaque item est adéquat lorsque comparé au modèle qui inclut toutes les covariables?
+3. Est-ce que l'effet de la variable âge est globalement significatif?
+4. Fournissez un intervalle de confiance à niveau 95% pour l'effet multiplicatif d'une augmentation d'une unité de la variable âge pour chacune des cote par rapport à très insatisfait (`1`). Que concluez-vous sur l'effet de âge pour les réponses 2 à 5 par rapport à 1?
+5. Écrivez l'équation de la cote ajustée pour satisfait (`4`) par rapport à très insatisfait (`1`).
+6. Prédisez la probabilité qu'un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?
+
+# Exercice 3.4
+
+Dans une étude sur le comportement d'investisseurs et leur perception du comportement aléatoire ou épistémique de la bourse, @Walters:2022 étudie la présentation de résultats financiers et l'impact du format (par exemple, par le biais de différents graphiques) sur leur perception du risque. Le but de l'étude 4A de l'article est d'établir l'effet modérateur de l'incertitude (épistémique ou aléatoire) sur le risque et les décisions d'investissement.
+
+Les données `compinvest` fournissent les observations de l'étude. 
+
+Ajustez un modèle logistique avec effets principaux (`risque`, `aleatoire`, `epistemique`) et une interaction entre risque et aléatoire, ainsi que risque et épistémique comme dans l'article.
+
+1. Rapportez un tableau des coefficients du modèle et comparez avec les résultats du Tableau 3 de la prépublication.^[Notez que les auteurs de l'article ont centré préalablement les variables explicatives (c'est-à-dire, en soustrayant la moyenne de chacune des colonnes).]
+2. Interpétez l'effet d'une augmentation de l'échelle de risque  de forte aversion (`risque = 1`) à en quête de risque (`risque = 4`) en terme de pourcentage d'augmentation ou diminution de la cote pour         - un score aléatoire (`aleatoire`) de 1 point supérieur à la moyenne des scores de l'échantillon et 
+      - un score pour `epistemique` égal à la moyenne de l'échantillon.^[*Astuce*: vous pouvez calculer le rapport de cote en remplaçant les coefficients dans l'équation, ou prédire les probabilités pour les deux profils de personnes présentés et calculer le rapport de cote.]
+3. Vérifiez l'hypothèse de modération des auteurs en déterminant si l'effet des termes d'interaction est significativement non-nul à niveau 5%. 
+    - Rapportez les valeurs des statistiques de test et les valeur-$p$ associées. Commentez sur les résultats obtenus.
+4. Produisez un graphique de la probabilité prédite d'investir (axe des ordonnées) en fonction de l'échelle pour la perception de l'aléatoire (`aleatoire`, axe des abcisses) pour une personne avec un score `epistemique` égal à la moyenne. 
+   - Tracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l'autre avec un score de 4 (en quête de risque).^[Astuce: créez une base de données (`data.frame`) avec une séquence adéquate de valeurs de `aleatoire` pour les valeurs données de `risque` et de `epistemique`.]
+   - En vous basant sur le graphique, commentez sur les différences estimées en terme de décision d'investissement, selon le profil de risque.
+
+
