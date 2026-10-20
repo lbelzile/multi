@@ -94,7 +94,7 @@ Modélisez la satisfaction des clients en fonction de l’âge, du niveau d’é
 5. Écrivez l'équation de la cote ajustée pour satisfait (`4`) par rapport à très insatisfait (`1`).
 6. Prédisez la probabilité qu'un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?
 
-# Exercice 3.4
+## Exercice 3.4
 
 Dans une étude sur le comportement d'investisseurs et leur perception du comportement aléatoire ou épistémique de la bourse, @Walters:2022 étudie la présentation de résultats financiers et l'impact du format (par exemple, par le biais de différents graphiques) sur leur perception du risque. Le but de l'étude 4A de l'article est d'établir l'effet modérateur de l'incertitude (épistémique ou aléatoire) sur le risque et les décisions d'investissement.
 
@@ -112,3 +112,45 @@ Ajustez un modèle logistique avec effets principaux (`risque`, `aleatoire`, `ep
    - En vous basant sur le graphique, commentez sur les différences estimées en terme de décision d'investissement, selon le profil de risque.
 
 
+## Exercice 3.5
+
+La base de données `reduflation` du paquet **R** `hecmulti` contient les données de @Evangelidis:2024.
+
+Ajustez un modèle de régression logistique pour la `perception` des consommateurs en fonction des variables explicatives suivantes (modèle à deux facteurs avec interactions):
+
+- l'information sur les coûts (`couts`) de production, soit dus à une augmentation ou sans changement
+- la décision d'affaire (`decision`): soit réduire la quantité ou augmenter les prix.
+
+1. Interprétez l'ordonnée à l'origine.
+2. Classez les quatre combinaisons de facteurs (`couts` $\times$ `decision`) en ordre de probabilité décroissante pour injustice.
+3. Interprétez le coefficient pour `decision`: `quantité réduite`.
+4. Qu'est-ce qui est le mieux perçu par les participants de l'étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d'affaires
+
+
+```{r}
+#| eval: false
+#| echo: false
+data(reduflation, package = "hecmulti")
+mod <- glm(
+  perception == "juste" ~ decision * couts,
+  data = reduflation,
+  family = binomial
+)
+
+# Estimation des coefficients
+summary(mod)
+# Cotes
+exp(coef(mod))
+# Prédictions
+newdata <- reduflation |>
+  dplyr::select(decision, couts) |>
+  dplyr::distinct()
+pred <- predict(
+  mod, newdata = newdata, type = "response")
+cbind(newdata, pred)
+# Tests d'hypothèse
+car::Anova(mod, type = 2)
+# Puisque l'interaction est significative, 
+# on ne peut pas considérer les autres tests
+
+```

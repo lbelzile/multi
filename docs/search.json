@@ -1423,5 +1423,29 @@
     "title": "Analyse multidimensionnelle appliquée",
     "section": "",
     "text": "Analyse multidimensionnelle appliquée\n        \n        \n            Formation de base en traitement de données multidimensionnelles. Compréhension intuitive, interprétation et utilisation de plusieurs techniques statistiques à l’aide de logiciels appropriés.\n        \n        \n            MATH 60602HEC Montréal"
+  },
+  {
+    "objectID": "exercices/03-exercice.html#exercice-3.4",
+    "href": "exercices/03-exercice.html#exercice-3.4",
+    "title": "Régression logistique",
+    "section": "Exercice 3.4",
+    "text": "Exercice 3.4\nDans une étude sur le comportement d’investisseurs et leur perception du comportement aléatoire ou épistémique de la bourse, Walters et al. (2023) étudie la présentation de résultats financiers et l’impact du format (par exemple, par le biais de différents graphiques) sur leur perception du risque. Le but de l’étude 4A de l’article est d’établir l’effet modérateur de l’incertitude (épistémique ou aléatoire) sur le risque et les décisions d’investissement.\nLes données compinvest fournissent les observations de l’étude.\nAjustez un modèle logistique avec effets principaux (risque, aleatoire, epistemique) et une interaction entre risque et aléatoire, ainsi que risque et épistémique comme dans l’article.\n\nRapportez un tableau des coefficients du modèle et comparez avec les résultats du Tableau 3 de la prépublication.4\nInterpétez l’effet d’une augmentation de l’échelle de risque de forte aversion (risque = 1) à en quête de risque (risque = 4) en terme de pourcentage d’augmentation ou diminution de la cote pour - un score aléatoire (aleatoire) de 1 point supérieur à la moyenne des scores de l’échantillon et\n\nun score pour epistemique égal à la moyenne de l’échantillon.5\n\nVérifiez l’hypothèse de modération des auteurs en déterminant si l’effet des termes d’interaction est significativement non-nul à niveau 5%.\n\nRapportez les valeurs des statistiques de test et les valeur-\\(p\\) associées. Commentez sur les résultats obtenus.\n\nProduisez un graphique de la probabilité prédite d’investir (axe des ordonnées) en fonction de l’échelle pour la perception de l’aléatoire (aleatoire, axe des abcisses) pour une personne avec un score epistemique égal à la moyenne.\n\nTracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l’autre avec un score de 4 (en quête de risque).6\nEn vous basant sur le graphique, commentez sur les différences estimées en terme de décision d’investissement, selon le profil de risque.",
+    "crumbs": [
+      "Exercices",
+      "Régression logistique",
+      "Exercice 3"
+    ]
+  },
+  {
+    "objectID": "exercices/03-exercice.html#exercice-3.5",
+    "href": "exercices/03-exercice.html#exercice-3.5",
+    "title": "Régression logistique",
+    "section": "Exercice 3.5",
+    "text": "Exercice 3.5\nLa base de données reduflation du paquet R hecmulti contient les données de Evangelidis (2024).\nAjustez un modèle de régression logistique pour la perception des consommateurs en fonction des variables explicatives suivantes (modèle à deux facteurs avec interactions):\n\nl’information sur les coûts (couts) de production, soit dus à une augmentation ou sans changement\nla décision d’affaire (decision): soit réduire la quantité ou augmenter les prix.\n\n\nInterprétez l’ordonnée à l’origine.\nClassez les quatre combinaisons de facteurs (couts \\(\\times\\) decision) en ordre de probabilité décroissante pour injustice.\nInterprétez le coefficient pour decision: quantité réduite.\nQu’est-ce qui est le mieux perçu par les participants de l’étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d’affaires",
+    "crumbs": [
+      "Exercices",
+      "Régression logistique",
+      "Exercice 3"
+    ]
   }
 ]
