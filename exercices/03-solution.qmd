@@ -390,3 +390,112 @@ predict(mod1,
 
 Les probabilités prédites sont (0.321; 0.222; 0.039; 0.127; 0.292). La modalité la plus susceptible est donc très insatisfait (`1`).
 
+
+## Exercice 3.4
+
+Dans une étude sur le comportement d'investisseurs et leur perception du comportement aléatoire ou épistémique de la bourse, @Walters:2022 étudie la présentation de résultats financiers et l'impact du format (par exemple, par le biais de différents graphiques) sur leur perception du risque. Le but de l'étude 4A de l'article est d'établir l'effet modérateur de l'incertitude (épistémique ou aléatoire) sur le risque et les décisions d'investissement.
+
+Les données `compinvest` fournissent les observations de l'étude. 
+
+Ajustez un modèle logistique avec effets principaux (`risque`, `aleatoire`, `epistemique`) et une interaction entre risque et aléatoire, ainsi que risque et épistémique comme dans l'article.
+
+1. Rapportez un tableau des coefficients du modèle et comparez avec les résultats du Tableau 3 de la prépublication.^[Notez que les auteurs de l'article ont centré préalablement les variables explicatives (c'est-à-dire, en soustrayant la moyenne de chacune des colonnes).]
+2. Interpétez l'effet d'une augmentation de l'échelle de risque  de forte aversion (`risque = 1`) à en quête de risque (`risque = 4`) en terme de pourcentage d'augmentation ou diminution de la cote pour        
+     - un score aléatoire (`aleatoire`) de 1 point supérieur à la moyenne des scores de l'échantillon et 
+      - un score pour `epistemique` égal à la moyenne de l'échantillon.^[*Astuce*: vous pouvez calculer le rapport de cote en remplaçant les coefficients dans l'équation, ou prédire les probabilités pour les deux profils de personnes présentés et calculer le rapport de cote.]
+3. Vérifiez l'hypothèse de modération des auteurs en déterminant si l'effet des termes d'interaction est significativement non-nul à niveau 5%. 
+    - Rapportez les valeurs des statistiques de test et les valeur-$p$ associées. Commentez sur les résultats obtenus.
+4. Produisez un graphique de la probabilité prédite d'investir (axe des ordonnées) en fonction de l'échelle pour la perception de l'aléatoire (`aleatoire`, axe des abcisses) pour une personne avec un score `epistemique` égal à la moyenne. 
+    - Tracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l'autre avec un score de 4 (en quête de risque).^[Astuce: créez une base de données (`data.frame`) avec une séquence adéquate de valeurs de `aleatoire` pour les valeurs données de `risque` et de `epistemique`.]
+    - En vous basant sur le graphique, commentez sur les différences estimées en terme de décision d'investissement, selon le profil de risque.
+
+
+
+
+## Exercice 3.5
+
+*La base de données `reduflation` du paquet R `hecmulti` contient les données de @Evangelidis:2024.* 
+
+*Ajustez un modèle de régression logistique pour la `perception` des consommateurs en fonction des variables explicatives suivantes (modèle à deux facteurs avec interactions):*
+
+- *l'information sur les coûts (`couts`) de production, soit dus à une augmentation ou sans changement*
+- *la décision d'affaire (`decision`): soit réduire la quantité ou augmenter les prix.*
+
+
+```{r}
+#| eval: false
+#| echo: true
+data(reduflation, package = "hecmulti")
+levels(reduflation$couts)
+levels(reduflation$decision)
+mod <- glm(
+  perception == "juste" ~ decision * couts,
+  data = reduflation,
+  family = binomial
+)
+
+# Estimation des coefficients
+summary(mod)
+# Cotes
+exp(coef(mod))
+# Prédictions
+newdata <- reduflation |>
+  dplyr::select(decision, couts) |>
+  dplyr::distinct()
+pred <- predict(
+  mod, newdata = newdata, type = "response")
+# Tests d'hypothèse
+car::Anova(mod, type = 2)
+# Puisque l'interaction est significative, 
+# on ne peut pas considérer les autres tests
+```
+
+```{r}
+#| eval: true
+#| echo: false
+data(reduflation, package = "hecmulti")
+mod <- glm(
+  perception == "juste" ~ decision * couts,
+  data = reduflation,
+  family = binomial
+)
+newdata <- reduflation |>
+  dplyr::select(decision, couts) |>
+  dplyr::distinct()
+pred <- predict(
+  mod, newdata = newdata, type = "response")
+```
+
+1. *Interprétez l'ordonnée à l'origine.*
+
+Le coefficient $\exp(\beta_0)$ correspond à la cote pour juste (versus référence injuste) pour la catégorie de référence: ici changement dus à des augmentation de coûts, avec hausse de prix.
+
+Autrement, dit, la probabilité estimée de trouver la décision juste est $\exp(\widehat{\beta}_0)=`r round(exp(coef(mod))[1],3)`$ fois celle de la trouver injuste si la décision de l'entreprise est d'augmenter les prix suite à une augmentation de coûts.
+
+2. *Classez les quatre combinaisons de facteurs (`couts` $\times$ `decision`) en ordre de probabilité décroissante pour injustice.*
+
+```{r}
+#| eval: true
+#| echo: false
+#| code-fold: true
+knitr::kable(
+  cbind(newdata, 
+        prob_injust = 1-pred) |>
+  dplyr::arrange(dplyr::desc(prob_injust)),
+  digits = 3,
+  col.names = c("décision","coûts", "Pr(injuste)"))
+```
+
+3. *Interprétez le coefficient pour `decision`: `quantité réduite`.*
+
+Le rapport de cote pour quantité réduite vs augmentation de prix, quand le changement est dû à une augmentation des coûts est de $\exp(\beta_1)$, soit 
+\begin{align*}
+&\frac{\Pr(\text{juste} \mid \text{quantité réduite, coûts en augmentation})}{\Pr(\text{injuste} \mid \text{quantité réduite, coûts en augmentation})} \\&=\exp(\beta_1)\frac{\Pr(\text{juste} \mid \text{prix augmenté, coûts en augmentation})}{\Pr(\text{injuste} \mid \text{prix augmenté, coûts en augmentation})}.
+\end{align*}
+L'estimation est de $\exp(\widehat{\beta}_1) = `r round(coef(mod)[2],3)`$, une diminution de $`r round(100*(1-round(coef(mod)[2],3)),1)`$ pourcent de la cote.
+
+4. *Qu'est-ce qui est le mieux perçu par les participants de l'étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d'affaires?*
+
+L'augmentation de prix est mieux perçue que la réduflation, dans les deux scénarios. Le terme d'interaction est significatif, donc l'effet dépend de la justification d'affaires (même si la valeur-$p$ est de 0.04). On ne peut directement étudier les effets marginaux, mais on pourrait considérer les effets simples.
+
+

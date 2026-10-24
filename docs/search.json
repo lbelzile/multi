@@ -197,7 +197,7 @@
     "href": "exercices/03-solution.html#footnotes",
     "title": "Régression logistique",
     "section": "Notes de bas de page",
-    "text": "Notes de bas de page\n\n\nUtilisez la fonction relevel pour changer la catégorie de référence, avec relevel(educ, ref = 'sec').↩︎",
+    "text": "Notes de bas de page\n\n\nUtilisez la fonction relevel pour changer la catégorie de référence, avec relevel(educ, ref = 'sec').↩︎\nNotez que les auteurs de l’article ont centré préalablement les variables explicatives (c’est-à-dire, en soustrayant la moyenne de chacune des colonnes).↩︎\nAstuce: vous pouvez calculer le rapport de cote en remplaçant les coefficients dans l’équation, ou prédire les probabilités pour les deux profils de personnes présentés et calculer le rapport de cote.↩︎\nAstuce: créez une base de données (data.frame) avec une séquence adéquate de valeurs de aleatoire pour les valeurs données de risque et de epistemique.↩︎",
     "crumbs": [
       "Exercices",
       "Régression logistique",
@@ -1446,6 +1446,30 @@
       "Exercices",
       "Régression logistique",
       "Exercice 3"
+    ]
+  },
+  {
+    "objectID": "exercices/03-solution.html#exercice-3.4",
+    "href": "exercices/03-solution.html#exercice-3.4",
+    "title": "Régression logistique",
+    "section": "Exercice 3.4",
+    "text": "Exercice 3.4\nDans une étude sur le comportement d’investisseurs et leur perception du comportement aléatoire ou épistémique de la bourse, Walters et al. (2023) étudie la présentation de résultats financiers et l’impact du format (par exemple, par le biais de différents graphiques) sur leur perception du risque. Le but de l’étude 4A de l’article est d’établir l’effet modérateur de l’incertitude (épistémique ou aléatoire) sur le risque et les décisions d’investissement.\nLes données compinvest fournissent les observations de l’étude.\nAjustez un modèle logistique avec effets principaux (risque, aleatoire, epistemique) et une interaction entre risque et aléatoire, ainsi que risque et épistémique comme dans l’article.\n\nRapportez un tableau des coefficients du modèle et comparez avec les résultats du Tableau 3 de la prépublication.2\nInterpétez l’effet d’une augmentation de l’échelle de risque de forte aversion (risque = 1) à en quête de risque (risque = 4) en terme de pourcentage d’augmentation ou diminution de la cote pour\n\nun score aléatoire (aleatoire) de 1 point supérieur à la moyenne des scores de l’échantillon et\nun score pour epistemique égal à la moyenne de l’échantillon.3\n\nVérifiez l’hypothèse de modération des auteurs en déterminant si l’effet des termes d’interaction est significativement non-nul à niveau 5%.\n\nRapportez les valeurs des statistiques de test et les valeur-\\(p\\) associées. Commentez sur les résultats obtenus.\n\nProduisez un graphique de la probabilité prédite d’investir (axe des ordonnées) en fonction de l’échelle pour la perception de l’aléatoire (aleatoire, axe des abcisses) pour une personne avec un score epistemique égal à la moyenne.\n\nTracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l’autre avec un score de 4 (en quête de risque).4\nEn vous basant sur le graphique, commentez sur les différences estimées en terme de décision d’investissement, selon le profil de risque.",
+    "crumbs": [
+      "Exercices",
+      "Régression logistique",
+      "Solutions 3"
+    ]
+  },
+  {
+    "objectID": "exercices/03-solution.html#exercice-3.5",
+    "href": "exercices/03-solution.html#exercice-3.5",
+    "title": "Régression logistique",
+    "section": "Exercice 3.5",
+    "text": "Exercice 3.5\nLa base de données reduflation du paquet R hecmulti contient les données de Evangelidis (2024).\nAjustez un modèle de régression logistique pour la perception des consommateurs en fonction des variables explicatives suivantes (modèle à deux facteurs avec interactions):\n\nl’information sur les coûts (couts) de production, soit dus à une augmentation ou sans changement\nla décision d’affaire (decision): soit réduire la quantité ou augmenter les prix.\n\n\n\nCode\ndata(reduflation, package = \"hecmulti\")\nlevels(reduflation$couts)\nlevels(reduflation$decision)\nmod &lt;- glm(\n  perception == \"juste\" ~ decision * couts,\n  data = reduflation,\n  family = binomial\n)\n\n# Estimation des coefficients\nsummary(mod)\n# Cotes\nexp(coef(mod))\n# Prédictions\nnewdata &lt;- reduflation |&gt;\n  dplyr::select(decision, couts) |&gt;\n  dplyr::distinct()\npred &lt;- predict(\n  mod, newdata = newdata, type = \"response\")\n# Tests d'hypothèse\ncar::Anova(mod, type = 2)\n# Puisque l'interaction est significative, \n# on ne peut pas considérer les autres tests\n\n\n\nInterprétez l’ordonnée à l’origine.\n\nLe coefficient \\(\\exp(\\beta_0)\\) correspond à la cote pour juste (versus référence injuste) pour la catégorie de référence: ici changement dus à des augmentation de coûts, avec hausse de prix.\nAutrement, dit, la probabilité estimée de trouver la décision juste est \\(\\exp(\\widehat{\\beta}_0)=1.687\\) fois celle de la trouver injuste si la décision de l’entreprise est d’augmenter les prix suite à une augmentation de coûts.\n\nClassez les quatre combinaisons de facteurs (couts \\(\\times\\) decision) en ordre de probabilité décroissante pour injustice.\n\n\n\n\n\n\n\ndécision\ncoûts\nPr(injuste)\n\n\n\n\n1\nquantité réduite\nidentique\n0.860\n\n\n2\nhausse de prix\nidentique\n0.791\n\n\n4\nquantité réduite\naugmentation\n0.630\n\n\n3\nhausse de prix\naugmentation\n0.372\n\n\n\n\n\n\nInterprétez le coefficient pour decision: quantité réduite.\n\nLe rapport de cote pour quantité réduite vs augmentation de prix, quand le changement est dû à une augmentation des coûts est de \\(\\exp(\\beta_1)\\), soit \\[\\begin{align*}\n&\\frac{\\Pr(\\text{juste} \\mid \\text{quantité réduite, coûts en augmentation})}{\\Pr(\\text{injuste} \\mid \\text{quantité réduite, coûts en augmentation})} \\\\&=\\exp(\\beta_1)\\frac{\\Pr(\\text{juste} \\mid \\text{prix augmenté, coûts en augmentation})}{\\Pr(\\text{injuste} \\mid \\text{prix augmenté, coûts en augmentation})}.\n\\end{align*}\\]\nL’estimation est de \\(\\exp(\\widehat{\\beta}_1) = -1.055\\), une diminution de \\(205.5\\) pourcent de la cote.\n\nQu’est-ce qui est le mieux perçu par les participants de l’étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d’affaires?\n\nL’augmentation de prix est mieux perçue que la réduflation, dans les deux scénarios. Le terme d’interaction est significatif, donc l’effet dépend de la justification d’affaires (même si la valeur-\\(p\\) est de 0.04). On ne peut directement étudier les effets marginaux, mais on pourrait considérer les effets simples.",
+    "crumbs": [
+      "Exercices",
+      "Régression logistique",
+      "Solutions 3"
     ]
   }
 ]

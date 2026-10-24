@@ -58,7 +58,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -359,6 +379,8 @@ window.Quarto = {
   <li><a href="#exercice-3.1" id="toc-exercice-3.1" class="nav-link active" data-scroll-target="#exercice-3.1">Exercice 3.1</a></li>
   <li><a href="#exercice-3.2" id="toc-exercice-3.2" class="nav-link" data-scroll-target="#exercice-3.2">Exercice 3.2</a></li>
   <li><a href="#exercice-3.3" id="toc-exercice-3.3" class="nav-link" data-scroll-target="#exercice-3.3">Exercice 3.3</a></li>
+  <li><a href="#exercice-3.4" id="toc-exercice-3.4" class="nav-link" data-scroll-target="#exercice-3.4">Exercice 3.4</a></li>
+  <li><a href="#exercice-3.5" id="toc-exercice-3.5" class="nav-link" data-scroll-target="#exercice-3.5">Exercice 3.5</a></li>
   </ul>
 </nav>
     </div>
@@ -1011,15 +1033,145 @@ Levels: 1 2 3 4 5</code></pre>
 </div>
 </div>
 <p>Les probabilités prédites sont (0.321; 0.222; 0.039; 0.127; 0.292). La modalité la plus susceptible est donc très insatisfait (<code>1</code>).</p>
+</section>
+<section id="exercice-3.4" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3.4">Exercice 3.4</h2>
+<p>Dans une étude sur le comportement d’investisseurs et leur perception du comportement aléatoire ou épistémique de la bourse, <span class="citation" data-cites="Walters:2022">Walters et al. (<a href="#ref-Walters:2022" role="doc-biblioref">2023</a>)</span> étudie la présentation de résultats financiers et l’impact du format (par exemple, par le biais de différents graphiques) sur leur perception du risque. Le but de l’étude 4A de l’article est d’établir l’effet modérateur de l’incertitude (épistémique ou aléatoire) sur le risque et les décisions d’investissement.</p>
+<p>Les données <code>compinvest</code> fournissent les observations de l’étude.</p>
+<p>Ajustez un modèle logistique avec effets principaux (<code>risque</code>, <code>aleatoire</code>, <code>epistemique</code>) et une interaction entre risque et aléatoire, ainsi que risque et épistémique comme dans l’article.</p>
+<ol type="1">
+<li>Rapportez un tableau des coefficients du modèle et comparez avec les résultats du Tableau 3 de la prépublication.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li>Interpétez l’effet d’une augmentation de l’échelle de risque de forte aversion (<code>risque = 1</code>) à en quête de risque (<code>risque = 4</code>) en terme de pourcentage d’augmentation ou diminution de la cote pour
+<ul>
+<li>un score aléatoire (<code>aleatoire</code>) de 1 point supérieur à la moyenne des scores de l’échantillon et</li>
+<li>un score pour <code>epistemique</code> égal à la moyenne de l’échantillon.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+</ul></li>
+<li>Vérifiez l’hypothèse de modération des auteurs en déterminant si l’effet des termes d’interaction est significativement non-nul à niveau 5%.
+<ul>
+<li>Rapportez les valeurs des statistiques de test et les valeur-<span class="math inline">\(p\)</span> associées. Commentez sur les résultats obtenus.</li>
+</ul></li>
+<li>Produisez un graphique de la probabilité prédite d’investir (axe des ordonnées) en fonction de l’échelle pour la perception de l’aléatoire (<code>aleatoire</code>, axe des abcisses) pour une personne avec un score <code>epistemique</code> égal à la moyenne.
+<ul>
+<li>Tracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l’autre avec un score de 4 (en quête de risque).<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+<li>En vous basant sur le graphique, commentez sur les différences estimées en terme de décision d’investissement, selon le profil de risque.</li>
+</ul></li>
+</ol>
+</section>
+<section id="exercice-3.5" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3.5">Exercice 3.5</h2>
+<p><em>La base de données <code>reduflation</code> du paquet R <code>hecmulti</code> contient les données de <span class="citation" data-cites="Evangelidis:2024">Evangelidis (<a href="#ref-Evangelidis:2024" role="doc-biblioref">2024</a>)</span>.</em></p>
+<p><em>Ajustez un modèle de régression logistique pour la <code>perception</code> des consommateurs en fonction des variables explicatives suivantes (modèle à deux facteurs avec interactions):</em></p>
+<ul>
+<li><em>l’information sur les coûts (<code>couts</code>) de production, soit dus à une augmentation ou sans changement</em></li>
+<li><em>la décision d’affaire (<code>decision</code>): soit réduire la quantité ou augmenter les prix.</em></li>
+</ul>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(reduflation, <span class="at">package =</span> <span class="st">"hecmulti"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(reduflation<span class="sc">$</span>couts)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(reduflation<span class="sc">$</span>decision)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  perception <span class="sc">==</span> <span class="st">"juste"</span> <span class="sc">~</span> decision <span class="sc">*</span> couts,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> reduflation,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimation des coefficients</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Cotes</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(mod))</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Prédictions</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">&lt;-</span> reduflation <span class="sc">|&gt;</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(decision, couts) <span class="sc">|&gt;</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>()</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  mod, <span class="at">newdata =</span> newdata, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Tests d'hypothèse</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">Anova</span>(mod, <span class="at">type =</span> <span class="dv">2</span>)</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Puisque l'interaction est significative, </span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="co"># on ne peut pas considérer les autres tests</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<ol type="1">
+<li><em>Interprétez l’ordonnée à l’origine.</em></li>
+</ol>
+<p>Le coefficient <span class="math inline">\(\exp(\beta_0)\)</span> correspond à la cote pour juste (versus référence injuste) pour la catégorie de référence: ici changement dus à des augmentation de coûts, avec hausse de prix.</p>
+<p>Autrement, dit, la probabilité estimée de trouver la décision juste est <span class="math inline">\(\exp(\widehat{\beta}_0)=1.687\)</span> fois celle de la trouver injuste si la décision de l’entreprise est d’augmenter les prix suite à une augmentation de coûts.</p>
+<ol start="2" type="1">
+<li><em>Classez les quatre combinaisons de facteurs (<code>couts</code> <span class="math inline">\(\times\)</span> <code>decision</code>) en ordre de probabilité décroissante pour injustice.</em></li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">décision</th>
+<th style="text-align: left;">coûts</th>
+<th style="text-align: right;">Pr(injuste)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">quantité réduite</td>
+<td style="text-align: left;">identique</td>
+<td style="text-align: right;">0.860</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">hausse de prix</td>
+<td style="text-align: left;">identique</td>
+<td style="text-align: right;">0.791</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">quantité réduite</td>
+<td style="text-align: left;">augmentation</td>
+<td style="text-align: right;">0.630</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">hausse de prix</td>
+<td style="text-align: left;">augmentation</td>
+<td style="text-align: right;">0.372</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ol start="3" type="1">
+<li><em>Interprétez le coefficient pour <code>decision</code>: <code>quantité réduite</code>.</em></li>
+</ol>
+<p>Le rapport de cote pour quantité réduite vs augmentation de prix, quand le changement est dû à une augmentation des coûts est de <span class="math inline">\(\exp(\beta_1)\)</span>, soit <span class="math display">\[\begin{align*}
+&amp;\frac{\Pr(\text{juste} \mid \text{quantité réduite, coûts en augmentation})}{\Pr(\text{injuste} \mid \text{quantité réduite, coûts en augmentation})} \\&amp;=\exp(\beta_1)\frac{\Pr(\text{juste} \mid \text{prix augmenté, coûts en augmentation})}{\Pr(\text{injuste} \mid \text{prix augmenté, coûts en augmentation})}.
+\end{align*}\]</span></p>
+<p>L’estimation est de <span class="math inline">\(\exp(\widehat{\beta}_1) = -1.055\)</span>, une diminution de <span class="math inline">\(205.5\)</span> pourcent de la cote.</p>
+<ol start="4" type="1">
+<li><em>Qu’est-ce qui est le mieux perçu par les participants de l’étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d’affaires?</em></li>
+</ol>
+<p>L’augmentation de prix est mieux perçue que la réduflation, dans les deux scénarios. Le terme d’interaction est significatif, donc l’effet dépend de la justification d’affaires (même si la valeur-<span class="math inline">\(p\)</span> est de 0.04). On ne peut directement étudier les effets marginaux, mais on pourrait considérer les effets simples.</p>
+
 
 
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Références</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Evangelidis:2024" class="csl-entry" role="listitem">
+Evangelidis, I. (2024). Frontiers: Shrinkflation aversion: When and why product size decreases are seen as more unfair than equivalent price increases. <em>Marketing Science</em>, <em>43</em>(2), 280–288. <a href="https://doi.org/10.1287/mksc.2023.0269">https://doi.org/10.1287/mksc.2023.0269</a>
+</div>
+<div id="ref-Walters:2022" class="csl-entry" role="listitem">
+Walters, D. J., Ülkümen, G., Tannenbaum, D., Erner, C., &amp; Fox, C. R. (2023). Investor behavior under epistemic vs. Aleatory uncertainty. <em>Management Science</em>, <em>69</em>(5), 2761–2777. <a href="https://doi.org/10.1287/mnsc.2022.4489">https://doi.org/10.1287/mnsc.2022.4489</a>
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notes de bas de page</h2>
 
 <ol>
 <li id="fn1"><p>Utilisez la fonction <code>relevel</code> pour changer la catégorie de référence, avec <code>relevel(educ, ref = 'sec')</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Notez que les auteurs de l’article ont centré préalablement les variables explicatives (c’est-à-dire, en soustrayant la moyenne de chacune des colonnes).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><em>Astuce</em>: vous pouvez calculer le rapport de cote en remplaçant les coefficients dans l’équation, ou prédire les probabilités pour les deux profils de personnes présentés et calculer le rapport de cote.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Astuce: créez une base de données (<code>data.frame</code>) avec une séquence adéquate de valeurs de <code>aleatoire</code> pour les valeurs données de <code>risque</code> et de <code>epistemique</code>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

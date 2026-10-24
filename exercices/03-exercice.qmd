@@ -111,7 +111,6 @@ Ajustez un modèle logistique avec effets principaux (`risque`, `aleatoire`, `ep
    - Tracez deux courbes: une pour une personne avec un score de risque de 1 (forte aversion au risque), l'autre avec un score de 4 (en quête de risque).^[Astuce: créez une base de données (`data.frame`) avec une séquence adéquate de valeurs de `aleatoire` pour les valeurs données de `risque` et de `epistemique`.]
    - En vous basant sur le graphique, commentez sur les différences estimées en terme de décision d'investissement, selon le profil de risque.
 
-
 ## Exercice 3.5
 
 La base de données `reduflation` du paquet **R** `hecmulti` contient les données de @Evangelidis:2024.
@@ -124,33 +123,4 @@ Ajustez un modèle de régression logistique pour la `perception` des consommate
 1. Interprétez l'ordonnée à l'origine.
 2. Classez les quatre combinaisons de facteurs (`couts` $\times$ `decision`) en ordre de probabilité décroissante pour injustice.
 3. Interprétez le coefficient pour `decision`: `quantité réduite`.
-4. Qu'est-ce qui est le mieux perçu par les participants de l'étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d'affaires
-
-
-```{r}
-#| eval: false
-#| echo: false
-data(reduflation, package = "hecmulti")
-mod <- glm(
-  perception == "juste" ~ decision * couts,
-  data = reduflation,
-  family = binomial
-)
-
-# Estimation des coefficients
-summary(mod)
-# Cotes
-exp(coef(mod))
-# Prédictions
-newdata <- reduflation |>
-  dplyr::select(decision, couts) |>
-  dplyr::distinct()
-pred <- predict(
-  mod, newdata = newdata, type = "response")
-cbind(newdata, pred)
-# Tests d'hypothèse
-car::Anova(mod, type = 2)
-# Puisque l'interaction est significative, 
-# on ne peut pas considérer les autres tests
-
-```
+4. Qu'est-ce qui est le mieux perçu par les participants de l'étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d'affaires?
