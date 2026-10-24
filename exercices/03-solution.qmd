@@ -492,7 +492,7 @@ Le rapport de cote pour quantité réduite vs augmentation de prix, quand le cha
 \begin{align*}
 &\frac{\Pr(\text{juste} \mid \text{quantité réduite, coûts en augmentation})}{\Pr(\text{injuste} \mid \text{quantité réduite, coûts en augmentation})} \\&=\exp(\beta_1)\frac{\Pr(\text{juste} \mid \text{prix augmenté, coûts en augmentation})}{\Pr(\text{injuste} \mid \text{prix augmenté, coûts en augmentation})}.
 \end{align*}
-L'estimation est de $\exp(\widehat{\beta}_1) = `r round(coef(mod)[2],3)`$, une diminution de $`r round(100*(1-round(coef(mod)[2],3)),1)`$ pourcent de la cote.
+L'estimation est de $\exp(\widehat{\beta}_1) = `r round(exp(coef(mod))[2],3)`$, une diminution de $`r round(100*(1-round(exp(coef(mod))[2],3)),1)`$ pourcent de la cote.
 
 4. *Qu'est-ce qui est le mieux perçu par les participants de l'étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d'affaires?*
 
