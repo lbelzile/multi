@@ -168,7 +168,7 @@ knitr::include_graphics("figures/Sibuya_tabular.png")
 
 \small
 
-Données censurées par intervalles et tronquées à droite (l'âge maximum des personnes en date de collecte des données en 2012).
+Données censurées par intervalles et tronquées à droite (l'âge maximum des personnes en date de collecte des données en 2012). On sait seulement que les individus sont morts pendant l'année; certaines personnes de ces cohortes pourraient être encore vivantes.
 
 \normalsize
 
@@ -185,7 +185,7 @@ Si la censure est informative, les outils présentés ne sont pas adéquats!
 
 # Exemple
 
-Où est l'erreur de logique dans l'analyse suivante?
+Où est l'erreur de logique dans l'[analyse suivante](https://theconversation.com/music-to-die-for-how-genre-affects-popular-musicians-life-expectancy-36660)?
 
 ```{r}
 #| eval: true
@@ -194,6 +194,18 @@ Où est l'erreur de logique dans l'analyse suivante?
 #| out-width: '60%'
 knitr::include_graphics("figures/rightcensoring_illustration-age_death_music_genre.jpg")
 ```
+
+# Explication
+
+
+
+La figure de cet article tiré de *The Conversation* montre l'impact drastique de la censure en représentant l'âge moyen au décès en fonction du
+genre musical, ordonné par ordre d’apparition de ce dernier. 
+
+Puisque seules les personnes décédées sont incluses, les artistes de hip-hop décédés l'ont été forcément jeune (la plupart des artistes de ce genre sont encore vivants)!
+
+Morale de l'histoire: Si on ne prend pas en compte la censure, on
+obtiendrait une conclusion erronée. Avec les données de survie, les statistiques descriptives usuelles sont trompeuses.
 
 
 # Contenu du cours
@@ -285,8 +297,6 @@ Parmi les 500 observations, il y a
 
 La fonction résumé (`summary`) renvoit l'estimation de la fonction de survie pour chaque temps d'échec (événement).
 
-- l'estimateur est *indéfini* à ces valeurs. 
-
 # Tableau résumé (sortie tronqué)
 
 ::: .small
@@ -368,7 +378,7 @@ autoplot(kapm) +
 
 # Comprendre l'estimateur de Kaplan--Meier
 
-- On parle d'**échec** au temps $t_i$ si $T = t_i$ et $C=0$ (événement observé au temps $t_i$).
+- On parle d'**échec** au temps $t_i$ si $T = t_i$ et $C=1$ (événement observé au temps $t_i$).
 - Le nombre de **personnes à risque** au temps $t_i$ est le total des observations dont le temps mesuré excède $t_i$ (censure et événements postérieurs à $t_i$ si troncation à gauche)
 
 **Construction**:
@@ -402,7 +412,7 @@ La troncature à gauche impacte seulement l'ensemble des observations à risque
 
 - une personne n'est pas à risque d'échec avant le temps enregistré pour la censure à gauche.
 
-Avec `survival`, la syntaxe pour la variable réponse devient `Surv(time, time2, event, type = 'right')`, où
+Avec le paquet **R** `survival`, la syntaxe pour la variable réponse est `Surv(time, time2, event, type = 'right')`, où
 
 - `time` est le temps de troncature à gauche, ou zéro
 - `time2` est le temps de défaillance, ou de censure à droite
@@ -441,7 +451,7 @@ Le quantile à niveau $1-\alpha$ est la valeur $\min\{t: S(t) \leq \alpha\}$.
 
 C'est le point sur l'axe des abcisse auquel une ligne horizontale de hauteur $\alpha$ croise la courbe de survie empirique (une contre-marche).
 
-- En regardant le tableau, le quantile 80% de la survie est la valeur à laquelle la survie descend en dessous de 0.2, soit 202 semaines. 
+- En regardant le tableau, le quantile $\alpha=0.8$ de la survie est la valeur à laquelle la survie descend en dessous de $1-\alpha = 0.2$, soit 202 semaines. 
 - Interprétation: on estime que 80% des gens se sont désabonnés avant 202 semaines.
 
 # Estimateur déficient et moyenne restreinte
@@ -543,7 +553,7 @@ L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables explicative
 # Récapitulatif
 
 - La fonction de survie $S(t)$ encode la probabilité que le temps de défaillance excède le temps $t$.
-- La fonction de risque encode la probabilité de mourir juste après le temps $t$ sachant qu'on a survécu jusque là.
+- La fonction de risque $h(t) = f(t)/S(t)$ encode la probabilité instantanée de mourir juste après le temps $t$ sachant qu'on a survécu jusque là.
 - La connaissance de la fonction de survie permet d'obtenir la fonction de risque et vice-versa.
 
 # Récapitulatif
@@ -569,7 +579,7 @@ L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables explicative
 
 La **fonction de risque** (en anglais, _hazard_) est 
 \begin{align*}
-h(t) =  \lim_{\Delta t \to 0} \frac{\Pr( t < T  \leq t + \Delta t] \mid T \geq t)}{\Delta t }
+h(t) =  \lim_{\Delta t \to 0} \frac{\Pr( t < T  \leq t + \Delta t \mid T \geq t)}{\Delta t }
 \end{align*}
 
 et $h(t) \Delta t$ est la probabilité que l'événement survienne juste après le temps $t$, sachant qu'il n'est pas survenu jusque là.
@@ -578,7 +588,7 @@ Plus le risque est élevé au temps $t$, plus l'événement est susceptible d'ar
 
 # Fonction de risque (bis)
 
-Dans le cas discret où le temps peut seulement prendre les valeurs $0, 1, 2, \ldots$, le risque est
+Dans le cas discret où le temps peut seulement prendre les valeurs (par ex., $t=0, 1, 2, \ldots$), le risque est
 \begin{align*}
 h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
 \end{align*}
@@ -855,6 +865,7 @@ Test du score de Grampsch et Therneau (1994) pour les coefficients constants dan
 - $\mathscr{H}_0$: $\beta(t)=c$ est constant (risques proportionnels)
 - $\mathscr{H}_a$: $\beta(t) \neq c$ (risques non prop., coef. variable).
 
+en gardant toutes les autres variables explicatives dans le modèle.
 
 ```{r}
 #| label: tbl-coxph-hypothese
