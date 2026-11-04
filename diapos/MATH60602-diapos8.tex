@@ -179,10 +179,11 @@
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -422,7 +423,9 @@ adéquats!
 
 \begin{frame}{Exemple}
 \protect\phantomsection\label{exemple}
-Où est l'erreur de logique dans l'analyse suivante?
+Où est l'erreur de logique dans
+l'\href{https://theconversation.com/music-to-die-for-how-genre-affects-popular-musicians-life-expectancy-36660}{analyse
+suivante}?
 
 \begin{center}
 \includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{figures/rightcensoring_illustration-age_death_music_genre.jpg}
@@ -881,9 +884,9 @@ sexe=1 191      117      153      8.63      16.4
   test asymptotique du log-rang pour l'hypothèse d'égalité des fonctions
   de survie.
 \item
-  La valeur-\(p\) du test est inférieure à \(10^{-4}\): on rejette
-  \(\mathscr{H}_0\) pour conclure qu'il y a une différence significative
-  entre les deux courbes de survie.
+  La valeur-\(p\) du test est inférieure à \(5 \times 10^{-5}\): on
+  rejette \(\mathscr{H}_0\) pour conclure qu'il y a une différence
+  significative entre les deux courbes de survie.
 \end{itemize}
 \end{frame}
 
@@ -1010,11 +1013,10 @@ explicatives à proprement parler.
 \protect\phantomsection\label{fonction-de-risque}
 La \textbf{fonction de risque} (en anglais, \emph{hazard}) est
 \begin{align*}
-h(t) =  \lim_{\Delta t \to 0} \frac{\Pr( t < T  \leq t + \Delta t \mid T \geq t)}{\Delta t }
-\end{align*}
-
-et \(h(t) \Delta t\) est la probabilité que l'événement survienne juste
-après le temps \(t\), sachant qu'il n'est pas survenu jusque là.
+h(t) =  \lim_{\Delta t \to 0} \frac{\Pr( t < T  \leq t + \Delta t \mid T \geq t)}{\Delta t}
+\end{align*} et \(h(t) \Delta t\) est la probabilité que l'événement
+survienne juste après le temps \(t\), sachant qu'il n'est pas survenu
+jusque là.
 
 Plus le risque est élevé au temps \(t\), plus l'événement est
 susceptible d'arriver.
@@ -1279,7 +1281,7 @@ graphique de Grampsch et Therneau).}
 \end{figure}%
 \end{frame}
 
-\begin{frame}[fragile]{Test du score pour risques proportionnels}
+\begin{frame}{Test du score pour risques proportionnels}
 \protect\phantomsection\label{test-du-score-pour-risques-proportionnels}
 Test du score de Grampsch et Therneau (1994) pour les coefficients
 constants dans le temps avec
@@ -1295,7 +1297,11 @@ constants dans le temps avec
 \end{itemize}
 
 en gardant toutes les autres variables explicatives dans le modèle.
+\end{frame}
 
+\begin{frame}[fragile]{Résultats du test du score pour risques
+proportionnels}
+\protect\phantomsection\label{ruxe9sultats-du-test-du-score-pour-risques-proportionnels}
 \begin{longtable}[t]{lrrl}
 
 \caption{\label{tbl-coxph-hypothese}Tests du score avec valeur-\(p\)
@@ -1314,8 +1320,6 @@ global & 20.83 & 9 & 0.013\\
 \bottomrule
 
 \end{longtable}
-
-\footnotesize
 
 Postulat pas respecté pour \texttt{service}: augmentation au fil du
 temps pour tous les groupes. Il faudrait ajouter une interaction ou
