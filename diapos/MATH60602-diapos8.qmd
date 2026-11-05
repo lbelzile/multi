@@ -233,7 +233,7 @@ On considère l'exemple d'une entreprise de télécommunications qui veut conna�
 Les données `survie1` contiennent les variables suivantes.
 
 - $\texttt{temps}$: temps (en semaines) que le client est resté abonné au service de téléphone cellulaire. Il s'agit du vrai temps si le client n'est plus abonné et d'une borne inférieure si le client est toujours abonné.
-- `censure`: variable binaire qui indique si la variable `t` est censurée (`0` si le client est toujours abonné) ou non (`1`, la variable `t` est la durée finale de l'abonnement).
+- `censure`: variable binaire qui indique si la variable `temps` est censurée (`0` si le client est toujours abonné) ou non (`1`, la variable `temps` est la durée finale de l'abonnement).
 - `age`: âge du client au début de l'abonnement.
 - `sexe`: sexe du client, soit femme (`1`), soit homme (`0`).
 - `service`: nombre de services en plus du cellulaire auquel le client est abonné parmi internet, téléphone fixe, télévision (câble ou antenne parabolique). 
@@ -550,12 +550,6 @@ L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables explicative
 
 - L'analyse de survie est l'étude de temps d'attente (variable positive) avant que survienne un événement.
 - L'étude des temps de défaillance nécessite l'utilisation d'outils statistiques spécifiques en raison des mécanismes de censure et de troncature.
-
-# Récapitulatif
-
-- La fonction de survie $S(t)$ encode la probabilité que le temps de défaillance excède le temps $t$.
-- La fonction de risque $h(t) = f(t)/S(t)$ encode la probabilité instantanée de mourir juste après le temps $t$ sachant qu'on a survécu jusque là.
-- La connaissance de la fonction de survie permet d'obtenir la fonction de risque et vice-versa.
 
 # Récapitulatif
 
@@ -900,6 +894,14 @@ Si le postulat n'est pas validé, on peut interpréter l'effet comme un rapport 
 Cela implique surtout que les erreurs-types associées aux estimations sont trompeuses.
 
 
+
+# Récapitulatif
+
+- La fonction de survie $S(t)$ encode la probabilité que le temps de défaillance excède le temps $t$.
+- La fonction de risque $h(t) = f(t)/S(t)$ encode la probabilité instantanée de mourir juste après le temps $t$ sachant qu'on a survécu jusque là.
+- La connaissance de la fonction de survie permet d'obtenir la fonction de risque et vice-versa.
+
+
 # Récapitulatif
 
 Le modèle de Kaplan--Meier ne permet pas d'estimer l'impact de variables explicatives sur la survie.
@@ -908,7 +910,7 @@ On peut utiliser pour ce faire le modèle de Cox.
 
 Ce dernier suppose qu'on peut diviser le risque en deux parties
 
-- risque de base $h_0(t)$ commun à tou(te)s (composante nonparamétrique)
+- risque de base $h_0(t)$ commun (composante nonparamétrique)
 - effet multiplicatif $\exp(\mathbf{X}\boldsymbol{\beta})$ (composante paramétrique)
 
 

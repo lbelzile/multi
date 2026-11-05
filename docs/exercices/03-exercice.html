@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -60,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-addd9d9e9293d0f3a21ce6ae0bace6b8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a1508c08374364ce6894fd4576ce01f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -95,7 +98,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -431,8 +434,8 @@ X_{ik} = \begin{cases}
 <li>Prédisez la probabilité qu’un homme de 30 ans qui a un diplôme collégial et qui fait partie de la classe moyenne sélectionne une catégorie donnée. Quelle modalité est la plus susceptible?</li>
 </ol>
 </section>
-<section id="exercice-3.4" class="level1">
-<h1>Exercice 3.4</h1>
+<section id="exercice-3.4" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3.4">Exercice 3.4</h2>
 <p>Dans une étude sur le comportement d’investisseurs et leur perception du comportement aléatoire ou épistémique de la bourse, <span class="citation" data-cites="Walters:2022">Walters et al. (<a href="#ref-Walters:2022" role="doc-biblioref">2023</a>)</span> étudie la présentation de résultats financiers et l’impact du format (par exemple, par le biais de différents graphiques) sur leur perception du risque. Le but de l’étude 4A de l’article est d’établir l’effet modérateur de l’incertitude (épistémique ou aléatoire) sur le risque et les décisions d’investissement.</p>
 <p>Les données <code>compinvest</code> fournissent les observations de l’étude.</p>
 <p>Ajustez un modèle logistique avec effets principaux (<code>risque</code>, <code>aleatoire</code>, <code>epistemique</code>) et une interaction entre risque et aléatoire, ainsi que risque et épistémique comme dans l’article.</p>
@@ -453,8 +456,8 @@ X_{ik} = \begin{cases}
 </ul></li>
 </ol>
 </section>
-<section id="exercice-3.5" class="level1">
-<h1>Exercice 3.5</h1>
+<section id="exercice-3.5" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3.5">Exercice 3.5</h2>
 <p>La base de données <code>reduflation</code> du paquet <strong>R</strong> <code>hecmulti</code> contient les données de <span class="citation" data-cites="Evangelidis:2024">Evangelidis (<a href="#ref-Evangelidis:2024" role="doc-biblioref">2024</a>)</span>.</p>
 <p>Ajustez un modèle de régression logistique pour la <code>perception</code> des consommateurs en fonction des variables explicatives suivantes (modèle à deux facteurs avec interactions):</p>
 <ul>
@@ -465,7 +468,7 @@ X_{ik} = \begin{cases}
 <li>Interprétez l’ordonnée à l’origine.</li>
 <li>Classez les quatre combinaisons de facteurs (<code>couts</code> <span class="math inline">\(\times\)</span> <code>decision</code>) en ordre de probabilité décroissante pour injustice.</li>
 <li>Interprétez le coefficient pour <code>decision</code>: <code>quantité réduite</code>.</li>
-<li>Qu’est-ce qui est le mieux perçu par les participants de l’étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de</li>
+<li>Qu’est-ce qui est le mieux perçu par les participants de l’étude: la réduflation ou une augmentation de prix? Est-ce que ce résultat dépend de la justification d’affaires?</li>
 </ol>
 
 

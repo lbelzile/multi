@@ -17,30 +17,30 @@ On pourrait ignorer la censure par intervalle en associant chaque intervalle de 
 
 2. *Donnez une estimation de la probabilité qu’une entreprise survive trois ans et plus.*
 
-On veut la survie $\Pr(T \geq 3)$ L'estimation est donnée dans la colonne *Cumulative survival rate* du Tableau 1, soit 0.6393.
+On veut la survie $\Pr(T \geq 3)$ L'estimation est donnée dans la colonne *Cumulative survival rate* du Tableau 1, soit $0.6393$.
 
 3. *Donnez une estimation de la probabilité qu’une entreprise survive entre 4 et 5 ans, soit l'intervalle [4,5) ans.*
 
-Puisque la fonction de survie empirique est constante, cela revient à la probabilité de défaillance dans l'intervalle [4,5) ans, soit 
+Puisque la fonction de survie empirique est constante, cela revient à la probabilité de défaillance dans l'intervalle $[4,5)$ ans, soit 
 \begin{align*}
 \Pr\{T \in [4,5)\} &= \Pr(T \ge 5) - \Pr(T \ge 4) \\&= 0.5525 - 0.5023 \\&= 0.0502.
 \end{align*}
-Si on traçait la courbe de Kaplan--Meier, cette probabilité correspond à la hauteur de la contre-marche entre 4 et 5 ans.
+Si on traçait la courbe de Kaplan--Meier, cette probabilité correspond à la hauteur de la contre-marche entre $4$ et $5$ ans.
 
 
 4. *Quel pourcentage des observations sont censurées?*
 
-Il y a 219 observations au total et $38=13+25$ firmes sont toujours en activité et donc leur temps de survie est censuré; le pourcentage est 38/219 ou 17.35%.
+Il y a $219$ observations au total et $38=13+25$ firmes sont toujours en activité et donc leur temps de survie est censuré; le pourcentage est $38/219$ ou $17.35$%.
 
 5. *Êtes-vous en mesure de nous fournir une estimation du troisième quartile de la fonction de survie? Justifiez votre réponse.*
 
-Non, puisque les plus grandes temps observés sont censurées et l'estimation de la fonction de survie s'arrête à 0.2921; la fonction de survie ne traverse pas la valeur horizontale de 0.25
+Non, puisque les plus grandes temps observés sont censurées et l'estimation de la fonction de survie s'arrête à $0.2921$; la fonction de survie ne traverse pas la valeur horizontale de $0.25$
 
 *Le Tableau 3 de l'article fournit les estimations d'un modèle à risques proportionnels de Cox.*
 
 6. *Comparez les modèles (1) et (2). Est-ce que l'effet de cohorte impacte la survie?*
 
-Oui. On peut voir cela de plusieurs façons puisque (1) les deux coefficients associés sont significativement différents de zéro (tests de Wald) avec, pour `COHORT_82`, $Z = -0.5518/0.2081=-2.651$ et une valeur-$p$ basée sur l'approximation normale de 0.008 (idem pour `COHORT_83`).
+Oui. On peut voir cela de plusieurs façons puisque (1) les deux coefficients associés sont significativement différents de zéro (tests de Wald) avec, pour `COHORT_82`, $Z = -0.5518/0.2081=-2.651$ et une valeur-$p$ basée sur l'approximation normale de $0.008$ (idem pour `COHORT_83`).
 
 On peut aussi construire une statistique du rapport de vraisemblance avec $$-2\ell_{(1)} + 2 \ell_{(2)} =1503.442-1471.353 = 32.089.$$ Or, l'inclusion des cohortes ajoute deux paramètres, donc cette statistique est à comparer avec une loi $\chi^2_2$.
 
@@ -57,9 +57,9 @@ pchisq(1503.442 - 1471.353,
 
 7. *Pour le modèle (3), décrivez le plus précisément possible l’effet des variables capital (`FIXED_ASSET`) et le montant de la dette (`DEBT`) sur la durée de vie des entreprises.*
 
-Toute chose étant égale par ailleurs, une augmentation du ratio du passif total sur le total des actifs (`DEBT`) de 1 augmente le risque de 119.3%; le rapport de risque étant multiplié par $\exp(0.83)=2.293$.
+Toute chose étant égale par ailleurs, une augmentation du ratio du passif total sur le total des actifs (`DEBT`) de $1$ augmente le risque de $119.3$%; le rapport de risque étant multiplié par $\exp(0.83)=2.293$.
 
-*Ceteris paribus*, une augmentation du ratio des immobilisations sur le total des actifs de 1 diminue le risque d'environ 59.8%, avec un rapport de risque de $\exp(-0.9091) =0.4028$.
+*Ceteris paribus*, une augmentation du ratio des immobilisations sur le total des actifs de $1$ diminue le risque d'environ $59.8$%, avec un rapport de risque de $\exp(-0.9091) =0.4028$.
 
 ## Exercice 4.2
 
@@ -75,7 +75,7 @@ Toute chose étant égale par ailleurs, une augmentation du ratio du passif tota
 
 1. *Que représente la censure dans cet exemple?*
 
-Les données censurées à droites correspondent aux paires de chaussure qui sont toujours en stock à la fin de la période d’observation ou qui sont invendues après 40 mois.
+Les données censurées à droites correspondent aux paires de chaussure qui sont toujours en stock à la fin de la période d’observation ou qui sont invendues après $40$ mois.
 
 2. *Estimez le temps de stockage à l'aide d'un modèle de Kaplan--Meier et rapportez les estimés des quartiles.*
 
@@ -97,7 +97,7 @@ plot(km)
 quantile(km)$quantile
 ```
 
-Les quartiles sont 5 mois (25% des chaussures sont en inventaire moins de ce temps), 8 mois (temps médian en stock) et 12 mois (75% des chaussures sont vendues dans l'année de leur achat).
+Les quartiles sont $5$ mois ($25$% des chaussures sont en inventaire moins de ce temps), $8$ mois (temps médian en stock) et $12$ mois ($75$% des chaussures sont vendues dans l'année de leur achat).
 
 3. *Ajustez un modèle à risque proportionnel de Cox pour la durée de stockage en fonction du sexe et du prix de vente.*
    - *Rapportez et interprétez les coefficients des variables.*
@@ -111,9 +111,9 @@ modcox <- coxph(
 summary(modcox)
 ```
    
-Chaque augmentation du prix d'un dollar mène à une diminution de risque de vente de 1.35%. De manière équivalente, une augmentation d'un dollar multiplie le risque par 0.9865, soit une diminution de 12.7% pour une différence de prix de 10\$. Cet effet est significativement différent de zéro (statistique de Wald de $z = -14.17$, valeur-$p$ négligeable).
+Chaque augmentation du prix d'un dollar mène à une diminution de risque de vente de $1.35$%. De manière équivalente, une augmentation d'un dollar multiplie le risque par $0.9865$, soit une diminution de $12.7$% pour une différence de prix de $10$\$. Cet effet est significativement différent de zéro (statistique de Wald de $z = -14.17$, valeur-$p$ négligeable).
 
-Pour une paire de chaussure du même prix, le risque de vendre la paire de chaussures pour femmes est de 15.13% inférieur à celui d'une paire pour hommes. Cette différence est significative à niveau 1% (statistique de Wald $z=-6.254$). Les souliers pour femmes restent plus longtemps en stock que ceux des hommes au même prix.
+Pour une paire de chaussure du même prix, le risque de vendre la paire de chaussures pour femmes est de $15.13$% inférieur à celui d'une paire pour hommes. Cette différence est significative à niveau $1$% (statistique de Wald $z=-6.254$). Les souliers pour femmes restent plus longtemps en stock que ceux des hommes au même prix.
 
 
 4. *Tracez les estimés des courbes de survie d'une chaussure de l'année dont le prix de vente est 120\$ pour les modèles pour homme et pour femme.*
@@ -143,9 +143,9 @@ plot(pred,
 
 5.  *Ajustez un modèle de Cox qui prendra en compte cette nouvelle information. Rapportez les estimés des paramètres de votre modèle; est-ce que vos interprétations changent?*
 
-Pour ce faire il faut modifier la base de données et casser la contribution en deux selon que le temps soit supérieur à 15 mois ou pas.
+Pour ce faire il faut modifier la base de données et casser la contribution en deux selon que le temps soit supérieur à $15$ mois ou pas.
 
-On obtient donc une plage de $(0,t]$ pour les chaussures vendues en dessous de 15 mois (aucun changement). 
+On obtient donc une plage de $(0,t]$ pour les chaussures vendues en dessous de $15$ mois (aucun changement). 
 
 Pour les chaussures mises au rabais on a une plage de $(0, 15]$ avec censure à droite (dans `chaussure1` ci dessous) et finalement $(15,t]$ avec l'événement pour les autres chaussures (`chaussures2`).
 

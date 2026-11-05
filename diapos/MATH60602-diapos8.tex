@@ -490,9 +490,9 @@ Les données \texttt{survie1} contiennent les variables suivantes.
   toujours abonné.
 \item
   \texttt{censure}: variable binaire qui indique si la variable
-  \texttt{t} est censurée (\texttt{0} si le client est toujours abonné)
-  ou non (\texttt{1}, la variable \texttt{t} est la durée finale de
-  l'abonnement).
+  \texttt{temps} est censurée (\texttt{0} si le client est toujours
+  abonné) ou non (\texttt{1}, la variable \texttt{temps} est la durée
+  finale de l'abonnement).
 \item
   \texttt{age}: âge du client au début de l'abonnement.
 \item
@@ -947,23 +947,6 @@ explicatives à proprement parler.
 \begin{itemize}
 \tightlist
 \item
-  La fonction de survie \(S(t)\) encode la probabilité que le temps de
-  défaillance excède le temps \(t\).
-\item
-  La fonction de risque \(h(t) = f(t)/S(t)\) encode la probabilité
-  instantanée de mourir juste après le temps \(t\) sachant qu'on a
-  survécu jusque là.
-\item
-  La connaissance de la fonction de survie permet d'obtenir la fonction
-  de risque et vice-versa.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-2}
-\begin{itemize}
-\tightlist
-\item
   Le mécanisme d'information partielle le plus courant en analyse de
   survie est la \textbf{censure à droite} (on ne connaît qu'une borne
   inférieure pour le temps de défaillance, l'événement n'étant toujours
@@ -975,7 +958,7 @@ explicatives à proprement parler.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-3}
+\protect\phantomsection\label{ruxe9capitulatif-2}
 \begin{itemize}
 \tightlist
 \item
@@ -996,7 +979,7 @@ explicatives à proprement parler.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\phantomsection\label{ruxe9capitulatif-4}
+\protect\phantomsection\label{ruxe9capitulatif-3}
 \begin{itemize}
 \tightlist
 \item
@@ -1337,6 +1320,23 @@ sont trompeuses.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
+\protect\phantomsection\label{ruxe9capitulatif-4}
+\begin{itemize}
+\tightlist
+\item
+  La fonction de survie \(S(t)\) encode la probabilité que le temps de
+  défaillance excède le temps \(t\).
+\item
+  La fonction de risque \(h(t) = f(t)/S(t)\) encode la probabilité
+  instantanée de mourir juste après le temps \(t\) sachant qu'on a
+  survécu jusque là.
+\item
+  La connaissance de la fonction de survie permet d'obtenir la fonction
+  de risque et vice-versa.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Récapitulatif}
 \protect\phantomsection\label{ruxe9capitulatif-5}
 Le modèle de Kaplan--Meier ne permet pas d'estimer l'impact de variables
 explicatives sur la survie.
@@ -1348,8 +1348,7 @@ Ce dernier suppose qu'on peut diviser le risque en deux parties
 \begin{itemize}
 \tightlist
 \item
-  risque de base \(h_0(t)\) commun à tou(te)s (composante
-  nonparamétrique)
+  risque de base \(h_0(t)\) commun (composante nonparamétrique)
 \item
   effet multiplicatif \(\exp(\mathbf{X}\boldsymbol{\beta})\) (composante
   paramétrique)
