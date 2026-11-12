@@ -341,7 +341,7 @@ ggplot(data = survcurves,
   geom_step() +
   ggplot2::scale_y_continuous(
     expand = c(0,0),
-    limits = c(0,1), 
+    limits = c(0,1.01), 
     breaks = seq(0, 1, by = 0.25),
     labels = c("0","0.25","0.5","0.75","1")) + 
   theme_classic() +
@@ -415,7 +415,9 @@ cox_np <- survival::coxph(
      age + sexe + service + 
       tt(service1) + tt(service2) + tt(service3), 
      data = survie1_modif, 
-     tt = function(x, t, ...){t * x})
+     tt = function(x, t, ...){t / 52 * x })
+# Modèle linéaire: beta0 + beta_1*t pour chaque service
+# l'effet est exprimé en années plutôt qu'en semaines
 ```
 
 # Coefficients et tests
@@ -434,7 +436,7 @@ colnames(tab6) <- c("terme",
                     "exp(coef)",
                     "test de Wald",
                     "valeur-p")
-tab6[,4] <- format.pval(tab6[,4], eps = 1e-3, digits = 3)
+tab6[,4] <- format.pval(tab6[,4], eps = 1e-2, digits = 2)
 knitr::kable(tab6,
                digits = c(2,3,3),
                booktabs = TRUE,
@@ -444,7 +446,7 @@ knitr::kable(tab6,
 
 # Interprétation des résultats
 
-- Les coefficients pour l'interaction avec $t$ sont petits parce que la plage de $t$ (0 à 200 semaines) est énorme.
+
 - Les coefficients sont positifs: le risque augmente avec le temps. L'impact des rabais pour services multiples diminue avec le temps.
 - Deux des termes d'interaction sont significatifs à niveau 5% (statistiques de Wald $Z$ de `r round(summary(cox_np)$coefficients[6,4],3)`, `r round(summary(cox_np)$coefficients[7,4],3)` et `r round(summary(cox_np)$coefficients[8,4],3)` et valeurs-$p$ correspondantes de `r round(summary(cox_np)$coefficients[6,5],3)`, `r round(summary(cox_np)$coefficients[7,5],3)` et `r round(summary(cox_np)$coefficients[8,5],3)`).
 
@@ -590,8 +592,8 @@ Deux options: ajuster chaque modèle séparément en traitant tout événement a
 #  - 0 (FALSE) pour censure à droite
 data(survie4, package = "hecmulti")
 rc_cox_A <- coxph(Surv(time = temps, 
-                   event = censure == 2) ~ 
-                age + sexe + service, 
+                       event = censure == 2) ~ 
+                     age + sexe + service, 
               data = survie4)
 ```
 
@@ -635,11 +637,12 @@ Passer la variable état comme **facteur**, avec transition depuis catégorie de
 n <- nrow(survie4)
 surv4 <- survie4 |> 
   dplyr::mutate(id = seq_len(n))
-rc_cox <- coxph(Surv(time = temps, 
-             event = factor(censure)) ~ 
-               sexe + age + service,
-             data = surv4,
-             id = id)
+rc_cox <- coxph(
+  Surv(time = temps, 
+       event = factor(censure)) ~ 
+     sexe + age + service,
+  data = surv4,
+  id = id)
 ```
 
 \footnotesize
@@ -656,26 +659,28 @@ Surtout, ne pas estimer les courbes séparément!
 #| eval: true
 #| echo: true
 data(survie4, package = "hecmulti")
-rc_km <- survfit(Surv(time = temps, 
-             event = factor(censure)) ~ 1, #facteur
-             data = survie4)
+rc_km <- survfit(
+  Surv(time = temps, 
+       event = factor(censure)) ~ 1, #facteur
+  data = survie4)
 ```
 
 # Graphiques
 
+\footnotesize
 Les représentations graphiques donnent la probabilité d'être dans une situation en fonction du temps (ici avec la catégorie de référence abonnement).
 
-\footnotesize 
+
 
 ```{r}
 #| label: fig-competitif
-#| fig-cap: "Probabilité d'événement sans variable explicative (Kaplan-Meier, gauche) et avec âge, service et sexe (modèle de Cox, droite)."
+#| fig-cap: "Probabilité d'événement: Kaplan-Meier (gauche) et modèle de Cox avec âge, service et sexe (id=3)."
 #| eval: true
 #| echo: false
 #| out-width: '100%'
 #| fig-width: 8
 #| fig-height: 4
-par(mfrow = c(1,2), bty = "l")
+par(mfrow = c(1,2), mar = c(4,4,1,1), bty = "l")
 plot(rc_km, noplot = NULL, 
      col = 1:4,
      ylab = "probabilité dans l'état",
@@ -686,12 +691,13 @@ legend("topright",
                   "A","B","fin"),
        bty = "n", col = 1:4, lty = 1)
 plot(survfit(rc_cox, 
-             newdata = hecmulti::survie4[1,]),
+             newdata = hecmulti::survie4[3,]),
      noplot = NULL,
      col = 1:4,
      ylim = c(0,1),
      yaxs = "i")
 ```
+\normalsize 
 
 # Récapitulatif
 

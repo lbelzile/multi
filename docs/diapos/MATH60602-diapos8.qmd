@@ -85,10 +85,11 @@ theme_set(theme_classic())
 
 # Mécanismes de survie
 
-La survie est caractérisée par la présence d'information **partielle**.
-
+La survie est un sujet très compliqué... elle est caractérisée par la présence d'information **partielle**.
 Les données sont sujettes à **troncature** et à **censure**.
 
+- On s'intéressera uniquement à la censure à droite (non informative). 
+- Le cours ne couvrira que des méthodes nonparamétriques ou semiparamétriques.
 
 # Définition de la censure
 
@@ -112,6 +113,7 @@ La plage des valeurs possibles est tronquée.
 - Certaines personnes seront déjà au chômage au début de l'étude (troncature à gauche): le temps réel sera supérieur à la durée écoulée
 - Certaines personnes ont trouvé un emploi entre deux prises de contact, mais la date exacte est inconnue (censure par intervalle).
 - D'autres personnes seront toujours au chômage à la fin de l'étude (censure à droite). 
+
 
 # Diagramme de Lexis
 
@@ -209,21 +211,13 @@ Morale de l'histoire: Si on ne prend pas en compte la censure, on
 obtiendrait une conclusion erronée. Avec les données de survie, les statistiques descriptives usuelles sont trompeuses.
 
 
-# Contenu du cours
-
-La survie est un sujet très compliqué...
-
-On s'intéressera uniquement à la censure à droite (non informative). 
-
-Le cours ne couvrira que des méthodes nonparamétriques ou semiparamétriques.
-
 # Données 
 
 La structure de données de base que l'on doit avoir pour travailler est la suivante:
 
 1. une variable temps, $T$.
 2. une variable binaire $C$ (censure).
-3. des variables explicatives $X_1, \ldots, X_p$
+3. des variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$
 
 
 On considère l'exemple d'une entreprise de télécommunications qui veut connaître les facteurs influençant la durée d'abonnement à son service de téléphone cellulaire.
@@ -248,6 +242,10 @@ Soit $F(t)=\Pr(T \leq t)$ la fonction de répartition du temps de survie $t$. La
 S(t)= \Pr(T > t) = 1-F(t),
 \end{align*}
 donne la probabilité que le temps de survie soit supérieur à $t$.
+
+La fonction de masse ou de densité $f(t)$ est la dérivée de la fonction de répartion, $f(t) = \mathrm{d} F(t)/{\mathrm{d} t}$. 
+
+Si $T$ est une variable discrète, $f(t)=\Pr(T=t).$
 
 # Estimateur de Kaplan--Meier
 
@@ -572,19 +570,20 @@ L'estimateur de Kaplan--Meier ne permet pas l'inclusion de variables explicative
 # Fonction de risque
 
 
-La **fonction de risque** (en anglais, _hazard_) est 
+La **fonction de risque** (en anglais, _hazard_) est défini comme
 \begin{align*}
-h(t) =  \lim_{\Delta t \to 0} \frac{\Pr( t < T  \leq t + \Delta t \mid T \geq t)}{\Delta t}
+h(t) &=  \lim_{\Delta  \to 0} \frac{\Pr( t < T  < t + \Delta \mid T \geq t)}{\Delta}\\
+&= -\frac{S'(t)}{S(t)} = \frac{f(t)}{S(t)}.
 \end{align*}
-et $h(t) \Delta t$ est la probabilité que l'événement survienne juste après le temps $t$, sachant qu'il n'est pas survenu jusque là.
 
-Plus le risque est élevé au temps $t$, plus l'événement est susceptible d'arriver.
+- Le risque satisfait $h(t) \ge 0$ pour tout temps $t$. 
+- Plus le risque est élevé au temps $t$, plus l'événement est susceptible d'arriver.
 
 # Fonction de risque (bis)
 
 Dans le cas discret où le temps peut seulement prendre les valeurs (par ex., $t=0, 1, 2, \ldots$), le risque est
 \begin{align*}
-h(t) &= \frac{\Pr(T=t)}{\Pr(T \geq t)},
+h(t) &= \frac{f(t)}{S(t)}=\frac{\Pr(T=t)}{\Pr(T \geq t)},
 \end{align*}
 la probabilité conditionnelle que l'événement survienne au temps $t$, étant donné qu'il n'était pas survenu juste avant.
 
@@ -924,9 +923,8 @@ Puisque $h_0(t)$ est commune à toutes les observations, moins d'incertitude sur
 - L'impact sur la survie de changement dans les variables explicatives n'est pas multiplicatif!
 - voir les prédictions pour les quatre profils clients.
 
-Le modèle de Cox suppose que le rapport de cote ne dépend pas du temps (postulat de risques proportionnels).
+Le modèle de Cox suppose que le rapport de risque ne dépend pas du temps (postulat de risques proportionnels).
 
-- On peut vérifier ce postulat 
-- et généraliser le modèle au besoin.
+- On peut vérifier ce postulat et généraliser le modèle au besoin.
 
  

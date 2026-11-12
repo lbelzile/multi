@@ -1,18 +1,18 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
   ignorenonframetext,
 ]{beamer}
+\newif\ifbibliography
 \usepackage{pgfpages}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
 \setbeamercolor{caption name}{fg=normal text.fg}
 \beamertemplatenavigationsymbolsempty
-% Prevent slide breaks in the middle of a paragraph
-\widowpenalties 1 10000
-\raggedbottom
+% remove section numbering
 \setbeamertemplate{part page}{
   \centering
   \begin{beamercolorbox}[sep=16pt,center]{part title}
@@ -21,16 +21,19 @@
 }
 \setbeamertemplate{section page}{
   \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
     \usebeamerfont{section title}\insertsection\par
   \end{beamercolorbox}
 }
 \setbeamertemplate{subsection page}{
   \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
     \usebeamerfont{subsection title}\insertsubsection\par
   \end{beamercolorbox}
 }
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
 \AtBeginPart{
   \frame{\partpage}
 }
@@ -43,26 +46,28 @@
 \AtBeginSubsection{
   \frame{\subsectionpage}
 }
-
-\usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+
+\usecolortheme[]{Flip}
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+\useinnertheme[]{Flip}
+\useoutertheme[]{Flip}
+\ifPDFTeX\else
+  % xetex/luatex font selection
   \setmainfont[]{VisbyCF-Medium}
   \setsansfont[]{Latin Modern Sans}
   \setmathfont[]{Latin Modern Math}
 \fi
-\usecolortheme{Flip}
-\usefonttheme{serif} % use mainfont rather than sansfont for slide text
-\useinnertheme{Flip}
-\useoutertheme{Flip}
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -79,10 +84,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\newif\ifbibliography
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -102,7 +103,7 @@
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -112,7 +113,7 @@
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -125,8 +126,8 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
 \usepackage{calc} % for calculating minipage widths
 \usepackage{caption}
 % Make caption package work with longtable
@@ -135,17 +136,33 @@
 \makeatother
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -155,7 +172,8 @@
 \usepackage{float}
 \usepackage{colortbl}
 \usepackage{pdflscape}
-\usepackage{tabu}
+\usepackage{tabularx}
+\usepackage{xltabular}
 \usepackage{threeparttable}
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
@@ -164,27 +182,24 @@
 \usepackage{tabu}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
+\renewcommand{\boldsymbol}[1]{\symbfit{#1}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
-  \renewcommand*\contentsname{Table of contents}
+  \renewcommand*\contentsname{Table des matières}
 \else
-  \newcommand\contentsname{Table of contents}
+  \newcommand\contentsname{Table des matières}
 \fi
 \ifdefined\listfigurename
-  \renewcommand*\listfigurename{List of Figures}
+  \renewcommand*\listfigurename{Liste des figures}
 \else
-  \newcommand\listfigurename{List of Figures}
+  \newcommand\listfigurename{Liste des figures}
 \fi
 \ifdefined\listtablename
-  \renewcommand*\listtablename{List of Tables}
+  \renewcommand*\listtablename{Liste des tableaux}
 \else
-  \newcommand\listtablename{List of Tables}
+  \newcommand\listtablename{Liste des tableaux}
 \fi
 \ifdefined\figurename
   \renewcommand*\figurename{Figure}
@@ -192,53 +207,51 @@
   \newcommand\figurename{Figure}
 \fi
 \ifdefined\tablename
-  \renewcommand*\tablename{Table}
+  \renewcommand*\tablename{Tableau}
 \else
-  \newcommand\tablename{Table}
+  \newcommand\tablename{Tableau}
 \fi
 }
 \@ifpackageloaded{float}{}{\usepackage{float}}
 \floatstyle{ruled}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
-\floatname{codelisting}{Listing}
-\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\floatname{codelisting}{Énumération}
+\newcommand*\listoflistings{\listof{codelisting}{Liste des énumérations}}
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
 \hypersetup{
   pdftitle={Analyse de survie},
   pdfauthor={Léo Belzile},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Analyse de survie}
-\subtitle{Analyse multidimensionnelle appliquée}
+
+\title{\texorpdfstring{Analyse de survie}{Analyse de survie}}
+\subtitle{\texorpdfstring{Analyse multidimensionnelle
+appliquée}{Analyse multidimensionnelle appliquée}}
 \author{Léo Belzile}
 \date{}
 \institute{HEC Montréal}
 
 \begin{document}
 \frame{\titlepage}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, breakable, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
+
 
 \begin{frame}{Modèle à risques proportionnels de Cox}
-\protect\hypertarget{moduxe8le-uxe0-risques-proportionnels-de-cox}{}
+\protect\phantomsection\label{moduxe8le-uxe0-risques-proportionnels-de-cox}
 Le \textbf{modèle à risques proportionnels de Cox} pour \(\mathbf{X}\)
 au temps \(t\) est \begin{align*}
 h(t; \mathbf{X}) = h_0(t)\exp(\beta_1\mathrm{X}_1 + \cdots + \beta_p \mathrm{X}_p),
@@ -254,21 +267,23 @@ remplace l'ordonnée à l'origine.
 \end{frame}
 
 \begin{frame}{Postulat de risques proportionnels}
-\protect\hypertarget{postulat-de-risques-proportionnels}{}
+\protect\phantomsection\label{postulat-de-risques-proportionnels}
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/fig-risquepropfig-1.pdf}
+\centering{
+
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos9_files/figure-beamer/fig-risquepropfig-1.pdf}
 
 }
 
 \caption{\label{fig-risquepropfig}Courbes de risques proportionnelles
 (panneau supérieur) et non proportionnelles (panneau inférieur).}
 
-\end{figure}
+\end{figure}%
 \end{frame}
 
 \begin{frame}{Absence de proportionnalité et stratification}
-\protect\hypertarget{absence-de-proportionnalituxe9-et-stratification}{}
+\protect\phantomsection\label{absence-de-proportionnalituxe9-et-stratification}
 On peut modéliser la non proportionnalité des risques par la
 \textbf{stratification} pour une variable catégorielle
 \(Z=1, \ldots, K\).
@@ -295,7 +310,7 @@ Dans ce modèle
 \end{frame}
 
 \begin{frame}{Stratification}
-\protect\hypertarget{stratification}{}
+\protect\phantomsection\label{stratification}
 \begin{itemize}
 \tightlist
 \item
@@ -317,7 +332,7 @@ de contrôles.
 
 \begin{frame}[fragile]{Modèle de Cox avec stratification dans
 \textbf{R}}
-\protect\hypertarget{moduxe8le-de-cox-avec-stratification-dans-r}{}
+\protect\phantomsection\label{moduxe8le-de-cox-avec-stratification-dans-r}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{library}\NormalTok{(survival)}
@@ -335,51 +350,51 @@ de contrôles.
 \end{frame}
 
 \begin{frame}{Sorties}
-\protect\hypertarget{sorties}{}
-\hypertarget{tbl-nserv}{}
-\begin{table}
-\caption{\label{tbl-nserv}Décompte du nombre d'observations par service et status. }\tabularnewline
+\protect\phantomsection\label{sorties}
+\begin{longtable}[]{@{}lrrrr@{}}
 
-\centering
-\begin{tabular}{lrrrr}
-\toprule
-  & 0 & 1 & 2 & 3\\
-\midrule
-0 & 37 & 66 & 37 & 26\\
-1 & 160 & 113 & 41 & 20\\
-\bottomrule
-\end{tabular}
-\end{table}
+\caption{\label{tbl-nserv}Décompte du nombre d'observations par service
+et status.}
 
-\hypertarget{tbl-coxstratif}{}
-\begin{table}
-\caption{\label{tbl-coxstratif}Rapport de risques pour un modèle de Cox stratifié par service. }\tabularnewline
+\tabularnewline
 
-\centering
-\begin{tabular}{lrrr}
+\toprule\noalign{}
+& 0 & 1 & 2 & 3 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 37 & 66 & 37 & 26 \\
+1 & 160 & 113 & 41 & 20 \\
+
+\end{longtable}
+
+\begin{longtable}[t]{lrrr}
+
+\caption{\label{tbl-coxstratif}Rapport de risques pour un modèle de Cox
+stratifié par service.}
+
+\tabularnewline
+
 \toprule
 terme & exp(coef) & borne inf. & borne sup.\\
 \midrule
 age & 0.95 & 0.94 & 0.96\\
 sexe & 0.54 & 0.43 & 0.68\\
 \bottomrule
-\end{tabular}
-\end{table}
+
+\end{longtable}
 \end{frame}
 
 \begin{frame}{Courbes de survie du modèle stratifié}
-\protect\hypertarget{courbes-de-survie-du-moduxe8le-stratifiuxe9}{}
-\begin{figure}
-
-{\centering \includegraphics[width=0.85\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/unnamed-chunk-6-1.pdf}
-
-}
-
-\end{figure}
+\protect\phantomsection\label{courbes-de-survie-du-moduxe8le-stratifiuxe9}
+\begin{center}
+\includegraphics[width=0.85\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos9_files/figure-beamer/unnamed-chunk-1-1.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Risques non proportionnels}
-\protect\hypertarget{risques-non-proportionnels}{}
+\protect\phantomsection\label{risques-non-proportionnels}
 Si le postulat de risques proportionnels n'est pas validé, l'effet d'au
 moins une des variables explicatives dépend du temps.
 
@@ -392,7 +407,7 @@ temps.
 \end{frame}
 
 \begin{frame}[fragile]{Exemple 1 - augmentation de l'âge}
-\protect\hypertarget{exemple-1---augmentation-de-luxe2ge}{}
+\protect\phantomsection\label{exemple-1---augmentation-de-luxe2ge}
 Ici, le coefficient est supposé constante mais l'âge (en années)
 augmente à mesure que le temps d'abonnement (en semaines) passe, d'où
 \(\texttt{age}(t) = \texttt{age} + t/52\).
@@ -419,7 +434,7 @@ La variable qui dépend du temps doit être créée à l'intérieur de l'appel
 \end{frame}
 
 \begin{frame}{Exemple 2 - effet de service croissant}
-\protect\hypertarget{exemple-2---effet-de-service-croissant}{}
+\protect\phantomsection\label{exemple-2---effet-de-service-croissant}
 Supposons que l'impact du nombre de services varie comme suit,
 \begin{align*}
 &h(t, \text{age}, \text{sexe}, \texttt{service = i}) \\ &\qquad = h_0(t)\exp(\beta_{\texttt{sexe}}\texttt{sexe} + \beta_{\texttt{age}} \texttt{age} + \beta_{\texttt{service}_i} + \beta_{\texttt{service}_i*t}t).
@@ -430,7 +445,7 @@ pour que le logiciel puisse ajuster le modèle.
 \end{frame}
 
 \begin{frame}[fragile]{Code \textbf{R} pour service}
-\protect\hypertarget{code-r-pour-service}{}
+\protect\phantomsection\label{code-r-pour-service}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \CommentTok{\# Créer variables binaires par service}
@@ -444,44 +459,44 @@ pour que le logiciel puisse ajuster le modèle.
 \NormalTok{     age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service }\SpecialCharTok{+} 
       \FunctionTok{tt}\NormalTok{(service1) }\SpecialCharTok{+} \FunctionTok{tt}\NormalTok{(service2) }\SpecialCharTok{+} \FunctionTok{tt}\NormalTok{(service3), }
      \AttributeTok{data =}\NormalTok{ survie1\_modif, }
-     \AttributeTok{tt =} \ControlFlowTok{function}\NormalTok{(x, t, ...)\{t }\SpecialCharTok{*}\NormalTok{ x\})}
+     \AttributeTok{tt =} \ControlFlowTok{function}\NormalTok{(x, t, ...)\{t }\SpecialCharTok{/} \DecValTok{52} \SpecialCharTok{*}\NormalTok{ x \})}
+\CommentTok{\# Modèle linéaire: beta0 + beta\_1*t pour chaque service}
+\CommentTok{\# l\textquotesingle{}effet est exprimé en années plutôt qu\textquotesingle{}en semaines}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
 
 \begin{frame}{Coefficients et tests}
-\protect\hypertarget{coefficients-et-tests}{}
-\hypertarget{tbl-cox-nph}{}
-\begin{table}
-\caption{\label{tbl-cox-nph}Rapport de risque et intervalles de confiance à niveau 95\% pour le
-modèle à risques non proportionnels (interaction linéaire entre temps et
-service). }\tabularnewline
+\protect\phantomsection\label{coefficients-et-tests}
+\begin{longtable}[t]{lrrl}
 
-\centering
-\begin{tabular}{lrrl}
+\caption{\label{tbl-cox-nph}Rapport de risque et intervalles de
+confiance à niveau 95\% pour le modèle à risques non proportionnels
+(interaction linéaire entre temps et service).}
+
+\tabularnewline
+
 \toprule
 terme & exp(coef) & test de Wald & valeur-p\\
 \midrule
-age & 0.953 & -7.368 & <0.001\\
-sexe & 0.543 & -5.241 & <0.001\\
-service1 & 0.144 & -4.293 & <0.001\\
-service2 & 0.072 & -3.762 & <0.001\\
-service3 & 0.010 & -4.139 & <0.001\\
-tt(service1) & 1.010 & 2.173 & 0.0298\\
-tt(service2) & 1.010 & 1.584 & 0.1132\\
-tt(service3) & 1.023 & 2.476 & 0.0133\\
+age & 0.953 & -7.368 & <0.01\\
+sexe & 0.543 & -5.241 & <0.01\\
+service1 & 0.144 & -4.293 & <0.01\\
+service2 & 0.072 & -3.762 & <0.01\\
+service3 & 0.010 & -4.139 & <0.01\\
+\addlinespace
+tt(service1) & 1.678 & 2.173 & 0.030\\
+tt(service2) & 1.700 & 1.584 & 0.113\\
+tt(service3) & 3.190 & 2.476 & 0.013\\
 \bottomrule
-\end{tabular}
-\end{table}
+
+\end{longtable}
 \end{frame}
 
 \begin{frame}{Interprétation des résultats}
-\protect\hypertarget{interpruxe9tation-des-ruxe9sultats}{}
+\protect\phantomsection\label{interpruxe9tation-des-ruxe9sultats}
 \begin{itemize}
 \tightlist
-\item
-  Les coefficients pour l'interaction avec \(t\) sont petits parce que
-  la plage de \(t\) (0 à 200 semaines) est énorme.
 \item
   Les coefficients sont positifs: le risque augmente avec le temps.
   L'impact des rabais pour services multiples diminue avec le temps.
@@ -493,7 +508,7 @@ tt(service3) & 1.023 & 2.476 & 0.0133\\
 \end{frame}
 
 \begin{frame}{Évolution temporelle de variables explicatives}
-\protect\hypertarget{uxe9volution-temporelle-de-variables-explicatives}{}
+\protect\phantomsection\label{uxe9volution-temporelle-de-variables-explicatives}
 On considère une extension du modèle de Cox qui permet d'inclure des
 variables explicatives dont la valeur change dans le temps.
 
@@ -505,13 +520,13 @@ h(t; \boldsymbol{x}) = h_0(t) \exp\{\beta_1\mathrm{x}_1(t) + \cdots + \beta_p\ma
 \end{frame}
 
 \begin{frame}{Illustration}
-\protect\hypertarget{illustration}{}
+\protect\phantomsection\label{illustration}
 \begin{columns}[T]
-\begin{column}{0.4\textwidth}
-\includegraphics{figures/Lexis_censure_modif.pdf}
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{figures/Lexis_censure_modif.pdf}}
 \end{column}
 
-\begin{column}{0.6\textwidth}
+\begin{column}{0.6\linewidth}
 Pour ajuster le modèle, on peut casser la contribution d'une observation
 en segments: considérons un seul changement survenant au temps \(t_c\).
 
@@ -529,18 +544,19 @@ en segments: considérons un seul changement survenant au temps \(t_c\).
 \end{frame}
 
 \begin{frame}[fragile]{Exemple}
-\protect\hypertarget{exemple}{}
+\protect\phantomsection\label{exemple}
 Supposons qu'il y a eu au plus un changement dans la variable
 \texttt{service}. On doit formatter la base de données comme suit.
 
 \footnotesize
 
-\hypertarget{tbl-survie3-donnees}{}
-\begin{table}
-\caption{\label{tbl-survie3-donnees}Aperçu des cinq premières observations de la base de données survie3. }\tabularnewline
+\begin{longtable}[t]{rrrrrrll}
 
-\centering
-\begin{tabular}{rrrrrrll}
+\caption{\label{tbl-survie3-donnees}Aperçu des cinq premières
+observations de la base de données \texttt{survie3}.}
+
+\tabularnewline
+
 \toprule
 id & debut & fin & evenement & age & sexe & region & service\\
 \midrule
@@ -549,11 +565,12 @@ id & debut & fin & evenement & age & sexe & region & service\\
 2 & 0 & 159 & 0 & 31 & 1 & 3 & 2\\
 3 & 0 & 110 & 1 & 36 & 1 & 4 & 0\\
 4 & 0 & 109 & 1 & 30 & 0 & 2 & 0\\
+\addlinespace
 5 & 0 & 78 & 0 & 22 & 0 & 5 & 1\\
 5 & 78 & 108 & 1 & 22 & 0 & 5 & 0\\
 \bottomrule
-\end{tabular}
-\end{table}
+
+\end{longtable}
 
 Tout intervalle autre que terminal pour un individu est traité comme de
 la censure à droite.
@@ -562,7 +579,7 @@ la censure à droite.
 \end{frame}
 
 \begin{frame}[fragile]{Code pour variables explicatives variables}
-\protect\hypertarget{code-pour-variables-explicatives-variables}{}
+\protect\phantomsection\label{code-pour-variables-explicatives-variables}
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(survie3, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
@@ -583,7 +600,7 @@ pas son effet, on a l'interprétation usuelle.
 \end{frame}
 
 \begin{frame}{Modèle à risques compétitifs}
-\protect\hypertarget{moduxe8le-uxe0-risques-compuxe9titifs}{}
+\protect\phantomsection\label{moduxe8le-uxe0-risques-compuxe9titifs}
 Parfois, la raison pour laquelle un individu quitte l'état étudié peut
 avoir un intérêt en soi.
 
@@ -602,7 +619,7 @@ entre
 \end{frame}
 
 \begin{frame}[fragile]{Exemple}
-\protect\hypertarget{exemple-1}{}
+\protect\phantomsection\label{exemple-1}
 Supposons que nous avons trois causes possibles pour la perte d'un
 client. La variable \texttt{censure} dans le fichier \texttt{survie4}
 vaut:
@@ -621,13 +638,13 @@ vaut:
 \end{frame}
 
 \begin{frame}{Transition d'un état à l'autre}
-\protect\hypertarget{transition-dun-uxe9tat-uxe0-lautre}{}
+\protect\phantomsection\label{transition-dun-uxe9tat-uxe0-lautre}
 \begin{columns}[T]
-\begin{column}{0.6\textwidth}
-\includegraphics{figures/transition_etats_modele_risque_competitifs.pdf}
+\begin{column}{0.6\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{figures/transition_etats_modele_risque_competitifs.pdf}}
 \end{column}
 
-\begin{column}{0.4\textwidth}
+\begin{column}{0.4\linewidth}
 Modèle avec transition d'un état de base (abonné) vers un état absorbant
 (désabonnement, soit chez compétiteur \(A\), compétiteur \(B\) ou
 abandon du cellulaire).
@@ -636,7 +653,7 @@ abandon du cellulaire).
 \end{frame}
 
 \begin{frame}{Modèle à risques compétitifs avec modèle de Cox}
-\protect\hypertarget{moduxe8le-uxe0-risques-compuxe9titifs-avec-moduxe8le-de-cox}{}
+\protect\phantomsection\label{moduxe8le-uxe0-risques-compuxe9titifs-avec-moduxe8le-de-cox}
 Pour estimer la probabilité d'un événement au fil du temps, on peut
 ajuster plusieurs modèles de Cox.
 
@@ -654,7 +671,7 @@ l'événement.
 \end{frame}
 
 \begin{frame}[fragile]{Code \textbf{R} pour risque compétitif (1)}
-\protect\hypertarget{code-r-pour-risque-compuxe9titif-1}{}
+\protect\phantomsection\label{code-r-pour-risque-compuxe9titif-1}
 Deux options: ajuster chaque modèle séparément en traitant tout
 événement autre que celui d'intérêt comme de la censure à droite.
 
@@ -665,8 +682,8 @@ Deux options: ajuster chaque modèle séparément en traitant tout
 \CommentTok{\#  {-} 0 (FALSE) pour censure à droite}
 \FunctionTok{data}\NormalTok{(survie4, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
 \NormalTok{rc\_cox\_A }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
-                   \AttributeTok{event =}\NormalTok{ censure }\SpecialCharTok{==} \DecValTok{2}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} 
-\NormalTok{                age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service, }
+                       \AttributeTok{event =}\NormalTok{ censure }\SpecialCharTok{==} \DecValTok{2}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{                     age }\SpecialCharTok{+}\NormalTok{ sexe }\SpecialCharTok{+}\NormalTok{ service, }
               \AttributeTok{data =}\NormalTok{ survie4)}
 \end{Highlighting}
 \end{Shaded}
@@ -681,12 +698,10 @@ pour compétiteur \(A\) n'est pas survenu).
 \end{frame}
 
 \begin{frame}{Interprétation des coefficients}
-\protect\hypertarget{interpruxe9tation-des-coefficients}{}
+\protect\phantomsection\label{interpruxe9tation-des-coefficients}
 Attention, l'interprétation dépend maintenant de l'événement étudié.
 
-\begin{table}
-\centering
-\begin{tabular}{lrrr}
+\begin{longtable*}[t]{lrrr}
 \toprule
 terme & exp(coef) & borne inf. & borne sup.\\
 \midrule
@@ -696,15 +711,14 @@ service1 & 0.38 & 0.27 & 0.535\\
 service2 & 0.19 & 0.11 & 0.308\\
 service3 & 0.11 & 0.05 & 0.220\\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{longtable*}
 
 Selon le modèle, le risque \emph{de quitter pour aller chez le
 compétiteur A} d'une femme est 0.48 fois celui d'un homme.
 \end{frame}
 
 \begin{frame}[fragile]{Code \textbf{R} pour risque compétitif (2)}
-\protect\hypertarget{code-r-pour-risque-compuxe9titif-2}{}
+\protect\phantomsection\label{code-r-pour-risque-compuxe9titif-2}
 Créer une variable avec identifiant \(1, \ldots, n\).
 
 Passer la variable état comme \textbf{facteur}, avec transition depuis
@@ -715,11 +729,12 @@ catégorie de référence (ici \texttt{censure=1}, soit abonné)
 \NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(survie4)}
 \NormalTok{surv4 }\OtherTok{\textless{}{-}}\NormalTok{ survie4 }\SpecialCharTok{|\textgreater{}} 
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{id =} \FunctionTok{seq\_len}\NormalTok{(n))}
-\NormalTok{rc\_cox }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
-             \AttributeTok{event =} \FunctionTok{factor}\NormalTok{(censure)) }\SpecialCharTok{\textasciitilde{}} 
-\NormalTok{               sexe }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ service,}
-             \AttributeTok{data =}\NormalTok{ surv4,}
-             \AttributeTok{id =}\NormalTok{ id)}
+\NormalTok{rc\_cox }\OtherTok{\textless{}{-}} \FunctionTok{coxph}\NormalTok{(}
+  \FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
+       \AttributeTok{event =} \FunctionTok{factor}\NormalTok{(censure)) }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{     sexe }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ service,}
+  \AttributeTok{data =}\NormalTok{ surv4,}
+  \AttributeTok{id =}\NormalTok{ id)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -731,7 +746,7 @@ L'identifiant sert dans les cas où on peut transiter entre plusieurs
 
 \begin{frame}[fragile]{Code \textbf{R} pour risques compétitifs
 (Kaplan--Meier)}
-\protect\hypertarget{code-r-pour-risques-compuxe9titifs-kaplanmeier}{}
+\protect\phantomsection\label{code-r-pour-risques-compuxe9titifs-kaplanmeier}
 Ajuster le modèle multi-état avec un \textbf{facteur} pour l'événement,
 où la catégorie de référence est abonnement (\texttt{censure=1}).
 
@@ -740,36 +755,40 @@ Surtout, ne pas estimer les courbes séparément!
 \begin{Shaded}
 \begin{Highlighting}[numbers=left,,]
 \FunctionTok{data}\NormalTok{(survie4, }\AttributeTok{package =} \StringTok{"hecmulti"}\NormalTok{)}
-\NormalTok{rc\_km }\OtherTok{\textless{}{-}} \FunctionTok{survfit}\NormalTok{(}\FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
-             \AttributeTok{event =} \FunctionTok{factor}\NormalTok{(censure)) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\CommentTok{\#facteur}
-             \AttributeTok{data =}\NormalTok{ survie4)}
+\NormalTok{rc\_km }\OtherTok{\textless{}{-}} \FunctionTok{survfit}\NormalTok{(}
+  \FunctionTok{Surv}\NormalTok{(}\AttributeTok{time =}\NormalTok{ temps, }
+       \AttributeTok{event =} \FunctionTok{factor}\NormalTok{(censure)) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\CommentTok{\#facteur}
+  \AttributeTok{data =}\NormalTok{ survie4)}
 \end{Highlighting}
 \end{Shaded}
 \end{frame}
 
 \begin{frame}{Graphiques}
-\protect\hypertarget{graphiques}{}
+\protect\phantomsection\label{graphiques}
+\footnotesize
+
 Les représentations graphiques donnent la probabilité d'être dans une
 situation en fonction du temps (ici avec la catégorie de référence
 abonnement).
 
-\footnotesize
-
 \begin{figure}
 
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{MATH60602-diapos9_files/figure-beamer/fig-competitif-1.pdf}
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{MATH60602-diapos9_files/figure-beamer/fig-competitif-1.pdf}
 
 }
 
-\caption{\label{fig-competitif}Probabilité d'événement sans variable
-explicative (Kaplan-Meier, gauche) et avec âge, service et sexe (modèle
-de Cox, droite).}
+\caption{\label{fig-competitif}Probabilité d'événement: Kaplan-Meier
+(gauche) et modèle de Cox avec âge, service et sexe (id=3).}
 
-\end{figure}
+\end{figure}%
+
+\normalsize
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif}{}
+\protect\phantomsection\label{ruxe9capitulatif}
 Si le postulat de risques proportionnels ne tient pas, on peut
 considérer des modifications du modèle de Cox.
 
@@ -785,7 +804,7 @@ considérer des modifications du modèle de Cox.
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-1}{}
+\protect\phantomsection\label{ruxe9capitulatif-1}
 Si les variables explicatives changent au fil du temps, on peut traiter
 le cas de figure en décomposant la contribution de l'observation en
 plusieurs segments
@@ -807,7 +826,7 @@ l'effet est le même pour tous (comme l'âge).
 \end{frame}
 
 \begin{frame}{Récapitulatif}
-\protect\hypertarget{ruxe9capitulatif-2}{}
+\protect\phantomsection\label{ruxe9capitulatif-2}
 Le modèle multi-état (modèle à risques compétitifs) permet d'estimer la
 probabilité de chaque transition.
 
@@ -823,6 +842,7 @@ probabilité de chaque transition.
 Dans \textbf{R}, s'assurer que la catégorie de référence est l'état de
 départ.
 \end{frame}
+
 
 
 

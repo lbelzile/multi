@@ -470,7 +470,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   :  14.71   Mean   :  15.09               
  3rd Qu.:  12.00   3rd Qu.:  13.00               
  Max.   :1592.00   Max.   :1584.00               
-                   NA's   :393                   </code></pre>
+                   NAs    :393                   </code></pre>
 </div>
 </div>
 <p>La plupart des variables, dont les colonnes 7 à 20 qui contiennent les réponses au questionnaire, sont des variables entières (<code>int</code>) formées d’échelles de Likert de 1 à 5; les valeurs manquantes encodées 0. Le sexe, la classe, le type de déplacement sont des variables catégorielles nominales. La satisfaction globale et l’indice de fidélité du consommateur sont binaires et ordinales. La distance du vol est continue et encodée comme numérique (<code>dbl</code>). Les délais sont encodées avec des valeurs entières (valeur arrondie).</p>
@@ -505,7 +505,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                  Mean   :1190   Mean   :2.814          
                  3rd Qu.:1744   3rd Qu.:4.000          
                  Max.   :4983   Max.   :5.000          
-                                NA's   :3916           
+                                NAs    :3916           
  temps_arrivee_depart_convenable facilite_reservation_en_ligne
  Min.   :1.000                   Min.   :1.000                
  1st Qu.:2.000                   1st Qu.:2.000                
@@ -513,7 +513,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   :3.223                   Mean   :2.883                
  3rd Qu.:4.000                   3rd Qu.:4.000                
  Max.   :5.000                   Max.   :5.000                
- NA's   :6681                    NA's   :5682                 
+ NAs    :6681                    NAs    :5682                 
  localisation_porte   nourriture    preenregistrement_en_ligne confort_siege  
  Min.   :1.000      Min.   :1.000   Min.   :1.000              Min.   :1.000  
  1st Qu.:2.000      1st Qu.:2.000   1st Qu.:2.000              1st Qu.:2.000  
@@ -521,7 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   :2.977      Mean   :3.208   Mean   :3.332              Mean   :3.441  
  3rd Qu.:4.000      3rd Qu.:4.000   3rd Qu.:4.000              3rd Qu.:5.000  
  Max.   :5.000      Max.   :5.000   Max.   :5.000              Max.   :5.000  
- NA's   :1          NA's   :132     NA's   :3080               NA's   :1      
+ NAs    :1          NAs    :132     NAs    :3080               NAs    :1      
  divertissement_en_vol service_embarquement service_espace_jambes
  Min.   :1.000         Min.   :1.000        Min.   :1.000        
  1st Qu.:2.000         1st Qu.:2.000        1st Qu.:2.000        
@@ -529,7 +529,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   :3.359         Mean   :3.383        Mean   :3.366        
  3rd Qu.:4.000         3rd Qu.:4.000        3rd Qu.:4.000        
  Max.   :5.000         Max.   :5.000        Max.   :5.000        
- NA's   :18            NA's   :5            NA's   :598          
+ NAs    :18            NAs    :5            NAs    :598          
  gestion_bagages service_enregistrement  service_vol       proprete    
  Min.   :1.000   Min.   :1.000          Min.   :1.000   Min.   :1.000  
  1st Qu.:3.000   1st Qu.:3.000          1st Qu.:3.000   1st Qu.:2.000  
@@ -537,7 +537,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   :3.632   Mean   :3.306          Mean   :3.642   Mean   :3.287  
  3rd Qu.:5.000   3rd Qu.:4.000          3rd Qu.:5.000   3rd Qu.:4.000  
  Max.   :5.000   Max.   :5.000          Max.   :5.000   Max.   :5.000  
-                 NA's   :1              NA's   :5       NA's   :14     
+                 NAs    :1              NAs    :5       NAs    :14     
  delai_depart_min  delai_arrivee_min satisfaction
  Min.   :   0.00   Min.   :   0.00   non:73452   
  1st Qu.:   0.00   1st Qu.:   0.00   oui:56428   
@@ -545,7 +545,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   :  14.71   Mean   :  15.09               
  3rd Qu.:  12.00   3rd Qu.:  13.00               
  Max.   :1592.00   Max.   :1584.00               
-                   NA's   :393                   </code></pre>
+                   NAs    :393                   </code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -565,45 +565,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                     Max.   :85.00                    
                                                                      
      classe       distance_vol  service_internet_en_vol
- affaire:62160   Min.   :  31   1   :22328             
- eco    :58309   1st Qu.: 414   2   :32320             
- ecoplus: 9411   Median : 844   3   :32185             
-                 Mean   :1190   4   :24775             
-                 3rd Qu.:1744   5   :14356             
-                 Max.   :4983   NA's: 3916             
+ affaire:62160   Min.   :  31   1  :22328              
+ eco    :58309   1st Qu.: 414   2  :32320              
+ ecoplus: 9411   Median : 844   3  :32185              
+                 Mean   :1190   4  :24775              
+                 3rd Qu.:1744   5  :14356              
+                 Max.   :4983   NAs: 3916              
                                                        
  temps_arrivee_depart_convenable facilite_reservation_en_ligne
- 1   :19409                      1   :21886                   
- 2   :21534                      2   :30051                   
- 3   :22378                      3   :30393                   
- 4   :31880                      4   :24444                   
- 5   :27998                      5   :17424                   
- NA's: 6681                      NA's: 5682                   
+ 1  :19409                       1  :21886                    
+ 2  :21534                       2  :30051                    
+ 3  :22378                       3  :30393                    
+ 4  :31880                       4  :24444                    
+ 5  :27998                       5  :17424                    
+ NAs: 6681                       NAs: 5682                    
                                                               
- localisation_porte nourriture   preenregistrement_en_ligne confort_siege
- 1   :21991         1   :16051   1   :13261                 1   :15108   
- 2   :24296         2   :27383   2   :21934                 2   :18529   
- 3   :35717         3   :27794   3   :27117                 3   :23328   
- 4   :30466         4   :30563   4   :38468                 4   :39756   
- 5   :17409         5   :27957   5   :26020                 5   :33158   
- NA's:    1         NA's:  132   NA's: 3080                 NA's:    1   
-                                                                         
+ localisation_porte nourriture  preenregistrement_en_ligne confort_siege
+ 1  :21991          1  :16051   1  :13261                  1  :15108    
+ 2  :24296          2  :27383   2  :21934                  2  :18529    
+ 3  :35717          3  :27794   3  :27117                  3  :23328    
+ 4  :30466          4  :30563   4  :38468                  4  :39756    
+ 5  :17409          5  :27957   5  :26020                  5  :33158    
+ NAs:    1          NAs:  132   NAs: 3080                  NAs:    1    
+                                                                        
  divertissement_en_vol service_embarquement service_espace_jambes
- 1   :15675            1   :14787           1   :12895           
- 2   :21968            2   :18351           2   :24540           
- 3   :23884            3   :28542           3   :25056           
- 4   :36791            4   :38703           4   :35886           
- 5   :31544            5   :29492           5   :30905           
- NA's:   18            NA's:    5           NA's:  598           
+ 1  :15675             1  :14787            1  :12895            
+ 2  :21968             2  :18351            2  :24540            
+ 3  :23884             3  :28542            3  :25056            
+ 4  :36791             4  :38703            4  :35886            
+ 5  :31544             5  :29492            5  :30905            
+ NAs:   18             NAs:    5            NAs:  598            
                                                                  
- gestion_bagages service_enregistrement service_vol  proprete    
- 1: 9028         1   :16108             1   : 8862   1   :16729  
- 2:14362         2   :16102             2   :14308   2   :20113  
- 3:25851         3   :35453             3   :25316   3   :30639  
- 4:46761         4   :36333             4   :47323   4   :33969  
- 5:33878         5   :25883             5   :34066   5   :28416  
-                 NA's:    1             NA's:    5   NA's:   14  
-                                                                 
+ gestion_bagages service_enregistrement service_vol proprete   
+ 1: 9028         1  :16108              1  : 8862   1  :16729  
+ 2:14362         2  :16102              2  :14308   2  :20113  
+ 3:25851         3  :35453              3  :25316   3  :30639  
+ 4:46761         4  :36333              4  :47323   4  :33969  
+ 5:33878         5  :25883              5  :34066   5  :28416  
+                 NAs:    1              NAs:    5   NAs:   14  
+                                                               
  delai_depart_min  delai_arrivee_min satisfaction
  Min.   :   0.00   Min.   :   0.00   non:73452   
  1st Qu.:   0.00   1st Qu.:   0.00   oui:56428   
@@ -611,7 +611,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   :  14.71   Mean   :  15.09               
  3rd Qu.:  12.00   3rd Qu.:  13.00               
  Max.   :1592.00   Max.   :1584.00               
-                   NA's   :393                   </code></pre>
+                   NAs    :393                   </code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>

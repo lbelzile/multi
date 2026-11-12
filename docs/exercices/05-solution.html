@@ -901,7 +901,7 @@ Tableau&nbsp;3: Statistiques descriptives des questions du sondage en entreprise
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-solution_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="05-solution_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -928,7 +928,7 @@ Tableau&nbsp;3: Statistiques descriptives des questions du sondage en entreprise
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-solution_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="05-solution_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1075,8 +1075,6 @@ La base de données est la même que celle de l'Exercice 1.1, mais on ne sélect
 Il faut dans un premier temps convertir les zéros en valeurs manquantes. Ensuite, le calcul de la corrélation doit prendre en compte les valeurs manquantes pour ne pas que les valeurs manquantes se répercutent: il y a plusieurs options (voir `?cor`); j'utilise ici `use = pairwise.complete.obs` qui utilise toutes les paires.^[Le défaut de cette option, qui extrait le maximum d'information à l'aide de toutes les paires complètes, est que l'on a pas de garantie que la matrice de covariance résultante est positive définie.]
     
 
-
-
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -1094,7 +1092,7 @@ eboulis(eigen(corbd))
 ```
 
 ::: {.cell-output-display}
-![](05-solution_files/figure-html/unnamed-chunk-16-1.png){width=672}
+![](05-solution_files/figure-html/unnamed-chunk-13-1.png){width=672}
 :::
 
 ```{.r .cell-code}
@@ -1135,8 +1133,6 @@ Cumulative Var 0.211 0.401 0.577 0.679
 :::
 :::
 
-
-
     
 Le diagramme d'éboulis suggère quatre facteurs, idem pour le critère de Kaiser.
 
@@ -1148,8 +1144,6 @@ Si on prend un point de coupure de 0.6 pour déterminer les facteurs qui ont une
 - Le facteur 4 inclut l'item 6, peut-être 12, les deux en lien avec l'enregistrement
 
 Augmenter le nombre de facteurs à cinq ou six fait ressortir les questions 12 et 10 sans que le facteur ne soit associé à plus de variables.
-
-
 
 
 ::: {.cell}
@@ -1179,15 +1173,11 @@ print(
 :::
 
 
-
-
 Si les trois premières échelles sont globalement cohérentes, la dernière qui regroupe préenregistrement en ligne et enregistrement à la porte n'ont pas un $\alpha$ de Cronbach supérieur à 0.6.
 
 **2. Répétez l'exercice, mais en utilisant cette fois la méthode du maximum de vraisemblance pour ajuster le modèle.**
 
 - **Qu'arrive-t-il lorsque vous augmentez le nombre de facteurs? Formulez une hypothèse de travail pour expliquer ce comportement.**
-
-
 
 
 ::: {.cell}
@@ -1215,8 +1205,6 @@ hecmulti::ajustement_factanal(covmat = corbd,
 
 :::
 :::
-
-
 
 
 En raison du nombre excessivement élevé d'observations, l'ajustement du modèle est médiocre et les critères d'information suggèrent fortement des modèles plus complexes. La simplification pour les 14 items n'est pas adéquate et on rejette à coup sûr le test d'hypothèse basée sur la statistique de rapport de vraisemblance (déviance) comparant le modèle saturé (matrice de corrélation empirique) et le modèle réduit offert part l'analyse factorielle parce que notre puissance est élevée vu qu'on a 119567 réponses complètes. 

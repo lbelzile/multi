@@ -217,7 +217,7 @@ La structure de données de base que l'on doit avoir pour travailler est la suiv
 
 1. une variable temps, $T$.
 2. une variable binaire $C$ (censure).
-3. des variables explicatives $X_1, \ldots, X_p$
+3. des variables explicatives $\mathrm{X}_1, \ldots, \mathrm{X}_p$
 
 
 On considère l'exemple d'une entreprise de télécommunications qui veut connaître les facteurs influençant la durée d'abonnement à son service de téléphone cellulaire.
