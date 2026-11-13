@@ -103,16 +103,16 @@ hazard2 <- function(x){
   (40*pexp(x, rate = 1/300) + 25*dnorm(x, 10, 5) -
      20*pgamma(x, shape = 5, scale = 5) +
      40*pgamma(x, shape = 1, scale = 5) - 
-     20*pexp(x, rate = 1/400))/20
+     20*pexp(x, rate = 1/400))/20/25
 }
 
 temps <- seq(0, 60, length.out = 1001)
-survrisque <- data.frame(
+surv_df <- data.frame(
   temps = temps,
   risque1 = hazard(temps),
   risque2 = hazard2(temps)
 )
-survie1f <- function(temps,cst = 1){
+survie1f <- function(temps, cst = 1){
   sapply(temps, function(ti){
     exp(-cst*integrate(hazard, lower = 0, upper = ti)$value)
   })
@@ -129,30 +129,32 @@ fsurvie1 <- data.frame(
   survie1a = survie1f(temps, cst = 1),
   survie1b = survie1f(temps, cst = 2)
 )
-temps2 <- seq(0, 12, length.out = 1001)
+temps2 <- seq(0, 60, length.out = 1001)
 
 fsurvie2 <- data.frame(
   temps = temps2,
-  survie2a = survie1f(temps2, cst = 12),
+  survie2a = survie1f(temps2),
   survie2b = survie2f(temps2)
 )
-g1 <- ggplot(data = survrisque,
+g1 <- ggplot(data = surv_df,
        aes(x = temps)) +
   geom_line(aes(y = risque1),
                 color = safe_colorblind_palette[1]) +
   geom_line(aes(y = 2*risque1),
                 color = safe_colorblind_palette[8]) +
-  scale_y_continuous(limits = c(0, 0.5),
-                     expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0, 3),
+                     expand = c(0, 0),
+                     labels = scales::label_number(drop0trailing = TRUE)) +
   labs(x = "temps",
        y = "",
        subtitle = "risque") +
   theme_classic()
 
-g2 <- ggplot(data = survrisque,
+g2 <- ggplot(data = surv_df,
              aes(x = temps)) +
   geom_hline(yintercept = .5) +
-  scale_y_continuous(limits = c(0, 2),
+  scale_y_continuous(limits = c(0, 1),
+                     labels = scales::label_number(drop0trailing = TRUE),
                      expand = c(0, 0)) +
   scale_x_continuous(limits = c(0, 60),
                      expand = c(0, 0)) +
@@ -167,6 +169,7 @@ g3 <- ggplot(data = fsurvie1,
   geom_line(aes(y = survie1a), col = safe_colorblind_palette[1]) +
   geom_line(aes(y = survie1b), col = safe_colorblind_palette[8])  +
   scale_y_continuous(limits = c(0, 1),
+                     labels = scales::label_number(drop0trailing = TRUE),
                      expand = c(0,0)) +
   scale_x_continuous(expand = c(0,0),
                      limits = c(0, 61)) + 
@@ -176,13 +179,14 @@ g3 <- ggplot(data = fsurvie1,
   theme_classic()
 
 
-g4 <- ggplot(data = survrisque,
+g4 <- ggplot(data = surv_df,
              aes(x = temps)) +
   geom_line(aes(y = risque2),
             color = safe_colorblind_palette[1]) +
-  geom_line(aes(y = 12*risque1),
+  geom_line(aes(y = risque1),
             color = safe_colorblind_palette[8]) +
-  scale_y_continuous(limits = c(0, 2),
+  scale_y_continuous(limits = c(0, 0.2),
+                     labels = scales::label_number(drop0trailing = TRUE),
                      expand = c(0, 0)) +
   scale_x_continuous(limits = c(0, 60),
                      expand = c(0, 0)) +
@@ -191,10 +195,11 @@ g4 <- ggplot(data = survrisque,
        subtitle = "risque") +
   theme_classic()
 
-g5 <- ggplot(data = survrisque,
+g5 <- ggplot(data = surv_df,
              aes(x = temps)) +
   geom_line(aes(y = risque2/risque1)) +
-  scale_y_continuous(limits = c(0, 60),
+  scale_y_continuous(limits = c(0, 3),
+                     labels = scales::label_number(drop0trailing = TRUE),
                      expand = c(0, 0)) +
   scale_x_continuous(limits = c(0, 60),
                      expand = c(0, 0)) +
@@ -210,9 +215,10 @@ g6 <- ggplot(data = fsurvie2,
   geom_line(aes(y = survie2b),
             col = safe_colorblind_palette[1]) +
   scale_y_continuous(limits = c(0, 1),
+                     labels = scales::label_number(drop0trailing = TRUE),
                      expand = c(0,0)) +
   scale_x_continuous(expand = c(0,0),
-                     limits = c(0, 12)) + 
+                     limits = c(0, 60)) + 
   labs(x = "temps",
        y = "",
        subtitle = "survie") +
@@ -332,7 +338,9 @@ survcurves <- with(pred,
     survie = c(surv),
     groupe = factor(unlist(sapply(1:4, function(i){rep(profil[i], strata[i])}))))
   )
-
+# Ajouter le temps initial
+survcurves <- rbind(survcurves,
+                    data.frame(temps = 0, censure = FALSE, survie = 1, groupe = 0:4))
 ggplot(data = survcurves, 
        aes(x = temps, 
            y = survie,
@@ -428,26 +436,30 @@ cox_np <- survival::coxph(
 #| eval: true
 #| tbl-cap: "Rapport de risque et intervalles de confiance à niveau 95% pour le modèle à risques non proportionnels (interaction linéaire entre temps et service)."
 #| cache: true
-scnp <- summary(cox_np)$coefficients
-tab6 <- broom::tidy(cox_np,
-            exponentiate = TRUE, 
-            conf.int = TRUE)[,-c(3,6,7)]
-colnames(tab6) <- c("terme",
+scnp <- as.data.frame(summary(cox_np)$coefficients)
+
+colnames(scnp) <- c("coef",
                     "exp(coef)",
-                    "test de Wald",
+                    "err. (coef)",
+                    "Wald",
                     "valeur-p")
-tab6[,4] <- format.pval(tab6[,4], eps = 1e-2, digits = 2)
-knitr::kable(tab6,
-               digits = c(2,3,3),
+scnp[,5] <- format.pval(scnp[,5], eps = 1e-2, digits = 2)
+knitr::kable(scnp,
+               digits = c(2,3,3,2),
                booktabs = TRUE,
+             row.names = TRUE,
              linesep = "") |>
   kableExtra::kable_styling()
 ```
+
+
 
 # Interprétation des résultats
 
 
 - Les coefficients sont positifs: le risque augmente avec le temps. L'impact des rabais pour services multiples diminue avec le temps.
+    - L'effet d'avoir deux services (versus aucun) de plus sur le risque est $\exp(-2.63 + 0.53 t / 52)$. 
+    - Après un an d'abonnement (`t=52`), le facteur multiplicatif est de $0.122$ (versus référence aucune).
 - Deux des termes d'interaction sont significatifs à niveau 5% (statistiques de Wald $Z$ de `r round(summary(cox_np)$coefficients[6,4],3)`, `r round(summary(cox_np)$coefficients[7,4],3)` et `r round(summary(cox_np)$coefficients[8,4],3)` et valeurs-$p$ correspondantes de `r round(summary(cox_np)$coefficients[6,5],3)`, `r round(summary(cox_np)$coefficients[7,5],3)` et `r round(summary(cox_np)$coefficients[8,5],3)`).
 
 

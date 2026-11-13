@@ -468,7 +468,7 @@ pour que le logiciel puisse ajuster le modèle.
 
 \begin{frame}{Coefficients et tests}
 \protect\phantomsection\label{coefficients-et-tests}
-\begin{longtable}[t]{lrrl}
+\begin{longtable}[t]{lrrrrl}
 
 \caption{\label{tbl-cox-nph}Rapport de risque et intervalles de
 confiance à niveau 95\% pour le modèle à risques non proportionnels
@@ -477,29 +477,39 @@ confiance à niveau 95\% pour le modèle à risques non proportionnels
 \tabularnewline
 
 \toprule
-terme & exp(coef) & test de Wald & valeur-p\\
+ & coef & exp(coef) & err. (coef) & Wald & valeur-p\\
 \midrule
-age & 0.953 & -7.368 & <0.01\\
-sexe & 0.543 & -5.241 & <0.01\\
-service1 & 0.144 & -4.293 & <0.01\\
-service2 & 0.072 & -3.762 & <0.01\\
-service3 & 0.010 & -4.139 & <0.01\\
+age & -0.05 & 0.953 & 0.007 & -7.37 & <0.01\\
+sexe & -0.61 & 0.543 & 0.117 & -5.24 & <0.01\\
+service1 & -1.94 & 0.144 & 0.451 & -4.29 & <0.01\\
+service2 & -2.63 & 0.072 & 0.699 & -3.76 & <0.01\\
+service3 & -4.57 & 0.010 & 1.103 & -4.14 & <0.01\\
 \addlinespace
-tt(service1) & 1.678 & 2.173 & 0.030\\
-tt(service2) & 1.700 & 1.584 & 0.113\\
-tt(service3) & 3.190 & 2.476 & 0.013\\
+tt(service1) & 0.52 & 1.678 & 0.238 & 2.17 & 0.030\\
+tt(service2) & 0.53 & 1.700 & 0.335 & 1.58 & 0.113\\
+tt(service3) & 1.16 & 3.190 & 0.468 & 2.48 & 0.013\\
 \bottomrule
 
 \end{longtable}
 \end{frame}
 
-\begin{frame}{Interprétation des résultats}
+\begin{frame}[fragile]{Interprétation des résultats}
 \protect\phantomsection\label{interpruxe9tation-des-ruxe9sultats}
 \begin{itemize}
 \tightlist
 \item
   Les coefficients sont positifs: le risque augmente avec le temps.
   L'impact des rabais pour services multiples diminue avec le temps.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    L'effet d'avoir deux services (versus aucun) de plus sur le risque
+    est \(\exp(-2.63 + 0.53 t / 52)\).
+  \item
+    Après un an d'abonnement (\texttt{t=52}), le facteur multiplicatif
+    est de \(0.122\) (versus référence aucune).
+  \end{itemize}
 \item
   Deux des termes d'interaction sont significatifs à niveau 5\%
   (statistiques de Wald \(Z\) de 2.173, 1.584 et 2.476 et valeurs-\(p\)
